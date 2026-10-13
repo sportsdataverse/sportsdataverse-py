@@ -1182,6 +1182,7 @@ def fiba_gdap_awards(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1239,6 +1240,7 @@ def fiba_gdap_competition(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1301,6 +1303,7 @@ def fiba_gdap_editions(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1359,6 +1362,7 @@ def fiba_gdap_federation_games(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1421,6 +1425,7 @@ def fiba_gdap_federation_ranking(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1481,6 +1486,7 @@ def fiba_gdap_final_standings(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1540,6 +1546,7 @@ def fiba_gdap_game(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1596,6 +1603,7 @@ def fiba_gdap_game_officials(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1654,6 +1662,7 @@ def fiba_gdap_game_periods(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1714,6 +1723,7 @@ def fiba_gdap_games_between(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1775,6 +1785,7 @@ def fiba_gdap_gateway_competition_ids(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1839,6 +1850,7 @@ def fiba_gdap_gateway_federation_ranking(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1900,6 +1912,7 @@ def fiba_gdap_medal_count(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -1956,6 +1969,7 @@ def fiba_gdap_national_teams(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2014,6 +2028,7 @@ def fiba_gdap_nominations(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2075,6 +2090,7 @@ def fiba_gdap_player_game_stats(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2136,6 +2152,7 @@ def fiba_gdap_player_info(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2197,6 +2214,7 @@ def fiba_gdap_player_stats(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2254,6 +2272,7 @@ def fiba_gdap_ranking_zones(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2312,6 +2331,7 @@ def fiba_gdap_roster(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2371,6 +2391,7 @@ def fiba_gdap_roster_coaches(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2430,6 +2451,7 @@ def fiba_gdap_roster_latest(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2488,6 +2510,7 @@ def fiba_gdap_round_gamedays(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2546,6 +2569,7 @@ def fiba_gdap_round_standings(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2604,6 +2628,7 @@ def fiba_gdap_rounds(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2660,6 +2685,7 @@ def fiba_gdap_schedule(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2716,6 +2742,7 @@ def fiba_gdap_team_games(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2772,6 +2799,7 @@ def fiba_gdap_team_player_stats(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2830,6 +2858,7 @@ def fiba_gdap_team_staff(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2886,6 +2915,7 @@ def fiba_gdap_team_stats(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2942,6 +2972,7 @@ def fiba_gdap_teams(
     Notes:
         * FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
         * The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
+        * Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

@@ -920,7 +920,8 @@ def scb_seasons(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -987,7 +988,8 @@ def scb_season_players(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1058,7 +1060,8 @@ def scb_season_teams(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1127,7 +1130,8 @@ def scb_playoff_series(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1198,7 +1202,8 @@ def scb_playoff_games(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1269,7 +1274,8 @@ def scb_player_statistics(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1347,7 +1353,8 @@ def scb_team_statistics(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1431,7 +1438,8 @@ def scb_games(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1506,7 +1514,8 @@ def scb_games_recent(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1574,7 +1583,8 @@ def scb_game(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1641,7 +1651,8 @@ def scb_game_players(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1708,7 +1719,8 @@ def scb_game_teams(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1775,7 +1787,8 @@ def scb_game_actions(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1844,7 +1857,8 @@ def scb_standings(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1913,7 +1927,8 @@ def scb_season_player(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -1980,7 +1995,8 @@ def scb_team(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -2047,7 +2063,8 @@ def scb_team_seasons(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -2112,7 +2129,8 @@ def scb_referees(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -2174,7 +2192,8 @@ def scb_transfers(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2233,7 +2252,8 @@ def scb_transfers_teams(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2294,7 +2314,8 @@ def scb_team_rosters(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -2357,7 +2378,8 @@ def scb_records_per_game(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")
@@ -2426,7 +2448,8 @@ def scb_records_season_averages(
     Notes:
         * Unofficial use of a public source: these wrappers read the front-end API of the German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads are not redistributed as release assets.
         * Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an information system without BBL's written permission. That is a copyright term, not a robots rule (the API host has no robots.txt). The owner reviewed it and accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits at least 1 s per host) and raise any published data release with the owner. The DBBL host is the same operator and API; its site notice was not separately reviewed.
-        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it.
+        * Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key before it calls the API.
+        * Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is ambiguous (the seasonPlayerId in box scores, records and /season-players; the person in /transfers). Game ids are strings.
     """
     if league not in ("bbl", "dbbl"):
         raise ValueError(f"league must be one of ('bbl', 'dbbl'); got {league!r}")

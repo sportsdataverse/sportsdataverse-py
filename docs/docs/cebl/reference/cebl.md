@@ -292,10 +292,10 @@ Schedule and results of one season (regular season and finals), with the Genius 
 | `away_team_id` | integer | CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`, the games' `home_team_id` / `away_team_id`, `team_id` in player rows and the `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53 (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and 16+54 (Vancouver, Fraser Valley Bandits). The away team. |
 | `away_team_name` | character | Away team full English name. |
 | `away_team_score` | integer | Away team final score. On the 3 cancelled games: null, 0 or a partial score; before tip-off unobserved. |
-| `home_team_logo_url` | character | Home team logo URL. |
+| `home_team_logo_url` | character | URL of the home team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season). |
 | `home_team_stats_url_en` | character | Home team's cebl.ca stats page (English). |
 | `home_team_stats_url_fr` | character | Home team's cebl.ca stats page (French). |
-| `away_team_logo_url` | character | Away team logo URL. |
+| `away_team_logo_url` | character | URL of the away team's logo image as the games feed lists it (a team-level asset, the same on every game of that team in the season). |
 | `away_team_stats_url_en` | character | Away team's cebl.ca stats page (English). |
 | `away_team_stats_url_fr` | character | Away team's cebl.ca stats page (French). |
 | `stats_url_en` | character | Genius LiveStats box-score page, `https://fibalivestats.dcd.shared.geniussports.com/u/CEBL/{matchId}/`. The segment after `/u/CEBL/` is the Genius match id: the join to genius-livestats/ (org CEBL), whose `data/{matchId}/data.json` holds the box score, play-by-play and shot chart. Only match 2600563 is banked there; the others are derived, and cancelled (CANELLED) games carry a filled-in URL whose `data.json` is unverified. |

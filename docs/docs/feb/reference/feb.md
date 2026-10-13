@@ -15,6 +15,8 @@ toc_max_heading_level: 2
 
 > **Note:** Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (`season=1997`). Segunda FEB and the youth and Tercera FEB groups share the same routes; `group` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
 
+> **Note:** Seasons are END years everywhere in this package (`season=2027` is 2026-27); the site's own `t` is the START year, so the runtime sends `t = season - 1` (`t=2026` is 2026-27).
+
 ## feb_game_info
 
 Game header: competition, tip-off, venue, officials, status, both teams and the score (every game route carries it; this wrapper reads the lightest, /TeamStats).

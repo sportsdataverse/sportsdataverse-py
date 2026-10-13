@@ -193,8 +193,8 @@ Player box score of a finished game: minutes, shooting, rebounds, assists and th
 | `active` | integer | 1 when the player is on court now (at game end: on court at the final whistle), else 0 |
 | `minutes` | character | Minutes as the feed prints them, an 'mm:ss' text (can exceed 59 for a team; '199:60' happens); the text of an integer when the feed sends one. |
 | `seconds_played` | integer | Seconds played parsed from the printed mm:ss text as minutes * 60 + seconds (so '224:60' gives 13500); null when the feed sent an integer, whose unit is unknown. |
-| `field_goals_made` | integer | Field goals made |
-| `field_goals_attempted` | integer | Field goals attempted |
+| `field_goals_made` | integer | Field goals the player made in the game (two- and three-pointers together; a count). |
+| `field_goals_attempted` | integer | Field goals the player attempted in the game (two- and three-pointers together; a count). |
 | `field_goals_percentage` | numeric | Field-goal percentage, 0-100, rounded to an integer by the feed |
 | `three_pointers_made` | integer | Three-pointers made |
 | `three_pointers_attempted` | integer | Three-pointers attempted |
@@ -202,8 +202,8 @@ Player box score of a finished game: minutes, shooting, rebounds, assists and th
 | `two_pointers_made` | integer | Two-pointers made |
 | `two_pointers_attempted` | integer | Two-pointers attempted |
 | `two_pointers_percentage` | numeric | Two-point percentage, 0-100, rounded to an integer |
-| `free_throws_made` | integer | Free throws made |
-| `free_throws_attempted` | integer | Free throws attempted |
+| `free_throws_made` | integer | Free throws the player made in the game (a count). |
+| `free_throws_attempted` | integer | Free throws the player attempted in the game (a count). |
 | `free_throws_percentage` | numeric | Free-throw percentage, 0-100, rounded to an integer |
 | `rebounds_defensive` | integer | Defensive rebounds |
 | `rebounds_offensive` | integer | Offensive rebounds |
@@ -219,7 +219,7 @@ Player box score of a finished game: minutes, shooting, rebounds, assists and th
 | `points_from_turnovers` | integer | Points off turnovers |
 | `points_second_chance` | integer | Second-chance points |
 | `points_fast_break` | integer | Fast-break points |
-| `points_in_the_paint` | integer | Points in the paint |
+| `points_in_the_paint` | integer | Points the player scored in the paint in the game (the feed's sPointsInThePaint). |
 | `plus_minus_points` | integer | Plus/minus: team point margin while the player was on court |
 | `eff_1` | integer | Genius efficiency formula 1. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
 | `eff_2` | integer | Genius efficiency formula 2. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |

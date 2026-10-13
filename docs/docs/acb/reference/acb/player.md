@@ -45,8 +45,8 @@ Per-player box score of a game, per period (quarter 0 = the whole game).
 | `seconds_played` | integer | Time on court in whole seconds (play_time parsed). |
 | `is_starter` | logical | True when the player started the game (the API's isStarted). |
 | `points` | integer | Points (player box-score row) |
-| `free_throws_made` | integer | Free throws made |
-| `free_throws_attempted` | integer | Free throws attempted |
+| `free_throws_made` | integer | Free throws the player made in the row's period (a count; quarter 0 is the whole game). |
+| `free_throws_attempted` | integer | Free throws the player attempted in the row's period (a count; quarter 0 is the whole game). |
 | `two_pointers_made` | integer | Two-point field goals made |
 | `two_pointers_attempted` | integer | Two-point field goals attempted |
 | `three_pointers_made` | integer | Three-point field goals made |
@@ -469,12 +469,12 @@ A player's game log for an edition (default: the current one).
 | `two_pointers_made` | integer | Two-point field goals made |
 | `two_pointers_attempted` | integer | Two-point field goals attempted |
 | `two_pointers_percentage` | numeric | Two-point percentage, 0-100 with one decimal; 0 when there was no attempt |
-| `free_throws_made` | integer | Free throws made |
-| `free_throws_attempted` | integer | Free throws attempted |
+| `free_throws_made` | integer | Free throws the player made in that match (a count, not a season total). |
+| `free_throws_attempted` | integer | Free throws the player attempted in that match (a count, not a season total). |
 | `free_throws_percentage` | numeric | Free-throw percentage, 0-100 with one decimal; 0 when there was no attempt |
 | `rebounds` | integer | Total rebounds in the game. |
-| `offensive_rebounds` | integer | Offensive rebounds |
-| `defensive_rebounds` | integer | Defensive rebounds |
+| `offensive_rebounds` | integer | Offensive rebounds the player took in that match (a count; part of the total rebounds). |
+| `defensive_rebounds` | integer | Defensive rebounds the player took in that match (a count; part of the total rebounds). |
 | `assists` | integer | Assists (player game-log row) |
 | `steals` | integer | Steals (player game-log row) |
 | `turnovers` | integer | Turnovers (player game-log row) |

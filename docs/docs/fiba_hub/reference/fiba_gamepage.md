@@ -13,6 +13,8 @@ toc_max_heading_level: 2
 
 > **Note:** The GDAP subscription key is public (fiba.basketball ships it in every page); the runtime reads it from the live page at run time and never logs it. Officials' contact details and coaches' and officials' dates of birth are dropped from every body.
 
+> **Note:** Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and game_id is global across competitions (the <gameId> of a game-page URL). team_id is per team per competition (Germany is 279569 at the 2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.
+
 > **Note:** The wrapper takes the game id and its competition (comp) and builds the real page URL from GDAP (the competition's marketing name gives the history slug, its schedule gives the two team codes; a competition with an event page is tried at its event URL when the archive URL answers the not-found shell, and the Champions League host last). The 'Example URL' above is the wrapper's route, not a page FIBA serves.
 
 > **Note:** Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events) and 2017-18 (FLS club competitions). A game with no box score raises NoDataError; a game still live raises AssetFetchError. fiba.basketball answers plain requests with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip install sportsdataverse[all]). Shot x/y are image pixels with an unverified scale.

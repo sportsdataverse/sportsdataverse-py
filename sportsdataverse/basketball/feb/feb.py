@@ -344,6 +344,7 @@ def feb_game_info(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -403,6 +404,7 @@ def feb_period_scores(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -462,6 +464,7 @@ def feb_team_stats(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -521,6 +524,7 @@ def feb_player_box(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -580,6 +584,7 @@ def feb_pbp(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -639,6 +644,7 @@ def feb_shots(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -698,6 +704,7 @@ def feb_leaders(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -755,6 +762,7 @@ def feb_overview(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -816,6 +824,7 @@ def feb_schedule(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -880,6 +889,7 @@ def feb_results(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
@@ -944,6 +954,7 @@ def feb_standings(
         * Legal notice (sdv-internal-refs/feb/README.md): the FEB's aviso legal asserts intellectual-property rights over the site's content and databases (the EU database right). It has no explicit scraping clause and robots.txt returns 404 on both hosts, but SportsDataverse has not ruled on it: fetching on your own machine is fine; a published data release or a hosted mirror needs a legal sign-off first.
         * Unofficial and unsupported: the LiveStats API is the federation's own widget backend, not a documented public API. It needs a bearer JWT, which is public: ``feb_runtime`` reads it from the site's home page at run time, keeps it in memory for the process (24 h validity) and never prints, logs or writes it.
         * Coverage: the game routes answer from 2020-21 (Liga Femenina Endesa from its first game; Primera FEB from 2021-03-12, so its earlier 2020-21 games answer 404, as do all earlier seasons). 2020-21 play-by-play is text only. The schedule pages go back to 1996-97 (``season=1997``). Segunda FEB and the youth and Tercera FEB groups share the same routes; ``group`` is the site's menu group (1 Primera FEB, 2 Segunda FEB, 4 Liga Femenina Endesa).
+        * Seasons are END years everywhere in this package (``season=2027`` is 2026-27); the site's own ``t`` is the START year, so the runtime sends ``t = season - 1`` (``t=2026`` is 2026-27).
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
