@@ -1,0 +1,84 @@
+{
+  "stats": [
+    {
+      "category": "points",
+      "name": "Banco di Sardegna Sassari ",
+      "sponsor_name": null,
+      "short_name": "Banco di Sardegna Sassari ",
+      "tv_name": "Banco di Sardegna Sassari ",
+      "year": 2017,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 30,
+      "total_points": 2586,
+      "minutes": 6100,
+      "score_40_min": 84.78688524590164,
+      "score": 86.2,
+      "team_id": 1390
+    },
+    {
+      "category": "points",
+      "name": "Red October Cantù",
+      "sponsor_name": null,
+      "short_name": "Red October Cantù",
+      "tv_name": "Red October Cantù",
+      "year": 2017,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 33,
+      "total_points": 2832,
+      "minutes": 6650,
+      "score_40_min": 85.17293233082707,
+      "score": 85.81818181818181,
+      "team_id": 1393
+    },
+    {
+      "category": "points",
+      "name": "Vanoli Cremona",
+      "sponsor_name": null,
+      "short_name": "Vanoli Cremona",
+      "tv_name": "Vanoli Cremona",
+      "year": 2017,
+      "logo_key": null,
+      "attempts": 0,
+      "total_played_matches": 33,
+      "total_points": 2779,
+      "minutes": 6600,
+      "score_40_min": 84.21212121212122,
+      "score": 84.21212121212122,
+      "team_id": 1399
+    }
+  ],
+  "filters": {
+    "order_by": [
+      {
+        "code": "sum",
+        "description": "Totale"
+      },
+      {
+        "code": "avg",
+        "description": "Media"
+      },
+      {
+        "code": "40_perc",
+        "description": "40 min/%"
+      }
+    ],
+    "categories": [
+      {
+        "code": "points",
+        "description": "Punti"
+      },
+      {
+        "code": "rating_lega",
+        "description": "Valutazione"
+      },
+      {
+        "code": "total_rebound",
+        "description": "Rimbalzi"
+      }
+    ]
+  },
+  "cache_key": "_cmtCK:1791747613_season_range:off|year:2017|championship_series_id:1|advanced:false|order_by:avg",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}
