@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: opponent_team_id
+  type: integer
+- description: ''
+  name: game_number
+  type: integer
+- description: ''
+  name: win
+  type: integer
+- description: ''
+  name: losg
+  type: integer
+- description: ''
+  name: result
+  type: character
+kind: dataframe
+schema: wjbl_head_to_head

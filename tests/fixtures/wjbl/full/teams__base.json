@@ -1,0 +1,278 @@
+[
+    {
+        "team_id": 30,
+        "team_name": "富士通レッドウェーブ"
+    },
+    {
+        "team_id": 591,
+        "team_name": "TEAM シリウス"
+    },
+    {
+        "team_id": 592,
+        "team_name": "TEAM アンタレス"
+    },
+    {
+        "team_id": 12,
+        "team_name": "デンソー アイリス"
+    },
+    {
+        "team_id": 11,
+        "team_name": "シャンソン化粧品 シャンソンVマジック"
+    },
+    {
+        "team_id": 8,
+        "team_name": "ＥＮＥＯＳサンフラワーズ"
+    },
+    {
+        "team_id": 13,
+        "team_name": "トヨタ自動車アンテロープス"
+    },
+    {
+        "team_id": 31,
+        "team_name": "トヨタ紡織 サンシャインラビッツ"
+    },
+    {
+        "team_id": 10,
+        "team_name": "アイシン ウィングス"
+    },
+    {
+        "team_id": 14,
+        "team_name": "東京羽田ヴィッキーズ"
+    },
+    {
+        "team_id": 26,
+        "team_name": "日立ハイテク クーガーズ"
+    },
+    {
+        "team_id": 18,
+        "team_name": "三菱電機　コアラーズ"
+    },
+    {
+        "team_id": 16,
+        "team_name": "山梨クィーンビーズ"
+    },
+    {
+        "team_id": 36,
+        "team_name": "新潟アルビレックスＢＢラビッツ"
+    },
+    {
+        "team_id": 204,
+        "team_name": "プレステージ・インターナショナル アランマーレ"
+    },
+    {
+        "team_id": 232,
+        "team_name": "広島イーグレッツ"
+    },
+    {
+        "team_id": 357,
+        "team_name": "SMBC TOKYO SOLUA"
+    },
+    {
+        "team_id": 235,
+        "team_name": "山形銀行 ライヤーズ"
+    },
+    {
+        "team_id": 356,
+        "team_name": "ミツウロコ"
+    },
+    {
+        "team_id": 461,
+        "team_name": "秋田銀行"
+    },
+    {
+        "team_id": 236,
+        "team_name": "TOTO"
+    },
+    {
+        "team_id": 295,
+        "team_name": "紀陽銀行ハートビーツ"
+    },
+    {
+        "team_id": 234,
+        "team_name": "滋賀銀行 Ｌａｋｅ Ｖｅｎｕｓ"
+    },
+    {
+        "team_id": 358,
+        "team_name": "U18女子日本代表"
+    },
+    {
+        "team_id": 412,
+        "team_name": "Team SUNRISE"
+    },
+    {
+        "team_id": 413,
+        "team_name": "Team STARLIGHT"
+    },
+    {
+        "team_id": 421,
+        "team_name": "Team SUN"
+    },
+    {
+        "team_id": 422,
+        "team_name": "Team STAR"
+    },
+    {
+        "team_id": 425,
+        "team_name": "W LEAGUE ALLSTAR UNITED"
+    },
+    {
+        "team_id": 426,
+        "team_name": "WKBL RISING ALLSATRS"
+    },
+    {
+        "team_id": 297,
+        "team_name": "学生選抜"
+    },
+    {
+        "team_id": 237,
+        "team_name": "日本代表 2021(オータムカップ)"
+    },
+    {
+        "team_id": 233,
+        "team_name": "鶴屋百貨店 "
+    },
+    {
+        "team_id": 296,
+        "team_name": "日立笠戸"
+    },
+    {
+        "team_id": 20,
+        "team_name": "第一勧業銀行 ＤＫＢハーティーズ"
+    },
+    {
+        "team_id": 17,
+        "team_name": "三井生命ファルコンズ"
+    },
+    {
+        "team_id": 15,
+        "team_name": "広島銀行ブルーフレイムズ"
+    },
+    {
+        "team_id": 21,
+        "team_name": "ビッグブルー　東京"
+    },
+    {
+        "team_id": 33,
+        "team_name": "三洋電機 サンシャインズ"
+    },
+    {
+        "team_id": 24,
+        "team_name": "日本航空 JAL ラビッツ"
+    },
+    {
+        "team_id": 34,
+        "team_name": "日立那珂 スクァレルズ"
+    },
+    {
+        "team_id": 29,
+        "team_name": "富士銀行 ダイナミクス"
+    },
+    {
+        "team_id": 27,
+        "team_name": "日立戸塚レパード"
+    },
+    {
+        "team_id": 23,
+        "team_name": "東北電力ジャックサンダース"
+    },
+    {
+        "team_id": 22,
+        "team_name": "東京三菱銀行 ゴールデンイーグルス"
+    },
+    {
+        "team_id": 298,
+        "team_name": "サムソン ・ブルーミンクス"
+    },
+    {
+        "team_id": 37,
+        "team_name": "EAST"
+    },
+    {
+        "team_id": 38,
+        "team_name": "WEST"
+    },
+    {
+        "team_id": 196,
+        "team_name": "渋谷"
+    },
+    {
+        "team_id": 197,
+        "team_name": "原宿"
+    },
+    {
+        "team_id": 249,
+        "team_name": "エキストラチーム　A"
+    },
+    {
+        "team_id": 250,
+        "team_name": "エキストラチーム　B"
+    },
+    {
+        "team_id": 560,
+        "team_name": "Harajuku"
+    },
+    {
+        "team_id": 561,
+        "team_name": "Shibuya"
+    },
+    {
+        "team_id": 562,
+        "team_name": "Fresh Harajuku"
+    },
+    {
+        "team_id": 563,
+        "team_name": "Fresh Shibuya"
+    },
+    {
+        "team_id": 493,
+        "team_name": "東軍"
+    },
+    {
+        "team_id": 494,
+        "team_name": "西軍"
+    },
+    {
+        "team_id": 495,
+        "team_name": "フレッシユ東軍"
+    },
+    {
+        "team_id": 496,
+        "team_name": "フレッシユ西軍"
+    },
+    {
+        "team_id": 497,
+        "team_name": "グレーテスト東軍"
+    },
+    {
+        "team_id": 498,
+        "team_name": "グレーテスト西軍"
+    },
+    {
+        "team_id": 525,
+        "team_name": "スラバヤ フィーバー"
+    },
+    {
+        "team_id": 380,
+        "team_name": "W LEAGUE UNITED U25"
+    },
+    {
+        "team_id": 381,
+        "team_name": "W LEAGUE UNITED O26"
+    },
+    {
+        "team_id": 382,
+        "team_name": "女子U22日本代表 2023"
+    },
+    {
+        "team_id": 383,
+        "team_name": "女子U19日本代表 2023"
+    },
+    {
+        "team_id": 489,
+        "team_name": "AKATSUKI BLACK"
+    },
+    {
+        "team_id": 490,
+        "team_name": "AKATSUKI WHITE"
+    }
+]

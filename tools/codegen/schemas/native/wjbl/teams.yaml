@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+kind: dataframe
+schema: wjbl_teams

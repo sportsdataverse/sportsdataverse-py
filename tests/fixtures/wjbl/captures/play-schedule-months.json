@@ -1,0 +1,17 @@
+{
+  "league_id": "45",
+  "game_months": [
+    {
+      "game_month_jpn": "2026年4月",
+      "game_month": "2026-04"
+    },
+    {
+      "game_month_jpn": "2026年3月",
+      "game_month": "2026-03"
+    },
+    {
+      "game_month_jpn": "2026年2月",
+      "game_month": "2026-02"
+    }
+  ]
+}
