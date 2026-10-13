@@ -15,5 +15,9 @@
     0.00538158802524432
   ],
   "intercept": 0.00022502034140326968,
-  "cutoff_season": 2018
+  "cutoff_season": 2018,
+  "median_ref": {
+    "gp_pct": 0.775,
+    "bmi": 24.0
+  }
 }
