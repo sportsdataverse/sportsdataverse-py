@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, bool_str
 from sportsdataverse._common_espn_parsers import (
@@ -37,6 +37,10 @@ from sportsdataverse._common_espn_parsers import (
     parse_transactions,
     parse_weekly_powerindex,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "espn_mlb_scoreboard",
@@ -169,7 +173,7 @@ def espn_mlb_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -224,7 +228,7 @@ def espn_mlb_summary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -271,7 +275,7 @@ def espn_mlb_calendar(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -315,7 +319,7 @@ def espn_mlb_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -361,7 +365,7 @@ def espn_mlb_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -405,7 +409,7 @@ def espn_mlb_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -451,7 +455,7 @@ def espn_mlb_conferences(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -494,7 +498,7 @@ def espn_mlb_statistics_league(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -537,7 +541,7 @@ def espn_mlb_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -581,7 +585,7 @@ def espn_mlb_teams_site(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -628,7 +632,7 @@ def espn_mlb_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -674,7 +678,7 @@ def espn_mlb_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -723,7 +727,7 @@ def espn_mlb_team_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -771,7 +775,7 @@ def espn_mlb_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -816,7 +820,7 @@ def espn_mlb_team_depthcharts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -861,7 +865,7 @@ def espn_mlb_team_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -906,7 +910,7 @@ def espn_mlb_team_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -951,7 +955,7 @@ def espn_mlb_team_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -997,7 +1001,7 @@ def espn_mlb_team_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1045,7 +1049,7 @@ def espn_mlb_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1090,7 +1094,7 @@ def espn_mlb_player_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1135,7 +1139,7 @@ def espn_mlb_player_bio(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1180,7 +1184,7 @@ def espn_mlb_player_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1227,7 +1231,7 @@ def espn_mlb_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1278,7 +1282,7 @@ def espn_mlb_player_overview(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1324,7 +1328,7 @@ def espn_mlb_player_stats_v3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1373,7 +1377,7 @@ def espn_mlb_player_gamelog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1422,7 +1426,7 @@ def espn_mlb_player_splits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1475,7 +1479,7 @@ def espn_mlb_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1531,7 +1535,7 @@ def espn_mlb_league_root(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1574,7 +1578,7 @@ def espn_mlb_season_pointer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1618,7 +1622,7 @@ def espn_mlb_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1665,7 +1669,7 @@ def espn_mlb_season_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1710,7 +1714,7 @@ def espn_mlb_season_types(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1756,7 +1760,7 @@ def espn_mlb_season_type(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1804,7 +1808,7 @@ def espn_mlb_season_group(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1852,7 +1856,7 @@ def espn_mlb_season_groups(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1901,7 +1905,7 @@ def espn_mlb_season_group_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -1954,7 +1958,7 @@ def espn_mlb_season_group_children(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2005,7 +2009,7 @@ def espn_mlb_season_type_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2052,7 +2056,7 @@ def espn_mlb_season_type_corrections(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2099,7 +2103,7 @@ def espn_mlb_season_weeks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2147,7 +2151,7 @@ def espn_mlb_season_week(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2197,7 +2201,7 @@ def espn_mlb_season_week_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2250,7 +2254,7 @@ def espn_mlb_season_week_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2302,7 +2306,7 @@ def espn_mlb_season_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2353,7 +2357,7 @@ def espn_mlb_season_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2401,7 +2405,7 @@ def espn_mlb_season_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2452,7 +2456,7 @@ def espn_mlb_season_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2500,7 +2504,7 @@ def espn_mlb_season_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2546,7 +2550,7 @@ def espn_mlb_season_draft_round_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2592,7 +2596,7 @@ def espn_mlb_season_futures(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2637,7 +2641,7 @@ def espn_mlb_season_freeagents(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2683,7 +2687,7 @@ def espn_mlb_season_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2731,7 +2735,7 @@ def espn_mlb_season_powerindex_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2777,7 +2781,7 @@ def espn_mlb_season_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2827,7 +2831,7 @@ def espn_mlb_players_index(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2878,7 +2882,7 @@ def espn_mlb_player_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2924,7 +2928,7 @@ def espn_mlb_player_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -2972,7 +2976,7 @@ def espn_mlb_player_statisticslog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3017,7 +3021,7 @@ def espn_mlb_player_eventlog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3062,7 +3066,7 @@ def espn_mlb_player_contracts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3107,7 +3111,7 @@ def espn_mlb_player_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3152,7 +3156,7 @@ def espn_mlb_player_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3197,7 +3201,7 @@ def espn_mlb_player_records(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3242,7 +3246,7 @@ def espn_mlb_player_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3287,7 +3291,7 @@ def espn_mlb_player_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3333,7 +3337,7 @@ def espn_mlb_player_vs_player(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3380,7 +3384,7 @@ def espn_mlb_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3429,7 +3433,7 @@ def espn_mlb_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3475,7 +3479,7 @@ def espn_mlb_game_competition(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3524,7 +3528,7 @@ def espn_mlb_game_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3574,7 +3578,7 @@ def espn_mlb_game_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3625,7 +3629,7 @@ def espn_mlb_game_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3676,7 +3680,7 @@ def espn_mlb_game_team_linescores(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3727,7 +3731,7 @@ def espn_mlb_game_team_statistics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3778,7 +3782,7 @@ def espn_mlb_game_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3829,7 +3833,7 @@ def espn_mlb_game_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3879,7 +3883,7 @@ def espn_mlb_game_odds(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3929,7 +3933,7 @@ def espn_mlb_game_probabilities(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -3982,7 +3986,7 @@ def espn_mlb_game_plays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4037,7 +4041,7 @@ def espn_mlb_game_play(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4088,7 +4092,7 @@ def espn_mlb_game_play_personnel(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4138,7 +4142,7 @@ def espn_mlb_game_situation(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4187,7 +4191,7 @@ def espn_mlb_game_status(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4238,7 +4242,7 @@ def espn_mlb_game_officials(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4287,7 +4291,7 @@ def espn_mlb_game_broadcasts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4336,7 +4340,7 @@ def espn_mlb_game_predictor(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4385,7 +4389,7 @@ def espn_mlb_game_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4434,7 +4438,7 @@ def espn_mlb_game_propbets(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4485,7 +4489,7 @@ def espn_mlb_game_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4536,7 +4540,7 @@ def espn_mlb_game_scoringplays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4586,7 +4590,7 @@ def espn_mlb_game_official_detail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4636,7 +4640,7 @@ def espn_mlb_teams_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4685,7 +4689,7 @@ def espn_mlb_team_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4730,7 +4734,7 @@ def espn_mlb_venues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4777,7 +4781,7 @@ def espn_mlb_venue(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4822,7 +4826,7 @@ def espn_mlb_franchises(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4869,7 +4873,7 @@ def espn_mlb_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4914,7 +4918,7 @@ def espn_mlb_coach(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -4960,7 +4964,7 @@ def espn_mlb_coach_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5007,7 +5011,7 @@ def espn_mlb_coach_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5053,7 +5057,7 @@ def espn_mlb_positions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5100,7 +5104,7 @@ def espn_mlb_position(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5145,7 +5149,7 @@ def espn_mlb_tournaments(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5192,7 +5196,7 @@ def espn_mlb_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5239,7 +5243,7 @@ def espn_mlb_award(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5283,7 +5287,7 @@ def espn_mlb_standings_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5326,7 +5330,7 @@ def espn_mlb_leaders_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5369,7 +5373,7 @@ def espn_mlb_league_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5412,7 +5416,7 @@ def espn_mlb_talentpicks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5456,7 +5460,7 @@ def espn_mlb_player_hotzones(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5503,7 +5507,7 @@ def espn_mlb_fpi(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='baseball', league='mlb'.
@@ -5554,7 +5558,7 @@ def espn_mlb_cdn_playbyplay(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """One game's espn.com play-by-play page data. The gamepackageJSON block is a Site v2 summary (header, boxscore, plays or drives, win probability, ...), so the parsed result is the same dict of frames that parse_summary returns.
 
     Bound to sport='baseball', league='mlb'.
@@ -5603,7 +5607,7 @@ def espn_mlb_cdn_boxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """One game's espn.com box-score page data, parsed like a Site v2 summary. For football the drives and scoring plays are only on the playbyplay page.
 
     Bound to sport='baseball', league='mlb'.
@@ -5655,7 +5659,7 @@ def espn_mlb_cdn_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """espn.com schedule page data, one row per game: up to 7 days starting at `date` (mbb and wbb: that day only; cfb and nfl: one week).
 
     Bound to sport='baseball', league='mlb'.
@@ -5712,7 +5716,7 @@ def espn_mlb_cdn_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """espn.com scoreboard page data for one day (one week for football), one row per game. The page's sbData block is a Site v2 scoreboard payload.
 
     Bound to sport='baseball', league='mlb'.
