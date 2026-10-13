@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbr
+  type: character
+- description: ''
+  name: head_coach
+  type: character
+- description: ''
+  name: assistant_coaches
+  type: character
+- description: ''
+  name: arena
+  type: character
+- description: ''
+  name: attendance
+  type: integer
+- description: ''
+  name: referees
+  type: character
+kind: dataframe
+schema: acb_box_info

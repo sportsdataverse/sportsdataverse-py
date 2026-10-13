@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: group
+  type: character
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: match_value
+  type: numeric
+- description: ''
+  name: season_value
+  type: numeric
+- description: ''
+  name: win_value
+  type: numeric
+- description: ''
+  name: loss_value
+  type: numeric
+- description: ''
+  name: season_diff
+  type: numeric
+- description: ''
+  name: win_diff
+  type: numeric
+- description: ''
+  name: loss_diff
+  type: numeric
+kind: dataframe
+schema: acb_player_advanced_stats

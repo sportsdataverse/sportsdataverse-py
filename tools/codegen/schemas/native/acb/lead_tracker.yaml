@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: quarter
+  type: integer
+- description: ''
+  name: minute
+  type: integer
+- description: ''
+  name: second
+  type: integer
+- description: ''
+  name: clock_seconds
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+- description: ''
+  name: margin
+  type: integer
+kind: dataframe
+schema: acb_lead_tracker

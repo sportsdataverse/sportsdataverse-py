@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: quarter
+  type: integer
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: home_value
+  type: numeric
+- description: ''
+  name: away_value
+  type: numeric
+- description: ''
+  name: home_made
+  type: integer
+- description: ''
+  name: home_attempted
+  type: integer
+- description: ''
+  name: away_made
+  type: integer
+- description: ''
+  name: away_attempted
+  type: integer
+- description: ''
+  name: home_is_highlighted
+  type: logical
+- description: ''
+  name: away_is_highlighted
+  type: logical
+kind: dataframe
+schema: acb_team_comparison

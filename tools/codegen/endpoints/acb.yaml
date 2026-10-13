@@ -1,0 +1,945 @@
+api: acb
+docstring:
+  example_import: true
+  notes:
+  - 'Legal notice (sdv-internal-refs/acb/README.md, aviso legal of acb.com read 2026-10-12):
+    ACEB, S.A.U. claims intellectual property in the site''s databases (the EU sui
+    generis database right) among its other content. It authorises viewing and private
+    copies for personal or journalistic use with the source credited, and requires
+    prior express consent for distribution, reproduction or public communication.
+    These wrappers fetch on the user''s behalf; a published data release or a hosted
+    mirror needs the owner''s decision first. robots.txt allows the paths.'
+  - 'Unofficial and unsupported: api2.acb.com is the .NET API behind acb.com and live.acb.com,
+    not a documented public API. It needs the header ``X-APIKEY``, a public key shipped
+    in acb.com''s bundle: ``acb_runtime`` sends the documented value (``$ACB_API_KEY``
+    overrides it), re-reads the live bundle once on a 401, and never prints the key.'
+  - 'Seasons: the API keys a season by ``editionId`` = season START year - 1935 (91
+    = 2026-27, 48 = 1983-84, the first). The wrappers take ``season``, the END year
+    (2027 = 2026-27), and ``acb_runtime`` sends ``editionId = season - 1936``. A route
+    that omits ``season`` serves the current edition. ``team_id`` is a season-team
+    entry (new every season); ``club_id`` is the stable club.'
+  - 'Coverage: box scores from 1983-84 (old seasons carry only the whole-game period,
+    quarter 0); play-by-play and shots from 2016-17 (earlier games answer empty lists,
+    which raise NoDataError). Shot coordinates come in two systems, split by match
+    id: millimetres from the attacked basket from 2020-21 (``coord_system`` mm), a
+    0-100 full-court percent grid before (grid). A game that is not finished (``matchFinished``
+    false) raises AssetFetchError for the routes that report it.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the ACB has nothing for the request (an unknown
+    id, a game outside a playoff series, play-by-play or shots before 2016-17, a club
+    with no games that season).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a rejected key, an error envelope or stub, a body for another
+    season, round, club or player, a game that is not finished).'
+  - 'ValueError: a missing or non-integer id, or a season before 1984 (raised before
+    any request), or the API''s HTTP 400 / 422.'
+  raw_doc: 'the raw body (``dict``): the route''s JSON plus ``_request`` (the ids
+    asked for, in snake_case, with ``season`` the END year)'
+  see_also:
+  - name: ACB
+    note: the league site whose API these wrappers read
+    url: https://www.acb.com
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_match_header
+  path: /matchdata/MatchHeader/match-header
+  returns_schema: native/acb/match_header
+  short: match_header
+  summary: 'Match header: teams, status, score, bonus, current period and the content
+    the site offers.'
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_period_scores
+  path: /matchdata/MatchHeader/match-header
+  returns_schema: native/acb/period_scores
+  short: period_scores
+  summary: Points each team scored in each period of a game.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_player_box
+  path: /matchdata/Result/boxscores
+  returns_schema: native/acb/player_box
+  short: player_box
+  summary: Per-player box score of a game, per period (quarter 0 = the whole game).
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_team_box
+  path: /matchdata/Result/boxscores
+  returns_schema: native/acb/team_box
+  short: team_box
+  summary: 'Team totals of a game per period: everything the team did, and the part
+    credited to the team itself.'
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_box_info
+  path: /matchdata/Result/boxscores
+  returns_schema: native/acb/box_info
+  short: box_info
+  summary: 'Coaches and game facts per team: head coach, assistants, arena, attendance,
+    referees.'
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_pbp
+  path: /matchdata/PlayByPlay/play-by-play
+  returns_schema: native/acb/pbp
+  short: pbp
+  summary: 'Play-by-play of a game (2016-17 onward): every shot, rebound, foul, turnover,
+    substitution and time-out.'
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_shots
+  path: /matchdata/MatchShots/match-shots
+  returns_schema: native/acb/shots
+  short: shots
+  summary: Every field-goal and free-throw attempt of a game (2016-17 onward) with
+    its court position.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_lead_tracker
+  path: /matchdata/Overview/lead-tracker
+  returns_schema: native/acb/lead_tracker
+  short: lead_tracker
+  summary: Score through a game, one row per scoring moment, with the margin.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_lead_stats
+  path: /matchdata/Overview/lead-tracker
+  returns_schema: native/acb/lead_stats
+  short: lead_stats
+  summary: Lead statistics of a game (best run, maximum lead, time ahead, lead changes)
+    per side.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_lineup
+  path: /matchdata/Overview/lineup
+  returns_schema: native/acb/lineup
+  short: lineup
+  summary: Players of a game with their game line, starters first.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_match_leaders
+  path: /matchdata/Overview/match-leaders
+  returns_schema: native/acb/match_leaders
+  short: match_leaders
+  summary: Each team's leaders of a game by category.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_team_comparison
+  path: /matchdata/Overview/match-team-comparison
+  returns_schema: native/acb/team_comparison
+  short: team_comparison
+  summary: Team-versus-team comparison bars of a game per period.
+- example_args:
+    match_id: 17718
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_serie
+  path: /matchdata/Overview/serie
+  returns_schema: native/acb/serie
+  short: serie
+  summary: The playoff series a game belongs to, one row per game of the series (HTTP
+    204 outside a series).
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_quickfacts
+  path: /matchdata/Preview/quickfacts
+  returns_schema: native/acb/quickfacts
+  short: quickfacts
+  summary: 'Pre-match facts per team: standing, record, recent results.'
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_season_leaders
+  path: /matchdata/Preview/season-leaders
+  returns_schema: native/acb/season_leaders
+  short: season_leaders
+  summary: Each team's season leaders before a game, by category.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  parser: parse_acb_match_advanced_stats
+  path: /matchdata/AdvancedStats/match-advanced-stats
+  returns_schema: native/acb/match_advanced_stats
+  short: match_advanced_stats
+  summary: Team advanced statistics of a game against the team's season and win/loss
+    splits.
+- example_args:
+    match_id: 105401
+    player_id: 20212243
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicense
+    required: true
+    type: int
+  parser: parse_acb_player_advanced_stats
+  path: /matchdata/AdvancedStats/player-advanced-stats
+  returns_schema: native/acb/player_advanced_stats
+  short: player_advanced_stats
+  summary: One player's advanced statistics in a game against his season and win/loss
+    splits.
+- example_args:
+    match_id: 105401
+  extra_params:
+  - description: 'Required. ACB match id (integer), one global sequence for every
+      competition: legacy ids (seasons up to 2019-20) sit below about 20000 (12559
+      = the 2005-06 final); ids from 2020-21 start around 100000 (105401 = Barca 89-86
+      Valencia Basket, Liga 2026-27 round 3).'
+    name: match_id
+    query_key: matchId
+    required: true
+    type: int
+  - description: 'Round id (integer): global across seasons, not the round number
+      (6017 = Liga 2026-27 round 3). List them with ``acb_competition_rounds`` or
+      ``acb_calendar``. Omitted = the current (or last) round.'
+    name: round_id
+    query_key: roundId
+    type: int
+  - description: 'Week id (integer): global across seasons (2989 = the week of 2026-10-10).
+      List them with ``acb_competition_weeks``.'
+    name: week_id
+    query_key: weekId
+    type: int
+  parser: parse_acb_matchlist
+  path: /matchdata/Menu/matchlist
+  returns_schema: native/acb/matchlist
+  short: matchlist
+  summary: The games of the round (or week) around a game.
+- example_args: {}
+  extra_params:
+  - description: Competition id (1, 2, 3, 10) or a list of ids for several. Omitted
+      = the API's default competition.
+    name: competition_ids
+    query_key: competitionIds
+    type: int
+  parser: parse_acb_competition_editions
+  path: /matchdata/Menu/competition-data
+  returns_schema: native/acb/competition_editions
+  short: competition_editions
+  summary: Every competition edition (season) the API knows, one row per edition.
+- example_args: {}
+  extra_params:
+  - description: Competition id (1, 2, 3, 10) or a list of ids for several. Omitted
+      = the API's default competition.
+    name: competition_ids
+    query_key: competitionIds
+    type: int
+  parser: parse_acb_competition_rounds
+  path: /matchdata/Menu/competition-data
+  returns_schema: native/acb/competition_rounds
+  short: competition_rounds
+  summary: 'The rounds of every competition edition: the round ids to crawl.'
+- example_args: {}
+  extra_params:
+  - description: Competition id (1, 2, 3, 10) or a list of ids for several. Omitted
+      = the API's default competition.
+    name: competition_ids
+    query_key: competitionIds
+    type: int
+  parser: parse_acb_competition_weeks
+  path: /matchdata/Menu/competition-data
+  returns_schema: native/acb/competition_weeks
+  short: competition_weeks
+  summary: 'The weeks of every competition edition: the week ids to crawl.'
+- example_args: {}
+  extra_params:
+  - description: Competition id (1, 2, 3, 10) or a list of ids for several. Omitted
+      = the API's default competition.
+    name: competition_ids
+    query_key: competitionIds
+    type: int
+  parser: parse_acb_competition_current
+  path: /matchdata/Menu/competition-data
+  returns_schema: native/acb/competition_current
+  short: competition_current
+  summary: 'The API''s current pointers: competition, edition, week, round and match.'
+- example_args:
+    round_id: 6017
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Round id (integer): global across seasons, not the round number
+      (6017 = Liga 2026-27 round 3). List them with ``acb_competition_rounds`` or
+      ``acb_calendar``. Omitted = the current (or last) round.'
+    name: round_id
+    query_key: roundId
+    type: int
+  - description: 'Week id (integer): global across seasons (2989 = the week of 2026-10-10).
+      List them with ``acb_competition_weeks``.'
+    name: week_id
+    query_key: weekId
+    type: int
+  - description: 'With week_id: false = the games played that week across rounds;
+      true resolves the week to one round.'
+    name: is_round_selected
+    query_key: isRoundSelected
+    type: bool
+  parser: parse_acb_round_matches
+  path: /seasondata/Competition/matches
+  returns_schema: native/acb/round_matches
+  short: round_matches
+  summary: Games of one round (or week) with scores, status and broadcasters.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Standings after this round. Round id (integer): global across seasons,
+      not the round number (6017 = Liga 2026-27 round 3). List them with ``acb_competition_rounds``
+      or ``acb_calendar``. Omitted = the current (or last) round.'
+    name: round_id
+    query_key: roundId
+    type: int
+  parser: parse_acb_standings
+  path: /seasondata/Competition/standings
+  returns_schema: native/acb/standings
+  short: standings
+  summary: 'League table after a round (default: the current round).'
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Standings after this round. Round id (integer): global across seasons,
+      not the round number (6017 = Liga 2026-27 round 3). List them with ``acb_competition_rounds``
+      or ``acb_calendar``. Omitted = the current (or last) round.'
+    name: round_id
+    query_key: roundId
+    type: int
+  parser: parse_acb_standings_rounds
+  path: /seasondata/Competition/standings
+  returns_schema: native/acb/standings_rounds
+  short: standings_rounds
+  summary: 'Standings history: each team''s position after each round, with the round''s
+    game.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_bracket
+  path: /seasondata/Competition/bracket
+  returns_schema: native/acb/bracket
+  short: bracket
+  summary: 'Playoff bracket: one row per series (quarter-final, semifinal, final).'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_bracket_games
+  path: /seasondata/Competition/bracket
+  returns_schema: native/acb/bracket_games
+  short: bracket_games
+  summary: The games of every playoff series of a bracket, one row per game.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_calendar
+  path: /seasondata/Calendar/season-calendar
+  returns_schema: native/acb/calendar
+  short: calendar
+  summary: 'Every round of a season with its games: one call lists every game id.'
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_league_zones
+  path: /seasondata/ShotChart/league-zones
+  returns_schema: native/acb/league_zones
+  short: league_zones
+  summary: League-wide shooting by court zone for a season.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_teams
+  path: /seasondata/TeamProfile/teams
+  returns_schema: native/acb/teams
+  short: teams
+  summary: Teams entered in a competition edition.
+- example_args:
+    club_id: 2
+    season: 2027
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_team_matches
+  path: /seasondata/TeamProfile/team-matches
+  returns_schema: native/acb/team_matches
+  short: team_matches
+  summary: A club's games in a competition edition.
+- example_args:
+    club_id: 2
+    number_of_matches: 5
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: How many games to return (the site asks for 5).
+    name: number_of_matches
+    query_key: numberOfMatches
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_next_matches
+  path: /seasondata/TeamProfile/next-matches
+  returns_schema: native/acb/next_matches
+  short: next_matches
+  summary: A club's most recent and upcoming games.
+- example_args:
+    club_id: 2
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  parser: parse_acb_club_data
+  path: /seasondata/TeamProfile/club-data
+  returns_schema: native/acb/club_data
+  short: club_data
+  summary: 'Club profile: arena, contacts and links.'
+- example_args:
+    club_id: 2
+    season: 2027
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_current_roster
+  path: /seasondata/TeamProfile/current-roster
+  returns_schema: native/acb/current_roster
+  short: current_roster
+  summary: 'A club''s players and staff for an edition (default: the current one).'
+- example_args:
+    club_id: 2
+    number_of_players: 3
+    season: 2027
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: Required. Leaders per statistic; 0 is refused (HTTP 400).
+    name: number_of_players
+    query_key: numberOfPlayers
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_team_leaders
+  path: /seasondata/TeamProfile/team-leaders
+  returns_schema: native/acb/team_leaders
+  short: team_leaders
+  summary: A club's statistical leaders for an edition and all-time.
+- example_args:
+    club_id: 2
+    season: 2027
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_team_stats
+  path: /seasondata/TeamProfile/team-stats
+  returns_schema: native/acb/team_stats
+  short: team_stats
+  summary: 'A club''s player season statistics for an edition: totals, averages and
+    per-40 side by side.'
+- example_args:
+    club_id: 2
+    season: 2027
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_team_totals
+  path: /seasondata/TeamProfile/team-stats
+  returns_schema: native/acb/team_totals
+  short: team_totals
+  summary: A club's team season totals, averages and per-40 values for an edition.
+- example_args:
+    club_id: 2
+  extra_params:
+  - description: Required. ACB club id (integer), stable across seasons and sponsor
+      names (2 = Barca, 9 = Real Madrid, 13 = Valencia Basket). Not the season-team
+      ``team_id``.
+    name: club_id
+    query_key: clubId
+    required: true
+    type: int
+  parser: parse_acb_team_records
+  path: /seasondata/TeamProfile/team-records
+  returns_schema: native/acb/team_records
+  short: team_records
+  summary: A club's single-game records (best performance per statistic).
+- example_args:
+    player_id: 20209407
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  parser: parse_acb_player_data
+  path: /seasondata/PlayerProfile/player-data
+  returns_schema: native/acb/player_data
+  short: player_data
+  summary: 'Player biography: birth, nationality, height, current team and social
+    links.'
+- example_args:
+    player_id: 20209407
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: 'Season END year used as an UPPER bound: the rows keep the seasons
+      up to this one (2026 drops the 2026-27 row). Omitted = all seasons.'
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_player_stats
+  path: /seasondata/PlayerProfile/player-stats
+  returns_schema: native/acb/player_stats
+  short: player_stats
+  summary: A player's season statistics, one row per team and edition.
+- example_args:
+    player_id: 20209407
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  - description: 'Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa,
+      10 Minicopa Endesa (youth). Omitted = the API''s default competition.'
+    name: competition_id
+    query_key: competitionId
+    type: int
+  - description: Season END year used as an UPPER bound for the career rows. Omitted
+      = all seasons.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_player_totals
+  path: /seasondata/PlayerProfile/player-stats
+  returns_schema: native/acb/player_totals
+  short: player_totals
+  summary: A player's career totals, averages and per-40 values.
+- example_args:
+    player_id: 20209407
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  parser: parse_acb_career_stints
+  path: /seasondata/PlayerProfile/career
+  returns_schema: native/acb/career_stints
+  short: career_stints
+  summary: A player's club stints, one row per stint.
+- example_args:
+    player_id: 20209407
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  parser: parse_acb_career_trophies
+  path: /seasondata/PlayerProfile/career
+  returns_schema: native/acb/career_trophies
+  short: career_trophies
+  summary: A player's trophies, one row per competition.
+- example_args:
+    player_id: 20209407
+    season: 2027
+  extra_params:
+  - description: 'Required. ACB licence number (integer): the person id everywhere
+      (box score, play-by-play, shots, rosters). 20209407 = Edy Tavares, 20212243
+      = Olek Balcerowski.'
+    name: player_id
+    query_key: playerLicenceId
+    required: true
+    type: int
+  - description: Season END year (2027 = 2026-27; the first ACB season, 1983-84, is
+      1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted
+      = the current season.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_acb_player_matches
+  path: /seasondata/PlayerProfile/matches
+  returns_schema: native/acb/player_matches
+  short: player_matches
+  summary: 'A player''s game log for an edition (default: the current one).'
+- example_args:
+    limit: 5
+    search_term: tavares
+  extra_params:
+  - description: Required. Name fragment (accent-insensitive on the player rows);
+      a blank term is refused.
+    name: search_term
+    query_key: searchTerm
+    required: true
+    type: str
+  - description: Maximum results per kind (players, teams, coaches).
+    name: limit
+    query_key: limit
+    type: int
+  parser: parse_acb_search
+  path: /seasondata/Search/search
+  returns_schema: native/acb/search
+  short: search
+  summary: Search players, teams and coaches by name.
+getter_module: sportsdataverse.basketball.acb.acb_runtime
+host: https://api2.acb.com/api
+module: acb
+name_pattern: acb_{short}
+parser_columns: true
+parser_module: basketball.acb.acb_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: acb_

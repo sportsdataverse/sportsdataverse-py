@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbr
+  type: character
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: standing
+  type: integer
+- description: ''
+  name: wins
+  type: integer
+- description: ''
+  name: losses
+  type: integer
+- description: ''
+  name: last_results
+  type: character
+kind: dataframe
+schema: acb_quickfacts

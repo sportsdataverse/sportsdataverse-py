@@ -1,0 +1,74 @@
+{
+  "matchId": 17718,
+  "competitionId": 1,
+  "start": "2017-06-16T18:30:00Z",
+  "matchStatus": "FINALIZED",
+  "isOnHalfTime": false,
+  "timeLeft": "00:00",
+  "currentQuarter": 0,
+  "currentHomeScore": 87,
+  "currentAwayScore": 76,
+  "currentHomeBonus": 0,
+  "currentAwayBonus": 0,
+  "teams": {
+    "home": {
+      "id": 3074,
+      "competitionId": 1,
+      "editionId": 81,
+      "clubId": 13,
+      "fullName": "Valencia Basket Club",
+      "shortName": "Valencia Basket",
+      "abbreviatedName": "VBC",
+      "primaryColorHex": "#fc6c0f",
+      "textColorHex": "#000000",
+      "logo": "https://static.acb.com/img/www/clubes20102019/201213ValenciaBasketClub.png",
+      "logoAlt": "Valencia Basket Club logo",
+      "secondaryLogo": null,
+      "contrastRequired": false,
+      "shirtColor": null,
+      "shirtTextColor": null
+    },
+    "away": {
+      "id": 3070,
+      "competitionId": 1,
+      "editionId": 81,
+      "clubId": 9,
+      "fullName": "Real Madrid",
+      "shortName": "Real Madrid",
+      "abbreviatedName": "RMB",
+      "primaryColorHex": "#ffffff",
+      "textColorHex": "#000000",
+      "logo": " https://static.acb.com/logos/1718/real_madrid_00.png",
+      "logoAlt": "Real Madrid logo",
+      "secondaryLogo": null,
+      "contrastRequired": false,
+      "shirtColor": null,
+      "shirtTextColor": null
+    }
+  },
+  "quarterScores": [
+    {
+      "quarter": 1,
+      "homeScore": 19,
+      "awayScore": 20
+    },
+    {
+      "quarter": 2,
+      "homeScore": 29,
+      "awayScore": 11
+    },
+    {
+      "quarter": 3,
+      "homeScore": 19,
+      "awayScore": 25
+    }
+  ],
+  "broadcastChannels": [],
+  "availableContent": {
+    "overview": true,
+    "playbyplay": true,
+    "boxscore": true,
+    "advanced": true
+  },
+  "highLightsVideoURL": null
+}

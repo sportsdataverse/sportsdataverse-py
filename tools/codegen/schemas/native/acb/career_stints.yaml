@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: initial_year
+  type: integer
+- description: ''
+  name: end_year
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbr
+  type: character
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: n_editions
+  type: integer
+- description: ''
+  name: has_no_validated_data
+  type: logical
+kind: dataframe
+schema: acb_career_stints

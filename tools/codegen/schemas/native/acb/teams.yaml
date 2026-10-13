@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbr
+  type: character
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: latest_team_id
+  type: integer
+- description: ''
+  name: latest_team
+  type: character
+kind: dataframe
+schema: acb_teams

@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: value
+  type: character
+- description: ''
+  name: bar_progress
+  type: numeric
+- description: ''
+  name: is_highlighted
+  type: logical
+kind: dataframe
+schema: acb_lead_stats
