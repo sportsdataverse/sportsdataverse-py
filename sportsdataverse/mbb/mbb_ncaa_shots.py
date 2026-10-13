@@ -22,7 +22,7 @@ deliberate Python extension for WBB (divergence spec §2.9 / §3 ``basket_xy``
 knob): the shared-court-geometry bigballR constants (5.25 / 88.75) are used
 for both leagues, and the ``period_model`` knob — same shape as
 :mod:`~sportsdataverse.mbb.mbb_ncaa_game_pbp` — supplies correct WBB quarter
-seconds ``(4, 600, 300)`` in place of the R halves ``case_when``.
+seconds (``wbb_period_model(season)``) in place of the R halves ``case_when``.
 
 Deliberate R-faithful quirks are marked with ``ponytail:`` comments citing
 the R line they reproduce.
@@ -35,6 +35,8 @@ import re
 from typing import Any, Literal, Optional, Protocol, Sequence, Union, overload
 
 import polars as pl
+
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +79,7 @@ SHOTS_SCHEMA: "dict[str, type[pl.DataType]]" = {
 }
 
 #: ``(n_regulation_periods, regulation_period_seconds, ot_period_seconds)``
-#: — MBB halves; WBB quarters are ``(4, 600, 300)``.
+#: — MBB halves; the WBB model comes from ``wbb_period_model(season)``.
 _MBB_PERIOD_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
 
 #: One shot per line: ``addShot(<8 comma-separated fields>);`` (R ``:14``,
@@ -147,8 +149,8 @@ def parse_ncaa_bb_shots(
         game_id: NCAA contest id (kept as Utf8 passthrough).
         period_model: ``(n_regulation_periods, regulation_period_seconds,
             overtime_period_seconds)``. MBB halves ``(2, 1200, 300)`` —
-            reproducing the R ``case_when`` exactly for periods 1-8; WBB
-            quarters ``(4, 600, 300)`` (Python extension — wbigballR's
+            reproducing the R ``case_when`` exactly for periods 1-8; for WBB
+            pass ``wbb_period_model(season)`` (Python extension — wbigballR's
             unexported copy wrongly keeps the halves math).
 
     Returns:
@@ -169,7 +171,8 @@ def parse_ncaa_bb_shots(
 
         WBB quarters (Python extension — no wbigballR export)::
 
-            df = parse_ncaa_bb_shots(html, "5722355", period_model=(4, 600, 300))
+            from sportsdataverse.scrape.ncaa.parse import wbb_period_model
+            df = parse_ncaa_bb_shots(html, "5722355", period_model=wbb_period_model("2025"))
 
         Pipeline next step (one line)::
 
@@ -337,12 +340,13 @@ def ncaa_mbb_shot_locations(
 
     .. _hoopR: https://hoopR.sportsdataverse.org
     """
-    ids = [g for g in game_ids if g is not None and g == g]  # R :5 drops NAs
+    # R :5 drops NAs; NaN and non-integral floats map to None, 6470186.0 -> "6470186"
+    ids = [g for g in map(_utf8_id, game_ids) if g is not None]
 
     def _run(f: _SupportsFetchGameBox) -> "list[pl.DataFrame]":
         frames: "list[pl.DataFrame]" = []
         for gid in ids:
-            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), str(gid))
+            df = parse_ncaa_bb_shots(f.fetch_game_box(gid), gid)
             found = sorted({t for t in df["team"].to_list() if t is not None})
             logger.info(
                 "Game_ID: %s || %s v. %s || %d shots found",

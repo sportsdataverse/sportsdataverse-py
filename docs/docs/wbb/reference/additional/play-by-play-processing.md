@@ -205,7 +205,7 @@ halves era. The line-score width alone cannot (halves + 2 OT and quarters
 
 **Returns**
 
-`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise `(4, 600, 300)` (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
+`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise the quarters model (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
 **Example**
 
