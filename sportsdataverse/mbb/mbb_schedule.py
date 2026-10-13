@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import datetime
 
-import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._espn_schedule import _schedule_frame
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import SeasonNotFoundError
 
@@ -21,13 +21,16 @@ def espn_mbb_schedule(
     """espn_mbb_schedule - look up the men's college basketball scheduler for a given season
 
     Args:
-        dates (int): Used to define different seasons. 2002 is the earliest available season.
+        dates (int): A date (``YYYYMMDD``) or a season (``YYYY``, 2002 or later). A season asks ESPN for
+            both calendar years plus one request per day of November-December (63 requests, as hoopR
+            does) and keeps the games ESPN files under that season.
         groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
         season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
         limit (int): number of records to return, default: 500.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
     Returns:
-        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. A day or season
+            with no games returns a zero-row frame carrying the documented columns.
 
     Example:
         Single date (April 8, 2024 - 2024 NCAA M championship day)::
@@ -65,41 +68,36 @@ def espn_mbb_schedule(
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard"
     params = {
         "dates": dates,
-        "seasonType": season_type,
+        "seasontype": season_type,
         "groups": groups if groups is not None else "50",
         "limit": limit,
     }
-    ev = pd.DataFrame()
-    events_txt = _download_json(download, url, params=params, **kwargs)
-    events = events_txt.get("events")
-    if events is None:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
-    if len(events) == 0:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
+    if dates is None or len(str(dates)) != 4:
+        events = _download_json(download, url, params=params, **kwargs).get("events")
+    else:
+        events = _season_events(int(dates), url, params, **kwargs)
+    return _schedule_frame(events, scoreboard_event_parsing, "mbb", return_as_pandas=return_as_pandas)
 
-    for event in events:
-        event = scoreboard_event_parsing(event)
-        x = pl.from_pandas(pd.json_normalize(event.get("competitions")[0], sep="_"))
-        x = x.with_columns(
-            game_id=(pl.col("id").cast(pl.Int32)),
-            season=(event.get("season").get("year")),
-            season_type=(event.get("season").get("type")),
-            home_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("home_linescores")),
-            away_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("away_linescores")),
-        ).with_columns(
-            season=pl.col("season").cast(pl.Int32),
-            season_type=pl.col("season_type").cast(pl.Int32),
-        )
-        x = x[[s.name for s in x if s.null_count() != x.height]]
-        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
-    ev = pl.from_pandas(ev)
-    ev = ev.janitor.clean_names()
 
-    return ev.to_pandas() if return_as_pandas else ev
+def _season_events(season: int, url: str, params: dict, **kwargs) -> list:
+    """Every event ESPN assigns to ``season`` (hoopR ``espn_mbb_scoreboard``, B-M13).
+
+    ESPN reads a bare ``dates=YYYY`` as the calendar year and stops at ``limit`` (mid-January), so
+    a season pull asks for both calendar years, backfills November-December of ``season - 1`` one
+    day at a time, keeps the events ESPN files under ``season`` and drops the repeats.
+    """
+    fall = datetime.date(season - 1, 11, 1)
+    days = [(fall + datetime.timedelta(days=i)).strftime("%Y%m%d") for i in range(61)]  # Nov 1 - Dec 31
+    events: list = []
+    for d in [season - 1, season, *days]:
+        events += _download_json(download, url, params={**params, "dates": d}, **kwargs).get("events") or []
+    seen: set = set()
+    keep = []
+    for e in events:
+        if isinstance(e, dict) and (e.get("season") or {}).get("year") == season and e.get("id") not in seen:
+            seen.add(e.get("id"))
+            keep.append(e)
+    return keep
 
 
 def scoreboard_event_parsing(event):
@@ -188,7 +186,8 @@ def espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     """espn_mbb_calendar - look up the men's college basketball calendar for a given season
 
     Args:
-        season (int): Used to define different seasons. 2002 is the earliest available season.
+        season (int): Used to define different seasons. 2002 is the earliest available season;
+            ``None`` means the current season.
         ondays (boolean): Used to return dates for calendar ondays
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -196,7 +195,7 @@ def espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
-        ValueError: If `season` is less than 2002.
+        SeasonNotFoundError: If `season` is less than 2002.
 
     Example:
         Calendar dates for a single season::
@@ -224,7 +223,8 @@ def espn_mbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         .. _cfbfastR: https://cfbfastR.sportsdataverse.org
         .. _ESPN: https://www.espn.com
     """
-    if int(season) < 2002:
+    season = most_recent_mbb_season() if season is None else int(season)  # B-L9: never `2024.0` in a URL
+    if season < 2002:
         raise SeasonNotFoundError("season cannot be less than 2002")
     if ondays is not None:
         full_schedule = __ondays_mbb_calendar(season, **kwargs)

@@ -6,6 +6,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._espn_schedule import _empty_schedule
 from sportsdataverse.dl_utils import download
 
 
@@ -21,7 +22,8 @@ def espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
             returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing the schedule. Returns ``None`` if no games.
+        pl.DataFrame: Polars dataframe containing the schedule. A day with no games returns a zero-row frame
+            carrying the documented columns.
 
     Example:
         Pull a single date's slate (Opening Day 2024)::
@@ -48,9 +50,9 @@ def espn_mlb_schedule(dates=None, season_type=None, limit=500, return_as_pandas=
         params["seasontype"] = season_type
 
     payload = _download_json(download, url, params=params, **kwargs)
-    events = payload.get("events", [])
+    events = [ev for ev in payload.get("events") or [] if isinstance(ev, dict) and ev]
     if not events:
-        return None
+        return _empty_schedule("mlb", return_as_pandas)
 
     rows = [_scoreboard_event_parsing(ev) for ev in events]
     df = pd.DataFrame(rows)

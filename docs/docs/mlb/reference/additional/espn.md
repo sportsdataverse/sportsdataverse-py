@@ -257,7 +257,7 @@ espn_mlb_schedule - look up the MLB schedule for a given date or season-year.
 
 **Returns**
 
-Polars dataframe containing the schedule. Returns `None` if no games.
+Polars dataframe containing the schedule. A day with no games returns a zero-row frame carrying the documented columns.
 
 | col_name | type | description |
 |---|---|---|

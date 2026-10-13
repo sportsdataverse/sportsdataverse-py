@@ -3726,6 +3726,7 @@ espn_cfb_schedule:
   home_linescores: Per-period point totals for the home team, stored as an array of quarter/overtime scores.
   home_records: Win-loss record of the home team at the time of the game, as reported by ESPN (e.g., overall or conference
     record).
+  status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country in which the game venue is located, as provided by ESPN's venue data.
 espn_mbb_game_rosters:
   athlete_href: ESPN API URL pointing to the full athlete resource for this player.
@@ -4038,12 +4039,14 @@ espn_nfl_player_stats:
   scoring_two_point_rec_convs: Number of successful two-point conversion receptions caught by the player.
   scoring_two_point_rush_convs: Number of successful two-point conversion rushes scored by the player.
 espn_nfl_schedule:
-  away_current_rank: Current AP or ESPN power ranking of the away team at the time of the game.
+  away_current_rank: Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules.
+  away_winner: True when the away team won, from ESPN's winner flag; null before the game ends.
   away_linescores: Comma-separated or serialized quarter-by-quarter score totals for the away team.
   away_records: Serialized win-loss-tie record(s) for the away team (e.g., overall, home, away, conference).
-  home_current_rank: Current AP or ESPN power ranking of the home team at the time of the game.
+  home_current_rank: Always null. The NFL has no poll, so ESPN ships no curatedRank; kept so the column set matches the college schedules.
   home_linescores: Comma-separated or serialized quarter-by-quarter score totals for the home team.
   home_records: Serialized win-loss-tie record(s) for the home team (e.g., overall, home, away, conference).
+  home_winner: True when the home team won, from ESPN's winner flag; null before the game ends.
   status_is_tbd_flex: Boolean flag indicating whether the game's broadcast slot is designated as a flex/TBD window.
   venue_address_country: Two-letter ISO country code or country name for the country where the venue is located.
 espn_nhl_game_rosters:
@@ -4198,6 +4201,7 @@ espn_nhl_schedule:
   away_records: Serialized win-loss-overtime record string for the away team at the time of the scheduled game.
   home_linescores: Period-by-period goal totals for the home team, stored as an array of integer scores indexed by period.
   home_records: Serialized win-loss-overtime record string for the home team at the time of the scheduled game.
+  status_type_alt_detail: ESPN's short extra-time label on a final ("OT", "SO"); null when the game ended in regulation.
   venue_address_country: Country name or code for the country in which the game venue is located, as provided by ESPN's schedule
     endpoint.
 espn_wbb_game_officials:
