@@ -66,7 +66,7 @@ from sportsdataverse.cfb.cfb_pbp import _UNTYPED_ADMIN_RE, CFBPlayProcess
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
-# 401628439 warns PlayOrderWarning; test_cfb_pbp_offline.py::test_period_order_warning_on_a_mislabelled_period asserts it.
+# 401628439 warns PlayOrderWarning; test_cfb_whole_game_oracle.py::test_period_monotonic_or_the_step_back_warns asserts it.
 pytestmark = [
     pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
     pytest.mark.filterwarnings("ignore::sportsdataverse.errors.PlayOrderWarning"),
