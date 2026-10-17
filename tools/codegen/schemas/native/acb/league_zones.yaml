@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: phase_id
+  type: integer
+- description: ''
+  name: zone
+  type: character
+- description: ''
+  name: attempts
+  type: integer
+- description: ''
+  name: made
+  type: integer
+- description: ''
+  name: points_scored
+  type: integer
+kind: dataframe
+schema: acb_league_zones

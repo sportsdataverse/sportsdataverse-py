@@ -80,7 +80,7 @@ def test_unmatched_espn_game_leaves_the_stats_game_stats_only() -> None:
     assert sched["espn_game_id"].to_list() == ["400796849", None]
 
 
-def test_wnba_archive_crosswalks_have_no_yahoo_ids() -> None:
+def test_wnba_archive_crosswalks_have_no_yahoo_ids_by_default() -> None:
     schedule, rosters = _espn("wnba")
     out = wnba_crosswalks_from_archive(2015, schedule, rosters, F / "wnba_stats" / "json")
     team = out["team"]
@@ -261,3 +261,45 @@ def test_fox_off_by_default_and_failures_leave_columns_null(
     out = nba_crosswalks_from_archive(2015, schedule, rosters, F / "nba_stats" / "json", fox=True)
     assert out["team"]["fox_team_id"].null_count() == 2
     assert "Fox teams unavailable" in caplog.text
+
+
+def _stub_yahoo(monkeypatch: pytest.MonkeyPatch, *, teams_down: bool = False, ids_down: bool = False) -> None:
+    def teams(**_: object) -> dict:
+        if teams_down:
+            raise ConnectionError("yahoo down")
+        return json.loads((F / "yahoo_wnba_league_teams.json").read_text())
+
+    def game_ids(**kw: object) -> dict:
+        if ids_down:
+            raise ConnectionError("yahoo down")
+        assert kw["season"] == "2015"
+        return json.loads((F / "yahoo_wnba_game_ids_20151014.json").read_text())
+
+    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_teams", teams)
+    monkeypatch.setattr("sportsdataverse.yahoo.yahoo_shangrila.yahoo_league_game_ids_by_date", game_ids)
+
+
+def test_wnba_yahoo_leg_fills_team_and_listed_game_ids(monkeypatch: pytest.MonkeyPatch) -> None:
+    _stub_yahoo(monkeypatch)
+    schedule, rosters = _espn("wnba")
+    out = wnba_crosswalks_from_archive(2015, schedule, rosters, F / "wnba_stats" / "json", yahoo=True)
+    team = out["team"].select("espn_team_id", "yahoo_team_id", "yahoo_team_abbreviation", "yahoo_team_name")
+    assert team.sort("espn_team_id").rows() == [
+        (5, "wnba.t.13", "IND", "Indiana Fever"),
+        (8, "wnba.t.11", "MIN", "Minnesota Lynx"),
+    ]
+    assert out["schedule"]["yahoo_game_id"].to_list() == ["wnba.g.20151014011"]
+    assert out["team"].columns == wnba_crosswalk.TEAM_COLUMNS
+    assert out["schedule"].columns == wnba_crosswalk.SCHEDULE_COLUMNS
+
+
+def test_wnba_yahoo_leg_fails_soft(monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture) -> None:
+    schedule, rosters = _espn("wnba")
+    _stub_yahoo(monkeypatch, ids_down=True)  # id list down: unverified home-side id kept
+    out = wnba_crosswalks_from_archive(2015, schedule, rosters, F / "wnba_stats" / "json", yahoo=True)
+    assert out["schedule"]["yahoo_game_id"].to_list() == ["wnba.g.20151014011"]
+    _stub_yahoo(monkeypatch, teams_down=True)
+    out = wnba_crosswalks_from_archive(2015, schedule, rosters, F / "wnba_stats" / "json", yahoo=True)
+    assert out["team"]["yahoo_team_id"].null_count() == 2
+    assert out["schedule"]["yahoo_game_id"].null_count() == 1
+    assert "Yahoo teams unavailable" in caplog.text

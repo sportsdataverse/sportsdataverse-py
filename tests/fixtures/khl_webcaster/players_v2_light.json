@@ -1,0 +1,36 @@
+[
+  {
+    "id": 33797,
+    "shirt_number": 11,
+    "khl_id": 23248,
+    "image": "https://www.khl.ru/img/teamplayers_db/15546/23248.jpg",
+    "name": "Abramov Vitaly",
+    "team": {
+      "id": 12,
+      "khl_id": 54,
+      "name": "Amur",
+      "location": "Khabarovsk"
+    }
+  },
+  {
+    "id": 43535,
+    "shirt_number": 97,
+    "khl_id": 30941,
+    "image": "https://www.khl.ru/img/teamplayers_db/15556/30941.jpg",
+    "name": "Abramov Mikhail B.",
+    "team": null
+  },
+  {
+    "id": 35165,
+    "shirt_number": 17,
+    "khl_id": 30629,
+    "image": "https://www.khl.ru/img/teamplayers_db/15555/30629.jpg",
+    "name": "Abrosimov Ruslan",
+    "team": {
+      "id": 42,
+      "khl_id": 56,
+      "name": "Severstal",
+      "location": "Cherepovets"
+    }
+  }
+]

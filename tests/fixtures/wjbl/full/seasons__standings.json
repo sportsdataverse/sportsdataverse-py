@@ -1,0 +1,975 @@
+[
+    {
+        "season_full_name": "26-27 Wリーグ 大樹生命 Wリーグ ユナイテッドカップ 2026-27",
+        "seasons": {
+            "181": {
+                "season_id": 181,
+                "season_league_name": "グループステージ",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "26-27 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "179": {
+                "season_id": 179,
+                "season_league_name": "プレミア",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "180": {
+                "season_id": 180,
+                "season_league_name": "フューチャー",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "Wリーグオールスター2025-26 in 代々木",
+        "seasons": {
+            "178": {
+                "season_id": 178,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "25-26 Wリーグ プレーオフ セミファイナル",
+        "seasons": {
+            "175": {
+                "season_id": 175,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "25-26 Wリーグ 入替戦",
+        "seasons": {
+            "174": {
+                "season_id": 174,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "25-26 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "169": {
+                "season_id": 169,
+                "season_league_name": "プレミア",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "170": {
+                "season_id": 170,
+                "season_league_name": "フューチャー",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "25-26 Wリーグ 大樹生命 Wリーグ ユナイテッドカップ 2025-26",
+        "seasons": {
+            "173": {
+                "season_id": 173,
+                "season_league_name": "ファイナルステージ",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "172": {
+                "season_id": 172,
+                "season_league_name": "グループステージ",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "25-26 Wリーグ サマーキャンプ in いしかわ",
+        "seasons": {
+            "171": {
+                "season_id": 171,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "Wリーグオールスター2024-25 in 代々木",
+        "seasons": {
+            "168": {
+                "season_id": 168,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "24-25 Wリーグ プレーオフ セミファイナル",
+        "seasons": {
+            "166": {
+                "season_id": 166,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "24-25 Wリーグ 入替戦",
+        "seasons": {
+            "165": {
+                "season_id": 165,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "24-25 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "163": {
+                "season_id": 163,
+                "season_league_name": "プレミア",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "164": {
+                "season_id": 164,
+                "season_league_name": "フューチャー",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "24-25 Wリーグ ユナイテッドカップ2024ｰ25",
+        "seasons": {
+            "162": {
+                "season_id": 162,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "24-25 Wリーグ サマーキャンプ in 武蔵野の森",
+        "seasons": {
+            "161": {
+                "season_id": 161,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "Wリーグオールスター2023-24 in 愛知",
+        "seasons": {
+            "160": {
+                "season_id": 160,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "23-24 Wリーグ プレーオフ　セミクォーターファイナル",
+        "seasons": {
+            "156": {
+                "season_id": 156,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "23-24 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "152": {
+                "season_id": 152,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "23-24 Wリーグ オータムカップ in 奥州",
+        "seasons": {
+            "154": {
+                "season_id": 154,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "23-24 Wリーグ サマーキャンプ in 高崎",
+        "seasons": {
+            "153": {
+                "season_id": 153,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "Wリーグオールスター2022-23 in 有明",
+        "seasons": {
+            "151": {
+                "season_id": 151,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "22-23 Wリーグ プレーオフ　セミクォーターファイナル",
+        "seasons": {
+            "147": {
+                "season_id": 147,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "22-23 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "143": {
+                "season_id": 143,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "22-23 Wリーグ オータムカップ in 高崎",
+        "seasons": {
+            "145": {
+                "season_id": 145,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "22-23 Wリーグ サマーキャンプ in 高崎",
+        "seasons": {
+            "144": {
+                "season_id": 144,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "21-22 Wリーグ プレーオフ　ファイナル",
+        "seasons": {
+            "140": {
+                "season_id": 140,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "21-22 Wリーグ プレーオフ　セミファイナル",
+        "seasons": {
+            "139": {
+                "season_id": 139,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "21-22 Wリーグ プレーオフ　クォーターファイナル",
+        "seasons": {
+            "138": {
+                "season_id": 138,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "21-22 Wリーグ プレーオフ　セミクォーターファイナル",
+        "seasons": {
+            "137": {
+                "season_id": 137,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "21-22 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "135": {
+                "season_id": 135,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "Ｗリーグオールスター 2021-2022 in YOYOGI",
+        "seasons": {
+            "141": {
+                "season_id": 141,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "オータムカップ2021 in 高崎",
+        "seasons": {
+            "136": {
+                "season_id": 136,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "20-21 Wリーグ プレーオフ　ファイナル",
+        "seasons": {
+            "134": {
+                "season_id": 134,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "20-21 Wリーグ プレーオフ　セミファイナル",
+        "seasons": {
+            "133": {
+                "season_id": 133,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "20-21 Wリーグ プレーオフ　クォーターファイナル",
+        "seasons": {
+            "132": {
+                "season_id": 132,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "20-21 Wリーグ プレーオフ　セミクォーターファイナル",
+        "seasons": {
+            "131": {
+                "season_id": 131,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "20-21 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "129": {
+                "season_id": 129,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "19-20 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "123": {
+                "season_id": 123,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "サマーキャンプ2019  in 大村",
+        "seasons": {
+            "122": {
+                "season_id": 122,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "18-19 Wリーグ プレーオフ　ファイナル",
+        "seasons": {
+            "121": {
+                "season_id": 121,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "18-19 Wリーグ プレーオフ　セミファイナル",
+        "seasons": {
+            "120": {
+                "season_id": 120,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "18-19 Wリーグ プレーオフ　クォーターファイナル",
+        "seasons": {
+            "119": {
+                "season_id": 119,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "18-19 Wリーグ プレーオフ　セミクォーターファイナル",
+        "seasons": {
+            "118": {
+                "season_id": 118,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "18-19 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "116": {
+                "season_id": 116,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "17-18 Wリーグ プレーオフ　ファイナル",
+        "seasons": {
+            "115": {
+                "season_id": 115,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "17-18 Wリーグ プレーオフ　3位決定戦",
+        "seasons": {
+            "114": {
+                "season_id": 114,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "17-18 Wリーグ プレーオフ　セミファイナル",
+        "seasons": {
+            "113": {
+                "season_id": 113,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "17-18 Wリーグ プレーオフ　クォーターファイナル",
+        "seasons": {
+            "112": {
+                "season_id": 112,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "17-18 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "110": {
+                "season_id": 110,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "16-17 Wリーグ プレーオフ　ファイナル",
+        "seasons": {
+            "109": {
+                "season_id": 109,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "16-17 Wリーグ プレーオフ　セミファイナル",
+        "seasons": {
+            "108": {
+                "season_id": 108,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "16-17 Wリーグ プレーオフ　クォーターファイナル",
+        "seasons": {
+            "107": {
+                "season_id": 107,
+                "season_league_name": "",
+                "team_standings_flg": 0,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "16-17 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "104": {
+                "season_id": 104,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "106": {
+                "season_id": 106,
+                "season_league_name": "2次ラウンド 下位リーグ",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "15-16 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "97": {
+                "season_id": 97,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "99": {
+                "season_id": 99,
+                "season_league_name": "2次ラウンド下位リーグ",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "14-15 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "94": {
+                "season_id": 94,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "13-14 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "91": {
+                "season_id": 91,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "12-13 Wリーグ プレーオフ／ファーストラウンド",
+        "seasons": {
+            "88": {
+                "season_id": 88,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "12-13 Wリーグ レギュラーシーズン",
+        "seasons": {
+            "87": {
+                "season_id": 87,
+                "season_league_name": "",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "11-12 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "83": {
+                "season_id": 83,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "84": {
+                "season_id": 84,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "10-11 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "78": {
+                "season_id": 78,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "79": {
+                "season_id": 79,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "09-10 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "73": {
+                "season_id": 73,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "74": {
+                "season_id": 74,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "08-09 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "67": {
+                "season_id": 67,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "68": {
+                "season_id": 68,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "07-08 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "61": {
+                "season_id": 61,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "62": {
+                "season_id": 62,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "06-07 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "56": {
+                "season_id": 56,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "57": {
+                "season_id": 57,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "05-06 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "46": {
+                "season_id": 46,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "47": {
+                "season_id": 47,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "04-05 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "41": {
+                "season_id": 41,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "42": {
+                "season_id": 42,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "03-04 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "25": {
+                "season_id": 25,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "26": {
+                "season_id": 26,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "02-03 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "20": {
+                "season_id": 20,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "21": {
+                "season_id": 21,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "01-02 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "15": {
+                "season_id": 15,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "16": {
+                "season_id": 16,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "00-01 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "12": {
+                "season_id": 12,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "13": {
+                "season_id": 13,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    },
+    {
+        "season_full_name": "99-00 Wリーグ レギュラーリーグ",
+        "seasons": {
+            "49": {
+                "season_id": 49,
+                "season_league_name": "WI",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            },
+            "48": {
+                "season_id": 48,
+                "season_league_name": "W",
+                "team_standings_flg": 1,
+                "season_tournament_text_flg": 0,
+                "season_tournament_text": ""
+            }
+        }
+    }
+]

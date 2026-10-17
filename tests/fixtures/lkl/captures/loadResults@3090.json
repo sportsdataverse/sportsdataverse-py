@@ -1,0 +1,88 @@
+{
+  "season_id": 3090,
+  "season_label": "2007-2008 m. sezonas",
+  "season_end_year": 2008,
+  "pages": 12,
+  "game_count": 111,
+  "games": [
+    {
+      "game_id": 1989,
+      "date": "2008-05-17",
+      "weekday": "Saturday",
+      "time": "18:45",
+      "arena": "Jeep arena",
+      "city": "Vilnius",
+      "home_slug": "rytas",
+      "home_code": "RYT",
+      "home_name": "Rytas",
+      "home_score": 75,
+      "away_slug": "zalgiris",
+      "away_code": "ŽAL",
+      "away_name": "Žalgiris",
+      "away_score": 81,
+      "winner_highlighted": "away"
+    },
+    {
+      "game_id": 1988,
+      "date": "2008-05-14",
+      "weekday": "Wednesday",
+      "time": "21:00",
+      "arena": "Kauno sporto halė",
+      "city": "Kaunas",
+      "home_slug": "zalgiris",
+      "home_code": "ŽAL",
+      "home_name": "Žalgiris",
+      "home_score": 92,
+      "away_slug": "rytas",
+      "away_code": "RYT",
+      "away_name": "Rytas",
+      "away_score": 79,
+      "winner_highlighted": "home"
+    },
+    {
+      "game_id": 2079,
+      "date": "2008-05-13",
+      "weekday": "Tuesday",
+      "time": "18:00",
+      "arena": "Šiaulių arena",
+      "city": "Šiauliai",
+      "home_slug": "siauliai",
+      "home_code": "ŠIA",
+      "home_name": "Šiauliai",
+      "home_score": 90,
+      "away_slug": "wolves-twinsbet",
+      "away_code": "ALY",
+      "away_name": "Wolves Twinsbet",
+      "away_score": 75,
+      "winner_highlighted": "home"
+    }
+  ],
+  "seasons": [
+    {
+      "season_id": 49436,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 41936,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 39252,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "kmt_seasons": [
+    {
+      "season_id": 49437,
+      "label": "KMT 2026-2027 m."
+    },
+    {
+      "season_id": 41937,
+      "label": "KMT 2025-2026 m."
+    },
+    {
+      "season_id": 39371,
+      "label": "KMT 2024-2025 m."
+    }
+  ]
+}

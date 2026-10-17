@@ -1,0 +1,333 @@
+[
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "eventId": 133,
+    "eventUuid": "4209fd58-15c6-5830-aa7d-2270bf9afdaf",
+    "round": 1,
+    "gameType": "Elitserien",
+    "arena": "Scandinavium",
+    "attendance": 12044,
+    "startDateAndTime": "2025-09-13T15:15:00",
+    "period": 3,
+    "time": "20:00",
+    "gameState": "GameEnded",
+    "revision": 2,
+    "type": "goalkeeper",
+    "realWorldTime": "2025-09-13T17:42:59.53494",
+    "updatedTime": "2025-09-13T15:42:59.598746",
+    "homeTeam": {
+      "teamId": "FHC",
+      "teamName": "Frölunda HC",
+      "teamCode": "FHC",
+      "score": 2
+    },
+    "awayTeam": {
+      "teamId": "LHC",
+      "teamName": "Linköpings HC",
+      "teamCode": "LHC",
+      "score": 1
+    },
+    "eventTeam": {
+      "teamId": "FHC",
+      "place": "home",
+      "teamCode": "FHC",
+      "teamName": "Frölunda HC"
+    },
+    "player": {
+      "playerId": "2427",
+      "firstName": "Lars",
+      "familyName": "Johansson",
+      "jerseyToday": "1"
+    },
+    "isEntering": false,
+    "gameUuid": "bdhvuc5tex"
+  },
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "eventId": 132,
+    "eventUuid": "067896e4-1810-52f8-a480-3033a5650387",
+    "round": 1,
+    "gameType": "Elitserien",
+    "arena": "Scandinavium",
+    "attendance": 12044,
+    "startDateAndTime": "2025-09-13T15:15:00",
+    "period": 3,
+    "time": "19:59",
+    "gameState": "GameEnded",
+    "revision": 1,
+    "type": "shot",
+    "realWorldTime": "2025-09-13T17:35:56.603044",
+    "updatedTime": "2025-09-13T15:36:06.186916",
+    "homeTeam": {
+      "teamId": "FHC",
+      "teamName": "Frölunda HC",
+      "teamCode": "FHC",
+      "score": 2
+    },
+    "awayTeam": {
+      "teamId": "LHC",
+      "teamName": "Linköpings HC",
+      "teamCode": "LHC",
+      "score": 1
+    },
+    "eventTeam": {
+      "teamId": "LHC",
+      "place": "away",
+      "teamCode": "LHC",
+      "teamName": "Linköpings HC"
+    },
+    "player": {
+      "playerId": "3622",
+      "firstName": "Johan",
+      "familyName": "Södergran",
+      "jerseyToday": "38"
+    },
+    "locationX": 12,
+    "locationY": -135,
+    "goalSection": -3,
+    "isPenaltyShot": false,
+    "gameUuid": "bdhvuc5tex"
+  },
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "eventId": 117,
+    "eventUuid": "df97d9e6-a579-5b82-ba5a-96f2359b796a",
+    "round": 1,
+    "gameType": "Elitserien",
+    "arena": "Scandinavium",
+    "attendance": 12044,
+    "startDateAndTime": "2025-09-13T15:15:00",
+    "period": 3,
+    "time": "17:13",
+    "gameState": "GameEnded",
+    "revision": 1,
+    "type": "timeout",
+    "realWorldTime": "2025-09-13T17:27:04.525552",
+    "updatedTime": "2025-09-13T15:27:04.702405",
+    "homeTeam": {
+      "teamId": "FHC",
+      "teamName": "Frölunda HC",
+      "teamCode": "FHC",
+      "score": 2
+    },
+    "awayTeam": {
+      "teamId": "LHC",
+      "teamName": "Linköpings HC",
+      "teamCode": "LHC",
+      "score": 1
+    },
+    "eventTeam": {
+      "teamId": "LHC",
+      "place": "away",
+      "teamCode": "LHC",
+      "teamName": "Linköpings HC"
+    },
+    "gameUuid": "bdhvuc5tex"
+  },
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "eventId": 105,
+    "eventUuid": "595b23ed-9319-53b2-8e3d-3f41bb9522e5",
+    "round": 1,
+    "gameType": "Elitserien",
+    "arena": "Scandinavium",
+    "attendance": 12044,
+    "startDateAndTime": "2025-09-13T15:15:00",
+    "period": 3,
+    "time": "11:10",
+    "gameState": "GameEnded",
+    "revision": 2,
+    "type": "penalty",
+    "realWorldTime": "2025-09-13T17:16:14.502352",
+    "updatedTime": "2025-09-13T15:19:59.373733",
+    "homeTeam": {
+      "teamId": "FHC",
+      "teamName": "Frölunda HC",
+      "teamCode": "FHC",
+      "score": 2
+    },
+    "awayTeam": {
+      "teamId": "LHC",
+      "teamName": "Linköpings HC",
+      "teamCode": "LHC",
+      "score": 1
+    },
+    "eventTeam": {
+      "teamId": "FHC",
+      "place": "home",
+      "teamCode": "FHC",
+      "teamName": "Frölunda HC"
+    },
+    "player": {
+      "playerId": "6432",
+      "firstName": "Dominik",
+      "familyName": "Egli",
+      "jerseyToday": "46"
+    },
+    "variant": {
+      "shortName": "Minor",
+      "minorTime": "2",
+      "doubleMinorTime": "0",
+      "benchTime": "0",
+      "majorTime": "0",
+      "misconductTime": "0",
+      "gMTime": "0",
+      "mPTime": "0",
+      "description": "2 min"
+    },
+    "offence": "CROSS",
+    "didRenderInPenaltyShot": false,
+    "gameUuid": "bdhvuc5tex"
+  },
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "eventId": 96,
+    "eventUuid": "e7ba057e-5686-5586-9145-c79704bd5efb",
+    "round": 1,
+    "gameType": "Elitserien",
+    "arena": "Scandinavium",
+    "attendance": 12044,
+    "startDateAndTime": "2025-09-13T15:15:00",
+    "period": 3,
+    "time": "09:07",
+    "gameState": "GameEnded",
+    "revision": 3,
+    "type": "goal",
+    "realWorldTime": "2025-09-13T17:10:22.536784",
+    "updatedTime": "2025-09-13T15:34:22.161003",
+    "homeTeam": {
+      "teamId": "FHC",
+      "teamName": "Frölunda HC",
+      "teamCode": "FHC",
+      "score": 2
+    },
+    "awayTeam": {
+      "teamId": "LHC",
+      "teamName": "Linköpings HC",
+      "teamCode": "LHC",
+      "score": 1
+    },
+    "eventTeam": {
+      "teamId": "FHC",
+      "place": "home",
+      "teamCode": "FHC",
+      "teamName": "Frölunda HC"
+    },
+    "player": {
+      "playerId": "6433",
+      "firstName": "Arttu",
+      "familyName": "Ruotsalainen",
+      "jerseyToday": "25",
+      "statistics": [
+        {
+          "key": "G",
+          "value": "1"
+        },
+        {
+          "key": "A",
+          "value": "0"
+        }
+      ]
+    },
+    "locationX": 51,
+    "locationY": 68,
+    "homeGoals": 2,
+    "awayGoals": 1,
+    "goalSection": 9,
+    "isPenaltyShot": false,
+    "isEmptyNetGoal": false,
+    "pop": [
+      {
+        "playerId": "2427",
+        "firstName": "Lars",
+        "familyName": "Johansson",
+        "jerseyToday": "1"
+      },
+      {
+        "playerId": "6433",
+        "firstName": "Arttu",
+        "familyName": "Ruotsalainen",
+        "jerseyToday": "25"
+      },
+      {
+        "playerId": "4565",
+        "firstName": "Theodor",
+        "familyName": "Niederbach",
+        "jerseyToday": "27"
+      }
+    ],
+    "nep": [
+      {
+        "playerId": "4287",
+        "firstName": "Erik",
+        "familyName": "Norén",
+        "jerseyToday": "9"
+      },
+      {
+        "playerId": "2609",
+        "firstName": "Christoffer",
+        "familyName": "Ehn",
+        "jerseyToday": "21"
+      },
+      {
+        "playerId": "3858",
+        "firstName": "Jesper",
+        "familyName": "Myrenberg",
+        "jerseyToday": "31"
+      }
+    ],
+    "assists": {
+      "first": {
+        "playerId": "6432",
+        "firstName": "Dominik",
+        "familyName": "Egli",
+        "jerseyToday": "46",
+        "statistics": [
+          {
+            "key": "G",
+            "value": "0"
+          },
+          {
+            "key": "A",
+            "value": "1"
+          }
+        ]
+      },
+      "second": {
+        "playerId": "6598",
+        "firstName": "Ivar",
+        "familyName": "Stenberg",
+        "jerseyToday": "41",
+        "statistics": [
+          {
+            "key": "G",
+            "value": "0"
+          },
+          {
+            "key": "A",
+            "value": "1"
+          }
+        ]
+      }
+    },
+    "goalStatus": "PP1",
+    "gameUuid": "bdhvuc5tex"
+  },
+  {
+    "gameSourceId": "20250913-FHC-LHC",
+    "gameId": 22003,
+    "period": 1,
+    "started": true,
+    "startedAt": "2025-09-13T15:14:26.032Z",
+    "finished": true,
+    "finishedAt": "2025-09-13T15:46:48.027Z",
+    "realWorldTime": "2025-09-13T15:46:48.275351",
+    "gameUuid": "bdhvuc5tex",
+    "type": "period"
+  }
+]

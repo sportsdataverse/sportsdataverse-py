@@ -1,0 +1,145 @@
+{
+  "data": {
+    "matchId": "345915",
+    "categories": [
+      {
+        "leaderCategory": "HucumRibaundu",
+        "leaderCategoryDescription": "Hücum Ribaundu",
+        "leaders": [
+          {
+            "value": 5.0,
+            "playerId": 467246,
+            "playerName": "Ahmet Arda Aydın",
+            "jerseyNumber": "23",
+            "image": "https://tbf.org.tr/res/663152-arda-D1F671B5-34B2-4112-B356-6A114B518667.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 4.0,
+            "playerId": 35766,
+            "playerName": "Ali Işık",
+            "jerseyNumber": "44",
+            "image": "https://tbf.org.tr/res/412df485-37e0-4d56-8cf9-79d0c6b90684_44.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 2.0,
+            "playerId": 56403,
+            "playerName": "Ömer Sancaklı",
+            "jerseyNumber": "11",
+            "image": "https://tbf.org.tr/res/84ea5c10-11bc-4d65-8168-2d3870d839f5_mer Sancakl.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "Asist",
+        "leaderCategoryDescription": "Asist",
+        "leaders": [
+          {
+            "value": 5.0,
+            "playerId": 473518,
+            "playerName": "Keshun Sherrill",
+            "jerseyNumber": "73",
+            "image": "https://tbf.org.tr/res/ccef0f2d-014e-4676-9e9c-654fa11d0c06_73.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 3.0,
+            "playerId": 189840,
+            "playerName": "Umut Geçen",
+            "jerseyNumber": "21",
+            "image": "https://tbf.org.tr/res/851435dc-f30e-4b24-a3ef-a9d9c93d35c5_21.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 3.0,
+            "playerId": 224801,
+            "playerName": "Ömercan Engin",
+            "jerseyNumber": "8",
+            "image": "https://tbf.org.tr/res/42c2d722-da9b-4b19-bb01-ec7bc01435c8_8.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      },
+      {
+        "leaderCategory": "TopCalma",
+        "leaderCategoryDescription": "Top Çalma",
+        "leaders": [
+          {
+            "value": 2.0,
+            "playerId": 189840,
+            "playerName": "Umut Geçen",
+            "jerseyNumber": "21",
+            "image": "https://tbf.org.tr/res/851435dc-f30e-4b24-a3ef-a9d9c93d35c5_21.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 1.0,
+            "playerId": 224801,
+            "playerName": "Ömercan Engin",
+            "jerseyNumber": "8",
+            "image": "https://tbf.org.tr/res/42c2d722-da9b-4b19-bb01-ec7bc01435c8_8.webp",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          },
+          {
+            "value": 1.0,
+            "playerId": 340042,
+            "playerName": "Ata Engin",
+            "jerseyNumber": "22",
+            "image": "https://tbf.org.tr/res/4d12c4a3-006d-4094-a98f-3277b3db9d24_13868442196.jpg",
+            "isHome": true,
+            "isActive": false,
+            "isStarter": false,
+            "pno": 0,
+            "caption": false,
+            "teamName": ""
+          }
+        ]
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

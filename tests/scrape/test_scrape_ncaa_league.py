@@ -6,6 +6,7 @@ here is the seam the extraction exists to protect: a league is always passed
 in, never assumed.
 """
 
+import ast
 import inspect
 import pathlib
 
@@ -72,9 +73,21 @@ def test_no_module_hardcodes_a_league_literal() -> None:
     for path in sorted(ENGINE_DIR.glob("*.py")):
         if path.name == "league_config.py":
             continue  # the one file whose job IS declaring the league tokens
-        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        text = path.read_text(encoding="utf-8")
+        # docstrings are documentation: a usage example there (league="mbb") is the caller passing it
+        docstring_lines = {
+            ln
+            for node in ast.walk(ast.parse(text))
+            if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
+            and node.body
+            and isinstance(node.body[0], ast.Expr)
+            and isinstance(node.body[0].value, ast.Constant)
+            and isinstance(node.body[0].value.value, str)
+            for ln in range(node.body[0].lineno, node.body[0].end_lineno + 1)
+        }
+        for i, line in enumerate(text.splitlines(), 1):
             stripped = line.strip()
-            if stripped.startswith("#") or '"""' in stripped:
+            if stripped.startswith("#") or '"""' in stripped or i in docstring_lines:
                 continue
             for bad in ('league="mbb"', 'league="wbb"', '/ "mbb" /', '/ "wbb" /'):
                 if bad in stripped:

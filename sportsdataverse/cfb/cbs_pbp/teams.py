@@ -14,6 +14,12 @@ Built 2026-09-18 from CBS NAPI ``season/teams/50000037`` (348 teams, league 56) 
 normalised name to ESPN's own football team directory: 320 teams, no CBS id claimed by two
 ESPN ids. The unmatched remainder is CBS's D2/D3 tail, which has no play-by-play in any era.
 
+Five FCS schools the name match missed were added 2026-10-12 from CBS's own team list (NAPI
+league 56 ``season/teams``) -- Albany, The Citadel, Incarnate Word, Jacksonville and East Texas
+A&M (CBS's ``Texas A&M-Commerce``) -- the first four confirmed by every 2015-2017 harvested
+scoreboard card that pairs them with an already-mapped opponent on an ESPN game's date. That
+leaves one 2015+ FBS/FCS school unmapped: UT Rio Grande Valley (football from 2025).
+
 # ponytail: a static snapshot. A new FBS member or a rename is a missing key, which degrades to
 # "no CBS id" and hands the game to the next source -- never to a wrong id. The upgrade path is
 # the id map's ``TEAM_SCHEMA.cbs_team_id`` column, which this module is only the fallback for.
@@ -345,6 +351,12 @@ _CBS_TEAM_BY_ESPN: Dict[str, Tuple[int, str, str, str]] = {
     "111610": (2932255, "STAU", "St. Andrews", "Knights"),  # St. Andrews Knights
     "112334": (3115531, "FP", "Franklin Pierce", "Ravens"),  # Franklin Pierce Ravens
     "124386": (29191269, "ARBA", "Arkansas Baptist", "Buffaloes"),  # Arkansas Baptist Buffaloes
+    # added 2026-10-12 from CBS's team list (see the module docstring)
+    "294": (13493, "JAX", "Jacksonville", "Dolphins"),  # Jacksonville Dolphins
+    "399": (460, "ALBY", "UAlbany", "Great Danes"),  # UAlbany Great Danes
+    "2643": (860, "CIT", "The Citadel", "Bulldogs"),  # The Citadel Bulldogs
+    "2837": (871, "ETAM", "East Texas A&M", "Lions"),  # East Texas A&M Lions
+    "2916": (1678525, "UIW", "Incarnate Word", "Cardinals"),  # Incarnate Word Cardinals
 }
 
 #: CBS team id -> ESPN team id (the reverse of the same snapshot).

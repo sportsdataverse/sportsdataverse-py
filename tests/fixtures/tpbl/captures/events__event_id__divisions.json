@@ -1,0 +1,23 @@
+[
+ {
+  "id": 1,
+  "gohoops_id": 64,
+  "gohoops_event_id": 319,
+  "name": "熱身賽",
+  "status": "COMPLETED"
+ },
+ {
+  "id": 2,
+  "gohoops_id": 65,
+  "gohoops_event_id": 319,
+  "name": "例行賽",
+  "status": "COMPLETED"
+ },
+ {
+  "id": 6,
+  "gohoops_id": 259,
+  "gohoops_event_id": 319,
+  "name": "季後挑戰賽",
+  "status": "COMPLETED"
+ }
+]

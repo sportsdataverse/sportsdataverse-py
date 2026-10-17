@@ -26,7 +26,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
 
 __all__ = ["_get"]
@@ -74,7 +74,5 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Di
     """
     headers = {**_HEADERS, **(kwargs.pop("headers", None) or {})}
     query = {**_LOCALE, **{k: v for k, v in (params or {}).items() if v is not None}}
-    with _transport_errors(url):
-        resp = download(url=url, params=query, headers=headers, **kwargs)
-    body = _json_body(resp, url)
+    body = _download_json(download, url, params=query, headers=headers, **kwargs)
     return body if isinstance(body, dict) else {}

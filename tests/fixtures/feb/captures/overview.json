@@ -1,0 +1,521 @@
+{
+  "HEADER": null,
+  "SCOREBOARD": null,
+  "TEAMSTATS": null,
+  "TICKER": null,
+  "OVERVIEW": {
+    "activeCompID": null,
+    "duration": null,
+    "COMPETITIONS": [
+      {
+        "id": "210",
+        "name": "Liga Femenina Endesa",
+        "gamescount": 8,
+        "nowplaying": 0,
+        "order": 2,
+        "GAMES": [
+          {
+            "CompID": "210",
+            "CompCode": "23467",
+            "Competition": "LF ENDESA",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2522794,
+            "GameCode": null,
+            "Place": "PAZO PROVINCIAL DOS DEPORTES",
+            "TeamAID": 1008982,
+            "TeamA": "DURÁN MAQUINARIA ENSINO",
+            "ScoreA": 76,
+            "TeamACode": "27030500",
+            "TeamAClubCode": "270305",
+            "TeamASlug": "DME",
+            "TeamBID": 1008971,
+            "TeamB": "KUTXABANK ARASKI",
+            "TeamBCode": "01024102",
+            "TeamBClubCode": "010241",
+            "TeamBSlug": "ARA",
+            "ScoreB": 63,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1008982&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008971&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "17",
+                "scoreB": "18"
+              },
+              {
+                "n": "2",
+                "scoreA": "19",
+                "scoreB": "11"
+              },
+              {
+                "n": "3",
+                "scoreA": "25",
+                "scoreB": "23"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "210",
+            "CompCode": "23467",
+            "Competition": "LF ENDESA",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2522795,
+            "GameCode": null,
+            "Place": "ANTONIO MAGARIÑOS, PABELLON",
+            "TeamAID": 1008993,
+            "TeamA": "MOVISTAR ESTUDIANTES",
+            "ScoreA": 70,
+            "TeamACode": "28000154",
+            "TeamAClubCode": "280001",
+            "TeamASlug": "MOV",
+            "TeamBID": 1008686,
+            "TeamB": "VALENCIA B.C.",
+            "TeamBCode": "46000221",
+            "TeamBClubCode": "460002",
+            "TeamBSlug": "VBC",
+            "ScoreB": 99,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1008993&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008686&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "16",
+                "scoreB": "21"
+              },
+              {
+                "n": "2",
+                "scoreA": "18",
+                "scoreB": "25"
+              },
+              {
+                "n": "3",
+                "scoreA": "25",
+                "scoreB": "25"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "210",
+            "CompCode": "23467",
+            "Competition": "LF ENDESA",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2522798,
+            "GameCode": null,
+            "Place": "PABELLON MUNICIPAL WURZBURG SILVIA DOMINGUEZ",
+            "TeamAID": 1008381,
+            "TeamA": "MEINS AVENIDA",
+            "ScoreA": 86,
+            "TeamACode": "37016400",
+            "TeamAClubCode": "370164",
+            "TeamASlug": "MEI",
+            "TeamBID": 1008628,
+            "TeamB": "INVERSUS GERNIKA BIZKAIA",
+            "TeamBCode": "48035600",
+            "TeamBClubCode": "480356",
+            "TeamBSlug": "GRK",
+            "ScoreB": 58,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1008381&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008628&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "18",
+                "scoreB": "20"
+              },
+              {
+                "n": "2",
+                "scoreA": "22",
+                "scoreB": "5"
+              },
+              {
+                "n": "3",
+                "scoreA": "26",
+                "scoreB": "19"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          }
+        ]
+      },
+      {
+        "id": "118",
+        "name": "Segunda FEB",
+        "gamescount": 7,
+        "nowplaying": 0,
+        "order": 3,
+        "GAMES": [
+          {
+            "CompID": "118",
+            "CompCode": "23474",
+            "Competition": "SEGUNDA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2536305,
+            "GameCode": null,
+            "Place": "PAB MUNI CIUTAT CASTELLO",
+            "TeamAID": 1010208,
+            "TeamA": "AMICS CASTELLÓ",
+            "ScoreA": 65,
+            "TeamACode": "12004900",
+            "TeamAClubCode": "120049",
+            "TeamASlug": "AMB",
+            "TeamBID": 1009133,
+            "TeamB": "C.B. ZARAGOZA",
+            "TeamBCode": "50000102",
+            "TeamBClubCode": "500001",
+            "TeamBSlug": "CBZ",
+            "ScoreB": 75,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010208&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1009133&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "13",
+                "scoreB": "15"
+              },
+              {
+                "n": "2",
+                "scoreA": "19",
+                "scoreB": "26"
+              },
+              {
+                "n": "3",
+                "scoreA": "17",
+                "scoreB": "14"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "118",
+            "CompCode": "23474",
+            "Competition": "SEGUNDA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2536125,
+            "GameCode": null,
+            "Place": "PABELLÓN DE DEPORTES JAVIER IMBRODA ORTIZ",
+            "TeamAID": 1010352,
+            "TeamA": "MELILLA CIUDAD DEL DEPORTE",
+            "ScoreA": 82,
+            "TeamACode": "52004200",
+            "TeamAClubCode": "520042",
+            "TeamASlug": "MCD",
+            "TeamBID": 1008643,
+            "TeamB": "CLÍNICA PONFERRADA SDP",
+            "TeamBCode": "24023504",
+            "TeamBClubCode": "240235",
+            "TeamBSlug": "SDP",
+            "ScoreB": 69,
+            "StartTime": "2026-10-11T12:30:00",
+            "StartTimeUTC": "2026-10-11T10:30:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010352&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008643&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "26",
+                "scoreB": "15"
+              },
+              {
+                "n": "2",
+                "scoreA": "26",
+                "scoreB": "21"
+              },
+              {
+                "n": "3",
+                "scoreA": "18",
+                "scoreB": "10"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "118",
+            "CompCode": "23474",
+            "Competition": "SEGUNDA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2536124,
+            "GameCode": null,
+            "Place": "PRINCIPES DE ASTURIAS, PABELLON",
+            "TeamAID": 1010495,
+            "TeamA": "SPANISH BASKETBALL ACADEMY",
+            "ScoreA": 77,
+            "TeamACode": "28294100",
+            "TeamAClubCode": "282941",
+            "TeamASlug": "SBA",
+            "TeamBID": 1008857,
+            "TeamB": "CULTURAL Y DEPORTIVA LEONESA",
+            "TeamBCode": "24031000",
+            "TeamBClubCode": "240310",
+            "TeamBSlug": "CUL",
+            "ScoreB": 84,
+            "StartTime": "2026-10-11T20:00:00",
+            "StartTimeUTC": "2026-10-11T18:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010495&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008857&ti=1",
+            "Quarter": 5,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "17",
+                "scoreB": "20"
+              },
+              {
+                "n": "2",
+                "scoreA": "22",
+                "scoreB": "13"
+              },
+              {
+                "n": "3",
+                "scoreA": "7",
+                "scoreB": "16"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          }
+        ]
+      },
+      {
+        "id": "111",
+        "name": "Tercera FEB",
+        "gamescount": 22,
+        "nowplaying": 0,
+        "order": 6,
+        "GAMES": [
+          {
+            "CompID": "111",
+            "CompCode": "23475",
+            "Competition": "TERCERA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2536853,
+            "GameCode": null,
+            "Place": "Pavillón Municipal Vila de Noia",
+            "TeamAID": 1010503,
+            "TeamA": "CALVO BASKET XIRIA",
+            "ScoreA": 72,
+            "TeamACode": "15033900",
+            "TeamAClubCode": "150339",
+            "TeamASlug": "EBX",
+            "TeamBID": 1008919,
+            "TeamB": "MARÍN ENCE PEIXEGALEGO",
+            "TeamBCode": "36020904",
+            "TeamBClubCode": "360209",
+            "TeamBSlug": "PXG",
+            "ScoreB": 74,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010503&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1008919&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "22",
+                "scoreB": "20"
+              },
+              {
+                "n": "2",
+                "scoreA": "15",
+                "scoreB": "26"
+              },
+              {
+                "n": "3",
+                "scoreA": "19",
+                "scoreB": "9"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "111",
+            "CompCode": "23475",
+            "Competition": "TERCERA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2536491,
+            "GameCode": null,
+            "Place": "PABELLON MUNICIPAL MOTRIL",
+            "TeamAID": 1010328,
+            "TeamA": "MOLINA OLEA CB COSTA MOTRIL",
+            "ScoreA": 86,
+            "TeamACode": "18012190",
+            "TeamAClubCode": "180121",
+            "TeamASlug": "CBM",
+            "TeamBID": 1010895,
+            "TeamB": "BALONCESTO COMARCA DE LA AXARQUIA",
+            "TeamBCode": "29009100",
+            "TeamBClubCode": "290091",
+            "TeamBSlug": "BRA",
+            "ScoreB": 75,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010328&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1010895&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "28",
+                "scoreB": "30"
+              },
+              {
+                "n": "2",
+                "scoreA": "19",
+                "scoreB": "13"
+              },
+              {
+                "n": "3",
+                "scoreA": "19",
+                "scoreB": "15"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          },
+          {
+            "CompID": "111",
+            "CompCode": "23475",
+            "Competition": "TERCERA FEB",
+            "RoundID": 0,
+            "Round": null,
+            "Stage": "0",
+            "ID": 2537217,
+            "GameCode": null,
+            "Place": "POLIDEPORTIVO PRIMERO DE MAYO",
+            "TeamAID": 1010580,
+            "TeamA": "BALONCESTO TALAVERA",
+            "ScoreA": 106,
+            "TeamACode": "45032745",
+            "TeamAClubCode": "450327",
+            "TeamASlug": "CBT",
+            "TeamBID": 1009825,
+            "TeamB": "GRAN CANARIA",
+            "TeamBCode": "35000206",
+            "TeamBClubCode": "350002",
+            "TeamBSlug": "GCA",
+            "ScoreB": 111,
+            "StartTime": "2026-10-11T12:00:00",
+            "StartTimeUTC": "2026-10-11T10:00:00Z",
+            "_GameTime": "0001-01-01T00:00:00",
+            "GameTime": "00:00",
+            "LogoA": "https://imagenes.feb.es/imagen.aspx?i=1010580&ti=1",
+            "LogoB": "https://imagenes.feb.es/imagen.aspx?i=1009825&ti=1",
+            "Quarter": 4,
+            "Time": "FINAL",
+            "Status": 3,
+            "Timezone": null,
+            "Duration": 0,
+            "Quarters": [
+              {
+                "n": "1",
+                "scoreA": "32",
+                "scoreB": "37"
+              },
+              {
+                "n": "2",
+                "scoreA": "25",
+                "scoreB": "27"
+              },
+              {
+                "n": "3",
+                "scoreA": "22",
+                "scoreB": "26"
+              }
+            ],
+            "Season": null,
+            "SeasonID": null
+          }
+        ]
+      }
+    ]
+  },
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": null
+}

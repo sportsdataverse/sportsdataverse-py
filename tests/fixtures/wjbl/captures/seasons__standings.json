@@ -1,0 +1,45 @@
+[
+  {
+    "season_full_name": "26-27 Wリーグ 大樹生命 Wリーグ ユナイテッドカップ 2026-27",
+    "seasons": {
+      "181": {
+        "season_id": 181,
+        "season_league_name": "グループステージ",
+        "team_standings_flg": 0,
+        "season_tournament_text_flg": 0,
+        "season_tournament_text": ""
+      }
+    }
+  },
+  {
+    "season_full_name": "26-27 Wリーグ レギュラーシーズン",
+    "seasons": {
+      "179": {
+        "season_id": 179,
+        "season_league_name": "プレミア",
+        "team_standings_flg": 0,
+        "season_tournament_text_flg": 0,
+        "season_tournament_text": ""
+      },
+      "180": {
+        "season_id": 180,
+        "season_league_name": "フューチャー",
+        "team_standings_flg": 0,
+        "season_tournament_text_flg": 0,
+        "season_tournament_text": ""
+      }
+    }
+  },
+  {
+    "season_full_name": "Wリーグオールスター2025-26 in 代々木",
+    "seasons": {
+      "178": {
+        "season_id": 178,
+        "season_league_name": "",
+        "team_standings_flg": 0,
+        "season_tournament_text_flg": 0,
+        "season_tournament_text": ""
+      }
+    }
+  }
+]
