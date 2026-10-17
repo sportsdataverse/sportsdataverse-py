@@ -1,0 +1,87 @@
+{
+  "stats": [
+    {
+      "category": "points",
+      "player_id": 2885,
+      "name": "Darius",
+      "surname": "Johnson-Odom",
+      "team_name": "Vanoli Cremona",
+      "tv_name": "Vanoli Cremona",
+      "year": 2017,
+      "category_filter_total": 601,
+      "attempts": 0,
+      "presences": 32,
+      "minutes": "28.34375",
+      "score_40_min": 26.504961411245866,
+      "score": "18.78125",
+      "team_id": 1399,
+      "player_photo_key": null
+    },
+    {
+      "category": "points",
+      "player_id": 3832,
+      "name": "Dallas",
+      "surname": "Moore",
+      "team_name": "VL Pesaro",
+      "tv_name": "VL Pesaro",
+      "year": 2017,
+      "category_filter_total": 412,
+      "attempts": 0,
+      "presences": 22,
+      "minutes": "36.5",
+      "score_40_min": 20.52303860523039,
+      "score": "18.7272727272727273",
+      "team_id": 1397,
+      "player_photo_key": null
+    },
+    {
+      "category": "points",
+      "player_id": 4894,
+      "name": "Jason",
+      "surname": "Rich",
+      "team_name": "Sidigas Avellino ",
+      "tv_name": "Sidigas Avellino ",
+      "year": 2017,
+      "category_filter_total": 627,
+      "attempts": 0,
+      "presences": 34,
+      "minutes": "29.4705882352941176",
+      "score_40_min": 25.02994011976048,
+      "score": "18.4411764705882353",
+      "team_id": 1388,
+      "player_photo_key": null
+    }
+  ],
+  "filters": {
+    "order_by": [
+      {
+        "code": "sum",
+        "description": "Totale"
+      },
+      {
+        "code": "avg",
+        "description": "Media"
+      },
+      {
+        "code": "40_perc",
+        "description": "40 min/%"
+      }
+    ],
+    "categories": [
+      {
+        "code": "points",
+        "description": "Punti"
+      },
+      {
+        "code": "rating_lega",
+        "description": "Valutazione"
+      },
+      {
+        "code": "total_rebound",
+        "description": "Rimbalzi"
+      }
+    ]
+  },
+  "cache_key": "_cmpCK:1791747819_season_range:off|year:2017|championship_series_id:1|category:points|advanced:true|order_by:avg",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

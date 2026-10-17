@@ -1,0 +1,65 @@
+{
+  "match": {
+    "id": "2508598",
+    "date": "2016-09-20",
+    "home_id": 18,
+    "home_name": "Bílí Tygři Liberec",
+    "home_shortcut": "LIB",
+    "visitor_id": 917,
+    "visitor_name": "HC Škoda Plzeň",
+    "visitor_shortcut": "PLZ",
+    "shots": [
+      {
+        "id": 1642404,
+        "player_id": 14259,
+        "jersey": 18,
+        "first_name": "Dominik",
+        "last_name": "Kubalík",
+        "team_id": 917,
+        "match_shot_resutl_id": 4,
+        "time": 0,
+        "coordinate_x": -62,
+        "coordinate_y": -24,
+        "real_date": "2016-09-20 18:02:57"
+      },
+      {
+        "id": 1642405,
+        "player_id": 179,
+        "jersey": 7,
+        "first_name": "Petr",
+        "last_name": "Kadlec",
+        "team_id": 917,
+        "match_shot_resutl_id": 2,
+        "time": 0,
+        "coordinate_x": -35,
+        "coordinate_y": 63,
+        "real_date": "2016-09-20 18:05:18"
+      },
+      {
+        "id": 1642406,
+        "player_id": 12877,
+        "jersey": 61,
+        "first_name": "Milan",
+        "last_name": "Bartovič",
+        "team_id": 18,
+        "match_shot_resutl_id": 3,
+        "time": 0,
+        "coordinate_x": 46,
+        "coordinate_y": -66,
+        "real_date": "2016-09-20 18:07:19"
+      }
+    ],
+    "faceoffs": {
+      "home": [
+        46.67,
+        57.14,
+        63.64
+      ],
+      "visitor": [
+        53.33,
+        42.86,
+        36.36
+      ]
+    }
+  }
+}

@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+kind: dataframe
+schema: sportpress_club_seasons

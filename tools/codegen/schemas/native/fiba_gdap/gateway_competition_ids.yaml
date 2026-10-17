@@ -1,0 +1,6 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+kind: dataframe
+schema: fiba_gdap_gateway_competition_ids

@@ -1,0 +1,243 @@
+fiba_gamepage_box_players:
+  assists: Assists credited in the game.
+  blocks: Blocked shots (blocks made).
+  blocks_received: Own shots blocked by the opponent (blocks received).
+  cb: Boolean flag, false on every sampled player; meaning unverified.
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  efficiency: 'Efficiency (FIBA EFF: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers).'
+  fg2_attempted: Two-point field goals attempted.
+  fg2_made: Two-point field goals made.
+  fg2_pct: Two-point field-goal percentage, 0-100.
+  fg3_attempted: Three-point field goals attempted.
+  fg3_made: Three-point field goals made.
+  fg3_pct: Three-point field-goal percentage, 0-100.
+  fg_attempted: Field goals attempted (2 + 3 points).
+  fg_made: Field goals made (2 + 3 points).
+  fg_pct: Field-goal percentage, 0-100.
+  first_name: Given name(s) as registered with FIBA.
+  fouls: Personal fouls (a team row includes the team fouls team_fouls).
+  fouls_drawn: Fouls drawn in the game.
+  ft_attempted: Free throws attempted.
+  ft_made: Free throws made.
+  ft_pct: Free-throw percentage, 0-100.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  has_played: True when the player got on the court.
+  is_captain: True for the team captain.
+  is_starter: True for the starting five.
+  jersey: Jersey number as a string.
+  last_name: Last name as registered with FIBA.
+  minutes: Minutes played as an 'm:ss' string ('0:0' = did not play).
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  paint_fg_attempted: Field goals attempted in the paint.
+  paint_fg_made: Field goals made in the paint (team points_in_paint = 2 x paint_fg_made
+    on every sampled game).
+  paint_fg_pct: Field-goal percentage in the paint, 0-100.
+  player_id: 'FIBA person id (Int64), global across competitions and roles: the page''s
+    P_<id>, play-by-play pId, roster personId and fiba_gdap_roster.player_id.'
+  plus_minus: 'Plus/minus: the team''s point differential while the player was on
+    the court.'
+  points: Points scored in the game.
+  position: Playing position code from the lineup card (PG, SG, SF, PF, C).
+  reb_defensive: Defensive rebounds.
+  reb_offensive: Offensive rebounds.
+  reb_total: Total rebounds (a team row includes the team rebounds team_reb_total).
+  seconds_played: Seconds played, derived from minutes.
+  steals: Steals credited in the game.
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'
+  turnovers: Turnovers (a team row includes the team turnovers team_turnovers).
+fiba_gamepage_box_teams:
+  a_act: Always 0 in the samples; meaning unverified (FIBA stat code A_ACT).
+  a_foul: Always 0 in the samples; meaning unverified (FIBA stat code A_FOUL).
+  a_tod: Always 0 in the samples; meaning unverified (FIBA stat code A_TOD).
+  a_tot: Always 0 in the samples; meaning unverified (FIBA stat code A_TOT).
+  assists: Assists credited in the game.
+  attendance: Attendance (game-level; repeats on both team rows).
+  bench_points: Points from the bench (the sum of the non-starters' points).
+  biggest_lead: Biggest lead, points.
+  biggest_lead_score: Score when the biggest lead was reached, 'A-B' string (spacing
+    varies; empty when the team never led).
+  biggest_run: Biggest scoring run, points.
+  biggest_run_score: Score of the biggest scoring run, 'x-y' string; exact meaning
+    unverified.
+  blocks: Blocked shots (blocks made).
+  blocks_received: Own shots blocked by the opponent (blocks received).
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  duration: Game duration as an 'h:mm' string (game-level; repeats on both team rows).
+  efficiency: 'Efficiency (FIBA EFF: points + rebounds + assists + steals + blocks
+    - missed field goals - missed free throws - turnovers).'
+  fast_break_points: Fast-break points.
+  fg2_attempted: Two-point field goals attempted.
+  fg2_made: Two-point field goals made.
+  fg2_pct: Two-point field-goal percentage, 0-100.
+  fg3_attempted: Three-point field goals attempted.
+  fg3_made: Three-point field goals made.
+  fg3_pct: Three-point field-goal percentage, 0-100.
+  fg_attempted: Field goals attempted (2 + 3 points).
+  fg_made: Field goals made (2 + 3 points).
+  fg_pct: Field-goal percentage, 0-100.
+  fouls: Personal fouls (a team row includes the team fouls team_fouls).
+  fouls_drawn: Fouls drawn in the game.
+  ft_attempted: Free throws attempted.
+  ft_made: Free throws made.
+  ft_pct: Free-throw percentage, 0-100.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  lead_changes: Lead changes in the game (game-level; repeats on both team rows).
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  paint_fg_attempted: Field goals attempted in the paint.
+  paint_fg_made: Field goals made in the paint (team points_in_paint = 2 x paint_fg_made
+    on every sampled game).
+  paint_fg_pct: Field-goal percentage in the paint, 0-100.
+  points: Points scored in the game.
+  points_in_paint: Points in the paint (2 x paint_fg_made).
+  points_off_turnovers: Points scored after turnovers.
+  reb_defensive: Defensive rebounds.
+  reb_offensive: Offensive rebounds.
+  reb_total: Total rebounds (a team row includes the team rebounds team_reb_total).
+  score: Team final score.
+  second_chance_points: Second-chance points.
+  statistic_system: 'Live-stats system of the game: OVR (World Cup, Olympics) or FLS
+    (club competitions, most qualifiers); they differ in the play-by-play action ids,
+    order and text.'
+  steals: Steals credited in the game.
+  team_bench_points_flag: Bench points in FLS games (equal to bench_points); 0 in
+    OVR games (FIBA stat code T_PFB).
+  team_fouls: Team (bench/coach) fouls (personal fouls minus the players' sum).
+  team_reb_defensive: Team defensive rebounds, credited to no player.
+  team_reb_offensive: Team offensive rebounds, credited to no player.
+  team_reb_total: Team rebounds (total rebounds minus the players' sum).
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'
+  team_turnovers: Team turnovers (turnovers minus the players' sum).
+  time_led: Time the team led, 'mm:ss' string.
+  times_tied: Times the score was tied (game-level; repeats on both team rows).
+  turnovers: Turnovers (a team row includes the team turnovers team_turnovers).
+fiba_gamepage_lineup:
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  first_name: Given name(s) as registered with FIBA.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  is_captain: True for the team captain.
+  jersey: Jersey number as a string.
+  last_name: Last name as registered with FIBA.
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  player_id: 'FIBA person id (Int64), global across competitions and roles: the page''s
+    P_<id>, play-by-play pId, roster personId and fiba_gdap_roster.player_id.'
+  position: Playing position code from the lineup card (PG, SG, SF, PF, C).
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'
+fiba_gamepage_pbp:
+  action_code: 'Action code: P2 two-point shot, P3 three-point shot, FT free throw,
+    REB rebound, TREB team rebound, ASS assist, ST steal, BS block, TO turnover, TTO
+    team turnover, FOUL foul, RFOUL foul drawn, SUBST substitution, TIMO timeout,
+    plus period events (STARTG, STARTP, ENDP, ENDG).'
+  action_family: 'Action family: shot, subst, timeout, periods, and ''unknwown'' (FIBA''s
+    spelling) for every other action.'
+  action_id: 'Action id (String): ''<n>:<seq>'' in OVR games (3:0015), a sequence
+    number in FLS games; unique within the game.'
+  clock: 'Game clock: time REMAINING in the period, ''m:ss'', counting down from 10:00
+    (5:00 in overtime).'
+  clock_seconds: Seconds remaining in the period, derived from clock.
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  description: English action text ('3pt jump shot missed', 'defensive rebound');
+    null on most OVR actions.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  has_location: True when shot_x / shot_y locate the shot (two- and three-pointers);
+    False for free throws (always 0, 0); null on other actions.
+  made: True when the shot went in (two-pointers, three-pointers and free throws only;
+    null otherwise).
+  order: 'Sort key within the period (OVR: 1, 2, ...; FLS: 1000, 2000, ...); null
+    on some period events.'
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  period: 'Period name: Q1..Q4, then OT1, OT2...'
+  period_number: 1-based position of the period in the game.
+  player2_id: FIBA person id (Int64) of the second player on a substitution; null
+    when the game does not record it (the refs note FLS only, but the Paris 2024 final,
+    an OVR game, carries it and the FLS games sampled leave it null).
+  player_id: 'FIBA person id (Int64), global across competitions and roles: the page''s
+    P_<id>, play-by-play pId, roster personId and fiba_gdap_roster.player_id.'
+  points_attempted: Points the attempt was worth (2, 3 or 1), made or not; null on
+    other actions.
+  score_a: Team A score after the action.
+  score_b: Team B score after the action.
+  shot_type: 'Shot type derived from action_code: 2PT, 3PT or FT; null on other actions.'
+  shot_x: Shot x, integer pixels on a half-court image across the court width (observed
+    0-278, basket near x = 139). Present only on shots; free throws are 0. Which sideline
+    is x = 0 and the scale are UNVERIFIED.
+  shot_y: Shot y, integer pixels from the baseline (y = 0) towards midcourt (observed
+    0-224, basket near y = 25); both teams' shots are drawn on one basket. Free throws
+    are 0. Scale UNVERIFIED.
+  statistic_system: 'Live-stats system of the game: OVR (World Cup, Olympics) or FLS
+    (club competitions, most qualifiers); they differ in the play-by-play action ids,
+    order and text.'
+  sub_direction: 'Substitution direction: IN or OUT; null on other actions.'
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'
+  wall_time_ms: Wall-clock time of the action, Unix epoch milliseconds.
+fiba_gamepage_period_scores:
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  period: 'Period name: Q1..Q4, then OT1, OT2...'
+  period_number: 1-based position of the period in the game.
+  points: Points the team scored in the period.
+  points_first_five_min: Points the team scored in the first five minutes of the period
+    (matches the play-by-play except free throws on the 5:00 boundary); null when
+    absent.
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'
+fiba_gamepage_shots:
+  action_code: 'Action code: P2 two-point shot, P3 three-point shot, FT free throw,
+    REB rebound, TREB team rebound, ASS assist, ST steal, BS block, TO turnover, TTO
+    team turnover, FOUL foul, RFOUL foul drawn, SUBST substitution, TIMO timeout,
+    plus period events (STARTG, STARTP, ENDP, ENDG).'
+  action_id: 'Action id (String): ''<n>:<seq>'' in OVR games (3:0015), a sequence
+    number in FLS games; unique within the game.'
+  clock: 'Game clock: time REMAINING in the period, ''m:ss'', counting down from 10:00
+    (5:00 in overtime).'
+  clock_seconds: Seconds remaining in the period, derived from clock.
+  competition_id: FIBA competition id (Int64) of the game's edition; the comp argument.
+  game_id: 'FIBA game id (Int64), global across competitions: gdapGameId, the <gameId>
+    of a game-page URL.'
+  has_location: True when shot_x / shot_y locate the shot (two- and three-pointers);
+    False for free throws (always 0, 0); null on other actions.
+  made: True when the shot went in (two-pointers, three-pointers and free throws only;
+    null otherwise).
+  order: 'Sort key within the period (OVR: 1, 2, ...; FLS: 1000, 2000, ...); null
+    on some period events.'
+  organisation_id: Stable federation or club id (Int64) of the team, the same in every
+    competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the
+    per-competition team_id.
+  period: 'Period name: Q1..Q4, then OT1, OT2...'
+  period_number: 1-based position of the period in the game.
+  player_id: 'FIBA person id (Int64), global across competitions and roles: the page''s
+    P_<id>, play-by-play pId, roster personId and fiba_gdap_roster.player_id.'
+  points_attempted: Points the attempt was worth (2, 3 or 1), made or not; null on
+    other actions.
+  shot_type: 'Shot type derived from action_code: 2PT, 3PT or FT; null on other actions.'
+  shot_x: Shot x, integer pixels on a half-court image across the court width (observed
+    0-278, basket near x = 139). Present only on shots; free throws are 0. Which sideline
+    is x = 0 and the scale are UNVERIFIED.
+  shot_y: Shot y, integer pixels from the baseline (y = 0) towards midcourt (observed
+    0-224, basket near y = 25); both teams' shots are drawn on one basket. Free throws
+    are 0. Scale UNVERIFIED.
+  statistic_system: 'Live-stats system of the game: OVR (World Cup, Olympics) or FLS
+    (club competitions, most qualifiers); they differ in the play-by-play action ids,
+    order and text.'
+  team_side: 'A or B: whether the row is the schedule''s team A or team B (null when
+    the page does not say).'

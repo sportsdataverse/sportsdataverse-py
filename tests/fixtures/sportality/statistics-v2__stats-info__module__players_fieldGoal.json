@@ -1,0 +1,467 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "FGPerc",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 1,
+        "FGA": 1,
+        "FGPerc": "100.00",
+        "FGEPerc": "100.00",
+        "3PM": 0,
+        "3PA": 0,
+        "3PPerc": 0,
+        "2PM": 1,
+        "2PA": 1,
+        "2PPerc": "100.00",
+        "info": {
+          "uuid": "ov8efrnhhc",
+          "fullName": "Silas Bøje Ilkjær",
+          "firstName": "Silas Bøje",
+          "lastName": "Ilkjær",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 14,
+          "position": "PF",
+          "shoots": null,
+          "gender": "",
+          "weight": {
+            "value": 95,
+            "format": "kg"
+          },
+          "height": {
+            "value": 200,
+            "format": "cm"
+          },
+          "playerMedia": {},
+          "team": {
+            "uuid": "ozojzoejir",
+            "name": "Værløse Blue Hawks",
+            "code": "VBH",
+            "media": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+            "ownerInstanceId": "vbh1_vbh",
+            "siteDisplayName": "Værløse Blue Hawks"
+          },
+          "teamCode": 114932,
+          "teamId": "ozojzoejir"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 1,
+        "FGA": 1,
+        "FGPerc": "100.00",
+        "FGEPerc": "100.00",
+        "3PM": 0,
+        "3PA": 0,
+        "3PPerc": 0,
+        "2PM": 1,
+        "2PA": 1,
+        "2PPerc": "100.00",
+        "info": {
+          "uuid": "p443tm7b3n",
+          "fullName": "Aske Oey Meinert Baaré",
+          "firstName": "Aske Oey",
+          "lastName": "Meinert Baaré",
+          "birthDate": "<redacted>",
+          "nationality": "DK",
+          "number": 17,
+          "position": "G",
+          "shoots": null,
+          "gender": "male",
+          "weight": {
+            "value": 82,
+            "format": "kg"
+          },
+          "height": {
+            "value": 188,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2481,
+            "mediaString": "image|ramses_sports|player_portrait_147c9a2f-1c04-4007-af16-5b30d1e0b8f218AskeBarrePortrt.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "swr1d65lew",
+            "name": "Bears Academy",
+            "code": "BAC",
+            "media": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+            "ownerInstanceId": "bac1_bac",
+            "siteDisplayName": "Bears Academy"
+          },
+          "teamCode": 130088,
+          "teamId": "swr1d65lew"
+        }
+      },
+      {
+        "Rank": null,
+        "Player": 0,
+        "Team": 0,
+        "FGM": 10,
+        "FGA": 12,
+        "FGPerc": "83.33",
+        "FGEPerc": "83.33",
+        "3PM": 0,
+        "3PA": 0,
+        "3PPerc": 0,
+        "2PM": 10,
+        "2PA": 12,
+        "2PPerc": "83.33",
+        "info": {
+          "uuid": "dwtrqzqfkm",
+          "fullName": "Shaquille Rombley",
+          "firstName": "Shaquille",
+          "lastName": "Rombley",
+          "birthDate": "<redacted>",
+          "nationality": "NL",
+          "number": 25,
+          "position": "C",
+          "shoots": null,
+          "gender": "male",
+          "weight": {
+            "value": 95,
+            "format": "kg"
+          },
+          "height": {
+            "value": 203,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 2419,
+            "mediaString": "image|ramses_sports|player_portrait_98571576-5ebb-4c92-a6b7-82c2d2df0a0e25 Shaquille Rombley.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "ktcu9aaala",
+            "name": "Bakken Bears",
+            "code": "BAK",
+            "media": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+            "ownerInstanceId": "bak1_bak",
+            "siteDisplayName": "Bakken Bears"
+          },
+          "teamCode": 22248,
+          "teamId": "ktcu9aaala"
+        }
+      }
+    ],
+    "provider": "genius-basketball",
+    "teams": {
+      "ozojzoejir": {
+        "type": "team",
+        "id": 114932,
+        "teamCode": "VBH",
+        "siteDisplayName": "Værløse Blue Hawks",
+        "name": "Værløse Blue Hawks",
+        "uuid": "ozojzoejir",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-09-14T19:10:13.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "vbh1_vbh",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+        "teamNames": {
+          "code": "VBH",
+          "short": "Værløse Blue Hawks",
+          "long": "Værløse Blue Hawks",
+          "full": "Værløse Blue Hawks",
+          "codeSite": "VBH",
+          "shortSite": "Værløse Blue Hawks",
+          "fullSite": "Værløse Blue Hawks",
+          "longSite": "Værløse Blue Hawks"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1972",
+          "facebook": "https://www.facebook.com/vbbk.dk",
+          "instagram": "https://www.instagram.com/vaerloesebasketballklub/"
+        },
+        "teamExtIds": [
+          {
+            "id": 868,
+            "extId": "114932",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 868,
+            "extId": "114932",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "kgejfzwwbd": {
+        "type": "team",
+        "id": 140898,
+        "teamCode": "BMS",
+        "siteDisplayName": "BMS Herlev",
+        "name": "BMS Herlev",
+        "uuid": "kgejfzwwbd",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-08-18T06:43:31.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "bms1_bms",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+        "teamNames": {
+          "code": "BMS",
+          "short": "BMS Herlev",
+          "long": "BMS Herlev",
+          "full": "BMS Herlev",
+          "codeSite": "BMS",
+          "shortSite": "BMS Herlev",
+          "fullSite": "BMS Herlev",
+          "longSite": "BMS Herlev"
+        },
+        "clubName": {},
+        "teamInfo": {},
+        "teamExtIds": [
+          {
+            "id": 866,
+            "extId": "140898",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 866,
+            "extId": "140898",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/bms1_bms.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "swr1d65lew": {
+        "type": "team",
+        "id": 130088,
+        "teamCode": "BAC",
+        "siteDisplayName": "Bears Academy",
+        "name": "Bears Academy",
+        "uuid": "swr1d65lew",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-08-18T06:41:05.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "bac1_bac",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+        "teamNames": {
+          "code": "BAC",
+          "short": "Bears Academy",
+          "long": "Bears Academy",
+          "full": "Bears Academy",
+          "codeSite": "BAC",
+          "shortSite": "Bears Academy",
+          "fullSite": "Bears Academy",
+          "longSite": "Bears Academy"
+        },
+        "clubName": {},
+        "teamInfo": {},
+        "teamExtIds": [
+          {
+            "id": 867,
+            "extId": "130088",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 867,
+            "extId": "130088",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 164,
+    "players": {
+      "172165": {
+        "type": "athlete",
+        "id": 172165,
+        "firstName": "Sylvester",
+        "lastName": "Berg",
+        "jerseyNumber": 13,
+        "position": "SF",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "p75z5zigsk",
+        "fullName": "Sylvester Berg",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 98,
+        "height": 200,
+        "playerMedia": {
+          "id": 2415,
+          "mediaString": "image|ramses_sports|player_portrait_b40d91fd-5cc2-4763-abbe-ce21059d290013 Sylvester Berg.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "172234": {
+        "type": "athlete",
+        "id": 172234,
+        "firstName": "Oscar",
+        "lastName": "Jørgensen",
+        "jerseyNumber": 10,
+        "position": "SG",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "qoytfuny8d",
+        "fullName": "Oscar Jørgensen",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 78,
+        "height": 187,
+        "playerMedia": {
+          "id": 2420,
+          "mediaString": "image|ramses_sports|player_portrait_bf24c37d-1dce-49fe-865b-dc253749682c10 Oscar Jrgensen.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      },
+      "175351": {
+        "type": "athlete",
+        "id": 175351,
+        "firstName": "Anton",
+        "lastName": "Lønstrup Hansen",
+        "jerseyNumber": 8,
+        "position": "PG",
+        "shoots": null,
+        "epUrl": "",
+        "uuid": "t988zab17n",
+        "fullName": "Anton Lønstrup Hansen",
+        "dateOfBirth": "<redacted>",
+        "nationality": "DK",
+        "gender": "male",
+        "weight": 82,
+        "height": 190,
+        "playerMedia": {
+          "id": 2432,
+          "mediaString": "image|ramses_sports|player_portrait_401db048-61c7-4743-aa75-761a3eafa8a908 Anton Hansen Portrt.png",
+          "type": "portrait",
+          "sortOrder": 0
+        }
+      }
+    }
+  }
+]

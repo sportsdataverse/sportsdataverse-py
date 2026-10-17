@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from sportsdataverse.cfb.cbs_pbp.game_id import _CARD_RE, _resolve_cbs_game_id
+from sportsdataverse.cfb.cbs_pbp.game_id import _CARD_RE, _match_cbs_card, _resolve_cbs_game_id
 from sportsdataverse.football.cbs_common import _parse_scoreboard
 from sportsdataverse.cfb.cbs_pbp.to_espn_summary import (
     _cbs_cfb_to_espn_summary,
@@ -654,3 +654,74 @@ def test_the_card_parser_reads_both_team_ids_in_page_order():
             "home_cbs_team_id": "853",
         }
     ]
+
+
+def test_the_id_map_reads_the_fcs_page_after_the_fbs_one():
+    calls = []
+
+    def transport(url, **kwargs):
+        calls.append(url)
+        return _Page(_CARD if "/FCS/" in url else "<html>no cards</html>")
+
+    game_id, _ = _resolve_cbs_game_id(2026, 3, "251", "194", divisions=("FBS", "FCS"), transport=transport)
+    assert game_id == "50027666"
+    assert calls[:2] == [
+        "https://www.cbssports.com/college-football/scoreboard/FBS/2026/regular/3/",
+        "https://www.cbssports.com/college-football/scoreboard/FCS/2026/regular/3/",
+    ]
+
+
+def test_a_bowl_reads_the_postseason_pages_not_espns_week_one():
+    calls = []
+
+    def transport(url, **kwargs):
+        calls.append(url)
+        return _Page(_CARD if url.endswith("/postseason/17/") else "")
+
+    game_id, provenance = _resolve_cbs_game_id(2026, 1, "251", "194", season_type=3, transport=transport)
+    assert game_id == "50027666"
+    assert all("/postseason/" in u for u in calls)
+    assert provenance["how"].endswith("/FBS/2026/postseason/17/")
+
+
+#: Real cards from the cfbfastR-cfb-alt-raw harvest (cbs/cfb/scoreboard/2016/FBS_*.json).
+_NEW_MEXICO_BOWL_2016 = {  # CBS names New Mexico home; ESPN 400876038 names UTSA (2636) home
+    "cbs_game_id": "2492733",
+    "enhanced": False,
+    "date": "20161217",
+    "away": "TXSA",
+    "home": "NMEX",
+    "away_cbs_team_id": "1827968",
+    "home_cbs_team_id": "732",
+}
+_UCF_TULANE_2016 = {  # played 2016-11-05; ESPN also keeps 400869532, the postponed 10-08 listing
+    "cbs_game_id": "2295672",
+    "enhanced": False,
+    "date": "20161105",
+    "away": "TULANE",
+    "home": "UCF",
+    "away_cbs_team_id": "867",
+    "home_cbs_team_id": "519",
+}
+
+
+def test_a_neutral_site_game_matches_with_the_home_team_the_other_way_round():
+    cards = [_NEW_MEXICO_BOWL_2016, _UCF_TULANE_2016]
+    assert _match_cbs_card(cards, "2636", "167", "2016-12-17T19:00Z") == "2492733"
+
+
+def test_a_postponed_ghost_row_does_not_claim_the_played_games_id():
+    cards = [_NEW_MEXICO_BOWL_2016, _UCF_TULANE_2016]
+    assert _match_cbs_card(cards, "2116", "2655", "2016-11-05T21:00Z") == "2295672"
+    assert _match_cbs_card(cards, "2116", "2655", "2016-10-08T00:00Z") is None
+
+
+def test_one_game_listed_on_two_pages_is_still_one_match_and_two_games_are_none():
+    twice = [_UCF_TULANE_2016, dict(_UCF_TULANE_2016)]
+    assert _match_cbs_card(twice, "2116", "2655", "2016-11-05T21:00Z") == "2295672"
+    rematch = [_UCF_TULANE_2016, {**_UCF_TULANE_2016, "cbs_game_id": "9", "date": "20161106"}]
+    assert _match_cbs_card(rematch, "2116", "2655", None) is None
+
+
+def test_an_unmapped_team_matches_nothing():
+    assert _match_cbs_card([_UCF_TULANE_2016], "999999", "2655", "2016-11-05T21:00Z") is None

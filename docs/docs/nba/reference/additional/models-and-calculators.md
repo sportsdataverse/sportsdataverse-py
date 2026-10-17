@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_matchup"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_four"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_matchup
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -778,19 +778,22 @@ print(curve.delta(24))  # ~1.0
 
 ### game_minutes {#game_minutes}
 
-`game_minutes(periods: 'int', *, league_id: 'str' = '00') -> 'int'`
+`game_minutes(periods: 'int', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None) -> 'int'`
 
 Minutes played in a game of `periods` periods: the league's regulation length plus five per overtime.
 
-Regulation is 48 minutes for the NBA (`"00"`) and 40 for the WNBA (`"10"`), read from
-`~sportsdataverse.nba.nba_prediction_constants.get_constants`; an overtime is 5 minutes in both.
+Regulation is 48 minutes in the NBA and 40 in the WNBA and both college leagues (two 20-minute
+halves or four 10-minute quarters); every overtime is 5 minutes. A period past the game's
+`regulation_periods` is an overtime, so period 3 of a halves game is the first overtime.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `periods` | `int` |  | Highest period number played (`4` for regulation, `5` for one OT, ...). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA. |
+| `periods` | `int` |  | Highest period number played. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods (2 or 4); default `game_regulation_periods` for the league without a season (MBB 2, otherwise 4). |
 
 **Returns**
 
@@ -802,33 +805,35 @@ Game minutes.
 from sportsdataverse.nba.nba_game_page import game_minutes
 game_minutes(5)  # 53
 
-# WNBA
+# A double-overtime men's college game (two halves + two OTs)
 
-game_minutes(5, league_id="10")  # 45
+game_minutes(4, league="mbb")  # 50
 ```
 
 ### game_page_frames {#game_page_frames}
 
-`game_page_frames(final: 'dict', *, league_id: 'str' = '00') -> 'dict[str, object]'`
+`game_page_frames(final: 'dict', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None) -> 'dict[str, object]'`
 
-Everything the Game on Paper NBA game page needs, from one `espn_nba_pbp` payload.
+Everything the Game on Paper basketball game page needs, from one `espn_<league>_pbp` payload.
 
-Runs the hoopR converters (`helper_nba_play_by_play` / `helper_nba_team_box` /
-`helper_nba_player_box`) and then `score_win_prob`, `shot_coordinates`,
-`team_game_rates` and `player_game_rates`. The sdv-db nightly stage calls those four
-directly on the warehouse's copies of the same frames, so a game renders identically from
-either source.
+Reads the game's regulation (`format.regulation.periods`, else the season cutoff of
+`game_regulation_periods`) and neutral site (`header.competitions[0].neutralSite`),
+runs the league's hoopR / wehoop converters (`helper_<league>_play_by_play` /
+`helper_<league>_team_box` / `helper_<league>_player_box`) and then
+`game_page_tables`. The sdv-db nightly stage calls `game_page_tables` directly on
+the warehouse's copies of the same frames.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `final` | `dict` |  | The dict `~sportsdataverse.nba.nba_pbp.espn_nba_pbp` returns. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (48 / 40-minute regulation for the rates). |
+| `final` | `dict` |  | The dict `espn_<league>_pbp` returns (for example `~sportsdataverse.nba.nba_pbp.espn_nba_pbp`). |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
 
 **Returns**
 
-`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior"}` where `prior` is `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
+`{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
 
 **Example**
 
@@ -837,6 +842,94 @@ from sportsdataverse.nba.nba_game_page import game_page_frames
 from sportsdataverse.nba.nba_pbp import espn_nba_pbp
 frames = game_page_frames(espn_nba_pbp(401766458))
 frames["pbp"].select("text", "home_win_prob", "wp_delta").head()
+
+# A men's college game
+
+from sportsdataverse.mbb.mbb_pbp import espn_mbb_pbp
+frames = game_page_frames(espn_mbb_pbp(401830342), league="mbb")
+frames["regulation_periods"], frames["period_kind"], frames["periods"]  # (2, 'half', 4)
+```
+
+### game_page_tables {#game_page_tables}
+
+`game_page_tables(pbp: 'pl.DataFrame', team_box: 'pl.DataFrame', player_box: 'pl.DataFrame', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, regulation_periods: 'Optional[int]' = None, neutral_site: 'Optional[bool]' = False) -> 'dict[str, object]'`
+
+Every game-page table for one game, from its basketball pbp / team box / player box frames.
+
+The warehouse path: the sdv-db nightly stage reads one game's rows from `<league>.pbp` /
+`team_box` / `player_box` and its schedule row (`season`, `format_regulation_periods`,
+`neutral_site`) and calls this. `game_page_frames` builds the same frames live from ESPN
+and calls this too, so a game renders identically from either source. Runs
+`score_win_prob`, `shot_coordinates`, `team_game_rates` and
+`player_game_rates` on the game's own regulation.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | One game's plays in the basketball pbp schema, in play order (empty before tip-off). |
+| `team_box` | `DataFrame` |  | The game's team box rows (rates need exactly two). |
+| `player_box` | `DataFrame` |  | The game's player box rows. |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `regulation_periods` | `Optional[int]` | `None` | The game's regulation periods; default `game_regulation_periods` from the frame's `season`. Pass the schedule's `format_regulation_periods` through `game_regulation_periods` when you have it. |
+| `neutral_site` | `Optional[bool]` | `False` | Whether the game was at a neutral site (no home-court advantage in a lineless prior); `None`, NaN or `pd.NA` counts as false. |
+
+**Returns**
+
+`{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.nba.nba_game_page import game_page_tables, game_regulation_periods
+from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp, load_wbb_player_boxscore, load_wbb_team_boxscore
+gid = 293170052
+pbp = load_wbb_pbp([2010]).filter(pl.col("game_id") == gid)
+tb = load_wbb_team_boxscore([2010]).filter(pl.col("game_id") == gid)
+pb = load_wbb_player_boxscore([2010]).filter(pl.col("game_id") == gid)
+tables = game_page_tables(pbp, tb, pb, league="wbb", regulation_periods=game_regulation_periods("wbb", season=2010))
+
+# The win-probability chart
+
+tables["pbp"].select("game_play_number", "home_win_prob", "wp_delta", "wp_regime")
+```
+
+### game_regulation_periods {#game_regulation_periods}
+
+`game_regulation_periods(league: 'str', *, season: 'Optional[int]' = None, format_regulation_periods: 'Optional[float]' = None) -> 'int'`
+
+Regulation periods of one game: 2 (halves) or 4 (quarters).
+
+The game's own value wins: ESPN's summary `format.regulation.periods` on the live path, the
+schedule's `format_regulation_periods` in the warehouse. Without it (null, NaN, or anything
+other than 2 or 4) the season decides: the NBA always plays quarters, men's college basketball
+always halves, the WNBA halves before 2006 and women's college basketball halves before the
+2015-16 season (`season` 2016, ESPN's end year). With neither, WNBA and WBB default to quarters.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`; `None` means NBA. |
+| `season` | `Optional[int]` | `None` | ESPN `season.year` of the game (the end year for college); null or NaN counts as unknown. |
+| `format_regulation_periods` | `Optional[float]` | `None` | The game's own regulation period count, if known. |
+
+**Returns**
+
+`2` or `4`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_regulation_periods
+game_regulation_periods("wbb", season=2015)  # 2: halves before 2015-16
+game_regulation_periods("wnba", season=2024, format_regulation_periods=4.0)  # 4
+
+# A warehouse schedule row
+
+game_regulation_periods("mbb", season=2024, format_regulation_periods=2.0)  # 2
 ```
 
 ### get_constants {#get_constants}
@@ -887,15 +980,18 @@ get_shrinkage_k("00")
 
 ### home_prior {#home_prior}
 
-`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'str' = '00') -> 'tuple[float, str]'`
+`home_prior(home_team_spread: 'Optional[float]', game_spread_available: 'Optional[bool]', *, league_id: 'Optional[str]' = None, league: 'Optional[str]' = None, neutral_site: 'Optional[bool]' = False) -> 'tuple[float, str]'`
 
 Pregame home win probability for the in-game model, and where it came from.
 
-`home_team_spread` is the signed expected home margin that `load_nba_pbp` /
-`helper_nba_pbp_features` carry (positive when the home side is favoured). Both hoopR and
-`~sportsdataverse.nba.nba_pbp.helper_nba_pickcenter` substitute `+2.5` when no line
-exists, so the value is only trusted when `game_spread_available` is true; otherwise the
-prior is home-court advantage alone.
+`home_team_spread` is the signed expected home margin the basketball pbp frames carry
+(positive when the home side is favoured). Every league's pickcenter helper substitutes `+2.5`
+when no line exists, so the value is only trusted when `game_spread_available` is true. A line
+already prices the venue. Without one the prior is home-court advantage alone, and at a neutral
+site (common in college tournaments) there is none: the prior is 0.5. NBA and WNBA use
+`~sportsdataverse.nba.nba_game_predict.win_prob_from_margin` and their fitted `hfa`;
+MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` with
+`league="mens"` / `"womens"`.
 
 **Parameters**
 
@@ -903,11 +999,13 @@ prior is home-court advantage alone.
 |---|---|---|---|
 | `home_team_spread` | `Optional[float]` |  | Signed expected home margin, or `None`. |
 | `game_spread_available` | `Optional[bool]` |  | Whether a real line backed that spread. |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA (selects the constants). |
+| `league_id` | `Optional[str]` | `None` | Legacy alias: `"00"` NBA / `"10"` WNBA. |
+| `league` | `Optional[str]` | `None` | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"` (default NBA). |
+| `neutral_site` | `Optional[bool]` | `False` | ESPN `neutralSite` / the schedule's `neutral_site`; `None`, NaN or `pd.NA` counts as false. |
 
 **Returns**
 
-`(probability, source)` with `source` `"spread"` or `"hfa"`.
+`(probability, source)` with `source` `"spread"`, `"neutral"` or `"hfa"`.
 
 **Example**
 
@@ -915,6 +1013,10 @@ prior is home-court advantage alone.
 from sportsdataverse.nba.nba_game_page import home_prior
 home_prior(3.0, True)      # (0.58, 'spread')
 home_prior(2.5, False)     # (0.56, 'hfa')  the default line is ignored
+
+# A lineless college tournament game
+
+home_prior(None, None, league="mbb", neutral_site=True)  # (0.5, 'neutral')
 ```
 
 ### in_game_features {#in_game_features}
@@ -949,6 +1051,36 @@ from sportsdataverse.nba.nba_game_predict import in_game_features
 from sportsdataverse.nba.nba_loaders import load_nba_pbp
 pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
 feats = in_game_features(pbp, 0.62)
+```
+
+### league_pbp_functions {#league_pbp_functions}
+
+`league_pbp_functions(league: 'str') -> 'tuple[Callable[..., dict], Callable[[Any, dict], dict]]'`
+
+The ESPN fetch and parse pair for one league: `(espn_<league>_pbp, helper_<league>_pbp)`.
+
+A live processor fetches once (`fetch(game_id, raw=True)`, the summary with its keys
+defaulted and nothing parsed), checks the payload has plays, then parses (`parse(game_id,
+summary)`) and hands the result to `game_page_frames`. Splitting the two keeps an
+upstream failure (fetch) apart from a parsing bug (parse).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `league` | `str` |  | `"nba"`, `"wnba"`, `"mbb"` or `"wbb"`. |
+
+**Returns**
+
+`(fetch, parse)`.
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_game_page import game_page_frames, league_pbp_functions
+fetch, parse = league_pbp_functions("wnba")
+summary = fetch(401726992, raw=True)
+frames = game_page_frames(parse(401726992, summary), league="wnba")
 ```
 
 ### luck_adjusted_response {#luck_adjusted_response}
@@ -1426,155 +1558,4 @@ Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns pe
 from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
 ff = nba_four_factor_rapm(season_poss)
 print(ff.sort("efg__off", descending=True).head())
-```
-
-### nba_in_game_win_prob {#nba_in_game_win_prob}
-
-`nba_in_game_win_prob(pbp: 'pl.DataFrame', pregame_home_prob: 'float', *, league_id: 'str' = '00', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Per-play home win probability from the bundled in-game model.
-
-Scores `in_game_features` through the committed artifact
-(`sportsdataverse/nba/models/nba_in_game_wp.ubj` for NBA -- a shallow
-xgboost booster, trained on 2022-23 so the 2023-24 calibration backtest
-stays out-of-sample; escalated from a plain logistic that failed the
-per-bucket calibration gate).
-
-Gate note: the plan's concurrent oracle (stats.nba.com
-`winprobabilitypbp` HOME_PCT) is a dead endpoint, so this model is
-validated ONLY on realized-outcome calibration, not against a native WP
-feed. See the fixtures README + SDD ledger.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play for ONE game in the `load_nba_pbp` schema (`start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`). |
-| `pregame_home_prob` | `float` |  | Pregame home win probability (e.g. from `win_prob_from_margin`). |
-| `league_id` | `str` | `'00'` | `"00"` NBA / `"10"` WNBA / `"20"` G-League (selects the bundled artifact). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per play: the five feature columns plus `home_win_prob`.
-
-| col_name | type | description |
-|---|---|---|
-| `score_diff` | double |  |
-| `sec_left` | double |  |
-| `sqrt_sec_left` | double |  |
-| `pregame_logit` | double |  |
-| `home_has_ball` | integer |  |
-| `home_win_prob` | double |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_game_predict import nba_in_game_win_prob
-from sportsdataverse.nba.nba_loaders import load_nba_pbp
-pbp = load_nba_pbp([2024]).filter(pl.col("game_id") == 401585828)
-wp = nba_in_game_win_prob(pbp, 0.62)
-```
-
-### nba_la_rapm {#nba_la_rapm}
-
-`nba_la_rapm(possessions: 'pl.DataFrame', shooting: 'pl.DataFrame', player_rates: 'Optional[dict[int, tuple[float, float]]]' = None, *, alphas: 'Optional[np.ndarray]' = None, fg3_k: 'float' = 100.0, ft_k: 'float' = 50.0, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed).
-
-Replaces realized 3-point and free-throw outcomes with the shooter's shrunk
-expected value (`luck_adjusted_response`); 2-pt makes stay realized.
-**DECISION 2/3/4** govern the response recipe and shrinkage constants.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via prepare`) requires it unconditionally. |
-| `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
-| `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
-| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
-| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `luck_adjusted_response` when `player_rates` is `None`. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-Frame with `LA_RAPM_SCHEMA`. Empty input → zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `o_la_rapm` | double |  |
-| `d_la_rapm` | double |  |
-| `la_rapm` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_rapm_variants import nba_la_rapm
-df = nba_la_rapm(season_poss, season_shooting)
-print(df.sort("la_rapm", descending=True).head())
-
-# Planted-truth shooter rates (e.g. for testing)
-
-df = nba_la_rapm(season_poss, season_shooting, {7: (0.4, 0.8)})
-```
-
-### nba_matchup_drapm {#nba_matchup_drapm}
-
-`nba_matchup_drapm(season: 'str', *, league_id: 'str' = '00', matchups: 'Optional[pl.DataFrame]' = None, config: 'Optional[PlaytypeConfig]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Matchup-based defensive RAPM (offense-quality-controlled).
-
-Fits `points_allowed_per_100 ~ defender_FE + offense_FE` via
-`~sklearn.linear_model.RidgeCV` (weighted by matchup possessions),
-reusing the shipped RAPM ridge machinery on the
-`build_matchup_drapm_design` two-way-FE design.
-
-**Sign + scale:** the design target `y` is already points-allowed *per 100*
-matchup possessions (`100 * player_pts / partial_poss`), so the defender
-coefficient is already on the per-100 scale -- `matchup_drapm =
--(beta_defender - mean_beta_defender)` (centered, NO extra ×100, unlike
-`~sportsdataverse.nba.nba_rapm.nba_rapm` whose `y` is per-*possession*
-and needs the ×100). Sign is negated so higher = better defense (fewer points
-allowed), matching the `d_rapm` convention. Typical magnitudes are a few to
-low-double-digit points per 100 vs the league defender average.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `str` |  | Season string, e.g. `"2023-24"`. |
-| `league_id` | `str` | `'00'` | `"00"` NBA (default), `"10"` WNBA, `"20"` G-League. |
-| `matchups` | `Optional[DataFrame]` | `None` | Injected `nba_stats_leagueseasonmatchups`-shaped frame (bypasses the live fetch -- used for tests / oracle fixtures). |
-| `config` | `Optional[PlaytypeConfig]` | `None` | `~sportsdataverse.nba.nba_playtype_constants.PlaytypeConfig`; defaults to a fresh instance (`ridge_alphas` = the shared RAPM grid, `min_matchup_poss` = 25.0 inclusion floor). |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per defender: `player_id` (Int64), `matchup_drapm` (Float64, points-allowed-per-100 estimate, higher = better defense), `matchup_poss` (Float64, total matchup possessions guarded). Returns a zero-row frame with this schema when the upstream fetch/injection is empty or no row survives the `min_matchup_poss` floor (sparse-coverage leagues never raise).
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `matchup_drapm` | double |  |
-| `matchup_poss` | double |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba import nba_matchup_drapm
-d = nba_matchup_drapm("2023-24")
-print(d.sort("matchup_drapm", descending=True).head(10))
-
-# Injected offline (oracle / test) path
-
-d = nba_matchup_drapm("2023-24", matchups=matchups_df)
-
-# Pipeline next step
-
-d.filter(pl.col("matchup_poss") >= 200).sort("matchup_drapm", descending=True)
 ```

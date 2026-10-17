@@ -1,0 +1,191 @@
+{
+  "title": "Goalie Stats",
+  "description": "Goalie Stats - Shootout",
+  "pages": 35,
+  "selectedPage": 1,
+  "orderBy": "penShotsAgainst",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:18.4908505+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "goalsAgainstAverage",
+      "isOrderDescending": false,
+      "alias": "goalkeeper"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogaSog",
+      "isOrderDescending": true,
+      "alias": "goalkeeperShotDetail"
+    },
+    {
+      "name": "Wins/Shutout",
+      "rowIdentifierKey": "wins",
+      "isOrderDescending": true,
+      "alias": "goalkeeperWin"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        8
+      ]
+    },
+    {
+      "name": null,
+      "style": "line",
+      "rows": [
+        17
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "PSAG",
+      "description": "Anzahl Penaltys gegen Torhüter",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotsAgainst"
+    },
+    {
+      "name": "PSGA",
+      "description": "Erhaltene Penaltytore",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotGoalsAgainst"
+    },
+    {
+      "name": "PS SVS",
+      "description": "Anzahl Penaltys abgewehrt",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotSaves"
+    },
+    {
+      "name": "PS SVS%",
+      "description": "Penalty Abwehrquote",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "penShotSavesPercent"
+    }
+  ],
+  "data": [
+    [
+      "16",
+      "Waeber Ludovic",
+      {
+        "id": 101149,
+        "name": "EHC Kloten",
+        "acronym": "EHCK",
+        "signed": false,
+        "type": "team"
+      },
+      "25",
+      "0",
+      "0",
+      "0",
+      "-"
+    ],
+    [
+      "15",
+      "Pasche Kevin",
+      {
+        "id": 103141,
+        "name": "Lausanne HC",
+        "acronym": "LHC",
+        "signed": false,
+        "type": "team"
+      },
+      "42",
+      "0",
+      "0",
+      "0",
+      "-"
+    ],
+    [
+      "14",
+      "Senn Gilles",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "4",
+      "2",
+      "2",
+      "50.00"
+    ]
+  ],
+  "alias": "goalkeeperShootout"
+}

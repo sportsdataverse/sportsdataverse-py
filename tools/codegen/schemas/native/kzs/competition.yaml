@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: season_is_active
+  type: logical
+- description: ''
+  name: season_active
+  type: logical
+- description: ''
+  name: gender
+  type: character
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: rank
+  type: character
+- description: ''
+  name: type
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: social_medias
+  type: character
+kind: dataframe
+schema: kzs_competition

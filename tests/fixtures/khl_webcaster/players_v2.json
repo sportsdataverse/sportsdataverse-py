@@ -1,0 +1,376 @@
+[
+  {
+    "player": {
+      "id": 33405,
+      "height": 180,
+      "weight": 90,
+      "age": 27,
+      "shirt_number": 98,
+      "khl_id": 24862,
+      "role": "forward",
+      "role_key": "forward",
+      "country": "Russia",
+      "image": "https://www.khl.ru/img/teamplayers_db/15558/24862.jpg",
+      "flag_image_url": "https://www.webcaster.pro/images/flags_64x64/RU.png",
+      "name": "Belyayev Alexander Vl.",
+      "birthday": 922579200,
+      "stick": "l",
+      "team": {
+        "id": 18,
+        "khl_id": 7,
+        "name": "Spartak",
+        "location": "Moscow",
+        "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+        "division": "Bobrov division",
+        "division_key": "bobrov",
+        "conference": "West",
+        "conference_key": "west"
+      },
+      "stats": [
+        {
+          "id": "gp",
+          "title": "Games played",
+          "val": 56,
+          "max": 68
+        },
+        {
+          "id": "pts",
+          "title": "Points",
+          "val": 26,
+          "max": 89
+        },
+        {
+          "id": "g",
+          "title": "Goals",
+          "val": 10,
+          "max": 36
+        }
+      ],
+      "teams": [
+        {
+          "id": 18,
+          "khl_id": 7,
+          "name": "Spartak",
+          "location": "Moscow",
+          "seasons": "2023/2024,2024/2025,2025/2026,2026/2027",
+          "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+        },
+        {
+          "id": 36,
+          "khl_id": 71,
+          "name": "Neftekhimik",
+          "location": "Nizhnekamsk",
+          "seasons": "2021/2022",
+          "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png"
+        }
+      ],
+      "quotes": [
+        {
+          "id": 2441799,
+          "start_ts": 1773858652467,
+          "finish_ts": 1773858744091,
+          "is_vertical_video": false,
+          "description": "Penalty. Belyayev Alexander Vl. (Spartak). Tripping. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_ad1a34a23fd396bb901e0e5e440eca4e/q2441799/d1632183b42f604e50f29fc57a56bc15/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_ad1a34a23fd396bb901e0e5e440eca4e/q2441799/d1632183b42f604e50f29fc57a56bc15/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_ad1a34a23fd396bb901e0e5e440eca4e/q2441799/d1632183b42f604e50f29fc57a56bc15/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_ad1a34a23fd396bb901e0e5e440eca4e/q2441799/d1632183b42f604e50f29fc57a56bc15/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2441799/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730081",
+          "match_id": "898225",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        },
+        {
+          "id": 2436379,
+          "start_ts": 1773682823708,
+          "finish_ts": 1773682979238,
+          "is_vertical_video": false,
+          "description": "Penalty. Belyayev Alexander Vl. (Spartak). Roughing. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_57212df06cbc01fe1549fb5fe72f79a2/q2436379/894d2329764c08ca3ebb9adb9e2e435f/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_57212df06cbc01fe1549fb5fe72f79a2/q2436379/894d2329764c08ca3ebb9adb9e2e435f/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_57212df06cbc01fe1549fb5fe72f79a2/q2436379/894d2329764c08ca3ebb9adb9e2e435f/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_57212df06cbc01fe1549fb5fe72f79a2/q2436379/894d2329764c08ca3ebb9adb9e2e435f/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2436379/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730068",
+          "match_id": "898214",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        },
+        {
+          "id": 2436311,
+          "start_ts": 1773682430479,
+          "finish_ts": 1773682504256,
+          "is_vertical_video": false,
+          "description": "Goal. 2:1. Rubtsov German (Spartak). Assistants: Filin Yegor, Belyayev Alexander Vl.. Even strength.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_83f9657552f998a8671b31237f47a874/q2436311/af7e5eb3fcbc569351b88461ce3bc200/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_83f9657552f998a8671b31237f47a874/q2436311/af7e5eb3fcbc569351b88461ce3bc200/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_83f9657552f998a8671b31237f47a874/q2436311/af7e5eb3fcbc569351b88461ce3bc200/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_83f9657552f998a8671b31237f47a874/q2436311/af7e5eb3fcbc569351b88461ce3bc200/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2436311/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730068",
+          "match_id": "898214",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      ],
+      "seasons_count": {
+        "khl": 5,
+        "team": 4
+      },
+      "positions": [
+        {
+          "id": "pts",
+          "pos": 153,
+          "title": "Points"
+        },
+        {
+          "id": "a",
+          "pos": 146,
+          "title": "Assists"
+        },
+        {
+          "id": "g",
+          "pos": 152,
+          "title": "Goals"
+        }
+      ]
+    }
+  },
+  {
+    "player": {
+      "id": 1144,
+      "height": 189,
+      "weight": 96,
+      "age": 32,
+      "shirt_number": 94,
+      "khl_id": 17624,
+      "role": "defensemen",
+      "role_key": "defensemen",
+      "country": "Russia",
+      "image": "https://www.khl.ru/img/teamplayers_db/15558/17624.jpg",
+      "flag_image_url": "https://www.webcaster.pro/images/flags_64x64/RU.png",
+      "name": "Mironov Andrei A.",
+      "birthday": 775440000,
+      "stick": "l",
+      "team": {
+        "id": 18,
+        "khl_id": 7,
+        "name": "Spartak",
+        "location": "Moscow",
+        "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+        "division": "Bobrov division",
+        "division_key": "bobrov",
+        "conference": "West",
+        "conference_key": "west"
+      },
+      "stats": [
+        {
+          "id": "gp",
+          "title": "Games played",
+          "val": 66,
+          "max": 68
+        },
+        {
+          "id": "pts",
+          "title": "Points",
+          "val": 21,
+          "max": 89
+        },
+        {
+          "id": "g",
+          "title": "Goals",
+          "val": 6,
+          "max": 36
+        }
+      ],
+      "teams": [
+        {
+          "id": 8,
+          "khl_id": 719,
+          "name": "Dynamo Msk",
+          "location": "Moscow",
+          "seasons": "2012/2013,2013/2014,2014/2015,2015/2016,2016/2017,2019/2020,2020/2021,2021/2022,2022/2023,2023/2024",
+          "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/8/original/dynamo_msk_2019__200x200.png"
+        },
+        {
+          "id": 18,
+          "khl_id": 7,
+          "name": "Spartak",
+          "location": "Moscow",
+          "seasons": "2024/2025,2025/2026,2026/2027",
+          "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+        },
+        {
+          "id": 487,
+          "khl_id": 591,
+          "name": "Tarasov",
+          "location": "",
+          "seasons": "2022/2023",
+          "image": "https://thumbs.webcaster.pro/rec-2-16.webcaster.pro/fc/sdd/team_pics/487/original/Tarasov_div.png"
+        }
+      ],
+      "quotes": [
+        {
+          "id": 2441779,
+          "start_ts": 1773858542967,
+          "finish_ts": 1773858616385,
+          "is_vertical_video": false,
+          "description": "Goal. 2:2. Maltsev Mikhail G. (Spartak). Assistants: Mironov Andrei A., Morozov Ivan D.. Even strength.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_d7e4d8302e29b69c221b8b7db0acfd24/q2441779/a280a3b4c37f87894d7ec9af192cab38/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_d7e4d8302e29b69c221b8b7db0acfd24/q2441779/a280a3b4c37f87894d7ec9af192cab38/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_d7e4d8302e29b69c221b8b7db0acfd24/q2441779/a280a3b4c37f87894d7ec9af192cab38/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_d7e4d8302e29b69c221b8b7db0acfd24/q2441779/a280a3b4c37f87894d7ec9af192cab38/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2441779/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730081",
+          "match_id": "898225",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        },
+        {
+          "id": 2436263,
+          "start_ts": 1773682039357,
+          "finish_ts": 1773682116044,
+          "is_vertical_video": false,
+          "description": "Goal. 1:1. Belyayev Alexander Vl. (Spartak). Assistants: Rubtsov German, Mironov Andrei A.. Even strength.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_a5d2609cd7b4d04324793b2aee914b3d/q2436263/b0af466148bf9e5ba0ea77b592c7871f/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_a5d2609cd7b4d04324793b2aee914b3d/q2436263/b0af466148bf9e5ba0ea77b592c7871f/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_a5d2609cd7b4d04324793b2aee914b3d/q2436263/b0af466148bf9e5ba0ea77b592c7871f/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_a5d2609cd7b4d04324793b2aee914b3d/q2436263/b0af466148bf9e5ba0ea77b592c7871f/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2436263/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730068",
+          "match_id": "898214",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        },
+        {
+          "id": 2375855,
+          "start_ts": 1771765900663,
+          "finish_ts": 1771765944512,
+          "is_vertical_video": false,
+          "description": "Penalty. Mironov Andrei A. (Spartak). Hooking. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_3b9511501e1c5d447d3d5a5ba040979e/q2375855/5f03bf52c6421b10959ec73bf8642f68/1791849543.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_3b9511501e1c5d447d3d5a5ba040979e/q2375855/5f03bf52c6421b10959ec73bf8642f68/1791849543?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_3b9511501e1c5d447d3d5a5ba040979e/q2375855/5f03bf52c6421b10959ec73bf8642f68/1791849543?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_3b9511501e1c5d447d3d5a5ba040979e/q2375855/5f03bf52c6421b10959ec73bf8642f68/1791849543?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2375855/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m729986",
+          "match_id": "898125",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      ],
+      "seasons_count": {
+        "khl": 14,
+        "team": 3
+      },
+      "positions": [
+        {
+          "id": "pts",
+          "pos": 42,
+          "title": "Points (Defensemen)"
+        },
+        {
+          "id": "a",
+          "pos": 52,
+          "title": "Assists (Defensemen)"
+        },
+        {
+          "id": "g",
+          "pos": 29,
+          "title": "Goals (Defensemen)"
+        }
+      ]
+    }
+  }
+]

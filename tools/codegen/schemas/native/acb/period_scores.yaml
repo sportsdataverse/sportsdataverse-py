@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: quarter
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+kind: dataframe
+schema: acb_period_scores

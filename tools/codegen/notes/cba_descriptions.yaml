@@ -1,0 +1,1708 @@
+cba_best_player:
+  assists: Assists by the player in this game.
+  blocked: Blocks by the player in this game.
+  fouls: Personal fouls by the player in this game.
+  free_throw_str: Free throws as the string 'made/attempted'.
+  minutes: Minutes played (whole minutes).
+  number: Jersey number as a string.
+  player_img: Absolute URL of the player's photo; null when there is none.
+  player_name: 'Full player name (Chinese, may include the first name: 贾卡尔-桑普森). Null
+    on some rows (the short name is in playerNameStr).'
+  player_name_str: 'Short display name (Chinese surname form: 桑普森).'
+  points: Points scored by the player in this game.
+  real_point_rate: 真实命中率 true-shooting percentage as a whole-percent string ('74%').
+  rebounds: Total rebounds by the player in this game.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  steals: Steals by the player in this game.
+  three_points_str: Three-point field goals as the string 'made/attempted'.
+  turn_share: 回合占有率 possession share (see advance-count turnShare) as a whole-percent
+    string ('16%').
+  turnovers: Turnovers by the player in this game.
+  two_points_str: Two-point field goals as the string 'made/attempted' ('3/5').
+cba_best_stats:
+  ctype: 'Statistic the row leads: points, assists, steals, rebounds, blocked (five
+    rows per side in every sample). See the code table.'
+  cvalue: The leader's value of ctype, as a STRING ('16').
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id. A STRING here (''100005271''), an integer on every box route.'
+  player_name: Player name (Chinese). Null on rows whose name the report does not
+    repeat (the same player's earlier row carries it).
+  player_no: Jersey number as a string. Null where playerName is null.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  seconds: The leader's time on court in SECONDS.
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  team_id: 'Unobserved: null in every sample (the side is the enclosing list).'
+  type: 'Side flag: 0 on home rows, 2 on visiting rows (differs from advance-count,
+    where the visiting side is 1).'
+cba_game_info:
+  count: 'Unverified: an integer shown in the report header (83 in the 2025-26 sample,
+    99 in 2017-18). Not the play-by-play row count; plausibly possessions per team,
+    which the bundle does not confirm.'
+  guest_color: Visiting team colour as a '#RRGGBB' hex string.
+  guest_score: Visiting team final points.
+  guest_team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id. Visiting team.'
+  guest_team_logo: Absolute URL of the visiting team logo.
+  guest_team_name: Visiting team name (Chinese) at the time of the game. Names change
+    with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml.
+  host_color: Home team colour as a '#RRGGBB' hex string (the game report's theme
+    colour).
+  host_score: Home team final points.
+  host_team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id. Home team.'
+  host_team_logo: Absolute URL of the home team logo.
+  host_team_name: Home team name (Chinese) at the time of the game (e.g. 广东东莞银行 in
+    2017-18). Names change with the sponsor, the id does not; teamId -> English glossary
+    in cba_glossary.yaml.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  schedule_time: Tip-off as 'YYYY-MM-DD HH:MM:SS' (China local time); equals schedules/day
+    scheduleTime.
+cba_game_team_four:
+  effective_hit_rate: '有效命中率 effective field-goal percentage, in PERCENT as a number
+    (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  effective_hit_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: 有效命中率 effective field-goal percentage, in PERCENT
+    as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  effective_hit_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage,
+    in PERCENT as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  free_throw_rate: '罚球率 free-throw rate: free throws made relative to field-goal attempts,
+    in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  free_throw_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: 罚球率 free-throw rate: free throws made relative
+    to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  free_throw_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 罚球率 free-throw rate: free throws made
+    relative to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  loss_average: League-average losses; 0.0 in every sample.
+  loss_num: Losses of the team in the table's season.
+  offensive_rebound_rate: '进攻篮板率 offensive-rebound rate: the team''s offensive rebounds
+    as a share of all offensive-rebound chances, in percent as a number (site definition).'
+  offensive_rebound_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: 进攻篮板率 offensive-rebound rate: the team''s
+    offensive rebounds as a share of all offensive-rebound chances, in percent as
+    a number (site definition).'
+  offensive_rebound_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 进攻篮板率 offensive-rebound rate:
+    the team''s offensive rebounds as a share of all offensive-rebound chances, in
+    percent as a number (site definition).'
+  other_effective_hit_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 有效命中率 effective field-goal percentage, in PERCENT as a number
+    (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_effective_hit_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: The same measure for the team''s OPPONENTS
+    (the site''s ''other'' block): 有效命中率 effective field-goal percentage, in PERCENT
+    as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_effective_hit_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 有效命中率 effective field-goal percentage,
+    in PERCENT as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_free_throw_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 罚球率 free-throw rate: free throws made relative to field-goal
+    attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_free_throw_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: The same measure for the team''s OPPONENTS (the
+    site''s ''other'' block): 罚球率 free-throw rate: free throws made relative to field-goal
+    attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_free_throw_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 罚球率 free-throw rate: free throws made
+    relative to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_offensive_rebound_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s offensive rebounds
+    as a share of all offensive-rebound chances, in percent as a number (site definition).'
+  other_offensive_rebound_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: The same measure for the team''s OPPONENTS
+    (the site''s ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s offensive
+    rebounds as a share of all offensive-rebound chances, in percent as a number (site
+    definition).'
+  other_offensive_rebound_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s
+    offensive rebounds as a share of all offensive-rebound chances, in percent as
+    a number (site definition).'
+  other_points_hundred_round: '百回合失分 points allowed per 100 possessions (defensive
+    rating): the opponents'' points per 100 possessions.'
+  other_points_hundred_round_average: 'League average of the metric. Metric: 百回合失分
+    points allowed per 100 possessions (defensive rating): the opponents'' points
+    per 100 possessions.'
+  other_points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 百回合失分 points allowed per 100
+    possessions (defensive rating): the opponents'' points per 100 possessions.'
+  other_turnovers_rate: 'The same measure for the team''s OPPONENTS (the site''s ''other''
+    block): 失误率 turnover rate: the share of the team''s possessions ending in a turnover,
+    in percent as a number (site definition).'
+  other_turnovers_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: The same measure for the team''s OPPONENTS (the
+    site''s ''other'' block): 失误率 turnover rate: the share of the team''s possessions
+    ending in a turnover, in percent as a number (site definition).'
+  other_turnovers_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 失误率 turnover rate: the share of the team''s
+    possessions ending in a turnover, in percent as a number (site definition).'
+  points_hundred_round: 百回合得分 points scored per 100 possessions (offensive rating).
+  points_hundred_round_average: 'League average of the metric. Metric: 百回合得分 points
+    scored per 100 possessions (offensive rating).'
+  points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
+    possessions (offensive rating).'
+  rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数).'
+  rhythm_num: Pace as a STRING with one decimal ('96.3'); same value as rhythm.
+  rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
+    per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
+    每48分钟回合数).'
+  schedule_season: 'Season START year (2025 = the 2025-26 season). The sdv season
+    key is the END year = season + 1; map at the boundary. The season of this table:
+    one before the game''s season (2025 game -> 2024).'
+  season: 'Season of the table as a STRING (''2024'' = the START year of 2024-25;
+    sdv END year = value + 1); equals scheduleSeason. NOT the season of the game:
+    the table is the PREVIOUS season''s.'
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: 'Team name (Chinese) in the table''s season (can differ from the game''s:
+    四川锦城 in the 2016 table of a 2017 Sichuan game).'
+  turnovers_rate: '失误率 turnover rate: the share of the team''s possessions ending
+    in a turnover, in percent as a number (site definition).'
+  turnovers_rate_average: 'Unobserved: null in every sample. When filled: league average
+    of the metric. Metric: 失误率 turnover rate: the share of the team''s possessions
+    ending in a turnover, in percent as a number (site definition).'
+  turnovers_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 失误率 turnover rate: the share of the
+    team''s possessions ending in a turnover, in percent as a number (site definition).'
+  win_num: Wins of the team in the table's season (regular season).
+  win_points_hundred_round: 百回合净胜分 net points per 100 possessions.
+  win_points_hundred_round_average: 'League average of the metric. Metric: 百回合净胜分
+    net points per 100 possessions.'
+  wine_average: League-average wins (field name sic); 0.0 in every sample.
+cba_game_team_shots:
+  bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
+    points allowed per 100 possessions).'
+  bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
+    per 100 possessions).'
+  bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
+    百回合净胜分 net points per 100 possessions).'
+  guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
+    at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle). A string percent (''36.3%'').'
+  guard_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
+    of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
+    the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
+    is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_field_goals_at_rim_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts taken
+    at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle).'
+  guard_hit_at_rim_made_rate: 篮下命中率 at-rim shooting percentage, for the shots of the
+    OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the
+    site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+  guard_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
+    for the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
+    is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_hit_at_rim_made_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the shots
+    of the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle).'
+  guard_hit_middle_rate: 中距离命中率 mid-range shooting percentage, for the shots of the
+    OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the
+    site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+  guard_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
+    percentage, for the shots of the OPPONENTS against this team (守, defence; the
+    ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_hit_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle).'
+  guard_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts that
+    are two-pointers outside the restricted area, for the shots of the OPPONENTS against
+    this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
+    toggle). A string percent (''36.3%'').'
+  guard_middle_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of
+    field-goal attempts that are two-pointers outside the restricted area, for the
+    shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix is
+    inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts that
+    are two-pointers outside the restricted area, for the shots of the OPPONENTS against
+    this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
+    toggle).'
+  guard_real_point: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
+    the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A
+    string percent ('36.3%').
+  guard_real_point_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage
+    (all field goals counted as two-point attempts), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle).'
+  guard_real_point_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_three_goals_rate: 三分命中率 three-point shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from
+    the site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+  guard_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
+    percentage, for the shots of the OPPONENTS against this team (守, defence; the
+    ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_three_goals_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 三分命中率 three-point shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle).'
+  guard_three_rate: '三分占比 three-point share: the share of field-goal attempts that
+    are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).
+    A string percent (''36.3%'').'
+  guard_three_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 三分占比 three-point share: the share
+    of field-goal attempts that are three-pointers, for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle).'
+  guard_three_rate_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 三分占比 three-point share: the share of field-goal attempts that
+    are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  is_avg: 'Row kind: 2 on every sampled row = a team''s own row; 1 is presumed to
+    mark a league-average row but is unobserved.'
+  num: Games the profile covers (the site's 场数 'games'), e.g. 42.0; a number typed
+    as float.
+  offensive_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts
+    taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
+    (攻, offence). A string percent (''36.3%'').'
+  offensive_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
+    of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
+    the team''s own shots (攻, offence).'
+  offensive_field_goals_at_rim_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts
+    taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
+    (攻, offence).'
+  offensive_hit_at_rim_made_rate: 篮下命中率 at-rim shooting percentage, for the team's
+    own shots (攻, offence). A string percent ('36.3%').
+  offensive_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
+    for the team''s own shots (攻, offence).'
+  offensive_hit_at_rim_made_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the team''s
+    own shots (攻, offence).'
+  offensive_hit_middle_rate: 中距离命中率 mid-range shooting percentage, for the team's
+    own shots (攻, offence). A string percent ('36.3%').
+  offensive_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
+    percentage, for the team''s own shots (攻, offence).'
+  offensive_hit_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the team''s own
+    shots (攻, offence).'
+  offensive_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts
+    that are two-pointers outside the restricted area, for the team''s own shots (攻,
+    offence). A string percent (''36.3%'').'
+  offensive_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the
+    share of field-goal attempts that are two-pointers outside the restricted area,
+    for the team''s own shots (攻, offence).'
+  offensive_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts
+    that are two-pointers outside the restricted area, for the team''s own shots (攻,
+    offence).'
+  offensive_real_point: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the team's own shots (攻, offence). A string percent
+    ('36.3%').
+  offensive_real_point_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 有效命中率 effective field-goal
+    percentage (all field goals counted as two-point attempts), for the team''s own
+    shots (攻, offence).'
+  offensive_real_point_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals
+    counted as two-point attempts), for the team''s own shots (攻, offence).'
+  offensive_three_goals_rate: 三分命中率 three-point shooting percentage, for the team's
+    own shots (攻, offence). A string percent ('36.3%').
+  offensive_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
+    percentage, for the team''s own shots (攻, offence).'
+  offensive_three_goals_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 三分命中率 three-point shooting percentage, for the team''s
+    own shots (攻, offence).'
+  offensive_three_rate: '三分占比 three-point share: the share of field-goal attempts
+    that are three-pointers, for the team''s own shots (攻, offence). A string percent
+    (''36.3%'').'
+  offensive_three_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分占比 three-point share: the
+    share of field-goal attempts that are three-pointers, for the team''s own shots
+    (攻, offence).'
+  offensive_three_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 三分占比 three-point share: the share of field-goal attempts
+    that are three-pointers, for the team''s own shots (攻, offence).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: Team name (Chinese) in that season; changes with the sponsor.
+cba_match_types:
+  is_default: 'Default-selection flag: 1 = the site''s default (the preseason, ''3'',
+    at capture time: it follows the calendar), 2 = not the default.'
+  key: 'Match type name (Chinese): 常规赛 regular season, 季后赛 playoffs, 季前赛 preseason,
+    全明星 all-star, 保级赛 relegation play-off.'
+  value: Match type id as a string ('1' regular season, '2' playoffs, '3' preseason,
+    '4' all-star, '9' relegation); the matchTypeId of every other route.
+cba_pbp:
+  bt_textual_format: Second copy of the description; equal to textualFormat on every
+    sampled row (unverified difference).
+  color: Hex colour of the acting team (homeColor or visitingColor).
+  distance: 'Unobserved: null in every sample (a shot distance slot). The API has
+    NO shot x/y coordinates.'
+  home_color: Home team colour '#RRGGBB'.
+  home_score: 'Home team points after the play. NOT monotone row by row: a substitution
+    row can carry a stale score (2017 game, Q1 0:40); the game''s final score is the
+    maximum.'
+  minutes: 'Game clock, minutes REMAINING in the period (counts down: 10 or 12 at
+    the start, depending on the era).'
+  player_cn_names: Names (Chinese surnames/short names) of the players in textualFormat,
+    in order of mention (shooter or fouler first, then assister, rebounder or fouled
+    player). 0-3 names. There are NO player ids in the play-by-play.
+  player_fouls: 'Unobserved: null in every sample (a player''s fouls slot).'
+  player_score: 'Unobserved: null in every sample (a player''s points slot).'
+  quarter_num: Period of the row (1-4; 5+ would be overtime). Equals the request's
+    quarterNum on every row.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  seconds: Game clock, seconds remaining within the minute.
+  team_cn_alias1: 'Unobserved: null in every sample (a team-name slot).'
+  team_cn_alias2: 'Unobserved: null in every sample (a team-name slot).'
+  team_cn_alias3: 'Unobserved: null in every sample (a team-name slot).'
+  textual_format: 'Play description sentence (Chinese) naming the players; the phrase
+    glossary translates every form seen. Team names inside it can be a different era''s
+    name than the game header (a 2025-26 text reads 浙江方兴渡队). Sentence forms ({P} a
+    player, {T} a team): {T}队换人，{P}换下了{P} = {T} substitution, {P} replaces {P}; {P}三分跳投不中，{P}获得防守篮板
+    = {P} three-point jump shot, misses, {P} gets the defensive rebound; {P}带球上篮得分
+    = {P} layup (driving), scores; {P}两罚，第二罚命中 = {P} takes two free throws, free throw
+    2 made; {P}在对方投篮时犯规 (造成了犯规) = {P} shooting foul on the opponent''s shot (drawn
+    by an unnamed player); {P}接到{P}的助攻，跳投，三分入网 = {P} receives an assist from {P},
+    jump shot, three-pointer made; the full glossary is in cba_glossary.yaml.'
+  type: 'Team the play belongs to: 1 = home, 2 = visiting (checked on all 667 rows
+    of two games: color equals homeColor when 1 and visitingColor when 2). See the
+    code table.'
+  visiting_color: Visiting team colour '#RRGGBB'.
+  visitor_score: Visiting team points after the play (same caveat as homeScore).
+cba_period_scores:
+  period: 'Period number: 1-4 regulation, 5 and up overtime (the API holds up to seven
+    periods).'
+  points: Points the side scored IN this period (not cumulative); overtime periods
+    included.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+cba_player_advanced:
+  assists_percentage: '助攻率 assist rate: the share of teammates'' made field goals
+    the player assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例).'
+  assists_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 助攻率 assist rate: the share of teammates'' made field goals the player
+    assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例). Null on
+    every row of some eras: the 2017-18 and 2009-10 samples have no Rank values, and
+    the at-rim / mid-range strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  assists_percentage_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 助攻率 assist rate: the share of teammates'' made field goals
+    the player assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例).'
+  blocked_percentage: '盖帽率 block rate: blocks as a share of the opponent''s two-point
+    attempts while the player is on the court (site definition).'
+  blocked_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 盖帽率 block rate: blocks as a share of the opponent''s two-point attempts
+    while the player is on the court (site definition). Null on every row of some
+    eras: the 2017-18 and 2009-10 samples have no Rank values, and the at-rim / mid-range
+    strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  blocked_percentage_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 盖帽率 block rate: blocks as a share of the opponent''s two-point
+    attempts while the player is on the court (site definition).'
+  cn_alias: Player name (Chinese).
+  field_goals_at_rim_percentage: 'At-the-rim (篮下, inside the restricted area 合理冲撞区)
+    field goals as the string ''made/attempted''. Null on every row of some eras:
+    the 2017-18 and 2009-10 samples have no Rank values, and the at-rim / mid-range
+    strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  field_goals_at_rim_percentage_rank: 'Unobserved: null in every sample. When filled:
+    colour rank for the metric, a fraction 0-1 (1 = best, inverted for ''bad'' statistics
+    such as turnovers) that the site uses to colour the cell (inferred from the sample
+    values; the base population is not documented). Metric: At-the-rim (篮下, inside
+    the restricted area 合理冲撞区) field goals as the string ''made/attempted''.'
+  field_goals_at_rim_percentage_sort: 'Unobserved: null in every sample. When filled:
+    unformatted numeric value behind the formatted string of the same metric (a fraction
+    0-1 for percentages), used by the site to sort the table. Metric: At-the-rim (篮下,
+    inside the restricted area 合理冲撞区) field goals as the string ''made/attempted''.'
+  field_goals_mid_percentage: 'Mid-range (中距离, two-point shots outside the restricted
+    area) field goals as the string ''made/attempted''. Null on every row of some
+    eras: the 2017-18 and 2009-10 samples have no Rank values, and the at-rim / mid-range
+    strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  field_goals_mid_percentage_rank: 'Unobserved: null in every sample. When filled:
+    colour rank for the metric, a fraction 0-1 (1 = best, inverted for ''bad'' statistics
+    such as turnovers) that the site uses to colour the cell (inferred from the sample
+    values; the base population is not documented). Metric: Mid-range (中距离, two-point
+    shots outside the restricted area) field goals as the string ''made/attempted''.'
+  field_goals_mid_percentage_sort: 'Unobserved: null in every sample. When filled:
+    unformatted numeric value behind the formatted string of the same metric (a fraction
+    0-1 for percentages), used by the site to sort the table. Metric: Mid-range (中距离,
+    two-point shots outside the restricted area) field goals as the string ''made/attempted''.'
+  game_start: 'Starter flag: 1 = started the game.'
+  is_color: Highlight flag, 1 on every sampled row (unverified meaning; the site uses
+    it to colour the row).
+  number: Jersey number as a string.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_times: 0 on every sampled row; meaning unverified (a games-played slot the
+    game route does not fill).
+  position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
+    / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
+    / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
+    positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses: C = 中锋; C/PF =
+    中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG
+    = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫;
+    SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋
+    = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫;
+    得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  rebounds_defensive_percentage: '防守篮板率 defensive-rebound rate: the player''s defensive
+    rebounds as a share of the defensive rebounds available while he is on the court
+    (site definition).'
+  rebounds_defensive_percentage_rank: 'Colour rank for the metric, a fraction 0-1
+    (1 = best, inverted for ''bad'' statistics such as turnovers) that the site uses
+    to colour the cell (inferred from the sample values; the base population is not
+    documented). Metric: 防守篮板率 defensive-rebound rate: the player''s defensive rebounds
+    as a share of the defensive rebounds available while he is on the court (site
+    definition). Null on every row of some eras: the 2017-18 and 2009-10 samples have
+    no Rank values, and the at-rim / mid-range strings are null in 2009-10 and ''0/0''
+    strings in 2025-26.'
+  rebounds_defensive_percentage_sort: 'Unformatted numeric value behind the formatted
+    string of the same metric (a fraction 0-1 for percentages), used by the site to
+    sort the table. Metric: 防守篮板率 defensive-rebound rate: the player''s defensive
+    rebounds as a share of the defensive rebounds available while he is on the court
+    (site definition).'
+  rebounds_offensive_percentage: '进攻篮板率 offensive-rebound rate: the player''s offensive
+    rebounds as a share of the offensive rebounds available while he is on the court
+    (site definition).'
+  rebounds_offensive_percentage_rank: 'Colour rank for the metric, a fraction 0-1
+    (1 = best, inverted for ''bad'' statistics such as turnovers) that the site uses
+    to colour the cell (inferred from the sample values; the base population is not
+    documented). Metric: 进攻篮板率 offensive-rebound rate: the player''s offensive rebounds
+    as a share of the offensive rebounds available while he is on the court (site
+    definition). Null on every row of some eras: the 2017-18 and 2009-10 samples have
+    no Rank values, and the at-rim / mid-range strings are null in 2009-10 and ''0/0''
+    strings in 2025-26.'
+  rebounds_offensive_percentage_sort: 'Unformatted numeric value behind the formatted
+    string of the same metric (a fraction 0-1 for percentages), used by the site to
+    sort the table. Metric: 进攻篮板率 offensive-rebound rate: the player''s offensive
+    rebounds as a share of the offensive rebounds available while he is on the court
+    (site definition).'
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  steals_percentage: '抢断率 steal rate: steals as a share of the opponent''s possessions
+    while the player is on the court (site definition).'
+  steals_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    抢断率 steal rate: steals as a share of the opponent''s possessions while the player
+    is on the court (site definition). Null on every row of some eras: the 2017-18
+    and 2009-10 samples have no Rank values, and the at-rim / mid-range strings are
+    null in 2009-10 and ''0/0'' strings in 2025-26.'
+  steals_percentage_sort: 'Unformatted numeric value behind the formatted string of
+    the same metric (a fraction 0-1 for percentages), used by the site to sort the
+    table. Metric: 抢断率 steal rate: steals as a share of the opponent''s possessions
+    while the player is on the court (site definition).'
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  true_shooting_percentage: '真实命中率 true-shooting percentage: scoring efficiency counting
+    field goals and free throws, all attempts converted to two-point attempts (site
+    definition: 球员运动战出手和罚球出手都折算为两分出手时的命中率).'
+  true_shooting_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 =
+    best, inverted for ''bad'' statistics such as turnovers) that the site uses to
+    colour the cell (inferred from the sample values; the base population is not documented).
+    Metric: 真实命中率 true-shooting percentage: scoring efficiency counting field goals
+    and free throws, all attempts converted to two-point attempts (site definition:
+    球员运动战出手和罚球出手都折算为两分出手时的命中率). Null on every row of some eras: the 2017-18 and 2009-10
+    samples have no Rank values, and the at-rim / mid-range strings are null in 2009-10
+    and ''0/0'' strings in 2025-26.'
+  true_shooting_percentage_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 真实命中率 true-shooting percentage: scoring efficiency counting
+    field goals and free throws, all attempts converted to two-point attempts (site
+    definition: 球员运动战出手和罚球出手都折算为两分出手时的命中率).'
+  turn_share: '回合占有率 ''possession share'': the share of the team''s possessions the
+    player ends while on the court (site definition: 球员在场时终结回合占球队总回合的比例).'
+  turn_share_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    回合占有率 ''possession share'': the share of the team''s possessions the player ends
+    while on the court (site definition: 球员在场时终结回合占球队总回合的比例). Null on every row of
+    some eras: the 2017-18 and 2009-10 samples have no Rank values, and the at-rim
+    / mid-range strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  turn_share_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    回合占有率 ''possession share'': the share of the team''s possessions the player ends
+    while on the court (site definition: 球员在场时终结回合占球队总回合的比例).'
+  turnovers_percentage: '失误率 turnover rate: the share of the player''s possession-ending
+    plays that are turnovers (site definition: 球员以失误终结的回合占他所有终结回合的比例).'
+  turnovers_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 失误率 turnover rate: the share of the player''s possession-ending plays
+    that are turnovers (site definition: 球员以失误终结的回合占他所有终结回合的比例). Null on every row
+    of some eras: the 2017-18 and 2009-10 samples have no Rank values, and the at-rim
+    / mid-range strings are null in 2009-10 and ''0/0'' strings in 2025-26.'
+  turnovers_percentage_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 失误率 turnover rate: the share of the player''s possession-ending
+    plays that are turnovers (site definition: 球员以失误终结的回合占他所有终结回合的比例).'
+  type: 'Side flag: 0 on every home row, 1 on every visiting row (differs from best_quota,
+    where the visiting side is 2).'
+  up_time: Time on court in SECONDS (1692 = 28:12).
+cba_player_base:
+  age: Age in years in that season.
+  assists: Assists per game, as a decimal STRING ('1.2') when countRanger is 1.
+  birth_date: Date of birth 'YYYY-MM-DD' (a public player bio field; midnight-suffixed
+    'YYYY-MM-DD 00:00:00' on player-base-list).
+  blocked: Blocks per game, as a decimal STRING ('1.2') when countRanger is 1.
+  cn_alias: Player name (Chinese). Names change with the sponsor, the id does not;
+    teamId -> English glossary in cba_glossary.yaml.
+  field_goals: Field goals made per game, as a decimal STRING ('1.2') when countRanger
+    is 1.
+  field_goals_at_rim_attempted: At-the-rim (inside the restricted area) field goals
+    attempted in the season (total), a float.
+  field_goals_at_rim_made: At-the-rim field goals made in the season (total), a float.
+  field_goals_attempted: Field goals attempted per game, as a decimal STRING ('1.2')
+    when countRanger is 1.
+  field_goals_mid_range_attempted: Mid-range (two-point shots outside the restricted
+    area) field goals attempted in the season (total), a float.
+  field_goals_mid_range_made: Mid-range field goals made in the season (total), a
+    float.
+  field_goals_percentage: Field-goal percentage as a percent string ('64.9%').
+  field_goals_percentage_sort: Field-goal percentage as a FRACTION 0-1 for sorting.
+  fouls: Personal fouls per game, as a decimal STRING ('1.2') when countRanger is
+    1.
+  fouls_defensive: Defensive personal fouls in the season (total), a float.
+  free_throws: Free throws made per game, as a decimal STRING ('1.2') when countRanger
+    is 1.
+  free_throws_attempted: Free throws attempted per game, as a decimal STRING ('1.2')
+    when countRanger is 1.
+  free_throws_percentage: Free-throw percentage as a percent string.
+  free_throws_percentage_sort: Free-throw percentage as a FRACTION 0-1 for sorting.
+  game_start_num: Games started (首发).
+  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
+    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  nationality: 'Nationality (Chinese country name; see the nationality code table
+    for every value seen and its English name). Chinese country names seen: 中国 = China;
+    美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
+    尼日利亚 = Nigeria; 约旦 = Jordan.'
+  number: Jersey number as a string.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_times: Games played (场数), a float (39.0).
+  player_times2: 'Unobserved: null in every sample.'
+  points: Points per game, as a decimal STRING ('16.8') when countRanger is 1 (the
+    request value); other countRanger values change the unit (2 total, 3 per 36 minutes,
+    4 per 100 possessions).
+  position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
+    / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
+    / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
+    positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses: C = 中锋; C/PF =
+    中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG
+    = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫;
+    SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋
+    = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫;
+    得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  position_num: Position as a number 1-5 (1 point guard, 2 shooting guard, 3 small
+    forward, 4 power forward, 5 center); a fraction such as 4.5 averages a dual position;
+    typed as float.
+  rank_sort: 'Unobserved: null in every sample.'
+  rebounds: Total rebounds per game, as a decimal STRING ('1.2') when countRanger
+    is 1.
+  rebounds_defensive: Defensive rebounds per game, as a decimal STRING ('1.2') when
+    countRanger is 1.
+  rebounds_offensive: Offensive rebounds per game, as a decimal STRING ('1.2') when
+    countRanger is 1.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
+    total integer elsewhere.'
+  steals: Steals per game, as a decimal STRING ('1.2') when countRanger is 1.
+  team_cn_alias: Team short name (Chinese) in that season. Names change with the sponsor,
+    the id does not; teamId -> English glossary in cba_glossary.yaml.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  three_point_attempted: Three-pointers attempted per game, as a decimal STRING ('1.2')
+    when countRanger is 1.
+  three_point_goals: Three-pointers made per game, as a decimal STRING ('1.2') when
+    countRanger is 1.
+  three_point_percentage: Three-point percentage as a percent string.
+  three_point_percentage_sort: Three-point percentage as a FRACTION 0-1 for sorting.
+  turnovers: Turnovers per game, as a decimal STRING ('1.2') when countRanger is 1.
+cba_player_box:
+  assists: Assists in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
+    row).
+  blocked: Blocks in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
+    row).
+  cn_alias: Player name (Chinese). The team row reads 团队篮板/失误 = 'team rebounds / turnovers'
+    (rebounds and turnovers not credited to a player; that row does not exist in the
+    2009-10 sample).
+  field_goals: Field goals made in this game (integer). Null on the team row (the
+    团队篮板/失误 rebounds/turnovers row).
+  field_goals_attempted: Field goals attempted in this game (integer). Null on the
+    team row (the 团队篮板/失误 rebounds/turnovers row).
+  field_goals_percentage: Field-goal percentage as a FRACTION 0-1 (0.308), null when
+    no attempt (0/0) as well as on the team row.
+  fouls: Personal fouls in this game (integer). Null on the team row (the 团队篮板/失误
+    rebounds/turnovers row).
+  free_throws: Free throws made in this game (integer). Null on the team row (the
+    团队篮板/失误 rebounds/turnovers row).
+  free_throws_attempted: Free throws attempted in this game (integer). Null on the
+    team row (the 团队篮板/失误 rebounds/turnovers row).
+  free_throws_percentage: Free-throw percentage as a FRACTION 0-1, null on the team
+    row.
+  game_start: 'Starter flag: 1 = started the game. Null on the team row.'
+  number: Jersey number as a string. Null on the team row.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id. Null on the team row.'
+  plus_minus: Plus-minus while on court. Null on the team row and on every row of
+    the 2009-10 sample (not tracked then).
+  points: Points in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
+    row).
+  rebounds: Total rebounds in this game (integer). The team row carries the team's
+    own total here.
+  rebounds_defensive: Defensive rebounds in this game (integer). The team row carries
+    the team's own total here.
+  rebounds_offensive: Offensive rebounds in this game (integer). The team row carries
+    the team's own total here.
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  steals: Steals in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
+    row).
+  three_point_attempted: Three-pointers attempted in this game (integer). Null on
+    the team row (the 团队篮板/失误 rebounds/turnovers row).
+  three_point_goals: Three-pointers made in this game (integer). Null on the team
+    row (the 团队篮板/失误 rebounds/turnovers row).
+  three_point_percentage: Three-point percentage as a FRACTION 0-1, null on the team
+    row.
+  turnovers: Turnovers in this game (integer). The team row carries the team's own
+    total here.
+  up_time: Time on court in SECONDS (1692 = 28:12). Null on the team row.
+cba_player_defensive:
+  age: Age in years in that season.
+  blocked_rate: 盖帽率 block rate (site definition, as blockedPercentage).
+  blocked_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    盖帽率 block rate (site definition, as blockedPercentage).'
+  blocked_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 盖帽率 block rate (site definition, as blockedPercentage).'
+  first_position: 'Primary position label (Chinese; see position for the label set).
+    Label glosses: C = 中锋; C/PF = 中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋;
+    PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG
+    = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫; SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 =
+    中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋 = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 =
+    小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
+    = 控球后卫/得分后卫.'
+  fouls_rate: '犯规率 foul rate: defensive fouls per 100 possessions (site definition:
+    每百回合防守犯规数).'
+  fouls_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    犯规率 foul rate: defensive fouls per 100 possessions (site definition: 每百回合防守犯规数).'
+  fouls_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    犯规率 foul rate: defensive fouls per 100 possessions (site definition: 每百回合防守犯规数).'
+  is_color: Highlight flag, 1 or 2 (unverified meaning; the site uses it to colour
+    the row).
+  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
+    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  nationality: 'Nationality (Chinese country name; see the nationality code table
+    for every value seen and its English name). Chinese country names seen: 中国 = China;
+    美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
+    尼日利亚 = Nigeria; 约旦 = Jordan.'
+  number: Jersey number as a string.
+  play_times: Games played (场数), integer.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_name: Player name (Chinese).
+  position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
+    / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
+    / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
+    positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses: C = 中锋; C/PF =
+    中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG
+    = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫;
+    SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋
+    = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫;
+    得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  position_num: Position as a number 1-5 (1 point guard, 2 shooting guard, 3 small
+    forward, 4 power forward, 5 center); a fraction such as 4.5 averages a dual position;
+    typed as float.
+  rank: 'Unobserved: null in every sample (a row-rank slot; the site numbers rows
+    itself).'
+  rebounds_defensive_rate: 防守篮板率 defensive-rebound rate (site definition, as reboundsDefensivePercentage).
+  rebounds_defensive_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 防守篮板率 defensive-rebound rate (site definition, as reboundsDefensivePercentage).'
+  rebounds_defensive_rate_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 防守篮板率 defensive-rebound rate (site definition, as reboundsDefensivePercentage).'
+  rebounds_offensive_rate: 进攻篮板率 offensive-rebound rate (site definition, as reboundsOffensivePercentage).
+  rebounds_offensive_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 进攻篮板率 offensive-rebound rate (site definition, as reboundsOffensivePercentage).'
+  rebounds_offensive_rate_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 进攻篮板率 offensive-rebound rate (site definition, as reboundsOffensivePercentage).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
+    total integer elsewhere.'
+  steals_rate: 抢断率 steal rate (site definition, as stealsPercentage).
+  steals_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    抢断率 steal rate (site definition, as stealsPercentage).'
+  steals_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 抢断率 steal rate (site definition, as stealsPercentage).'
+  team_cn_alias: Team short name (Chinese) in that season.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+cba_player_extras:
+  cn_alias: Player name (Chinese).
+  dunks_points: 扣篮得分 points scored on dunks.
+  fast_break_points: 快攻得分 fast-break points scored by the player.
+  field_goals_at_rim_made: '油漆区得分 points scored in the paint (the site''s own column
+    title). The field name says ''made'' but the value is a POINTS count: it exceeds
+    field goals made for 15 of 65 sampled players (e.g. 10 against 9 field goals made,
+    28 points).'
+  game_start: 'Starter flag: 1 = started the game.'
+  number: Jersey number as a string.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  up_time: Time on court in SECONDS.
+cba_player_offensive:
+  age: Age in years in that season.
+  assists: Assists in the season (total, integer).
+  assists_rate: 助攻率 assist rate (site definition, as assistsPercentage).
+  assists_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    助攻率 assist rate (site definition, as assistsPercentage).'
+  assists_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 助攻率 assist rate (site definition, as assistsPercentage).'
+  assists_round_rate: '助攻率/回合占有率 assist rate divided by possession share (site definition:
+    球员助攻率和回合占有率的比值).'
+  assists_round_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 助攻率/回合占有率 assist rate divided by possession share (site definition: 球员助攻率和回合占有率的比值).'
+  assists_round_rate_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 助攻率/回合占有率 assist rate divided by possession share (site definition:
+    球员助攻率和回合占有率的比值).'
+  birth_date: Date of birth 'YYYY-MM-DD' (a public player bio field; midnight-suffixed
+    'YYYY-MM-DD 00:00:00' on player-base-list).
+  field_goals_attempted: Field goals attempted in the season (total, integer).
+  first_position: 'Primary position label (Chinese; see position for the label set).
+    Label glosses: C = 中锋; C/PF = 中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋;
+    PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG
+    = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫; SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 =
+    中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋 = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 =
+    小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
+    = 控球后卫/得分后卫.'
+  free_throws: Free throws made in the season (total, integer).
+  is_color: Highlight flag, 1 or 2 (unverified meaning).
+  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
+    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  nationality: 'Nationality (Chinese country name; see the nationality code table
+    for every value seen and its English name). Chinese country names seen: 中国 = China;
+    美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
+    尼日利亚 = Nigeria; 约旦 = Jordan.'
+  number: Jersey number as a string.
+  play_times: Games played (场数), integer.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_name: Player name (Chinese).
+  position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
+    / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
+    / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
+    positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses: C = 中锋; C/PF =
+    中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG
+    = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫;
+    SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋
+    = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫;
+    得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  position_num: Position as a number 1-5 (1 point guard, 2 shooting guard, 3 small
+    forward, 4 power forward, 5 center); a fraction such as 4.5 averages a dual position;
+    typed as float.
+  rank: 'Unobserved: null in every sample (a row-rank slot; the site numbers rows
+    itself).'
+  real_rate: 真实命中率 true-shooting percentage (site definition, as trueShootingPercentage).
+  real_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    真实命中率 true-shooting percentage (site definition, as trueShootingPercentage).'
+  real_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    真实命中率 true-shooting percentage (site definition, as trueShootingPercentage).'
+  round_rate: '回合占有率 ''possession share'': the share of the team''s possessions the
+    player ends while on the court (site definition).'
+  round_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    回合占有率 ''possession share'': the share of the team''s possessions the player ends
+    while on the court (site definition).'
+  round_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    回合占有率 ''possession share'': the share of the team''s possessions the player ends
+    while on the court (site definition).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
+    total integer elsewhere.'
+  team_cn_alias: Team short name (Chinese) in that season.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  turnovers: Turnovers in the season (total, integer).
+  turnovers_rate: '失误率 turnover rate: for a player, the share of his possession-ending
+    plays that are turnovers; for a team, the share of the team''s possessions ending
+    in a turnover (site definitions).'
+  turnovers_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    失误率 turnover rate: for a player, the share of his possession-ending plays that
+    are turnovers; for a team, the share of the team''s possessions ending in a turnover
+    (site definitions).'
+  turnovers_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 失误率 turnover rate: for a player, the share of his possession-ending plays
+    that are turnovers; for a team, the share of the team''s possessions ending in
+    a turnover (site definitions).'
+cba_player_shots:
+  age: Age in years in that season.
+  at_rim_made_rate: '篮下频率 at-rim frequency: restricted-area attempts per 100 possessions
+    (site definition: 每百回合合理冲撞区内的出手数).'
+  at_rim_made_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    篮下频率 at-rim frequency: restricted-area attempts per 100 possessions (site definition:
+    每百回合合理冲撞区内的出手数).'
+  at_rim_made_rate_sort: 'Unformatted numeric value behind the formatted string of
+    the same metric (a fraction 0-1 for percentages), used by the site to sort the
+    table. Metric: 篮下频率 at-rim frequency: restricted-area attempts per 100 possessions
+    (site definition: 每百回合合理冲撞区内的出手数).'
+  first_position: 'Primary position label (Chinese; see position for the label set).
+    Label glosses: C = 中锋; C/PF = 中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋;
+    PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG
+    = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫; SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 =
+    中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋 = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 =
+    小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
+    = 控球后卫/得分后卫.'
+  free_rate: '罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site
+    definition).'
+  free_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site definition).'
+  free_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site definition).'
+  hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage: restricted-area field-goal
+    percentage (site definition).'
+  hit_at_rim_made_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
+    inverted for ''bad'' statistics such as turnovers) that the site uses to colour
+    the cell (inferred from the sample values; the base population is not documented).
+    Metric: 篮下命中率 at-rim shooting percentage: restricted-area field-goal percentage
+    (site definition).'
+  hit_at_rim_made_rate_sort: 'Unformatted numeric value behind the formatted string
+    of the same metric (a fraction 0-1 for percentages), used by the site to sort
+    the table. Metric: 篮下命中率 at-rim shooting percentage: restricted-area field-goal
+    percentage (site definition).'
+  hit_free_rate: 罚球命中率 free-throw percentage.
+  hit_free_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    罚球命中率 free-throw percentage.'
+  hit_free_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 罚球命中率 free-throw percentage.'
+  hit_middle_rate: '中距离命中率 mid-range shooting percentage: percentage on two-point
+    attempts outside the restricted area (site definition).'
+  hit_middle_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    中距离命中率 mid-range shooting percentage: percentage on two-point attempts outside
+    the restricted area (site definition).'
+  hit_middle_rate_sort: 'Unformatted numeric value behind the formatted string of
+    the same metric (a fraction 0-1 for percentages), used by the site to sort the
+    table. Metric: 中距离命中率 mid-range shooting percentage: percentage on two-point attempts
+    outside the restricted area (site definition).'
+  hit_rate: '有效命中率 effective field-goal percentage: all field-goal attempts converted
+    to two-point attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率).'
+  hit_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted for
+    ''bad'' statistics such as turnovers) that the site uses to colour the cell (inferred
+    from the sample values; the base population is not documented). Metric: 有效命中率
+    effective field-goal percentage: all field-goal attempts converted to two-point
+    attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率).'
+  hit_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    有效命中率 effective field-goal percentage: all field-goal attempts converted to two-point
+    attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率).'
+  hit_three_rate: 三分命中率 three-point shooting percentage.
+  hit_three_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    三分命中率 three-point shooting percentage.'
+  hit_three_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 三分命中率 three-point shooting percentage.'
+  is_color: Highlight flag, 1 or 2 (unverified meaning; the site uses it to colour
+    the row).
+  middle_rate: '中距离频率 mid-range frequency: two-point attempts outside the restricted
+    area per 100 possessions (site definition).'
+  middle_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    中距离频率 mid-range frequency: two-point attempts outside the restricted area per
+    100 possessions (site definition).'
+  middle_rate_sort: 'Unformatted numeric value behind the formatted string of the
+    same metric (a fraction 0-1 for percentages), used by the site to sort the table.
+    Metric: 中距离频率 mid-range frequency: two-point attempts outside the restricted area
+    per 100 possessions (site definition).'
+  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
+    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  nationality: 'Nationality (Chinese country name; see the nationality code table
+    for every value seen and its English name). Chinese country names seen: 中国 = China;
+    美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
+    尼日利亚 = Nigeria; 约旦 = Jordan.'
+  number: Jersey number as a string.
+  play_times: Games played (场数), integer.
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_name: Player name (Chinese).
+  position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
+    / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
+    / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
+    positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses: C = 中锋; C/PF =
+    中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG
+    = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫;
+    SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋
+    = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫;
+    得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  position_num: Position as a number 1-5 (1 point guard, 2 shooting guard, 3 small
+    forward, 4 power forward, 5 center); a fraction such as 4.5 averages a dual position;
+    typed as float.
+  rank: 'Unobserved: null in every sample (a row-rank slot; the site numbers rows
+    itself).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
+    total integer elsewhere.'
+  team_cn_alias: Team short name (Chinese) in that season.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  three_rate: '三分频率 three-point frequency: three-point attempts per 100 possessions
+    (site definition).'
+  three_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
+    for ''bad'' statistics such as turnovers) that the site uses to colour the cell
+    (inferred from the sample values; the base population is not documented). Metric:
+    三分频率 three-point frequency: three-point attempts per 100 possessions (site definition).'
+  three_rate_sort: 'Unformatted numeric value behind the formatted string of the same
+    metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
+    三分频率 three-point frequency: three-point attempts per 100 possessions (site definition).'
+cba_report_status:
+  is_report: True when the game report page exists (equals schedules/day isReport
+    == 1 in every sample).
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+cba_rosters:
+  age: 'Age in years as registered (0 on every sampled row: not maintained).'
+  birth_date: Date of birth 'YYYY-MM-DD'. A public player bio field of the roster
+    (kept; officials' and coaches' dates would be redacted by the capture).
+  body_data: JSON string of physical-testing results as the league stores it (wingspan,
+    standing reach, vertical reach, hand size); null where not tested.
+  cn_alias: Player short name (Chinese).
+  cn_alias_show: Display name (Chinese); '---' for a placeholder row.
+  cn_name: Player full name (Chinese; may include a first-name form for foreigners).
+  created_date: 'Audit field: row creation time ''YYYY-MM-DD HH:MM:SS''.'
+  first_name: Given name in Latin letters as registered, in capitals (e.g. 'CAI S.L.S.').
+  height: Height in cm (integer).
+  id: 'Internal row id of the (player, team, season) registration, a 19-digit integer
+    beyond 2^53: read it as a string/int64, never as a JS number. Not the playerId.'
+  is_captain: Team captain flag (false on every sampled row).
+  is_delete: Soft-delete flag (false on every sampled row).
+  is_injury: Injury flag (false on every sampled row).
+  is_three: Flag, 2 on every sampled row; meaning unverified.
+  last_modified_date: 'Audit field: last modification time; null on rows never modified.'
+  last_name: Family name in Latin letters; '' when none, and null on some older rows.
+  match_type_id: Match type id (1 = regular season) of the registration.
+  nationality: 'Nationality (Chinese country name; see the nationality code table
+    for every value seen and its English name). Chinese country names seen: 中国 = China;
+    美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
+    尼日利亚 = Nigeria; 约旦 = Jordan.'
+  number: Jersey number as a string.
+  player_cba_id: A registration id from the league's own system (e.g. 502672); 0 when
+    unset (27 of 101 sampled rows). Not the playerId (unverified beyond that).
+  player_id: 'playerId (key space: CBA persons, stable across seasons and clubs; 3-9
+    digits, older players have short ids (393433) and newer ones 100xxxxxx). Joins
+    the player box routes, the season player lists and getPlayersByScheduleId. Not
+    a team id.'
+  player_pic: Absolute URL of the player's photo; null when there is none.
+  position: 'Position code as registered: SG, SF, PG, PF, C and their ''/'' pairs,
+    or the coarse G (guard) / F (forward) on older rows (see positionDescription).
+    Label glosses: C = 中锋; C/PF = 中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋;
+    PF/SF = 大前锋/小前锋; PG = 控球后卫; PG/SG = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG
+    = 小前锋/得分后卫; SG = 得分后卫; SG/PG = 得分后卫/控球后卫; SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 =
+    中锋/大前锋; 前锋 = 前锋; 后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋 = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 =
+    小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
+    = 控球后卫/得分后卫.'
+  position_description: 'Position label (Chinese). Eras differ: coarse 后卫 (guard)
+    / 前锋 (forward) / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫
+    (shooting guard) / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in
+    newer ones; dual positions are joined with ''/'' (e.g. 小前锋/大前锋). Label glosses:
+    C = 中锋; C/PF = 中锋/大前锋; F = 前锋; G = 后卫; PF = 大前锋; PF/C = 大前锋/中锋; PF/SF = 大前锋/小前锋;
+    PG = 控球后卫; PG/SG = 控球后卫/得分后卫; SF = 小前锋; SF/PF = 小前锋/大前锋; SF/SG = 小前锋/得分后卫; SG
+    = 得分后卫; SG/PG = 得分后卫/控球后卫; SG/SF = 得分后卫/小前锋; 中锋 = 中锋; 中锋/大前锋 = 中锋/大前锋; 前锋 = 前锋;
+    后卫 = 后卫; 大前锋 = 大前锋; 大前锋/中锋 = 大前锋/中锋; 大前锋/小前锋 = 大前锋/小前锋; 小前锋 = 小前锋; 小前锋/大前锋 = 小前锋/大前锋;
+    小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
+  position_string: 'Unobserved: null in every sample.'
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  season_id: Season START year (2025 = the 2025-26 season). The sdv season key is
+    the END year = season + 1; map at the boundary. Same value as season.
+  season_name: 'Unobserved: null in every sample.'
+  season_year: 'Unobserved: null in every sample.'
+  side: 'Side of the game the row belongs to: home (the API''s host / home block)
+    or away (guest / visiting block).'
+  team_cba_id: teamId as a string ('29128'); meaning unverified beyond equalling teamId
+    in the sample.
+  team_cn_alias: Team short name (Chinese) in that season.
+  team_cn_name: Team full legal name (Chinese), e.g. 浙江广厦雄狮俱乐部浙商证券篮球队 'Zhejiang Guangsha
+    Lions Club Zheshang Securities basketball team'.
+  team_en_alias: 'Team code or English city name as registered: a three-letter code
+    on recent rows (''ZGL'', ''SBW''), an English city name on older ones (''Guangdong'',
+    ''Sichuan''), '''' when none.'
+  team_en_name: Team English name as the league registers it (the sample reads 'GUANG
+    SHA').
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  weight: Weight in kg (integer).
+cba_schedule_day:
+  home_team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  home_team_logo: Absolute URL of the home team logo (300x300 png).
+  home_team_lose: Home team's cumulative losses after this game, as a STRING.
+  home_team_name: Home team name (Chinese) as of the game's season; changes with the
+    sponsor. Names change with the sponsor, the id does not; teamId -> English glossary
+    in cba_glossary.yaml.
+  home_team_score: Home team final points (a game not yet played has no score; a scheduled
+    2026-27 game outside the samples showed null).
+  home_team_win: Home team's cumulative wins after this game in the match type, as
+    a STRING ('1').
+  is_events: 'Play-by-play flag: 1 = play-by-play exists (2017-18 and later in the
+    samples), 2 = none (the 2009-10 sample answers empty pages).'
+  is_report: 'Game-report flag: 1 = a game report page exists (every sample).'
+  match_order: Sequence number of the game within its season and match type (1-based).
+  match_type_id: Match type id (1 regular season, 2 playoffs, 3 preseason, 4 all-star,
+    9 relegation; see getMatchType).
+  minutes: 'Regulation length of the game in minutes: 40 (4 x 10) in the 2025-26 sample,
+    48 (4 x 12) in the 2009-10 and 2017-18 samples.'
+  quarter: Number of periods played (4 = no overtime; 5 and up would be overtime periods).
+  round: Round number within the match type (1-based).
+  round_desc: 'Unobserved: null in every sample, so no meaning is claimed beyond its
+    name (round description).'
+  schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
+    across seasons and match types; the {scheduleId} of every game route). Stamped
+    by the runtime from the request; null on a body parsed without it.'
+  schedule_num: 'Unobserved: null in every sample on this route (the game count is
+    filled on schedules/month).'
+  schedule_time: Tip-off as 'YYYY-MM-DD HH:MM:SS' (China local time, no zone).
+  schedule_type_name: Round label (Chinese), e.g. 常规赛第1轮 = regular season, round 1.
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  seconds: 'Unobserved: null in every sample (the clock seconds of a live game, by
+    its name).'
+  status: 'Game status: 4 = finished (every sampled game). 1 = not started and 2 =
+    in progress are inferred from the site''s polling logic; 3 is unobserved. See
+    the code table.'
+  visiting_team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  visiting_team_logo: Absolute URL of the visiting team logo (300x300 png).
+  visiting_team_lose: Visiting team's cumulative losses after this game, as a STRING.
+  visiting_team_name: Visiting team name (Chinese) as of the game's season; changes
+    with the sponsor. Names change with the sponsor, the id does not; teamId -> English
+    glossary in cba_glossary.yaml.
+  visiting_team_score: Visiting team final points.
+  visiting_team_win: Visiting team's cumulative wins after this game, as a STRING.
+cba_schedule_month:
+  schedule_num: Number of games scheduled on that day (0 = none).
+  schedule_time: The day as 'YYYY-MM-DD 00:00:00' (China local time, no zone); one
+    row per calendar day of the month.
+cba_seasons:
+  is_default: 'Default-selection flag: 1 = the site''s default season (exactly one
+    row: the season in progress or next), 2 = not the default.'
+  key: Season label 'YYYY-YYYY' (START year - END year), e.g. '2025-2026'; the sdv
+    season key is the second year. The list runs from the upcoming season (2026-2027,
+    32 rows) down to 1995-1996 with no gap.
+  value: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary. String of digits ('2025'); the value
+    every season parameter takes.
+cba_team_basic:
+  assists: Assists, formatted by statisticalDimension, as a STRING.
+  blocked: Blocks, formatted by statisticalDimension, as a STRING.
+  cba_rank: 'Unobserved: null in every sample (a league-rank slot).'
+  field_goals: Field goals made, formatted by statisticalDimension, as a STRING.
+  field_goals_attempted: Field goals attempted, formatted by statisticalDimension,
+    as a STRING.
+  field_goals_percentage_rate: Field-goal percentage as a percent string ('46.0%').
+  fouls: Personal fouls, formatted by statisticalDimension, as a STRING.
+  free_throws: Free throws made, formatted by statisticalDimension, as a STRING.
+  free_throws_attempted: Free throws attempted, formatted by statisticalDimension,
+    as a STRING.
+  free_throws_percentage_rate: Free-throw percentage as a percent string.
+  losses_number: Losses (负场). (as the API names it)
+  points: 'Points, formatted by statisticalDimension (1 per-game average, 2 season
+    total, 3 and 4 per 100 possessions: both give the same values, 120.1 = boutPoints),
+    as a STRING (''104.5'').'
+  real_player_times: Games counted for the averages (实际场数 by its name); equals scheduleNumber
+    in the sample except in short seasons (unverified).
+  rebounds: Total rebounds, formatted by statisticalDimension, as a STRING.
+  rebounds_defensive: Defensive rebounds, formatted by statisticalDimension, as a
+    STRING.
+  rebounds_offensive: Offensive rebounds, formatted by statisticalDimension, as a
+    STRING.
+  round: Possessions in the season (回合数) as a float (4074.09); identical for statisticalDimension
+    1-4.
+  schedule_number: Games played in that season and match type (场数).
+  schedule_season: Season START year (2025 = the 2025-26 season). The sdv season key
+    is the END year = season + 1; map at the boundary. One row per season of the team.
+  season: Season label 'YYYY-YYYY' as a string ('2024-2025' = start year - end year;
+    the sdv END year is the second one); scheduleSeason is the numeric START year.
+  steals: Steals, formatted by statisticalDimension, as a STRING.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: Team name (Chinese) in that season; changes with the sponsor (the sampled
+    team 29128 has 9 different names across 20 seasons). Names change with the sponsor,
+    the id does not; teamId -> English glossary in cba_glossary.yaml.
+  three_point_attempted: Three-pointers attempted, formatted by statisticalDimension,
+    as a STRING.
+  three_point_goals: Three-pointers made, formatted by statisticalDimension, as a
+    STRING.
+  three_point_percentage_rate: Three-point percentage as a percent string.
+  time: Team minutes per game (statisticalDimension 1) or in total (2), as a STRING
+    ('48.1').
+  turnovers: Turnovers, formatted by statisticalDimension, as a STRING.
+  win_number: Wins (胜场). (as the API names it)
+  win_rate: Win rate (胜率) as a percent string ('84.8%').
+cba_team_counts:
+  key: Match type id as a string ('1' regular season, '2' playoffs); see getMatchType.
+  value: 'Number of teams in that match type in the requested season (inferred: 20
+    for key ''1'' in 2025, equal to the 2025 getTeam list length; the playoff count
+    is smaller).'
+cba_team_four:
+  effective_hit_rate: '有效命中率 effective field-goal percentage, in PERCENT as a number
+    (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  effective_hit_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: 有效命中率 effective field-goal percentage, in PERCENT
+    as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  effective_hit_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage,
+    in PERCENT as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  effective_hit_sort: Unformatted fraction 0-1 behind effectiveHitRate.
+  field_goals: Field goals made in the season (sum).
+  field_goals_attempted: Field goals attempted in the season (sum).
+  free_throw_rate: '罚球率 free-throw rate: free throws made relative to field-goal attempts,
+    in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  free_throw_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: 罚球率 free-throw rate: free throws made relative
+    to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  free_throw_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 罚球率 free-throw rate: free throws made
+    relative to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  free_throw_sort: Unformatted fraction 0-1 behind freeThrowRate.
+  free_throws: Free throws made in the season (sum).
+  loss_average: League-average losses; 0.0 in every sample.
+  loss_num: Losses in that season.
+  offensive_rebound_rate: '进攻篮板率 offensive-rebound rate: the team''s offensive rebounds
+    as a share of all offensive-rebound chances, in percent as a number (site definition).'
+  offensive_rebound_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: 进攻篮板率 offensive-rebound rate: the team''s
+    offensive rebounds as a share of all offensive-rebound chances, in percent as
+    a number (site definition).'
+  offensive_rebound_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 进攻篮板率 offensive-rebound rate:
+    the team''s offensive rebounds as a share of all offensive-rebound chances, in
+    percent as a number (site definition).'
+  offensive_rebound_sort: Unformatted fraction 0-1 behind offensiveReboundRate.
+  other_effective_hit_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 有效命中率 effective field-goal percentage, in PERCENT as a number
+    (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_effective_hit_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: The same measure for the team''s OPPONENTS
+    (the site''s ''other'' block): 有效命中率 effective field-goal percentage, in PERCENT
+    as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_effective_hit_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 有效命中率 effective field-goal percentage,
+    in PERCENT as a number (53.6 = 53.6%) (site definition: 球队所有运动战出手都折算为两分出手时的命中率).'
+  other_effective_hit_sort: Unformatted fraction 0-1 behind otherEffectiveHitRate.
+  other_field_goals: Field goals made by the team's opponents (sum).
+  other_field_goals_attempted: Field goals attempted by the opponents (sum).
+  other_free_throw_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 罚球率 free-throw rate: free throws made relative to field-goal
+    attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_free_throw_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: The same measure for the team''s OPPONENTS (the
+    site''s ''other'' block): 罚球率 free-throw rate: free throws made relative to field-goal
+    attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_free_throw_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 罚球率 free-throw rate: free throws made
+    relative to field-goal attempts, in percent as a number (site definition: 球队罚球命中数和运动战出手数的比值).'
+  other_free_throw_sort: Unformatted fraction 0-1 behind otherFreeThrowRate.
+  other_free_throws: Free throws made by the opponents (sum).
+  other_offensive_rebound_rate: 'The same measure for the team''s OPPONENTS (the site''s
+    ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s offensive rebounds
+    as a share of all offensive-rebound chances, in percent as a number (site definition).'
+  other_offensive_rebound_rate_average: 'Unobserved: null in every sample. When filled:
+    league average of the metric. Metric: The same measure for the team''s OPPONENTS
+    (the site''s ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s offensive
+    rebounds as a share of all offensive-rebound chances, in percent as a number (site
+    definition).'
+  other_offensive_rebound_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 进攻篮板率 offensive-rebound rate: the team''s
+    offensive rebounds as a share of all offensive-rebound chances, in percent as
+    a number (site definition).'
+  other_offensive_rebound_sort: Unformatted fraction 0-1 behind otherOffensiveReboundRate.
+  other_points_hundred_round: '百回合失分 points allowed per 100 possessions (defensive
+    rating): the opponents'' points per 100 possessions.'
+  other_points_hundred_round_average: 'League average of the metric. Metric: 百回合失分
+    points allowed per 100 possessions (defensive rating): the opponents'' points
+    per 100 possessions.'
+  other_points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 百回合失分 points allowed per 100
+    possessions (defensive rating): the opponents'' points per 100 possessions.'
+  other_rebounds_defensive: Defensive rebounds by the opponents (sum).
+  other_rebounds_offensive: Offensive rebounds by the opponents (sum).
+  other_three_point_goals: Three-pointers made by the opponents (sum).
+  other_turnovers: Turnovers by the opponents (sum).
+  other_turnovers_rate: 'The same measure for the team''s OPPONENTS (the site''s ''other''
+    block): 失误率 turnover rate: the share of the team''s possessions ending in a turnover,
+    in percent as a number (site definition).'
+  other_turnovers_rate_average: 'Unobserved: null in every sample. When filled: league
+    average of the metric. Metric: The same measure for the team''s OPPONENTS (the
+    site''s ''other'' block): 失误率 turnover rate: the share of the team''s possessions
+    ending in a turnover, in percent as a number (site definition).'
+  other_turnovers_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: The same measure for the team''s
+    OPPONENTS (the site''s ''other'' block): 失误率 turnover rate: the share of the team''s
+    possessions ending in a turnover, in percent as a number (site definition).'
+  other_turnovers_sort: Unformatted fraction 0-1 behind otherTurnoversRate.
+  other_win_points_hundred_round: Net points per 100 possessions as seen from the
+    opponents' side (the site's 'other' block).
+  points_hundred_round: 百回合得分 points scored per 100 possessions (offensive rating).
+  points_hundred_round_average: 'League average of the metric. Metric: 百回合得分 points
+    scored per 100 possessions (offensive rating).'
+  points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
+    possessions (offensive rating).'
+  rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数).'
+  rhythm_num: 'Unobserved: null in every sample (a string form of the pace; the schedule-four-elements
+    route fills it).'
+  rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
+    per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
+    每48分钟回合数).'
+  round: Possessions in the season (回合数), a float such as 2606.36.
+  round_jingque: Possessions in the season computed 'precisely' (精确回合数 by its name);
+    equals round in the sample (unverified difference).
+  schedule_season: Season START year (2025 = the 2025-26 season). The sdv season key
+    is the END year = season + 1; map at the boundary. One row per season of the team.
+  season: Season of the row as a STRING ('2025' = the START year of 2025-26; sdv END
+    year = value + 1); equals scheduleSeason.
+  self_rebounds_defensive: Defensive rebounds by the team in the season (sum).
+  self_rebounds_offensive: Offensive rebounds by the team in the season (sum).
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: Team name (Chinese) in that season; changes with the sponsor. Names change
+    with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml.
+  three_point_goals: Three-pointers made in the season (sum).
+  total_minute: Team minutes played in the season (sum, 1440 = 30 games x 48).
+  total_other_points: Points the team's opponents scored in the season (sum).
+  total_points: Points the team scored in the season (sum).
+  turnovers: Turnovers in the season (sum).
+  turnovers_rate: '失误率 turnover rate: the share of the team''s possessions ending
+    in a turnover, in percent as a number (site definition).'
+  turnovers_rate_average: 'Unobserved: null in every sample. When filled: league average
+    of the metric. Metric: 失误率 turnover rate: the share of the team''s possessions
+    ending in a turnover, in percent as a number (site definition).'
+  turnovers_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 失误率 turnover rate: the share of the
+    team''s possessions ending in a turnover, in percent as a number (site definition).'
+  turnovers_sort: Unformatted fraction 0-1 behind turnoversRate.
+  win_num: Wins in that season (regular season for matchTypeId 1).
+  win_points_hundred_round: 百回合净胜分 net points per 100 possessions.
+  win_points_hundred_round_average: 'League average of the metric. Metric: 百回合净胜分
+    net points per 100 possessions.'
+  win_points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 百回合净胜分 net points per 100
+    possessions.'
+  wine_average: League-average wins (field name sic); 0.0 in every sample.
+cba_team_options:
+  is_default: 'Default-selection flag: 2 = not the default on every row (the site
+    prepends its own ''all teams'' row, which this route does not send).'
+  key: Team display name (Chinese) in the requested season; names change with the
+    sponsor, the teamId does not.
+  value: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id. Here a string of
+    digits.'
+cba_team_overview:
+  bout_no_points: 百回合失分 points allowed per 100 possessions (defensive rating), a float.
+  bout_no_points_rank: Rank among the teams of that season for boutNoPoints (integer-valued
+    float; direction undocumented).
+  bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind boutNoPoints).'
+  bout_point_sort: 'Unobserved: null in every sample (numeric value behind boutPoints).'
+  bout_points: 百回合得分 points scored per 100 possessions (offensive rating), a float
+    (120.1).
+  bout_points_rank: Rank among the teams of that season for boutPoints (integer-valued
+    float; direction undocumented).
+  bout_subtract_points: 百回合净胜分 net points per 100 possessions (boutPoints - boutNoPoints),
+    a float.
+  bout_subtract_points_rank: Rank among the teams of that season for boutSubtractPoints
+    (integer-valued float).
+  bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
+    boutSubtractPoints).'
+  is_avg: 'Row kind: 2 on every sampled row = a team''s own row (1 presumed league
+    average, unobserved).'
+  loss_num: Losses in that season, a float.
+  player_times: Games played, a float (42.0).
+  rhythm: '节奏 pace as a STRING: possessions per 48 minutes (''75.7''; site definition:
+    每48分钟回合数).'
+  rhythm_rank: 'Unobserved: null in every sample (a rank slot for pace).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary. One row per season of the team.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: Team name (Chinese) in that season; changes with the sponsor. Names change
+    with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml.
+  win_num: Wins in that season (match type of the request), a number typed as float
+    (33.0).
+  win_rate: Win rate as a percent string ('78.6%').
+cba_team_shots:
+  bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
+    points allowed per 100 possessions).'
+  bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
+    per 100 possessions).'
+  bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
+    百回合净胜分 net points per 100 possessions).'
+  guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
+    at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle). A string percent (''36.3%''). Null for the seasons
+    2006-2016 (sampled team 29128): the at-rim and mid-range zone splits start with
+    2017-18.'
+  guard_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
+    of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
+    the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
+    is inferred from the site''s 攻/防 offence/defence toggle). Null for the seasons
+    2006-2016 (sampled team 29128): the at-rim and mid-range zone splits start with
+    2017-18.'
+  guard_field_goals_at_rim_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts taken
+    at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle). Null for the seasons 2006-2016 (sampled team 29128):
+    the at-rim and mid-range zone splits start with 2017-18.'
+  guard_hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle). A string percent (''36.3%''). Null
+    for the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range zone
+    splits start with 2017-18.'
+  guard_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
+    for the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
+    is inferred from the site''s 攻/防 offence/defence toggle). Null for the seasons
+    2006-2016 (sampled team 29128): the at-rim and mid-range zone splits start with
+    2017-18.'
+  guard_hit_at_rim_made_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the shots
+    of the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  guard_hit_middle_rate: '中距离命中率 mid-range shooting percentage, for the shots of the
+    OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred from
+    the site''s 攻/防 offence/defence toggle). A string percent (''36.3%''). Null for
+    the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range zone splits
+    start with 2017-18.'
+  guard_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
+    percentage, for the shots of the OPPONENTS against this team (守, defence; the
+    ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle). Null
+    for the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range zone
+    splits start with 2017-18.'
+  guard_hit_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  guard_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts that
+    are two-pointers outside the restricted area, for the shots of the OPPONENTS against
+    this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
+    toggle). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  guard_middle_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of
+    field-goal attempts that are two-pointers outside the restricted area, for the
+    shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix is
+    inferred from the site''s 攻/防 offence/defence toggle). Null for the seasons 2006-2016
+    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  guard_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts that
+    are two-pointers outside the restricted area, for the shots of the OPPONENTS against
+    this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
+    toggle). Null for the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range
+    zone splits start with 2017-18.'
+  guard_real_point: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
+    the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A
+    string percent ('36.3%').
+  guard_real_point_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage
+    (all field goals counted as two-point attempts), for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle).'
+  guard_real_point_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_three_goals_rate: 三分命中率 three-point shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from
+    the site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+  guard_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
+    percentage, for the shots of the OPPONENTS against this team (守, defence; the
+    ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  guard_three_goals_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 三分命中率 three-point shooting percentage, for the shots of
+    the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
+    from the site''s 攻/防 offence/defence toggle).'
+  guard_three_rate: '三分占比 three-point share: the share of field-goal attempts that
+    are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).
+    A string percent (''36.3%'').'
+  guard_three_rate_rank: 'Rank among the teams of that season (integer-valued number;
+    direction per metric undocumented). Metric: 三分占比 three-point share: the share
+    of field-goal attempts that are three-pointers, for the shots of the OPPONENTS
+    against this team (守, defence; the ''guard'' prefix is inferred from the site''s
+    攻/防 offence/defence toggle).'
+  guard_three_rate_sort: 'Unformatted fraction 0-1 behind the formatted string of
+    the metric. Metric: 三分占比 three-point share: the share of field-goal attempts that
+    are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
+    the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
+  is_avg: 'Row kind: 2 on every sampled row = a team''s own row; 1 is presumed to
+    mark a league-average row but is unobserved.'
+  num: Games the profile covers (the site's 场数 'games'), e.g. 42.0; a number typed
+    as float.
+  offensive_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts
+    taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
+    (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
+    of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
+    the team''s own shots (攻, offence). Null for the seasons 2006-2016 (sampled team
+    29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_field_goals_at_rim_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts
+    taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
+    (攻, offence). Null for the seasons 2006-2016 (sampled team 29128): the at-rim
+    and mid-range zone splits start with 2017-18.'
+  offensive_hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage, for the team''s
+    own shots (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016
+    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
+    for the team''s own shots (攻, offence). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_hit_at_rim_made_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the team''s
+    own shots (攻, offence). Null for the seasons 2006-2016 (sampled team 29128): the
+    at-rim and mid-range zone splits start with 2017-18.'
+  offensive_hit_middle_rate: '中距离命中率 mid-range shooting percentage, for the team''s
+    own shots (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016
+    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
+    percentage, for the team''s own shots (攻, offence). Null for the seasons 2006-2016
+    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_hit_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the team''s own
+    shots (攻, offence). Null for the seasons 2006-2016 (sampled team 29128): the at-rim
+    and mid-range zone splits start with 2017-18.'
+  offensive_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts
+    that are two-pointers outside the restricted area, for the team''s own shots (攻,
+    offence). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_middle_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the
+    share of field-goal attempts that are two-pointers outside the restricted area,
+    for the team''s own shots (攻, offence). Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+  offensive_middle_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts
+    that are two-pointers outside the restricted area, for the team''s own shots (攻,
+    offence). Null for the seasons 2006-2016 (sampled team 29128): the at-rim and
+    mid-range zone splits start with 2017-18.'
+  offensive_real_point: 有效命中率 effective field-goal percentage (all field goals counted
+    as two-point attempts), for the team's own shots (攻, offence). A string percent
+    ('36.3%').
+  offensive_real_point_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 有效命中率 effective field-goal
+    percentage (all field goals counted as two-point attempts), for the team''s own
+    shots (攻, offence).'
+  offensive_real_point_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals
+    counted as two-point attempts), for the team''s own shots (攻, offence).'
+  offensive_three_goals_rate: 三分命中率 three-point shooting percentage, for the team's
+    own shots (攻, offence). A string percent ('36.3%').
+  offensive_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
+    percentage, for the team''s own shots (攻, offence).'
+  offensive_three_goals_rate_sort: 'Unformatted fraction 0-1 behind the formatted
+    string of the metric. Metric: 三分命中率 three-point shooting percentage, for the team''s
+    own shots (攻, offence).'
+  offensive_three_rate: '三分占比 three-point share: the share of field-goal attempts
+    that are three-pointers, for the team''s own shots (攻, offence). A string percent
+    (''36.3%'').'
+  offensive_three_rate_rank: 'Rank among the teams of that season (integer-valued
+    number; direction per metric undocumented). Metric: 三分占比 three-point share: the
+    share of field-goal attempts that are three-pointers, for the team''s own shots
+    (攻, offence).'
+  offensive_three_rate_sort: 'Unformatted fraction 0-1 behind the formatted string
+    of the metric. Metric: 三分占比 three-point share: the share of field-goal attempts
+    that are three-pointers, for the team''s own shots (攻, offence).'
+  season: Season START year (2025 = the 2025-26 season). The sdv season key is the
+    END year = season + 1; map at the boundary.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_name: Team name (Chinese) in that season; changes with the sponsor. Names change
+    with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml.
+cba_teams:
+  club: Empty string on every row; meaning unverified (a club-code slot the site leaves
+    unused).
+  team_cn_alias: Current team name (Chinese short name, e.g. 北京控股 'Beijing Holdings').
+    Names change with the sponsor, the id does not; teamId -> English glossary in
+    cba_glossary.yaml.
+  team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
+    clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
+    club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
+    Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
+    and the team and player routes. Not a player or schedule id.'
+  team_logo: Protocol-relative URL of the 300x300 team logo ('//image.cbaleague.com/cbaleague/teamlogo/300x300/<teamId>_300.png').

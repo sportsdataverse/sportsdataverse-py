@@ -1299,7 +1299,7 @@ loaders:
   base: sdv_releases
   url: nba_crosswalk/nba_player_crosswalk_{season}.parquet
   tag: nba_crosswalk
-  min_season: 2026
+  min_season: 2002
   example_args:
     seasons: 2026
 - fn: load_nba_schedule_crosswalk
@@ -1323,7 +1323,7 @@ loaders:
   base: sdv_releases
   url: wnba_crosswalk/wnba_player_crosswalk_{season}.parquet
   tag: wnba_crosswalk
-  min_season: 2026
+  min_season: 2002
   example_args:
     seasons: 2026
 - fn: load_wnba_schedule_crosswalk
@@ -1856,7 +1856,7 @@ loaders:
   base: sdv_releases
   url: wnba_stats_player_game_logs/player_game_logs_{season}.parquet
   tag: wnba_stats_player_game_logs
-  min_season: 2025
+  min_season: 1997
   example_args:
     seasons: 2025
 - fn: load_wnba_stats_rosters
@@ -1880,7 +1880,7 @@ loaders:
   base: sdv_releases
   url: wnba_stats_shots/shots_{season}.parquet
   tag: wnba_stats_shots
-  min_season: 2026
+  min_season: 1997
   example_args:
     seasons: 2026
 - fn: load_wnba_stats_team_boxscores

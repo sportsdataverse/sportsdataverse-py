@@ -1,0 +1,18 @@
+{
+ "data": {
+  "leagues": [
+   {
+    "games": [
+     {
+      "gameId": "wnba.g.20151014011",
+      "startDate": "2015-10-14-05:00",
+      "startTime": "2015-10-14T19:00:00-05:00",
+      "status": "FINAL",
+      "seasonPhase": "POSTSEASON"
+     }
+    ]
+   }
+  ]
+ },
+ "extensions": {}
+}

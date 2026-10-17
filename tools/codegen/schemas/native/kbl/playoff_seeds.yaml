@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: game_code
+  type: character
+- description: ''
+  name: seed
+  type: integer
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_name_full
+  type: character
+kind: dataframe
+schema: kbl_playoff_seeds

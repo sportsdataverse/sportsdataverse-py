@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: news_id
+  type: integer
+- description: ''
+  name: language
+  type: character
+- description: ''
+  name: title
+  type: character
+- description: ''
+  name: published_at_utc
+  type: character
+- description: ''
+  name: image_url
+  type: character
+- description: ''
+  name: html_content
+  type: character
+kind: dataframe
+schema: cebl_news

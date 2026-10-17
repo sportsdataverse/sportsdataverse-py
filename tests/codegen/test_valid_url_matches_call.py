@@ -29,6 +29,9 @@ def _espn_views(prefix: str):
 def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int:
     mod = importlib.import_module(dotted)
     seen: dict = {}
+    # A runtime that rewrites the query before requesting (sihf_runtime._build_query) puts THAT on
+    # the wire, so the documented URL is compared with the query after the same rewrite.
+    build = getattr(importlib.import_module(mod._get.__module__), "_build_query", None)
 
     def fake_get(url, params=None, **_kw):
         seen.update(url=url, params=params or {})
@@ -49,6 +52,9 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
         seen.clear()
         fn(**kwargs)
         query = {k: val for k, val in seen["params"].items() if val is not None}
+        if build is not None:
+            built = build(query)
+            query = built[0] if isinstance(built, tuple) else built
         got = seen["url"] + (f"?{urlencode(query, doseq=True)}" if query else "")
         assert v.valid_url == got, v.fn_name
         assert f"{v.fn_name}(" in v.example_call and v.valid_url in v.docstring, v.fn_name

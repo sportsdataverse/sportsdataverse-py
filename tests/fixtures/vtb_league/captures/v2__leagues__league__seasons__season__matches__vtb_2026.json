@@ -1,0 +1,406 @@
+{
+  "meta": {
+    "version": 2,
+    "code": 200,
+    "status": "success",
+    "request": "http://api.vtb-league.com/v2/leagues/vtb/seasons/2026/matches?limit=1000",
+    "time": 1791835508,
+    "count": 273,
+    "limit": 1000,
+    "page": 1
+  },
+  "data": [
+    {
+      "matchId": 932510,
+      "attendance": 12365,
+      "competition": "vtb-supercup",
+      "competitors": [
+        {
+          "teamId": 520,
+          "scoreString": 67,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/4RxD5qk90If7-mhhJECDiWBPnyw=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/D7VXOoBhcTDgOjgBpcPecUj8VPw=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/WtzXUEQUuf_TmyCbnBZzkIDabVg=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Белград",
+            "en": "Belgrade"
+          },
+          "teamCode": {
+            "ru": "Црвена Звезда",
+            "en": "Crvena Zvezda"
+          },
+          "teamName": {
+            "ru": "Црвена Звезда",
+            "en": "Crvena Zvezda"
+          }
+        },
+        {
+          "teamId": 15,
+          "scoreString": 89,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/YU6J3gl539aURIRBG5s9_FCq46A=/75x75/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F13842.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/kXw4Qa5vxHlvYUp7-0IKzxGUgtw=/200x200/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F13842.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/XkAxsxjCAUXcKAVRlD-DmDUhJio=/400x400/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F13842.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Москва",
+            "en": "Moscow"
+          },
+          "teamCode": {
+            "ru": "ЦСКА",
+            "en": "CSKA"
+          },
+          "teamName": {
+            "ru": "ЦСКА",
+            "en": "CSKA"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 520,
+      "isTimeSet": true,
+      "league": "vtb",
+      "matchNumber": "1/2-2",
+      "matchStatus": "COMPLETE",
+      "matchTime": "2025-09-24T16:00:00+02:00",
+      "matchTimeMSK": "2025-09-24T17:00:00+03:00",
+      "matchTimeUTC": "2025-09-24T14:00:00+00:00",
+      "matchType": "FINALS",
+      "periods": 4,
+      "phaseId": 1213772,
+      "phaseName": {
+        "ru": "1/2 финала (1)",
+        "en": "1/2 finals (1)"
+      },
+      "pointsByQuarters": [
+        [
+          19,
+          30
+        ],
+        [
+          20,
+          17
+        ],
+        [
+          16,
+          17
+        ]
+      ],
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 13442,
+        "venueName": {
+          "ru": "Belgrade Arena",
+          "en": "Belgrade Arena"
+        },
+        "regionName": {
+          "ru": "Белград",
+          "en": "Belgrad"
+        }
+      },
+      "venueId": 13442,
+      "customValues": {
+        "subtitle": {
+          "ru": "Суперкубок 2025",
+          "en": "Supercup 2025"
+        }
+      }
+    },
+    {
+      "matchId": 932509,
+      "attendance": 2511,
+      "competition": "vtb-supercup",
+      "competitors": [
+        {
+          "teamId": 2994,
+          "scoreString": 107,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/dxY5eoM-fKu6tf0k0QZe8EEpBvQ=/75x75/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F18004.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/8chnq8nhjHKNNbh1XQytyODgXXs=/200x200/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F18004.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/hWbqlqlvFBt2G_eJgvCdBdgjghM=/400x400/https%3A%2F%2Ffiles.infobasket.su%2Flogos%2F18004.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Санкт-Петербург",
+            "en": "Saint Petersburg"
+          },
+          "teamCode": {
+            "ru": "Зенит",
+            "en": "Zenit"
+          },
+          "teamName": {
+            "ru": "Зенит",
+            "en": "Zenit"
+          }
+        },
+        {
+          "teamId": 52852,
+          "scoreString": 103,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/O4i8KVmGsX9QpJHtSXm8eYaQlnw=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/A6B11qPfDJ9Nxh0WnKj6HBgI-K0=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/-URqvSEC5nInrrvWrp98P9TDHs8=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Дубай",
+            "en": "Dubai"
+          },
+          "teamCode": {
+            "ru": "Дубай",
+            "en": "Dubai Basketball"
+          },
+          "teamName": {
+            "ru": "Дубай",
+            "en": "Dubai Basketball"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 2994,
+      "isTimeSet": true,
+      "league": "vtb",
+      "matchNumber": "1/2-1",
+      "matchStatus": "COMPLETE",
+      "matchTime": "2025-09-24T19:00:00+02:00",
+      "matchTimeMSK": "2025-09-24T20:00:00+03:00",
+      "matchTimeUTC": "2025-09-24T17:00:00+00:00",
+      "matchType": "FINALS",
+      "periods": 4,
+      "phaseId": 1213771,
+      "phaseName": {
+        "ru": "1/2 финала (2)",
+        "en": "1/2 finals (2)"
+      },
+      "pointsByQuarters": [
+        [
+          19,
+          24
+        ],
+        [
+          25,
+          30
+        ],
+        [
+          28,
+          29
+        ]
+      ],
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 13442,
+        "venueName": {
+          "ru": "Belgrade Arena",
+          "en": "Belgrade Arena"
+        },
+        "regionName": {
+          "ru": "Белград",
+          "en": "Belgrad"
+        }
+      },
+      "venueId": 13442,
+      "customValues": {
+        "subtitle": {
+          "ru": "Суперкубок 2025",
+          "en": "Supercup 2025"
+        }
+      }
+    },
+    {
+      "matchId": 932511,
+      "attendance": null,
+      "competition": "vtb-supercup",
+      "competitors": [
+        {
+          "teamId": 52852,
+          "scoreString": 0,
+          "isHomeCompetitor": true,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/O4i8KVmGsX9QpJHtSXm8eYaQlnw=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/A6B11qPfDJ9Nxh0WnKj6HBgI-K0=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/-URqvSEC5nInrrvWrp98P9TDHs8=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F40010.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Дубай",
+            "en": "Dubai"
+          },
+          "teamCode": {
+            "ru": "Дубай",
+            "en": "Dubai Basketball"
+          },
+          "teamName": {
+            "ru": "Дубай",
+            "en": "Dubai Basketball"
+          }
+        },
+        {
+          "teamId": 520,
+          "scoreString": 0,
+          "isHomeCompetitor": false,
+          "images": {
+            "logo": {
+              "T1": {
+                "size": "T1",
+                "height": 75,
+                "width": 75,
+                "url": "https://img.vtb-league.com/4RxD5qk90If7-mhhJECDiWBPnyw=/75x75/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              },
+              "S1": {
+                "size": "S1",
+                "height": 200,
+                "width": 200,
+                "url": "https://img.vtb-league.com/D7VXOoBhcTDgOjgBpcPecUj8VPw=/200x200/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              },
+              "M1": {
+                "size": "M1",
+                "height": 400,
+                "width": 400,
+                "url": "https://img.vtb-league.com/WtzXUEQUuf_TmyCbnBZzkIDabVg=/400x400/https%3A%2F%2Fimg.infobasket.su%2Flogo%2F23151.png"
+              }
+            }
+          },
+          "regionName": {
+            "ru": "Белград",
+            "en": "Belgrade"
+          },
+          "teamCode": {
+            "ru": "Црвена Звезда",
+            "en": "Crvena Zvezda"
+          },
+          "teamName": {
+            "ru": "Црвена Звезда",
+            "en": "Crvena Zvezda"
+          }
+        }
+      ],
+      "duration": 0,
+      "extraPeriodsUsed": false,
+      "hostingTeamId": 52852,
+      "isTimeSet": true,
+      "league": "vtb",
+      "matchNumber": "F-3",
+      "matchStatus": "CANCELLED",
+      "matchTime": "2025-09-25T17:00:00+02:00",
+      "matchTimeMSK": "2025-09-25T18:00:00+03:00",
+      "matchTimeUTC": "2025-09-25T15:00:00+00:00",
+      "matchType": "FINALS",
+      "periods": 4,
+      "phaseId": 1213774,
+      "phaseName": {
+        "ru": "Финал за 3 место",
+        "en": "Final for 3"
+      },
+      "pointsByQuarters": null,
+      "season": 2026,
+      "timeActual": null,
+      "timeEndActual": null,
+      "venue": {
+        "venueId": 13442,
+        "venueName": {
+          "ru": "Belgrade Arena",
+          "en": "Belgrade Arena"
+        },
+        "regionName": {
+          "ru": "Белград",
+          "en": "Belgrad"
+        }
+      },
+      "venueId": 13442
+    }
+  ]
+}

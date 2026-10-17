@@ -1,0 +1,524 @@
+api: shl
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: SHL answered 404, an empty body (gameday
+    routes before 2023/24), a table with no rows, another game / team / ssgt than
+    the one asked for, or the season and game type are not in layout-info.'
+  see_also:
+  - name: SHL
+    note: the Swedish Hockey League site whose API this is
+    url: https://www.shl.se/
+  - name: fastRhockey
+    note: the SportsDataverse hockey package for R
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- example_args:
+    athlete_uuid: qQ9-349c7WDv6
+    master_site_instance_id: shl1_shl
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (shl1_shl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  parser: parse_shl_stats_info
+  path: /statistics-v2/athlete/playerProfile_gameLog
+  returns_schema: native/shl/athlete_career
+  short: athlete_career
+  summary: Player career totals by season.
+- example_args:
+    athlete_uuid: qQ9-349c7WDv6
+  parser: parse_shl_page
+  path: /sports-v2/athlete-details/{athlete_uuid}
+  path_params:
+  - description: Athlete uuid (stats-info stats[].info.uuid, roster rows, or athlete-details).
+    name: athlete_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/athlete_details
+  short: athlete_details
+  summary: Player bio plus playerExtIds (isa, ramses_legacy, ...).
+- example_args:
+    athlete_uuid: qQ9-349c7WDv6
+    master_site_instance_id: shl1_shl
+    season: 2026
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (shl1_shl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  - description: Season END year (2026 = 2025/26); the runtime sends the START year
+      this route takes. None = the player's default (shorter) log.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_shl_stats_info
+  path: /statistics-v2/athlete/playerProfile_seasonGameLog
+  returns_schema: native/shl/athlete_game_log
+  short: athlete_game_log
+  summary: Player game log of one season.
+- example_args:
+    athlete_uuid: qQ9-349c7WDv6
+    master_site_instance_id: shl1_shl
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (shl1_shl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  parser: parse_shl_page
+  path: /statistics-v2/athlete/profile-page
+  returns_schema: native/shl/athlete_profile
+  short: athlete_profile
+  summary: 'Player profile: age, height, weight, position.'
+- example_args:
+    athlete_uuid: qQ9-349c7WDv6
+    master_site_instance_id: shl1_shl
+  extra_params:
+  - description: Required. Athlete uuid.
+    name: athlete_uuid
+    query_key: playerUuid
+    required: true
+    type: str
+  - description: Site instance (shl1_shl). No effect in the drop-one probe.
+    name: master_site_instance_id
+    query_key: masterSiteInstanceId
+    type: str
+  parser: parse_shl
+  path: /statistics-v2/athlete/seasonList
+  returns_schema: native/shl/athlete_seasons
+  short: athlete_seasons
+  summary: Seasons a player has stats for.
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_player_box
+  path: /gameday/boxscore/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/boxscore
+  short: boxscore
+  summary: Skater and goalie box score per team (2023/24 on).
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_page
+  path: /sports-v2/game-info/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/game_header
+  short: game_header
+  summary: 'Game header: StatNet extId, arena, state, teams, scores.'
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_page
+  path: /gameday/game-overview/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/game_overview
+  short: game_overview
+  summary: Score, state, clock, StatNet gameId and gameSourceId.
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_page
+  path: /gameday/game-info/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/game_summary
+  short: game_summary
+  summary: Goals by period, head-to-head summary, best scorers.
+- example_args: {}
+  extra_params:
+  - description: Season END year (2026 = 2025/26), mapped to its ssgt through layout-info.
+      None = the active ssgt (these match-day views follow the current season).
+    name: season
+    query_key: season
+    type: int
+  - choices: &id001
+    - regular
+    - playoff
+    - qualdown
+    - playin
+    default: regular
+    description: 'Game type: regular (Grundserie), playoff (Slutspel), qualdown (relegation
+      qualification) or playin (2023/24 on).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_shl_schedule
+  path: /sports-v2/last-game-day
+  returns_schema: native/shl/last_game_day
+  short: last_game_day
+  summary: Games of the last played match day of an ssgt.
+- example_args: {}
+  parser: parse_shl_layout
+  path: /statistics-v2/layout-info
+  returns_schema: native/shl/layout_info
+  short: layout_info
+  summary: Directory of every SHL ssgt (season + series + game type) with teams and
+    the stats modules.
+- example_args: {}
+  extra_params:
+  - description: Season END year (2026 = 2025/26), mapped to its ssgt through layout-info.
+      None = the active ssgt (these match-day views follow the current season).
+    name: season
+    query_key: season
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (Grundserie), playoff (Slutspel), qualdown (relegation
+      qualification) or playin (2023/24 on).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_shl_schedule
+  path: /sports-v2/next-game-day
+  returns_schema: native/shl/next_game_day
+  short: next_game_day
+  summary: Games of the next match day of an ssgt.
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_pbp
+  path: /gameday/play-by-play/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/pbp
+  short: pbp
+  summary: Play-by-play events with shot coordinates (2023/24 on).
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_player_box
+  path: /gameday/player-stats/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/player_box
+  short: player_box
+  summary: Extended skater and goalie game stats per team (2023/24 on).
+- example_args:
+    away_team_uuid: 41c4-41c4BiYZU
+    game_uuid: bdhvuc5tex
+    home_team_uuid: 087a-087aTQv9u
+    ssgt_uuid: iuzqg7dqk9
+  extra_params:
+  - description: Game uuid; narrows the head-to-head to that game's line-ups.
+    name: game_uuid
+    query_key: gameUuid
+    type: str
+  parser: parse_shl_h2h
+  path: /statistics-v2/player-h2h-v2/{ssgt_uuid}/{home_team_uuid}/{away_team_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
+      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  - description: Home team uuid of the game.
+    name: home_team_uuid
+    required: true
+    type: str
+  - description: Away team uuid of the game.
+    name: away_team_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/player_h2h
+  short: player_h2h
+  summary: Player head-to-head for a matchup.
+- example_args:
+    away_team_uuid: 41c4-41c4BiYZU
+    game_uuid: bdhvuc5tex
+    home_team_uuid: 087a-087aTQv9u
+    ssgt_uuid: iuzqg7dqk9
+  extra_params:
+  - description: Required. ssgt uuid.
+    name: ssgt_uuid
+    query_key: ssgtUuid
+    required: true
+    type: str
+  - description: Required. Home team uuid; without it the home side comes back blank.
+    name: home_team_uuid
+    query_key: homeTeamUuid
+    required: true
+    type: str
+  - description: Required. Away team uuid; without it the away side comes back blank.
+    name: away_team_uuid
+    query_key: awayTeamUuid
+    required: true
+    type: str
+  parser: parse_shl
+  path: /gameday/post-game-data/team-stats/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/post_game_team_stats
+  short: post_game_team_stats
+  summary: Post-game team comparison.
+- example_args:
+    team_uuid: 087a-087aTQv9u
+  parser: parse_shl_roster
+  path: /sports-v2/athletes/by-team-uuid/{team_uuid}
+  path_params:
+  - description: Team uuid (homeTeamInfo.uuid / awayTeamInfo.uuid in the schedule,
+      or teamList[].uuid).
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/roster
+  short: roster
+  summary: Current roster of a team, grouped by position.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025/26). Mapped to the provider's
+      ssgt through /statistics-v2/layout-info (SHL 1975/76 on); a season it does not
+      list raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (Grundserie), playoff (Slutspel), qualdown (relegation
+      qualification) or playin (2023/24 on).'
+    name: game_type
+    query_key: gameType
+    type: str
+  parser: parse_shl_schedule
+  path: /sports-v2/game-schedule
+  returns_schema: native/shl/schedule
+  short: schedule
+  summary: Schedule and results of one season + series + game type.
+- example_args:
+    season_uuid: xs4m9qupsi
+    series_uuid: qQ9-bb0bzEWUk
+  extra_params:
+  - description: Series uuid (SHL qQ9-bb0bzEWUk, CHL qQ9-9397drVEh). No effect on
+      the body in the drop-one probe.
+    name: series_uuid
+    query_key: series
+    type: str
+  - description: Season uuid; picks the default ssgt returned for that season (omit
+      for the current season).
+    name: season_uuid
+    query_key: season
+    type: str
+  parser: parse_shl_filter
+  path: /sports-v2/season-series-game-types-filter
+  returns_schema: native/shl/season_filter
+  short: season_filter
+  summary: Series, seasons (1975/76 on) and game types with their uuids, plus the
+    default ssgt.
+- example_args:
+    ssgt_uuid: iuzqg7dqk9
+  parser: parse_shl
+  path: /sports-v2/all-sites/{ssgt_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
+      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/sites
+  short: sites
+  summary: Teams (sites) taking part in an ssgt.
+- example_args:
+    ssgt_uuid: iuzqg7dqk9
+  parser: parse_shl
+  path: /sports-v2/ssgt/{ssgt_uuid}/provider
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
+      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/ssgt_provider
+  short: ssgt_provider
+  summary: Stats provider of an ssgt, a bare string such as statnet.
+- example_args:
+    ssgt_uuid: iuzqg7dqk9
+  parser: parse_shl_standings
+  path: /gameday/team-standings/{ssgt_uuid}
+  path_params:
+  - description: 'ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular
+      season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid.'
+    name: ssgt_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/standings
+  short: standings
+  summary: Standings of an ssgt (gameday widget).
+- example_args:
+    module: players_summary
+    season: 2026
+  extra_params:
+  - description: Required. Season END year (2026 = 2025/26). Mapped to the provider's
+      ssgt through /statistics-v2/layout-info (SHL 1975/76 on); a season it does not
+      list raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices: *id001
+    default: regular
+    description: 'Game type: regular (Grundserie), playoff (Slutspel), qualdown (relegation
+      qualification) or playin (2023/24 on).'
+    name: game_type
+    query_key: gameType
+    type: str
+  fixed_params:
+    count: 1000
+  parser: parse_shl_stats_info
+  path: /statistics-v2/stats-info/{module}
+  path_params:
+  - choices:
+    - players_summary
+    - players_point
+    - players_strength
+    - players_goal
+    - players_timeOnIce
+    - players_powerplay
+    - players_penaltykilling
+    - players_equalStrength
+    - players_penalty
+    - players_plusMinus
+    - players_faceoff
+    - players_shot
+    - players_defensive
+    - players_penaltyShot
+    - players_extendedMetrics
+    - teams_result
+    - teams_goal
+    - teams_powerplay
+    - teams_penaltyKilling
+    - teams_attendance
+    - teams_penalty
+    - teams_shotsForward
+    - teams_shotsAgainst
+    - teams_faceoff
+    - teams_penaltyShot
+    - teams_extendedMetrics
+    - teams_stoppage
+    - goalkeepers_summary
+    - goalkeepers_shotAgainst
+    - goalkeepers_result
+    - goalkeepers_strength
+    - goalkeepers_penaltyShot
+    - games_games
+    - standings_standings
+    description: 'Stats module: <group>_<table>. Every name under layout-info [].filters.<group>.modules.'
+    name: module
+    required: true
+    type: str
+  returns_schema: native/shl/stats_info
+  short: stats_info
+  summary: Stats table of one module for an ssgt (standings, players, goalies, teams,
+    games).
+- example_args:
+    team_uuid: 087a-087aTQv9u
+  parser: parse_shl_page
+  path: /sports-v2/teams/{team_uuid}
+  path_params:
+  - description: Team uuid (homeTeamInfo.uuid / awayTeamInfo.uuid in the schedule,
+      or teamList[].uuid).
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/team
+  short: team
+  summary: One team.
+- example_args:
+    team_uuid: 087a-087aTQv9u
+  parser: parse_shl_schedule
+  path: /sports-v2/played-games/{team_uuid}
+  path_params:
+  - description: Team uuid (homeTeamInfo.uuid / awayTeamInfo.uuid in the schedule,
+      or teamList[].uuid).
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/team_played_games
+  short: team_played_games
+  summary: A team's recent games.
+- example_args:
+    game_uuid: bdhvuc5tex
+  parser: parse_shl_team_stats
+  path: /gameday/team-stats/{game_uuid}
+  path_params:
+  - description: Game uuid (gameInfo[].uuid from /sports-v2/game-schedule). gameday/*
+      has data from 2023/24 on; older games answer 200 with an empty body.
+    name: game_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/team_stats
+  short: team_stats
+  summary: Team stats per period and total (2023/24 on).
+- example_args:
+    team_uuid: 087a-087aTQv9u
+  extra_params:
+  - description: Home/away filter; empty means all. No effect in the drop-one probe.
+    name: game_place
+    query_key: gamePlace
+    type: str
+  parser: parse_shl_schedule
+  path: /sports-v2/upcoming-games/{team_uuid}
+  path_params:
+  - description: Team uuid (homeTeamInfo.uuid / awayTeamInfo.uuid in the schedule,
+      or teamList[].uuid).
+    name: team_uuid
+    required: true
+    type: str
+  returns_schema: native/shl/team_upcoming_games
+  short: team_upcoming_games
+  summary: A team's next games.
+getter_module: sportsdataverse.hockey.shl.shl_runtime
+host: https://www.shl.se/api
+module: shl
+name_pattern: shl_{short}
+parser_columns: true
+parser_module: hockey.shl.shl_parsers
+passthrough_query: false
+qualifier: ''
+raw_types:
+- Dict
+- str
+runtime_imports:
+- _get
+schema_prefix: shl_
