@@ -1,0 +1,486 @@
+{
+  "game": {
+    "stage": "Regular Season",
+    "season": "2025/2026",
+    "game_number": 984,
+    "date_text": "18 Март 2026, Среда, 17:00",
+    "date": "2026-03-18",
+    "local_time": "17:00",
+    "attendance": 910,
+    "score": "2:3",
+    "home_score": 2,
+    "away_score": 3,
+    "decision": "SO",
+    "period_scores": [
+      "0:2",
+      "0:0",
+      "2:0"
+    ],
+    "home_team_page_id": 390,
+    "home_team": "Toros",
+    "home_city": "Neftekamsk",
+    "home_coach": "Lemtyugov Nikolai",
+    "away_team_page_id": 505612,
+    "away_team": "Magnitka",
+    "away_city": "Magnitogorsk",
+    "away_coach": "Polozov Evgeny",
+    "referees": [
+      {
+        "number": 6,
+        "name": "Otmakhov Alexander"
+      },
+      {
+        "number": 31,
+        "name": "Stepuchyov Alexander"
+      }
+    ],
+    "linesmen": [
+      {
+        "number": 92,
+        "name": "Baranov Nikita"
+      },
+      {
+        "number": 94,
+        "name": "Khabibullin Kirill"
+      }
+    ],
+    "home_short": "Toros",
+    "away_short": "Magnitka"
+  },
+  "goals": [
+    {
+      "goal_number": 1,
+      "period": "1",
+      "time": "03:21",
+      "score": "0:1",
+      "strength": "eq",
+      "scorer_id": 41489,
+      "scorer": "Fursa Alexei",
+      "scorer_jersey": 98,
+      "scorer_season_total": 13,
+      "assist1_id": 20225,
+      "assist1": "Boltanov Artur",
+      "assist1_jersey": 9,
+      "assist1_season_total": 14,
+      "assist2_id": 42291,
+      "assist2": "Kovgorenya Arseny",
+      "assist2_jersey": 99,
+      "assist2_season_total": 4,
+      "home_on_ice": [
+        1,
+        9,
+        17
+      ],
+      "away_on_ice": [
+        23,
+        9,
+        14
+      ]
+    },
+    {
+      "goal_number": 2,
+      "period": "1",
+      "time": "19:42",
+      "score": "0:2",
+      "strength": "eq",
+      "scorer_id": 34526,
+      "scorer": "Mirzabalayev Alexander",
+      "scorer_jersey": 31,
+      "scorer_season_total": 25,
+      "assist1_id": 39442,
+      "assist1": "Zhugin Valentin",
+      "assist1_jersey": 74,
+      "assist1_season_total": 4,
+      "assist2_id": null,
+      "assist2": null,
+      "assist2_jersey": null,
+      "assist2_season_total": null,
+      "home_on_ice": [
+        1,
+        9,
+        17
+      ],
+      "away_on_ice": [
+        23,
+        7,
+        21
+      ]
+    },
+    {
+      "goal_number": 3,
+      "period": "3",
+      "time": "43:41",
+      "score": "1:2",
+      "strength": "ppg",
+      "scorer_id": 40340,
+      "scorer": "Gimbatov Ruslan",
+      "scorer_jersey": 93,
+      "scorer_season_total": 6,
+      "assist1_id": 39828,
+      "assist1": "Khvorov Nikolai",
+      "assist1_jersey": 44,
+      "assist1_season_total": 16,
+      "assist2_id": null,
+      "assist2": null,
+      "assist2_jersey": null,
+      "assist2_season_total": null,
+      "home_on_ice": [
+        49,
+        17,
+        22
+      ],
+      "away_on_ice": [
+        23,
+        36,
+        43
+      ]
+    }
+  ],
+  "shootout": [
+    {
+      "round": 1,
+      "score_after": "0:0",
+      "home_shooter_id": 40340,
+      "home_shooter": "Gimbatov Ruslan",
+      "home_shooter_jersey": 93,
+      "away_goalie_id": 39266,
+      "away_goalie": "Amirbekov Dzhelal-Ad-Din",
+      "away_shooter_id": 20225,
+      "away_shooter": "Boltanov Artur",
+      "away_shooter_jersey": 9,
+      "home_goalie_id": 26207,
+      "home_goalie": "Braginsky Dmitry"
+    },
+    {
+      "round": 2,
+      "score_after": "0:0",
+      "home_shooter_id": 39828,
+      "home_shooter": "Khvorov Nikolai",
+      "home_shooter_jersey": 44,
+      "away_goalie_id": 39266,
+      "away_goalie": "Amirbekov Dzhelal-Ad-Din",
+      "away_shooter_id": 42291,
+      "away_shooter": "Kovgorenya Arseny",
+      "away_shooter_jersey": 99,
+      "home_goalie_id": 26207,
+      "home_goalie": "Braginsky Dmitry"
+    },
+    {
+      "round": 3,
+      "score_after": "0:0",
+      "home_shooter_id": 35396,
+      "home_shooter": "Sychyov Vladimir",
+      "home_shooter_jersey": 17,
+      "away_goalie_id": 39266,
+      "away_goalie": "Amirbekov Dzhelal-Ad-Din",
+      "away_shooter_id": 41489,
+      "away_shooter": "Fursa Alexei",
+      "away_shooter_jersey": 98,
+      "home_goalie_id": 26207,
+      "home_goalie": "Braginsky Dmitry"
+    }
+  ],
+  "penalties": [
+    {
+      "team_side": "home",
+      "time": "45:16",
+      "player_id": 25292,
+      "player": "Sorokin Evgeny",
+      "player_jersey": 22,
+      "minutes": 2,
+      "infraction": null
+    },
+    {
+      "team_side": "away",
+      "time": "39:17",
+      "player_id": 23837,
+      "player": "Mikhnin Denis",
+      "player_jersey": 38,
+      "minutes": 2,
+      "infraction": "high-sticking"
+    },
+    {
+      "team_side": "away",
+      "time": "42:08",
+      "player_id": 41489,
+      "player": "Fursa Alexei",
+      "player_jersey": 98,
+      "minutes": 2,
+      "infraction": "hooking"
+    }
+  ],
+  "goalies": [
+    {
+      "team_side": "home",
+      "jersey": 49,
+      "player_id": 26207,
+      "player": "Braginsky Dmitry",
+      "captaincy": null,
+      "games_played": 1,
+      "wins": 0,
+      "losses": 0,
+      "shootouts_played": 1,
+      "shots_against": 10,
+      "goals_against": 0,
+      "saves": 10,
+      "save_pct": 100.0,
+      "gaa": 0.0,
+      "assists": 0,
+      "shutouts": 0,
+      "penalty_minutes": 0,
+      "toi": "44:26"
+    },
+    {
+      "team_side": "home",
+      "jersey": 1,
+      "player_id": 41850,
+      "player": "Yelin Ilya",
+      "captaincy": null,
+      "games_played": 1,
+      "wins": 0,
+      "losses": 0,
+      "shootouts_played": 0,
+      "shots_against": 5,
+      "goals_against": 2,
+      "saves": 3,
+      "save_pct": 60.0,
+      "gaa": 6.0,
+      "assists": 0,
+      "shutouts": 0,
+      "penalty_minutes": 0,
+      "toi": "20:00"
+    },
+    {
+      "team_side": "away",
+      "jersey": 23,
+      "player_id": 39266,
+      "player": "Amirbekov Dzhelal-Ad-Din",
+      "captaincy": null,
+      "games_played": 1,
+      "wins": 0,
+      "losses": 0,
+      "shootouts_played": 1,
+      "shots_against": 32,
+      "goals_against": 2,
+      "saves": 30,
+      "save_pct": 93.8,
+      "gaa": 1.85,
+      "assists": 0,
+      "shutouts": 0,
+      "penalty_minutes": 0,
+      "toi": "65:00"
+    }
+  ],
+  "skaters": [
+    {
+      "team_side": "home",
+      "position_group": "defense",
+      "jersey": 85,
+      "player_id": 34892,
+      "player": "Budnitsky Vitaly",
+      "captaincy": "A",
+      "games_played": 1,
+      "goals": 0,
+      "assists": 0,
+      "points": 0,
+      "plus_minus": -2,
+      "penalty_minutes": 0,
+      "even_strength_goals": 0,
+      "power_play_goals": 0,
+      "shorthanded_goals": 0,
+      "overtime_goals": 0,
+      "game_winning_goals": 0,
+      "shootout_deciding_goals": 0,
+      "shots_on_goal": 3,
+      "shot_pct": 0.0,
+      "faceoffs": 0,
+      "faceoffs_won": 0,
+      "faceoff_pct": null,
+      "toi_per_game": "20:55",
+      "shifts_per_game": 24,
+      "hits": 0,
+      "blocked_shots": 0
+    },
+    {
+      "team_side": "home",
+      "position_group": "forward",
+      "jersey": 22,
+      "player_id": 25292,
+      "player": "Sorokin Evgeny",
+      "captaincy": "A",
+      "games_played": 1,
+      "goals": 0,
+      "assists": 0,
+      "points": 0,
+      "plus_minus": 0,
+      "penalty_minutes": 2,
+      "even_strength_goals": 0,
+      "power_play_goals": 0,
+      "shorthanded_goals": 0,
+      "overtime_goals": 0,
+      "game_winning_goals": 0,
+      "shootout_deciding_goals": 0,
+      "shots_on_goal": 4,
+      "shot_pct": 0.0,
+      "faceoffs": 11,
+      "faceoffs_won": 7,
+      "faceoff_pct": 63.6,
+      "toi_per_game": "20:39",
+      "shifts_per_game": 21,
+      "hits": 0,
+      "blocked_shots": 1
+    },
+    {
+      "team_side": "away",
+      "position_group": "forward",
+      "jersey": 36,
+      "player_id": 16352,
+      "player": "Mastryukov Alexei",
+      "captaincy": "A",
+      "games_played": 1,
+      "goals": 0,
+      "assists": 0,
+      "points": 0,
+      "plus_minus": 0,
+      "penalty_minutes": 0,
+      "even_strength_goals": 0,
+      "power_play_goals": 0,
+      "shorthanded_goals": 0,
+      "overtime_goals": 0,
+      "game_winning_goals": 0,
+      "shootout_deciding_goals": 0,
+      "shots_on_goal": 2,
+      "shot_pct": 0.0,
+      "faceoffs": 16,
+      "faceoffs_won": 7,
+      "faceoff_pct": 43.8,
+      "toi_per_game": "20:20",
+      "shifts_per_game": 32,
+      "hits": 0,
+      "blocked_shots": 1
+    }
+  ],
+  "team_powerplay": [
+    {
+      "team": "Toros",
+      "games_played": 1,
+      "power_plays": 2,
+      "power_play_goals": 1,
+      "power_play_pct": 50.0,
+      "shorthanded_goals_against": 0,
+      "times_shorthanded": 1,
+      "power_play_goals_against": 0,
+      "penalty_kill_pct": 100.0,
+      "shorthanded_goals": 0
+    },
+    {
+      "team": "Magnitka",
+      "games_played": 1,
+      "power_plays": 1,
+      "power_play_goals": 0,
+      "power_play_pct": 0.0,
+      "shorthanded_goals_against": 0,
+      "times_shorthanded": 2,
+      "power_play_goals_against": 1,
+      "penalty_kill_pct": 50.0,
+      "shorthanded_goals": 0
+    }
+  ],
+  "team_goals_for": [
+    {
+      "team": "Magnitka",
+      "games_played": 1,
+      "g_5v5": 2,
+      "g_5v4": 0,
+      "g_5v3": 0,
+      "g_4v4": 0,
+      "g_4v3": 0,
+      "g_3v3": 0,
+      "g_3v4": 0,
+      "g_3v5": 0,
+      "g_4v5": 0,
+      "empty_net": 0,
+      "penalty_shot": 1,
+      "total": 3
+    },
+    {
+      "team": "Toros",
+      "games_played": 1,
+      "g_5v5": 1,
+      "g_5v4": 1,
+      "g_5v3": 0,
+      "g_4v4": 0,
+      "g_4v3": 0,
+      "g_3v3": 0,
+      "g_3v4": 0,
+      "g_3v5": 0,
+      "g_4v5": 0,
+      "empty_net": 0,
+      "penalty_shot": 0,
+      "total": 2
+    }
+  ],
+  "team_goals_against": [
+    {
+      "team": "Magnitka",
+      "games_played": 1,
+      "g_5v5": 1,
+      "g_5v4": 0,
+      "g_5v3": 0,
+      "g_4v4": 0,
+      "g_4v3": 0,
+      "g_3v3": 0,
+      "g_3v4": 0,
+      "g_3v5": 0,
+      "g_4v5": 1,
+      "empty_net": 0,
+      "penalty_shot": 0,
+      "total": 2
+    },
+    {
+      "team": "Toros",
+      "games_played": 1,
+      "g_5v5": 2,
+      "g_5v4": 0,
+      "g_5v3": 0,
+      "g_4v4": 0,
+      "g_4v3": 0,
+      "g_3v3": 0,
+      "g_3v4": 0,
+      "g_3v5": 0,
+      "g_4v5": 0,
+      "empty_net": 0,
+      "penalty_shot": 1,
+      "total": 3
+    }
+  ],
+  "shots_by_period": [
+    {
+      "period": "1-st period",
+      "home_goals": 0,
+      "home_shots_on_goal": 3,
+      "home_shot_pct": 0.0,
+      "away_goals": 2,
+      "away_shots_on_goal": 5,
+      "away_shot_pct": 40.0
+    },
+    {
+      "period": "2-d period",
+      "home_goals": 0,
+      "home_shots_on_goal": 14,
+      "home_shot_pct": 0.0,
+      "away_goals": 0,
+      "away_shots_on_goal": 5,
+      "away_shot_pct": 0.0
+    },
+    {
+      "period": null,
+      "home_goals": 2,
+      "home_shots_on_goal": 32,
+      "home_shot_pct": 6.25,
+      "away_goals": 2,
+      "away_shots_on_goal": 15,
+      "away_shot_pct": 13.33
+    }
+  ]
+}

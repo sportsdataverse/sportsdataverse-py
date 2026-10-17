@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: start_date
+  type: character
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_score
+  type: integer
+- description: ''
+  name: minute
+  type: integer
+- description: ''
+  name: shots
+  type: integer
+- description: ''
+  name: shots_on_goal
+  type: integer
+kind: dataframe
+schema: elh_events

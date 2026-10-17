@@ -1,0 +1,77 @@
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 75,
+        "logo": "https://hockeynet.fr/storage/logos_equipes/385/sEJ00DulIXaHCoHju1Ocm69qYtKy1SSvfAEex7Ef.png",
+        "sexe": "M",
+        "libelle": "72001S - ANGLET HORMADI Ligue MAGNUS",
+        "id_compet": [
+          1,
+          19,
+          21
+        ],
+        "structure": {
+          "id": 385,
+          "nom": "ANGLET HORMADI ELITE",
+          "code": "72001S",
+          "etat": "A",
+          "logo": "01jSIV0dk2fUK7SKgMTCg9w52QQcmkT8DQJ4El8z.png",
+          "type": "SOC",
+          "nom_court": "ANGLET HORMADI ELITE"
+        },
+        "abreviation": "HOR",
+        "libelle_court": "ANGLET",
+        "libelle_complet": "Anglet Hormadi"
+      },
+      {
+        "id": 103,
+        "logo": "https://hockeynet.fr/storage/logos_structures/sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png",
+        "sexe": "M",
+        "libelle": "22001S - AMIENS HOCKEY ELITE",
+        "id_compet": [
+          1,
+          26,
+          19
+        ],
+        "structure": {
+          "id": 389,
+          "nom": "AMIENS HOCKEY ELITE",
+          "code": "22001S",
+          "etat": "A",
+          "logo": "sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png",
+          "type": "SOC",
+          "nom_court": "AMIENS HOCKEY ELITE"
+        },
+        "abreviation": "AMI",
+        "libelle_court": "AMIENS",
+        "libelle_complet": "Gothiques d'Amiens"
+      },
+      {
+        "id": 253,
+        "logo": "https://hockeynet.fr/storage/logos_equipes/166/t70uoBQeQNNaS1c96TfP8cehaisjLYc4CylipPrJ.png",
+        "sexe": "M",
+        "libelle": "23001S - 23001S ROUEN HOCKEY ELITE 76",
+        "id_compet": [
+          1,
+          19,
+          26
+        ],
+        "structure": {
+          "id": 388,
+          "nom": "SASP ROUEN HOCKEY ELITE 76",
+          "code": "23001S",
+          "etat": "A",
+          "logo": "xga9XBOBA0N4QWD2c6W6J4vNkpLreCCDvIRloIlh.png",
+          "type": "SOC",
+          "nom_court": "SASP ROUEN HOCKEY ELITE 76"
+        },
+        "abreviation": "ROU",
+        "libelle_court": "ROUEN",
+        "libelle_complet": "Dragons de Rouen"
+      }
+    ],
+    "time": "0.0011 sec."
+  }
+}

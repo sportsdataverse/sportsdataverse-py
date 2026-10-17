@@ -25,9 +25,9 @@ import polars as pl
 
 from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
 from sportsdataverse.nba.nba_lineups import (
+    _on_court_rotation_else_pbp,
     boxscore_home_away,
     parse_rotation_resultsets,
-    players_on_court_from_rotation,
 )
 from sportsdataverse.nba.nba_possessions import attach_possession_lineups, build_possessions
 from sportsdataverse.nba.nba_rapm import nba_rapm
@@ -143,7 +143,9 @@ def nbagl_on_court(
     Makes three network calls (play-by-play v3, game rotation,
     box-score traditional v3), infers on-court rosters from the rotation
     stints via
-    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`
+    (or, when the rotation is missing or malformed, from the play-by-play
+    substitutions via :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_pbp`),
     and returns one row per PBP action with ten Int64 player-ID columns
     (``home_player_1..5`` / ``away_player_1..5``).  All transformation is
     performed by the shared ``nba/`` core with ``league_id="20"`` forwarded
@@ -188,12 +190,16 @@ def nbagl_on_court(
         .. _nba_on_court: sportsdataverse.nba.nba_lineups.nba_on_court
     """
     enh = _enhanced(game_id)
-    home, away = boxscore_home_away(_fetch_box(game_id))
-    oc = players_on_court_from_rotation(
+    raw_box = _fetch_box(game_id)
+    home, away = boxscore_home_away(raw_box)
+    # pbp-derived lineups stand in when the rotation is missing or malformed.
+    oc = _on_court_rotation_else_pbp(
         enh,
         parse_rotation_resultsets(_fetch_rotation(game_id)),
+        raw_box,
         home_team_id=home,
         away_team_id=away,
+        league_id=_GLEAGUE_LEAGUE_ID,
     )
     return oc.to_pandas() if return_as_pandas else oc
 
@@ -208,7 +214,8 @@ def nbagl_possessions(
     Builds possessions from the enhanced PBP via
     :func:`~sportsdataverse.nba.nba_possessions.build_possessions`, resolves
     on-court rosters via
-    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`,
+    :func:`~sportsdataverse.nba.nba_lineups.players_on_court_from_rotation`
+    (play-by-play substitutions when the rotation is missing or malformed),
     then attaches the 5v5 lineups via
     :func:`~sportsdataverse.nba.nba_possessions.attach_possession_lineups`.
     All transformation is performed by the shared ``nba/`` cores — no
@@ -253,12 +260,16 @@ def nbagl_possessions(
         .. _nba_possessions: sportsdataverse.nba.nba_possessions.nba_possessions
     """
     enh = _enhanced(game_id)
-    home, away = boxscore_home_away(_fetch_box(game_id))
-    oc = players_on_court_from_rotation(
+    raw_box = _fetch_box(game_id)
+    home, away = boxscore_home_away(raw_box)
+    # pbp-derived lineups stand in when the rotation is missing or malformed.
+    oc = _on_court_rotation_else_pbp(
         enh,
         parse_rotation_resultsets(_fetch_rotation(game_id)),
+        raw_box,
         home_team_id=home,
         away_team_id=away,
+        league_id=_GLEAGUE_LEAGUE_ID,
     )
     poss = attach_possession_lineups(build_possessions(enh), oc, enh, home_team_id=home)
     return poss.to_pandas() if return_as_pandas else poss

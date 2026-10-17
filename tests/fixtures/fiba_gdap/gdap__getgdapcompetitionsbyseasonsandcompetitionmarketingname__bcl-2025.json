@@ -1,0 +1,39 @@
+[
+  {
+    "hosts": [],
+    "competitionId": 208850,
+    "competitionCode": "BCL",
+    "season": 2025,
+    "officialName": "Basketball Champions League",
+    "start": "2024-10-01",
+    "end": "2025-05-11",
+    "status": "Closed",
+    "ageCategory": "Senior",
+    "gender": "Men",
+    "fibaZone": "Europe",
+    "zoneInformation": {
+      "zoneId": 23,
+      "zoneOfficialName": "Europe",
+      "zoneCode": "E",
+      "topZoneId": null,
+      "topZoneOfficialName": null,
+      "topZoneCode": null
+    },
+    "competitionType": "Clubs",
+    "competitionCategory": {
+      "isLeague": true,
+      "ageType": "S",
+      "code": "CCC-1",
+      "name": "Continental Club Competition - Tier 1"
+    },
+    "officialFlagItemCode": "O",
+    "officialFlagItemName": "Official",
+    "official": "Official",
+    "discipline": "Basketball",
+    "competitionMarketingName": {
+      "competitionMarketingNameId": 112,
+      "marketingName": "FIBA Men’s European Club Competitions – Tier 1",
+      "code": null
+    }
+  }
+]

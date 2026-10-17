@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: glkey
+  type: character
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: season_name_full
+  type: character
+- description: ''
+  name: season_grade
+  type: integer
+- description: ''
+  name: season_category
+  type: character
+- description: ''
+  name: game_code
+  type: character
+- description: ''
+  name: start_date
+  type: date
+- description: ''
+  name: end_date
+  type: date
+kind: dataframe
+schema: kbl_seasons

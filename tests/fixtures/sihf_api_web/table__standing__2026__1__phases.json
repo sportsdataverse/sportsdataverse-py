@@ -1,0 +1,276 @@
+{
+  "title": "Rangliste",
+  "description": null,
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-03-10T19:12:16.4481042+01:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        },
+        {
+          "name": "2023/24",
+          "alias": "2024"
+        },
+        {
+          "name": "2022/23",
+          "alias": "2023"
+        },
+        {
+          "name": "2021/22",
+          "alias": "2022"
+        },
+        {
+          "name": "2020/21",
+          "alias": "2021"
+        },
+        {
+          "name": "2019/20",
+          "alias": "2020"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    },
+    {
+      "title": "Phase",
+      "entries": [
+        {
+          "name": "Regular Season (3)",
+          "alias": "4940"
+        }
+      ],
+      "selected": "4940",
+      "type": "Dropdown",
+      "alias": "Phase"
+    }
+  ],
+  "secondaryMenu": null,
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "line",
+      "rows": [
+        6,
+        10,
+        12
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "PTS",
+      "description": "Punktetotal",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "points"
+    },
+    {
+      "name": "P/GP",
+      "description": "Punktetotal pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pointsQuotient"
+    },
+    {
+      "name": "W",
+      "description": "Siege nach regulärer Spielzeit",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesWonInTime"
+    },
+    {
+      "name": "OTW",
+      "description": "Siege nach Verlängerung",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesWonExtraTime"
+    },
+    {
+      "name": "SOW",
+      "description": "Siege nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesWonPenalty"
+    },
+    {
+      "name": "SOL",
+      "description": "Niederlagen nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesLostPenalty"
+    },
+    {
+      "name": "OTL",
+      "description": "Niederlage nach Verlängerung",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesLostExtraTime"
+    },
+    {
+      "name": "L",
+      "description": "Niederlagen nach regulärer Spielzeit",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesLostInTime"
+    },
+    {
+      "name": "GF",
+      "description": "Tore geschossen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsFor"
+    },
+    {
+      "name": "GA",
+      "description": "Tore erhalten",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsAgainst"
+    },
+    {
+      "name": "GDF",
+      "description": "Tordifferenz",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsDifference"
+    },
+    {
+      "name": "Streak",
+      "description": "Letzte Spiele",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "streak"
+    }
+  ],
+  "data": [
+    [
+      "1",
+      {
+        "id": 101151,
+        "name": "HC Davos",
+        "acronym": "HCD",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "50",
+      "1.923",
+      "14",
+      "1",
+      "1",
+      "3",
+      "1",
+      "6",
+      "82",
+      "70",
+      "12",
+      "L-L+L-L+W+W+W+W+W+W+"
+    ],
+    [
+      "2",
+      {
+        "id": 101139,
+        "name": "ZSC Lions",
+        "acronym": "ZSC",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "47",
+      "1.808",
+      "13",
+      "1",
+      "2",
+      "1",
+      "1",
+      "8",
+      "73",
+      "54",
+      "19",
+      "L+W+W-W+W+W+W+W-W+W+"
+    ],
+    [
+      "3",
+      {
+        "id": 101150,
+        "name": "HC Lugano",
+        "acronym": "HCL",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "45",
+      "1.731",
+      "13",
+      "0",
+      "0",
+      "2",
+      "4",
+      "7",
+      "68",
+      "59",
+      "9",
+      "W+L+W+L-W+W+L-L+W+L-"
+    ]
+  ],
+  "alias": "standing"
+}

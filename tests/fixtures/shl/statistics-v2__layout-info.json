@@ -1,0 +1,1697 @@
+[
+  {
+    "originalSeasonSeriesGameTypeTeams": [
+      {
+        "state": "closed",
+        "ssgtUuid": "fg2i6uu9dt",
+        "gameType": {
+          "uuid": "qQ9-7debq38kX",
+          "code": "playoff",
+          "deleted": false,
+          "name": "Slutspel"
+        },
+        "season": {
+          "uuid": "qeb-73bZkIm9A",
+          "code": "2024",
+          "deleted": false,
+          "name": "2024/2025"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          },
+          {
+            "uuid": "087a-087aTQv9u",
+            "instanceId": "fhc1_fhc",
+            "name": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "medium": "Frölunda HC"
+            },
+            "teamNames": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "long": "Frölunda HC",
+              "full": "Frölunda Hockey Club",
+              "code_site": "FHC",
+              "short_site": "Frölunda",
+              "full_site": "Frölunda Hockey Club / Herr",
+              "long_site": "Frölunda HC"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "iuzqg7dqk9",
+        "gameType": {
+          "uuid": "qQ9-af37Ti40B",
+          "code": "regular",
+          "deleted": false,
+          "name": "Grundserie"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "2459-2459QTs1f",
+            "instanceId": "dif1_dif",
+            "name": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "medium": "Djurgårdens IF"
+            },
+            "teamNames": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "long": "Djurgårdens IF",
+              "full": "Djurgården Hockey",
+              "codeSite": "DIF Herr",
+              "shortSite": "Djurgården Herr",
+              "fullSite": "Djurgården Hockey Herr",
+              "longSite": "Djurgården Hockey Herr"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "jjruyvpqht",
+        "gameType": {
+          "uuid": "qRf-347BaDIOc",
+          "code": "qualdown",
+          "deleted": false,
+          "name": "Kvalspel nedflyttning"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "3db0-3db09jXTE",
+            "instanceId": "hv711_hv71",
+            "name": {
+              "code": "HV71",
+              "short": "HV71",
+              "medium": "HV71"
+            },
+            "teamNames": {
+              "code": "HV71",
+              "short": "HV71",
+              "long": "HV71",
+              "full": "HV71",
+              "code_site": "HV71",
+              "short_site": "HV71",
+              "full_site": "HV71",
+              "long_site": "HV71"
+            }
+          },
+          {
+            "uuid": "9541-95418PpkP",
+            "instanceId": "lif1_lif",
+            "name": {
+              "code": "LIF",
+              "short": "Leksand",
+              "medium": "Leksands IF"
+            },
+            "teamNames": {
+              "code": "LIF",
+              "short": "Leksand",
+              "long": "Leksands IF",
+              "full": "Leksands Idrottsförening",
+              "code_site": "LIF",
+              "short_site": "Leksand",
+              "long_site": "Leksands IF Herr",
+              "full_site": "Leksands Idrottsförening"
+            }
+          }
+        ]
+      }
+    ],
+    "seasonSeriesGameTypeTeams": [
+      {
+        "state": "closed",
+        "ssgtUuid": "fg2i6uu9dt",
+        "gameType": {
+          "uuid": "qQ9-7debq38kX",
+          "code": "playoff",
+          "deleted": false,
+          "name": "Slutspel"
+        },
+        "season": {
+          "uuid": "qeb-73bZkIm9A",
+          "code": "2024",
+          "deleted": false,
+          "name": "2024/2025"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          },
+          {
+            "uuid": "087a-087aTQv9u",
+            "instanceId": "fhc1_fhc",
+            "name": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "medium": "Frölunda HC"
+            },
+            "teamNames": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "long": "Frölunda HC",
+              "full": "Frölunda Hockey Club",
+              "code_site": "FHC",
+              "short_site": "Frölunda",
+              "full_site": "Frölunda Hockey Club / Herr",
+              "long_site": "Frölunda HC"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "iuzqg7dqk9",
+        "gameType": {
+          "uuid": "qQ9-af37Ti40B",
+          "code": "regular",
+          "deleted": false,
+          "name": "Grundserie"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "2459-2459QTs1f",
+            "instanceId": "dif1_dif",
+            "name": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "medium": "Djurgårdens IF"
+            },
+            "teamNames": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "long": "Djurgårdens IF",
+              "full": "Djurgården Hockey",
+              "codeSite": "DIF Herr",
+              "shortSite": "Djurgården Herr",
+              "fullSite": "Djurgården Hockey Herr",
+              "longSite": "Djurgården Hockey Herr"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "jjruyvpqht",
+        "gameType": {
+          "uuid": "qRf-347BaDIOc",
+          "code": "qualdown",
+          "deleted": false,
+          "name": "Kvalspel nedflyttning"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "3db0-3db09jXTE",
+            "instanceId": "hv711_hv71",
+            "name": {
+              "code": "HV71",
+              "short": "HV71",
+              "medium": "HV71"
+            },
+            "teamNames": {
+              "code": "HV71",
+              "short": "HV71",
+              "long": "HV71",
+              "full": "HV71",
+              "code_site": "HV71",
+              "short_site": "HV71",
+              "full_site": "HV71",
+              "long_site": "HV71"
+            }
+          },
+          {
+            "uuid": "9541-95418PpkP",
+            "instanceId": "lif1_lif",
+            "name": {
+              "code": "LIF",
+              "short": "Leksand",
+              "medium": "Leksands IF"
+            },
+            "teamNames": {
+              "code": "LIF",
+              "short": "Leksand",
+              "long": "Leksands IF",
+              "full": "Leksands Idrottsförening",
+              "code_site": "LIF",
+              "short_site": "Leksand",
+              "long_site": "Leksands IF Herr",
+              "full_site": "Leksands Idrottsförening"
+            }
+          }
+        ]
+      }
+    ],
+    "ssgtDefaultValue": {
+      "state": "active",
+      "ssgtUuid": "qa98unlbd6",
+      "gameType": {
+        "uuid": "qQ9-af37Ti40B",
+        "code": "regular",
+        "deleted": false,
+        "name": "Grundserie"
+      },
+      "season": {
+        "uuid": "ndcf81nlb3",
+        "code": "2026",
+        "deleted": false,
+        "name": "2026/2027"
+      },
+      "series": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "lastModified": "2023-03-01T13:47:40.000Z",
+        "names": [
+          {
+            "language": "sv",
+            "translation": "SHL"
+          },
+          {
+            "language": "en",
+            "translation": "SHL"
+          }
+        ],
+        "name": "SHL"
+      },
+      "teams": [
+        {
+          "uuid": "1ab8-1ab8bfj7N",
+          "instanceId": "bif1_bif",
+          "name": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "medium": "Brynäs IF"
+          },
+          "teamNames": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening",
+            "code_site": "BIF",
+            "short_site": "Brynäs",
+            "full_site": "Brynäs Idrottsförening",
+            "long_site": "Brynäs IF"
+          }
+        },
+        {
+          "uuid": "2459-2459QTs1f",
+          "instanceId": "dif1_dif",
+          "name": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "medium": "Djurgårdens IF"
+          },
+          "teamNames": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "long": "Djurgårdens IF",
+            "full": "Djurgården Hockey",
+            "codeSite": "DIF Herr",
+            "shortSite": "Djurgården Herr",
+            "fullSite": "Djurgården Hockey Herr",
+            "longSite": "Djurgården Hockey Herr"
+          }
+        },
+        {
+          "uuid": "752c-752c12zB7Z",
+          "instanceId": "fbk1_fbk",
+          "name": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "medium": "Färjestad BK"
+          },
+          "teamNames": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb",
+            "code_site": "FBK",
+            "short_site": "Färjestad Herr",
+            "full_site": "Färjestad Bollklubb Herr",
+            "long_site": "Färjestad BK"
+          }
+        }
+      ]
+    },
+    "regularSsgt": {
+      "state": "active",
+      "ssgtUuid": "qa98unlbd6",
+      "gameType": {
+        "uuid": "qQ9-af37Ti40B",
+        "code": "regular",
+        "deleted": false,
+        "name": "Grundserie"
+      },
+      "season": {
+        "uuid": "ndcf81nlb3",
+        "code": "2026",
+        "deleted": false,
+        "name": "2026/2027"
+      },
+      "series": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "lastModified": "2023-03-01T13:47:40.000Z",
+        "names": [
+          {
+            "language": "sv",
+            "translation": "SHL"
+          },
+          {
+            "language": "en",
+            "translation": "SHL"
+          }
+        ],
+        "name": "SHL"
+      },
+      "teams": [
+        {
+          "uuid": "1ab8-1ab8bfj7N",
+          "instanceId": "bif1_bif",
+          "name": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "medium": "Brynäs IF"
+          },
+          "teamNames": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening",
+            "code_site": "BIF",
+            "short_site": "Brynäs",
+            "full_site": "Brynäs Idrottsförening",
+            "long_site": "Brynäs IF"
+          }
+        },
+        {
+          "uuid": "2459-2459QTs1f",
+          "instanceId": "dif1_dif",
+          "name": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "medium": "Djurgårdens IF"
+          },
+          "teamNames": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "long": "Djurgårdens IF",
+            "full": "Djurgården Hockey",
+            "codeSite": "DIF Herr",
+            "shortSite": "Djurgården Herr",
+            "fullSite": "Djurgården Hockey Herr",
+            "longSite": "Djurgården Hockey Herr"
+          }
+        },
+        {
+          "uuid": "752c-752c12zB7Z",
+          "instanceId": "fbk1_fbk",
+          "name": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "medium": "Färjestad BK"
+          },
+          "teamNames": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb",
+            "code_site": "FBK",
+            "short_site": "Färjestad Herr",
+            "full_site": "Färjestad Bollklubb Herr",
+            "long_site": "Färjestad BK"
+          }
+        }
+      ]
+    },
+    "provider": "statnet",
+    "overviewModuleList": {
+      "players": [
+        {
+          "type": "goal",
+          "statisticsSubset": "players_goal",
+          "highlightedField": "G",
+          "invertSortOrder": true
+        },
+        {
+          "type": "point",
+          "statisticsSubset": "players_point",
+          "highlightedField": "TP",
+          "invertSortOrder": true
+        },
+        {
+          "type": "pim",
+          "statisticsSubset": "players_penalty",
+          "highlightedField": "PIM",
+          "invertSortOrder": true
+        }
+      ],
+      "teams": [
+        {
+          "type": "win",
+          "statisticsSubset": "teams_result",
+          "highlightedField": "W",
+          "invertSortOrder": true
+        },
+        {
+          "type": "goal",
+          "statisticsSubset": "teams_goal",
+          "highlightedField": "G",
+          "invertSortOrder": true
+        },
+        {
+          "type": "powerplay",
+          "statisticsSubset": "teams_powerplay",
+          "highlightedField": "PPPerc",
+          "invertSortOrder": true
+        }
+      ]
+    },
+    "filters": {
+      "players": {
+        "filterType": [
+          "season",
+          "date",
+          "last"
+        ],
+        "modules": [
+          "players_summary",
+          "players_point",
+          "players_strength"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ],
+        "position": [
+          "all",
+          "F",
+          "D"
+        ],
+        "ageGroup": [
+          "All",
+          "Junior",
+          "Rookie"
+        ],
+        "outcome": [
+          "all",
+          "w",
+          "l"
+        ],
+        "team": true,
+        "vsTeam": true
+      },
+      "teams": {
+        "filterType": [
+          "season",
+          "date",
+          "last"
+        ],
+        "modules": [
+          "teams_result",
+          "teams_goal",
+          "teams_powerplay"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ],
+        "outcome": [
+          "all",
+          "w",
+          "l"
+        ],
+        "team": true,
+        "vsTeam": true
+      },
+      "games": {
+        "filterType": [
+          "season",
+          "date",
+          "last"
+        ],
+        "modules": [
+          "games_games"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ],
+        "outcome": [
+          "all",
+          "w",
+          "l"
+        ],
+        "gameStatus": [
+          "all",
+          "played"
+        ],
+        "decidedIn": [
+          "all",
+          "reg",
+          "ot"
+        ],
+        "team": true,
+        "vsTeam": true
+      },
+      "goalkeepers": {
+        "filterType": [
+          "season",
+          "date",
+          "last"
+        ],
+        "modules": [
+          "goalkeepers_summary",
+          "goalkeepers_result",
+          "goalkeepers_strength"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ],
+        "ageGroup": [
+          "All",
+          "Junior",
+          "Rookie"
+        ],
+        "outcome": [
+          "all",
+          "w",
+          "l"
+        ],
+        "team": true,
+        "vsTeam": true
+      },
+      "standings": {
+        "filterType": [
+          "season",
+          "date",
+          "last"
+        ],
+        "modules": [
+          "standings_standings"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ]
+      }
+    }
+  },
+  {
+    "originalSeasonSeriesGameTypeTeams": [
+      {
+        "state": "closed",
+        "ssgtUuid": "fg2i6uu9dt",
+        "gameType": {
+          "uuid": "qQ9-7debq38kX",
+          "code": "playoff",
+          "deleted": false,
+          "name": "Slutspel"
+        },
+        "season": {
+          "uuid": "qeb-73bZkIm9A",
+          "code": "2024",
+          "deleted": false,
+          "name": "2024/2025"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          },
+          {
+            "uuid": "087a-087aTQv9u",
+            "instanceId": "fhc1_fhc",
+            "name": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "medium": "Frölunda HC"
+            },
+            "teamNames": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "long": "Frölunda HC",
+              "full": "Frölunda Hockey Club",
+              "code_site": "FHC",
+              "short_site": "Frölunda",
+              "full_site": "Frölunda Hockey Club / Herr",
+              "long_site": "Frölunda HC"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "iuzqg7dqk9",
+        "gameType": {
+          "uuid": "qQ9-af37Ti40B",
+          "code": "regular",
+          "deleted": false,
+          "name": "Grundserie"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "2459-2459QTs1f",
+            "instanceId": "dif1_dif",
+            "name": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "medium": "Djurgårdens IF"
+            },
+            "teamNames": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "long": "Djurgårdens IF",
+              "full": "Djurgården Hockey",
+              "codeSite": "DIF Herr",
+              "shortSite": "Djurgården Herr",
+              "fullSite": "Djurgården Hockey Herr",
+              "longSite": "Djurgården Hockey Herr"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "jjruyvpqht",
+        "gameType": {
+          "uuid": "qRf-347BaDIOc",
+          "code": "qualdown",
+          "deleted": false,
+          "name": "Kvalspel nedflyttning"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "3db0-3db09jXTE",
+            "instanceId": "hv711_hv71",
+            "name": {
+              "code": "HV71",
+              "short": "HV71",
+              "medium": "HV71"
+            },
+            "teamNames": {
+              "code": "HV71",
+              "short": "HV71",
+              "long": "HV71",
+              "full": "HV71",
+              "code_site": "HV71",
+              "short_site": "HV71",
+              "full_site": "HV71",
+              "long_site": "HV71"
+            }
+          },
+          {
+            "uuid": "9541-95418PpkP",
+            "instanceId": "lif1_lif",
+            "name": {
+              "code": "LIF",
+              "short": "Leksand",
+              "medium": "Leksands IF"
+            },
+            "teamNames": {
+              "code": "LIF",
+              "short": "Leksand",
+              "long": "Leksands IF",
+              "full": "Leksands Idrottsförening",
+              "code_site": "LIF",
+              "short_site": "Leksand",
+              "long_site": "Leksands IF Herr",
+              "full_site": "Leksands Idrottsförening"
+            }
+          }
+        ]
+      }
+    ],
+    "seasonSeriesGameTypeTeams": [
+      {
+        "state": "closed",
+        "ssgtUuid": "fg2i6uu9dt",
+        "gameType": {
+          "uuid": "qQ9-7debq38kX",
+          "code": "playoff",
+          "deleted": false,
+          "name": "Slutspel"
+        },
+        "season": {
+          "uuid": "qeb-73bZkIm9A",
+          "code": "2024",
+          "deleted": false,
+          "name": "2024/2025"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          },
+          {
+            "uuid": "087a-087aTQv9u",
+            "instanceId": "fhc1_fhc",
+            "name": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "medium": "Frölunda HC"
+            },
+            "teamNames": {
+              "code": "FHC",
+              "short": "Frölunda ",
+              "long": "Frölunda HC",
+              "full": "Frölunda Hockey Club",
+              "code_site": "FHC",
+              "short_site": "Frölunda",
+              "full_site": "Frölunda Hockey Club / Herr",
+              "long_site": "Frölunda HC"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "iuzqg7dqk9",
+        "gameType": {
+          "uuid": "qQ9-af37Ti40B",
+          "code": "regular",
+          "deleted": false,
+          "name": "Grundserie"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "1ab8-1ab8bfj7N",
+            "instanceId": "bif1_bif",
+            "name": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "medium": "Brynäs IF"
+            },
+            "teamNames": {
+              "code": "BIF",
+              "short": "Brynäs",
+              "long": "Brynäs IF",
+              "full": "Brynäs Idrottsförening",
+              "code_site": "BIF",
+              "short_site": "Brynäs",
+              "full_site": "Brynäs Idrottsförening",
+              "long_site": "Brynäs IF"
+            }
+          },
+          {
+            "uuid": "2459-2459QTs1f",
+            "instanceId": "dif1_dif",
+            "name": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "medium": "Djurgårdens IF"
+            },
+            "teamNames": {
+              "code": "DIF",
+              "short": "Djurgården",
+              "long": "Djurgårdens IF",
+              "full": "Djurgården Hockey",
+              "codeSite": "DIF Herr",
+              "shortSite": "Djurgården Herr",
+              "fullSite": "Djurgården Hockey Herr",
+              "longSite": "Djurgården Hockey Herr"
+            }
+          },
+          {
+            "uuid": "752c-752c12zB7Z",
+            "instanceId": "fbk1_fbk",
+            "name": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "medium": "Färjestad BK"
+            },
+            "teamNames": {
+              "code": "FBK",
+              "short": "Färjestad",
+              "long": "Färjestad BK",
+              "full": "Färjestad Bollklubb",
+              "code_site": "FBK",
+              "short_site": "Färjestad Herr",
+              "full_site": "Färjestad Bollklubb Herr",
+              "long_site": "Färjestad BK"
+            }
+          }
+        ]
+      },
+      {
+        "state": "closed",
+        "ssgtUuid": "jjruyvpqht",
+        "gameType": {
+          "uuid": "qRf-347BaDIOc",
+          "code": "qualdown",
+          "deleted": false,
+          "name": "Kvalspel nedflyttning"
+        },
+        "season": {
+          "uuid": "xs4m9qupsi",
+          "code": "2025",
+          "deleted": false,
+          "name": "2025/2026"
+        },
+        "series": {
+          "uuid": "qQ9-bb0bzEWUk",
+          "code": "SHL",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "lastModified": "2023-03-01T13:47:40.000Z",
+          "names": [
+            {
+              "language": "sv",
+              "translation": "SHL"
+            },
+            {
+              "language": "en",
+              "translation": "SHL"
+            }
+          ],
+          "name": "SHL"
+        },
+        "teams": [
+          {
+            "uuid": "3db0-3db09jXTE",
+            "instanceId": "hv711_hv71",
+            "name": {
+              "code": "HV71",
+              "short": "HV71",
+              "medium": "HV71"
+            },
+            "teamNames": {
+              "code": "HV71",
+              "short": "HV71",
+              "long": "HV71",
+              "full": "HV71",
+              "code_site": "HV71",
+              "short_site": "HV71",
+              "full_site": "HV71",
+              "long_site": "HV71"
+            }
+          },
+          {
+            "uuid": "9541-95418PpkP",
+            "instanceId": "lif1_lif",
+            "name": {
+              "code": "LIF",
+              "short": "Leksand",
+              "medium": "Leksands IF"
+            },
+            "teamNames": {
+              "code": "LIF",
+              "short": "Leksand",
+              "long": "Leksands IF",
+              "full": "Leksands Idrottsförening",
+              "code_site": "LIF",
+              "short_site": "Leksand",
+              "long_site": "Leksands IF Herr",
+              "full_site": "Leksands Idrottsförening"
+            }
+          }
+        ]
+      }
+    ],
+    "ssgtDefaultValue": {
+      "state": "active",
+      "ssgtUuid": "qa98unlbd6",
+      "gameType": {
+        "uuid": "qQ9-af37Ti40B",
+        "code": "regular",
+        "deleted": false,
+        "name": "Grundserie"
+      },
+      "season": {
+        "uuid": "ndcf81nlb3",
+        "code": "2026",
+        "deleted": false,
+        "name": "2026/2027"
+      },
+      "series": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "lastModified": "2023-03-01T13:47:40.000Z",
+        "names": [
+          {
+            "language": "sv",
+            "translation": "SHL"
+          },
+          {
+            "language": "en",
+            "translation": "SHL"
+          }
+        ],
+        "name": "SHL"
+      },
+      "teams": [
+        {
+          "uuid": "1ab8-1ab8bfj7N",
+          "instanceId": "bif1_bif",
+          "name": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "medium": "Brynäs IF"
+          },
+          "teamNames": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening",
+            "code_site": "BIF",
+            "short_site": "Brynäs",
+            "full_site": "Brynäs Idrottsförening",
+            "long_site": "Brynäs IF"
+          }
+        },
+        {
+          "uuid": "2459-2459QTs1f",
+          "instanceId": "dif1_dif",
+          "name": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "medium": "Djurgårdens IF"
+          },
+          "teamNames": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "long": "Djurgårdens IF",
+            "full": "Djurgården Hockey",
+            "codeSite": "DIF Herr",
+            "shortSite": "Djurgården Herr",
+            "fullSite": "Djurgården Hockey Herr",
+            "longSite": "Djurgården Hockey Herr"
+          }
+        },
+        {
+          "uuid": "752c-752c12zB7Z",
+          "instanceId": "fbk1_fbk",
+          "name": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "medium": "Färjestad BK"
+          },
+          "teamNames": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb",
+            "code_site": "FBK",
+            "short_site": "Färjestad Herr",
+            "full_site": "Färjestad Bollklubb Herr",
+            "long_site": "Färjestad BK"
+          }
+        }
+      ]
+    },
+    "regularSsgt": {
+      "state": "active",
+      "ssgtUuid": "qa98unlbd6",
+      "gameType": {
+        "uuid": "qQ9-af37Ti40B",
+        "code": "regular",
+        "deleted": false,
+        "name": "Grundserie"
+      },
+      "season": {
+        "uuid": "ndcf81nlb3",
+        "code": "2026",
+        "deleted": false,
+        "name": "2026/2027"
+      },
+      "series": {
+        "uuid": "qQ9-bb0bzEWUk",
+        "code": "SHL",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "lastModified": "2023-03-01T13:47:40.000Z",
+        "names": [
+          {
+            "language": "sv",
+            "translation": "SHL"
+          },
+          {
+            "language": "en",
+            "translation": "SHL"
+          }
+        ],
+        "name": "SHL"
+      },
+      "teams": [
+        {
+          "uuid": "1ab8-1ab8bfj7N",
+          "instanceId": "bif1_bif",
+          "name": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "medium": "Brynäs IF"
+          },
+          "teamNames": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening",
+            "code_site": "BIF",
+            "short_site": "Brynäs",
+            "full_site": "Brynäs Idrottsförening",
+            "long_site": "Brynäs IF"
+          }
+        },
+        {
+          "uuid": "2459-2459QTs1f",
+          "instanceId": "dif1_dif",
+          "name": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "medium": "Djurgårdens IF"
+          },
+          "teamNames": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "long": "Djurgårdens IF",
+            "full": "Djurgården Hockey",
+            "codeSite": "DIF Herr",
+            "shortSite": "Djurgården Herr",
+            "fullSite": "Djurgården Hockey Herr",
+            "longSite": "Djurgården Hockey Herr"
+          }
+        },
+        {
+          "uuid": "752c-752c12zB7Z",
+          "instanceId": "fbk1_fbk",
+          "name": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "medium": "Färjestad BK"
+          },
+          "teamNames": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb",
+            "code_site": "FBK",
+            "short_site": "Färjestad Herr",
+            "full_site": "Färjestad Bollklubb Herr",
+            "long_site": "Färjestad BK"
+          }
+        }
+      ]
+    },
+    "provider": "impleo",
+    "overviewModuleList": {
+      "players": [
+        {
+          "type": "goal",
+          "statisticsSubset": "players_point",
+          "highlightedField": "G",
+          "invertSortOrder": true
+        },
+        {
+          "type": "point",
+          "statisticsSubset": "players_point",
+          "highlightedField": "TP",
+          "invertSortOrder": true
+        },
+        {
+          "type": "pim",
+          "statisticsSubset": "players_penalty",
+          "highlightedField": "PIM",
+          "invertSortOrder": true
+        }
+      ],
+      "teams": [
+        {
+          "type": "win",
+          "statisticsSubset": "teams_result",
+          "highlightedField": "W",
+          "invertSortOrder": true
+        },
+        {
+          "type": "goal",
+          "statisticsSubset": "teams_goal",
+          "highlightedField": "G",
+          "invertSortOrder": true
+        },
+        {
+          "type": "powerplay",
+          "statisticsSubset": "teams_powerplay",
+          "highlightedField": "PPPerc",
+          "invertSortOrder": true
+        }
+      ]
+    },
+    "filters": {
+      "players": {
+        "modules": [
+          "players_summary",
+          "players_point",
+          "players_strength"
+        ],
+        "team": true
+      },
+      "teams": {
+        "modules": [
+          "teams_result",
+          "teams_goal",
+          "teams_powerplay"
+        ]
+      },
+      "goalkeepers": {
+        "modules": [
+          "goalkeepers_summary",
+          "goalkeepers_shotAgainst"
+        ],
+        "team": true
+      },
+      "standings": {
+        "modules": [
+          "standings_standings"
+        ],
+        "location": [
+          "all",
+          "home",
+          "away"
+        ]
+      }
+    }
+  }
+]

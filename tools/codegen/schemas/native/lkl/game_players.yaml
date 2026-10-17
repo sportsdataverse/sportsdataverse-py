@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player
+  type: character
+- description: ''
+  name: jersey
+  type: character
+- description: ''
+  name: slug
+  type: character
+kind: dataframe
+schema: lkl_game_players

@@ -1,0 +1,72 @@
+{
+  "playbyplay": [
+    {
+      "periodId": 1,
+      "sequence": 7,
+      "description": "Jump ball lost",
+      "receivedTime": 1774174386049,
+      "eventTime": "2026-03-22T10:13:05.456",
+      "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "player": {
+        "nameFullLatin": "Alec BROWN",
+        "nameFullLocal": "Alec BROWN",
+        "playerId": "689dc46e-719c-11ef-9dd7-d56734dcce18",
+        "jerseyNumber": "21"
+      },
+      "scores": {
+        "865489e8-b0f5-11ed-8b3f-c199a9dea184": 0,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 9,
+      "description": "Jump ball won",
+      "receivedTime": 1774174386050,
+      "eventTime": "2026-03-22T10:13:05.456",
+      "teamId": "865489e8-b0f5-11ed-8b3f-c199a9dea184",
+      "player": {
+        "nameFullLatin": "Grant JERRETT",
+        "nameFullLocal": "Grant JERRETT",
+        "playerId": "8a4f5e97-b0f5-11ed-9b00-4d213e1c069d",
+        "jerseyNumber": "34"
+      },
+      "scores": {
+        "865489e8-b0f5-11ed-8b3f-c199a9dea184": 0,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    },
+    {
+      "periodId": 1,
+      "sequence": 20,
+      "description": "3pt Jump shot missed",
+      "receivedTime": 1774174416243,
+      "eventTime": "2026-03-22T10:13:33.917",
+      "teamId": "865489e8-b0f5-11ed-8b3f-c199a9dea184",
+      "player": {
+        "nameFullLatin": "HIEJIMA Makoto",
+        "nameFullLocal": "HIEJIMA Makoto",
+        "playerId": "8983317f-b0f5-11ed-8b68-4d213e1c069d",
+        "jerseyNumber": "6"
+      },
+      "scores": {
+        "865489e8-b0f5-11ed-8b3f-c199a9dea184": 3,
+        "f170040e-5ad9-11ef-b4d4-070129f618c6": 0
+      }
+    }
+  ],
+  "teams": [
+    {
+      "nameFullLatin": "宇都宮ブレックス",
+      "nameFullLocal": "Utsunomiya Brex",
+      "teamId": "865489e8-b0f5-11ed-8b3f-c199a9dea184",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/571eb873a9b445cc9acc7f98383c5fb8?size=RAW"
+    },
+    {
+      "nameFullLatin": "Taoyuan Pauian Pilots",
+      "nameFullLocal": "Taoyuan Pauian Pilots",
+      "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW"
+    }
+  ]
+}

@@ -1,0 +1,172 @@
+{
+  "jsonrpc": "2.0",
+  "id": "42",
+  "error": null,
+  "result": {
+    "gameInfo": {
+      "gameId": "50",
+      "apiId": "",
+      "id": 50,
+      "time": "2025-10-12T18:40:00",
+      "homeTeam": {
+        "name": "BEER SHEVA",
+        "nameLocal": "אלטשולר ב\"ש/דימונה",
+        "id": "11",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "BEER SHEVA",
+        "shortNameLocal": "ב\"ש/דימונה",
+        "players": [
+          {
+            "id": "1120",
+            "apiId": "",
+            "firstName": "CODY",
+            "lastName": "DEMPS",
+            "firstNameLocal": "קודי",
+            "lastNameLocal": "דמפס",
+            "inRoster": 2,
+            "jerseyNumber": 93
+          },
+          {
+            "id": "1111",
+            "apiId": "",
+            "firstName": "NAVE",
+            "lastName": "BEN SHEMEN",
+            "firstNameLocal": "נווה",
+            "lastNameLocal": "בן שמן",
+            "inRoster": 2,
+            "jerseyNumber": 0
+          },
+          {
+            "id": "1215",
+            "apiId": "",
+            "firstName": "MATAN",
+            "lastName": "FOGEL",
+            "firstNameLocal": "מתן",
+            "lastNameLocal": "פוגל",
+            "inRoster": 2,
+            "jerseyNumber": 55
+          }
+        ]
+      },
+      "awayTeam": {
+        "name": "MACCABI TEL AVIV",
+        "nameLocal": "מכבי Rapyd ת\"א",
+        "id": "2",
+        "apiId": null,
+        "Score": 0,
+        "shortName": "MACCABI TEL AVIV",
+        "shortNameLocal": "מכבי ת\"א",
+        "players": [
+          {
+            "id": "1017",
+            "apiId": "",
+            "firstName": "UROS",
+            "lastName": "TRIFUNOVIC",
+            "firstNameLocal": "אורוש",
+            "lastNameLocal": "טריפונוביץ'",
+            "inRoster": 0,
+            "jerseyNumber": 6
+          },
+          {
+            "id": "1025",
+            "apiId": "1025",
+            "firstName": "TAMIR",
+            "lastName": "BLATT",
+            "firstNameLocal": "תמיר",
+            "lastNameLocal": "בלאט",
+            "inRoster": 2,
+            "jerseyNumber": 45
+          },
+          {
+            "id": "1200",
+            "apiId": "1200",
+            "firstName": "OREN",
+            "lastName": "SAHAR",
+            "firstNameLocal": "אורן",
+            "lastNameLocal": "סהר",
+            "inRoster": 2,
+            "jerseyNumber": 7
+          }
+        ]
+      },
+      "competition": {
+        "name": "Winner League"
+      },
+      "numberOfQuarters": 4,
+      "gameFinished": true,
+      "currentQuarter": 4,
+      "currentQuarterTime": {
+        "m": 0,
+        "s": 0
+      }
+    },
+    "actions": [
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "21",
+          "made": "missed",
+          "freeThrowsAwarded": 2,
+          "freeThrowNumber": 1,
+          "fastBreak": false,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false
+        },
+        "id": 500034,
+        "parentActionId": 500032,
+        "userTime": "15:44:18",
+        "quarterTime": "08:24",
+        "type": "freeThrow",
+        "playerId": 1116,
+        "teamId": 11
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 1,
+          "player": "21",
+          "made": "made",
+          "freeThrowsAwarded": 2,
+          "freeThrowNumber": 2,
+          "fastBreak": false,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false
+        },
+        "id": 500035,
+        "parentActionId": 500032,
+        "userTime": "15:44:34",
+        "quarterTime": "08:24",
+        "type": "freeThrow",
+        "score": "2-3",
+        "totalPlayerPoints": "1",
+        "playerId": 1116,
+        "teamId": 11
+      },
+      {
+        "quarter": 1,
+        "parameters": {
+          "team": 2,
+          "player": "10",
+          "made": "made",
+          "freeThrowsAwarded": 2,
+          "freeThrowNumber": 1,
+          "fastBreak": false,
+          "secondChancePoints": false,
+          "pointsFromTurnover": false
+        },
+        "id": 500062,
+        "parentActionId": 500060,
+        "userTime": "15:47:32",
+        "quarterTime": "07:06",
+        "type": "freeThrow",
+        "score": "5-6",
+        "totalPlayerPoints": "1",
+        "playerId": 1020,
+        "teamId": 2
+      }
+    ],
+    "success": true
+  }
+}

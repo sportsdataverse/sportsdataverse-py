@@ -1,0 +1,275 @@
+{
+  "success": true,
+  "data": {
+    "data": {
+      "id": 9695,
+      "tour": 1,
+      "phase": {
+        "id": 714,
+        "libelle": "Saison régulière",
+        "visible": true,
+        "type_phase": "C",
+        "parametrage": {
+          "appuis": 0,
+          "grille_id": null,
+          "extra_poule": false,
+          "aller_retour": 0,
+          "phase_finale": false,
+          "prolongation": true,
+          "score_cumule": false,
+          "nombre_groupe": 1,
+          "petite_finale": true,
+          "nombre_plateaux": null,
+          "type_assignation": "M",
+          "avec_bascule_auto": true,
+          "nombre_participant": 12,
+          "avec_classement_final": true,
+          "nombre_match_par_confrontation": 4
+        },
+        "competition_libelle": "Synerglace Ligue Magnus"
+      },
+      "libelle": null,
+      "date_fin": "15/09/2026",
+      "phase_id": 714,
+      "date_debut": "15/09/2026",
+      "rencontres": [
+        {
+          "id": 77745,
+          "etat": "T",
+          "poule": null,
+          "score": [
+            {
+              "score": 2,
+              "equipe_id": 366,
+              "participant_id": 9124,
+              "sportif_rencontre_id": 77745
+            },
+            {
+              "score": 1,
+              "equipe_id": 611,
+              "participant_id": 9123,
+              "sportif_rencontre_id": 77745
+            }
+          ],
+          "en_cours": false,
+          "receveur": {
+            "id": 366,
+            "logo": "https://hockeynet.fr/storage/logos_structures/8wEqPG81zcvlxzrmX73wQQy4UNsgWuKWV30YXrgo.png",
+            "sexe": "M",
+            "libelle": "93006S - RAPACES DE GAP",
+            "id_compet": [
+              1,
+              19,
+              26
+            ],
+            "structure": {
+              "id": 390,
+              "nom": "SASP LES RAPACES DE GAP",
+              "code": "93006S",
+              "etat": "A",
+              "logo": "8wEqPG81zcvlxzrmX73wQQy4UNsgWuKWV30YXrgo.png",
+              "type": "SOC",
+              "nom_court": "SASP LES RAPACES DE GAP"
+            },
+            "abreviation": "GAP",
+            "libelle_court": "GAP",
+            "libelle_complet": "Rapaces de Gap"
+          },
+          "visiteur": {
+            "id": 611,
+            "logo": "https://hockeynet.fr/storage/logos_equipes/215/qM4Isk3zWu6RuAeylfZimNqv3I8KmRFpoqTjl9ka.png",
+            "sexe": "M",
+            "libelle": "82005S - CHAMONIX SLM",
+            "id_compet": [
+              1,
+              19,
+              21
+            ],
+            "structure": {
+              "id": 392,
+              "nom": "SASP CHAMONIX HOCKEY CLUB ELITE",
+              "code": "82005S",
+              "etat": "A",
+              "logo": "e5H1LDVa1NMNnwGnVS4DpE4OAoBuPoFUlvz64WwC.png",
+              "type": "SOC",
+              "nom_court": "SASP CHAMONIX HOCKEY CLUB ELITE"
+            },
+            "abreviation": "CHA",
+            "libelle_court": "CHAMONIX",
+            "libelle_complet": "Pionniers de Chamonix"
+          },
+          "date_rencontre": "2026-09-15T18:00:00.000000Z",
+          "lieu_de_pratique": {
+            "id": 5,
+            "nom": "Gap - Alp'Arena"
+          },
+          "rencontre_libelle": "GAP / CHAMONIX",
+          "infos_complementaires": ""
+        },
+        {
+          "id": 77746,
+          "etat": "T",
+          "poule": null,
+          "score": [
+            {
+              "score": 3,
+              "equipe_id": 3409,
+              "participant_id": 9131,
+              "sportif_rencontre_id": 77746
+            },
+            {
+              "score": 1,
+              "equipe_id": 253,
+              "participant_id": 9127,
+              "sportif_rencontre_id": 77746
+            }
+          ],
+          "en_cours": false,
+          "receveur": {
+            "id": 3409,
+            "logo": "https://hockeynet.fr/storage/logos_equipes/394/ViMCUPL6rjozws3LVGEc2gdqMYgSXbrLZ694rDrQ.png",
+            "sexe": "M",
+            "libelle": "93003S - DIABLES ROUGES BRIANÇON",
+            "id_compet": [
+              240,
+              256,
+              249
+            ],
+            "structure": {
+              "id": 394,
+              "nom": "S.A. LES DIABLES ROUGES DE BRIANCON",
+              "code": "93003S",
+              "etat": "A",
+              "logo": "50/93/50932d8f-83b8-423c-9224-8b40448ed2ea.png",
+              "type": "SOC",
+              "nom_court": "S.A. LES DIABLES ROUGES DE BRIANCON"
+            },
+            "abreviation": "BRI",
+            "libelle_court": "BRIANÇON",
+            "libelle_complet": "DIABLES ROUGES BRIANÇON"
+          },
+          "visiteur": {
+            "id": 253,
+            "logo": "https://hockeynet.fr/storage/logos_equipes/166/t70uoBQeQNNaS1c96TfP8cehaisjLYc4CylipPrJ.png",
+            "sexe": "M",
+            "libelle": "23001S - 23001S ROUEN HOCKEY ELITE 76",
+            "id_compet": [
+              1,
+              19,
+              26
+            ],
+            "structure": {
+              "id": 388,
+              "nom": "SASP ROUEN HOCKEY ELITE 76",
+              "code": "23001S",
+              "etat": "A",
+              "logo": "xga9XBOBA0N4QWD2c6W6J4vNkpLreCCDvIRloIlh.png",
+              "type": "SOC",
+              "nom_court": "SASP ROUEN HOCKEY ELITE 76"
+            },
+            "abreviation": "ROU",
+            "libelle_court": "ROUEN",
+            "libelle_complet": "Dragons de Rouen"
+          },
+          "date_rencontre": "2026-09-15T18:00:00.000000Z",
+          "lieu_de_pratique": {
+            "id": 20,
+            "nom": "Briançon - René Froger"
+          },
+          "rencontre_libelle": "BRIANÇON / ROUEN",
+          "infos_complementaires": ""
+        },
+        {
+          "id": 77744,
+          "etat": "T",
+          "poule": null,
+          "score": [
+            {
+              "score": 3,
+              "equipe_id": 103,
+              "participant_id": 9120,
+              "sportif_rencontre_id": 77744
+            },
+            {
+              "score": 4,
+              "equipe_id": 472,
+              "participant_id": 9126,
+              "sportif_rencontre_id": 77744
+            }
+          ],
+          "en_cours": false,
+          "receveur": {
+            "id": 103,
+            "logo": "https://hockeynet.fr/storage/logos_structures/sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png",
+            "sexe": "M",
+            "libelle": "22001S - AMIENS HOCKEY ELITE",
+            "id_compet": [
+              1,
+              26,
+              19
+            ],
+            "structure": {
+              "id": 389,
+              "nom": "AMIENS HOCKEY ELITE",
+              "code": "22001S",
+              "etat": "A",
+              "logo": "sU3oyYLGok4OV2px1Iz8beKLPXzV2MWm5SN79fhw.png",
+              "type": "SOC",
+              "nom_court": "AMIENS HOCKEY ELITE"
+            },
+            "abreviation": "AMI",
+            "libelle_court": "AMIENS",
+            "libelle_complet": "Gothiques d'Amiens"
+          },
+          "visiteur": {
+            "id": 472,
+            "logo": "https://hockeynet.fr/storage/logos_structures/fa/b9/fab96bac-a21d-4c67-ac7b-ab44b3b8fa15.png",
+            "sexe": "M",
+            "libelle": "93008S - NICE SLM",
+            "id_compet": [
+              1,
+              19,
+              26
+            ],
+            "structure": {
+              "id": 395,
+              "nom": "NICE HOCKEY  ELITE",
+              "code": "93008S",
+              "etat": "A",
+              "logo": "fa/b9/fab96bac-a21d-4c67-ac7b-ab44b3b8fa15.png",
+              "type": "SOC",
+              "nom_court": "NICE HOCKEY  ELITE"
+            },
+            "abreviation": "NIC",
+            "libelle_court": "NICE",
+            "libelle_complet": "Aigles de Nice"
+          },
+          "date_rencontre": "2026-09-15T18:15:00.000000Z",
+          "lieu_de_pratique": {
+            "id": 2,
+            "nom": "Amiens - Le Coliseum"
+          },
+          "rencontre_libelle": "AMIENS / NICE",
+          "infos_complementaires": ""
+        }
+      ],
+      "competition": {
+        "id": 240,
+        "type": {
+          "id": 1,
+          "code": "NA",
+          "libelle": "Ligue Magnus",
+          "created_at": "2021-07-13 15:12:51",
+          "updated_at": "2021-07-13 15:12:51"
+        },
+        "saison": 2027,
+        "libelle": "Synerglace Ligue Magnus",
+        "parametres": {
+          "url_externe": "https://www.magnus.tv",
+          "publier_sur_site": true
+        }
+      }
+    },
+    "time": "0.0012 sec."
+  }
+}

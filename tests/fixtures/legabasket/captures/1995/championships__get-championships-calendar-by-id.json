@@ -1,0 +1,203 @@
+{
+  "competition": {
+    "id": 374,
+    "year": 1995,
+    "code": "1995_regular_season_serie_a1",
+    "name": "Regular Season A1",
+    "full_name": "Regular Season A1 1995",
+    "focus_on": false,
+    "homepage_slider": false,
+    "scoreboard_live": true,
+    "homepage_calendar": false,
+    "show_cover_image_homepage": false,
+    "show_detail_teams_logo": false,
+    "status": 2,
+    "championship_type_id": 4,
+    "championship_series_id": 1,
+    "seo_meta_title": null,
+    "seo_meta_description": null,
+    "ctype_name": "Regular Season",
+    "ctype_code": "RS",
+    "serie_name": "Serie A",
+    "serie_code": "A1",
+    "logo_key": null,
+    "background_key": null,
+    "cover_key": null
+  },
+  "matches": [
+    {
+      "id": 14415,
+      "game_status": "2",
+      "championship_id": 374,
+      "championships_day_id": 2437,
+      "year": 1995,
+      "number": 1,
+      "match_datetime": "1995-09-17T00:00:00.000+02:00",
+      "match_hh": 0,
+      "match_mm": 0,
+      "home_final_score": 72,
+      "visitor_final_score": 76,
+      "target_score": null,
+      "additional_time": 0,
+      "plant_id": 42,
+      "websocket_match_id": "56752",
+      "ticketing_url": null,
+      "has_streaming": 0,
+      "updated_at": "2024-12-20T14:06:38.493+01:00",
+      "h_team_id": 267,
+      "h_team_name": "Illycaffe' Trieste",
+      "h_club_code": null,
+      "h_team_enabled": true,
+      "home_logo_key": null,
+      "v_team_id": 265,
+      "v_team_name": "Nuova Tirrena Roma",
+      "v_club_code": null,
+      "v_team_enabled": true,
+      "v_logo_key": null,
+      "town_id": 3267,
+      "plant_name": "PalaTrieste",
+      "town_name": "Trieste",
+      "day_code": "1",
+      "day_serial": 1,
+      "day_name": "1ª Giornata - Andata",
+      "match_serie_key": "265_267"
+    },
+    {
+      "id": 14414,
+      "game_status": "2",
+      "championship_id": 374,
+      "championships_day_id": 2437,
+      "year": 1995,
+      "number": 1,
+      "match_datetime": "1995-09-17T00:00:00.000+02:00",
+      "match_hh": 0,
+      "match_mm": 0,
+      "home_final_score": 85,
+      "visitor_final_score": 74,
+      "target_score": null,
+      "additional_time": 0,
+      "plant_id": 32,
+      "websocket_match_id": "56751",
+      "ticketing_url": null,
+      "has_streaming": 0,
+      "updated_at": "2024-12-20T14:06:38.289+01:00",
+      "h_team_id": 264,
+      "h_team_name": "Viola Reggio Calabria",
+      "h_club_code": null,
+      "h_team_enabled": true,
+      "home_logo_key": null,
+      "v_team_id": 262,
+      "v_team_name": "Scavolini Pesaro",
+      "v_club_code": null,
+      "v_team_enabled": true,
+      "v_logo_key": null,
+      "town_id": 6735,
+      "plant_name": "PalaCalafiore",
+      "town_name": "Reggio di Calabria",
+      "day_code": "1",
+      "day_serial": 1,
+      "day_name": "1ª Giornata - Andata",
+      "match_serie_key": "262_264"
+    },
+    {
+      "id": 14413,
+      "game_status": "2",
+      "championship_id": 374,
+      "championships_day_id": 2437,
+      "year": 1995,
+      "number": 1,
+      "match_datetime": "1995-09-17T00:00:00.000+02:00",
+      "match_hh": 0,
+      "match_mm": 0,
+      "home_final_score": 67,
+      "visitor_final_score": 72,
+      "target_score": null,
+      "additional_time": 0,
+      "plant_id": 40,
+      "websocket_match_id": "56750",
+      "ticketing_url": null,
+      "has_streaming": 0,
+      "updated_at": "2024-12-20T14:06:38.146+01:00",
+      "h_team_id": 266,
+      "h_team_name": "Cx Orologi Siena",
+      "h_club_code": null,
+      "h_team_enabled": true,
+      "home_logo_key": null,
+      "v_team_id": 269,
+      "v_team_name": "Cagiva Varese",
+      "v_club_code": null,
+      "v_team_enabled": true,
+      "v_logo_key": null,
+      "town_id": 4355,
+      "plant_name": "PalaEstra",
+      "town_name": "Siena",
+      "day_code": "1",
+      "day_serial": 1,
+      "day_name": "1ª Giornata - Andata",
+      "match_serie_key": "266_269"
+    }
+  ],
+  "referees": {
+    "14409": [
+      "Gennaro COLUCCI",
+      "Enrico SABETTA"
+    ],
+    "14411": [
+      "Tiziano ZANCANELLA",
+      "Luciano TOLA"
+    ],
+    "14412": [
+      "Alberto GROSSI",
+      "Angelo TULLIO"
+    ]
+  },
+  "broadcasters": {},
+  "videos": {},
+  "filters": {
+    "days": [
+      {
+        "id": 2437,
+        "event_serial": 1,
+        "code": "1",
+        "name": "1ª Giornata - Andata",
+        "focus_on": false
+      },
+      {
+        "id": 2438,
+        "event_serial": 2,
+        "code": "2",
+        "name": "2ª Giornata - Andata",
+        "focus_on": false
+      },
+      {
+        "id": 2439,
+        "event_serial": 3,
+        "code": "3",
+        "name": "3ª Giornata - Andata",
+        "focus_on": false
+      }
+    ],
+    "phases": [
+      {
+        "id": 1,
+        "phase_name": "Andata",
+        "phase_code": "And",
+        "data_sort": "desc"
+      },
+      {
+        "id": 2,
+        "phase_name": "Ritorno",
+        "phase_code": "Rit",
+        "data_sort": "desc"
+      },
+      {
+        "id": 12,
+        "phase_name": "Seconda fase",
+        "phase_code": "2°fas",
+        "data_sort": "desc"
+      }
+    ]
+  },
+  "cache_key": "tCK:1791375998_mlCK:1791828530_cmCK:1734700054_cdCK:1661324859_vCK:1791809157",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

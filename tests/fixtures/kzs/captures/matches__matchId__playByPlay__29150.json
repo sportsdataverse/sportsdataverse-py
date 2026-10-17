@@ -1,0 +1,113 @@
+{
+  "status": "OK",
+  "data": {
+    "firstTeamPlayers": [
+      {
+        "id": 48281,
+        "firstName": "Željko",
+        "lastName": "Jotić"
+      },
+      {
+        "id": 48132,
+        "firstName": "Tadej",
+        "lastName": "Ferme"
+      },
+      {
+        "id": 48485,
+        "firstName": "Dejan",
+        "lastName": "Milašinović"
+      }
+    ],
+    "secondTeamPlayers": [
+      {
+        "id": 48026,
+        "firstName": "Dejan",
+        "lastName": "Mlakar"
+      },
+      {
+        "id": 48089,
+        "firstName": "Bojan",
+        "lastName": "Krivec"
+      },
+      {
+        "id": 48995,
+        "firstName": "Dragan",
+        "lastName": "Pušić"
+      }
+    ],
+    "matchParts": [
+      "QUARTER1",
+      "QUARTER2",
+      "QUARTER3"
+    ],
+    "actions": [
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 347037,
+        "playerId": 48132,
+        "matchTeamPlayerFirstName": "Tadej",
+        "matchTeamPlayerLastName": "Ferme",
+        "teamApplicationId": 35571,
+        "teamName": "Rogaška",
+        "matchTeamId": 58287,
+        "clock": "10:00:00",
+        "actionType": "substitution",
+        "subType": "in",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "280443f1-f83f-4ffb-87e9-b62bdb24d517",
+        "shirtNumber": "4"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "clock": "10:00:00",
+        "actionType": "game",
+        "subType": "start",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 347041,
+        "playerId": 48401,
+        "matchTeamPlayerFirstName": "Miha",
+        "matchTeamPlayerLastName": "Fon",
+        "teamApplicationId": 35571,
+        "teamName": "Rogaška",
+        "matchTeamId": 58287,
+        "clock": "09:01:17",
+        "actionType": "3pt",
+        "subType": "",
+        "qualifiers": "",
+        "x": 12.0,
+        "y": 5.0,
+        "area": "",
+        "side": "LEFT",
+        "success": false,
+        "score1": "1",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "a2bf7b86-8aa6-46dc-bb43-b1bd5c059407",
+        "shirtNumber": "8"
+      }
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+schema: sihf_goalie_shootouts
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: phase_id
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: player
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: team_acronym
+  type: character
+  description: ''
+- name: games_played
+  type: integer
+  description: ''
+- name: pen_shots_against
+  type: integer
+  description: ''
+- name: pen_shot_goals_against
+  type: integer
+  description: ''
+- name: pen_shot_saves
+  type: integer
+  description: ''
+- name: pen_shot_saves_percent
+  type: double
+  description: ''
+- name: row_type
+  type: character
+  description: ''

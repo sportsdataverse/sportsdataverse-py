@@ -1,0 +1,152 @@
+[
+  {
+    "gameSourceId": "2868126",
+    "gameId": "2868126",
+    "eventId": 792,
+    "type": "turnover",
+    "eventUuid": "504e3200-35b3-555e-9bb3-52891830c4d7",
+    "period": 4,
+    "periodType": "REGULAR",
+    "time": "00:14:30",
+    "realWorldTime": "2026-09-17T19:08:30.000Z",
+    "updatedTime": "2026-09-17T19:08:42.607Z",
+    "homeTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e43",
+      "teamId": "153747",
+      "teamCode": "Hol",
+      "teamName": "Holbæk-Stenhus",
+      "name": "Holbæk-Stenhus",
+      "abbreviation": "Hol",
+      "teamNumber": 1,
+      "place": "home",
+      "players": [],
+      "score": 84
+    },
+    "awayTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e44",
+      "teamId": "22250",
+      "teamCode": "RAN",
+      "teamName": "Randers Cimbria",
+      "name": "Randers Cimbria",
+      "abbreviation": "RAN",
+      "teamNumber": 2,
+      "place": "away",
+      "players": [],
+      "score": 100
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e44",
+      "teamId": "22250",
+      "teamCode": "RAN",
+      "teamName": "Randers Cimbria",
+      "name": "Randers Cimbria",
+      "abbreviation": "RAN",
+      "teamNumber": 2,
+      "place": "away",
+      "players": []
+    },
+    "player": {
+      "playerId": 2776246,
+      "pno": 10,
+      "teamNumber": 2,
+      "firstName": "Jusaun",
+      "familyName": "Holt"
+    },
+    "coordinates": {
+      "x": 8.460000038146973,
+      "y": 58.02000045776367
+    },
+    "qualifiers": [],
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "c4hh5nig6t",
+    "subType": "badpass"
+  },
+  {
+    "gameSourceId": "2868126",
+    "gameId": "2868126",
+    "eventId": 784,
+    "type": "2pt",
+    "eventUuid": "2adb263d-72f6-591d-b056-ac035cddc80a",
+    "period": 4,
+    "periodType": "REGULAR",
+    "time": "00:46:20",
+    "realWorldTime": "2026-09-17T19:07:48.000Z",
+    "updatedTime": "2026-09-17T19:07:51.884Z",
+    "homeTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e43",
+      "teamId": "153747",
+      "teamCode": "Hol",
+      "teamName": "Holbæk-Stenhus",
+      "name": "Holbæk-Stenhus",
+      "abbreviation": "Hol",
+      "teamNumber": 1,
+      "place": "home",
+      "players": [],
+      "score": 84
+    },
+    "awayTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e44",
+      "teamId": "22250",
+      "teamCode": "RAN",
+      "teamName": "Randers Cimbria",
+      "name": "Randers Cimbria",
+      "abbreviation": "RAN",
+      "teamNumber": 2,
+      "place": "away",
+      "players": [],
+      "score": 100
+    },
+    "revision": 1,
+    "gameState": "ongoing",
+    "gameType": "",
+    "round": 0,
+    "startDateAndTime": "",
+    "eventTeam": {
+      "id": "6aac1a8e761c2daf9cfc5e43",
+      "teamId": "153747",
+      "teamCode": "Hol",
+      "teamName": "Holbæk-Stenhus",
+      "name": "Holbæk-Stenhus",
+      "abbreviation": "Hol",
+      "teamNumber": 1,
+      "place": "home",
+      "players": []
+    },
+    "player": {
+      "playerId": 2777479,
+      "pno": 9,
+      "teamNumber": 1,
+      "firstName": "Bryceson",
+      "familyName": "Burns"
+    },
+    "coordinates": {
+      "x": 94.56999969482422,
+      "y": 44.75
+    },
+    "subType": "layup",
+    "qualifiers": [
+      "pointsinthepaint"
+    ],
+    "isSuccessful": 1,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "c4hh5nig6t"
+  },
+  {
+    "gameSourceId": 2868126,
+    "gameId": 2868126,
+    "period": 1,
+    "periodTime": 0,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "gameUuid": "c4hh5nig6t",
+    "type": "period"
+  }
+]
