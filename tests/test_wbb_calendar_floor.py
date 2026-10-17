@@ -27,3 +27,13 @@ def test_season_2000_is_refused_before_any_request(monkeypatch):
     monkeypatch.setattr(wbb_schedule, "_download_json", boom)
     with pytest.raises(SeasonNotFoundError, match="2001"):
         wbb_schedule.espn_wbb_calendar(season=2000)
+
+
+def test_ondays_false_returns_the_full_calendar(monkeypatch):
+    def on_days_helper(*a, **k):
+        raise AssertionError("ondays=False must not take the on-days route")
+
+    monkeypatch.setattr(wbb_schedule, "_download_json", lambda *a, **k: json.loads(FIX.read_text()))
+    monkeypatch.setattr(wbb_schedule, "__ondays_wbb_calendar", on_days_helper, raising=False)
+    cal = wbb_schedule.espn_wbb_calendar(season=2001, ondays=False)
+    assert cal.height == 125 and "dateURL" in cal.columns

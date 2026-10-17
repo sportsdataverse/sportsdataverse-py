@@ -231,7 +231,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     """
     if int(season) < 2001:  # ESPN serves a WBB calendar from 2000-01 (2001); 2000 and earlier answer an empty one
         raise SeasonNotFoundError("season cannot be less than 2001")
-    if ondays is not None:
+    if ondays:
         full_schedule = __ondays_wbb_calendar(season, **kwargs)
     else:
         url = f"http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates={season}"
