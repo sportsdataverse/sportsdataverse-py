@@ -1,0 +1,111 @@
+{
+  "data": {
+    "id": 11193,
+    "competition_team_id": 541,
+    "jersey": "13",
+    "weight": null,
+    "height": 183,
+    "active": true,
+    "player_position": {
+      "id": 2,
+      "name": "shooting_guard"
+    },
+    "player": {
+      "id": 4232,
+      "birthdate": "1999-11-23",
+      "facebook": null,
+      "twitter": null,
+      "instagram": null,
+      "first_name": "Joel",
+      "last_name": "Murray",
+      "description": null,
+      "nationality_code": "USA",
+      "profile_image": {
+        "name": "Murray",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/O/8/O8pFLXETB7NHwnRZA0g0nitpP1788855016.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/O/8/small-O8pFLXETB7NHwnRZA0g0nitpP1788855016.png",
+          "medium": "https://bnxt.sportpress.info/storage/O/8/medium-O8pFLXETB7NHwnRZA0g0nitpP1788855016.png"
+        }
+      },
+      "created_at": "2024-08-28"
+    },
+    "competition_team": {
+      "id": 541,
+      "competition_id": 25,
+      "uu_team_id": 3,
+      "name": "Windrose Giants Antwerp",
+      "short_name": "ANT",
+      "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+      "club": {
+        "id": 1,
+        "name": "Belgium"
+      },
+      "team_logo": {
+        "name": "Antwerp",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+        }
+      },
+      "team_image": null,
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      },
+      "staffs": [],
+      "statistics": [],
+      "created_at": "2026-07-24"
+    },
+    "tagged_images": [],
+    "created_at": "2026-09-02",
+    "lastGameStatistics": {
+      "starter": true,
+      "minute": 27,
+      "foul": 4,
+      "defensive_foul": 5,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 3,
+      "two_point_all": 7,
+      "two_point_percent": 42.9,
+      "three_point_made": 2,
+      "three_point_all": 6,
+      "three_point_percent": 33.3,
+      "throw_made": 5,
+      "throw_all": 13,
+      "throw_percent": 38.46,
+      "free_throw_made": 0,
+      "free_throw_all": 1,
+      "free_throw_percent": 0,
+      "offensive_rebound": 0,
+      "defensive_rebound": 0,
+      "total_rebound": 0,
+      "block": 0,
+      "block_against": 0,
+      "turnover": 3,
+      "steal": 1,
+      "assist": 6,
+      "points": 12,
+      "value": 12,
+      "jersey": 13
+    }
+  }
+}

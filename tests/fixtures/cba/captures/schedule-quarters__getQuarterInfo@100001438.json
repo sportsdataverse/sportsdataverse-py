@@ -1,0 +1,21 @@
+{
+  "home": {
+    "oneScore": 24,
+    "twoScore": 25,
+    "threeScore": 35,
+    "fourScore": 29,
+    "fiveScore": null,
+    "sixScore": null,
+    "sevenScore": null
+  },
+  "visiting": {
+    "oneScore": 27,
+    "twoScore": 29,
+    "threeScore": 25,
+    "fourScore": 28,
+    "fiveScore": null,
+    "sixScore": null,
+    "sevenScore": null
+  },
+  "style": 1
+}

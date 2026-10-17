@@ -1,0 +1,68 @@
+{
+  "hostTeamBestData": [
+    {
+      "playerId": "555265",
+      "playerName": "刘炜",
+      "playerNo": "8",
+      "ctype": "assists",
+      "cvalue": "8",
+      "type": 0,
+      "teamId": null,
+      "seconds": 2088
+    },
+    {
+      "playerId": "100004236",
+      "playerName": "约翰-卢卡斯",
+      "playerNo": "1",
+      "ctype": "points",
+      "cvalue": "38",
+      "type": 0,
+      "teamId": null,
+      "seconds": 2423
+    },
+    {
+      "playerId": "958794",
+      "playerName": "赛义德-阿巴斯",
+      "playerNo": "23",
+      "ctype": "rebounds",
+      "cvalue": "17",
+      "type": 0,
+      "teamId": null,
+      "seconds": 2571
+    }
+  ],
+  "guestTeamBestData": [
+    {
+      "playerId": "100004152",
+      "playerName": "迈隆-阿伦",
+      "playerNo": "45",
+      "ctype": "assists",
+      "cvalue": "7",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2046
+    },
+    {
+      "playerId": "100004241",
+      "playerName": "查尔斯-盖恩斯",
+      "playerNo": "34",
+      "ctype": "points",
+      "cvalue": "41",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2274
+    },
+    {
+      "playerId": "100004241",
+      "playerName": "查尔斯-盖恩斯",
+      "playerNo": "34",
+      "ctype": "rebounds",
+      "cvalue": "17",
+      "type": 2,
+      "teamId": null,
+      "seconds": 2274
+    }
+  ],
+  "hostBestPlayer": null,
+  "guestBestPlayer": null
+}

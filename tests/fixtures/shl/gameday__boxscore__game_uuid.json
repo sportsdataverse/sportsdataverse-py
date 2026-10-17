@@ -1,0 +1,375 @@
+{
+  "dataColumns": [
+    {
+      "name": "NR",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "Player",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "LINE",
+      "type": "string",
+      "highlighted": false,
+      "group": ""
+    }
+  ],
+  "players": {
+    "homeTeamValue": {
+      "1115": {
+        "fullName": "Nicklas Lasu",
+        "firstName": "Nicklas",
+        "lastName": "Lasu",
+        "extIds": [
+          {
+            "extId": 1115
+          }
+        ]
+      },
+      "1332": {
+        "fullName": "Henrik Tömmernes",
+        "firstName": "Henrik",
+        "lastName": "Tömmernes",
+        "extIds": [
+          {
+            "extId": 1332
+          }
+        ]
+      },
+      "1639": {
+        "fullName": "Erik Thorell",
+        "firstName": "Erik",
+        "lastName": "Thorell",
+        "extIds": [
+          {
+            "extId": 1639
+          }
+        ]
+      }
+    },
+    "awayTeamValue": {
+      "2364": {
+        "fullName": "Jakub Vrana",
+        "firstName": "Jakub",
+        "lastName": "Vrana",
+        "extIds": [
+          {
+            "extId": 2364
+          }
+        ]
+      },
+      "2404": {
+        "fullName": "Robin Kovacs",
+        "firstName": "Robin",
+        "lastName": "Kovacs",
+        "extIds": [
+          {
+            "extId": 2404
+          }
+        ]
+      },
+      "2558": {
+        "fullName": "Theodor Lennström",
+        "firstName": "Theodor",
+        "lastName": "Lennström",
+        "extIds": [
+          {
+            "extId": 2558
+          }
+        ]
+      }
+    }
+  },
+  "stats": {
+    "homeTeamValue": [
+      {
+        "NR": 7,
+        "POS": "LD",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "PPG": 0,
+        "SW": 2,
+        "PIM": 0,
+        "SOG": 2,
+        "PPSOG": 0,
+        "+/-": 0,
+        "TOI": "22:21",
+        "Hits": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "FOPerc": 0,
+        "info": {
+          "period": 0,
+          "playerId": 1332,
+          "teamId": "FHC",
+          "team": "home"
+        }
+      },
+      {
+        "NR": 12,
+        "POS": "RW",
+        "LINE": 1,
+        "G": 0,
+        "A": 1,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 1,
+        "PPSOG": 0,
+        "+/-": 1,
+        "TOI": "23:47",
+        "Hits": 3,
+        "FOW": 1,
+        "FOL": 1,
+        "FOPerc": 50,
+        "info": {
+          "period": 0,
+          "playerId": 2004,
+          "teamId": "FHC",
+          "team": "home"
+        }
+      },
+      {
+        "NR": 21,
+        "POS": "LW",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "PPG": 0,
+        "SW": 1,
+        "PIM": 0,
+        "SOG": 4,
+        "PPSOG": 0,
+        "+/-": 1,
+        "TOI": "20:30",
+        "Hits": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "FOPerc": 0,
+        "info": {
+          "period": 0,
+          "playerId": 5639,
+          "teamId": "FHC",
+          "team": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 21,
+        "POS": "LW",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "PPG": 0,
+        "SW": 1,
+        "PIM": 0,
+        "SOG": 2,
+        "PPSOG": 0,
+        "+/-": 0,
+        "TOI": "18:21",
+        "Hits": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "FOPerc": 0,
+        "info": {
+          "period": 0,
+          "playerId": 2609,
+          "teamId": "LHC",
+          "team": "away"
+        }
+      },
+      {
+        "NR": 23,
+        "POS": "RW",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 0,
+        "PPSOG": 0,
+        "+/-": 0,
+        "TOI": "17:19",
+        "Hits": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "FOPerc": 0,
+        "info": {
+          "period": 0,
+          "playerId": 2404,
+          "teamId": "LHC",
+          "team": "away"
+        }
+      },
+      {
+        "NR": 26,
+        "POS": "RD",
+        "LINE": 1,
+        "G": 0,
+        "A": 0,
+        "PPG": 0,
+        "SW": 0,
+        "PIM": 0,
+        "SOG": 5,
+        "PPSOG": 0,
+        "+/-": -1,
+        "TOI": "18:16",
+        "Hits": 0,
+        "FOW": 0,
+        "FOL": 0,
+        "FOPerc": 0,
+        "info": {
+          "period": 0,
+          "playerId": 6454,
+          "teamId": "LHC",
+          "team": "away"
+        }
+      }
+    ]
+  },
+  "provider": "statnet",
+  "gkStats": {
+    "homeTeamValue": [
+      {
+        "NR": 1,
+        "POS": "GK",
+        "LINE": 1,
+        "GA": 1,
+        "SOGA": 29,
+        "SPGA": 14,
+        "SVS": 28,
+        "SVS%": "0.96551724137931039",
+        "info": {
+          "period": 0,
+          "playerId": 2427,
+          "teamId": "FHC",
+          "team": "home"
+        }
+      },
+      {
+        "NR": 30,
+        "POS": "GK",
+        "LINE": 2,
+        "GA": 0,
+        "SOGA": 0,
+        "SPGA": 0,
+        "SVS": 0,
+        "SVS%": 0,
+        "info": {
+          "period": 0,
+          "playerId": 6154,
+          "teamId": "FHC",
+          "team": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 31,
+        "POS": "GK",
+        "LINE": 1,
+        "GA": 2,
+        "SOGA": 31,
+        "SPGA": 9,
+        "SVS": 29,
+        "SVS%": "0.93548387096774188",
+        "info": {
+          "period": 0,
+          "playerId": 3858,
+          "teamId": "LHC",
+          "team": "away"
+        }
+      },
+      {
+        "NR": 36,
+        "POS": "GK",
+        "LINE": 2,
+        "GA": 0,
+        "SOGA": 0,
+        "SPGA": 0,
+        "SVS": 0,
+        "SVS%": 0,
+        "info": {
+          "period": 0,
+          "playerId": 5596,
+          "teamId": "LHC",
+          "team": "away"
+        }
+      }
+    ]
+  },
+  "gkDataColumns": [
+    {
+      "name": "POS",
+      "type": "integer",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "LINE",
+      "type": "integer",
+      "highlighted": false,
+      "group": ""
+    },
+    {
+      "name": "NR",
+      "type": "integer",
+      "highlighted": false,
+      "group": ""
+    }
+  ],
+  "goalkeepers": {
+    "homeTeamValue": {
+      "2427": {
+        "fullName": "Lars Johansson",
+        "firstName": "Lars",
+        "lastName": "Johansson",
+        "extIds": [
+          {
+            "extId": 2427
+          }
+        ]
+      },
+      "6154": {
+        "fullName": "Tobias Normann",
+        "firstName": "Tobias",
+        "lastName": "Normann",
+        "extIds": [
+          {
+            "extId": 6154
+          }
+        ]
+      }
+    },
+    "awayTeamValue": {
+      "3858": {
+        "fullName": "Jesper Myrenberg",
+        "firstName": "Jesper",
+        "lastName": "Myrenberg",
+        "extIds": [
+          {
+            "extId": 3858
+          }
+        ]
+      },
+      "5596": {
+        "fullName": "Waltteri Ignatjew",
+        "firstName": "Waltteri",
+        "lastName": "Ignatjew",
+        "extIds": [
+          {
+            "extId": 5596
+          }
+        ]
+      }
+    }
+  }
+}

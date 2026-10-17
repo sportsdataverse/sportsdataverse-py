@@ -1,0 +1,16 @@
+[
+ "/{websiteId}/entities",
+ "/{websiteId}/entity_detail",
+ "/{websiteId}/fixture_detail",
+ "/{websiteId}/fixtures",
+ "/{websiteId}/fixtures_ribbon",
+ "/{websiteId}/person_detail",
+ "/{websiteId}/persons",
+ "/{websiteId}/standings",
+ "/{websiteId}/standings_fragment",
+ "/{websiteId}/statistics_competition_entities",
+ "/{websiteId}/statistics_competition_persons",
+ "/{websiteId}/statistics_entities",
+ "/{websiteId}/statistics_leaders",
+ "/{websiteId}/statistics_persons"
+]

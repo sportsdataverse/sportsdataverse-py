@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: gid
+  type: integer
+- description: ''
+  name: period
+  type: character
+- description: ''
+  name: period_no
+  type: integer
+- description: ''
+  name: home_points
+  type: integer
+- description: ''
+  name: away_points
+  type: integer
+kind: dataframe
+schema: pleague_periods

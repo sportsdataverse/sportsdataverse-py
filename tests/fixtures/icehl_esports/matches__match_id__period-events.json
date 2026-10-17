@@ -1,0 +1,510 @@
+{
+  "last_event_time": 3600,
+  "periods": {
+    "1": {
+      "start": "2026-09-18 18:30:37",
+      "end": "2026-09-18 19:04:10"
+    },
+    "2": {
+      "start": "2026-09-18 19:21:21",
+      "end": "2026-09-18 19:51:34"
+    },
+    "3": {
+      "start": "2026-09-18 20:08:45",
+      "end": "2026-09-18 20:41:53"
+    },
+    "overtime": {
+      "start": null,
+      "end": null
+    }
+  },
+  "1": [
+    {
+      "time": 0,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 34454,
+        "team": "home",
+        "time": 0,
+        "player": {
+          "playerId": 1094,
+          "matchPlayerId": 318599,
+          "jersey": 1,
+          "name": "Bence",
+          "surname": "Balizs"
+        },
+        "outgoingGoalkeeper": null
+      }
+    },
+    {
+      "time": 434,
+      "type": "goal",
+      "data": {
+        "id": 43764,
+        "team": "visitor",
+        "currentScore": "0:1",
+        "realTime": "2026-09-18 18:39:38",
+        "scoreboardTime": 434,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 2938,
+          "matchPlayerId": 318614,
+          "jersey": 60,
+          "name": "Clayton",
+          "surname": "Kirichenko"
+        },
+        "assistants": [
+          {
+            "playerId": 4795,
+            "matchPlayerId": 318623,
+            "jersey": 92,
+            "name": "Joshua Darren",
+            "surname": "Lawrence"
+          },
+          {
+            "playerId": 3531,
+            "matchPlayerId": 318628,
+            "jersey": 11,
+            "name": "Marly",
+            "surname": "Quince"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 3268,
+              "matchPlayerId": 318607,
+              "jersey": 61,
+              "name": "Lukáš",
+              "surname": "Horák"
+            },
+            {
+              "playerId": 2938,
+              "matchPlayerId": 318614,
+              "jersey": 60,
+              "name": "Clayton",
+              "surname": "Kirichenko"
+            },
+            {
+              "playerId": 4795,
+              "matchPlayerId": 318623,
+              "jersey": 92,
+              "name": "Joshua Darren",
+              "surname": "Lawrence"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 1094,
+              "matchPlayerId": 318599,
+              "jersey": 1,
+              "name": "Bence",
+              "surname": "Balizs"
+            },
+            {
+              "playerId": 4108,
+              "matchPlayerId": 318586,
+              "jersey": 11,
+              "name": "Topi",
+              "surname": "Rönni"
+            },
+            {
+              "playerId": 4113,
+              "matchPlayerId": 318592,
+              "jersey": 23,
+              "name": "Zétény",
+              "surname": "Hadobás"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 460,
+      "type": "penalty",
+      "data": {
+        "id": 78486,
+        "team": "visitor",
+        "createTime": 460,
+        "disciplinedPlayer": {
+          "playerId": 3531,
+          "matchPlayerId": 318628,
+          "jersey": 11,
+          "name": "Marly",
+          "surname": "Quince"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-09-18 16:41:40",
+            "scoreboardTime": 460
+          },
+          "to": {
+            "realTime": "2026-09-18 18:45:07",
+            "scoreboardTime": 534
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "TRIP"
+      }
+    }
+  ],
+  "2": [
+    {
+      "time": 1756,
+      "type": "goal",
+      "data": {
+        "id": 43770,
+        "team": "visitor",
+        "currentScore": "1:3",
+        "realTime": "2026-09-18 19:34:38",
+        "scoreboardTime": 1756,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 3531,
+          "matchPlayerId": 318628,
+          "jersey": 11,
+          "name": "Marly",
+          "surname": "Quince"
+        },
+        "assistants": [
+          {
+            "playerId": 3270,
+            "matchPlayerId": 318624,
+            "jersey": 8,
+            "name": "Marcel",
+            "surname": "Mahkovec"
+          },
+          {
+            "playerId": 4944,
+            "matchPlayerId": 318616,
+            "jersey": 4,
+            "name": "Colin Reid",
+            "surname": "McNeill"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 3268,
+              "matchPlayerId": 318607,
+              "jersey": 61,
+              "name": "Lukáš",
+              "surname": "Horák"
+            },
+            {
+              "playerId": 3531,
+              "matchPlayerId": 318628,
+              "jersey": 11,
+              "name": "Marly",
+              "surname": "Quince"
+            },
+            {
+              "playerId": 3270,
+              "matchPlayerId": 318624,
+              "jersey": 8,
+              "name": "Marcel",
+              "surname": "Mahkovec"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 1094,
+              "matchPlayerId": 318599,
+              "jersey": 1,
+              "name": "Bence",
+              "surname": "Balizs"
+            },
+            {
+              "playerId": 4111,
+              "matchPlayerId": 318585,
+              "jersey": 7,
+              "name": "Jesper",
+              "surname": "Lindgren"
+            },
+            {
+              "playerId": 4108,
+              "matchPlayerId": 318586,
+              "jersey": 11,
+              "name": "Topi",
+              "surname": "Rönni"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 1851,
+      "type": "penalty",
+      "data": {
+        "id": 78497,
+        "team": "home",
+        "createTime": 1851,
+        "disciplinedPlayer": {
+          "playerId": 4701,
+          "matchPlayerId": 318601,
+          "jersey": 62,
+          "name": "David",
+          "surname": "Silye"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-09-18 19:37:52",
+            "scoreboardTime": 1851
+          },
+          "to": {
+            "realTime": "2026-09-18 19:39:52",
+            "scoreboardTime": 1965
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "HOOK"
+      }
+    },
+    {
+      "time": 1965,
+      "type": "goal",
+      "data": {
+        "id": 43773,
+        "team": "visitor",
+        "currentScore": "1:4",
+        "realTime": "2026-09-18 19:40:28",
+        "scoreboardTime": 1965,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 1078,
+          "matchPlayerId": 318631,
+          "jersey": 9,
+          "name": "Jan",
+          "surname": "Urbas"
+        },
+        "assistants": [
+          {
+            "playerId": 2938,
+            "matchPlayerId": 318614,
+            "jersey": 60,
+            "name": "Clayton",
+            "surname": "Kirichenko"
+          },
+          {
+            "playerId": 3270,
+            "matchPlayerId": 318624,
+            "jersey": 8,
+            "name": "Marcel",
+            "surname": "Mahkovec"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 3268,
+              "matchPlayerId": 318607,
+              "jersey": 61,
+              "name": "Lukáš",
+              "surname": "Horák"
+            },
+            {
+              "playerId": 1078,
+              "matchPlayerId": 318631,
+              "jersey": 9,
+              "name": "Jan",
+              "surname": "Urbas"
+            },
+            {
+              "playerId": 2938,
+              "matchPlayerId": 318614,
+              "jersey": 60,
+              "name": "Clayton",
+              "surname": "Kirichenko"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 1094,
+              "matchPlayerId": 318599,
+              "jersey": 1,
+              "name": "Bence",
+              "surname": "Balizs"
+            },
+            {
+              "playerId": 4111,
+              "matchPlayerId": 318585,
+              "jersey": 7,
+              "name": "Jesper",
+              "surname": "Lindgren"
+            },
+            {
+              "playerId": 4109,
+              "matchPlayerId": 318582,
+              "jersey": 25,
+              "name": "Aku",
+              "surname": "Kestila"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "3": [
+    {
+      "time": 2535,
+      "type": "penalty",
+      "data": {
+        "id": 78506,
+        "team": "visitor",
+        "createTime": 2535,
+        "disciplinedPlayer": {
+          "playerId": 4948,
+          "matchPlayerId": 318620,
+          "jersey": 37,
+          "name": "Christopher Russell",
+          "surname": "Douglas"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-09-18 20:11:45",
+            "scoreboardTime": 2535
+          },
+          "to": {
+            "realTime": "2026-09-18 20:13:45",
+            "scoreboardTime": 2655
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "SLASH"
+      }
+    },
+    {
+      "time": 2710,
+      "type": "goal",
+      "data": {
+        "id": 43781,
+        "team": "home",
+        "currentScore": "3:4",
+        "realTime": "2026-09-18 20:16:39",
+        "scoreboardTime": 2710,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 4109,
+          "matchPlayerId": 318582,
+          "jersey": 25,
+          "name": "Aku",
+          "surname": "Kestila"
+        },
+        "assistants": [
+          {
+            "playerId": 4700,
+            "matchPlayerId": 318600,
+            "jersey": 8,
+            "name": "Carter",
+            "surname": "Savoie"
+          },
+          {
+            "playerId": 4119,
+            "matchPlayerId": 318587,
+            "jersey": 13,
+            "name": "Rasmus",
+            "surname": "Bengtsson"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 1094,
+              "matchPlayerId": 318599,
+              "jersey": 1,
+              "name": "Bence",
+              "surname": "Balizs"
+            },
+            {
+              "playerId": 4109,
+              "matchPlayerId": 318582,
+              "jersey": 25,
+              "name": "Aku",
+              "surname": "Kestila"
+            },
+            {
+              "playerId": 4700,
+              "matchPlayerId": 318600,
+              "jersey": 8,
+              "name": "Carter",
+              "surname": "Savoie"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 3268,
+              "matchPlayerId": 318607,
+              "jersey": 61,
+              "name": "Lukáš",
+              "surname": "Horák"
+            },
+            {
+              "playerId": 4944,
+              "matchPlayerId": 318616,
+              "jersey": 4,
+              "name": "Colin Reid",
+              "surname": "McNeill"
+            },
+            {
+              "playerId": 525,
+              "matchPlayerId": 318627,
+              "jersey": 13,
+              "name": "Ziga",
+              "surname": "Pance"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 3447,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 34483,
+        "team": "home",
+        "time": 3447,
+        "player": null,
+        "outgoingGoalkeeper": {
+          "playerId": 1094,
+          "matchPlayerId": 318599,
+          "jersey": 1,
+          "name": "Bence",
+          "surname": "Balizs"
+        }
+      }
+    }
+  ],
+  "overtime": [],
+  "shootout": []
+}

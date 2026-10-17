@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: value
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: label
+  type: character
+kind: dataframe
+schema: shl_athlete_seasons

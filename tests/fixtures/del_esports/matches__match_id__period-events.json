@@ -1,0 +1,366 @@
+{
+  "1": [
+    {
+      "time": 0,
+      "type": "periodStart"
+    },
+    {
+      "time": 0,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 34559,
+        "team": "home",
+        "time": 0,
+        "player": {
+          "playerId": 1594,
+          "matchPlayerId": 274654,
+          "jersey": 60,
+          "name": "Joacim",
+          "surname": "Eriksson"
+        },
+        "outgoingGoalkeeper": null
+      }
+    },
+    {
+      "time": 338,
+      "type": "goal",
+      "data": {
+        "id": 27957,
+        "team": "home",
+        "currentScore": "1:0",
+        "realTime": "2026-10-11 16:38:57",
+        "scoreboardTime": 338,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 1705,
+          "matchPlayerId": 274655,
+          "jersey": 16,
+          "name": "Arkadiusz",
+          "surname": "Dziambor"
+        },
+        "assistants": [
+          {
+            "playerId": 1684,
+            "matchPlayerId": 274652,
+            "jersey": 19,
+            "name": "Håkon",
+            "surname": "Hänelt"
+          },
+          {
+            "playerId": 1850,
+            "matchPlayerId": 274656,
+            "jersey": 9,
+            "name": "Philip",
+            "surname": "Feist"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 1343,
+              "matchPlayerId": 274650,
+              "jersey": 78,
+              "name": "William",
+              "surname": "Weber"
+            },
+            {
+              "playerId": 1705,
+              "matchPlayerId": 274655,
+              "jersey": 16,
+              "name": "Arkadiusz",
+              "surname": "Dziambor"
+            },
+            {
+              "playerId": 1850,
+              "matchPlayerId": 274656,
+              "jersey": 9,
+              "name": "Philip",
+              "surname": "Feist"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 4328,
+              "matchPlayerId": 274694,
+              "jersey": 44,
+              "name": "Trevor",
+              "surname": "Carrick"
+            },
+            {
+              "playerId": 3557,
+              "matchPlayerId": 274687,
+              "jersey": 24,
+              "name": "Ryan",
+              "surname": "Murphy"
+            },
+            {
+              "playerId": 3556,
+              "matchPlayerId": 274686,
+              "jersey": 12,
+              "name": "Brady",
+              "surname": "Ferguson"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "2": [
+    {
+      "time": 1200,
+      "type": "periodStart"
+    },
+    {
+      "time": 1686,
+      "type": "penalty",
+      "data": {
+        "id": 40716,
+        "team": "home",
+        "createTime": 1686,
+        "disciplinedPlayer": {
+          "playerId": 1705,
+          "matchPlayerId": 274655,
+          "jersey": 16,
+          "name": "Arkadiusz",
+          "surname": "Dziambor"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 17:39:19",
+            "scoreboardTime": 1986
+          },
+          "to": {
+            "realTime": "2026-10-11 17:59:19",
+            "scoreboardTime": 3600
+          }
+        },
+        "duration": 1200,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "BOARD"
+      }
+    },
+    {
+      "time": 1824,
+      "type": "goal",
+      "data": {
+        "id": 27960,
+        "team": "visitor",
+        "currentScore": "1:1",
+        "realTime": "2026-10-11 17:39:48",
+        "scoreboardTime": 1824,
+        "balance": "PP1",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 139,
+          "matchPlayerId": 274669,
+          "jersey": 52,
+          "name": "Patrick",
+          "surname": "Hager"
+        },
+        "assistants": [
+          {
+            "playerId": 3275,
+            "matchPlayerId": 274677,
+            "jersey": 8,
+            "name": "Tobias",
+            "surname": "Rieder"
+          },
+          {
+            "playerId": 3426,
+            "matchPlayerId": 274685,
+            "jersey": 17,
+            "name": "Taro",
+            "surname": "Hirose"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 3275,
+              "matchPlayerId": 274677,
+              "jersey": 8,
+              "name": "Tobias",
+              "surname": "Rieder"
+            },
+            {
+              "playerId": 3557,
+              "matchPlayerId": 274687,
+              "jersey": 24,
+              "name": "Ryan",
+              "surname": "Murphy"
+            },
+            {
+              "playerId": 139,
+              "matchPlayerId": 274669,
+              "jersey": 52,
+              "name": "Patrick",
+              "surname": "Hager"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 4335,
+              "matchPlayerId": 274666,
+              "jersey": 6,
+              "name": "Alexander",
+              "surname": "Peters"
+            },
+            {
+              "playerId": 478,
+              "matchPlayerId": 274644,
+              "jersey": 7,
+              "name": "Dominik",
+              "surname": "Bittner"
+            },
+            {
+              "playerId": 1382,
+              "matchPlayerId": 274649,
+              "jersey": 64,
+              "name": "Boaz",
+              "surname": "Bassen"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "3": [
+    {
+      "time": 2400,
+      "type": "periodStart"
+    },
+    {
+      "time": 2865,
+      "type": "goal",
+      "data": {
+        "id": 27968,
+        "team": "visitor",
+        "currentScore": "1:4",
+        "realTime": "2026-10-11 18:24:50",
+        "scoreboardTime": 2865,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 550,
+          "matchPlayerId": 274674,
+          "jersey": 21,
+          "name": "Dominik",
+          "surname": "Kahun"
+        },
+        "assistants": [
+          {
+            "playerId": 3426,
+            "matchPlayerId": 274685,
+            "jersey": 17,
+            "name": "Taro",
+            "surname": "Hirose"
+          },
+          {
+            "playerId": 4142,
+            "matchPlayerId": 274688,
+            "jersey": 22,
+            "name": "Ville",
+            "surname": "Pokka"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 550,
+              "matchPlayerId": 274674,
+              "jersey": 21,
+              "name": "Dominik",
+              "surname": "Kahun"
+            },
+            {
+              "playerId": 4327,
+              "matchPlayerId": 274693,
+              "jersey": 3,
+              "name": "Lukas",
+              "surname": "Klok"
+            },
+            {
+              "playerId": 16,
+              "matchPlayerId": 274672,
+              "jersey": 55,
+              "name": "Fabio",
+              "surname": "Wagner"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 4335,
+              "matchPlayerId": 274666,
+              "jersey": 6,
+              "name": "Alexander",
+              "surname": "Peters"
+            },
+            {
+              "playerId": 1850,
+              "matchPlayerId": 274656,
+              "jersey": 9,
+              "name": "Philip",
+              "surname": "Feist"
+            },
+            {
+              "playerId": 1887,
+              "matchPlayerId": 274657,
+              "jersey": 72,
+              "name": "Niklas",
+              "surname": "Hübner"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 3189,
+      "type": "penalty",
+      "data": {
+        "id": 40725,
+        "team": "visitor",
+        "createTime": 3189,
+        "disciplinedPlayer": {
+          "playerId": 551,
+          "matchPlayerId": 274673,
+          "jersey": 93,
+          "name": "Maximilian",
+          "surname": "Kastner"
+        },
+        "replacedPlayer": null,
+        "fouledPlayer": null,
+        "time": {
+          "from": {
+            "realTime": "2026-10-11 18:34:14",
+            "scoreboardTime": 3189
+          },
+          "to": {
+            "realTime": "2026-10-11 18:36:14",
+            "scoreboardTime": 3309
+          }
+        },
+        "duration": 120,
+        "shooting": false,
+        "disciplined_functionary": false,
+        "disciplined_bm": false,
+        "codename": "DELAY"
+      }
+    }
+  ],
+  "overtime": [],
+  "shootout": []
+}

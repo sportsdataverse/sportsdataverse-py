@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: nationality
+  type: character
+- description: ''
+  name: nationality_code
+  type: character
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: prefix
+  type: character
+- description: ''
+  name: season_id
+  type: integer
+kind: dataframe
+schema: tbf_players

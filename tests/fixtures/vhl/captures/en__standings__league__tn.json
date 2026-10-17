@@ -1,0 +1,55 @@
+{
+  "tournament": {
+    "tn": 1374,
+    "label": "25/26 | Regular Season",
+    "season": "25/26",
+    "stage": "Regular Season"
+  },
+  "rows": [
+    {
+      "rank": 1,
+      "team": "Metallurg",
+      "team_season_id": 15017,
+      "games_played": 62,
+      "wins": 40,
+      "ot_wins": 5,
+      "so_wins": 6,
+      "so_losses": 1,
+      "ot_losses": 3,
+      "losses": 7,
+      "goals_for": 226,
+      "goals_against": 131,
+      "points": 106
+    },
+    {
+      "rank": 2,
+      "team": "Ugra",
+      "team_season_id": 15035,
+      "games_played": 62,
+      "wins": 39,
+      "ot_wins": 4,
+      "so_wins": 4,
+      "so_losses": 5,
+      "ot_losses": 2,
+      "losses": 8,
+      "goals_for": 178,
+      "goals_against": 93,
+      "points": 101
+    },
+    {
+      "rank": 3,
+      "team": "Neftyanik",
+      "team_season_id": 15019,
+      "games_played": 62,
+      "wins": 34,
+      "ot_wins": 3,
+      "so_wins": 5,
+      "so_losses": 6,
+      "ot_losses": 3,
+      "losses": 11,
+      "goals_for": 220,
+      "goals_against": 133,
+      "points": 93
+    }
+  ]
+}

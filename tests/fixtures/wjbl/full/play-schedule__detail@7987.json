@@ -1,0 +1,42 @@
+{
+    "play_schedule_id": 7987,
+    "game_status": "fixed",
+    "home": {
+        "team_id": 13,
+        "season_team_name": "トヨタ自動車 アンテロープス",
+        "season_team_short_name": "トヨタ自動車",
+        "team_logo_image": "/static/images/base_team/Bs3ia3gEK6OX9YfmScdRJNCistrBTkx6.png",
+        "team_entry_flg": 1,
+        "season_team_area": null,
+        "free_text": "",
+        "winner_flg": -1,
+        "score": 66,
+        "score_p1": 19,
+        "score_p2": 5,
+        "score_p3": 17,
+        "score_p4": 25,
+        "score_ot1": null,
+        "score_ot2": null,
+        "score_ot3": null,
+        "score_ot4": null
+    },
+    "away": {
+        "team_id": 12,
+        "season_team_name": "デンソー アイリス",
+        "season_team_short_name": "デンソー",
+        "team_logo_image": "/assets/img/team/iris.png",
+        "team_entry_flg": 1,
+        "season_team_area": null,
+        "free_text": "",
+        "winner_flg": 1,
+        "score": 75,
+        "score_p1": 22,
+        "score_p2": 17,
+        "score_p3": 17,
+        "score_p4": 19,
+        "score_ot1": null,
+        "score_ot2": null,
+        "score_ot3": null,
+        "score_ot4": null
+    }
+}

@@ -1,0 +1,194 @@
+[
+  {
+    "awayTeam": [
+      {
+        "jerseyNumber": 5,
+        "name": "強森",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 693,
+            "endTime": "0:27",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 721,
+            "startTime": "11:59"
+          },
+          {
+            "endQuarter": "Q3",
+            "endSeconds": 1994,
+            "endTime": "2:46",
+            "startQuarter": "Q3",
+            "startSeconds": 1440,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 11,
+        "name": "瓊斯",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 571,
+            "endTime": "2:29",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 693,
+            "startTime": "0:27"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1188,
+            "endTime": "4:12",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 8,
+        "name": "周桂羽",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 446,
+            "startTime": "4:34"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1024,
+            "endTime": "6:56",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1188,
+            "startTime": "4:12"
+          }
+        ],
+        "started": false
+      }
+    ],
+    "homeTeam": [
+      {
+        "jerseyNumber": 35,
+        "name": "辛巴",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 513,
+            "endTime": "3:27",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 713,
+            "endTime": "0:07",
+            "startQuarter": "Q1",
+            "startSeconds": 664,
+            "startTime": "0:56"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 992,
+            "endTime": "7:28",
+            "startQuarter": "Q2",
+            "startSeconds": 721,
+            "startTime": "11:59"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 12,
+        "name": "李家瑞",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 664,
+            "endTime": "0:56",
+            "startQuarter": "Q1",
+            "startSeconds": 513,
+            "startTime": "3:27"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 693,
+            "startTime": "0:27"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 721,
+            "endTime": "11:59",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": false
+      },
+      {
+        "jerseyNumber": 21,
+        "name": "伊波卡",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 693,
+            "endTime": "0:27",
+            "startQuarter": "Q1",
+            "startSeconds": 446,
+            "startTime": "4:34"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 713,
+            "startTime": "0:07"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 721,
+            "endTime": "11:59",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": false
+      }
+    ]
+  }
+]
