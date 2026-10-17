@@ -64082,7 +64082,7 @@ khl_player_stats:
 khl_playoff_bracket:
   club_id: khl.ru CLUB id (stable across seasons; joins webcaster team khl_id)
   conference: Conference (west / east)
-  game_ids: khl.ru game ids of the series, comma-joined
+  game_ids: khl.ru game ids of the series games
   name: Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration
   pair: Series number within the round
   round: Playoff round number

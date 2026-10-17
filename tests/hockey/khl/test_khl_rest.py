@@ -125,7 +125,13 @@ def test_an_empty_frame_concatenates_with_a_populated_one(ep):
 @pytest.mark.parametrize("ep", ENDPOINTS, ids=lambda e: e["short"])
 def test_parser_schema_is_the_committed_returns_schema(ep):
     schema = yaml.safe_load((SCHEMAS / f"{ep['short']}.yaml").read_text(encoding="utf-8"))
-    code = {"integer": pl.Int64, "numeric": pl.Float64, "character": pl.Utf8, "logical": pl.Boolean}
+    code = {
+        "integer": pl.Int64,
+        "numeric": pl.Float64,
+        "character": pl.Utf8,
+        "logical": pl.Boolean,
+        "list": pl.List(pl.Int64),
+    }
     assert P.SCHEMAS[schema["schema"]] == {c["name"]: code[c["type"]] for c in schema["columns"]}
 
 
@@ -303,3 +309,15 @@ def test_committed_schema_matches_the_parser(ep):
     parser = getattr(P, ep["parser"])
     body = _load(FULL) if ep["path"] == "/game/text/" else _load(fixture[parser])
     assert [c["name"] for c in schema["columns"]] == parser(body).columns
+
+
+def test_playoff_bracket_game_ids_are_a_list_of_int64() -> None:
+    df = P.parse_khl_playoff_bracket(_load("standings__playoff.json"))
+    assert df.schema["game_ids"] == pl.List(pl.Int64)
+    assert [901691, 901699] in df["game_ids"].to_list()
+    assert P.parse_khl_playoff_bracket({}).schema["game_ids"] == pl.List(pl.Int64)
+
+
+def test_null_data_body_is_a_zero_row_documented_frame() -> None:
+    df = P.parse_khl_playoff_bracket({"data": None})
+    assert df.height == 0 and df.schema == P.parse_khl_playoff_bracket({}).schema

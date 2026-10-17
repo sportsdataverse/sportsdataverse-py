@@ -242,7 +242,7 @@ def _typed(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _frame(rows: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
-    rows = [r for r in rows if r]
+    rows = [r for r in rows if r and any(v is not None for v in r.values())]  # {"data": null} -> no row
     if not rows:
         return pl.DataFrame()
     try:
