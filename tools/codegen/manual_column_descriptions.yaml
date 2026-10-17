@@ -45769,14 +45769,14 @@ nba_live_pbp:
   y: Shot location across the court's width on a 0-100 scale, 50 at the baskets' centerline; populated only on 2pt/3pt shots, like y_legacy.
   y_legacy: Shot y-coordinate in the legacy stats.nba.com coordinate system; populated only on 2pt/3pt shots (fouls and blocks carry a court zone in area/area_detail instead).
 score_win_prob:
-  pregame_home_prob: 'Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone.'
-  prior_source: 'Where the prior came from: "spread" (a real line) or "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model).'
-  wp_regime: '"reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame.'
+  pregame_home_prob: 'Pregame home win probability fed to the in-game model: Phi(home_team_spread / margin_sd) when a line existed, else home-court advantage alone (0.5 at a neutral site without a line).'
+  prior_source: 'Where the prior came from: "spread" (a real line), "hfa" (no line; home-court advantage only, so the default +2.5 never reaches the model) or "neutral" (no line at a neutral site; prior 0.5).'
+  wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
   home_win_prob: Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession).
   wp_delta: 'Change in home win probability from the previous play; the first play''s delta is measured from the pregame prior.'
 ot_adjusted_seconds:
-  wp_regime: '"reg" for regulation plays; "ot" for overtime plays, which are scored on the overtime period clock as a five-minute endgame.'
-  start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock on overtime plays.'
+  wp_regime: '"reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame.'
+  start_game_seconds_remaining: 'Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men''s college frames) on overtime plays.'
 shot_coordinates:
   x_legacy: Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays.
   y_legacy: Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays.
@@ -45784,21 +45784,21 @@ team_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   team_id: ESPN team id, the join key to the team box score.
   efg_pct: Effective field-goal percentage, (FGM + 0.5 x 3PM) / FGA; null with no attempts.
-  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive.
+  tov_pct: Turnover rate, total turnovers / (FGA + 0.44 x FTA + total turnovers); null when the denominator is not positive or the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers).
   orb_pct: Offensive rebound rate, own ORB / (own ORB + opponent DRB); null when the denominator is not positive.
   ft_rate: Free-throw rate, FTA / FGA; null with no attempts.
-  possessions: 'Oliver''s possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams.'
+  possessions: 'Oliver''s possession estimate (FGA - ORB + total turnovers + 0.44 x FTA) averaged over the two teams; null when the box records no turnovers (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers).'
   off_rtg: Points scored per 100 possessions; null when possessions are not positive.
   def_rtg: Points allowed per 100 possessions; null when possessions are not positive.
-  pace: Possessions per 48 minutes (overtime minutes included in the denominator).
-  total_turnovers: The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 total is repaired to the player count.
-  game_minutes: 'Minutes played in the game: 48 plus five per overtime.'
+  pace: Possessions per regulation length (48 minutes NBA; 40 WNBA, MBB and WBB), overtime minutes included in the denominator; null when the box records no turnovers.
+  total_turnovers: 'The team turnover count every rate above uses, player plus team turnovers; ESPN''s doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers).'
+  game_minutes: 'Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime.'
 player_game_rates:
   game_id: ESPN game id, the join key to the play-by-play and box-score frames.
   athlete_id: ESPN athlete id, the join key to the player box score.
   team_id: ESPN team id, the join key to the team box score.
   ts_pct: True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP.
-  usg_pct: Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes or a DNP.
+  usg_pct: 'Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers).'
 nba_l2m_games:
   game_id: 10-digit NBA game id (zero-padded), parsed from the season listing page's report link.
   label: Matchup label text scraped from the listing page link, e.g. "Thunder 125, Rockets 124 (2OT)".

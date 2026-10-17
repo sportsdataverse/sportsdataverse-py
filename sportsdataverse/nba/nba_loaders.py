@@ -3293,7 +3293,7 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/nba_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -3325,7 +3325,7 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_keys         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -3334,8 +3334,8 @@ def load_nba_player_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/nba_crosswalk/nba_player_crosswalk_{season}.parquet"
         )
