@@ -132,6 +132,19 @@ def _empty_frame(return_as_pandas: bool = False):
 # ===========================================================================
 
 
+def _broadcast_names(comp: dict) -> str:
+    """Every network name of a competition, feed order, deduped, "/"-joined ("ESPNU/ESPN+").
+
+    A broadcast entry without ``names`` contributes its ``market``; no broadcasts gives ``""``.
+    """
+    out: list = []
+    for b in comp.get("broadcasts") or []:
+        for n in b.get("names") or [b.get("market")]:
+            if n and n not in out:
+                out.append(n)
+    return "/".join(out)
+
+
 def _scoreboard_event_parsing(event: dict) -> dict:
     """Flatten one ESPN scoreboard event into a single row keyed by game_id.
 
@@ -192,9 +205,7 @@ def _scoreboard_event_parsing(event: dict) -> dict:
         "venue_city": (venue.get("address") or {}).get("city"),
         "venue_state": (venue.get("address") or {}).get("state"),
         "venue_indoor": venue.get("indoor"),
-        "broadcast": ", ".join(
-            b.get("names", [""])[0] if b.get("names") else b.get("market", "") for b in (comp.get("broadcasts") or [])
-        ),
+        "broadcast": _broadcast_names(comp),
         "note": note_text,
         "home_id": h["id"],
         "home_name": h["name"],
