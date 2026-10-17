@@ -1,0 +1,303 @@
+{
+  "status": "OK",
+  "data": {
+    "items": [
+      {
+        "id": 29150,
+        "competitions": [
+          {
+            "id": 23215,
+            "competitionId": 9,
+            "competitionName": "Liga NovaKBM",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 4265,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 16
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/215251/",
+        "dateTime": "2015-10-17T17:00:00Z",
+        "attendance": 550,
+        "sportHallName": "ŠD Rogaška Slatina",
+        "sportHallAddress": "Kozjanskega odreda 4, 3250 Rogaška Slatina, Slovenija",
+        "sportHallId": 189,
+        "firstTeamId": 58287,
+        "firstTeamTeamId": 4225,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 58288,
+        "secondTeamTeamId": 5157,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Rogaška",
+        "firstTeamShortName": "Rogaška",
+        "secondTeamName": "Sixt Primorska",
+        "secondTeamShortName": "Sixt Primorska",
+        "firstTeamScore": 83,
+        "secondTeamScore": 68,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "60e0340d-b00f-4db3-ad77-95cc74370ab3",
+        "firstTeamCode": "ROG",
+        "secondTeamCode": "XXX",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 399,
+          "person": {
+            "id": 58007,
+            "firstName": "Mario",
+            "lastName": "Majkić",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 452,
+          "person": {
+            "id": 96188,
+            "firstName": "Matej",
+            "lastName": "Špendl",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee3": {
+          "id": 101,
+          "person": {
+            "id": 57297,
+            "firstName": "Blaž",
+            "lastName": "Zupančič",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "commissioner": {
+          "id": 4,
+          "person": {
+            "id": 95777,
+            "firstName": "Aleš",
+            "lastName": "Rom",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      },
+      {
+        "id": 29158,
+        "competitions": [
+          {
+            "id": 23223,
+            "competitionId": 9,
+            "competitionName": "Liga NovaKBM",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 4265,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 16
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/215249/",
+        "dateTime": "2015-10-17T17:30:00Z",
+        "attendance": 350,
+        "sportHallName": "ŠD Lucija",
+        "sportHallAddress": "Liminjanska cesta 78, 6320 Portorož, Slovenija",
+        "sportHallId": 162,
+        "firstTeamId": 58303,
+        "firstTeamTeamId": 4762,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 58304,
+        "secondTeamTeamId": 4179,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Portorož",
+        "firstTeamShortName": "Portorož",
+        "secondTeamName": "Zlatorog Laško",
+        "secondTeamShortName": "Zlatorog Laško",
+        "firstTeamScore": 66,
+        "secondTeamScore": 70,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "0d226b8c-0b2d-4a73-a0fd-78a781f42cb2",
+        "secondTeamLogoUuid": "e2d136a7-5b41-4f75-825c-01356ceef2ab",
+        "firstTeamCode": "POR",
+        "secondTeamCode": "ZLA",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 62,
+          "person": {
+            "id": 95782,
+            "firstName": "Andrej",
+            "lastName": "Lovšin",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 304,
+          "person": {
+            "id": 96089,
+            "firstName": "Jure",
+            "lastName": "FIŠER",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee3": {
+          "id": 731,
+          "person": {
+            "id": 96384,
+            "firstName": "Uroš",
+            "lastName": "KOLAR",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "commissioner": {
+          "id": 95,
+          "person": {
+            "id": 95860,
+            "firstName": "Tomo",
+            "lastName": "Kovačič",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      },
+      {
+        "id": 29161,
+        "competitions": [
+          {
+            "id": 23226,
+            "competitionId": 9,
+            "competitionName": "Liga NovaKBM",
+            "competitionType": "LEAGUE",
+            "competitionPhaseId": 4265,
+            "competitionPhaseName": "1. del",
+            "transferred": false,
+            "seasonId": 16
+          }
+        ],
+        "round": 1,
+        "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/215250/",
+        "dateTime": "2015-10-17T18:00:00Z",
+        "attendance": 700,
+        "sportHallName": "ŠD Domžale",
+        "sportHallAddress": "Mestni trg 1, 1230 Domžale, Slovenija",
+        "sportHallId": 139,
+        "firstTeamId": 58309,
+        "firstTeamTeamId": 4115,
+        "isFirstTeamPlaceholder": false,
+        "secondTeamId": 58310,
+        "secondTeamTeamId": 4080,
+        "isSecondTeamPlaceholder": false,
+        "firstTeamName": "Helios Suns",
+        "firstTeamShortName": "Helios Suns",
+        "secondTeamName": "Elektra Šoštanj",
+        "secondTeamShortName": "Elektra Šoštanj",
+        "firstTeamScore": 134,
+        "secondTeamScore": 48,
+        "scoreInsertedManually": false,
+        "firstTeamLogoUuid": "ce68270c-327c-4e51-9091-d9fe83446aa2",
+        "secondTeamLogoUuid": "bf013c9e-3823-4d02-863b-9b434d9b9aab",
+        "firstTeamCode": "DOM",
+        "secondTeamCode": "ELE",
+        "liveStreams": [],
+        "streams": [],
+        "status": "FINISHED",
+        "conclusions": [],
+        "delegated": true,
+        "delegationChanges": [],
+        "moveRequests": [],
+        "referee1": {
+          "id": 780,
+          "person": {
+            "id": 96419,
+            "firstName": "Žiga",
+            "lastName": "Rener",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee2": {
+          "id": 515,
+          "person": {
+            "id": 48249,
+            "firstName": "Milan",
+            "lastName": "Španić",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "referee3": {
+          "id": 217,
+          "person": {
+            "id": 96029,
+            "firstName": "Goran",
+            "lastName": "Grbić",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        },
+        "commissioner": {
+          "id": 96,
+          "person": {
+            "id": 95861,
+            "firstName": "Tone",
+            "lastName": "Polak",
+            "addressesPostOfficeName": [
+              "<redacted>"
+            ],
+            "gender": "MALE"
+          },
+          "ranks": []
+        }
+      }
+    ],
+    "count": 0,
+    "offset": 0,
+    "limit": 0
+  }
+}

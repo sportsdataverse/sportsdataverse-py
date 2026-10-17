@@ -1,0 +1,353 @@
+api: tpbl
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these are the routes the tpbl.basketball site''s
+    own front end calls on api.tpbl.basketball (read from its JavaScript bundle).
+    The API is keyless and needs no headers; tpbl.basketball/robots.txt answers 200
+    with an empty body (no rules, no crawl-delay). ``tpbl_runtime`` still spaces requests
+    at least 1 s apart. SportsDataverse has not ruled on the site''s terms, so payloads
+    are not redistributed as release assets.'
+  - 'Coverage: three seasons so far (2024-25 = season 2025, to 2026-27 = season 2027,
+    whose regular season starts 2026-10-17). There is NO play-by-play route (none
+    of the site''s 131 JavaScript chunks calls one); the two shot lists carry court
+    coordinates only, with no shooter, game, quarter or time. Game wrappers serve
+    FINISHED games only (an unfinished game raises AssetFetchError). Names (teams
+    with their sponsor, venues, players, referees) are Traditional Chinese; the description
+    of each code column translates it.'
+  - 'Ids: every route takes TPBL''s own ids (season, division, team, game, player);
+    the gohoops_* ids belong to GoHoops, the stats platform behind the league, and
+    are echoed beside them. The box score keys its players by gohoops_roster_id (a
+    person registered with one squad in one season), not by the TPBL player id: join
+    tpbl_box_players to tpbl_roster on gohoops_roster_id. Season-keyed wrappers take
+    the END year and the runtime maps it to the API''s season id. Birth dates and
+    contact fields are never returned.'
+  - 'Scope checks: the box-score wrappers fetch the game detail first (one extra request)
+    and refuse a stats body whose teams, final scores, quarter count or player points
+    disagree with it; the season game list, roster and player game log are checked
+    against the object asked for. The two shot lists name no team, player or division
+    in the body, so they cannot be scoped. tpbl_games(verify=True) additionally checks
+    every division''s completed games against its standings (falling back to the team-filtered
+    lists for a division whose standings answer empty, as the 2024-25 playoffs do).
+    tpbl_standings raises NoDataError for such a division.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown
+    id, a season it does not list, an empty list such as the standings of a playoff
+    division).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (an unfinished game, a box score or list that disagrees with
+    the game it was asked for, an error envelope, a non-JSON body, a server error).'
+  raw_doc: 'the raw body (``dict``): the API''s JSON object, or a list body wrapped
+    as ``{''data'': [...]}``, plus ``_request`` (the season, game, division, team
+    or player asked for and the ids the runtime resolved)'
+  see_also:
+  - name: TPBL
+    note: the Taiwan Professional Basketball League site whose API these wrappers
+      read
+    url: https://tpbl.basketball
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_tpbl_seasons
+  path: /seasons
+  returns_schema: native/tpbl/seasons
+  short: seasons
+  summary: Every TPBL season with its TPBL and GoHoops ids, label, status and date
+    window.
+- example_args:
+    season: 2026
+  parser: parse_tpbl_divisions
+  path: /events/{season}/divisions
+  path_params:
+  - description: 'Required. Season END year (2026 = the 2025-26 season; 2025 is the
+      first). The API keys a season by its own small integer (1, 2, 3 = 2024-25, 2025-26,
+      2026-27; the event id of /events/{id}/* is the same number): ``tpbl_runtime``
+      reads /seasons once and sends that id, so the example URL shows the year. A
+      year the list lacks raises NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/tpbl/divisions
+  short: divisions
+  summary: The divisions (preseason, regular season, play-in, playoffs, finals) of
+    one season.
+- example_args:
+    season: 2026
+  parser: parse_tpbl_teams
+  path: /events/{season}/teams
+  path_params:
+  - description: 'Required. Season END year (2026 = the 2025-26 season; 2025 is the
+      first). The API keys a season by its own small integer (1, 2, 3 = 2024-25, 2025-26,
+      2026-27; the event id of /events/{id}/* is the same number): ``tpbl_runtime``
+      reads /seasons once and sends that id, so the example URL shows the year. A
+      year the list lacks raises NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/tpbl/teams
+  short: teams
+  summary: The teams of one season (bracket placeholders flagged).
+- example_args:
+    season: 2026
+  extra_params:
+  - description: 'TPBL team id (2-8): keep only that team''s games (the API''s own
+      filter). Cannot be combined with ``verify``.'
+    name: team_id
+    query_key: team_id
+    required: false
+    type: int
+  - description: 'Default False. Cross-check the list for completeness: every division''s
+      completed games must equal the matches of its own standings (one extra request
+      per division; a division whose standings are empty is checked against the team-filtered
+      lists instead). A mismatch raises AssetFetchError.'
+    name: verify
+    query_key: verify
+    required: false
+    type: bool
+  parser: parse_tpbl_games
+  path: /seasons/{season}/games
+  path_params:
+  - description: 'Required. Season END year (2026 = the 2025-26 season; 2025 is the
+      first). The API keys a season by its own small integer (1, 2, 3 = 2024-25, 2025-26,
+      2026-27; the event id of /events/{id}/* is the same number): ``tpbl_runtime``
+      reads /seasons once and sends that id, so the example URL shows the year. A
+      year the list lacks raises NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/tpbl/games
+  short: games
+  summary: Every game of one season, all divisions, played and scheduled, with teams,
+    venue, status and score.
+- example_args:
+    division_id: 2
+  parser: parse_tpbl_standings
+  path: /divisions/{division_id}/games/standings
+  path_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id.'
+    name: division_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/standings
+  short: standings
+  summary: 'League table of one division: rank, record, games behind and streak.'
+- example_args:
+    division_id: 2
+  parser: parse_tpbl_standings_against
+  path: /divisions/{division_id}/games/standings
+  path_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id.'
+    name: division_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/standings_against
+  short: standings_against
+  summary: Head-to-head record of every team against every other team in one division.
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_game
+  path: /games/{game_id}
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/game
+  short: game
+  summary: 'Header of one finished game: teams with scores, venue, status, quarters,
+    tip-off, attendance and links.'
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_referees
+  path: /games/{game_id}
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/referees
+  short: referees
+  summary: The officiating crew of one finished game, chief referee first (names only).
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_box_players
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/box_players
+  short: box_players
+  summary: Whole-game box score lines of every player on either team sheet, keyed
+    by GoHoops roster id.
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_box_player_periods
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/box_player_periods
+  short: box_player_periods
+  summary: Per-quarter box score lines of the players who were on court, overtimes
+    included.
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_box_teams
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/box_teams
+  short: box_teams
+  summary: 'Whole-game team totals of both teams: shooting, rebounds, fouls, assists,
+    turnovers and paint points.'
+- example_args:
+    game_id: 6
+  parser: parse_tpbl_box_team_periods
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Required. TPBL game id (integer), e.g. 6; ``game_id`` in tpbl_games.
+      Not sequential by date (2024-25 = 1-1367, 2025-26 = 1371-8641, 2026-27 = 27535-27667).
+      Only a finished game is served.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/box_team_periods
+  short: box_team_periods
+  summary: 'Per-quarter team lines of both teams: points scored and conceded in the
+    quarter, running totals and stats.'
+- example_args:
+    division_id: 2
+    team_id: 4
+  parser: parse_tpbl_roster
+  path: /divisions/{division_id}/teams/{team_id}/players
+  path_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id.'
+    name: division_id
+    required: true
+    type: int
+  - description: Required. TPBL team id (the franchise, 2-8, stable across seasons);
+      ``team_id`` in tpbl_teams. Not the GoHoops id.
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/roster
+  short: roster
+  summary: The registered roster of one team in one division (birth dates omitted).
+- example_args:
+    division_id: 2
+    team_id: 4
+  extra_params:
+  - description: 'Quarter filter: a quarter number or a list of them (1-4, 5 and 6
+      for overtimes); the runtime sends it as the API''s repeatable ``rounds[]``.
+      Omit for all quarters.'
+    name: rounds
+    query_key: rounds
+    required: false
+    type: list
+  parser: parse_tpbl_team_shots
+  path: /divisions/{division_id}/teams/{team_id}/shooting-spots
+  path_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id.'
+    name: division_id
+    required: true
+    type: int
+  - description: Required. TPBL team id (the franchise, 2-8, stable across seasons);
+      ``team_id`` in tpbl_teams. Not the GoHoops id.
+    name: team_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/team_shots
+  short: team_shots
+  summary: Every field-goal attempt of one team in one division with its court position
+    (optionally per quarter).
+- example_args:
+    division_id: 2
+    player_id: 75
+  parser: parse_tpbl_player_shots
+  path: /divisions/{division_id}/players/{player_id}/shooting-spots
+  path_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id.'
+    name: division_id
+    required: true
+    type: int
+  - description: Required. TPBL player id (one per person across seasons and teams);
+      ``player_id`` in tpbl_roster. Not the GoHoops person id and not the roster id.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/player_shots
+  short: player_shots
+  summary: Every field-goal attempt of one player in one division with its court position.
+- example_args:
+    division_id: 2
+    player_id: 75
+  extra_params:
+  - description: 'Required. TPBL division id (one competition phase of one season:
+      1, 2, 5, 6, 7 = 2024-25 preseason, regular season, playoffs, postseason challenge,
+      finals; 8, 9, 11, 12, 35 = 2025-26; 655, 656 = 2026-27); ``division_id`` in
+      tpbl_divisions. Not the GoHoops division id. Without it the API answers HTTP
+      422; an unknown id answers HTTP 500, which is not retried.'
+    name: division_id
+    query_key: division_id
+    required: true
+    type: int
+  parser: parse_tpbl_player_games
+  path: /players/{player_id}/games/stats
+  path_params:
+  - description: Required. TPBL player id (one per person across seasons and teams);
+      ``player_id`` in tpbl_roster. Not the GoHoops person id and not the roster id.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/tpbl/player_games
+  short: player_games
+  summary: 'A player''s game log in one division: one row per game played, with that
+    game''s whole stat line.'
+getter_module: sportsdataverse.basketball.tpbl.tpbl_runtime
+host: https://api.tpbl.basketball/api
+module: tpbl
+name_pattern: tpbl_{short}
+parser_columns: true
+parser_module: basketball.tpbl.tpbl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: tpbl_

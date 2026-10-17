@@ -1,0 +1,146 @@
+{
+  "teamHead2Head": [
+    {
+      "homeTeam": {
+        "sideTranslateKey": "G",
+        "left": {
+          "type": "G",
+          "value": 2
+        },
+        "right": {
+          "type": "SOG",
+          "value": 31
+        },
+        "center": {
+          "type": "SEff",
+          "value": "6.45"
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "G",
+        "left": {
+          "type": "G",
+          "value": 1
+        },
+        "right": {
+          "type": "SOG",
+          "value": 29
+        },
+        "center": {
+          "type": "SEff",
+          "value": "3.45"
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "PPG",
+        "left": {
+          "type": "PPG",
+          "value": 1
+        },
+        "right": {
+          "type": "PPOpp",
+          "value": 3
+        },
+        "center": {
+          "type": "PPPerc",
+          "value": "33.33"
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "PPG",
+        "left": {
+          "type": "PPG",
+          "value": 1
+        },
+        "right": {
+          "type": "PPOpp",
+          "value": 2
+        },
+        "center": {
+          "type": "PPPerc",
+          "value": "50.00"
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "PIM",
+        "left": {
+          "type": "PIM",
+          "value": 4
+        },
+        "right": {
+          "type": "PIM",
+          "value": 4
+        },
+        "center": {
+          "type": "PIM",
+          "value": 4
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "PIM",
+        "left": {
+          "type": "PIM",
+          "value": 6
+        },
+        "right": {
+          "type": "PIM",
+          "value": 6
+        },
+        "center": {
+          "type": "PIM",
+          "value": 6
+        }
+      }
+    }
+  ],
+  "teamPeriod": {
+    "caption": "G",
+    "overtime": false,
+    "shootout": false,
+    "stats": [
+      {
+        "periodName": 1,
+        "homeTeamValue": 1,
+        "awayTeamValue": 0
+      },
+      {
+        "periodName": 2,
+        "homeTeamValue": 0,
+        "awayTeamValue": 1
+      },
+      {
+        "periodName": 3,
+        "homeTeamValue": 1,
+        "awayTeamValue": 0
+      }
+    ]
+  },
+  "bestScorers": [
+    {
+      "uuid": "qQ9-adafYNUQw",
+      "fullName": "Jacob Peterson",
+      "teamCode": "FHC",
+      "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+      "totalPoints": 1
+    },
+    {
+      "uuid": "qRe-glixIcxZ",
+      "fullName": "Fredrik Karlström",
+      "teamCode": "LHC",
+      "media": "https://sportality.cdn.s8y.se/team-logos/lhc1_lhc.svg",
+      "totalPoints": 1
+    },
+    {
+      "uuid": "qee-2LDnbExBt",
+      "fullName": "Dominik Egli",
+      "teamCode": "FHC",
+      "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+      "totalPoints": 1
+    }
+  ],
+  "statisticsProvider": "statnet"
+}

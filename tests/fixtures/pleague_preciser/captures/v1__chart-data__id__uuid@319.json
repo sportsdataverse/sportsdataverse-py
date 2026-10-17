@@ -1,0 +1,68 @@
+[
+  {
+    "away_id": "e869743f-3d88-11ed-925e-7f44ba46b0b1",
+    "game_status": "post",
+    "home_id": "e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1",
+    "players": [
+      {
+        "id": "d474313f-3d8d-11ed-9a15-c7930d27d079",
+        "logo_url": "",
+        "name": "吉爾貝克",
+        "team_id": "e869743f-3d88-11ed-925e-7f44ba46b0b1"
+      },
+      {
+        "id": "d4704aca-3d8d-11ed-8fc0-c7930d27d079",
+        "logo_url": "https://photonew.preciser.io/plg/players/2025-26/d4704aca-3d8d-11ed-8fc0-c7930d27d079.png",
+        "name": "吳永盛",
+        "team_id": "e869743f-3d88-11ed-925e-7f44ba46b0b1"
+      },
+      {
+        "id": "d426e15b-3d8d-11ed-9d2a-c7930d27d079",
+        "logo_url": "https://photonew.preciser.io/plg/players/2025-26/d426e15b-3d8d-11ed-9d2a-c7930d27d079.png",
+        "name": "戴維斯",
+        "team_id": "e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1"
+      }
+    ],
+    "shot": [
+      {
+        "area": "Left Side 3pt",
+        "clock": "09:40",
+        "message": "蘇士軒未投進7.94公尺遠的三分球",
+        "period": 1,
+        "player": "800e84c2-4554-11ed-bcec-1f49181d2d53",
+        "subtype": "jumpShot",
+        "success": false,
+        "type": "3pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/1507ce60-7a03-478f-b16a-11b9f2e0b5d5.mp4?key=<redacted>",
+        "x": 79.2,
+        "y": 92.77
+      },
+      {
+        "area": "Left Center 3pt",
+        "clock": "04:22",
+        "message": "盧冠良未投進8.32公尺遠的三分球",
+        "period": 2,
+        "player": "8004be1c-4554-11ed-b330-1f49181d2d53",
+        "subtype": "jumpShot",
+        "success": false,
+        "type": "3pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/034dc7c4-210c-4fd7-8da7-e244d306aa67.mp4?key=<redacted>",
+        "x": 30.5,
+        "y": 76.1
+      },
+      {
+        "area": "Center Side 3pt",
+        "clock": "09:24",
+        "message": "曼尼高未投進7.75公尺遠的三分球",
+        "period": 3,
+        "player": "69a7ae6b-623c-11ed-9f1b-3dbf20da9459",
+        "subtype": "jumpShot",
+        "success": false,
+        "type": "3pt",
+        "video_url": "https://api-cf.tryspot.app/api/videos/instant_play/5b0440c1-844c-460a-8d0c-631fd1e515b9.mp4?key=<redacted>",
+        "x": 68,
+        "y": 46.99
+      }
+    ]
+  }
+]

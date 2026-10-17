@@ -1,0 +1,1 @@
+{"errors":[{"code":404,"type":"NotFoundException","message":"No boxscore found for this game id.","meta":{"gameId":2168097,"endpointPath":"/resource/game/boxscore/{gameId}","endpointClass":"BoxscoreResource"}}]}

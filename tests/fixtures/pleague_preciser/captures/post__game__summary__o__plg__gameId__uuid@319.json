@@ -1,0 +1,178 @@
+[
+  {
+    "away_team": {
+      "color": "#000000",
+      "id": "e869743f-3d88-11ed-925e-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e869743f-3d88-11ed-925e-7f44ba46b0b1.png",
+      "name": "福爾摩沙夢想家"
+    },
+    "fast_break_points": {
+      "away_progress": 53.8,
+      "away_value": 14.0,
+      "home_progress": 46.2,
+      "home_value": 12.0
+    },
+    "game_id": "131657f4-e8d5-11ed-b647-3f2f4ff04266",
+    "home_team": {
+      "color": "#ffe600",
+      "id": "e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1.png",
+      "name": "新北國王"
+    },
+    "home_team_probability_over_time": [
+      50,
+      50,
+      50
+    ],
+    "leadStats": {
+      "biggestLead": {
+        "away": 0,
+        "home": 34
+      },
+      "biggestScoringRun": {
+        "away": 9,
+        "home": 10
+      },
+      "leadChanges": 0,
+      "leadPerMinutes": [
+        {
+          "away_score": 0,
+          "home_score": 0,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "12:00"
+        },
+        {
+          "away_score": 0,
+          "home_score": 0,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "11:00"
+        },
+        {
+          "away_score": 0,
+          "home_score": 8,
+          "quarter": "q1",
+          "score_difference": 8,
+          "time": "10:00"
+        }
+      ],
+      "timeLeadingSeconds": {
+        "away": 0,
+        "home": 2814
+      }
+    },
+    "paint_points": {
+      "away_progress": 51.2,
+      "away_value": 44.0,
+      "home_progress": 48.8,
+      "home_value": 42.0
+    },
+    "pbp": [
+      {
+        "away_score": 0,
+        "home_score": 0,
+        "quarter": "q1",
+        "time": "11:39"
+      },
+      {
+        "away_score": 0,
+        "home_score": 0,
+        "quarter": "q1",
+        "time": "11:22"
+      },
+      {
+        "away_score": 0,
+        "home_score": 0,
+        "quarter": "q1",
+        "time": "11:04"
+      }
+    ],
+    "second_chance_points": {
+      "away_progress": 46.4,
+      "away_value": 13.0,
+      "home_progress": 53.6,
+      "home_value": 15.0
+    },
+    "team_comparison": {
+      "assists": {
+        "away_progress": 0.86,
+        "away_value": 19,
+        "home_progress": 1.0,
+        "home_value": 22
+      },
+      "blocks": {
+        "away_progress": 1.0,
+        "away_value": 3,
+        "home_progress": 0.67,
+        "home_value": 2
+      },
+      "field_goal_percentage": {
+        "away_progress": 1.0,
+        "away_value": 20,
+        "home_progress": 0.95,
+        "home_value": 19
+      },
+      "free_throw_percentage": {
+        "away_progress": 0.42,
+        "away_value": 41.7,
+        "home_progress": 0.77,
+        "home_value": 76.5
+      },
+      "points": {
+        "away_progress": 0.82,
+        "away_value": 84,
+        "home_progress": 1.0,
+        "home_value": 103
+      },
+      "rebounds": {
+        "away_progress": 1.0,
+        "away_value": 64,
+        "home_progress": 0.8,
+        "home_value": 51
+      },
+      "steals": {
+        "away_progress": 0.67,
+        "away_value": 6,
+        "home_progress": 1.0,
+        "home_value": 9
+      },
+      "three_points_percentage": {
+        "away_progress": 0.25,
+        "away_value": 25.0,
+        "home_progress": 0.32,
+        "home_value": 31.8
+      },
+      "turnovers": {
+        "away_progress": 1.0,
+        "away_value": 18,
+        "home_progress": 0.61,
+        "home_value": 11
+      },
+      "two_points_percentage": {
+        "away_progress": 0.4,
+        "away_value": 39.7,
+        "home_progress": 0.46,
+        "home_value": 46.2
+      }
+    },
+    "top_performers": {
+      "away_player": {
+        "assists": 4,
+        "jersey_number": "5",
+        "name": "麥卡洛",
+        "photo_url": "https://storage.googleapis.com/photo.preciser.io/plg/players/d4a41e43-3d8d-11ed-9f3e-c7930d27d079.png?t=1788887482595",
+        "points": 17,
+        "rebound": 22
+      },
+      "home_player": {
+        "assists": 5,
+        "jersey_number": "55",
+        "name": "曼尼高",
+        "photo_url": "https://storage.googleapis.com/photo.preciser.io/plg/players/69a7ae6b-623c-11ed-9f1b-3dbf20da9459.png?t=1788883230050",
+        "points": 23,
+        "rebound": 11
+      }
+    }
+  }
+]

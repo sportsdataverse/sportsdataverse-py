@@ -1,0 +1,49 @@
+{
+  "names": {
+    "code": "FHC",
+    "short": "Frölunda ",
+    "long": "Frölunda HC",
+    "full": "Frölunda Hockey Club",
+    "codeSite": "FHC",
+    "shortSite": "Frölunda",
+    "fullSite": "Frölunda Hockey Club / Herr",
+    "longSite": "Frölunda HC"
+  },
+  "info": {
+    "founded": "1944",
+    "golds": "5 st (1965, 2003, 2005, 2016, 2019)",
+    "finals": "7 st (1980, 1996, 2003, 2005, 2006, 2016, 2019)",
+    "retiredNumbers": "#13 Lars-Erik Lundvall\r\n#14 Ronald Pettersson\r\n#14 Patrik Carnbäck\r\n#19 Jörgen Pettersson\r\n#23 Ronnie Sundin\r\n#24 Niklas Andersson\r\n#29 Stefan Larsson",
+    "address": "Frölunda HC\r\nFrölundaborgs Isstadion\r\nBox 12127\r\n402 42 Göteborg",
+    "phone": "031-708 16 80",
+    "fax": "031-18 97 06",
+    "email": "kontakt@frolundahockey.com",
+    "chairman": "Mats Grauers",
+    "manager": "Christian Lecthaler",
+    "accreditation": "peter.kymmer@frolundahockey.com",
+    "facebook": "https://www.facebook.com/frolundahc",
+    "instagram": "https://www.instagram.com/frolunda_hc/",
+    "twitter": "https://twitter.com/frolunda_hc"
+  },
+  "contact": [
+    {
+      "url": "https://www.facebook.com/frolundahc",
+      "type": "facebook"
+    },
+    {
+      "url": "https://www.instagram.com/frolunda_hc/",
+      "type": "instagram"
+    },
+    {
+      "url": "https://twitter.com/frolunda_hc",
+      "type": "twitter"
+    }
+  ],
+  "uuid": "087a-087aTQv9u",
+  "nationality": "sv",
+  "arenaName": "",
+  "publicUrl": "http://www.frolundahockey.com/",
+  "icon": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+  "ownerInstanceId": "fhc1_fhc",
+  "siteDisplayName": "Frölunda HC"
+}

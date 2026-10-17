@@ -1,0 +1,65 @@
+{
+  "match": {
+    "id": "2928321",
+    "date": "2026-10-11",
+    "home_id": 8,
+    "home_name": "HC Sparta Praha",
+    "home_shortcut": "SPA",
+    "visitor_id": 7,
+    "visitor_name": "HC VÍTKOVICE RIDERA",
+    "visitor_shortcut": "VIT",
+    "shots": [
+      {
+        "id": 711884,
+        "player_id": 10093378,
+        "jersey": 29,
+        "first_name": "Vojtěch",
+        "last_name": "Hradec",
+        "team_id": 8,
+        "match_shot_resutl_id": 2,
+        "time": 111,
+        "coordinate_x": 69.0,
+        "coordinate_y": -30.0,
+        "real_date": "2026-10-11 15:07:02"
+      },
+      {
+        "id": 711894,
+        "player_id": 10110309,
+        "jersey": 19,
+        "first_name": "Anthony",
+        "last_name": "Nellis",
+        "team_id": 7,
+        "match_shot_resutl_id": 3,
+        "time": 233,
+        "coordinate_x": -67.0,
+        "coordinate_y": -26.0,
+        "real_date": "2026-10-11 15:10:25"
+      },
+      {
+        "id": 712105,
+        "player_id": 10093378,
+        "jersey": 29,
+        "first_name": "Vojtěch",
+        "last_name": "Hradec",
+        "team_id": 8,
+        "match_shot_resutl_id": 4,
+        "time": 3257,
+        "coordinate_x": 78.0,
+        "coordinate_y": -22.0,
+        "real_date": "2026-10-11 17:11:12"
+      }
+    ],
+    "faceoffs": {
+      "home": [
+        43.75,
+        35.71,
+        52.17
+      ],
+      "visitor": [
+        56.25,
+        64.29,
+        47.83
+      ]
+    }
+  }
+}

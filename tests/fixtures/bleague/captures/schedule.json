@@ -1,0 +1,92 @@
+{
+  "tab": 1,
+  "year": 2025,
+  "event": 2,
+  "mon": 10,
+  "day": 4,
+  "season_label": "2025-26",
+  "event_label": "B1リーグ",
+  "events": [
+    {
+      "event": 2,
+      "label": "B1リーグ"
+    },
+    {
+      "event": 5,
+      "label": "オールスターゲーム"
+    },
+    {
+      "event": 3,
+      "label": "B1チャンピオンシップ"
+    }
+  ],
+  "game_days": [
+    3,
+    4,
+    5
+  ],
+  "clubs": [
+    {
+      "team_id": "702",
+      "name": "北海道"
+    },
+    {
+      "team_id": "692",
+      "name": "仙台"
+    },
+    {
+      "team_id": "693",
+      "name": "秋田"
+    }
+  ],
+  "games": [
+    {
+      "schedule_key": 504748,
+      "date": "2025-10-04",
+      "round_label": "第1節",
+      "round": 1,
+      "home_team_id": "700",
+      "home_team": "大阪",
+      "home_score": 85,
+      "away_team_id": "697",
+      "away_team": "三遠",
+      "away_score": 95,
+      "prefecture": "大阪府",
+      "venue": "おおきに",
+      "tip_time": "14:05",
+      "state": "FINAL"
+    },
+    {
+      "schedule_key": 504750,
+      "date": "2025-10-04",
+      "round_label": "第1節",
+      "round": 1,
+      "home_team_id": "1638",
+      "home_team": "佐賀",
+      "home_score": 92,
+      "away_team_id": "698",
+      "away_team": "滋賀",
+      "away_score": 68,
+      "prefecture": "佐賀県",
+      "venue": "Sアリ",
+      "tip_time": "14:05",
+      "state": "FINAL"
+    },
+    {
+      "schedule_key": 504730,
+      "date": "2025-10-04",
+      "round_label": "第1節",
+      "round": 1,
+      "home_team_id": "745",
+      "home_team": "越谷",
+      "home_score": 74,
+      "away_team_id": "720",
+      "away_team": "島根",
+      "away_score": 86,
+      "prefecture": "埼玉県",
+      "venue": "越谷",
+      "tip_time": "15:05",
+      "state": "FINAL"
+    }
+  ]
+}

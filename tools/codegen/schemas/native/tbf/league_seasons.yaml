@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: activity_id
+  type: integer
+- description: ''
+  name: activity_name
+  type: character
+- description: ''
+  name: url
+  type: character
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_label
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+kind: dataframe
+schema: tbf_league_seasons

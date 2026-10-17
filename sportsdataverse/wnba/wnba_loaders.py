@@ -134,6 +134,7 @@ def load_wnba_pbp(seasons, return_as_pandas: bool = False):
         |athlete_name_2                  |String                                                 |
         |athlete_name_3                  |String                                                 |
         |type_abbreviation               |String                                                 |
+        |score_source                    |String                                                 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
@@ -1014,7 +1015,7 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_crosswalk
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 2002).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1046,7 +1047,7 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
         |match_keys         |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 2002.
 
     Example:
         Quick start::
@@ -1055,8 +1056,8 @@ def load_wnba_player_crosswalk(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 2002:
+            raise SeasonNotFoundError("season cannot be less than 2002")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_crosswalk/wnba_player_crosswalk_{season}.parquet"
         )
@@ -1854,7 +1855,7 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_player_game_logs
 
     Args:
-        seasons: an int or iterable of seasons (>= 2025).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -1900,7 +1901,7 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
         |measure_type      |String  |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2025.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -1909,8 +1910,8 @@ def load_wnba_stats_player_game_logs(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2025:
-            raise SeasonNotFoundError("season cannot be less than 2025")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_player_game_logs/player_game_logs_{season}.parquet"
         )
@@ -2051,7 +2052,7 @@ def load_wnba_stats_shots(seasons, return_as_pandas: bool = False):
     Source: https://github.com/sportsdataverse/sportsdataverse-data/releases/tag/wnba_stats_shots
 
     Args:
-        seasons: an int or iterable of seasons (>= 2026).
+        seasons: an int or iterable of seasons (>= 1997).
         return_as_pandas: return a pandas DataFrame instead of polars.
 
     Returns:
@@ -2080,7 +2081,7 @@ def load_wnba_stats_shots(seasons, return_as_pandas: bool = False):
         |score_away    |String |
 
     Raises:
-        SeasonNotFoundError: if a requested season is below 2026.
+        SeasonNotFoundError: if a requested season is below 1997.
 
     Example:
         Quick start::
@@ -2089,8 +2090,8 @@ def load_wnba_stats_shots(seasons, return_as_pandas: bool = False):
     """
     frames, missing = [], []
     for season in _as_season_list(seasons):
-        if int(season) < 2026:
-            raise SeasonNotFoundError("season cannot be less than 2026")
+        if int(season) < 1997:
+            raise SeasonNotFoundError("season cannot be less than 1997")
         df = _read_release_parquet(
             f"https://github.com/sportsdataverse/sportsdataverse-data/releases/download/wnba_stats_shots/shots_{season}.parquet"
         )

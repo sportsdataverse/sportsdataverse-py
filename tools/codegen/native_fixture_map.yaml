@@ -394,3 +394,39 @@ kenpom:
   four_factors.json: four_factors
   efficiency.json: efficiency
   ratings.json: ratings
+sihf_api_web:
+  table__results__2026__1.json: results
+  table__standing__2026__1.json: standings
+  table__player__2026__1.json: player_stats
+  table__goalkeeper__2026__1.json: goalie_stats
+  table__results__2026__1__phases.json: phases
+  gameoverview__20261105000325.json:
+    - pbp
+    - game_info
+    - game_player_stats
+    - game_goalie_stats
+    - game_team_stats
+    - game_lineups
+  # Phase B extension: the 22 remaining table aliases (3-row refs captures)
+  table__teamGoal__2026__1.json: team_goals
+  table__teamGoalPosNation__2026__1.json: team_goals_by_position
+  table__teamShotDetail__2026__1.json: team_shots
+  table__teamPp__2026__1.json: team_power_play
+  table__teamPk__2026__1.json: team_penalty_kill
+  table__teamFoul__2026__1.json: team_penalties
+  table__teamShootout__2026__1.json: team_shootouts
+  table__teamFaceoff__2026__1.json: team_faceoffs
+  table__teamFaceoffZone__2026__1.json: team_faceoffs_by_zone
+  table__teamFaceoffZoneGame__2026__1.json: team_faceoffs_by_zone_per_game
+  table__teamSpectator__2026__1.json: team_attendance
+  table__playerGoalAssist__2026__1.json: player_goals_assists
+  table__playerShotDetail__2026__1.json: player_shots
+  table__playerFoul__2026__1.json: player_penalties
+  table__playerShootout__2026__1.json: player_shootouts
+  table__playerFaceoff__2026__1.json: player_faceoffs
+  table__playerFaceoffZone__2026__1.json: player_faceoffs_by_zone
+  table__playerFaceoffZoneGame__2026__1.json: player_faceoffs_by_zone_per_game
+  table__playerTimeOnIce__2026__1.json: player_time_on_ice
+  table__goalkeeperShotDetail__2026__1.json: goalie_shots
+  table__goalkeeperWin__2026__1.json: goalie_wins
+  table__goalkeeperShootout__2026__1.json: goalie_shootouts

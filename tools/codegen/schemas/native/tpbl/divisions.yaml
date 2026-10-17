@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: division_id
+  type: integer
+- description: ''
+  name: gohoops_division_id
+  type: integer
+- description: ''
+  name: gohoops_event_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: status
+  type: character
+kind: dataframe
+schema: tpbl_divisions

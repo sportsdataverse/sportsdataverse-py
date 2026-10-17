@@ -1,0 +1,233 @@
+[
+ {
+  "team": {
+   "id": 7,
+   "gohoops_id": 945,
+   "gohoops_squad_id": 15537,
+   "name": "新北國王",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+    "alt_name": "kings"
+   }
+  },
+  "rank": 1,
+  "score_won_matches": 2,
+  "score_lost_matches": 0,
+  "score_draw_matches": 0,
+  "games_behind": 0,
+  "streaks": "W2",
+  "against_result": [
+   {
+    "team": {
+     "id": 8,
+     "gohoops_id": 946,
+     "gohoops_squad_id": 15536,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "臺北台新戰神",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/mars.webp",
+      "alt_name": "mars"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 3,
+     "gohoops_id": 941,
+     "gohoops_squad_id": 15541,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "福爾摩沙夢想家",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+      "alt_name": "dreamers"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 6,
+     "gohoops_id": 944,
+     "gohoops_squad_id": 15538,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "新北中信特攻",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/dea.webp",
+      "alt_name": "dea"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   }
+  ]
+ },
+ {
+  "team": {
+   "id": 8,
+   "gohoops_id": 946,
+   "gohoops_squad_id": 15536,
+   "name": "臺北台新戰神",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/mars.webp",
+    "alt_name": "mars"
+   }
+  },
+  "rank": 1,
+  "score_won_matches": 2,
+  "score_lost_matches": 0,
+  "score_draw_matches": 0,
+  "games_behind": 0,
+  "streaks": "W2",
+  "against_result": [
+   {
+    "team": {
+     "id": 7,
+     "gohoops_id": 945,
+     "gohoops_squad_id": 15537,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "新北國王",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+      "alt_name": "kings"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 3,
+     "gohoops_id": 941,
+     "gohoops_squad_id": 15541,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "福爾摩沙夢想家",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+      "alt_name": "dreamers"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 1,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 6,
+     "gohoops_id": 944,
+     "gohoops_squad_id": 15538,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "新北中信特攻",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/dea.webp",
+      "alt_name": "dea"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   }
+  ]
+ },
+ {
+  "team": {
+   "id": 3,
+   "gohoops_id": 941,
+   "gohoops_squad_id": 15541,
+   "name": "福爾摩沙夢想家",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+    "alt_name": "dreamers"
+   }
+  },
+  "rank": 3,
+  "score_won_matches": 1,
+  "score_lost_matches": 1,
+  "score_draw_matches": 0,
+  "games_behind": 1,
+  "streaks": "W1",
+  "against_result": [
+   {
+    "team": {
+     "id": 8,
+     "gohoops_id": 946,
+     "gohoops_squad_id": 15536,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "臺北台新戰神",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/mars.webp",
+      "alt_name": "mars"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 1,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 7,
+     "gohoops_id": 945,
+     "gohoops_squad_id": 15537,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "新北國王",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+      "alt_name": "kings"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 0,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   },
+   {
+    "team": {
+     "id": 6,
+     "gohoops_id": 944,
+     "gohoops_squad_id": 15538,
+     "gohoops_event_id": 613,
+     "gohoops_season_id": 275,
+     "name": "新北中信特攻",
+     "status": "ACTIVE",
+     "meta": {
+      "logo": "https://assets.tpbl.basketball/logos/dea.webp",
+      "alt_name": "dea"
+     },
+     "is_league": false
+    },
+    "score_won_matches": 1,
+    "score_lost_matches": 0,
+    "score_draw_matches": 0
+   }
+  ]
+ }
+]

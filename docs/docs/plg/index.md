@@ -1,0 +1,25 @@
+---
+title: PLG
+sidebar_label: PLG
+description: "sdv-py PLG: endpoint references, dataset loaders and parsers for PLG in the SportsDataverse Python package."
+---
+# PLG (`sportsdataverse.basketball.plg`)
+
+## Data sources
+
+| Source | APIs / hosts | Functions | Auth |
+|---|---|---:|---|
+| [P. LEAGUE+ (Taiwan) and Preciser](#p-league-taiwan-and-preciser) | `api.preciser.io`, `pleagueofficial.com` | 18 | none |
+
+## P. LEAGUE+ (Taiwan) and Preciser {#p-league-taiwan-and-preciser}
+
+| Reference | Functions |
+|---|---:|
+| [P. LEAGUE+ site (pleagueofficial.com, Taiwan)](reference/pleague) | 11 |
+| [P. LEAGUE+ vendor API (api.preciser.io, Taiwan)](reference/pleague_preciser) | 7 |
+
+## Examples
+
+Worked examples — executed notebooks rendered as pages (refreshed weekly against the live APIs):
+
+- [Quickstart](../tutorials/01_quickstart.md)

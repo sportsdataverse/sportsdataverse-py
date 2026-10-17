@@ -1,0 +1,518 @@
+cebl_games:
+  away_team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/
+    `id`, the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and
+    the `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits). The away team.'
+  away_team_logo_url: URL of the away team's logo image as the games feed lists it
+    (a team-level asset, the same on every game of that team in the season).
+  away_team_name: Away team full English name.
+  away_team_score: 'Away team final score. On the 3 cancelled games: null, 0 or a
+    partial score; before tip-off unobserved.'
+  away_team_stats_url_en: Away team's cebl.ca stats page (English).
+  away_team_stats_url_fr: Away team's cebl.ca stats page (French).
+  broadcast_partner_logo_urls: Logo URLs of the game's broadcasters (TSN+, CEBL+,
+    ...); 2 to 7 per game.
+  cebl_stats_url_en: 'The game page on cebl.ca, `https://www.cebl.ca/game?id={matchId}`:
+    `id` is the Genius match id, not this row''s `id`.'
+  cebl_stats_url_fr: The French cebl.ca game page (`https://www.cebl.ca/fr-ca/game?id={matchId}`).
+  competition: REGULAR (regular season) or FINALS (playoffs).
+  game_id: 'CEBL game id (its own key space: 568 in 2019, 8 digits from 2025, e.g.
+    14708701). No route is keyed by it; the Genius match id is in `stats_url_en`.'
+  genius_match_id: Genius LiveStats match id parsed from the stats URL (the join to
+    the genius family, organisation CEBL, where play-by-play and shots live). Derived
+    from the URL, not fetched; null when the URL is absent.
+  home_team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/
+    `id`, the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and
+    the `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits). The home team.'
+  home_team_logo_url: URL of the home team's logo image as the games feed lists it
+    (a team-level asset, the same on every game of that team in the season).
+  home_team_name: Home team full English name.
+  home_team_score: 'Home team final score. On the 3 cancelled games: null, 0 or a
+    partial score; before tip-off unobserved.'
+  home_team_stats_url_en: Home team's cebl.ca stats page (English).
+  home_team_stats_url_fr: Home team's cebl.ca stats page (French).
+  period: Last period played when the API sets it (seen only on a cancelled game,
+    which carried period 3); null on a finished game.
+  season: 'Season of the game: the year of start_time_utc (the calendar year = the
+    sdv END year).'
+  start_time_utc: Scheduled tip-off, ISO 8601 in UTC ('2025-05-11T22:00:00Z').
+  stats_url_en: 'Genius LiveStats box-score page, `https://fibalivestats.dcd.shared.geniussports.com/u/CEBL/{matchId}/`.
+    The segment after `/u/CEBL/` is the Genius match id: the join to genius-livestats/
+    (org CEBL), whose `data/{matchId}/data.json` holds the box score, play-by-play
+    and shot chart. Only match 2600563 is banked there; the others are derived, and
+    cancelled (CANELLED) games carry a filled-in URL whose `data.json` is unverified.'
+  stats_url_fr: The same Genius LiveStats page in French (`.../u/CEBL/{matchId}/index_fr_FR.html`).
+  status: 'Game status. Observed: COMPLETE (final) and CANELLED (sic: cancelled; 1
+    game in 2025, 2 in 2026). The Stats Hub also knows SCHEDULED, IN_PROGRESS, DELAYED
+    and FINISHED.'
+  tickets_url_en: Ticket-sales page for the game (English).
+  tickets_url_fr: Ticket-sales page for the game (French).
+  venue_name: Arena name ('Edmonton EXPO Centre').
+cebl_news:
+  html_content: Article body as HTML (upstream schema; unobserved, no article was
+    ever served).
+  image_url: Article image URL (upstream schema; unobserved, no article was ever served).
+  language: Language code of the request ('en'); the body does not echo it.
+  news_id: 'CEBL news article id; null when the API gives none. Unobserved: the route
+    answered an empty list on every probe.'
+  published_at_utc: Publication time in UTC (upstream schema; unobserved, no article
+    was ever served).
+  title: Article headline (upstream schema; unobserved, the route answered an empty
+    list on every probe).
+cebl_player:
+  age: Age in whole years on the day of the request (computed by the API); null when
+    the birth date is unknown.
+  birth_date: Date of birth, YYYY-MM-DD (players' public bio field); null when unknown.
+  full_name: Player's full name.
+  jersey_number: Jersey number, as a string of up to 2 characters ('0', '00' and '1'
+    are distinct); null when unknown.
+  nationality: 'Nationality: an upper-case English country name (''CANADA'', ''UNITED
+    STATES'', ''SOUTH SUDAN''); null when unknown.'
+  photo_url: Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com).
+  player_id: CEBL player id (its own key space). Joins /players/{player_id}/ and `id`
+    in the other player rows. Genius LiveStats `data.json` carries no person id, so
+    the join to Genius play-by-play is by name, team and jersey number (unverified).
+  position: 'Playing position: G (guard), F (forward), C (center), or a combination
+    such as ''C/F''; null when unknown.'
+  team_icon_url: Icon URL (without the name) of the player's team.
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits). The player''s latest team.'
+  team_name_en: Full English name of the player's team.
+  team_name_fr: Full French name of the player's team.
+  team_short_name_en: Short English name (city) of the player's team.
+  team_short_name_fr: Short French name (city) of the player's team.
+  team_stats_url_en: cebl.ca stats page of the player's team (English).
+  team_stats_url_fr: cebl.ca stats page of the player's team (French).
+cebl_player_gamelog:
+  assists: Assists in the game. An integer.
+  blocks: Shots blocked in the game. An integer.
+  defensive_rebounds: Defensive rebounds in the game. An integer.
+  field_goal_percentage: 'Field-goal percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the game. A string.'
+  field_goals_attempted: Field goals attempted (2- and 3-pointers) in the game. An
+    integer.
+  field_goals_made: Field goals made (2- and 3-pointers) in the game. An integer.
+  fouls: Personal fouls committed in the game. An integer.
+  free_throw_percentage: 'Free-throw percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the game. A string.'
+  free_throws_attempted: Free throws attempted in the game. An integer.
+  free_throws_made: Free throws made in the game. An integer.
+  game_date: Tip-off of the game, ISO 8601 in UTC (same as the game's `start_time_utc`).
+  game_stats_url_en: 'cebl.ca game page, `https://www.cebl.ca/game?id={matchId}`:
+    `id` is the Genius match id (the join to genius-livestats/).'
+  game_stats_url_fr: French cebl.ca game page (`https://www.cebl.ca/fr-ca/game?id={matchId}`).
+  genius_match_id: Genius LiveStats match id parsed from the stats URL (the join to
+    the genius family, organisation CEBL, where play-by-play and shots live). Derived
+    from the URL, not fetched; null when the URL is absent.
+  is_target_scorer: True when the player made the basket that reached the Elam Ending
+    target score and ended the game.
+  matchup: '''{TEAM} {team score} {vs or @} {opponent score} {OPP}'': the player''s
+    team code and score first; `vs` = a home game, `@` = an away game (''OTT 91 @
+    95 BHB'').'
+  minutes: Minutes played as decimal minutes (26.4), not mm:ss; the API sends a string.
+  offensive_rebounds: Offensive rebounds in the game. An integer.
+  player_id: CEBL player id of the log asked for (from the request; the body does
+    not echo it).
+  points: Points scored in the game. An integer.
+  rebounds: Total rebounds in the game; the API sends it as a string ('5'), cast to
+    Int64.
+  season: 'Season of the game: the year of game_date (the calendar year = the sdv
+    END year).'
+  steals: Steals in the game. An integer.
+  team_abbreviated_name: Three-letter code of the player's team in that game ('OTT').
+  team_stats_url_en: cebl.ca stats page of the player's team in that game (English).
+  team_stats_url_fr: cebl.ca stats page of the player's team in that game (French).
+  three_point_percentage: 'Three-point percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the game. A string.'
+  three_points_attempted: Three-pointers attempted in the game. An integer.
+  three_points_made: Three-pointers made in the game. An integer.
+  turn_overs: Turnovers in the game. An integer.
+cebl_player_leaders:
+  competition: 'Competition filter of the request: REGULAR or FINALS; null when both
+    were asked. The body does not echo it.'
+  full_name: Player's full name.
+  mode: 'Table mode of the request: TOTALS (sums over the selected games) or PER_GAME
+    (per-game averages); the body does not echo it.'
+  photo_url: Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com).
+  player_id: CEBL player id (its own key space). Joins /players/{player_id}/ and `id`
+    in the other player rows. Genius LiveStats `data.json` carries no person id, so
+    the join to Genius play-by-play is by name, team and jersey number (unverified).
+  ranking: Rank in this statistic, 1 = best; ties share a rank and skip the next (1,
+    1, 1, 4). The list is the top 5 rows, no more.
+  season: 'Season: the calendar year it is played in (May to August) = the sdv END
+    year (2025). Taken from the request (the body does not echo it); null for the
+    all-time table and for a bare body.'
+  statistic: 'Statistic this leader row ranks, the body''s key for the list: POINTS,
+    REBOUNDS, ASSISTS, TARGET_SCORES and the other names the request asked for.'
+  team_abbreviated_name: Three-letter code of the player's team ('OTT', 'VAN').
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits).'
+  team_logo_url: Logo URL (icon with the name) of the player's team.
+  team_name_en: Full English name of the player's team.
+  team_name_fr: Full French name of the player's team.
+  team_short_name_en: Short English name (city) of the player's team.
+  team_short_name_fr: Short French name (city) of the player's team.
+  value: The player's figure for the statistic this list is keyed by, in the requested
+    mode (TOTALS sum or PER_GAME average; percentages 0-100). A decimal string ('25.9').
+cebl_player_seasons:
+  assists: 'Assists. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  blocks: 'Shots blocked. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  competition: 'Competition filter of the request: REGULAR or FINALS; null when both
+    were asked. The body does not echo it.'
+  defensive_rebounds: 'Defensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  double_doubles: 'Double-doubles: games with 10 or more in two of points, rebounds,
+    assists, steals, blocks. TOTALS: the sum over the selected games; PER_GAME: the
+    per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  field_goal_percentage: 'Field-goal percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  field_goals_attempted: 'Field goals attempted (2- and 3-pointers). TOTALS: the sum
+    over the selected games; PER_GAME: the per-game average, 1 decimal. A decimal
+    sent as a string (''2256.0'', ''12.7'').'
+  field_goals_made: 'Field goals made (2- and 3-pointers). TOTALS: the sum over the
+    selected games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a
+    string (''2256.0'', ''12.7'').'
+  fouls: 'Personal fouls committed. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  free_throw_percentage: 'Free-throw percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  free_throws_attempted: 'Free throws attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  free_throws_made: 'Free throws made. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  is_career: 'True on the career row (null season): the sum or average over every
+    season and team; false on a per-season row.'
+  minutes: 'Minutes played, decimal minutes (not mm:ss). TOTALS: the sum (''1281.7'');
+    PER_GAME: the per-game average (''29.5''). A string.'
+  mode: 'Table mode of the request: TOTALS (sums over the selected games) or PER_GAME
+    (per-game averages); the body does not echo it.'
+  offensive_rebounds: 'Offensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  played: Games played (a count in both modes).
+  player_id: 'CEBL player id: the `player_id` of the request, on every row. Joins
+    /players/{player_id}/ and `id` in the other player rows. Genius LiveStats `data.json`
+    carries no person id, so the join to Genius play-by-play is by name, team and
+    jersey number (unverified).'
+  points: 'Points scored. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  rebounds: 'Total rebounds (offensive + defensive). TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  season: Season (calendar year = sdv END year); null on the career row.
+  started: Games started (a count in both modes).
+  steals: 'Steals. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  target_scores: 'Target-score baskets: games in which the player made the basket
+    that reached the Elam Ending target score and ended the game (CEBL has used the
+    Elam Ending since 2020, so 2019 is 0). TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits). The player''s team that season (on the
+    career row, his latest).'
+  team_logo_url: Logo URL (icon with the name) of the player's team.
+  team_name_en: Full English name of the player's team.
+  team_name_fr: Full French name of the player's team.
+  team_short_name_en: Short English name (city) of the player's team.
+  team_short_name_fr: Short French name (city) of the player's team.
+  three_point_percentage: 'Three-point percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  three_points_attempted: 'Three-pointers attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  three_points_made: 'Three-pointers made. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  triple_doubles: 'Triple-doubles: games with 10 or more in three of those. TOTALS:
+    the sum over the selected games; PER_GAME: the per-game average, 1 decimal. A
+    decimal sent as a string (''2256.0'', ''12.7'').'
+  turn_overs: 'Turnovers. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+cebl_player_stats:
+  assists: 'Assists. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  blocks: 'Shots blocked. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  competition: 'Competition filter of the request: REGULAR or FINALS; null when both
+    were asked. The body does not echo it.'
+  defensive_rebounds: 'Defensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  double_doubles: 'Double-doubles: games with 10 or more in two of points, rebounds,
+    assists, steals, blocks. TOTALS: the sum over the selected games; PER_GAME: the
+    per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  field_goal_percentage: 'Field-goal percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  field_goals_attempted: 'Field goals attempted (2- and 3-pointers). TOTALS: the sum
+    over the selected games; PER_GAME: the per-game average, 1 decimal. A decimal
+    sent as a string (''2256.0'', ''12.7'').'
+  field_goals_made: 'Field goals made (2- and 3-pointers). TOTALS: the sum over the
+    selected games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a
+    string (''2256.0'', ''12.7'').'
+  fouls: 'Personal fouls committed. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  free_throw_percentage: 'Free-throw percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  free_throws_attempted: 'Free throws attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  free_throws_made: 'Free throws made. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  full_name: Player's full name.
+  minutes: 'Minutes played, decimal minutes (not mm:ss). TOTALS: the sum (''1281.7'');
+    PER_GAME: the per-game average (''29.5''). A string.'
+  mode: 'Table mode of the request: TOTALS (sums over the selected games) or PER_GAME
+    (per-game averages); the body does not echo it.'
+  nationality: 'Nationality: an upper-case English country name (''CANADA'', ''UNITED
+    STATES'', ''SOUTH SUDAN''); null when unknown.'
+  offensive_rebounds: 'Offensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  played: Games played (a count in both modes).
+  player_id: CEBL player id (its own key space). Joins /players/{player_id}/ and `id`
+    in the other player rows. Genius LiveStats `data.json` carries no person id, so
+    the join to Genius play-by-play is by name, team and jersey number (unverified).
+  points: 'Points scored. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  rebounds: 'Total rebounds (offensive + defensive). TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  season: 'Season: the calendar year it is played in (May to August) = the sdv END
+    year (2025). Taken from the request (the body does not echo it); null for the
+    all-time table and for a bare body.'
+  segment: Game-subset filter of the request (HOME, AWAY, L5G, MAY ...); null for
+    all games. The body does not echo it.
+  started: Games started (a count in both modes).
+  steals: 'Steals. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  target_scores: 'Target-score baskets: games in which the player made the basket
+    that reached the Elam Ending target score and ended the game (CEBL has used the
+    Elam Ending since 2020, so 2019 is 0). TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits).'
+  team_logo_url: Logo URL (icon with the name) of the player's team.
+  team_name_en: Full English name of the player's team.
+  team_name_fr: Full French name of the player's team.
+  team_short_name_en: Short English name (city) of the player's team.
+  team_short_name_fr: Short French name (city) of the player's team.
+  three_point_percentage: 'Three-point percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  three_points_attempted: 'Three-pointers attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  three_points_made: 'Three-pointers made. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  triple_doubles: 'Triple-doubles: games with 10 or more in three of those. TOTALS:
+    the sum over the selected games; PER_GAME: the per-game average, 1 decimal. A
+    decimal sent as a string (''2256.0'', ''12.7'').'
+  turn_overs: 'Turnovers. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+cebl_roster:
+  birth_date: Date of birth, YYYY-MM-DD (players' public bio field); null when unknown.
+  full_name: Player's full name.
+  jersey_number: Jersey number, as a string of up to 2 characters ('0', '00' and '1'
+    are distinct); null when unknown.
+  nationality: 'Nationality: an upper-case English country name (''CANADA'', ''UNITED
+    STATES'', ''SOUTH SUDAN''); null when unknown.'
+  photo_url: Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com).
+  player_id: CEBL player id (its own key space). Joins /players/{player_id}/ and `id`
+    in the other player rows. Genius LiveStats `data.json` carries no person id, so
+    the join to Genius play-by-play is by name, team and jersey number (unverified).
+  position: 'Playing position: G (guard), F (forward), C (center), or a combination
+    such as ''C/F''; null when unknown.'
+  season: Season of the roster asked for (from the request; the body does not echo
+    it).
+  team_id: CEBL team id of the roster asked for (from the request; the body does not
+    echo it).
+cebl_seasons:
+  is_active: 'True for the current season (one row: 2026 on 2026-10-12).'
+  is_live: 'True while the current season is in progress or open for live data (true
+    for 2026 on 2026-10-12, after its last game: the exact meaning is unverified).'
+  season: 'Season: the calendar year it is played in (May-August) = the sdv END year.
+    The key every route''s `season` param takes.'
+  season_id: 'CEBL season row id (1 = 2019 ... 8 = 2026). No route takes it: routes
+    take `year`.'
+cebl_standings:
+  away_losses: Regular-season away games lost.
+  away_wins: Regular-season away games won.
+  conference: 'Conference: EAST or WEST.'
+  games_behind: Games behind the conference leader; the API sends a decimal string
+    ('0.0').
+  home_losses: Regular-season home games lost.
+  home_wins: Regular-season home games won.
+  icon_url: Team icon URL (without the team name) on Google Cloud Storage.
+  last_five: Record in the last 5 games, 'W-L' ('4-1').
+  logo_url: Team logo URL (icon with the team name) on Google Cloud Storage.
+  losses: Regular-season games lost.
+  name_en: Team full name in English ('Niagara River Lions').
+  name_fr: Team full name in French ('River Lions de Niagara').
+  played: Regular-season games played (24 a team in 2025).
+  points_difference: Points scored minus points allowed over the season. An integer.
+  position: Rank in the team's conference standings (1 = first), not a playing position.
+  season: 'Season: the calendar year it is played in (May to August) = the sdv END
+    year (2025). Taken from the request (the body does not echo it); null for the
+    all-time table and for a bare body.'
+  shop_url_en: The team's merchandise shop (English).
+  shop_url_fr: The team's merchandise shop (French).
+  short_name_en: Team short name in English, usually the city ('Niagara').
+  short_name_fr: Team short name in French, usually the city.
+  stats_url_en: The team's stats page on cebl.ca (`https://cebl.ca/stats/{slug}`).
+  stats_url_fr: The team's stats page on the French cebl.ca (`https://cebl.ca/fr-ca/stats/{slug}`).
+  streak: 'Current streak: W or L and its length (''W4'', ''L1'').'
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits).'
+  tickets_url_en: Ticket-sales page for the team's home games (English).
+  tickets_url_fr: Ticket-sales page for the team's home games (French).
+  website_url_en: The team's own website (English).
+  website_url_fr: The team's own website (French).
+  win_percentage: Win fraction, 0-1 (0.583), not a percentage; the API sends a decimal
+    string.
+  wins: Regular-season games won.
+cebl_team_stats:
+  assists: 'Assists. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  blocks: 'Shots blocked. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  competition: 'Competition filter of the request: REGULAR or FINALS; null when both
+    were asked. The body does not echo it.'
+  defensive_rebounds: 'Defensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  efficiency: 'Efficiency rating (EFF); CEBL does not publish its formula (unverified:
+    the usual Genius / FIBA EFF is PTS + REB + AST + STL + BLK - missed FG - missed
+    FT - TO). TOTALS: the sum over the selected games; PER_GAME: the per-game average,
+    1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  field_goal_percentage: 'Field-goal percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  field_goals_attempted: 'Field goals attempted (2- and 3-pointers). TOTALS: the sum
+    over the selected games; PER_GAME: the per-game average, 1 decimal. A decimal
+    sent as a string (''2256.0'', ''12.7'').'
+  field_goals_made: 'Field goals made (2- and 3-pointers). TOTALS: the sum over the
+    selected games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a
+    string (''2256.0'', ''12.7'').'
+  fouls: 'Personal fouls committed. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  fouls_drawn: 'Fouls drawn (committed by opponents). TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  free_throw_percentage: 'Free-throw percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  free_throws_attempted: 'Free throws attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  free_throws_made: 'Free throws made. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  icon_url: Team icon URL (without the team name) on Google Cloud Storage. Null on
+    the league row.
+  is_league_row: 'True on the one league row of a team table (null team_id and names):
+    the league''s own figures, where played counts team-games and, in TOTALS, points
+    equals points_against.'
+  logo_url: Team logo URL (icon with the team name) on Google Cloud Storage. Null
+    on the league row.
+  losses: Losses (a count in both modes).
+  mode: 'Table mode of the request: TOTALS (sums over the selected games) or PER_GAME
+    (per-game averages); the body does not echo it.'
+  name_en: Team full name in English ('Niagara River Lions'). Null on the league row.
+  name_fr: Team full name in French ('River Lions de Niagara'). Null on the league
+    row.
+  offensive_rebounds: 'Offensive rebounds. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  played: 'Games played (a count in both modes). On the league row: team-games (twice
+    the games).'
+  point_difference: 'Points scored minus points allowed. TOTALS: the sum over the
+    selected games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a
+    string (''2256.0'', ''12.7'').'
+  points: 'Points scored. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  points_against: 'Points allowed. TOTALS: the sum over the selected games; PER_GAME:
+    the per-game average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  rebounds: 'Total rebounds (offensive + defensive). TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  season: 'Season: the calendar year it is played in (May to August) = the sdv END
+    year (2025). Taken from the request (the body does not echo it); null for the
+    all-time table and for a bare body.'
+  segment: Game-subset filter of the request (HOME, AWAY, L5G, MAY ...); null for
+    all games. The body does not echo it.
+  short_name_en: Team short name in English, usually the city ('Niagara'). Null on
+    the league row.
+  short_name_fr: Team short name in French, usually the city. Null on the league row.
+  stats_url_en: The team's stats page on cebl.ca (`https://cebl.ca/stats/{slug}`).
+    Null on the league row.
+  stats_url_fr: The team's stats page on the French cebl.ca (`https://cebl.ca/fr-ca/stats/{slug}`).
+    Null on the league row.
+  steals: 'Steals. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits). Null on the league row.'
+  three_point_percentage: 'Three-point percentage, 0-100 with 1 decimal (''44.7''):
+    made / attempted over the selected games (the same in both modes). A string.'
+  three_points_attempted: 'Three-pointers attempted. TOTALS: the sum over the selected
+    games; PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  three_points_made: 'Three-pointers made. TOTALS: the sum over the selected games;
+    PER_GAME: the per-game average, 1 decimal. A decimal sent as a string (''2256.0'',
+    ''12.7'').'
+  turn_overs: 'Turnovers. TOTALS: the sum over the selected games; PER_GAME: the per-game
+    average, 1 decimal. A decimal sent as a string (''2256.0'', ''12.7'').'
+  vs_conference: Opponent-conference filter of the request (EAST or WEST); null when
+    not asked. The body does not echo it.
+  vs_team_id: Opponent team filter of the request (CEBL team id); null when not asked.
+    The body does not echo it.
+  win_percentage: Wins / games played, 0-1 with 3 decimals ('0.625'). A string.
+  wins: Wins (a count in both modes).
+cebl_teams:
+  icon_url: 'Team icon URL (upstream: ''Should not include the team name'').'
+  is_active: True for a team in the current league; false for a former identity (Guelph
+    Nighthawks, Hamilton Honey Badgers, Fraser Valley Bandits, Saskatchewan Rattlers,
+    Newfoundland Growlers).
+  logo_url: 'Team logo URL (icon with the team name; upstream: ''Should include the
+    icon and team name'').'
+  name_en: Team full name in English ('Niagara River Lions').
+  name_fr: Team full name in French ('River Lions de Niagara').
+  short_name_en: Team short name in English, usually the city ('Niagara').
+  short_name_fr: Team short name in French, usually the city.
+  team_id: 'CEBL team id (its own key space; not a Genius id). Joins /teams/ `id`,
+    the games'' `home_team_id` / `away_team_id`, `team_id` in player rows and the
+    `team_id` / `vs_team_id` params. A relocated or renamed franchise has a second
+    id: the Stats Hub groups 15+56 (Saskatchewan Rattlers, Saskatoon Mamba), 17+53
+    (Calgary Surge, Guelph Nighthawks), 19+55 (Brampton, Hamilton Honey Badgers) and
+    16+54 (Vancouver, Fraser Valley Bandits).'

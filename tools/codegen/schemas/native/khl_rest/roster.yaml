@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: group
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: photo
+  type: character
+- description: ''
+  name: country
+  type: character
+- description: ''
+  name: lastname
+  type: character
+- description: ''
+  name: firstname
+  type: character
+- description: ''
+  name: jn
+  type: integer
+- description: ''
+  name: age
+  type: integer
+- description: ''
+  name: favorite
+  type: logical
+- description: ''
+  name: link
+  type: character
+kind: dataframe
+schema: khl_roster

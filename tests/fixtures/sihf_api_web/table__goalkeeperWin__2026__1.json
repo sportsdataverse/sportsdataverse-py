@@ -1,0 +1,257 @@
+{
+  "title": "Goalie Stats",
+  "description": "Goalie Stats - Wins/Shutout",
+  "pages": 35,
+  "selectedPage": 1,
+  "orderBy": "wins",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:18.4908505+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "goalsAgainstAverage",
+      "isOrderDescending": false,
+      "alias": "goalkeeper"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogaSog",
+      "isOrderDescending": true,
+      "alias": "goalkeeperShotDetail"
+    },
+    {
+      "name": "Wins/Shutout",
+      "rowIdentifierKey": "wins",
+      "isOrderDescending": true,
+      "alias": "goalkeeperWin"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        12
+      ]
+    },
+    {
+      "name": null,
+      "style": "line",
+      "rows": [
+        17
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "GPI",
+      "description": "Spiele als 1. Torhüter",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "firstKeeper"
+    },
+    {
+      "name": "WT",
+      "description": "Siege Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "wins"
+    },
+    {
+      "name": "W",
+      "description": "Siege nach regulärer Spielzeit",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "winsIntime"
+    },
+    {
+      "name": "OTW",
+      "description": "Siege nach Verlängerung",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "winsOvertime"
+    },
+    {
+      "name": "SOW",
+      "description": "Siege nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "winsPenalty"
+    },
+    {
+      "name": "LT",
+      "description": "Niederlagen Total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "losses"
+    },
+    {
+      "name": "L",
+      "description": "Niederlagen nach regulärer Spielzeit",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "lossesIntime"
+    },
+    {
+      "name": "OTL",
+      "description": "Niederlagen nach Verlängerung",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "lossesOvertime"
+    },
+    {
+      "name": "SOL",
+      "description": "Niederlagen nach Penaltyschiessen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "lossesPenalty"
+    },
+    {
+      "name": "SO",
+      "description": "Spiele ohne Gegentor",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "shutout"
+    }
+  ],
+  "data": [
+    [
+      "16",
+      "Senn Gilles",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "26",
+      "7",
+      "6",
+      "1",
+      "0",
+      "19",
+      "15",
+      "3",
+      "1",
+      "0"
+    ],
+    [
+      "15",
+      "Ciaccio Damiano",
+      {
+        "id": 103144,
+        "name": "HC Ajoie",
+        "acronym": "HCA",
+        "signed": false,
+        "type": "team"
+      },
+      "29",
+      "28",
+      "8",
+      "5",
+      "1",
+      "2",
+      "19",
+      "17",
+      "2",
+      "0",
+      "0"
+    ],
+    [
+      "14",
+      "Boltshauser Luca",
+      {
+        "id": 102127,
+        "name": "SCL Tigers",
+        "acronym": "SCL",
+        "signed": false,
+        "type": "team"
+      },
+      "29",
+      "29",
+      "9",
+      "8",
+      "1",
+      "0",
+      "18",
+      "13",
+      "2",
+      "3",
+      "3"
+    ]
+  ],
+  "alias": "goalkeeperWin"
+}

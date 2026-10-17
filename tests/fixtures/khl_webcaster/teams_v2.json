@@ -1,0 +1,41 @@
+[
+  {
+    "team": {
+      "id": 30,
+      "khl_id": 37,
+      "name": "Metallurg Mg",
+      "location": "Magnitogorsk",
+      "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/30/original/metallurg_mg_2020__200x200.png",
+      "division": "Kharlamov division",
+      "division_key": "kharlamov",
+      "conference": "East",
+      "conference_key": "east"
+    }
+  },
+  {
+    "team": {
+      "id": 10,
+      "khl_id": 34,
+      "name": "Avangard",
+      "location": "Omsk Region",
+      "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+      "division": "Chernyshev division",
+      "division_key": "chernyshev",
+      "conference": "East",
+      "conference_key": "east"
+    }
+  },
+  {
+    "team": {
+      "id": 26,
+      "khl_id": 1,
+      "name": "Lokomotiv",
+      "location": "Yaroslavl",
+      "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/26/original/lokomotiv_2022__200x200.png",
+      "division": "Tarasov division",
+      "division_key": "tarasov",
+      "conference": "West",
+      "conference_key": "west"
+    }
+  }
+]

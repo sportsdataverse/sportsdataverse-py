@@ -1,0 +1,424 @@
+{
+"game": {
+"espn_event_id": 401671799,
+"kickoff_utc": "2024-12-25T18:00Z",
+"home_espn_team_id": "23",
+"away_espn_team_id": "12"
+},
+"athletes": [
+{
+"team_id": "12",
+"athlete_id": "3139477",
+"athlete_display_name": "Patrick Mahomes",
+"athlete_jersey": "15"
+},
+{
+"team_id": "12",
+"athlete_id": "3059915",
+"athlete_display_name": "Kareem Hunt",
+"athlete_jersey": "29"
+},
+{
+"team_id": "12",
+"athlete_id": "4361529",
+"athlete_display_name": "Isiah Pacheco",
+"athlete_jersey": "10"
+},
+{
+"team_id": "12",
+"athlete_id": "4683062",
+"athlete_display_name": "Xavier Worthy",
+"athlete_jersey": "1"
+},
+{
+"team_id": "12",
+"athlete_id": "3116389",
+"athlete_display_name": "Samaje Perine",
+"athlete_jersey": "34"
+},
+{
+"team_id": "12",
+"athlete_id": "15847",
+"athlete_display_name": "Travis Kelce",
+"athlete_jersey": "87"
+},
+{
+"team_id": "12",
+"athlete_id": "3118892",
+"athlete_display_name": "Justin Watson",
+"athlete_jersey": "84"
+},
+{
+"team_id": "12",
+"athlete_id": "4241372",
+"athlete_display_name": "Hollywood Brown",
+"athlete_jersey": "5"
+},
+{
+"team_id": "12",
+"athlete_id": "3120348",
+"athlete_display_name": "JuJu Smith-Schuster",
+"athlete_jersey": "9"
+},
+{
+"team_id": "12",
+"athlete_id": "15795",
+"athlete_display_name": "DeAndre Hopkins",
+"athlete_jersey": "8"
+},
+{
+"team_id": "12",
+"athlete_id": "4240472",
+"athlete_display_name": "Noah Gray",
+"athlete_jersey": "83"
+},
+{
+"team_id": "12",
+"athlete_id": "4372716",
+"athlete_display_name": "Nikko Remigio",
+"athlete_jersey": "81"
+},
+{
+"team_id": "12",
+"athlete_id": "2969944",
+"athlete_display_name": "Deon Bush",
+"athlete_jersey": "26"
+},
+{
+"team_id": "12",
+"athlete_id": "4362759",
+"athlete_display_name": "Nick Bolton",
+"athlete_jersey": "32"
+},
+{
+"team_id": "12",
+"athlete_id": "4428383",
+"athlete_display_name": "Chris Roland-Wallace",
+"athlete_jersey": "30"
+},
+{
+"team_id": "12",
+"athlete_id": "3129310",
+"athlete_display_name": "Drue Tranquill",
+"athlete_jersey": "23"
+},
+{
+"team_id": "12",
+"athlete_id": "3931399",
+"athlete_display_name": "Justin Reid",
+"athlete_jersey": "20"
+},
+{
+"team_id": "12",
+"athlete_id": "3915487",
+"athlete_display_name": "Mike Danna",
+"athlete_jersey": "51"
+},
+{
+"team_id": "12",
+"athlete_id": "4426405",
+"athlete_display_name": "Trent McDuffie",
+"athlete_jersey": "22"
+},
+{
+"team_id": "12",
+"athlete_id": "4685232",
+"athlete_display_name": "Jaden Hicks",
+"athlete_jersey": "21"
+},
+{
+"team_id": "12",
+"athlete_id": "4612387",
+"athlete_display_name": "Felix Anudike-Uzomah",
+"athlete_jersey": "97"
+},
+{
+"team_id": "12",
+"athlete_id": "4043625",
+"athlete_display_name": "Nazeeh Johnson",
+"athlete_jersey": "13"
+},
+{
+"team_id": "12",
+"athlete_id": "4570546",
+"athlete_display_name": "Swayze Bozeman",
+"athlete_jersey": "50"
+},
+{
+"team_id": "12",
+"athlete_id": "4058925",
+"athlete_display_name": "Tershawn Wharton",
+"athlete_jersey": "98"
+},
+{
+"team_id": "12",
+"athlete_id": "4247726",
+"athlete_display_name": "Bryan Cook",
+"athlete_jersey": "6"
+},
+{
+"team_id": "12",
+"athlete_id": "4426659",
+"athlete_display_name": "George Karlaftis",
+"athlete_jersey": "56"
+},
+{
+"team_id": "12",
+"athlete_id": "4371959",
+"athlete_display_name": "Cam Jones",
+"athlete_jersey": "44"
+},
+{
+"team_id": "12",
+"athlete_id": "4917635",
+"athlete_display_name": "Joshua Williams",
+"athlete_jersey": "2"
+},
+{
+"team_id": "12",
+"athlete_id": "16665",
+"athlete_display_name": "James Winchester",
+"athlete_jersey": "41"
+},
+{
+"team_id": "12",
+"athlete_id": "3929865",
+"athlete_display_name": "Charles Omenihu",
+"athlete_jersey": "90"
+},
+{
+"team_id": "12",
+"athlete_id": "4243332",
+"athlete_display_name": "Keith Taylor",
+"athlete_jersey": "39"
+},
+{
+"team_id": "12",
+"athlete_id": "3122930",
+"athlete_display_name": "Derrick Nnadi",
+"athlete_jersey": "91"
+},
+{
+"team_id": "12",
+"athlete_id": "4426901",
+"athlete_display_name": "Leo Chenal",
+"athlete_jersey": "54"
+},
+{
+"team_id": "12",
+"athlete_id": "3055899",
+"athlete_display_name": "Harrison Butker",
+"athlete_jersey": "7"
+},
+{
+"team_id": "12",
+"athlete_id": "4361496",
+"athlete_display_name": "Matt Araiza",
+"athlete_jersey": "14"
+},
+{
+"team_id": "23",
+"athlete_id": "14881",
+"athlete_display_name": "Russell Wilson",
+"athlete_jersey": "3"
+},
+{
+"team_id": "23",
+"athlete_id": "4241457",
+"athlete_display_name": "Najee Harris",
+"athlete_jersey": "22"
+},
+{
+"team_id": "23",
+"athlete_id": "4569987",
+"athlete_display_name": "Jaylen Warren",
+"athlete_jersey": "30"
+},
+{
+"team_id": "23",
+"athlete_id": "15807",
+"athlete_display_name": "Cordarrelle Patterson",
+"athlete_jersey": "84"
+},
+{
+"team_id": "23",
+"athlete_id": "4361411",
+"athlete_display_name": "Pat Freiermuth",
+"athlete_jersey": "88"
+},
+{
+"team_id": "23",
+"athlete_id": "4426354",
+"athlete_display_name": "George Pickens",
+"athlete_jersey": "14"
+},
+{
+"team_id": "23",
+"athlete_id": "4243389",
+"athlete_display_name": "Calvin Austin III",
+"athlete_jersey": "19"
+},
+{
+"team_id": "23",
+"athlete_id": "4241961",
+"athlete_display_name": "Connor Heyward",
+"athlete_jersey": "83"
+},
+{
+"team_id": "23",
+"athlete_id": "4430802",
+"athlete_display_name": "Darnell Washington",
+"athlete_jersey": "80"
+},
+{
+"team_id": "23",
+"athlete_id": "3045138",
+"athlete_display_name": "Mike Williams",
+"athlete_jersey": "18"
+},
+{
+"team_id": "23",
+"athlete_id": "3930066",
+"athlete_display_name": "Van Jefferson",
+"athlete_jersey": "11"
+},
+{
+"team_id": "23",
+"athlete_id": "3925345",
+"athlete_display_name": "Minkah Fitzpatrick",
+"athlete_jersey": "39"
+},
+{
+"team_id": "23",
+"athlete_id": "4242207",
+"athlete_display_name": "Patrick Queen",
+"athlete_jersey": "6"
+},
+{
+"team_id": "23",
+"athlete_id": "3843769",
+"athlete_display_name": "Donte Jackson",
+"athlete_jersey": "26"
+},
+{
+"team_id": "23",
+"athlete_id": "4037333",
+"athlete_display_name": "Alex Highsmith",
+"athlete_jersey": "56"
+},
+{
+"team_id": "23",
+"athlete_id": "4361652",
+"athlete_display_name": "Payton Wilson",
+"athlete_jersey": "41"
+},
+{
+"team_id": "23",
+"athlete_id": "13977",
+"athlete_display_name": "Cameron Heyward",
+"athlete_jersey": "97"
+},
+{
+"team_id": "23",
+"athlete_id": "3929846",
+"athlete_display_name": "DeShon Elliott",
+"athlete_jersey": "25"
+},
+{
+"team_id": "23",
+"athlete_id": "3044724",
+"athlete_display_name": "Cameron Sutton",
+"athlete_jersey": "20"
+},
+{
+"team_id": "23",
+"athlete_id": "4372492",
+"athlete_display_name": "Cory Trice Jr.",
+"athlete_jersey": "27"
+},
+{
+"team_id": "23",
+"athlete_id": "2987743",
+"athlete_display_name": "Elandon Roberts",
+"athlete_jersey": "50"
+},
+{
+"team_id": "23",
+"athlete_id": "3050122",
+"athlete_display_name": "Larry Ogunjobi",
+"athlete_jersey": "99"
+},
+{
+"team_id": "23",
+"athlete_id": "3045282",
+"athlete_display_name": "T.J. Watt",
+"athlete_jersey": "90"
+},
+{
+"team_id": "23",
+"athlete_id": "4426694",
+"athlete_display_name": "Keeanu Benton",
+"athlete_jersey": "95"
+},
+{
+"team_id": "23",
+"athlete_id": "2575164",
+"athlete_display_name": "Miles Killebrew",
+"athlete_jersey": "28"
+},
+{
+"team_id": "23",
+"athlete_id": "2978524",
+"athlete_display_name": "Christian Kuntz",
+"athlete_jersey": "46"
+},
+{
+"team_id": "23",
+"athlete_id": "4034959",
+"athlete_display_name": "Jeremiah Moon",
+"athlete_jersey": "49"
+},
+{
+"team_id": "23",
+"athlete_id": "4249342",
+"athlete_display_name": "Mark Robinson",
+"athlete_jersey": "93"
+},
+{
+"team_id": "23",
+"athlete_id": "4259252",
+"athlete_display_name": "James Pierre",
+"athlete_jersey": "42"
+},
+{
+"team_id": "23",
+"athlete_id": "3051894",
+"athlete_display_name": "Montravius Adams",
+"athlete_jersey": "57"
+},
+{
+"team_id": "23",
+"athlete_id": "4035798",
+"athlete_display_name": "Isaiahh Loudermilk",
+"athlete_jersey": "92"
+},
+{
+"team_id": "23",
+"athlete_id": "4429164",
+"athlete_display_name": "Nick Herbig",
+"athlete_jersey": "51"
+},
+{
+"team_id": "23",
+"athlete_id": "17372",
+"athlete_display_name": "Chris Boswell",
+"athlete_jersey": "9"
+},
+{
+"team_id": "23",
+"athlete_id": "3125280",
+"athlete_display_name": "Corliss Waitman",
+"athlete_jersey": "8"
+}
+]
+}
