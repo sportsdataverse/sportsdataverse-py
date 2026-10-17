@@ -64,7 +64,7 @@ SCHEMAS: Dict[str, str] = {
         "group:s rank:i player_id:i player_name:s image:s jn:i gp:i g:i a:i pts:i pm:i plus:i minus:i "
         "pim:i eqg:i ppg:i shg:i otg:i gwg:i sds:i sog:i sog_pct:f sog_avg:f fo:i fow:i fo_pct:f "
         "toi_avg:s sft_avg:f tie_avg:s sfte_avg:f tipp_avg:s sftpp_avg:f tish_avg:s sftsh_avg:f hits:i "
-        "bls:i"
+        "bls:i w:i l:i sop:i ga:i sv:i sv_pct:f gaa:f so:i toi:s"
     ),
     "khl_playoff_bracket": (
         "round:i wins_to_advance:i pair:i conference:s seed:i club_id:i name:s series_wins:i game_ids:s"

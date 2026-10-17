@@ -64050,12 +64050,15 @@ khl_player_stats:
   fo_pct: Faceoff win percentage
   fow: Faceoffs won by the player
   g: Goals scored by the player
+  ga: Goals against (goalies only)
+  gaa: Goals-against average, 60 min x goals against / time on ice (goalies only)
   gp: Games played by the player
   group: List the row comes from (position group / roster section)
   gwg: Game-winning goals
   hits: Hits (body checks)
   image: Player photo URL on khl.ru (team-season specific)
   jn: Jersey number (not an id; 0 on a team event)
+  l: Losses (goalies only)
   minus: Minus (on ice for a goal against)
   otg: Overtime goals scored by the player
   pim: Penalty minutes
@@ -64066,19 +64069,25 @@ khl_player_stats:
   ppg: Power-play goals
   pts: Points (goals plus assists)
   rank: 1-based position in its table / list
+  so: Shutouts, games without a goal against (goalies only)
+  sop: Games that went to a shootout (goalies only)
   sds: Shootout-deciding goals
   sft_avg: Average shifts per game
   sfte_avg: Average even-strength shifts per game
   sftpp_avg: Average power-play shifts per game
   sftsh_avg: Average short-handed shifts per game
   shg: Short-handed goals
-  sog: Shots on goal by the player
+  sog: Shots on goal by the player (shots faced for a goalie)
   sog_avg: Shots on goal per game
   sog_pct: Shooting percentage
+  sv: Saves, shots on goal stopped (goalies only)
+  sv_pct: Save percentage (goalies only)
   tie_avg: Average even-strength time on ice per game
   tipp_avg: Average power-play time on ice per game
   tish_avg: Average short-handed time on ice per game
   toi_avg: Average time on ice per game (mm:ss)
+  toi: Total time on the ice (goalies only; text, null when none)
+  w: Wins (goalies only)
 khl_playoff_bracket:
   club_id: khl.ru CLUB id (stable across seasons; joins webcaster team khl_id)
   conference: Conference (west / east)

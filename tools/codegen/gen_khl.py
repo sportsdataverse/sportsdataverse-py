@@ -36,6 +36,7 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+import polars as pl
 import yaml
 
 from gen_soccer_common import ROOT, columns_from_frame, load_spec, refs_dir, rewrite_schema_dir, write_yaml
@@ -240,7 +241,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
             ],
             {},
             {"season": 2026, "position": "forwards"},
-            "stat__players.json",
+            ("stat__players.json", "stat__players_goalies.json"),  # skater + goalie columns
         )
     ],
     "/players/profile/": [
@@ -576,10 +577,19 @@ def returns_descriptions(path: Path) -> Dict[str, Dict[str, str]]:
 
 
 def _schema(
-    fixture: Path, parser: Callable[..., Any], key: str, route_docs: Dict[str, str], notes: Dict[str, Dict[str, str]]
+    fixture: Path | tuple[Path, ...],
+    parser: Callable[..., Any],
+    key: str,
+    route_docs: Dict[str, str],
+    notes: Dict[str, Dict[str, str]],
 ) -> Dict[str, Any]:
-    frame = parser(json.loads(fixture.read_text(encoding="utf-8")))
-    assert frame.height, f"{fixture.name}: {parser.__name__} parsed no rows"
+    """A returns schema from the parsed fixture(s); several fixtures declare the union of their columns."""
+    frames = []
+    for path in fixture if isinstance(fixture, tuple) else (fixture,):
+        frame = parser(json.loads(path.read_text(encoding="utf-8")))
+        assert frame.height, f"{path.name}: {parser.__name__} parsed no rows"
+        frames.append(frame)
+    frame = frames[0] if len(frames) == 1 else pl.concat(frames, how="diagonal_relaxed")
     cols = columns_from_frame(frame, [], leaf_fallback=False)
     descs = {c["name"]: DERIVED.get(c["name"]) or route_docs.get(c["name"], "") for c in cols}
     notes[key] = {k: v for k, v in descs.items() if _useful(k, v)}
@@ -679,7 +689,11 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
             write_yaml(
                 schema_dir / f"{short}.yaml",
                 _schema(
-                    FIXTURES / "khl_rest" / fixture, getattr(rest, parser), f"khl_{short}", docs.get(path, {}), notes
+                    tuple(FIXTURES / "khl_rest" / f for f in ((fixture,) if isinstance(fixture, str) else fixture)),
+                    getattr(rest, parser),
+                    f"khl_{short}",
+                    docs.get(path, {}),
+                    notes,
                 ),
             )
     doc = {
