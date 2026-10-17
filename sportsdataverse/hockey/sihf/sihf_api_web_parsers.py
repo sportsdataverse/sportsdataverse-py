@@ -2,7 +2,8 @@
 
 The SIHF statistics API serves two body shapes:
 
-* **Tables** (``/table?alias=results|standing|player|goalkeeper``) --
+* **Tables** (``/table?alias=results|standing``, the 11 ``team*``, 9 ``player*`` and 4
+  ``goalkeeper*`` aliases) --
   ``{header: [{alias, name, ...}], data: [[cell, ...], ...], filters: [...],
   highlightedPositions: [...]}``. Rows are positional lists aligned with ``header``.
   A cell is a string, or an object tagged by ``type``: ``team`` (``id`` / ``name`` /
@@ -84,13 +85,141 @@ _INT_ALIASES = frozenset(
         "blockings",
         "faceoffsWon",
         "faceoffsLost",
+        # the team / skater / goalie detail tables (counts in every row of the full 2025-26 NL bodies;
+        # the two attendance averages are whole numbers with a thousands separator, ``5’276``)
+        "eqAssists",
+        "eqGoals",
+        "evenGoalsAgainst",
+        "evenGoalsFor",
+        "faceoffs",
+        "faceoffsDefensive",
+        "faceoffsLostDefensive",
+        "faceoffsLostNeutral",
+        "faceoffsLostOffensive",
+        "faceoffsNeutral",
+        "faceoffsOffensive",
+        "faceoffsWonDefensive",
+        "faceoffsWonNeutral",
+        "faceoffsWonOffensive",
+        "gameMisconducts",
+        "gameWinningGoals",
+        "goalsForDf",
+        "goalsForFw",
+        "goalsForFwDf",
+        "goalsForIm",
+        "hattricks",
+        "homeGames",
+        "losses",
+        "lossesIntime",
+        "lossesOvertime",
+        "lossesPenalty",
+        "matchPenalties",
+        "overtimeGoals",
+        "penShotGoals",
+        "penShotGoalsAgainst",
+        "penShotSaves",
+        "penShotWinningGoals",
+        "penShots",
+        "penShotsAgainst",
+        "penShotsMissed",
+        "pim10",
+        "pim2",
+        "pim5",
+        "pkAssists",
+        "pkGoals",
+        "pkGoalsAgainst",
+        "pkSituations",
+        "ppAssists",
+        "ppGoals",
+        "ppGoalsAgainst",
+        "ppGoalsFor",
+        "ppOpportunities",
+        "shGoals",
+        "shifts",
+        "shutout",
+        "sogSog",
+        "sogSogSlot",
+        "sogaMissed",
+        "sogaPost",
+        "sogaSog",
+        "sogaSogSlot",
+        "sowGoalsAgainst",
+        "sowGoalsFor",
+        "spectators",
+        "wins",
+        "winsIntime",
+        "winsOvertime",
+        "winsPenalty",
     }
 )
+# Rates: decimals (``"2.25"``) in every row of the full bodies. Every ``*Quotient`` (a per-game ratio)
+# is a rate, Float64 even where SIHF rounds it to a whole number (``spectatorsQuotient`` ``"5’276"``),
+# so a quotient never changes dtype between tables. The ``timeOnIce*``, ``powerPlayTime*`` and
+# ``penaltyKillTime*`` columns are ``"mm:ss"`` strings, quotient or not, and stay String.
 _FLOAT_ALIASES = frozenset(
-    {"pointsQuotient", "pointsPerGame", "goalsAgainstAverage", "savesPercentage", "faceoffsPercent"}
+    {
+        "spectatorsQuotient",
+        "stadiumCapacityQuotient",
+        "pointsQuotient",
+        "pointsPerGame",
+        "goalsAgainstAverage",
+        "savesPercentage",
+        "faceoffsPercent",
+        "blockingsPerGame",
+        "evenGoalsAgainstQuotient",
+        "evenGoalsForQuotient",
+        "faceoffsDefensivePerGame",
+        "faceoffsDefensivePercent",
+        "faceoffsLostDefensivePerGame",
+        "faceoffsLostNeutralPerGame",
+        "faceoffsLostOffensivePerGame",
+        "faceoffsLostPerGame",
+        "faceoffsNeutralPerGame",
+        "faceoffsNeutralPercent",
+        "faceoffsOffensivePerGame",
+        "faceoffsOffensivePercent",
+        "faceoffsPerGame",
+        "faceoffsWonDefensivePerGame",
+        "faceoffsWonNeutralPerGame",
+        "faceoffsWonOffensivePerGame",
+        "faceoffsWonPerGame",
+        "goalsAgainstQuotient",
+        "goalsForDfPercent",
+        "goalsForFwPercent",
+        "goalsForImPercent",
+        "goalsForQuotient",
+        "penShotSavesPercent",
+        "penShotsPercent",
+        "pkGoalsAgainstQuotient",
+        "pkPercent",
+        "pkSituationsQuotient",
+        "ppGoalsAgainstQuotient",
+        "ppGoalsForQuotient",
+        "ppOpportunitiesQuotient",
+        "ppPercent",
+        "savesSlotPercentage",
+        "shGoalsQuotient",
+        "shiftsPerGame",
+        "sogMissedPerGame",
+        "sogPostPerGame",
+        "sogSogPercent",
+        "sogSogQuotient",
+        "sogSogSlotPerGame",
+        "sogaMissedPerGame",
+        "sogaPostPerGame",
+        "sogaSogPerGame",
+        "sogaSogSlotPerGame",
+        "stadiumCapacityPercent",
+    }
 )
 # highlightedPositions styles that mark a summary row (the rest -- ``line`` -- are visual separators).
 _SUMMARY_STYLES = frozenset({"average", "total"})
+# The pseudo-team of a summary row: team id 100000, named ``Durchschnitt`` (league average) or ``Total``.
+# An empty rank is NOT a signal on its own: every goaltender below the qualification line has one too.
+_PSEUDO_TEAM_ID = 100000
+_PSEUDO_TEAM_NAMES = {"Durchschnitt": "average", "Total": "total"}
+# The thousands separator in attendance figures (``3’458’381``).
+_THOUSANDS = "[’']"
 # Season-table columns whose dtype neither their header alias nor the ``*_id`` rule gives: the
 # expanded ``result`` / ``periods`` / ``gameStatus`` cells, ``date`` and the echoed ``season``.
 _TABLE_DTYPES: Dict[str, Any] = {
@@ -143,8 +272,9 @@ def _int(value: Any) -> Optional[int]:
         return None
     if isinstance(value, int):
         return value
-    if isinstance(value, str) and re.fullmatch(r"-?\d+", value.strip()):
-        return int(value.strip())
+    if isinstance(value, str):
+        text = re.sub(_THOUSANDS, "", value.strip())
+        return int(text) if re.fullmatch(r"-?\d+", text) else None
     return None
 
 
@@ -197,7 +327,8 @@ def _coerce(value: Any, dtype: Any) -> Any:
 
 
 def _blank(value: Any) -> Any:
-    return None if isinstance(value, str) and not value.strip() else value
+    """``""`` and SIHF's ``"-"`` missing-value placeholder -> ``None``."""
+    return None if isinstance(value, str) and value.strip() in ("", "-") else value
 
 
 # ---------------------------------------------------------------------------
@@ -248,9 +379,9 @@ def _typed(df: pl.DataFrame, aliases: Mapping[str, str]) -> pl.DataFrame:
         if col not in df.columns or df.schema[col] != pl.String:
             continue
         if alias in _INT_ALIASES:
-            exprs.append(pl.col(col).cast(pl.Int64, strict=False))
+            exprs.append(pl.col(col).str.replace_all(_THOUSANDS, "").cast(pl.Int64, strict=False))
         elif alias in _FLOAT_ALIASES:
-            exprs.append(pl.col(col).cast(pl.Float64, strict=False))
+            exprs.append(pl.col(col).str.replace_all(_THOUSANDS, "").cast(pl.Float64, strict=False))
         elif alias == "date":
             exprs.append(pl.col(col).str.to_date("%d.%m.%Y", strict=False))
     return df.with_columns(exprs) if exprs else df
@@ -263,7 +394,8 @@ def _echoed(raw: Any) -> Dict[str, Optional[int]]:
     names = {"Season": "season", "Phase": "phase_id"}
     out: Dict[str, Optional[int]] = dict.fromkeys(names.values())
     for f in _list(raw.get("filters") if isinstance(raw, dict) else None):
-        if isinstance(f, dict) and f.get("alias") in names:
+        # a list / dict alias is unhashable: only a string can be one of the echoed filter names
+        if isinstance(f, dict) and isinstance(f.get("alias"), str) and f["alias"] in names:
             out[names[f["alias"]]] = _int(f.get("selected"))
     return out
 
@@ -279,7 +411,7 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
     aliases = {str(h.get("alias")): _col(str(h.get("alias"))) for h in header}
     summary: Dict[int, str] = {}
     for hp in _list(raw.get("highlightedPositions")):
-        if isinstance(hp, dict) and hp.get("style") in _SUMMARY_STYLES:
+        if isinstance(hp, dict) and isinstance(hp.get("style"), str) and hp["style"] in _SUMMARY_STYLES:
             for r in _list(hp.get("rows")):
                 if isinstance(r, int):
                     summary[r - 1] = str(hp["style"])  # rows are 1-based
@@ -291,7 +423,14 @@ def _table_frame(raw: Any, extra: Optional[Mapping[str, Any]] = None) -> pl.Data
         row: Dict[str, Any] = dict(prefix)
         for h, value in zip(header, cells):
             row.update(_expand_cell(aliases[str(h.get("alias"))], value))
-        row["row_type"] = summary.get(i, "data")
+        # A pseudo-team row is a summary row even when highlightedPositions does not tag it, and its
+        # team id (100000) and acronym are not a team's: null them so they never join to one.
+        team_name = row.get("team_name")
+        name = team_name if isinstance(team_name, str) else ""
+        pseudo = row.get("team_id") == _PSEUDO_TEAM_ID or name in _PSEUDO_TEAM_NAMES
+        row["row_type"] = summary.get(i) or (_PSEUDO_TEAM_NAMES.get(name, "average") if pseudo else "data")
+        if pseudo:
+            row.update({c: None for c in ("team_id", "team_acronym") if c in row})
         # A cell of the wrong type (a list where a string belongs) becomes null; header string
         # cells stay strings, which _typed casts afterwards.
         rows.append({c: _coerce(v, _raw_cell_dtype(c)) for c, v in row.items()})
@@ -326,13 +465,17 @@ def parse_sihf_table(
     expand: a ``team`` cell to ``{col}_id`` / ``{col}_name`` / ``{col}_acronym``, a ``result`` to ``{col}_home`` / ``{col}_away``, ``periods`` to
     per-side ``List[Int64]`` columns, ``gameStatus`` to ``status_*`` plus the start / end /
     update timestamps, and ``linkToGameDetail`` to ``game_id``. Known count and rate columns
-    are cast to ``Int64`` / ``Float64`` (``""`` and ``"-"`` become null) and ``date`` to a
-    ``Date``. ``season`` / ``phase_id`` come from the body's own filter echo (``phase_id`` is
+    are cast to ``Int64`` / ``Float64`` (the ``’`` thousands separator is dropped, ``""`` and
+    ``"-"`` become null) and ``date`` to a ``Date``; ``"mm:ss"`` times stay strings, with
+    ``"-"`` null. ``season`` / ``phase_id`` come from the body's own filter echo (``phase_id`` is
     null unless a phase was asked for; the body does not echo the league, so there is no
     league column), every ``*_id`` is ``Int64``, and ``row_type`` is ``"data"``, or
-    ``"average"`` / ``"total"`` for the summary rows SIHF
-    mixes into some tables (the goalie table's league-average row, whose team is the
-    pseudo-team ``100000`` / ``Durchschnitt``).
+    ``"average"`` / ``"total"`` for the summary rows SIHF mixes into the team and goalie
+    tables: the league-average row and the attendance table's ``Total`` row, both on the
+    pseudo-team ``100000`` (``Durchschnitt`` / ``Total``). A summary row is recognised from
+    ``highlightedPositions`` or, failing that, from its pseudo-team, whose ``team_id`` and
+    ``team_acronym`` are null so it never joins to a real team. An empty ``rank`` alone is
+    not a summary row: every goaltender below the qualification line has one.
 
     Args:
         raw (dict | None): a SIHF table JSON body.
@@ -405,8 +548,8 @@ def parse_sihf_phases(
     ``season`` comes from the body's Season echo. Rows keep SIHF's order.
 
     Args:
-        raw: a SIHF table JSON body requested with a ``Phase`` filter.
-        return_as_pandas: return a pandas DataFrame instead of polars.
+        raw (dict | None): a SIHF table JSON body requested with a ``Phase`` filter.
+        return_as_pandas (bool): return a pandas DataFrame instead of polars.
         columns (Sequence[str] | None): accepted for the generated wrappers, which pass the documented column names;
             unused, because the phase frame always carries its fixed documented schema.
 
@@ -441,13 +584,13 @@ def parse_sihf_phases(
     season = _echoed(raw)["season"]
     # Only the results table (the one with home / away team columns) counts games per phase.
     counts_games = isinstance(raw, dict) and any(
-        isinstance(h, dict) and h.get("alias") == "homeTeam" for h in raw.get("header") or []
+        isinstance(h, dict) and h.get("alias") == "homeTeam" for h in _list(raw.get("header"))
     )
     rows: List[Dict[str, Any]] = []
-    for f in (raw.get("filters") if isinstance(raw, dict) else None) or []:
+    for f in _list(raw.get("filters") if isinstance(raw, dict) else None):
         if not (isinstance(f, dict) and f.get("alias") == "Phase"):
             continue
-        for e in f.get("entries") or []:
+        for e in _list(f.get("entries")):
             phase_id = _int(e.get("alias")) if isinstance(e, dict) else None
             if phase_id is None:  # the "all" pseudo-entry
                 continue

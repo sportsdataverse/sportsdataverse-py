@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: zone
+  type: integer
+- description: ''
+  name: made
+  type: integer
+- description: ''
+  name: attempts
+  type: integer
+- description: ''
+  name: perc
+  type: numeric
+- description: ''
+  name: precision
+  type: integer
+- description: ''
+  name: num
+  type: character
+- description: ''
+  name: opacity
+  type: integer
+kind: dataframe
+schema: lba_shots

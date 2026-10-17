@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: gender
+  type: character
+- description: ''
+  name: role_code
+  type: character
+- description: ''
+  name: role_name
+  type: character
+- description: ''
+  name: role_order
+  type: character
+- description: ''
+  name: default_nationality
+  type: character
+- description: ''
+  name: license_nationality
+  type: character
+kind: dataframe
+schema: fiba_gdap_game_officials

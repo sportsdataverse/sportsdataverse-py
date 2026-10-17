@@ -1,0 +1,361 @@
+api: wjbl
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial and unsupported: these wrappers read the JSON backend of www.wjbl.org
+    (api.wjbl.01core.app), keyless, found in the site''s own JavaScript. The site''s
+    terms of use (www.wjbl.org/kiyaku/) forbid reproducing, republishing or otherwise
+    using site content without permission: a copyright clause, not an anti-scraping
+    one. The wrappers fetch on the user''s behalf; a published data release or a hosted
+    mirror needs the owner''s decision first. The site has no robots.txt (404, checked
+    2026-10-12), so no Crawl-delay is published; the runtime waits at least 1 s before
+    every request, retries included. Payloads are not redistributed as release assets.'
+  - 'Women''s league: the W League is Japan''s top women''s basketball league (the
+    SportsDataverse R counterpart is wehoop). All text is Japanese (team names, phases,
+    play-by-play actions); the column descriptions translate the vocabulary.'
+  - 'Seasons are END years (2026 = 2025-26, 2000 = 1999-2000). The API keys a season
+    edition by an opaque league_id (45 = ''25-26 Wリーグ''; every all-star game, cup
+    and camp has one too) and the wrappers map the END year with the live league list
+    (one extra, cached request; END = 2000 + the second YY of league_title). Phases
+    inside an edition (season_id: 169 = regular season Premier, 170 = Future, 176
+    = playoff final; two divisions from 2024-25) are native ids, passed as given:
+    wjbl_standing_seasons lists them with their END year.'
+  - 'The schedule is paged by month: wjbl_schedule answers ONE month (game_month,
+    YYYY-MM; omitted = the season''s latest month only). List the months with wjbl_game_months
+    and loop. The game routes take only the global play_schedule_id and serve final
+    games only: each makes one extra, cached request (the game header) to prove the
+    game is final and that the answer is the game and the teams asked for.'
+  - 'Errors are HTTP 200: an unknown id answers [] (NoDataError) and a missing or
+    non-numeric parameter answers an error envelope (AssetFetchError). Coverage: schedules
+    from 1999-2000, box scores from 2013-14, play-by-play and the period stats from
+    2018-19 (earlier games answer [] on the /pbp routes: NoDataError). No route carries
+    shot coordinates.'
+  - 'Personal data: the organiser''s contact details (phones, e-mail) and the player''s
+    blood type are never output, and phone numbers and e-mail addresses inside free
+    text are replaced by [redacted-phone] / [redacted-email]. Do not add them back.
+    Player bio fields and referee names are public and stay.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty
+    list, an id it does not know, a game without play-by-play before 2018-19, a season
+    without months or games).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown
+    or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not
+    final, a truncated play-by-play, or a body for another game, league edition, month,
+    team, season phase or player than the one asked for.'
+  - 'ValueError: a season that is not the END year of a W League edition, an id that
+    is not an integer, a game_month that is not YYYY-MM (raised before the request),
+    or the API''s HTTP 400 / 422.'
+  raw_doc: 'the raw body (``dict``): the route''s JSON (a bare list as ``{''items'':
+    [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year)'
+  see_also:
+  - name: W League
+    note: the league site whose API these wrappers read
+    url: https://www.wjbl.org
+  - name: wehoop
+    note: SportsDataverse women's basketball package (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args: {}
+  fixed_params:
+    target: play_schedule
+  parser: parse_wjbl_leagues
+  path: /leagues
+  returns_schema: native/wjbl/leagues
+  short: leagues
+  summary: 'Every competition edition (league_id): the W League seasons back to 1999-2000,
+    all-star games, cups and camps.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26, 2000 = 1999-2000); the wrapper maps
+      it to the league edition id (league_id) with the live league list (wjbl_leagues,
+      one extra cached request).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  parser: parse_wjbl_game_months
+  path: /play-schedule-months
+  returns_schema: native/wjbl/game_months
+  short: game_months
+  summary: Months (YYYY-MM) that have games in a season, newest first; each is one
+    page of wjbl_schedule.
+- example_args:
+    game_month: 2026-04
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26, 2000 = 1999-2000); the wrapper maps
+      it to the league edition id (league_id) with the live league list (wjbl_leagues,
+      one extra cached request).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - description: 'Month to list, ''YYYY-MM'' (see wjbl_game_months). Omitted = the
+      season''s latest month only, NOT the whole season: the API pages by month.'
+    name: game_month
+    query_key: game_month
+    type: str
+  - description: 'Franchise id (team_id in wjbl_teams): stable across seasons and
+      sponsor renames, e.g. 13 (Toyota Antelopes). Narrows the month to that team''s
+      games.'
+    name: team_id
+    query_key: team_id
+    type: int
+  parser: parse_wjbl_schedule
+  path: /play-schedules
+  returns_schema: native/wjbl/schedule
+  short: schedule
+  summary: 'Games of a season in ONE month (default: the season''s latest month) with
+    teams, venue, status and score.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_game
+  path: /play-schedule/detail
+  returns_schema: native/wjbl/game
+  short: game
+  summary: 'Game header of a final game: both teams, the result flag and the score
+    by period, one row.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_period_scores
+  path: /play-schedule/detail
+  returns_schema: native/wjbl/period_scores
+  short: period_scores
+  summary: Points of each side in each period played (quarters and overtimes) from
+    the game header.
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_game_info
+  path: /play-schedule
+  returns_schema: native/wjbl/game_info
+  short: game_info
+  summary: 'Game information of a final game: venue, times, referees, links and the
+    Japanese game report, one row.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_box_score
+  path: /boxscore
+  returns_schema: native/wjbl/box_score
+  short: box_score
+  summary: 'Box score of a final game (2013-14 on): one row per player of both teams.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_team_box_score
+  path: /boxscore
+  returns_schema: native/wjbl/team_box_score
+  short: team_box_score
+  summary: Team line and totals of each side of a final game's box score, with the
+    shooting percentages.
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_pbp
+  path: /pbp/play-by-play
+  returns_schema: native/wjbl/pbp
+  short: pbp
+  summary: 'Play-by-play of a final game (2018-19 on): one row per play, Japanese
+    action vocabulary, no shot x/y.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_team_period_stats
+  path: /pbp/team-stats
+  returns_schema: native/wjbl/team_period_stats
+  short: team_period_stats
+  summary: 'Team stat summary per period, half and game (2018-19 on): percentages,
+    rebounds, assists, turnovers, lead changes.'
+- example_args:
+    play_schedule_id: 7987
+  extra_params:
+  - description: 'Game id (play_schedule_id in wjbl_schedule): ONE global sequence
+      across every league edition and season, e.g. 7987 (2025-26 playoff final game
+      1), 5533 (2018-19), 4243 (2013-14 final, box score only). The game must be final.'
+    name: play_schedule_id
+    query_key: play_schedule_id
+    required: true
+    type: int
+  parser: parse_wjbl_player_period_leaders
+  path: /pbp/player-stats
+  returns_schema: native/wjbl/player_period_leaders
+  short: player_period_leaders
+  summary: Leading scorer, passer and rebounder of each team per period, half and
+    game (2018-19 on).
+- example_args: {}
+  parser: parse_wjbl_standing_seasons
+  path: /seasons/standings
+  returns_schema: native/wjbl/standing_seasons
+  short: standing_seasons
+  summary: Every season phase (season_id) with its edition name and standings flags.
+- example_args:
+    season_ids: '169'
+  extra_params:
+  - description: 'Season phase id or ids (season_id in wjbl_standing_seasons; a phase
+      inside a league edition, not a year): an integer, a list or a comma string such
+      as ''169,170'' (2025-26 regular season Premier and Future divisions).'
+    name: season_ids
+    query_key: season_ids
+    required: true
+    type: str
+  parser: parse_wjbl_team_standings
+  path: /team-standings
+  returns_schema: native/wjbl/team_standings
+  short: team_standings
+  summary: 'League table of one or more season phases: rank and record of every team.'
+- example_args:
+    season_ids: '169'
+  extra_params:
+  - description: 'Season phase id or ids (season_id in wjbl_standing_seasons; a phase
+      inside a league edition, not a year): an integer, a list or a comma string such
+      as ''169,170'' (2025-26 regular season Premier and Future divisions).'
+    name: season_ids
+    query_key: season_ids
+    required: true
+    type: str
+  parser: parse_wjbl_head_to_head
+  path: /team-standings
+  returns_schema: native/wjbl/head_to_head
+  short: head_to_head
+  summary: 'Head-to-head results grid (hoshitori-hyo) of one or more season phases:
+    one row per game played.'
+- example_args:
+    season_ids: 169,170
+  extra_params:
+  - description: 'Season phase id or ids (season_id in wjbl_standing_seasons; a phase
+      inside a league edition, not a year): an integer, a list or a comma string such
+      as ''169,170'' (2025-26 regular season Premier and Future divisions).'
+    name: season_ids
+    query_key: season_ids
+    required: true
+    type: str
+  parser: parse_wjbl_team_ranking
+  path: /team-ranking
+  returns_schema: native/wjbl/team_ranking
+  short: team_ranking
+  summary: League table with per-game team averages (points, shooting, rebounds, assists)
+    of one or more season phases.
+- example_args: {}
+  parser: parse_wjbl_teams
+  path: /teams/base
+  returns_schema: native/wjbl/teams
+  short: teams
+  summary: Every franchise (team_id) the site knows, all-star sides included.
+- example_args:
+    season_id: 169
+    team_id: 13
+  extra_params:
+  - description: 'Franchise id (team_id in wjbl_teams): stable across seasons and
+      sponsor renames, e.g. 13 (Toyota Antelopes).'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Season phase id (season_id in wjbl_standing_seasons), e.g. 169 (2025-26
+      regular season, Premier division).
+    name: season_id
+    query_key: season_id
+    type: int
+  parser: parse_wjbl_roster
+  path: /team/roster
+  returns_schema: native/wjbl/roster
+  short: roster
+  summary: Players of a team in a season phase, with the head coach.
+- example_args:
+    season_id: 169
+    team_id: 13
+  extra_params:
+  - description: 'Franchise id (team_id in wjbl_teams): stable across seasons and
+      sponsor renames, e.g. 13 (Toyota Antelopes).'
+    name: team_id
+    query_key: team_id
+    required: true
+    type: int
+  - description: Season phase id (season_id in wjbl_standing_seasons), e.g. 169 (2025-26
+      regular season, Premier division).
+    name: season_id
+    query_key: season_id
+    type: int
+  parser: parse_wjbl_staff
+  path: /team/roster
+  returns_schema: native/wjbl/staff
+  short: staff
+  summary: Staff of a team in a season phase (general manager, assistant coaches,
+    support staff).
+- example_args:
+    player_id: 9799
+  extra_params:
+  - description: 'Player id (player_id in wjbl_box_score or wjbl_roster): the person,
+      stable across seasons, e.g. 9799.'
+    name: player_id
+    query_key: player_id
+    required: true
+    type: int
+  parser: parse_wjbl_player
+  path: /player
+  returns_schema: native/wjbl/player
+  short: player
+  summary: 'Player profile: current team, names, bio and career notes, one row.'
+getter_module: sportsdataverse.basketball.wjbl.wjbl_runtime
+host: https://api.wjbl.01core.app/api
+module: wjbl
+name_pattern: wjbl_{short}
+parser_module: basketball.wjbl.wjbl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: wjbl_

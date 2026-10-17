@@ -1,0 +1,205 @@
+{
+  "matches": [
+    {
+      "id": 8161,
+      "start_date": "2026-09-18 18:30:00",
+      "real_start_date": "2026-09-18 18:30:39",
+      "real_end_date": "2026-09-18 20:42:00",
+      "league_id": 1,
+      "league": "ICEHL",
+      "league_part_id": 56,
+      "league_part_name": "ICEHL 2026/27",
+      "season": "2026",
+      "round": "1",
+      "highlights": "",
+      "matchNumber": 2,
+      "bets": {
+        "home_win": null,
+        "draw": null,
+        "visitor_win": null
+      },
+      "group": "",
+      "home": {
+        "id": 4,
+        "name": "FTC-Telekom",
+        "shortcut": "FTC"
+      },
+      "guest": {
+        "id": 10,
+        "name": "Olimpija Ljubljana",
+        "shortcut": "OLL"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 3,
+            "score_guest": 5
+          },
+          "first_period": {
+            "score_home": 1,
+            "score_guest": 2
+          },
+          "second_period": {
+            "score_home": 1,
+            "score_guest": 2
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 1
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "Tüskecsarnok",
+      "advanced_statistics": true,
+      "tickets_url": "https://www.eventim.hu/top-events/?affiliate=7HU",
+      "television": {
+        "name": "sporteurope.tv",
+        "url": "https://sporteurope.tv/ice-hockey-league",
+        "logo": "https://icehl.hokejovyzapis.cz/upload/television/logo/_68a843cd28d14_1755857869_Logo-Sporteurope.jpg"
+      },
+      "television2": null
+    },
+    {
+      "id": 8162,
+      "start_date": "2026-09-18 19:15:00",
+      "real_start_date": "2026-09-18 19:15:46",
+      "real_end_date": "2026-09-18 21:41:00",
+      "league_id": 1,
+      "league": "ICEHL",
+      "league_part_id": 56,
+      "league_part_name": "ICEHL 2026/27",
+      "season": "2026",
+      "round": "1",
+      "highlights": null,
+      "matchNumber": 1,
+      "bets": {
+        "home_win": 2.0,
+        "draw": 4.2,
+        "visitor_win": 2.8
+      },
+      "group": null,
+      "home": {
+        "id": 3,
+        "name": "EC Red Bull Salzburg",
+        "shortcut": "RBS"
+      },
+      "guest": {
+        "id": 2,
+        "name": "EC-KAC",
+        "shortcut": "KAC"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 1,
+            "score_guest": 7
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 2
+          },
+          "second_period": {
+            "score_home": 0,
+            "score_guest": 2
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 3
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "Eisarena Salzburg",
+      "advanced_statistics": true,
+      "tickets_url": "https://www.ticket-onlineshop.com/ols/ecrbs/de/ice/channel/shop/index",
+      "television": {
+        "name": "sporteurope.tv",
+        "url": "https://sporteurope.tv/ice-hockey-league",
+        "logo": "https://icehl.hokejovyzapis.cz/upload/television/logo/_68a843cd28d14_1755857869_Logo-Sporteurope.jpg"
+      },
+      "television2": null
+    },
+    {
+      "id": 8163,
+      "start_date": "2026-09-18 19:15:00",
+      "real_start_date": "2026-09-18 19:15:12",
+      "real_end_date": "2026-09-18 23:59:00",
+      "league_id": 1,
+      "league": "ICEHL",
+      "league_part_id": 56,
+      "league_part_name": "ICEHL 2026/27",
+      "season": "2026",
+      "round": "1",
+      "highlights": "",
+      "matchNumber": 4,
+      "bets": {
+        "home_win": null,
+        "draw": null,
+        "visitor_win": null
+      },
+      "group": "",
+      "home": {
+        "id": 6,
+        "name": "HC TIWAG Innsbruck - Die Haie",
+        "shortcut": "HCI"
+      },
+      "guest": {
+        "id": 85,
+        "name": "Milano HC",
+        "shortcut": "MHC"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 1,
+            "score_guest": 3
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 0
+          },
+          "second_period": {
+            "score_home": 0,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 2
+          }
+        }
+      },
+      "actual_time_name": "end",
+      "actual_time_alias": "K",
+      "last_event_time": 3600,
+      "arena": "TIWAG Arena",
+      "advanced_statistics": true,
+      "tickets_url": "https://tickets.hcinnsbruck.at/events",
+      "television": {
+        "name": "sporteurope.tv",
+        "url": "https://sporteurope.tv/ice-hockey-league",
+        "logo": "https://icehl.hokejovyzapis.cz/upload/television/logo/_68a843cd28d14_1755857869_Logo-Sporteurope.jpg"
+      },
+      "television2": null
+    }
+  ]
+}

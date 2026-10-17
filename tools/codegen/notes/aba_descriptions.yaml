@@ -1,0 +1,428 @@
+aba_box_players:
+  assists: Assists made (the Ass column).
+  blocks: Shots blocked by this player or team (Blck Fv, 'in favour'). Null on did-not-play
+    rows (played = false).
+  blocks_against: Own shots blocked by an opponent (Blck Ag, 'against'). Null on did-not-play
+    rows (played = false).
+  fg2_att: 2-point field goals attempted (FG2 A). Null on did-not-play rows (played
+    = false).
+  fg2_made: 2-point field goals made (FG2 M). Null on did-not-play rows (played =
+    false).
+  fg2_pct: 2-point percentage, 0-100 with one decimal; 0 when no attempt. Null on
+    did-not-play rows (played = false).
+  fg3_att: 3-point field goals attempted (FG3 A). Null on did-not-play rows (played
+    = false).
+  fg3_made: 3-point field goals made (FG3 M). Null on did-not-play rows (played =
+    false).
+  fg3_pct: 3-point percentage, 0-100 with one decimal; 0 when no attempt. Null on
+    did-not-play rows (played = false).
+  fg_pct: Field-goal percentage over 2- and 3-point attempts, 0-100 with one decimal
+    (FG2 + FG3 made / attempted); 0 when no attempt. Header 'overall %'. Null on did-not-play
+    rows (played = false).
+  fouls: Fouls committed (Foul Cm). Null on did-not-play rows (played = false).
+  fouls_drawn: Fouls drawn / received (Foul Rv). Null on did-not-play rows (played
+    = false).
+  ft_att: Free throws attempted (FT A). Null on did-not-play rows (played = false).
+  ft_made: Free throws made (FT M). Null on did-not-play rows (played = false).
+  ft_pct: Free-throw percentage, 0-100 with one decimal; 0 when no attempt. Null on
+    did-not-play rows (played = false).
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  jersey: Jersey number worn in the game (the box lists players by jersey number).
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  minutes: Minutes played, 'mm:ss' text. '00:00' on did-not-play rows.
+  on_court_at_end: 'On court at the final buzzer: the box prints the name in bold
+    (matches the substitutions in the play-by-play on every sample). Null for the
+    whole game when no name is bold (box-only seasons).'
+  played: False on a did-not-play row (minutes '00:00' and one empty cell across the
+    stat columns); its stat columns are null.
+  player_id: 'ABA player id (global: one person keeps one id across seasons and both
+    leagues, e.g. Carlik Jones = 4807), cast to an integer. Join on it, never on the
+    printed name.'
+  player_name: 'Name as the box prints it: ''Surname I.'' (diacritics kept).'
+  plus_minus: Plus/minus while on court (+/-). 0 on every row of the 2008-09 sample
+    (not tracked then). Null on did-not-play rows (played = false).
+  points: Points scored (overall Pts). Null on did-not-play rows (played = false).
+  pts_fast_break: Fast-break points (Points from FstBr). Null where the season has
+    no such column (2008-09) and on did-not-play rows.
+  pts_paint: Points in the paint (Points from Paint). Null where the season has no
+    such column (2008-09) and on did-not-play rows.
+  pts_second_chance: Second-chance points (Points from 2ndCh). Null where the season
+    has no such column (2008-09) and on did-not-play rows.
+  reb_def: Defensive rebounds (Rebs D). Null on did-not-play rows (played = false).
+  reb_off: Offensive rebounds (Rebs O). Null on did-not-play rows (played = false).
+  reb_tot: Total rebounds (Rebs T). Null on did-not-play rows (played = false).
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  side: '''home'' or ''away'' (the home team is listed first everywhere on the site).'
+  starter: 'In the starting five: the box marks it with ''*'' (matches the play-by-play
+    ''in starting lineup'' rows on every sample). Null for the whole game when no
+    row carries a ''*'' (box-only seasons, 2008-09 sample).'
+  steals: Steals made (the St column).
+  team_id: 'ABA club id (global: the same id in every season and in both leagues,
+    e.g. Partizan = 22 in 2008-09 and 2025-26). Joins every frame that carries it;
+    the calendar has club names only.'
+  turnovers: Turnovers (To). Null on did-not-play rows (played = false).
+  valuation: 'Valuation (Val, ''rank Value''): the efficiency rating (PIR-style index)
+    the site ranks players by. Null on did-not-play rows (played = false).'
+aba_box_teams:
+  assists: Assists made (the Ass column).
+  blocks: Shots blocked by this player or team (Blck Fv, 'in favour').
+  blocks_against: Own shots blocked by an opponent (Blck Ag, 'against').
+  fg2_att: 2-point field goals attempted (FG2 A).
+  fg2_made: 2-point field goals made (FG2 M).
+  fg2_pct: 2-point percentage, 0-100 with one decimal; 0 when no attempt.
+  fg3_att: 3-point field goals attempted (FG3 A).
+  fg3_made: 3-point field goals made (FG3 M).
+  fg3_pct: 3-point percentage, 0-100 with one decimal; 0 when no attempt.
+  fg_pct: Field-goal percentage over 2- and 3-point attempts, 0-100 with one decimal
+    (FG2 + FG3 made / attempted); 0 when no attempt. Header 'overall %'.
+  fouls: Fouls committed (Foul Cm).
+  fouls_drawn: Fouls drawn / received (Foul Rv).
+  ft_att: Free throws attempted (FT A).
+  ft_made: Free throws made (FT M).
+  ft_pct: Free-throw percentage, 0-100 with one decimal; 0 when no attempt.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  minutes: 'Minutes played, ''mm:ss'' text. Team rows sum the five on court: ''200:00'',
+    ''225:00'' with one overtime.'
+  plus_minus: 'Plus/minus while on court (+/-). 0 on every row of the 2008-09 sample
+    (not tracked then). Team rows: the final margin (0 on the 2008-09 sample).'
+  points: Points scored (overall Pts).
+  pts_fast_break: Fast-break points (Points from FstBr). Null where the season has
+    no such column (2008-09) and on did-not-play rows.
+  pts_paint: Points in the paint (Points from Paint). Null where the season has no
+    such column (2008-09) and on did-not-play rows.
+  pts_second_chance: Second-chance points (Points from 2ndCh). Null where the season
+    has no such column (2008-09) and on did-not-play rows.
+  reb_def: Defensive rebounds (Rebs D).
+  reb_off: Offensive rebounds (Rebs O).
+  reb_tot: Total rebounds (Rebs T). Team rows equal the players' sum on every sample
+    (team rebounds are not added).
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  side: '''home'' or ''away'' (the home team is listed first everywhere on the site).'
+  steals: Steals made (the St column).
+  team_id: 'ABA club id (global: the same id in every season and in both leagues,
+    e.g. Partizan = 22 in 2008-09 and 2025-26). Joins every frame that carries it;
+    the calendar has club names only.'
+  team_name: Club name as the site prints it now (see game.home_team).
+  turnovers: Turnovers (To).
+  valuation: 'Valuation (Val, ''rank Value''): the efficiency rating (PIR-style index)
+    the site ranks players by.'
+aba_calendar:
+  away_abbr: Away club's three-letter code.
+  away_score: Away final score; null like home_score for a game not played yet (live
+    2026-27 page, not banked).
+  away_team: Away club name; null like home_team while a pairing is not set (live
+    2026-27 page, not banked).
+  date: Game date, from the date-and-time line (the first date of a window); null
+    for 'TBA'.
+  date_to: Last date of a 'dd.mm.yyyy - dd.mm.yyyy' window printed before a game is
+    scheduled; null on a game with a single date.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  group: Group letter ('A', 'B') from the Group column, which exists only in seasons
+    with groups; null after the groups (Top8, Play-out, playoffs) and where the page
+    has no Group column.
+  home_abbr: Home club's three-letter code ('PAR', 'CZV'), from the mobile copy of
+    the cell.
+  home_score: 'Home final score. Null for a game not played yet (empty Result cell):
+    seen on the live 2026-27 page (282 of 302 games), which is NOT banked.'
+  home_team: 'Home club name as the site prints it now (see the match page''s game.home_team).
+    Null while a playoff pairing is not set ('' : ''): seen on the live 2026-27 page
+    (122 of 302 games), which is NOT banked, so no committed sample shows it.'
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  local_place: City of local_time ('Dubai', 'Cluj-Napoca'); null when the arena is
+    in Central Europe.
+  local_time: Arena-local tip-off 'hh:mm' when the arena is outside Central Europe
+    ('(19:00 Dubai local time)'); null otherwise.
+  round: Round or phase label, the accordion panel title ('ROUND 1', 'Top8 - R1',
+    'Quarter-finals, Round 1', 'Finals, Round 4').
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  season_label: Season label as the page prints it ('2025/26' on the match page, 'Season
+    2025/26' on the calendar and standings pages).
+  time: Tip-off 'hh:mm' in time_zone. Null when only a date window or 'TBA' is printed
+    (live 2026-27 page, NOT banked).
+  time_zone: '''CET'' = Central European wall-clock time INCLUDING summer time (CET
+    in winter, CEST in summer; the label never changes); ''local'' = arena local time
+    (''Local time'', ABA League 2). Null with a date window or ''TBA'' (live 2026-27
+    page, NOT banked).'
+  when: 'Date and Time cell verbatim: ''Monday, 06.10.2025 18:00 CET'', with ''(19:00
+    Dubai local time)'' for arenas outside Central Europe, ''Local time'' on ABA League
+    2, a date window or ''TBA'' before scheduling.'
+aba_game:
+  attendance: 'Spectators (the users icon). The parser sets null when the page prints
+    none (never seen: every banked page prints it; null is part of the record contract).'
+  away_city: Away club city (local spelling).
+  away_score: Away final score.
+  away_team: Away club name as the site prints it now (see home_team).
+  away_team_id: 'ABA team id (key space: aba-liga.com clubs, the same id in every
+    season and in both leagues, e.g. Partizan = 22 in 2008-09 and 2025-26, Krka =
+    10). The first number of /team/{id}/{sez}/{lea}/0/{slug}/ and of the logo images/club/{size}/{id}.png.
+    Joins match game.*_team_id / players / teams / pbp, standings rows and the player
+    page. Not a player id.'
+  commissioner: Game commissioner's name ('Commissioner:' line); 2008-09 adds an IOC-style
+    country code in parentheses ('(SRB)'). Null when not printed.
+  competition: 'Competition name as printed, sponsor included and applied to every
+    season: ''AdmiralBet ABA League'' (2017-18 and 2025-26), ''Regional League'' (2008-09),
+    ''2. ABA liga'' (ABA League 2).'
+  date: Game date, from the date-and-time line (the first date of a window); null
+    for 'TBA'.
+  date_to: Last date of a 'dd.mm.yyyy - dd.mm.yyyy' window printed before a game is
+    scheduled; null on a game with a single date.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  group: Group letter of a two-group regular season ('A', 'B'). ABSENT when the season
+    has no groups (2008-09, 2017-18 and ABA League 2 samples).
+  home_city: 'Home club city (local spelling: ''Beograd'', ''Novo Mesto'').'
+  home_score: Home final score.
+  home_team: 'Home club name as the site prints it NOW: a club''s current name is
+    applied to every season (2008-09 shows ''Partizan Mozzart Bet''); a club that
+    no longer plays keeps its last name (2008-09 ''Petrol Olimpija''). Join on the
+    team id.'
+  home_team_id: 'ABA team id (key space: aba-liga.com clubs, the same id in every
+    season and in both leagues, e.g. Partizan = 22 in 2008-09 and 2025-26, Krka =
+    10). The first number of /team/{id}/{sez}/{lea}/0/{slug}/ and of the logo images/club/{size}/{id}.png.
+    Joins match game.*_team_id / players / teams / pbp, standings rows and the player
+    page. Not a player id.'
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  local_place: City of local_time ('Dubai', 'Cluj-Napoca'); null when the arena is
+    in Central Europe.
+  local_time: Arena-local tip-off 'hh:mm' when the arena is outside Central Europe
+    ('(19:00 Dubai local time)'); null otherwise.
+  referees: Referees' names in page order (crew chief first), joined with '; ' (2008-09
+    adds an IOC-style country code in parentheses). Names only.
+  round: 'Round / phase label as the page prints it: ''ROUND 1'', ''Top8 - R2'', ''Quarter-finals,
+    Round 1'', ''Finals, Round 4'', ''Semifinal''. Same vocabulary as calendar games[].round.'
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  season_label: Season label as the page prints it ('2025/26' on the match page, 'Season
+    2025/26' on the calendar and standings pages).
+  time: Tip-off time 'hh:mm' in time_zone.
+  time_zone: '''CET'' = Central European wall-clock time INCLUDING summer time (the
+    label never changes; the Dubai local times prove CEST in October/June, CET in
+    winter); ''local'' = the arena''s local time (ABA League 2 prints ''Local time'').'
+  venue: 'Arena name (''Venue: ...''). ABSENT on the 2008-09 sample (the page has
+    no venue line).'
+  when: Date-and-time line verbatim (English weekday, dd.mm.yyyy, hh:mm, time-zone
+    label).
+aba_pbp:
+  action: text without its parenthesised qualifier; see the action table below the
+    route. Null on team rows (they print only '(qualifier)') and bare-clock rows.
+  away_score: Away score after this event, as home_score.
+  clock: Clock in the period, 'mm:ss' REMAINING (counts down from 10:00; overtime
+    from 05:00). Null on the starting-lineup rows and on game / period start and end
+    markers.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  home_score: 'Home score after this event: only set on scoring events (the page prints
+    the score only there); null otherwise. Carry it forward for a running score.'
+  jersey: Jersey number as printed; the play-by-play omits it on some rows (all starting-lineup
+    rows and many home rows), so it is null there.
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  period: '1-4 = quarters, 5 = overtime (the #q5 tab; every overtime of the game).'
+  player_id: 'ABA player id (global: one person keeps one id across seasons and both
+    leagues, e.g. Carlik Jones = 4807), cast to an integer. Join on it, never on the
+    printed name.'
+  player_name: 'Name as the play-by-play prints it: ''SURNAME I'' upper case (the
+    trailing ''.'' belongs to the event text on the page and is dropped).'
+  qualifier: The parenthesised part of text (shot type, rebound side, free-throw 'n
+    of m', foul or turnover type); see the qualifier table. Null when the text has
+    none.
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  seconds_left: The clock as whole seconds REMAINING in the period (08:34 = 514),
+    derived by the parser; null where the clock is.
+  seq: 1-based position in game order across the whole game (after the reversal).
+  side: 'Which column the event sits in: ''home'', ''away'', or null for game/period
+    markers and bare-clock rows. A timeout row gets the side of its team badge.'
+  team_id: 'ABA club id (global: the same id in every season and in both leagues,
+    e.g. Partizan = 22 in 2008-09 and 2025-26). Joins every frame that carries it;
+    the calendar has club names only.'
+  text: 'Event text in English after the player''s name: ''<action> (<qualifier>)'',
+    ''in starting lineup'', or the whole text of a team / game row (''(defensive)'',
+    ''Timeout'', ''start of 1. quarter''). Null on bare-clock rows (''10:00'' with
+    nothing else, opening some periods).'
+aba_periods:
+  away_points: Away points scored IN the period (not cumulative).
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  home_points: Home points scored IN the period (not cumulative).
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  period: '''Q1''..''Q4'', then ''OT1'', ''OT2'' ... for overtimes.'
+  period_no: '1-based position of the period: 1-4 for Q1-Q4, then 5 for OT1, 6 for
+    OT2.'
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+aba_player:
+  birth_date: Date of birth, ISO 'YYYY-MM-DD' (public player bio).
+  birth_place: Place of birth as printed, 'City, COUNTRY' ('Cincinnati, USA').
+  career: The Clubs box, one free-text line per stint, oldest first, joined with ';
+    ' ('2021/22 - Texas Legends; 2024-27 - Partizan Mozzart Bet').
+  club: Club name of the 'Club:' row.
+  height_cm: Height in centimetres ('185 cm').
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  name: Full name from the h1, 'First Last' (checked against the expected name).
+  nationality: Sporting nationality, a three-letter code as printed ('SSD' = South
+    Sudan; IOC/FIBA-style codes).
+  player_id: 'ABA player id (global: one person keeps one id across seasons and both
+    leagues, e.g. Carlik Jones = 4807), cast to an integer. Join on it, never on the
+    printed name.'
+  position: Position in English as printed ('Guard' on the sample).
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  team_id: 'ABA club id (global: the same id in every season and in both leagues,
+    e.g. Partizan = 22 in 2008-09 and 2025-26). Joins every frame that carries it;
+    the calendar has club names only.'
+aba_player_games:
+  assists: Assists made (the Ass column).
+  blocks: Shots blocked by this player or team (Blck Fv, 'in favour').
+  blocks_against: Own shots blocked by an opponent (Blck Ag, 'against').
+  fg2_att: 2-point field goals attempted (FG2 A).
+  fg2_made: 2-point field goals made (FG2 M).
+  fg2_pct: 2-point percentage, 0-100 with one decimal; 0 when no attempt.
+  fg3_att: 3-point field goals attempted (FG3 A).
+  fg3_made: 3-point field goals made (FG3 M).
+  fg3_pct: 3-point percentage, 0-100 with one decimal; 0 when no attempt.
+  fg_pct: Field-goal percentage over 2- and 3-point attempts, 0-100 with one decimal
+    (FG2 + FG3 made / attempted); 0 when no attempt. Header 'overall %'.
+  fouls: Fouls committed (Foul Cm).
+  fouls_drawn: Fouls drawn / received (Foul Rv).
+  ft_att: Free throws attempted (FT A).
+  ft_made: Free throws made (FT M).
+  ft_pct: Free-throw percentage, 0-100 with one decimal; 0 when no attempt.
+  game: Short pairing label 'Home-Away' with short club names ('Partizan-Krka', 'C.
+    Zvezda-Partizan').
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  minutes: Minutes played, 'mm:ss' text.
+  player_id: 'ABA player id (global: one person keeps one id across seasons and both
+    leagues, e.g. Carlik Jones = 4807), cast to an integer. Join on it, never on the
+    printed name.'
+  plus_minus: Plus/minus while on court (+/-). 0 on every row of the 2008-09 sample
+    (not tracked then).
+  points: Points scored (overall Pts).
+  pts_fast_break: Fast-break points (Points from FstBr). Null where the season has
+    no such column (2008-09) and on did-not-play rows.
+  pts_paint: Points in the paint (Points from Paint). Null where the season has no
+    such column (2008-09) and on did-not-play rows.
+  pts_second_chance: Second-chance points (Points from 2ndCh). Null where the season
+    has no such column (2008-09) and on did-not-play rows.
+  reb_def: Defensive rebounds (Rebs D).
+  reb_off: Offensive rebounds (Rebs O).
+  reb_tot: Total rebounds (Rebs T).
+  round_no: 'Season-wide round index of the game: 1-18 = regular season, later phases
+    continue the count (ABA 2025-26: ''Top8 - R2'' = 21, ''Finals, Round 4'' = 48).'
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  steals: Steals made (the St column).
+  turnovers: Turnovers (To).
+  valuation: 'Valuation (Val, ''rank Value''): the efficiency rating (PIR-style index)
+    the site ranks players by.'
+aba_score_difference:
+  away_score: Away cumulative score at the end of that minute (the site sends a numeric
+    string). The last row equals the final score.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  home_score: Home cumulative score at the end of that minute (the site sends a numeric
+    string). The last row equals the final score.
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  minute: 'Elapsed game minute: 0 (tip-off) to 40, then 41-45 per overtime; every
+    minute once, in order.'
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+aba_score_flow:
+  away_score: Away cumulative score at the end of that minute (the site sends a numeric
+    string). The last row equals the final score.
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  home_score: Home cumulative score at the end of that minute (the site sends a numeric
+    string). The last row equals the final score.
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  minute: 'Elapsed game minute: 0 (tip-off) to 40, then 41-45 per overtime; every
+    minute once, in order.'
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+aba_shots:
+  game_no: 'Game number, per season AND league: it restarts at 1 for every season
+    and league, so a game''s key is (game_no, season, league_id). Unplayed playoff
+    games leave gaps. The {gameNo} of the match route.'
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  made: True when the attempt was made (the site's koordinata_uspeh '1'), false when
+    missed.
+  player_id: Shooter's ABA player id (global), cast from the site's string; null when
+    the shooter was not recorded (id 0). Join to the box score on it, never on the
+    name.
+  player_name: Shooter's full name, 'First Last' (the box prints 'Last F.'); null
+    when not recorded.
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  side: 'Which team took the shot: home or away (the site''s ekipa, a string ''1''
+    / ''2'').'
+  x: Shot x as a PERCENTAGE (0-100) of the court LENGTH from the LEFT baseline of
+    the site's 1000x535 px full-court image. Home shoots at x < 50 and away at x >
+    50. The site sends it as a string in one half of a game and a number in the other;
+    cast to float.
+  y: Shot y as a PERCENTAGE (0-100) of the court WIDTH, drawn upward from the bottom
+    edge (the line through both baskets is 50). Whether 'up' is the scorer's table
+    side is unverified.
+aba_standings:
+  games: Games played (GP).
+  group: Group heading under the phase ('Group A', 'Group B'); null when the table
+    has no group heading.
+  league: 'League label: aba (ABA League, lea 1) or aba2 (ABA League 2, lea 2), the
+    wrapper''s league argument.'
+  league_id: 'League code, the site''s lea: 1 = ABA League, 2 = ABA League 2.'
+  losses: Games lost in this table (the L column).
+  point_diff: Point difference (Diff), points_for - points_against.
+  points_against: Points allowed (right side of 'Overall').
+  points_for: Points scored (left side of 'Overall' 'for:against').
+  rank: Position in this table (#).
+  season: 'Season END year (2026 = 2025-26): the site''s START-year key sez (25) plus
+    2001.'
+  season_label: Season label as the page prints it ('2025/26' on the match page, 'Season
+    2025/26' on the calendar and standings pages).
+  standing_points: 'Standings points (Points): 2 per win and 1 per loss (FIBA), e.g.
+    21-3 = 45.'
+  table: 'Title of the table''s phase heading (h2): ''Top 8 Season 2025/26'', ''Play-out
+    Season 2025/26'', ''Regular Season 2025/26''.'
+  team_id: 'ABA club id (global: the same id in every season and in both leagues,
+    e.g. Partizan = 22 in 2008-09 and 2025-26). Joins every frame that carries it;
+    the calendar has club names only.'
+  team_name: Club name as the site prints it now (see the match page's game.home_team).
+  wins: Games won in this table (the W column).

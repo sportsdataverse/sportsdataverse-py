@@ -1,0 +1,159 @@
+{
+  "HEADER": {
+    "CompID": "115",
+    "competition": "LIGA LEB ORO",
+    "round": "\"Oro-Clasif\"        ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "10-04-2021 - 19:00",
+    "place": "C/ SAN JUAN, S/N, Albacete (Almansa)",
+    "field": "PABELLON POLIDEPORTIVO DE ALMANSA",
+    "referee1": "MORALES RUIZ, GERMAN FRANCISC0",
+    "referee2": "CARRERA ROSDEVALL, ERIC",
+    "referee3": "LOPEZ LECUONA, ALEJANDRO",
+    "status": null,
+    "statusText": null,
+    "TEAM": [
+      {
+        "pts": "68",
+        "fouls": null,
+        "id": "848761",
+        "name": "CB ALMANSA CON AFANION",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848761&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "pts": "81",
+        "fouls": null,
+        "id": "848569",
+        "name": "RÍO BREOGÁN",
+        "logo": "http://competiciones.feb.es/estadisticas/Imagen.aspx?i=848569&ti=1",
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "18",
+          "scoreB": "21"
+        },
+        {
+          "n": "2",
+          "scoreA": "22",
+          "scoreB": "13"
+        },
+        {
+          "n": "3",
+          "scoreA": "13",
+          "scoreB": "24"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": {
+    "duration": null,
+    "TEAM": [
+      {
+        "p1m": "14",
+        "p1a": "20",
+        "p1p": "70,0",
+        "p2m": "18",
+        "p2a": "33",
+        "p2p": "54,5",
+        "p3m": "6",
+        "p3a": "21",
+        "p3p": "28,6",
+        "fgm": "24",
+        "fga": "54",
+        "fgp": "44,4",
+        "assist": "12",
+        "bs": "2",
+        "tc": null,
+        "mt": null,
+        "ro": "7",
+        "rd": "21",
+        "rt": "28",
+        "pf": "21",
+        "rf": "20",
+        "to": "12",
+        "st": "5",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "68",
+        "fouls": "21",
+        "id": "848761",
+        "name": "CB ALMANSA CON AFANION",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      },
+      {
+        "p1m": "11",
+        "p1a": "18",
+        "p1p": "61,1",
+        "p2m": "23",
+        "p2a": "42",
+        "p2p": "54,8",
+        "p3m": "8",
+        "p3a": "23",
+        "p3p": "34,8",
+        "fgm": "31",
+        "fga": "65",
+        "fgp": "47,7",
+        "assist": "12",
+        "bs": "0",
+        "tc": null,
+        "mt": null,
+        "ro": "15",
+        "rd": "25",
+        "rt": "40",
+        "pf": "20",
+        "rf": "21",
+        "to": "13",
+        "st": "7",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "81",
+        "fouls": "20",
+        "id": "848569",
+        "name": "RÍO BREOGÁN",
+        "logo": null,
+        "teamCode": null,
+        "clubCode": null,
+        "slug": null
+      }
+    ]
+  },
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": null
+}

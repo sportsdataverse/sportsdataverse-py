@@ -46,10 +46,27 @@ A table body also announces its row count in ``pages`` (``0`` on ``standing``); 
 rows disagree with it raises :class:`~sportsdataverse.errors.AssetFetchError` rather than
 passing a truncated table off as the whole one.
 
+A ``filters[].selected`` of ``null`` is no echo at all: it raises ``AssetFetchError`` like a
+dropped filter, never ``NoDataError``.
+
+**A game body must be the game asked for.** ``/gameoverview`` answers ``{"gameId": ...}``; a
+body whose ``gameId`` is not the requested ``searchQuery`` (a stub, a redirect or another game)
+raises :class:`~sportsdataverse.errors.AssetFetchError`, so it can never be parsed into a
+frame labelled as the requested game.
+
+**The error shapes drift within a day** (measured 2026-10-12). An unknown table ``alias``
+answered a 200 ``{"stub": true, "data": [], ...}`` at ~07:45 EDT and an empty HTTP 501 at
+09:35 EDT; a menu alias (``team``) answers a 200 ``{"action": "Redirect", ...}``. All of them
+raise ``AssetFetchError``, whichever shape arrives. A ``/table`` without ``searchQuery`` answered
+an empty 501 (``AssetFetchError``) and later 400 ``{"error": "InvalidSearchQuery"}``
+(``ValueError``); the wrappers always send it.
+
 Everything else is the package error vocabulary from the shared getter: 404 (the
 ``gameoverview`` ``{"error": "GameNotFound"}``) -> ``NoDataError``, 400
-(``MissingSearchQuery``) -> ``ValueError``, any other non-2xx (an unknown table ``alias``
-answers an empty 501), an empty or non-JSON 200 or a dead connection -> ``AssetFetchError``.
+(``MissingSearchQuery``) -> ``ValueError``, any other non-2xx, an empty or non-JSON 200 or a
+dead connection -> ``AssetFetchError``. Every request, each retry included, goes through
+:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, so every attempt waits at least one
+second after the last one to the host (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait`).
 """
 
 from __future__ import annotations
@@ -58,6 +75,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.hockey import euro_hockey_runtime as _eh
 
 __all__: List[str] = []
 
@@ -99,7 +117,9 @@ def _check_table(url: str, raw: Any, filters: List[Tuple[str, str]]) -> None:
             if not isinstance((by_alias.get(name) or {}).get("entries"), list):
                 raise AssetFetchError(f"{_rt._where(url)}: the body carries no Phase entries to list")
             continue
-        got = str(by_alias[name].get("selected")) if name in by_alias else None
+        # ``selected: null`` echoes nothing, exactly like a dropped filter.
+        selected = by_alias[name].get("selected") if name in by_alias else None
+        got = None if selected is None else str(selected)
         if got != value:
             answered = f"answered {name}={got}" if got is not None else f"dropped the {name} filter"
             if name == "ContentType" or got is None:
@@ -148,6 +168,21 @@ def _check_complete(url: str, raw: Any) -> None:
             )
 
 
+def _check_body(url: str, raw: Any, query: Dict[str, Any]) -> None:
+    """Raise on a 200 that is not the requested answer: a stub, a redirect, or another game."""
+    if isinstance(raw, dict) and raw.get("stub") is True:
+        raise AssetFetchError(f"{_rt._where(url)}: SIHF answered a stub body (an unknown alias)")
+    if isinstance(raw, dict) and raw.get("action") == "Redirect":
+        target = (raw.get("redirectTo") or {}).get("alias") if isinstance(raw.get("redirectTo"), dict) else None
+        raise AssetFetchError(f"{_rt._where(url)}: SIHF answered a redirect to alias {target!r}, not a table")
+    if url.rstrip("/").endswith("/gameoverview"):
+        got = raw.get("gameId") if isinstance(raw, dict) else None
+        if str(got) != str(query.get("searchQuery")):
+            raise AssetFetchError(
+                f"{_rt._where(url)}: asked for game {query.get('searchQuery')}, SIHF answered gameId={got!r}"
+            )
+
+
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a SIHF route as JSON: build the scoped query, fetch, then verify a table answer.
 
@@ -160,10 +195,12 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
             filter echo, an echo that leaves out a requested filter (or a phase echo without
             its ``entries``), a ``ContentType`` echo that differs from the request, or a table
             body with
-            fewer or more rows than its ``pages`` row count announces.
+            fewer or more rows than its ``pages`` row count announces; a stub or redirect body; a
+            ``gameoverview`` body whose ``gameId`` is not the requested game.
     """
     query, filters = _build_query(params)
-    raw = _rt._get(url, query, **kwargs)
+    raw = _eh._get(url, query, **kwargs)
+    _check_body(url, raw, query)
     _check_table(url, raw, filters)
     _check_complete(url, raw)
     return raw

@@ -1,0 +1,26 @@
+[
+ {
+  "id": 2,
+  "gohoops_id": 940,
+  "name": "高雄全家海神",
+  "is_real_team": true,
+  "status": "ACTIVE",
+  "ticket_url": null
+ },
+ {
+  "id": 3,
+  "gohoops_id": 941,
+  "name": "福爾摩沙夢想家",
+  "is_real_team": true,
+  "status": "ACTIVE",
+  "ticket_url": null
+ },
+ {
+  "id": 4,
+  "gohoops_id": 942,
+  "name": "新竹御嵿攻城獅",
+  "is_real_team": true,
+  "status": "ACTIVE",
+  "ticket_url": null
+ }
+]

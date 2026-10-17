@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: clock
+  type: character
+- description: ''
+  name: clock_seconds
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: shirt_number
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: made
+  type: logical
+- description: ''
+  name: x
+  type: numeric
+- description: ''
+  name: y
+  type: numeric
+kind: dataframe
+schema: feb_shots

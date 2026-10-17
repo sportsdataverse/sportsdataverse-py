@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: person_last_name_ru
+  type: character
+- description: ''
+  name: person_first_name_ru
+  type: character
+- description: ''
+  name: person_last_name_en
+  type: character
+- description: ''
+  name: person_first_name_en
+  type: character
+- description: ''
+  name: person_gender
+  type: integer
+- description: ''
+  name: person_height
+  type: integer
+- description: ''
+  name: person_weight
+  type: integer
+- description: ''
+  name: person_status
+  type: integer
+kind: dataframe
+schema: vtb_infobasket_coach

@@ -1,0 +1,39 @@
+schema: sihf_team_attendance
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: phase_id
+  type: integer
+  description: ''
+- name: rank
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: team_name
+  type: character
+  description: ''
+- name: team_acronym
+  type: character
+  description: ''
+- name: home_games
+  type: integer
+  description: ''
+- name: spectators
+  type: integer
+  description: ''
+- name: stadium_capacity_quotient
+  type: double
+  description: ''
+- name: spectators_quotient
+  type: double
+  description: ''
+- name: stadium_capacity_percent
+  type: double
+  description: ''
+- name: row_type
+  type: character
+  description: ''

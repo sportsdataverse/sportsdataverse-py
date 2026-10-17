@@ -1,0 +1,159 @@
+{
+  "HEADER": {
+    "CompID": "210",
+    "competition": "LF ENDESA",
+    "round": "Único               ",
+    "quarter": 4,
+    "time": "FINAL",
+    "logo": null,
+    "duration": null,
+    "starttime": "03-10-2026 - 18:30",
+    "place": "CAMÍ DE LA VILETA, 40, Illes Balears (Palma de Mallorca)",
+    "field": "POLIESPORTIU SON MOIX",
+    "referee1": "CHECA NEBOT, DANIEL",
+    "referee2": "BAENA CRIADO, JORGE",
+    "referee3": "SANHERMELANDO GARCIA, HECTOR",
+    "status": "3",
+    "statusText": "FINISHED",
+    "TEAM": [
+      {
+        "pts": "88",
+        "fouls": null,
+        "id": "1008705",
+        "name": "AZULMARINO MALLORCA PALMA",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008705&ti=1",
+        "teamCode": "07038300",
+        "clubCode": "070383",
+        "slug": null
+      },
+      {
+        "pts": "71",
+        "fouls": null,
+        "id": "1008686",
+        "name": "VALENCIA B.C.",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008686&ti=1",
+        "teamCode": "46000221",
+        "clubCode": "460002",
+        "slug": null
+      }
+    ],
+    "QUARTERS": {
+      "QUARTER": [
+        {
+          "n": "1",
+          "scoreA": "29",
+          "scoreB": "20"
+        },
+        {
+          "n": "2",
+          "scoreA": "20",
+          "scoreB": "16"
+        },
+        {
+          "n": "3",
+          "scoreA": "19",
+          "scoreB": "14"
+        }
+      ]
+    }
+  },
+  "SCOREBOARD": null,
+  "TEAMSTATS": {
+    "duration": null,
+    "TEAM": [
+      {
+        "p1m": "21",
+        "p1a": "24",
+        "p1p": "87,5",
+        "p2m": "20",
+        "p2a": "41",
+        "p2p": "48,8",
+        "p3m": "9",
+        "p3a": "27",
+        "p3p": "33,3",
+        "fgm": "29",
+        "fga": "68",
+        "fgp": "42,6",
+        "assist": "20",
+        "bs": "3",
+        "tc": null,
+        "mt": null,
+        "ro": "12",
+        "rd": "29",
+        "rt": "41",
+        "pf": "23",
+        "rf": "22",
+        "to": "6",
+        "st": "5",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "88",
+        "fouls": "23",
+        "id": "1008705",
+        "name": "AZULMARINO MALLORCA PALMA",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008705&ti=1",
+        "teamCode": "07038300",
+        "clubCode": "070383",
+        "slug": null
+      },
+      {
+        "p1m": "16",
+        "p1a": "22",
+        "p1p": "72,7",
+        "p2m": "20",
+        "p2a": "51",
+        "p2p": "39,2",
+        "p3m": "5",
+        "p3a": "15",
+        "p3p": "33,3",
+        "fgm": "25",
+        "fga": "66",
+        "fgp": "37,9",
+        "assist": "13",
+        "bs": "4",
+        "tc": null,
+        "mt": null,
+        "ro": "12",
+        "rd": "24",
+        "rt": "36",
+        "pf": "22",
+        "rf": "23",
+        "to": "10",
+        "st": "2",
+        "fastb": null,
+        "ptsto": null,
+        "secpts": null,
+        "bench": null,
+        "paint": null,
+        "min": null,
+        "minFormatted": "0:00",
+        "val": null,
+        "pts": "71",
+        "fouls": "22",
+        "id": "1008686",
+        "name": "VALENCIA B.C.",
+        "logo": "https://imagenes.feb.es/imagen.aspx?i=1008686&ti=1",
+        "teamCode": "46000221",
+        "clubCode": "460002",
+        "slug": null
+      }
+    ]
+  },
+  "TICKER": {
+    "text": null,
+    "duration": null,
+    "ITEM": null
+  },
+  "OVERVIEW": null,
+  "PLAYBYPLAY": null,
+  "BANNER": null,
+  "BOXSCORE": null,
+  "SHOTCHART": null,
+  "RANKING": null
+}

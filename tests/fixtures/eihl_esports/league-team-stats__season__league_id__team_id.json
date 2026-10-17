@@ -1,0 +1,173 @@
+[
+  {
+    "id": 4898,
+    "name": "Cade Neilson",
+    "firstname": "Cade",
+    "surname": "Neilson",
+    "birthdate": "2001-05-15",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 89,
+    "height": 183,
+    "jersey": 94,
+    "birthCountry": "USA",
+    "nationality": "United Kingdom",
+    "nationalityShort": "UK",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 7,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 3,
+        "away": 2
+      },
+      "points": {
+        "home": 3,
+        "away": 2
+      },
+      "penaltyMinutes": 2,
+      "positive": 6,
+      "negative": 7,
+      "pointsPerGame": 0.71,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 0.29,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 14,
+      "shotsOnGoal": {
+        "home": 5,
+        "away": 6
+      },
+      "shotsMissed": 1,
+      "shotsBlocked": 2,
+      "blockedShotsByPlayer": 4,
+      "faceoffsWin": 43,
+      "faceoffsLosses": 57,
+      "faceoffsCount": 100,
+      "timeonice": 7424,
+      "timeoniceEQ": 6984,
+      "timeonicePP": 60,
+      "timeoniceSH": 380,
+      "hits": 0
+    }
+  },
+  {
+    "id": 5157,
+    "name": "Josh Tarzwell",
+    "firstname": "Josh",
+    "surname": "Tarzwell",
+    "birthdate": "2000-02-08",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 93,
+    "height": 185,
+    "jersey": 89,
+    "birthCountry": "Canada",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 7,
+      "goals": {
+        "home": 0,
+        "away": 3
+      },
+      "assists": {
+        "home": 1,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 3
+      },
+      "penaltyMinutes": 0,
+      "positive": 5,
+      "negative": 7,
+      "pointsPerGame": 0.57,
+      "shotEfficiency": 20.0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 23,
+      "shotsOnGoal": {
+        "home": 6,
+        "away": 9
+      },
+      "shotsMissed": 4,
+      "shotsBlocked": 4,
+      "blockedShotsByPlayer": 1,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 6752,
+      "timeoniceEQ": 6603,
+      "timeonicePP": 40,
+      "timeoniceSH": 109,
+      "hits": 0
+    }
+  },
+  {
+    "id": 5154,
+    "name": "Cole Kodsi",
+    "firstname": "Cole",
+    "surname": "Kodsi",
+    "birthdate": "2000-06-17",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 91,
+    "height": 188,
+    "jersey": 67,
+    "birthCountry": "USA",
+    "nationality": "USA",
+    "nationalityShort": "USA",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 7,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 1,
+        "away": 2
+      },
+      "points": {
+        "home": 1,
+        "away": 2
+      },
+      "penaltyMinutes": 9,
+      "positive": 5,
+      "negative": 9,
+      "pointsPerGame": 0.43,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 1.29,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 25,
+      "shotsOnGoal": {
+        "home": 11,
+        "away": 7
+      },
+      "shotsMissed": 5,
+      "shotsBlocked": 2,
+      "blockedShotsByPlayer": 2,
+      "faceoffsWin": 6,
+      "faceoffsLosses": 8,
+      "faceoffsCount": 14,
+      "timeonice": 7363,
+      "timeoniceEQ": 6851,
+      "timeonicePP": 238,
+      "timeoniceSH": 274,
+      "hits": 0
+    }
+  }
+]

@@ -1,0 +1,60 @@
+{
+  "id": 2026,
+  "isActive": true,
+  "nationalities": [
+    "AT",
+    "AU",
+    "BE"
+  ],
+  "teams": [
+    {
+      "name": "Eisvögel USC Freiburg",
+      "teamId": "103",
+      "seasonTeamId": "103",
+      "tlc": "FRE",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/103"
+    },
+    {
+      "name": "ALBA BERLIN",
+      "teamId": "100",
+      "seasonTeamId": "100",
+      "tlc": "ALB",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/100"
+    },
+    {
+      "name": "halfit LIONS ",
+      "teamId": "109",
+      "seasonTeamId": "109",
+      "tlc": "hfL",
+      "logoUrl": "https://api-1.dbbl.scb.world/images/teams/logo/2026/109"
+    }
+  ],
+  "players": [
+    {
+      "firstName": "Lena",
+      "lastName": "Gohlisch",
+      "playerId": "10338",
+      "realPlayerId": 10338,
+      "seasonPlayerId": "20349",
+      "seasonTeamId": "100"
+    },
+    {
+      "firstName": "Leoni",
+      "lastName": "Kreyenfeld",
+      "playerId": "10343",
+      "realPlayerId": 10343,
+      "seasonPlayerId": "20354",
+      "seasonTeamId": "100"
+    },
+    {
+      "firstName": "Nina",
+      "lastName": "Rosemeyer",
+      "playerId": "10346",
+      "realPlayerId": 10346,
+      "seasonPlayerId": "20357",
+      "seasonTeamId": "100"
+    }
+  ],
+  "championshipWinnerId": null,
+  "cupWinnerId": null
+}

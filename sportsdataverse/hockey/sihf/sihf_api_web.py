@@ -34,6 +34,28 @@ __all__ = [
     "sihf_game_goalie_stats",
     "sihf_game_team_stats",
     "sihf_game_lineups",
+    "sihf_team_goals",
+    "sihf_team_goals_by_position",
+    "sihf_team_shots",
+    "sihf_team_power_play",
+    "sihf_team_penalty_kill",
+    "sihf_team_penalties",
+    "sihf_team_shootouts",
+    "sihf_team_faceoffs",
+    "sihf_team_faceoffs_by_zone",
+    "sihf_team_faceoffs_by_zone_per_game",
+    "sihf_team_attendance",
+    "sihf_player_goals_assists",
+    "sihf_player_shots",
+    "sihf_player_penalties",
+    "sihf_player_shootouts",
+    "sihf_player_faceoffs",
+    "sihf_player_faceoffs_by_zone",
+    "sihf_player_faceoffs_by_zone_per_game",
+    "sihf_player_time_on_ice",
+    "sihf_goalie_shots",
+    "sihf_goalie_wins",
+    "sihf_goalie_shootouts",
 ]
 
 # Documented columns per endpoint (its returns-schema): an empty payload parses to a
@@ -277,6 +299,454 @@ _PARSER_COLUMNS = {
         "is_first_goalkeeper",
         "absence_code",
         "absence_reason",
+    ],
+    "team_goals": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "goals_for",
+        "goals_for_quotient",
+        "goals_against",
+        "goals_against_quotient",
+        "even_goals_for",
+        "even_goals_for_quotient",
+        "even_goals_against",
+        "even_goals_against_quotient",
+        "pp_goals_for",
+        "pp_goals_for_quotient",
+        "pp_goals_against",
+        "pp_goals_against_quotient",
+        "sh_goals",
+        "sh_goals_quotient",
+        "pk_goals_against",
+        "pk_goals_against_quotient",
+        "row_type",
+    ],
+    "team_goals_by_position": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "goals_for_fw_df",
+        "goals_for_fw",
+        "goals_for_fw_percent",
+        "goals_for_df",
+        "goals_for_df_percent",
+        "goals_for_im",
+        "goals_for_im_percent",
+        "sow_goals_for",
+        "sow_goals_against",
+        "row_type",
+    ],
+    "team_shots": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "sog_sog",
+        "sog_sog_percent",
+        "sog_sog_quotient",
+        "sog_sog_slot",
+        "sog_sog_slot_per_game",
+        "sog_missed",
+        "sog_missed_per_game",
+        "sog_post",
+        "sog_post_per_game",
+        "blockings",
+        "blockings_per_game",
+        "soga_sog",
+        "soga_sog_per_game",
+        "soga_sog_slot",
+        "soga_sog_slot_per_game",
+        "row_type",
+    ],
+    "team_power_play": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "pp_opportunities",
+        "pp_opportunities_quotient",
+        "pp_goals_for",
+        "pp_goals_for_quotient",
+        "pp_percent",
+        "power_play_time",
+        "power_play_time_quotient",
+        "pp_goals_against",
+        "pp_goals_against_quotient",
+        "row_type",
+    ],
+    "team_penalty_kill": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "pk_situations",
+        "pk_situations_quotient",
+        "pk_goals_against",
+        "pk_goals_against_quotient",
+        "pk_percent",
+        "penalty_kill_time",
+        "penalty_kill_time_quotient",
+        "sh_goals",
+        "sh_goals_quotient",
+        "row_type",
+    ],
+    "team_penalties": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "pim2",
+        "pim5",
+        "pim10",
+        "game_misconducts",
+        "match_penalties",
+        "pim_total",
+        "row_type",
+    ],
+    "team_shootouts": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "games_won_penalty",
+        "games_lost_penalty",
+        "pen_shots",
+        "pen_shot_goals",
+        "pen_shots_missed",
+        "pen_shots_percent",
+        "pen_shots_against",
+        "pen_shot_goals_against",
+        "pen_shot_saves",
+        "pen_shot_saves_percent",
+        "row_type",
+    ],
+    "team_faceoffs": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "faceoffs",
+        "faceoffs_per_game",
+        "faceoffs_percent",
+        "faceoffs_won",
+        "faceoffs_lost",
+        "faceoffs_won_per_game",
+        "faceoffs_lost_per_game",
+        "faceoffs_offensive_percent",
+        "faceoffs_neutral_percent",
+        "faceoffs_defensive_percent",
+        "row_type",
+    ],
+    "team_faceoffs_by_zone": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "faceoffs_offensive",
+        "faceoffs_offensive_percent",
+        "faceoffs_won_offensive",
+        "faceoffs_lost_offensive",
+        "faceoffs_neutral",
+        "faceoffs_neutral_percent",
+        "faceoffs_won_neutral",
+        "faceoffs_lost_neutral",
+        "faceoffs_defensive",
+        "faceoffs_defensive_percent",
+        "faceoffs_won_defensive",
+        "faceoffs_lost_defensive",
+        "row_type",
+    ],
+    "team_faceoffs_by_zone_per_game": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "faceoffs_offensive_per_game",
+        "faceoffs_won_offensive_per_game",
+        "faceoffs_lost_offensive_per_game",
+        "faceoffs_neutral_per_game",
+        "faceoffs_won_neutral_per_game",
+        "faceoffs_lost_neutral_per_game",
+        "faceoffs_defensive_per_game",
+        "faceoffs_won_defensive_per_game",
+        "faceoffs_lost_defensive_per_game",
+        "row_type",
+    ],
+    "team_attendance": [
+        "season",
+        "phase_id",
+        "rank",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "home_games",
+        "spectators",
+        "stadium_capacity_quotient",
+        "spectators_quotient",
+        "stadium_capacity_percent",
+        "row_type",
+    ],
+    "player_goals_assists": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "goals",
+        "assists",
+        "assists1",
+        "assists2",
+        "game_winning_goals",
+        "eq_goals",
+        "eq_assists",
+        "pp_goals",
+        "pp_assists",
+        "pk_goals",
+        "pk_assists",
+        "overtime_goals",
+        "hattricks",
+        "row_type",
+    ],
+    "player_shots": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "sog_sog",
+        "sog_sog_percent",
+        "sog_sog_quotient",
+        "sog_sog_slot",
+        "sog_sog_slot_per_game",
+        "sog_missed",
+        "sog_missed_per_game",
+        "sog_post",
+        "sog_post_per_game",
+        "blockings",
+        "blockings_per_game",
+        "row_type",
+    ],
+    "player_penalties": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "pim_total",
+        "pim2",
+        "pim5",
+        "pim10",
+        "game_misconducts",
+        "match_penalties",
+        "row_type",
+    ],
+    "player_shootouts": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "pen_shots",
+        "pen_shot_goals",
+        "pen_shots_missed",
+        "pen_shots_percent",
+        "pen_shot_winning_goals",
+        "row_type",
+    ],
+    "player_faceoffs": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "faceoffs",
+        "faceoffs_per_game",
+        "faceoffs_percent",
+        "faceoffs_won",
+        "faceoffs_lost",
+        "faceoffs_won_per_game",
+        "faceoffs_lost_per_game",
+        "faceoffs_offensive_percent",
+        "faceoffs_neutral_percent",
+        "faceoffs_defensive_percent",
+        "row_type",
+    ],
+    "player_faceoffs_by_zone": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "faceoffs_offensive",
+        "faceoffs_offensive_percent",
+        "faceoffs_won_offensive",
+        "faceoffs_lost_offensive",
+        "faceoffs_neutral",
+        "faceoffs_neutral_percent",
+        "faceoffs_won_neutral",
+        "faceoffs_lost_neutral",
+        "faceoffs_defensive",
+        "faceoffs_defensive_percent",
+        "faceoffs_won_defensive",
+        "faceoffs_lost_defensive",
+        "row_type",
+    ],
+    "player_faceoffs_by_zone_per_game": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "faceoffs_offensive_per_game",
+        "faceoffs_won_offensive_per_game",
+        "faceoffs_lost_offensive_per_game",
+        "faceoffs_neutral_per_game",
+        "faceoffs_won_neutral_per_game",
+        "faceoffs_lost_neutral_per_game",
+        "faceoffs_defensive_per_game",
+        "faceoffs_won_defensive_per_game",
+        "faceoffs_lost_defensive_per_game",
+        "row_type",
+    ],
+    "player_time_on_ice": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "position",
+        "games_played",
+        "time_on_ice_eq",
+        "time_on_ice_eq_per_game",
+        "time_on_ice_pp",
+        "time_on_ice_pp_per_game",
+        "time_on_ice_pk",
+        "time_on_ice_pk_per_game",
+        "time_on_ice",
+        "time_on_ice_per_game",
+        "shifts",
+        "time_on_ice_per_shift",
+        "shifts_per_game",
+        "row_type",
+    ],
+    "goalie_shots": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "soga_sog",
+        "soga_sog_per_game",
+        "soga_sog_slot",
+        "soga_sog_slot_per_game",
+        "soga_missed",
+        "soga_missed_per_game",
+        "soga_post",
+        "soga_post_per_game",
+        "saves_slot_percentage",
+        "row_type",
+    ],
+    "goalie_wins": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "first_keeper",
+        "wins",
+        "wins_intime",
+        "wins_overtime",
+        "wins_penalty",
+        "losses",
+        "losses_intime",
+        "losses_overtime",
+        "losses_penalty",
+        "shutout",
+        "row_type",
+    ],
+    "goalie_shootouts": [
+        "season",
+        "phase_id",
+        "rank",
+        "player",
+        "team_id",
+        "team_name",
+        "team_acronym",
+        "games_played",
+        "pen_shots_against",
+        "pen_shot_goals_against",
+        "pen_shot_saves",
+        "pen_shot_saves_percent",
+        "row_type",
     ],
 }
 
@@ -964,4 +1434,1444 @@ def sihf_game_lineups(
     )
     if return_parsed:
         return parse_sihf_game_lineups(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["game_lineups"])
+    return raw
+
+
+def sihf_team_goals(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team goals for and against per season: totals and per game, even strength, power play and short-handed.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamGoal&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_goals
+            sihf_team_goals(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamGoal",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_goals"])
+    return raw
+
+
+def sihf_team_goals_by_position(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team goals by scorer: forwards, defensemen and import players (totals and shares), plus shootout-winning goals for and against.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamGoalPosNation&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_goals_by_position
+            sihf_team_goals_by_position(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamGoalPosNation",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_goals_by_position"]
+        )
+    return raw
+
+
+def sihf_team_shots(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team shots per season: on goal (total, slot, shooting percentage), missed, post, blocked, and shots against, with per-game rates.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamShotDetail&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_shots
+            sihf_team_shots(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamShotDetail",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_shots"])
+    return raw
+
+
+def sihf_team_power_play(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team power play per season: opportunities, goals, conversion percentage, power-play time, and short-handed goals against.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamPp&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_power_play
+            sihf_team_power_play(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamPp",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_power_play"])
+    return raw
+
+
+def sihf_team_penalty_kill(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team penalty kill per season: times short-handed, goals against, kill percentage, penalty-kill time, and short-handed goals for.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamPk&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_penalty_kill
+            sihf_team_penalty_kill(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamPk",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_penalty_kill"])
+    return raw
+
+
+def sihf_team_penalties(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team penalties per season: 2-, 5- and 10-minute penalties, game misconducts, match penalties and penalty minutes.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamFoul&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_penalties
+            sihf_team_penalties(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamFoul",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_penalties"])
+    return raw
+
+
+def sihf_team_shootouts(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team shootouts per season: shootout wins and losses, attempts, goals and percentage, and attempts, goals against and saves.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamShootout&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_shootouts
+            sihf_team_shootouts(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamShootout",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_shootouts"])
+    return raw
+
+
+def sihf_team_faceoffs(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team faceoffs per season: taken, won, lost, per game, and win percentage overall and by zone.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamFaceoff&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_faceoffs
+            sihf_team_faceoffs(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamFaceoff",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_faceoffs"])
+    return raw
+
+
+def sihf_team_faceoffs_by_zone(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team faceoffs by zone (offensive, neutral, defensive) per season: taken, won, lost and win percentage.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamFaceoffZone&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_faceoffs_by_zone
+            sihf_team_faceoffs_by_zone(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamFaceoffZone",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_faceoffs_by_zone"]
+        )
+    return raw
+
+
+def sihf_team_faceoffs_by_zone_per_game(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team faceoffs by zone (offensive, neutral, defensive) per game: taken, won and lost.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamFaceoffZoneGame&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_faceoffs_by_zone_per_game
+            sihf_team_faceoffs_by_zone_per_game(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamFaceoffZoneGame",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_faceoffs_by_zone_per_game"]
+        )
+    return raw
+
+
+def sihf_team_attendance(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Team home attendance per season: home games, total and average spectators, average arena capacity and utilisation.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=teamSpectator&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_team_attendance
+            sihf_team_attendance(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "teamSpectator",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["team_attendance"])
+    return raw
+
+
+def sihf_player_goals_assists(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater goals and assists by situation: even strength, power play, short-handed, game-winning and overtime goals, hat tricks.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerGoalAssist&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_goals_assists
+            sihf_player_goals_assists(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerGoalAssist",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_goals_assists"])
+    return raw
+
+
+def sihf_player_shots(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater shots: on goal (total, slot, shooting percentage), missed, post and blocked, with per-game rates.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerShotDetail&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_shots
+            sihf_player_shots(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerShotDetail",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_shots"])
+    return raw
+
+
+def sihf_player_penalties(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game misconducts and match penalties.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerFoul&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_penalties
+            sihf_player_penalties(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerFoul",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_penalties"])
+    return raw
+
+
+def sihf_player_shootouts(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerShootout&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_shootouts
+            sihf_player_shootouts(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerShootout",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_shootouts"])
+    return raw
+
+
+def sihf_player_faceoffs(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater faceoffs: taken, won, lost, per game, and win percentage overall and by zone.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerFaceoff&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_faceoffs
+            sihf_player_faceoffs(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerFaceoff",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_faceoffs"])
+    return raw
+
+
+def sihf_player_faceoffs_by_zone(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater faceoffs by zone (offensive, neutral, defensive): taken, won, lost and win percentage.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerFaceoffZone&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_faceoffs_by_zone
+            sihf_player_faceoffs_by_zone(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerFaceoffZone",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_faceoffs_by_zone"]
+        )
+    return raw
+
+
+def sihf_player_faceoffs_by_zone_per_game(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and lost.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerFaceoffZoneGame&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_faceoffs_by_zone_per_game
+            sihf_player_faceoffs_by_zone_per_game(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerFaceoffZoneGame",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(
+            raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_faceoffs_by_zone_per_game"]
+        )
+    return raw
+
+
+def sihf_player_time_on_ice(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Skater ice time by situation (even strength, power play, penalty kill), totals and per game, plus shifts.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=playerTimeOnIce&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_player_time_on_ice
+            sihf_player_time_on_ice(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "playerTimeOnIce",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["player_time_on_ice"])
+    return raw
+
+
+def sihf_goalie_shots(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Goaltender shots against: on goal (total, slot), missed, post, with per-game rates and the slot save percentage.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeperShotDetail&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_goalie_shots
+            sihf_goalie_shots(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "goalkeeperShotDetail",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["goalie_shots"])
+    return raw
+
+
+def sihf_goalie_wins(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Goaltender decisions: starts, wins and losses in regulation, overtime and shootout, and shutouts.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeperWin&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_goalie_wins
+            sihf_goalie_wins(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "goalkeeperWin",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["goalie_wins"])
+    return raw
+
+
+def sihf_goalie_shootouts(
+    season: int,
+    league_id: Optional[int] = 1,
+    phase_id: Optional[int] = None,
+    *,
+    language: Optional[str] = "en",
+    return_parsed: bool = True,
+    return_as_pandas: bool = False,
+    **kwargs,
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+    """Goaltender shootouts: attempts faced, goals against, saves and save percentage.
+
+    Endpoint: ``GET https://data.sihf.ch/statistic/api/cms/table``
+    Example URL: https://data.sihf.ch/statistic/api/cms/table?alias=goalkeeperShootout&searchQuery=1%2F%2F1&language=en&filterBy=Season&filterQuery=2026
+
+    Args:
+        season: Required. Season by its END year (2026 = 2025-26). A season SIHF does not have raises NoDataError (the API itself silently answers another one).
+        league_id: SIHF league id: 1 = National League, 2 = Swiss League, 100 = MyHockey League, 3 = 1. Liga, 43 = SWHL B, 113 = U21-Elit (the body's League filter lists them). An id SIHF does not have for the season raises NoDataError.
+        phase_id: SIHF phase id (regular season, a playoff round, ...; the body's Phase filter lists them). None = no phase filter: the season summary over every phase.
+        language: Response language. Only part of the body is translated: status, position and penalty names stay German.
+        return_parsed: parse the payload through parse_sihf_table -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
+        return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
+
+    Returns:
+        A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
+
+    Raises:
+        sportsdataverse.errors.NoDataError: SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+
+    Example:
+        Quick start::
+
+            from sportsdataverse.hockey.sihf import sihf_goalie_shootouts
+            sihf_goalie_shootouts(season=2026, league_id=1)
+
+        See Also:
+            * `SIHF`_ - the Swiss Ice Hockey Federation site whose statistics the API serves
+
+        .. _SIHF: https://www.sihf.ch/
+    """
+    if language not in ("en", "de", "fr", "it"):
+        raise ValueError(f"language must be one of ('en', 'de', 'fr', 'it'); got {language!r}")
+    _caller_params = kwargs.pop("params", None) or {}
+    _params = {
+        "alias": "goalkeeperShootout",
+        "searchQuery": "1//",
+        "Season": season,
+        "League": league_id,
+        "Phase": phase_id,
+        "language": language,
+    }
+    _params.update(_caller_params)
+    raw = _get(
+        "https://data.sihf.ch/statistic/api/cms/table",
+        params=_params,
+        **kwargs,
+    )
+    if return_parsed:
+        return parse_sihf_table(raw, return_as_pandas=return_as_pandas, columns=_PARSER_COLUMNS["goalie_shootouts"])
     return raw

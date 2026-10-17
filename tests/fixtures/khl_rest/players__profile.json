@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "data": {
+    "DATA": {
+      "firstname": "Джозеф",
+      "lastname": "Кин",
+      "photo": "//img.khl.ru/players/41928/200.jpg",
+      "position": "защитник",
+      "positionCode": "defender",
+      "biography": "",
+      "isHero": false,
+      "isRip": false,
+      "links": {
+        "stats": "/players/41928/stats/"
+      },
+      "pagelink": "/players/41928/",
+      "summaryStats": {
+        "gp": "185",
+        "a": "57",
+        "pm": "-18",
+        "g": "20",
+        "pts": "77"
+      },
+      "jn": 4,
+      "club": {
+        "name": "Спартак",
+        "logo": "//img.khl.ru/clubs/ru/7/200.png?u=2026",
+        "CODE": "spartak"
+      },
+      "height": "183 см",
+      "weight": "85 кг",
+      "birthdate": "02.07.1999",
+      "age": "27 лет",
+      "contractName": "Односторонний",
+      "contractDate": "31.05.2029",
+      "country": {
+        "name": "США",
+        "flag": "/local/templates/2025/images/flags/us.svg"
+      },
+      "sportCountry": {
+        "name": "США",
+        "flag": "/local/templates/2025/images/flags/us.svg"
+      },
+      "stick": "правый"
+    },
+    "TEXT": {
+      "players": "Игроки",
+      "club": "Клуб",
+      "clubIn": "Находится в",
+      "contractDate": "Контракт до",
+      "contractName": "Вид контракта",
+      "birthdate": "Дата рождения",
+      "shoots": "Хват",
+      "country": "Гражданство",
+      "sportCountry": "Сборная",
+      "deathdate": "Умер",
+      "stick": "Хват",
+      "summaryMetrics": "Основные показатели",
+      "gp": "Игры",
+      "a": "Голевых передач",
+      "pm": "Показатель эффективности",
+      "g": "Заброшенных",
+      "pts": "Голы + передачи",
+      "gaa": "Пропущенных в среднем",
+      "sv_pct": "Процент сейвов",
+      "so": "Без пропущенных голов («Сухари»)",
+      "aMetric": "Передачи",
+      "pmMetric": "Плюс/Минус",
+      "gMetric": "Шайбы",
+      "ptsMetric": "Очки",
+      "gaaMetric": "Коэффициент надежности",
+      "sv_pctMetric": "Процент отраженных бросков",
+      "soMetric": "Игры на 0",
+      "linkStats": "Смотреть всю статистику",
+      "pagelink": "Об игроке"
+    },
+    "CONFIG": []
+  },
+  "errors": []
+}

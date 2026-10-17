@@ -1,0 +1,253 @@
+{
+  "match": {
+    "id": "4440",
+    "date": "2026-10-11",
+    "home_id": 96,
+    "home_name": "Glasgow Clan",
+    "home_shortcut": "GLA",
+    "visitor_id": 97,
+    "visitor_name": "Guildford Flames",
+    "visitor_shortcut": "GUI",
+    "status": "AFTER_MATCH",
+    "shots": [
+      {
+        "id": 786207,
+        "player_id": 5064,
+        "jersey": 19,
+        "first_name": "Elliot",
+        "last_name": "Lewis",
+        "team_id": 97,
+        "match_shot_resutl_id": 1,
+        "time": 42,
+        "coordinate_x": -44.0,
+        "coordinate_y": -41.0,
+        "real_date": "2026-10-11 17:04:27",
+        "xG": 0.01262414,
+        "xG_type": "LD"
+      },
+      {
+        "id": 786219,
+        "player_id": 5155,
+        "jersey": 77,
+        "first_name": "Juho",
+        "last_name": "Rautanen",
+        "team_id": 96,
+        "match_shot_resutl_id": 3,
+        "time": 218,
+        "coordinate_x": 32.0,
+        "coordinate_y": 49.0,
+        "real_date": "2026-10-11 17:10:24",
+        "xG": 0.01097281,
+        "xG_type": "LD"
+      },
+      {
+        "id": 786233,
+        "player_id": 4892,
+        "jersey": 49,
+        "first_name": "Steven",
+        "last_name": "Seigo",
+        "team_id": 96,
+        "match_shot_resutl_id": 2,
+        "time": 328,
+        "coordinate_x": 39.0,
+        "coordinate_y": -19.0,
+        "real_date": "2026-10-11 17:13:11",
+        "xG": 0.0144467,
+        "xG_type": "LD"
+      }
+    ],
+    "faceoffs_count": {
+      "BULY_HOME_DEFENSE_RIGHT": {
+        "home": 4,
+        "visitor": 3
+      },
+      "BULY_HOME_DEFENSE_LEFT": {
+        "home": 5,
+        "visitor": 4
+      },
+      "BULY_HOME_BLUE_RIGHT": {
+        "home": 0,
+        "visitor": 0
+      },
+      "BULY_HOME_BLUE_LEFT": {
+        "home": 0,
+        "visitor": 0
+      },
+      "BULY_CENTRAL": {
+        "home": 9,
+        "visitor": 2
+      },
+      "BULY_AWAY_DEFENSE_RIGHT": {
+        "home": 7,
+        "visitor": 9
+      },
+      "BULY_AWAY_DEFENSE_LEFT": {
+        "home": 8,
+        "visitor": 4
+      },
+      "BULY_AWAY_BLUE_RIGHT": {
+        "home": 1,
+        "visitor": 1
+      },
+      "BULY_AWAY_BLUE_LEFT": {
+        "home": 1,
+        "visitor": 1
+      }
+    },
+    "faceoffs_percent": {
+      "BULY_HOME_DEFENSE_RIGHT": {
+        "home": 57.14,
+        "visitor": 42.86
+      },
+      "BULY_HOME_DEFENSE_LEFT": {
+        "home": 55.56,
+        "visitor": 44.44
+      },
+      "BULY_HOME_BLUE_RIGHT": {
+        "home": 0,
+        "visitor": 0
+      },
+      "BULY_HOME_BLUE_LEFT": {
+        "home": 0,
+        "visitor": 0
+      },
+      "BULY_CENTRAL": {
+        "home": 81.82,
+        "visitor": 18.18
+      },
+      "BULY_AWAY_DEFENSE_RIGHT": {
+        "home": 43.75,
+        "visitor": 56.25
+      },
+      "BULY_AWAY_DEFENSE_LEFT": {
+        "home": 66.67,
+        "visitor": 33.33
+      },
+      "BULY_AWAY_BLUE_RIGHT": {
+        "home": 50.0,
+        "visitor": 50.0
+      },
+      "BULY_AWAY_BLUE_LEFT": {
+        "home": 50.0,
+        "visitor": 50.0
+      }
+    },
+    "faceoffs": {
+      "home": [
+        56.25,
+        73.33,
+        53.57
+      ],
+      "visitor": [
+        43.75,
+        26.67,
+        46.43
+      ]
+    },
+    "deserve2win": {
+      "score": "2:6",
+      "homeD2W": 45.0,
+      "awayD2W": 55.0,
+      "homeExGoals": 2.3798240280000003,
+      "visitorExGoals": 2.934881856,
+      "homeStats": [
+        {
+          "playerName": "Cole Kodsi",
+          "value": 0.46828772800000007
+        },
+        {
+          "playerName": "Ross Armour",
+          "value": 0.33047118
+        },
+        {
+          "playerName": "Brady Risk",
+          "value": 0.29178269
+        }
+      ],
+      "visitorStats": [
+        {
+          "playerName": "Karl Boudrias",
+          "value": 0.966694862
+        },
+        {
+          "playerName": "Brett Neumann",
+          "value": 0.888794122
+        },
+        {
+          "playerName": "Joshua Waller",
+          "value": 0.20265666
+        }
+      ]
+    },
+    "xGStory": {
+      "xGPeriod": {
+        "1": {
+          "home": 0.726873273,
+          "visitor": 0.5118678539999999
+        },
+        "2": {
+          "home": 0.7654356330000001,
+          "visitor": 0.540293402
+        },
+        "3": {
+          "home": 0.887515122,
+          "visitor": 1.8827205999999999
+        }
+      },
+      "xGDataHome": [
+        {
+          "time": 94,
+          "value": 0.08591152
+        },
+        {
+          "time": 121,
+          "value": 0.09753361
+        },
+        {
+          "time": 139,
+          "value": 0.13954239000000002
+        }
+      ],
+      "xGDataVisitor": [
+        {
+          "time": 42,
+          "value": 0.01262414
+        },
+        {
+          "time": 76,
+          "value": 0.0788674
+        },
+        {
+          "time": 149,
+          "value": 0.2242361
+        }
+      ],
+      "goalsHome": [
+        {
+          "time": 367,
+          "xG": 0.24968888
+        },
+        {
+          "time": 427,
+          "xG": 0.37111462599999995
+        }
+      ],
+      "goalsVisitor": [
+        {
+          "time": 1382,
+          "xG": 0.636324634
+        },
+        {
+          "time": 1479,
+          "xG": 0.663830144
+        },
+        {
+          "time": 2551,
+          "xG": 1.1960620249999998
+        }
+      ],
+      "xWHome": 0.6505071882122997,
+      "xWVisitor": 0.34949281178770036
+    }
+  }
+}

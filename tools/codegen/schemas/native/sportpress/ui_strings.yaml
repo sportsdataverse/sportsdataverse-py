@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: language
+  type: character
+- description: ''
+  name: key
+  type: character
+- description: ''
+  name: text
+  type: character
+kind: dataframe
+schema: sportpress_ui_strings

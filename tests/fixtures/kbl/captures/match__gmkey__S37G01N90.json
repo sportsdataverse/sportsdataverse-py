@@ -1,0 +1,106 @@
+{
+  "game": {
+    "gmkey": "S37G01N90",
+    "glkey": "S37G01",
+    "seasonCode": 37,
+    "seasonGrade": 1,
+    "seasonCategoryName": "정규시즌",
+    "gameCode": "01",
+    "gameNo": 90,
+    "gameDate": "20201211",
+    "tcodeH": "70",
+    "tcodeA": "10",
+    "tnameH": "안양KGC",
+    "tnameA": "울산현대모비스",
+    "tnameFH": "안양 KGC 인삼공사",
+    "tnameFA": "울산 현대모비스 피버스",
+    "seasonName": "2020-2021",
+    "gameStart": "1900",
+    "gameEnd": "2046",
+    "gameTime": 146,
+    "isStarted": 1,
+    "isEnded": 1,
+    "playingQuarter": "X",
+    "weekDay": "금",
+    "tv": "SPOTV2 / SPOTV ON",
+    "tvCode": "T24,T25",
+    "stadiumname": "안양실내",
+    "stadiumnameF": "안양실내체육관",
+    "stadiumnameEn": "안양실내",
+    "crowds": 0,
+    "judges": {
+      "main": {
+        "name": "윤호영"
+      },
+      "sub": [
+        {
+          "name": "김태환"
+        },
+        {
+          "name": "이태희"
+        }
+      ]
+    },
+    "tlogoH": "kgc2011",
+    "tlogoA": "hd",
+    "detailUrl": "/game/record/S37G01N90",
+    "highlightUrl": "https://m.sports.naver.com/game/202012117010370190"
+  },
+  "teams": {
+    "home": {
+      "tcode": "70",
+      "tname": "안양KGC",
+      "tnameF": "안양 KGC 인삼공사",
+      "staffs": {
+        "manager": {
+          "name": "김승기"
+        },
+        "coaches": [
+          {
+            "name": "손규완"
+          },
+          {
+            "name": "손창환"
+          }
+        ]
+      }
+    },
+    "away": {
+      "tcode": "10",
+      "tname": "울산현대모비스",
+      "tnameF": "울산 현대모비스 피버스",
+      "staffs": {
+        "manager": {
+          "name": "유재학"
+        },
+        "coaches": [
+          {
+            "name": "아이라 클라크"
+          },
+          {
+            "name": "조동현"
+          },
+          {
+            "name": "성준모"
+          }
+        ]
+      }
+    }
+  },
+  "teamrecords": {
+    "home": {
+      "scoreq1": 27,
+      "scoreq2": 25,
+      "scoreq3": 15,
+      "scoreq4": 22,
+      "scoreeq": []
+    },
+    "away": {
+      "scoreq1": 20,
+      "scoreq2": 21,
+      "scoreq3": 22,
+      "scoreq4": 21,
+      "scoreeq": []
+    }
+  }
+}

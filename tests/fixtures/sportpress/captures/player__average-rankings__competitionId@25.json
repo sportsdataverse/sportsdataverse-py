@@ -1,0 +1,1199 @@
+{
+  "efficiency": [
+    {
+      "player": {
+        "id": 5533,
+        "birthdate": "2002-09-30",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Sebastian",
+        "last_name": "Thomas",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Thomas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/l/z/lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/l/z/small-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+            "medium": "https://bnxt.sportpress.info/storage/l/z/medium-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 559,
+        "name": "AB InBev Leuven Bears",
+        "short_name": "LEU",
+        "ticket_url": "https://leuvenbears.ordering.be/o/2",
+        "team_logo": {
+          "name": "Leuven",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/L/f/Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/L/f/small-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+            "medium": "https://bnxt.sportpress.info/storage/L/f/medium-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png"
+          }
+        }
+      },
+      "roster_id": 11105,
+      "value": 30.5
+    },
+    {
+      "player": {
+        "id": 5547,
+        "birthdate": "2002-02-04",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Malik",
+        "last_name": "Thomas",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Thomas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/N/d/NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/N/d/small-NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png",
+            "medium": "https://bnxt.sportpress.info/storage/N/d/medium-NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "roster_id": 11139,
+      "value": 27
+    },
+    {
+      "player": {
+        "id": 219,
+        "birthdate": "2000-12-27",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Niels",
+        "last_name": "Van Den Eynde",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Van Den Eynde",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/B/2/B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/B/2/small-B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+            "medium": "https://bnxt.sportpress.info/storage/B/2/medium-B2Lj5gloVt35wqgiHA41AwxB11788806715.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "roster_id": 11125,
+      "value": 25.5
+    }
+  ],
+  "points": [
+    {
+      "player": {
+        "id": 5547,
+        "birthdate": "2002-02-04",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Malik",
+        "last_name": "Thomas",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Thomas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/N/d/NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/N/d/small-NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png",
+            "medium": "https://bnxt.sportpress.info/storage/N/d/medium-NdGY4TAswFAzGqdg7FgLt5iBk1788807173.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "roster_id": 11139,
+      "value": 27
+    },
+    {
+      "player": {
+        "id": 5533,
+        "birthdate": "2002-09-30",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Sebastian",
+        "last_name": "Thomas",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Thomas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/l/z/lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/l/z/small-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+            "medium": "https://bnxt.sportpress.info/storage/l/z/medium-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 559,
+        "name": "AB InBev Leuven Bears",
+        "short_name": "LEU",
+        "ticket_url": "https://leuvenbears.ordering.be/o/2",
+        "team_logo": {
+          "name": "Leuven",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/L/f/Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/L/f/small-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+            "medium": "https://bnxt.sportpress.info/storage/L/f/medium-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png"
+          }
+        }
+      },
+      "roster_id": 11105,
+      "value": 22.5
+    },
+    {
+      "player": {
+        "id": 219,
+        "birthdate": "2000-12-27",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Niels",
+        "last_name": "Van Den Eynde",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Van Den Eynde",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/B/2/B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/B/2/small-B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+            "medium": "https://bnxt.sportpress.info/storage/B/2/medium-B2Lj5gloVt35wqgiHA41AwxB11788806715.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "roster_id": 11125,
+      "value": 18.5
+    }
+  ],
+  "total_rebound": [
+    {
+      "player": {
+        "id": 5457,
+        "birthdate": "2002-03-11",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Aleksandre",
+        "last_name": "Merkviladze",
+        "nationality_code": "GEO",
+        "profile_image": {
+          "name": "Merkviladze",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/j/r/jrX42ncHYY83xPp7r7cZDNSm41789333752.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/j/r/small-jrX42ncHYY83xPp7r7cZDNSm41789333752.png",
+            "medium": "https://bnxt.sportpress.info/storage/j/r/medium-jrX42ncHYY83xPp7r7cZDNSm41789333752.png"
+          }
+        },
+        "created_at": "2025-12-10"
+      },
+      "team": {
+        "id": 547,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "team_logo": {
+          "name": "Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/5/b/5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/5/b/small-5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+            "medium": "https://bnxt.sportpress.info/storage/5/b/medium-5bYE12yxtfijCQAKU2RhtMieX1785845195.png"
+          }
+        }
+      },
+      "roster_id": 11073,
+      "value": 9
+    },
+    {
+      "player": {
+        "id": 228,
+        "birthdate": "2001-02-07",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Niels",
+        "last_name": "De Ridder",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "De Ridder",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/T/e/Teg86WdBdV7zdc8i0WdIrHt111788859251.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/T/e/small-Teg86WdBdV7zdc8i0WdIrHt111788859251.png",
+            "medium": "https://bnxt.sportpress.info/storage/T/e/medium-Teg86WdBdV7zdc8i0WdIrHt111788859251.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "roster_id": 11449,
+      "value": 8.5
+    },
+    {
+      "player": {
+        "id": 5533,
+        "birthdate": "2002-09-30",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Sebastian",
+        "last_name": "Thomas",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Thomas",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/l/z/lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/l/z/small-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png",
+            "medium": "https://bnxt.sportpress.info/storage/l/z/medium-lzU3FMN1SkXKYV6ldrOHnBJPV1789152328.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 559,
+        "name": "AB InBev Leuven Bears",
+        "short_name": "LEU",
+        "ticket_url": "https://leuvenbears.ordering.be/o/2",
+        "team_logo": {
+          "name": "Leuven",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/L/f/Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/L/f/small-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png",
+            "medium": "https://bnxt.sportpress.info/storage/L/f/medium-Lf4ijAEkcAiQ983piyEx4UmvV1786710794.png"
+          }
+        }
+      },
+      "roster_id": 11105,
+      "value": 8
+    }
+  ],
+  "block": [
+    {
+      "player": {
+        "id": 5561,
+        "birthdate": "2001-05-17",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Eduardo",
+        "last_name": "Andre",
+        "nationality_code": "ANG",
+        "profile_image": {
+          "name": "Andre",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/z/b/zb1j1lRZcjaf2wubSAfArN6iE1788858635.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/z/b/small-zb1j1lRZcjaf2wubSAfArN6iE1788858635.png",
+            "medium": "https://bnxt.sportpress.info/storage/z/b/medium-zb1j1lRZcjaf2wubSAfArN6iE1788858635.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "roster_id": 11179,
+      "value": 3
+    },
+    {
+      "player": {
+        "id": 5559,
+        "birthdate": "2001-04-22",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Luukas",
+        "last_name": "Vaara",
+        "nationality_code": "FIN",
+        "profile_image": {
+          "name": "Vaara",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/c/E/cEL11P2BQx66TsdNV5K9FGACr1788858239.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/c/E/small-cEL11P2BQx66TsdNV5K9FGACr1788858239.png",
+            "medium": "https://bnxt.sportpress.info/storage/c/E/medium-cEL11P2BQx66TsdNV5K9FGACr1788858239.png"
+          }
+        },
+        "created_at": "2026-09-02"
+      },
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "roster_id": 11177,
+      "value": 2
+    },
+    {
+      "player": {
+        "id": 45,
+        "birthdate": "1999-03-19",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Servaas",
+        "last_name": "Buysschaert",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Buysschaert",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/z/V/zVCcRzyLvNRD3g5ALzZ9cx9WQ1788809163.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/z/V/small-zVCcRzyLvNRD3g5ALzZ9cx9WQ1788809163.png",
+            "medium": "https://bnxt.sportpress.info/storage/z/V/medium-zVCcRzyLvNRD3g5ALzZ9cx9WQ1788809163.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 565,
+        "name": "House of Talents Spurs Kortrijk",
+        "short_name": "KOR",
+        "ticket_url": "https://shop.ticket.monster/seller/hot-spurs-kortrijk-h2r9",
+        "team_logo": {
+          "name": "Kortrijk",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/Z/WZW7QcAreIiPReoaGtc8B3YYK1785845053.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/Z/small-WZW7QcAreIiPReoaGtc8B3YYK1785845053.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/Z/medium-WZW7QcAreIiPReoaGtc8B3YYK1785845053.png"
+          }
+        }
+      },
+      "roster_id": 11361,
+      "value": 1.5
+    }
+  ],
+  "assist": [
+    {
+      "player": {
+        "id": 212,
+        "birthdate": "1994-12-28",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Joshua",
+        "last_name": "Heath",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Heath",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/p/B/pBpSre7bxTjEAjY9D6r6E8YlV1788858198.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/p/B/small-pBpSre7bxTjEAjY9D6r6E8YlV1788858198.png",
+            "medium": "https://bnxt.sportpress.info/storage/p/B/medium-pBpSre7bxTjEAjY9D6r6E8YlV1788858198.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "roster_id": 11173,
+      "value": 9.5
+    },
+    {
+      "player": {
+        "id": 294,
+        "birthdate": "1998-09-17",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Marijn",
+        "last_name": "Ververs",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Ververs",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/T/V/TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/T/V/small-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+            "medium": "https://bnxt.sportpress.info/storage/T/V/medium-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "roster_id": 11399,
+      "value": 7.5
+    },
+    {
+      "player": {
+        "id": 219,
+        "birthdate": "2000-12-27",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Niels",
+        "last_name": "Van Den Eynde",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Van Den Eynde",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/B/2/B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/B/2/small-B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+            "medium": "https://bnxt.sportpress.info/storage/B/2/medium-B2Lj5gloVt35wqgiHA41AwxB11788806715.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 557,
+        "name": "Partena Professional Okapi Aalst",
+        "short_name": "AAL",
+        "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+        "team_logo": {
+          "name": "Aalst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+          }
+        }
+      },
+      "roster_id": 11125,
+      "value": 7
+    }
+  ],
+  "steal": [
+    {
+      "player": {
+        "id": 3692,
+        "birthdate": "1999-07-04",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Eric",
+        "last_name": "Boone Jr.",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Boone",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/C/a/CauRnTUiO7HcOl8X0f4bHozLA1790850832.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/C/a/small-CauRnTUiO7HcOl8X0f4bHozLA1790850832.png",
+            "medium": "https://bnxt.sportpress.info/storage/C/a/medium-CauRnTUiO7HcOl8X0f4bHozLA1790850832.png"
+          }
+        },
+        "created_at": "2024-08-28"
+      },
+      "team": {
+        "id": 561,
+        "name": "Brussels Basketball",
+        "short_name": "BRU",
+        "ticket_url": "https://www.brusselsbasketball.be/tickets",
+        "team_logo": {
+          "name": "Brussels",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/y/n/ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/y/n/small-ynqjUETIfJkJMUbOllRCow4rX1785845117.png",
+            "medium": "https://bnxt.sportpress.info/storage/y/n/medium-ynqjUETIfJkJMUbOllRCow4rX1785845117.png"
+          }
+        }
+      },
+      "roster_id": 11065,
+      "value": 4
+    },
+    {
+      "player": {
+        "id": 5325,
+        "birthdate": "2001-04-15",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Enoch",
+        "last_name": "Cheeks",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Cheeks",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/1/u/1u4wPUYEn1Dz06ycuMicwFYAr1788859173.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/1/u/small-1u4wPUYEn1Dz06ycuMicwFYAr1788859173.png",
+            "medium": "https://bnxt.sportpress.info/storage/1/u/medium-1u4wPUYEn1Dz06ycuMicwFYAr1788859173.png"
+          }
+        },
+        "created_at": "2025-08-25"
+      },
+      "team": {
+        "id": 541,
+        "name": "Windrose Giants Antwerp",
+        "short_name": "ANT",
+        "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+        "team_logo": {
+          "name": "Antwerp",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+            "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+          }
+        }
+      },
+      "roster_id": 11453,
+      "value": 3.5
+    },
+    {
+      "player": {
+        "id": 301,
+        "birthdate": "2000-07-17",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Lucas",
+        "last_name": "Kruithof",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Kruithof",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/i/e/ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/i/e/small-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+            "medium": "https://bnxt.sportpress.info/storage/i/e/medium-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 537,
+        "name": "Val-Dieu Spirou Basket",
+        "short_name": "CHA",
+        "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+        "team_logo": {
+          "name": "Spirou Basket",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/G/3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/G/small-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/G/medium-3GsvRCSQNq5oeb3QinpVy3p4H1785845088.png"
+          }
+        }
+      },
+      "roster_id": 11183,
+      "value": 3
+    }
+  ],
+  "two_point_percent": [
+    {
+      "player": {
+        "id": 5607,
+        "birthdate": "2003-03-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Konstantin",
+        "last_name": "Kostadinov",
+        "nationality_code": "BUL",
+        "profile_image": {
+          "name": "Kostadinov",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/K/4/K4Xn9m2RIt2J9NH78y3GGmOrn1790798933.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/K/4/small-K4Xn9m2RIt2J9NH78y3GGmOrn1790798933.png",
+            "medium": "https://bnxt.sportpress.info/storage/K/4/medium-K4Xn9m2RIt2J9NH78y3GGmOrn1790798933.png"
+          }
+        },
+        "created_at": "2026-09-04"
+      },
+      "team": {
+        "id": 539,
+        "name": "Coretec Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://www.bcoostende.be/tickets/tickets",
+        "team_logo": {
+          "name": "Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/e/WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/e/small-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/e/medium-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png"
+          }
+        }
+      },
+      "roster_id": 11269,
+      "value": 85.71,
+      "throw_made": 6,
+      "throw_attempted": 7
+    },
+    {
+      "player": {
+        "id": 5279,
+        "birthdate": "2001-08-16",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Aubin",
+        "last_name": "Gateretse",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Gateretse",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/N/v/NvBA3cYPCaY1vlFChdd8kncFi1790342150.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/N/v/small-NvBA3cYPCaY1vlFChdd8kncFi1790342150.png",
+            "medium": "https://bnxt.sportpress.info/storage/N/v/medium-NvBA3cYPCaY1vlFChdd8kncFi1790342150.png"
+          }
+        },
+        "created_at": "2025-08-21"
+      },
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "roster_id": 11405,
+      "value": 85.71,
+      "throw_made": 3,
+      "throw_attempted": 3.5
+    },
+    {
+      "player": {
+        "id": 5621,
+        "birthdate": "2003-04-10",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Isaac",
+        "last_name": "Abidde",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Abidde",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/3/v/3vD1yWpZgEkR1rcO7DdozlnhK1789374904.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/3/v/small-3vD1yWpZgEkR1rcO7DdozlnhK1789374904.png",
+            "medium": "https://bnxt.sportpress.info/storage/3/v/medium-3vD1yWpZgEkR1rcO7DdozlnhK1789374904.png"
+          }
+        },
+        "created_at": "2026-09-04"
+      },
+      "team": {
+        "id": 549,
+        "name": "Landstede Hammers",
+        "short_name": "ZWO",
+        "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+        "team_logo": {
+          "name": "Landstede Hammers",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/R/J/RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/R/J/small-RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png",
+            "medium": "https://bnxt.sportpress.info/storage/R/J/medium-RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png"
+          }
+        }
+      },
+      "roster_id": 11307,
+      "value": 85.71,
+      "throw_made": 3,
+      "throw_attempted": 3.5
+    }
+  ],
+  "three_point_percent": [
+    {
+      "player": {
+        "id": 170,
+        "birthdate": "1992-10-28",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Jonas",
+        "last_name": "Delalieux",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Delalieux",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/D/r/Dr85WccxT9zNOADKDkAWA5SpZ1790341896.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/D/r/small-Dr85WccxT9zNOADKDkAWA5SpZ1790341896.png",
+            "medium": "https://bnxt.sportpress.info/storage/D/r/medium-Dr85WccxT9zNOADKDkAWA5SpZ1790341896.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 545,
+        "name": "Hubo Limburg United",
+        "short_name": "LIM",
+        "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+        "team_logo": {
+          "name": "Limburg",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/I/p/IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/I/p/small-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png",
+            "medium": "https://bnxt.sportpress.info/storage/I/p/medium-IpEkrEru9R3Ed8vUHWlFkR4rZ1785845246.png"
+          }
+        }
+      },
+      "roster_id": 11397,
+      "value": 60,
+      "throw_made": 1.5,
+      "throw_attempted": 2.5
+    },
+    {
+      "player": {
+        "id": 13,
+        "birthdate": "1999-08-16",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Boyd",
+        "last_name": "Van Der Vuurst",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Van Der Vuurst",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/0/Z/0Zvk8NjWSRJx0qTj9rJJWTiw71789377716.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/0/Z/small-0Zvk8NjWSRJx0qTj9rJJWTiw71789377716.png",
+            "medium": "https://bnxt.sportpress.info/storage/0/Z/medium-0Zvk8NjWSRJx0qTj9rJJWTiw71789377716.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 549,
+        "name": "Landstede Hammers",
+        "short_name": "ZWO",
+        "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+        "team_logo": {
+          "name": "Landstede Hammers",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/R/J/RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/R/J/small-RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png",
+            "medium": "https://bnxt.sportpress.info/storage/R/J/medium-RJmkimeHoVO5gxw3dXfhx2eEx1785847130.png"
+          }
+        }
+      },
+      "roster_id": 11299,
+      "value": 60,
+      "throw_made": 3,
+      "throw_attempted": 5
+    },
+    {
+      "player": {
+        "id": 42,
+        "birthdate": "1991-04-16",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Pierre-Antoine",
+        "last_name": "Gillet",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "Gillet",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/m/WmheqxzXgPAxBgVqDSX4lpygM1790799016.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/m/small-WmheqxzXgPAxBgVqDSX4lpygM1790799016.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/m/medium-WmheqxzXgPAxBgVqDSX4lpygM1790799016.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 539,
+        "name": "Coretec Oostende",
+        "short_name": "OOS",
+        "ticket_url": "https://www.bcoostende.be/tickets/tickets",
+        "team_logo": {
+          "name": "Oostende",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/W/e/WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/W/e/small-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png",
+            "medium": "https://bnxt.sportpress.info/storage/W/e/medium-WeBMRLIogJuvtJmZrFZMsvxhj1786710770.png"
+          }
+        }
+      },
+      "roster_id": 11273,
+      "value": 50,
+      "throw_made": 4,
+      "throw_attempted": 8
+    }
+  ],
+  "free_throw_percent": [
+    {
+      "player": {
+        "id": 5475,
+        "birthdate": "2001-09-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Brandon",
+        "last_name": "Bergsma",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Bergsma",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/l/j/ljCiUTVWYYsbzPODXqz9i5RP21789333592.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/l/j/small-ljCiUTVWYYsbzPODXqz9i5RP21789333592.png",
+            "medium": "https://bnxt.sportpress.info/storage/l/j/medium-ljCiUTVWYYsbzPODXqz9i5RP21789333592.png"
+          }
+        },
+        "created_at": "2026-01-13"
+      },
+      "team": {
+        "id": 547,
+        "name": "Donar Groningen",
+        "short_name": "GRO",
+        "ticket_url": "https://www.donar.nl/tickets",
+        "team_logo": {
+          "name": "Groningen",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/5/b/5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/5/b/small-5bYE12yxtfijCQAKU2RhtMieX1785845195.png",
+            "medium": "https://bnxt.sportpress.info/storage/5/b/medium-5bYE12yxtfijCQAKU2RhtMieX1785845195.png"
+          }
+        }
+      },
+      "roster_id": 11093,
+      "value": 100,
+      "throw_made": 2.5,
+      "throw_attempted": 2.5
+    },
+    {
+      "player": {
+        "id": 4362,
+        "birthdate": "1999-03-07",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Kenyuoe",
+        "last_name": "Ondaan",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "BAL - Ondaan",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/U/u/Uu9D2oIIOCozIgmKC8xllOzuM1755857561.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/U/u/small-Uu9D2oIIOCozIgmKC8xllOzuM1755857561.png",
+            "medium": "https://bnxt.sportpress.info/storage/U/u/medium-Uu9D2oIIOCozIgmKC8xllOzuM1755857561.png"
+          }
+        },
+        "created_at": "2024-08-29"
+      },
+      "team": {
+        "id": 551,
+        "name": "Zeeuw & Zeeuw Rotterdam City",
+        "short_name": "RCB",
+        "ticket_url": "https://rcb.nl/tickets/",
+        "team_logo": {
+          "name": "Rotterdam",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/q/4/q4i5E06VYpXgnghlcSWgMilEC1785845412.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/q/4/small-q4i5E06VYpXgnghlcSWgMilEC1785845412.png",
+            "medium": "https://bnxt.sportpress.info/storage/q/4/medium-q4i5E06VYpXgnghlcSWgMilEC1785845412.png"
+          }
+        }
+      },
+      "roster_id": 11339,
+      "value": 100,
+      "throw_made": 2,
+      "throw_attempted": 2
+    },
+    {
+      "player": {
+        "id": 93,
+        "birthdate": "1991-07-25",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Leon",
+        "last_name": "Williams",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "ZWO - Williams",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/h/v/hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/h/v/small-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png",
+            "medium": "https://bnxt.sportpress.info/storage/h/v/medium-hvkkjqs7hdPppC9HzWkCJZ9jk1757275100.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "team": {
+        "id": 551,
+        "name": "Zeeuw & Zeeuw Rotterdam City",
+        "short_name": "RCB",
+        "ticket_url": "https://rcb.nl/tickets/",
+        "team_logo": {
+          "name": "Rotterdam",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/q/4/q4i5E06VYpXgnghlcSWgMilEC1785845412.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/q/4/small-q4i5E06VYpXgnghlcSWgMilEC1785845412.png",
+            "medium": "https://bnxt.sportpress.info/storage/q/4/medium-q4i5E06VYpXgnghlcSWgMilEC1785845412.png"
+          }
+        }
+      },
+      "roster_id": 11343,
+      "value": 100,
+      "throw_made": 2,
+      "throw_attempted": 2
+    }
+  ]
+}

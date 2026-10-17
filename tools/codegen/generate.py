@@ -150,7 +150,46 @@ _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
+        "sportsdataverse.hockey.euro_hockey_runtime",
+        "sportsdataverse.basketball.basketball_runtime",
+        "sportsdataverse.basketball.fiba_hub.fiba_runtime",
+        "sportsdataverse.basketball.genius.genius_runtime",
+        "sportsdataverse.basketball.atrium.atrium_runtime",
+        "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.basketball.feb.feb_runtime",
+        "sportsdataverse.basketball.scb.scb_runtime",
+        "sportsdataverse.basketball.lba.lba_runtime",
+        "sportsdataverse.basketball.acb.acb_runtime",
+        "sportsdataverse.basketball.ibba.ibba_runtime",
+        "sportsdataverse.basketball.ibba.ibba_segev_runtime",
+        "sportsdataverse.basketball.kzs.kzs_runtime",
+        "sportsdataverse.basketball.lkl.lkl_runtime",
+        "sportsdataverse.basketball.aba.aba_runtime",
+        "sportsdataverse.basketball.bnxt.bnxt_runtime",
+        "sportsdataverse.basketball.dbl.sportality_runtime",
+        "sportsdataverse.basketball.vtb.vtb_infobasket_runtime",
+        "sportsdataverse.basketball.vtb.vtb_league_runtime",
+        "sportsdataverse.basketball.wjbl.wjbl_runtime",
+        "sportsdataverse.basketball.kbl.kbl_runtime",
+        "sportsdataverse.basketball.bleague.bleague_runtime",
+        "sportsdataverse.basketball.cba.cba_runtime",
+        "sportsdataverse.basketball.tbf.tbf_runtime",
+        "sportsdataverse.basketball.tpbl.tpbl_runtime",
+        "sportsdataverse.basketball.plg.pleague_runtime",
+        "sportsdataverse.basketball.plg.pleague_preciser_runtime",
+        "sportsdataverse.basketball.cebl.cebl_runtime",
+        "sportsdataverse.basketball.easl.easl_runtime",
         "sportsdataverse.hockey.sihf.sihf_runtime",
+        "sportsdataverse.hockey.esports_runtime",
+        "sportsdataverse.hockey.elh.elh_runtime",
+        "sportsdataverse.hockey.ha.ha_runtime",
+        "sportsdataverse.hockey.khl.khl_runtime",
+        "sportsdataverse.hockey.khl.khl_webcaster_runtime",
+        "sportsdataverse.hockey.liiga.liiga_runtime",
+        "sportsdataverse.hockey.magnus.magnus_runtime",
+        "sportsdataverse.hockey.nl.nationalleague_runtime",
+        "sportsdataverse.hockey.shl.shl_runtime",
+        "sportsdataverse.hockey.vhl.vhl_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
@@ -234,7 +273,7 @@ def _build_docstring(
         else:
             lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
-    lines.append(f"Endpoint: ``GET {host_url}{ep.path}``")
+    lines.append(f"Endpoint: ``{ep.method.upper()} {host_url}{ep.path}``")
     if example_url:
         lines.append(f"Example URL: {example_url}")
     lines.append("")
@@ -247,8 +286,9 @@ def _build_docstring(
     lines.append("Args:")
     for p in ep.path_params:
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
+    q_kind = "body field" if ep.method == "post" else "query parameter"
     for p in ep.query_params:
-        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} query parameter.')}")
+        lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} {q_kind}.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
         # unauthenticated token is even usable, so the default text is only a
@@ -454,14 +494,69 @@ _LEAGUE_R_PACKAGE = {
     },
 }
 
-# Package homes that are not leagues: they carry flat-API families but no ESPN league, no
+# The European hockey league homes (sdv-internal-refs Phase A intake): one docs/registry prefix
+# each, nested under ``hockey/`` through _NESTED_HOMES below. Ordered as the docs list them.
+_EURO_HOCKEY_HOMES = ("del", "icehl", "eihl", "metal", "elh", "liiga", "shl", "ha", "nl", "magnus", "khl", "vhl")
+
+# The international basketball homes (sdv-internal-refs Phase A intake): one docs/registry prefix each, nested under
+# ``basketball/`` through _NESTED_HOMES below. Ordered as the docs list them. A prefix is the short snake_case name
+# of a provider family, not always a league: ``genius``/``atrium`` serve many competitions, ``scb`` serves BBL and
+# DBBL, ``fiba_hub``/``nbl_au`` avoid the ESPN ``fiba``/``nbl`` prefixes (function names keep ``fiba_*``/``nbl_*``), ``bnxt`` is the Sportpress family, ``dbl`` the Sportality one, ``plg`` the P. LEAGUE+ pair.
+_BASKETBALL_HOMES = (
+    "fiba_hub",
+    "genius",
+    "atrium",
+    "nbl_au",
+    "feb",
+    "scb",
+    "lba",
+    "acb",
+    "ibba",
+    "wjbl",
+    "vtb",
+    "kbl",
+    "bleague",
+    "kzs",
+    "lkl",
+    "tbf",
+    "cebl",
+    "aba",
+    "easl",
+    "bnxt",
+    "tpbl",
+    "plg",
+    "cba",
+    "dbl",
+)
+
+# Package homes that are not ESPN leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
-_NONLEAGUE_HOMES = ("odds", "cbs", "yahoo", "fox", "euroleague", "f1", "espn_content", "thesportsdb", "sihf")
+_NONLEAGUE_HOMES = (
+    "odds",
+    "cbs",
+    "yahoo",
+    "fox",
+    "euroleague",
+    "f1",
+    "espn_content",
+    "thesportsdb",
+    "sihf",
+    *_EURO_HOCKEY_HOMES,
+    *_BASKETBALL_HOMES,
+)
 
 # Homes that live inside a sport-group container from their first release, so they have no
 # top-level alias in ``sportsdataverse._MOVED`` and no ``group`` in leagues.yaml (the ESPN
-# registry). SIHF sits beside the HockeyTech families under ``hockey/`` without being one.
-_NESTED_HOMES = {"sihf": "hockey.sihf"}
+# registry). SIHF and the European leagues sit beside the HockeyTech families under ``hockey/``
+# without being among them. Key = docs/registry prefix, value = package path under
+# ``sportsdataverse``. They differ only for DEL: ``del`` is a Python keyword
+# (``import sportsdataverse.hockey.del`` is a SyntaxError), so its package is ``hockey.del_``.
+_NESTED_HOMES = {
+    "sihf": "hockey.sihf",
+    **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
+    **{h: f"basketball.{h}" for h in _BASKETBALL_HOMES},
+    "del": "hockey.del_",
+}
 
 
 def _home_module(prefix: str) -> str:
@@ -480,7 +575,58 @@ def _home_module(prefix: str) -> str:
 # A blank cell is honest. A wrong one is worse than blank AND invisible to the description
 # ratchet, which counts it as covered.
 _NO_R_DICT_FAMILIES = frozenset(
-    {"espn_content", "thesportsdb", "football_data", "openligadb", "polymarket", "kalshi", "sihf_api_web"},
+    {
+        "espn_content",
+        "thesportsdb",
+        "football_data",
+        "openligadb",
+        "polymarket",
+        "kalshi",
+        "sihf_api_web",
+        # European hockey: fastRhockey has no mirror yet (Phase C will add one).
+        "del_esports",
+        "icehl_esports",
+        "eihl_esports",
+        "metal_esports",
+        "elh",
+        "liiga",
+        "shl",
+        "ha",
+        "nationalleague",
+        "magnus",
+        "khl_rest",
+        "khl_webcaster",
+        "vhl",
+        # International basketball: no hoopR / wehoop mirror yet (Phase C will add them).
+        "fiba_gdap",
+        "fiba_gamepage",
+        "genius",
+        "atrium",
+        "nbl_rosetta",
+        "feb",
+        "scb",
+        "legabasket",
+        "acb",
+        "ibba",
+        "ibba_segev",
+        "wjbl",
+        "vtb_infobasket",
+        "vtb_league",
+        "kbl",
+        "bleague",
+        "kzs",
+        "lkl",
+        "tbf",
+        "cebl",
+        "aba",
+        "easl",
+        "sportpress",
+        "tpbl",
+        "pleague",
+        "pleague_preciser",
+        "cba",
+        "sportality",
+    },
 )
 
 
@@ -950,10 +1096,15 @@ class _EndpointView:
         # never displace ``headers`` / later positional args of an existing wrapper.
         self.signature_params = [p for p in ordered if not p.kw_only]
         self.kw_only_params = [p for p in ordered if p.kw_only]
+
         # A closed value set (``choices:``) is checked BEFORE the request: a path-token
         # typo would otherwise reach the host and surface as a misleading NoDataError.
+        # An optional param defaulting to None skips the check when left unset.
+        def _unset_ok(p: spec.Param) -> str:
+            return f"{p.python_name} is not None and " if not p.required and p.default is None else ""
+
         self.choice_checks = [
-            f"if {p.python_name} not in {tuple(p.choices)!r}:"
+            f"if {_unset_ok(p)}{p.python_name} not in {tuple(p.choices)!r}:"
             + "\n        raise ValueError("
             + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
             for p in ordered
@@ -1006,6 +1157,7 @@ class _EndpointView:
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
+        self.http_method = ep.method.upper()
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
@@ -2230,6 +2382,52 @@ FLAT_APIS = [
     ("kalshi", "odds"),
     # Swiss Ice Hockey Federation statistics API (data.sihf.ch), every SIHF league
     ("sihf_api_web", "sihf"),
+    # European hockey leagues (sdv-internal-refs: esports-hokejovyzapis/, hokejcz/, liiga/, shl/,
+    # hockeyallsvenskan/, nationalleague/, ligue-magnus/, khl/, vhl/), homed under hockey/<lg>/
+    ("del_esports", "del"),
+    ("icehl_esports", "icehl"),
+    ("eihl_esports", "eihl"),
+    ("metal_esports", "metal"),
+    ("elh", "elh"),
+    ("liiga", "liiga"),
+    ("shl", "shl"),
+    ("ha", "ha"),
+    ("nationalleague", "nl"),
+    ("magnus", "magnus"),
+    ("khl_rest", "khl"),
+    ("khl_webcaster", "khl"),
+    ("vhl", "vhl"),
+    # International basketball (sdv-internal-refs Phase A: feb/, scb/, genius-livestats/, atrium-embed/, nbl-rosetta/,
+    # fiba/, legabasket/, acb/, ibba/, wjbl/, vtb/, kbl/, bleague/, kzs/, lkl/, tbf/, cebl/, aba-liga/, easl/,
+    # sportpress/, tpbl/, pleague/, cba/, sportality/), homed under basketball/<lg>/
+    ("fiba_gdap", "fiba_hub"),
+    ("fiba_gamepage", "fiba_hub"),
+    ("genius", "genius"),
+    ("atrium", "atrium"),
+    ("nbl_rosetta", "nbl_au"),
+    ("feb", "feb"),
+    ("scb", "scb"),
+    ("legabasket", "lba"),
+    ("acb", "acb"),
+    ("ibba", "ibba"),
+    ("ibba_segev", "ibba"),
+    ("wjbl", "wjbl"),
+    ("vtb_infobasket", "vtb"),
+    ("vtb_league", "vtb"),
+    ("kbl", "kbl"),
+    ("bleague", "bleague"),
+    ("kzs", "kzs"),
+    ("lkl", "lkl"),
+    ("tbf", "tbf"),
+    ("cebl", "cebl"),
+    ("aba", "aba"),
+    ("easl", "easl"),
+    ("sportpress", "bnxt"),
+    ("tpbl", "tpbl"),
+    ("pleague", "plg"),
+    ("pleague_preciser", "plg"),
+    ("cba", "cba"),
+    ("sportality", "dbl"),
 ]
 
 
@@ -2483,9 +2681,10 @@ def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
         result.setdefault("hockey", [])
         if ht not in result["hockey"]:
             result["hockey"].append(ht)
-    # And the homes nested from their first release (sihf), under their container. The container
-    # imports its direct child, which is the home itself only one level down: ``a.b.home`` puts
-    # ``b`` under ``a`` (``b``'s own ``__init__`` then reaches ``home``).
+    # And the homes nested from their first release (sihf, the European leagues), under their
+    # container. The member is the PACKAGE name, not the prefix (DEL's prefix ``del`` is a keyword,
+    # its package ``del_``). The container imports its direct child, which is the home itself only
+    # one level down: ``a.b.home`` puts ``b`` under ``a`` (``b``'s own ``__init__`` reaches ``home``).
     for mod in _NESTED_HOMES.values():
         container, child = mod.split(".")[:2]
         members = result.setdefault(container, [])
@@ -2619,6 +2818,8 @@ _COVERAGE_LEAGUES = [
     "espn_content",
     "thesportsdb",
     "sihf",
+    *_EURO_HOCKEY_HOMES,
+    *_BASKETBALL_HOMES,
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -3008,6 +3209,47 @@ _FLAT_API_DOC = {
     "espn_content": "ESPN content API (content.core.api.espn.com/v1, news)",
     "thesportsdb": "TheSportsDB API v1 (thesportsdb.com; free test key by default, $THESPORTSDB_API_KEY to use your own)",
     "sihf_api_web": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
+    "del_esports": "DEL data feed (eSports hokejovyzapis S3 bucket, Germany)",
+    "icehl_esports": "ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)",
+    "eihl_esports": "EIHL data feed (eSports hokejovyzapis S3 bucket, UK)",
+    "metal_esports": "Metal Ligaen data feed (eSports hokejovyzapis S3 bucket, Denmark)",
+    "elh": "Czech Extraliga (hokej.cz S3 bucket + eSports Media scoreboard)",
+    "liiga": "Liiga API v2 (liiga.fi/api/v2, Finland)",
+    "shl": "SHL site API (www.shl.se/api, Sweden)",
+    "ha": "HockeyAllsvenskan site API (hockeyallsvenskan.se, Sweden)",
+    "nationalleague": "National League app API (www.nationalleague.ch/api, Switzerland)",
+    "magnus": "Ligue Magnus (liguemagnus.com admin-ajax JSON + game sheets, France)",
+    "khl_rest": "KHL site REST (www.khl.ru/rest)",
+    "khl_webcaster": "KHL webcaster mobile API (khl.api.webcaster.pro)",
+    "vhl": "VHL (vhlru.ru server-rendered pages, parsed)",
+    "fiba_gdap": "FIBA digital API (GDAP, digital-api.fiba.basketball)",
+    "fiba_gamepage": "FIBA game pages (fiba.basketball, RSC payload parsed)",
+    "genius": "Genius Sports LiveStats (fibalivestats.dcd.shared.geniussports.com, 20+ competitions)",
+    "atrium": "Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)",
+    "nbl_rosetta": "NBL / WNBL / NBL1 Rosetta proxy (prod.rosetta.nbl.com.au, Australia)",
+    "feb": "FEB LiveStats API + baloncestoenvivo.feb.es (Spain)",
+    "scb": "SCB basketball API (BBL and DBBL, Germany)",
+    "legabasket": "Lega Basket Serie A site API (www.legabasket.it/api, Italy)",
+    "acb": "ACB API (api2.acb.com, Spain)",
+    "ibba": "IBBA ASMX web service (basket.co.il, Israel)",
+    "ibba_segev": "Segev Stats live-stats API (stats.segevstats.com, Israel play-by-play)",
+    "wjbl": "W League API (api.wjbl.01core.app, Japan women)",
+    "vtb_infobasket": "VTB United League Infobasket (Russia)",
+    "vtb_league": "VTB United League API (api.vtb-league.com)",
+    "kbl": "KBL API (api.kbl.or.kr, Korea)",
+    "bleague": "B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)",
+    "kzs": "KZS FMS public API (Basketball Federation of Slovenia)",
+    "lkl": "LKL site API (lkl.lt, Lithuania)",
+    "tbf": "TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)",
+    "cebl": "CEBL stats API (api.data.cebl.ca, Canada)",
+    "aba": "ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)",
+    "easl": "EASL sync server (easl.joshricha.com, third-party over Sportradar DataCore)",
+    "sportpress": "BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)",
+    "tpbl": "TPBL API (api.tpbl.basketball, Taiwan)",
+    "pleague": "P. LEAGUE+ site (pleagueofficial.com, Taiwan)",
+    "pleague_preciser": "P. LEAGUE+ vendor API (api.preciser.io, Taiwan)",
+    "cba": "CBA data API (data-server.cbaleague.com, China; encrypted bodies)",
+    "sportality": "Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
@@ -3172,6 +3414,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
     page's ``sidebar_position`` so the league's Reference category orders Loaders
     first, then native APIs, then the ESPN APIs (site/web/core)."""
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
+    notes: list[str] = []
     if api in ESPN_APIS:
         cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
         league = next(lg for lg in cfg.leagues if lg.prefix == prefix)
@@ -3182,6 +3425,9 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
         endpoints = _flat_views(fa, league_prefix=prefix)
         label = _FLAT_API_DOC.get(fa.module, fa.module.replace("_", " "))
+        # The family's docstring ``notes`` (licence, owner rulings, sanctions flags) head the page too,
+        # not only every wrapper's docstring: the reference blocks have no Notes section.
+        notes = [" ".join(str(n).replace("``", "`").split()) for n in fa.docstring.get("notes") or []]
     template = render.ENV.get_template("reference_page.md.jinja")
     return template.render(
         prefix=prefix,
@@ -3191,6 +3437,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         sidebar_position=position,
         count=len(endpoints),
         endpoints=endpoints,
+        notes=notes,
     )
 
 
@@ -4936,7 +5183,12 @@ _SPORTS = (
     ("other", "Other"),
 )
 # Sport of a documented league that leagues.yaml does not list (releases-only or hand-written modules).
-_EXTRA_LEAGUE_SPORT = {"pwhl": "hockey", "sihf": "hockey", **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES}}
+_EXTRA_LEAGUE_SPORT = {
+    "pwhl": "hockey",
+    **{lg: "hockey" for lg in _HOCKEYTECH_MODULE_LEAGUES},
+    # A nested home's sport is its container (``hockey.liiga`` -> hockey).
+    **{home: mod.split(".")[0] for home, mod in _NESTED_HOMES.items()},
+}
 # Labels for prefixes that are not initials; every other prefix is upper-cased (nfl -> NFL).
 _LEAGUE_LABELS = {
     "bundesliga": "Bundesliga",
@@ -4949,12 +5201,41 @@ _LEAGUE_LABELS = {
     "ligamx": "Liga MX",
     "ligue1": "Ligue 1",
     "nbagl": "NBA G League",
+    "olympics_mbk": "Olympics men's basketball",
+    "olympics_wbk": "Olympics women's basketball",
+    "nbasl_lv": "NBA Summer League (Las Vegas)",
+    "nbasl_ut": "NBA Summer League (Utah)",
+    "nbasl_ca": "NBA Summer League (California)",
+    "nbasl_sac": "NBA Summer League (Sacramento)",
+    "nbasl_orl": "NBA Summer League (Orlando)",
+    "nbasl_gs": "NBA Summer League (Golden State)",
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
     "f1": "Formula 1",
     "espn_content": "ESPN content (news)",
     "thesportsdb": "TheSportsDB",
     "sihf": "SIHF (Swiss hockey)",
+    "icehl": "ICE Hockey League",
+    "metal": "Metal Ligaen",
+    "elh": "Czech Extraliga",
+    "liiga": "Liiga",
+    "ha": "HockeyAllsvenskan",
+    "nl": "National League",
+    "magnus": "Ligue Magnus",
+    "genius": "Genius Sports LiveStats",
+    "atrium": "Sportradar Atrium",
+    "nbl_au": "NBL Australia (Rosetta)",
+    "fiba_hub": "FIBA (digital API and game pages)",
+    "scb": "BBL / DBBL (SCB)",
+    "lba": "Lega Basket Serie A",
+    "wjbl": "W League (Japan)",
+    "bleague": "B.LEAGUE",
+    "bnxt": "BNXT League",
+    "plg": "P. LEAGUE+",
+    "dbl": "Basketligaen",
+    "aba": "ABA League",
+    "feb": "Spanish FEB",
+    "ibba": "Israeli Premier League",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",

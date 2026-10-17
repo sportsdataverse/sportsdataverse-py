@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: nationality_code
+  type: character
+kind: dataframe
+schema: sportpress_nationality_codes

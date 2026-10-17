@@ -1,0 +1,982 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "GP",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "W",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Team": 0,
+        "GP": 52,
+        "W": 36,
+        "L": 16,
+        "Leading": 55,
+        "Trailing": 29,
+        "G": 182,
+        "GA": 121,
+        "GFG": 33,
+        "OTW": 3,
+        "OTL": 3,
+        "SOW": 3,
+        "SOL": 3,
+        "P_GP_format": "2.08",
+        "GPG": "3.50",
+        "GAPG": "2.33",
+        "Points": 108,
+        "info": {
+          "type": "team",
+          "id": "SAIK",
+          "uuid": "50e6-50e6DYeWM",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "saik1-saik-ba23a",
+          "lastModified": "2024-11-18T09:21:40.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "saik1_saik",
+          "ownersite": "SAIK",
+          "teamCode": "SAIK",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+          "teamNames": {
+            "code": "SKE",
+            "short": "Skellefteå",
+            "long": "Skellefteå AIK",
+            "full": "Skellefteå AIK Hockey",
+            "code_site": "SKE",
+            "short_site": "Skellefteå",
+            "full_site": "Skellefteå AIK Hockey",
+            "long_site": "Skellefteå AIK"
+          },
+          "clubName": {
+            "code": "SKE",
+            "short": "Skellefteå",
+            "long": "Skellefteå AIK",
+            "full": "Skellefteå AIK Hockey"
+          },
+          "teamInfo": {
+            "founded": "1921",
+            "golds": "3 st (1978, 2013, 2014)",
+            "finals": "8 st (1978, 2011, 2012, 2013, 2014, 2015, 2016, 2018)",
+            "address": "Skellefteå AIK, Skellefteå Kraft Arena, Mossgatan 27, Box 185, 931 22 Skellefteå",
+            "phone": "0910-79 20 00",
+            "fax": "0910-79 20 10",
+            "email": "info@skellefteaaik.se",
+            "chairman": "Kenneth Fahlgren",
+            "manager": "Pea Israelsson",
+            "accreditation": "Anna Hägglund, anna.hagglund@skellefteaaik.se",
+            "facebook": "https://www.facebook.com/skellefteaaikhockey",
+            "instagram": "https://www.instagram.com/skellefteaaik/",
+            "twitter": "https://twitter.com/skelleftea_aik"
+          },
+          "teamExtIds": [
+            {
+              "id": 29,
+              "extId": "SAIK",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 30,
+              "extId": "10",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 29,
+              "extId": "SAIK",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 30,
+              "extId": "10",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "SAIK",
+          "siteDisplayName": "Skellefteå AIK"
+        }
+      },
+      {
+        "Rank": 2,
+        "Team": 0,
+        "GP": 52,
+        "W": 34,
+        "L": 18,
+        "Leading": 52,
+        "Trailing": 29,
+        "G": 161,
+        "GA": 106,
+        "GFG": 33,
+        "OTW": 1,
+        "OTL": 3,
+        "SOW": 3,
+        "SOL": 0,
+        "P_GP_format": "1.94",
+        "GPG": "3.10",
+        "GAPG": "2.04",
+        "Points": 101,
+        "info": {
+          "type": "team",
+          "id": "FHC",
+          "uuid": "087a-087aTQv9u",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "fhc1-fhc-f7c59",
+          "lastModified": "2024-11-11T16:30:35.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "fhc1_fhc",
+          "ownersite": "FHC",
+          "teamCode": "FHC",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+          "teamNames": {
+            "code": "FHC",
+            "short": "Frölunda ",
+            "long": "Frölunda HC",
+            "full": "Frölunda Hockey Club",
+            "code_site": "FHC",
+            "short_site": "Frölunda",
+            "full_site": "Frölunda Hockey Club / Herr",
+            "long_site": "Frölunda HC"
+          },
+          "clubName": {
+            "code": "FHC",
+            "short": "Frölunda",
+            "long": "Frölunda HC",
+            "full": "Frölunda Hockey Club / Herr"
+          },
+          "teamInfo": {
+            "founded": "1944",
+            "golds": "5 st (1965, 2003, 2005, 2016, 2019)",
+            "finals": "7 st (1980, 1996, 2003, 2005, 2006, 2016, 2019)",
+            "retired_numbers": "#13 Lars-Erik Lundvall\r\n#14 Ronald Pettersson\r\n#14 Patrik Carnbäck\r\n#19 Jörgen Pettersson\r\n#23 Ronnie Sundin\r\n#24 Niklas Andersson\r\n#29 Stefan Larsson",
+            "address": "Frölunda HC\r\nFrölundaborgs Isstadion\r\nBox 12127\r\n402 42 Göteborg",
+            "phone": "031-708 16 80",
+            "fax": "031-18 97 06",
+            "email": "kontakt@frolundahockey.com",
+            "chairman": "Mats Grauers",
+            "manager": "Christian Lecthaler",
+            "accreditation": "peter.kymmer@frolundahockey.com",
+            "facebook": "https://www.facebook.com/frolundahc",
+            "instagram": "https://www.instagram.com/frolunda_hc/",
+            "twitter": "https://twitter.com/frolunda_hc"
+          },
+          "teamExtIds": [
+            {
+              "id": 9,
+              "extId": "FHC",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 10,
+              "extId": "5",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 9,
+              "extId": "FHC",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 10,
+              "extId": "5",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "FHC",
+          "siteDisplayName": "Frölunda HC"
+        }
+      },
+      {
+        "Rank": 3,
+        "Team": 0,
+        "GP": 52,
+        "W": 32,
+        "L": 20,
+        "Leading": 52,
+        "Trailing": 38,
+        "G": 150,
+        "GA": 136,
+        "GFG": 28,
+        "OTW": 4,
+        "OTL": 2,
+        "SOW": 2,
+        "SOL": 2,
+        "P_GP_format": "1.81",
+        "GPG": "2.88",
+        "GAPG": "2.62",
+        "Points": 94,
+        "info": {
+          "type": "team",
+          "id": "VLH",
+          "uuid": "fe02-fe02mf1FN",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "vlh1-vlh-8a4d0",
+          "lastModified": "2024-10-09T15:51:55.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "vlh1_vlh",
+          "ownersite": "VLH",
+          "teamCode": "VLH",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+          "teamNames": {
+            "code": "VLH",
+            "short": "Växjö",
+            "long": "Växjö Lakers",
+            "full": "Växjö Lakers",
+            "code_site": "VLH",
+            "short_site": "Växjö Lakers",
+            "full_site": "Växjö Lakers",
+            "long_site": "Växjö Lakers"
+          },
+          "clubName": {
+            "code": "VLH",
+            "short": "Växjö Lakers",
+            "long": "Växjö Lakers",
+            "full": "Växjö Lakers"
+          },
+          "teamInfo": {
+            "founded": "1997",
+            "golds": "3 st (2015, 2018, 2021)",
+            "finals": "3 st (2015, 2018, 2021)",
+            "retired_numbers": "# 38 Johan Markusson",
+            "address": "Storgatan 86\r\n352 46 Växjö",
+            "phone": "0470-32 97 00",
+            "fax": "0470-32 97 99",
+            "email": "kansli@vaxjolakers.se",
+            "chairman": "Jennie Isberg",
+            "manager": "Johan Markusson",
+            "accreditation": "press@vaxjolakers.se",
+            "contact": "Instagram: @vaxjolakers\r\nFacebook: @Växjö Lakers\r\nTwitter: @VLHlive\r\nTikTok: @vaxjolakers\r\nYouTube: @Växjö Lakers OFFICIAL",
+            "instagram": "@vaxjolakers",
+            "facebook": "@Växjö Lakers",
+            "twitter": "@vlhlive"
+          },
+          "teamExtIds": [
+            {
+              "id": 33,
+              "extId": "VLH",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 34,
+              "extId": "12",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 33,
+              "extId": "VLH",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 34,
+              "extId": "12",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "VLH",
+          "siteDisplayName": "Växjö Lakers"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "SAIK": {
+        "type": "team",
+        "id": "SAIK",
+        "uuid": "50e6-50e6DYeWM",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "saik1-saik-ba23a",
+        "lastModified": "2024-11-18T09:21:40.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "saik1_saik",
+        "ownersite": "SAIK",
+        "teamCode": "SAIK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "teamNames": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey",
+          "code_site": "SKE",
+          "short_site": "Skellefteå",
+          "full_site": "Skellefteå AIK Hockey",
+          "long_site": "Skellefteå AIK"
+        },
+        "clubName": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey"
+        },
+        "teamInfo": {
+          "founded": "1921",
+          "golds": "3 st (1978, 2013, 2014)",
+          "finals": "8 st (1978, 2011, 2012, 2013, 2014, 2015, 2016, 2018)",
+          "address": "Skellefteå AIK, Skellefteå Kraft Arena, Mossgatan 27, Box 185, 931 22 Skellefteå",
+          "phone": "0910-79 20 00",
+          "fax": "0910-79 20 10",
+          "email": "info@skellefteaaik.se",
+          "chairman": "Kenneth Fahlgren",
+          "manager": "Pea Israelsson",
+          "accreditation": "Anna Hägglund, anna.hagglund@skellefteaaik.se",
+          "facebook": "https://www.facebook.com/skellefteaaikhockey",
+          "instagram": "https://www.instagram.com/skellefteaaik/",
+          "twitter": "https://twitter.com/skelleftea_aik"
+        },
+        "teamExtIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Skellefteå AIK"
+      },
+      "FHC": {
+        "type": "team",
+        "id": "FHC",
+        "uuid": "087a-087aTQv9u",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "fhc1-fhc-f7c59",
+        "lastModified": "2024-11-11T16:30:35.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "fhc1_fhc",
+        "ownersite": "FHC",
+        "teamCode": "FHC",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+        "teamNames": {
+          "code": "FHC",
+          "short": "Frölunda ",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club",
+          "code_site": "FHC",
+          "short_site": "Frölunda",
+          "full_site": "Frölunda Hockey Club / Herr",
+          "long_site": "Frölunda HC"
+        },
+        "clubName": {
+          "code": "FHC",
+          "short": "Frölunda",
+          "long": "Frölunda HC",
+          "full": "Frölunda Hockey Club / Herr"
+        },
+        "teamInfo": {
+          "founded": "1944",
+          "golds": "5 st (1965, 2003, 2005, 2016, 2019)",
+          "finals": "7 st (1980, 1996, 2003, 2005, 2006, 2016, 2019)",
+          "retired_numbers": "#13 Lars-Erik Lundvall\r\n#14 Ronald Pettersson\r\n#14 Patrik Carnbäck\r\n#19 Jörgen Pettersson\r\n#23 Ronnie Sundin\r\n#24 Niklas Andersson\r\n#29 Stefan Larsson",
+          "address": "Frölunda HC\r\nFrölundaborgs Isstadion\r\nBox 12127\r\n402 42 Göteborg",
+          "phone": "031-708 16 80",
+          "fax": "031-18 97 06",
+          "email": "kontakt@frolundahockey.com",
+          "chairman": "Mats Grauers",
+          "manager": "Christian Lecthaler",
+          "accreditation": "peter.kymmer@frolundahockey.com",
+          "facebook": "https://www.facebook.com/frolundahc",
+          "instagram": "https://www.instagram.com/frolunda_hc/",
+          "twitter": "https://twitter.com/frolunda_hc"
+        },
+        "teamExtIds": [
+          {
+            "id": 9,
+            "extId": "FHC",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 10,
+            "extId": "5",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 9,
+            "extId": "FHC",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 10,
+            "extId": "5",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Frölunda HC"
+      },
+      "VLH": {
+        "type": "team",
+        "id": "VLH",
+        "uuid": "fe02-fe02mf1FN",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "vlh1-vlh-8a4d0",
+        "lastModified": "2024-10-09T15:51:55.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "vlh1_vlh",
+        "ownersite": "VLH",
+        "teamCode": "VLH",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+        "teamNames": {
+          "code": "VLH",
+          "short": "Växjö",
+          "long": "Växjö Lakers",
+          "full": "Växjö Lakers",
+          "code_site": "VLH",
+          "short_site": "Växjö Lakers",
+          "full_site": "Växjö Lakers",
+          "long_site": "Växjö Lakers"
+        },
+        "clubName": {
+          "code": "VLH",
+          "short": "Växjö Lakers",
+          "long": "Växjö Lakers",
+          "full": "Växjö Lakers"
+        },
+        "teamInfo": {
+          "founded": "1997",
+          "golds": "3 st (2015, 2018, 2021)",
+          "finals": "3 st (2015, 2018, 2021)",
+          "retired_numbers": "# 38 Johan Markusson",
+          "address": "Storgatan 86\r\n352 46 Växjö",
+          "phone": "0470-32 97 00",
+          "fax": "0470-32 97 99",
+          "email": "kansli@vaxjolakers.se",
+          "chairman": "Jennie Isberg",
+          "manager": "Johan Markusson",
+          "accreditation": "press@vaxjolakers.se",
+          "contact": "Instagram: @vaxjolakers\r\nFacebook: @Växjö Lakers\r\nTwitter: @VLHlive\r\nTikTok: @vaxjolakers\r\nYouTube: @Växjö Lakers OFFICIAL",
+          "instagram": "@vaxjolakers",
+          "facebook": "@Växjö Lakers",
+          "twitter": "@vlhlive"
+        },
+        "teamExtIds": [
+          {
+            "id": 33,
+            "extId": "VLH",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 34,
+            "extId": "12",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 33,
+            "extId": "VLH",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 34,
+            "extId": "12",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/vlh1_vlh.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Växjö Lakers"
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "team",
+    "totalCount": 14
+  }
+]

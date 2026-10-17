@@ -18,7 +18,9 @@ import pytest
 import yaml
 
 from sportsdataverse.hockey.sihf import sihf_api_web
+from sportsdataverse.hockey.sihf import sihf_api_web_parsers as P
 from sportsdataverse.hockey.sihf.sihf_api_web_parsers import (
+    _col,
     parse_sihf_game_goalie_stats,
     parse_sihf_game_info,
     parse_sihf_game_lineups,
@@ -43,12 +45,40 @@ GAME_PARSERS = {
     "game_team_stats": parse_sihf_game_team_stats,
     "game_lineups": parse_sihf_game_lineups,
 }
+# The 22 detail tables: wrapper short -> SIHF table alias (11 team, 8 skater, 3 goaltender).
+DETAIL_ALIASES = {
+    "team_goals": "teamGoal",
+    "team_goals_by_position": "teamGoalPosNation",
+    "team_shots": "teamShotDetail",
+    "team_power_play": "teamPp",
+    "team_penalty_kill": "teamPk",
+    "team_penalties": "teamFoul",
+    "team_shootouts": "teamShootout",
+    "team_faceoffs": "teamFaceoff",
+    "team_faceoffs_by_zone": "teamFaceoffZone",
+    "team_faceoffs_by_zone_per_game": "teamFaceoffZoneGame",
+    "team_attendance": "teamSpectator",
+    "player_goals_assists": "playerGoalAssist",
+    "player_shots": "playerShotDetail",
+    "player_penalties": "playerFoul",
+    "player_shootouts": "playerShootout",
+    "player_faceoffs": "playerFaceoff",
+    "player_faceoffs_by_zone": "playerFaceoffZone",
+    "player_faceoffs_by_zone_per_game": "playerFaceoffZoneGame",
+    "player_time_on_ice": "playerTimeOnIce",
+    "goalie_shots": "goalkeeperShotDetail",
+    "goalie_wins": "goalkeeperWin",
+    "goalie_shootouts": "goalkeeperShootout",
+}
 TABLES = {
     "results": "table__results__2026__1.json",
     "standings": "table__standing__2026__1.json",
     "player_stats": "table__player__2026__1.json",
     "goalie_stats": "table__goalkeeper__2026__1.json",
+    **{short: f"table__{alias}__2026__1.json" for short, alias in DETAIL_ALIASES.items()},
 }
+# Whole (untruncated) 2025-26 National League bodies: the numeric dtypes are checked against these.
+FULL = sorted((FIXTURES / "full").glob("*.json"))
 PHASES = "table__results__2026__1__phases.json"
 
 
@@ -147,6 +177,137 @@ def test_table_pandas():
     assert isinstance(parse_sihf_table(_load(TABLES["standings"]), return_as_pandas=True), pd.DataFrame)
 
 
+# --- the 22 detail tables -------------------------------------------------------
+
+_SCHEMA_TYPES = {pl.Int64: "integer", pl.Float64: "double", pl.String: "character"}
+
+
+@pytest.mark.parametrize("short", sorted(DETAIL_ALIASES))
+def test_detail_table_parses_with_snake_case_and_int_ids(short):
+    df = parse_sihf_table(_load(TABLES[short]))
+    assert df.height == 3 and set(df["season"]) == {2026}
+    assert all(c == c.lower() and " " not in c for c in df.columns)
+    assert df.schema["team_id"] == pl.Int64 and df["team_id"].null_count() == 0
+    assert set(df["row_type"]) == {"data"}
+
+
+@pytest.mark.parametrize("path", FULL, ids=lambda p: p.stem)
+def test_full_body_numeric_columns_parse_every_cell(path):
+    # The dtypes are re-derived from WHOLE bodies: an Int64 / Float64 column must parse every cell
+    # that is not SIHF's "-" / "" placeholder (a decimal in an Int64 column would become null).
+    body = json.loads(path.read_text(encoding="utf-8"))
+    df = parse_sihf_table(body)
+    assert df.height == len(body["data"]) == (body["pages"] or len(body["data"]))
+    for i, h in enumerate(body["header"]):
+        col = _col(h["alias"])
+        if col in df.columns and df.schema[col] in (pl.Int64, pl.Float64):
+            filled = sum(1 for r in body["data"] if str(r[i]).strip() not in ("", "-"))
+            assert df[col].drop_nulls().len() == filled, col
+    short = next(s for s, a in DETAIL_ALIASES.items() if path.name == f"table__{a}__2026__1.json")
+    schema = yaml.safe_load((SCHEMA_DIR / f"{short}.yaml").read_text(encoding="utf-8"))
+    assert [(c["name"], c["type"]) for c in schema["columns"]] == [(c, _SCHEMA_TYPES[t]) for c, t in df.schema.items()]
+
+
+def test_mm_ss_times_stay_strings_and_the_placeholder_is_null():
+    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__playerTimeOnIce__2026__1.json").read_text()))
+    assert df.schema["time_on_ice"] == df.schema["time_on_ice_per_shift"] == pl.String
+    assert df.schema["shifts_per_game"] == pl.Float64
+    assert df["time_on_ice_per_shift"].null_count() == 4  # "-" for the four skaters without a shift
+    assert df["position"].null_count() == 2  # "-" upstream
+    assert df["time_on_ice"].drop_nulls().str.contains(r"^\d+:\d{2}$").all()
+
+
+@pytest.mark.parametrize(
+    "alias",
+    ["teamGoal", "teamGoalPosNation", "teamShotDetail", "teamPp", "teamFaceoffZone", "teamShootout"],
+)
+def test_team_table_league_average_row(alias):
+    df = parse_sihf_table(json.loads((FIXTURES / "full" / f"table__{alias}__2026__1.json").read_text()))
+    assert df.height == 15
+    avg = df.filter(pl.col("row_type") == "average")
+    assert avg.select("rank", "team_id", "team_name", "team_acronym").rows() == [(None, None, "Durchschnitt", None)]
+    teams = df.filter(pl.col("row_type") == "data")
+    assert teams.height == 14 and teams["team_id"].null_count() == 0 and teams["rank"].null_count() == 0
+
+
+def test_goal_tables_balance_league_wide():
+    teams = parse_sihf_table(json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text())).filter(
+        pl.col("row_type") == "data"
+    )
+    assert teams["goals_for"].sum() == teams["goals_against"].sum()
+
+
+def test_attendance_drops_the_thousands_separator_and_tags_the_total_row():
+    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text()))
+    total = df.filter(pl.col("row_type") == "total")
+    assert total.select("team_id", "team_name", "spectators", "home_games").rows() == [(None, "Total", 3458381, 460)]
+    teams = df.filter(pl.col("row_type") == "data")
+    assert teams["spectators"].sum() == 3458381  # "3’458’381" upstream; the 14 teams add up to the total
+    assert teams["home_games"].sum() == 460
+    # quotients are per-game rates: Float64 like every other *_quotient, even when SIHF rounds them
+    assert df.schema["spectators_quotient"] == df.schema["stadium_capacity_quotient"] == pl.Float64
+    assert teams.filter(pl.col("team_name") == "HC Ajoie")["spectators_quotient"].to_list() == [4231.0]
+
+
+def test_every_quotient_alias_is_a_float_rate():
+    """``*Quotient`` columns are ratios; time quotients (``mm:ss``) stay String, the rest are Float64."""
+    quotients = {a for a in P._INT_ALIASES | P._FLOAT_ALIASES if a.endswith("Quotient")}
+    assert quotients and quotients <= P._FLOAT_ALIASES
+    assert not {a for a in P._INT_ALIASES if a.endswith("Quotient") or a.endswith("Percent")}
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        {"filters": [{"alias": ["Season"], "selected": 2026}, {"alias": {"x": 1}, "selected": 1}]},
+        {"highlightedPositions": [{"style": ["total"], "rows": [1]}, {"style": {"a": 1}, "rows": [2]}]},
+    ],
+)
+def test_an_unhashable_filter_alias_or_highlight_style_is_ignored_not_a_crash(bad):
+    raw = json.loads((FIXTURES / "full" / "table__teamSpectator__2026__1.json").read_text())
+    raw.update(bad)
+    df = parse_sihf_table(raw)
+    assert df.height == len(raw["data"])
+
+
+def test_goalies_below_the_line_have_no_rank_but_are_not_summary_rows():
+    df = parse_sihf_table(json.loads((FIXTURES / "full" / "table__goalkeeperWin__2026__1.json").read_text()))
+    avg = df.filter(pl.col("row_type") == "average")
+    assert avg.select("player", "team_id", "team_name").rows() == [("Durchschnitt", None, "Durchschnitt")]
+    unranked = df.filter(pl.col("rank").is_null() & (pl.col("row_type") == "data"))
+    assert unranked.height == 18 and unranked["team_id"].null_count() == 0
+
+
+@pytest.mark.parametrize(
+    "cell",
+    [
+        {"id": 100000, "name": "Durchschnitt", "acronym": "Durchschnitt", "signed": False, "type": "team"},
+        {"name": "Durchschnitt"},  # the shape the 2026-10-12 refs samples document: no id, no type
+        {"id": 100000, "name": "?", "type": "team"},
+    ],
+)
+def test_the_average_row_is_found_without_highlighted_positions(cell):
+    body = json.loads((FIXTURES / "full" / "table__teamGoal__2026__1.json").read_text())
+    body["highlightedPositions"] = []
+    avg_index = next(i for i, r in enumerate(body["data"]) if r[1].get("name") == "Durchschnitt")
+    body["data"][avg_index][1] = cell
+    df = parse_sihf_table(body)
+    assert df["row_type"].to_list() == ["average" if i == avg_index else "data" for i in range(df.height)]
+    assert df.row(avg_index, named=True)["team_id"] is None
+    assert df.filter(pl.col("row_type") == "data")["team_id"].null_count() == 0
+
+
+def test_the_legacy_goalie_table_average_row_nulls_its_pseudo_team_id():
+    avg = parse_sihf_table(_load(TABLES["goalie_stats"])).filter(pl.col("row_type") == "average")
+    assert avg.select("team_id", "team_acronym").rows() == [(None, None)]
+
+
+def test_game_info_spectators_drop_the_thousands_separator():
+    body = _load(GAME)
+    body["details"]["venue"]["spectators"] = "6’130"
+    assert parse_sihf_game_info(body)["spectators"].item() == 6130
+
+
 # --- phases -------------------------------------------------------------------
 
 
@@ -186,7 +347,20 @@ def test_a_phase_name_of_the_wrong_type_is_null(entry):
     assert parse_sihf_phases(raw).rows() == [(2026, 657, None, None)]
 
 
-@pytest.mark.parametrize("payload", [None, {}, [], "x", {"filters": [{"alias": "Season", "selected": "2026"}]}])
+@pytest.mark.parametrize(
+    "payload",
+    [
+        None,
+        {},
+        [],
+        "x",
+        {"filters": [{"alias": "Season", "selected": "2026"}]},
+        # a block of the wrong type reads as absent (``x or []`` let a number through and raised)
+        {"filters": 5},
+        {"header": 5, "filters": [{"alias": "Phase", "entries": 5}]},
+        {"filters": [{"alias": "Phase", "entries": "4940"}, "x"]},
+    ],
+)
 def test_phases_parser_empty_keeps_its_columns(payload):
     df = parse_sihf_phases(payload)
     assert df.height == 0
@@ -335,6 +509,8 @@ _WRONG_LEAF_TYPES = [
     ("game_info", GAME, lambda b: b["details"]["venue"].update(name=["x"])),
     ("game_team_stats", GAME, _team_stat_object),
     ("results", TABLES["results"], _mixed_table_cell),
+    # an unhashable team name must not break the summary-row check
+    ("team_goals", TABLES["team_goals"], lambda b: b["data"][0][1].update(name=["Durchschnitt"])),
 ]
 
 
@@ -491,13 +667,58 @@ def test_the_documented_example_url_is_the_request_the_wrapper_sends(monkeypatch
         raise _Stop
 
     monkeypatch.setattr(sihf_runtime._rt, "_get", fake)
-    fn = getattr(sihf_api_web, f"sihf_{ep['short']}")
+    fn = _wrapper(ep["short"])
     with pytest.raises(_Stop):
         fn(**ep["example_args"])
     documented = next(
         line.split("Example URL:", 1)[1].strip() for line in (fn.__doc__ or "").splitlines() if "Example URL:" in line
     )
     assert sent == [documented]
+
+
+_ALL_TABLE_ALIASES = {"results", "standing", "player", "goalkeeper", *DETAIL_ALIASES.values()}
+
+
+def test_yaml_wraps_every_table_alias_once():
+    # sdv-internal-refs sihf/ documents 26 table aliases: results, standing, 11 team, 9 skater, 4 goalie.
+    table_eps = [ep for ep in _ENDPOINTS if ep["path"] == "/table" and ep["short"] != "phases"]
+    aliases = [ep["fixed_params"]["alias"] for ep in table_eps]
+    assert len(aliases) == len(set(aliases)) == 26
+    assert set(aliases) == _ALL_TABLE_ALIASES
+    for ep in table_eps:
+        assert ep["parser"] == "parse_sihf_table"
+        assert ep["returns_schema"] == f"native/sihf_api_web/{ep['short']}"
+        assert (SCHEMA_DIR / f"{ep['short']}.yaml").exists()
+        assert [p["name"] for p in ep["extra_params"]][:3] == ["season", "league_id", "phase_id"]
+
+
+def _wrapper(short: str) -> Any:
+    """The generated wrapper; the 22 detail wrappers exist once integration runs codegen."""
+    fn = getattr(sihf_api_web, f"sihf_{short}", None)
+    if fn is None:
+        pytest.skip(f"sihf_{short} is generated by tools/codegen/generate.py (integration, not this branch)")
+    return fn
+
+
+@pytest.mark.parametrize(("short", "alias"), sorted(DETAIL_ALIASES.items()))
+def test_detail_wrappers_send_alias_and_filters(monkeypatch, short, alias):
+    fn = _wrapper(short)
+    calls = _capture(monkeypatch, _load(TABLES[short]))
+    df = fn(season=2026, league_id=2, phase_id=4940)
+    assert calls[0]["url"] == "https://data.sihf.ch/statistic/api/cms/table"
+    p = calls[0]["params"]
+    assert (p["alias"], p["searchQuery"], p["Season"], p["League"], p["Phase"]) == (alias, "1//", 2026, 2, 4940)
+    assert "ContentType" not in p
+    assert df.height == 3
+
+
+@pytest.mark.parametrize("short", sorted(DETAIL_ALIASES))
+def test_detail_wrappers_return_the_documented_schema_when_empty(monkeypatch, short):
+    fn = _wrapper(short)
+    body = _load(TABLES[short])
+    body["data"] = []
+    _capture(monkeypatch, body)
+    assert fn(season=2026).schema == parse_sihf_table(_load(TABLES[short])).schema
 
 
 def test_language_is_a_closed_set():

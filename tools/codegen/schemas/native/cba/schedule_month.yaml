@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: schedule_num
+  type: integer
+- description: ''
+  name: schedule_time
+  type: character
+kind: dataframe
+schema: cba_schedule_month

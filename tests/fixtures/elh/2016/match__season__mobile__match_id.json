@@ -1,0 +1,22 @@
+{
+  "commentEvents": [
+    {
+      "id": 23595655,
+      "type": "normal",
+      "time": 0,
+      "content": "Vítáme vás u on-line přenosu. Utkání začíná v 18:00."
+    },
+    {
+      "id": 23984366,
+      "type": "goal",
+      "time": 61,
+      "content": "Plzeň právě vstřelila branku! No tak to je vstup do zápasu pro Plzeň. První nahození bylo odvráceno, po druhém padá branka! DOMINIK KUBALÍK si najel mezi kruhy, dostal přesný pas od Indráka a přesnou ranou do šibenice překazil po 61 vteřinách Willovi šanci na čisté konto! Asistence: Miroslav Indrák, Peter Čerešňák."
+    },
+    {
+      "id": 23984845,
+      "type": "penalty",
+      "time": 890,
+      "content": "Vyloučení v týmu Bílí Tygři Liberec (Lukáš Derner – 2 min.)."
+    }
+  ]
+}

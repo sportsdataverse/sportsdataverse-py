@@ -1,0 +1,120 @@
+{
+  "gameId": 122608,
+  "roundName": "Final",
+  "technicalName": "28141-26-A",
+  "roundType": "Non Group Round",
+  "groupPairingCode": "26",
+  "gameNumber": "A",
+  "statusCode": "VALID",
+  "gameDay": 15,
+  "teamAFrom": "Winner of Game 23",
+  "teamBFrom": "Winner of Game 24",
+  "teamA": {
+    "teamId": 281544,
+    "organisationId": 59,
+    "code": "FRA",
+    "officialName": "France",
+    "shortName": "France"
+  },
+  "teamB": {
+    "teamId": 281549,
+    "organisationId": 154,
+    "code": "USA",
+    "officialName": "USA",
+    "shortName": "USA"
+  },
+  "teamAScore": 87,
+  "teamBScore": 98,
+  "teamAAggregatedScore": 0,
+  "teamBAggregatedScore": 0,
+  "hostCity": "Paris",
+  "hostCountry": "France",
+  "hostCountryCode": "FRA",
+  "venueId": 57259,
+  "venueName": "Paris, Bercy Arena",
+  "gameDateTime": "2024-08-10T21:30:00",
+  "gameDateTimeUTC": "2024-08-10T19:30:00",
+  "hasTimeGameDateTime": true,
+  "ianaTimeZone": "Europe/Paris",
+  "utcOffset": 2,
+  "isPostponed": false,
+  "isPlayedBehindClosedDoors": false,
+  "venueCapacity": 14500,
+  "spectators": 12121,
+  "nominations": [
+    {
+      "personId": 272108,
+      "firstName": "Audrey",
+      "lastName": "Etienne",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "SCORER",
+      "roleName": "Scorer",
+      "roleOrder": null,
+      "defaultNationality": "FRA",
+      "licenseNationality": null
+    },
+    {
+      "personId": 299082,
+      "firstName": "Bénédicte",
+      "lastName": "Dutoya",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "ASSCORER",
+      "roleName": "Assistant scorer",
+      "roleOrder": null,
+      "defaultNationality": "FRA",
+      "licenseNationality": null
+    },
+    {
+      "personId": 15618,
+      "firstName": "Julio",
+      "lastName": "Anaya",
+      "dateOfBirth": "REDACTED",
+      "gender": "M",
+      "roleCode": "UMP",
+      "roleName": "Umpire",
+      "roleOrder": "1",
+      "defaultNationality": "PAN",
+      "licenseNationality": "PAN"
+    }
+  ],
+  "periods": [
+    {
+      "name": "Q1",
+      "number": 1,
+      "teamAScore": 15,
+      "teamBScore": 20,
+      "teamAFrom": "Winner of Game 23",
+      "teamBFrom": "Winner of Game 24"
+    },
+    {
+      "name": "Q2",
+      "number": 2,
+      "teamAScore": 26,
+      "teamBScore": 29,
+      "teamAFrom": "Winner of Game 23",
+      "teamBFrom": "Winner of Game 24"
+    },
+    {
+      "name": "Q3",
+      "number": 3,
+      "teamAScore": 25,
+      "teamBScore": 23,
+      "teamAFrom": "Winner of Game 23",
+      "teamBFrom": "Winner of Game 24"
+    }
+  ],
+  "isLive": false,
+  "currentPeriod": "Q4",
+  "chrono": "00:00",
+  "liveGameStatus": 999,
+  "currentPeriodStatus": "E",
+  "gameStatisticStatusCode": "VALID",
+  "gamePlayByPlayStatusCode": "VALID",
+  "gameResultStatusCode": "VALID",
+  "gameResultAdditionalInformation": "None",
+  "windowId": null,
+  "windowCode": null,
+  "windowName": null
+}

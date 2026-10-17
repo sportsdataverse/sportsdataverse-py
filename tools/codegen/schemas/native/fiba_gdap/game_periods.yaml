@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: number
+  type: integer
+- description: ''
+  name: team_a_score
+  type: integer
+- description: ''
+  name: team_b_score
+  type: integer
+- description: ''
+  name: team_a_from
+  type: character
+- description: ''
+  name: team_b_from
+  type: character
+kind: dataframe
+schema: fiba_gdap_game_periods

@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: season_team_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: tlc
+  type: character
+- description: ''
+  name: logo_url
+  type: character
+kind: dataframe
+schema: scb_season_teams
