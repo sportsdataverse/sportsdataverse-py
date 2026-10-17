@@ -17,8 +17,9 @@ from __future__ import annotations
 import datetime as _dt
 import inspect
 import re
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, Union
 
+import pandas as pd
 import polars as pl
 
 from sportsdataverse.basketball._competitions_registry import REGISTRY
@@ -51,6 +52,12 @@ def _section(doc: str, name: str) -> str:
 
 def _indent(block: str, pad: str = "        ") -> str:
     return "".join(f"{pad}{ln}\n" if ln else "\n" for ln in block.splitlines())
+
+
+class _BoundDoc(str):
+    """A minted docstring that remembers the base wrapper it was built from (read by :func:`_finish`)."""
+
+    base: Callable[..., Any]
 
 
 def _doc(
@@ -87,14 +94,26 @@ def _doc(
     if entry["gender"] in ("women", "both"):
         extra.append("Women's competition data: flagged for the wehoop mirror (Phase C).")
     out += "    Notes:\n" + notes + ("\n" if notes else "") + "".join(f"        * {ln}\n" for ln in extra)
-    return out.rstrip() + "\n"
+    bound = _BoundDoc(out.rstrip() + "\n")
+    bound.base = base
+    return bound
 
 
 def _finish(fn: Callable[..., Any], name: str, module: str, doc: str) -> Callable[..., Any]:
+    """Name the minted callable and point it at its base wrapper.
+
+    ``__sdv_base__`` is the base wrapper's name and ``__sdv_schema__`` its native returns schema
+    (``native/<stem>/<short>``): the docs renderer reads the minted function's returns table from there,
+    so the columns have one source of truth (``tools/codegen/schemas/native``)."""
     fn.__name__ = name
     fn.__qualname__ = name
     fn.__module__ = module
     fn.__doc__ = doc
+    base = getattr(doc, "base", None)
+    if base is not None:
+        stem = base.__module__.rsplit(".", 1)[-1]
+        fn.__sdv_base__ = base.__name__  # type: ignore[attr-defined]
+        fn.__sdv_schema__ = f"native/{stem}/{base.__name__[len(stem) + 1 :]}"  # type: ignore[attr-defined]
     return fn
 
 
@@ -140,7 +159,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
         return_parsed: bool = True,
         return_as_pandas: bool = False,
         **kwargs: Any,
-    ) -> Any:
+    ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
         return gdap.fiba_gdap_editions(
             family_id=fam,
             season=season,
@@ -176,7 +195,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_parsed: bool = True,
             return_as_pandas: bool = False,
             **kwargs: Any,
-        ) -> Any:
+        ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(gdap, base_name)(
                 comp=_fiba_comp(fam, season, comp, label),
                 return_parsed=return_parsed,
@@ -213,7 +232,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_parsed: bool = True,
             return_as_pandas: bool = False,
             **kwargs: Any,
-        ) -> Any:
+        ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(gp, base_name)(
                 game_id=game_id,
                 comp=_fiba_comp(fam, season, comp, label),
@@ -278,7 +297,9 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
     p, org, label = entry["prefix"], entry["org"], entry["label"]
     out: Dict[str, Callable[..., Any]] = {}
 
-    def competitions(*, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any) -> Any:
+    def competitions(
+        *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any
+    ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
         return g.genius_competitions(org=org, return_parsed=return_parsed, return_as_pandas=return_as_pandas, **kwargs)
 
     out[f"{p}_competitions"] = _finish(
@@ -302,7 +323,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
         return_parsed: bool = True,
         return_as_pandas: bool = False,
         **kwargs: Any,
-    ) -> Any:
+    ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
         return g.genius_schedule(
             org=org,
             comp_id=_genius_comp(entry, season, comp_id),
@@ -333,7 +354,9 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
     def _game_fn(base_name: str, suffix: str, what: str) -> None:
         base = getattr(g, base_name)
 
-        def fn(match_id: int, *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any) -> Any:
+        def fn(
+            match_id: int, *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any
+        ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(g, base_name)(
                 match_id=match_id, return_parsed=return_parsed, return_as_pandas=return_as_pandas, **kwargs
             )
@@ -376,7 +399,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
 
     def seasons(
         locale: Optional[str] = None, *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any
-    ) -> Any:
+    ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
         return a.atrium_seasons(
             website_id=site, locale=locale, return_parsed=return_parsed, return_as_pandas=return_as_pandas, **kwargs
         )
@@ -406,7 +429,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_parsed: bool = True,
             return_as_pandas: bool = False,
             **kwargs: Any,
-        ) -> Any:
+        ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(a, base_name)(
                 website_id=site,
                 season=season,
@@ -445,7 +468,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_parsed: bool = True,
             return_as_pandas: bool = False,
             **kwargs: Any,
-        ) -> Any:
+        ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(a, base_name)(
                 website_id=site,
                 fixture_id=fixture_id,

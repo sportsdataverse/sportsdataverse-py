@@ -5,4 +5,6 @@
   `slb_*`, `bal_*`, `nznbl_*`, `esake_*`, `lfb_*`, `lnbm_*`, `lub_*` (`competitions`, `schedule`, box,
   `pbp`, `shots`); `lnb_*`, `lnbp_*`, `nbl1_*`, `lmb_*`, `lpb_*` (`seasons`, `schedule`, `standings`,
   `teams`, box, `pbp`, `shots`). Each binds the competition (`comp` / `org` / `website_id`) and resolves
-  an END-year `season` to the edition; `comp=` / `comp_id=` override. (#TBD)
+  an END-year `season` to the edition; `comp=` / `comp_id=` override.
+  The reference pages show each minted function's returns table, read from its base wrapper's native
+  schema (`__sdv_schema__`), with the base's column descriptions. (#TBD)

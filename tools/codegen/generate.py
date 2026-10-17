@@ -3752,6 +3752,11 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
     fallback). A tuple (not list) so the result is hashable under lru_cache."""
     p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
     if not p.exists():
+        # A minted per-competition wrapper (basketball/_competitions.py) returns its base wrapper's
+        # frame: its table is the base's native schema, not a second copy.
+        pointer = getattr(_scope_callable(scope, fn), "__sdv_schema__", "")
+        p = ROOT / "tools" / "codegen" / "schemas" / f"{pointer}.yaml" if pointer else p
+    if not p.exists():
         return ()
     import yaml
 
@@ -4468,7 +4473,9 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
+            c["description"] = _table_cell_desc(
+                str(c.get("description", "")), league, raw_name, getattr(obj, "__sdv_base__", n)
+            )
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
@@ -4722,6 +4729,8 @@ def refresh_autodoc_schemas() -> int:
             if obj is None or not callable(obj):
                 continue
             in_scope.add((scope_key, fn))
+            if hasattr(obj, "__sdv_schema__"):
+                continue  # minted wrapper: its table is its base's native schema, never captured or called
             kwargs = scope_args.get(fn, {})
             annotated = _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return"))
             if not (annotated or fn in scope_args or (_AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml").exists()):

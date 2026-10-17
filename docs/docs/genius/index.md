@@ -17,7 +17,7 @@ description: "sdv-py GENIUS: endpoint references, dataset loaders and parsers fo
 | Reference | Functions |
 |---|---:|
 | [Genius Sports LiveStats (fibalivestats.dcd.shared.geniussports.com, 20+ competitions)](reference/genius) | 11 |
-| [Hand-written wrappers](reference/additional) | 48 |
+| [Hand-written wrappers](reference/additional/genius-sports-livestats) | 48 |
 
 ## Examples
 

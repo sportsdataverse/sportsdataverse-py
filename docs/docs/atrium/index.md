@@ -17,12 +17,12 @@ description: "sdv-py ATRIUM: endpoint references, dataset loaders and parsers fo
 | Reference | Functions |
 |---|---:|
 | [Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)](reference/atrium) | 22 |
-| [Hand-written wrappers](reference/additional) | 40 |
+| [Hand-written wrappers](reference/additional/sportradar-atrium-embed-api) | 40 |
 ## Tools and helpers
 
 ### Dates and seasons {#dates-and-seasons}
 
-- [`atrium_season_id`](reference/additional#atrium_season_id)
+- [`atrium_season_id`](reference/additional/dates-and-seasons#atrium_season_id)
 
 
 ## Examples
