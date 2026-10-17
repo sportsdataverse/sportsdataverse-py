@@ -1,0 +1,31 @@
+[
+  {
+    "scheduleNum": null,
+    "season": 2017,
+    "homeTeamId": 29124,
+    "visitingTeamId": 29127,
+    "homeTeamName": "广东东莞银行",
+    "visitingTeamName": "四川品胜",
+    "matchTypeId": 1,
+    "round": 4,
+    "status": 4,
+    "scheduleTime": "2017-11-04 19:35:00",
+    "homeTeamScore": 113,
+    "visitingTeamScore": 109,
+    "homeTeamWin": "4",
+    "homeTeamLose": "0",
+    "visitingTeamWin": "0",
+    "visitingTeamLose": "4",
+    "visitingTeamLogo": "https://image.cbaleague.com/cbaleague/teamlogo/300x300/29127_300.png",
+    "homeTeamLogo": "https://image.cbaleague.com/cbaleague/teamlogo/300x300/29124_300.png",
+    "quarter": 4,
+    "minutes": 48,
+    "seconds": null,
+    "scheduleId": 100001438,
+    "isReport": 1,
+    "isEvents": 1,
+    "scheduleTypeName": "常规赛第4轮",
+    "matchOrder": 31,
+    "roundDesc": null
+  }
+]

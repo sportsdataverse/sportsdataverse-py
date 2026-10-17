@@ -1,0 +1,95 @@
+{
+  "game": {
+    "gmkey": "S18G01N4",
+    "glkey": "S18G01",
+    "seasonCode": 18,
+    "seasonGrade": 2,
+    "seasonCategoryName": "D리그 1차",
+    "gameCode": "01",
+    "gameNo": 4,
+    "gameDate": "20101101",
+    "tcodeH": "21",
+    "tcodeA": "22",
+    "tnameH": "오리온스",
+    "tnameA": "전자랜드",
+    "tnameFH": "오리온스",
+    "tnameFA": "전자랜드",
+    "seasonName": "2010KBLWINTER",
+    "gameStart": "1300",
+    "gameEnd": "1441",
+    "gameTime": 141,
+    "isStarted": 1,
+    "isEnded": 1,
+    "playingQuarter": "X",
+    "weekDay": "월",
+    "stadiumname": "KT연습",
+    "stadiumnameF": "KT연습체육관",
+    "stadiumnameEn": "KT연습",
+    "crowds": 0,
+    "judges": {
+      "main": {
+        "name": "김병석"
+      },
+      "sub": [
+        {
+          "name": "김백규"
+        },
+        {
+          "name": "이승환"
+        }
+      ]
+    },
+    "tlogoH": "or2011",
+    "tlogoA": "zz2009",
+    "detailUrl": "/game/record/S18G01N4",
+    "highlightUrl": "https://m.sports.naver.com/game/20101101212218014"
+  },
+  "teams": {
+    "home": {
+      "tcode": "21",
+      "tname": "오리온스",
+      "tnameF": "오리온스",
+      "staffs": {
+        "manager": {
+          "name": ""
+        },
+        "coaches": [
+          {
+            "name": "정재훈"
+          }
+        ]
+      }
+    },
+    "away": {
+      "tcode": "22",
+      "tname": "전자랜드",
+      "tnameF": "전자랜드",
+      "staffs": {
+        "manager": {
+          "name": ""
+        },
+        "coaches": [
+          {
+            "name": "김태진"
+          }
+        ]
+      }
+    }
+  },
+  "teamrecords": {
+    "home": {
+      "scoreq1": 23,
+      "scoreq2": 16,
+      "scoreq3": 19,
+      "scoreq4": 24,
+      "scoreeq": []
+    },
+    "away": {
+      "scoreq1": 18,
+      "scoreq2": 18,
+      "scoreq3": 14,
+      "scoreq4": 17,
+      "scoreeq": []
+    }
+  }
+}

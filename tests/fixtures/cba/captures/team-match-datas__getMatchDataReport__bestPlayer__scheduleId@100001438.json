@@ -1,0 +1,42 @@
+{
+  "guestTeamBestData": null,
+  "hostTeamBestData": null,
+  "hostBestPlayer": {
+    "rebounds": 10,
+    "fouls": 3,
+    "twoPointsStr": "10/14",
+    "playerName": "安德鲁-尼克尔森",
+    "minutes": 37,
+    "playerNameStr": "尼克尔森",
+    "freeThrowStr": "2/3",
+    "playerImg": "https://image.cbaleague.com/cbaleague/playerheaders/100002140.jpg",
+    "steals": 3,
+    "turnShare": "30%",
+    "points": 34,
+    "number": "44",
+    "blocked": 2,
+    "assists": 4,
+    "realPointRate": "70%",
+    "turnovers": 3,
+    "threePointsStr": "4/9"
+  },
+  "guestBestPlayer": {
+    "rebounds": 13,
+    "fouls": 4,
+    "twoPointsStr": "6/13",
+    "playerName": null,
+    "minutes": 36,
+    "playerNameStr": "富兰克林",
+    "freeThrowStr": "8/9",
+    "playerImg": "https://image.cbaleague.com/cbaleague/playerheaders/561509.jpg",
+    "steals": 1,
+    "turnShare": "49%",
+    "points": 44,
+    "number": "29",
+    "blocked": 2,
+    "assists": 6,
+    "realPointRate": "71%",
+    "turnovers": 9,
+    "threePointsStr": "8/14"
+  }
+}

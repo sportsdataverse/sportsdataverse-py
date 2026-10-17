@@ -1,0 +1,194 @@
+[
+  {
+    "awayTeam": [
+      {
+        "jerseyNumber": 5,
+        "name": "麥卡洛",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 371,
+            "endTime": "5:49",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 440,
+            "startTime": "4:40"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1114,
+            "endTime": "5:26",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 28,
+        "name": "盧冠良",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 420,
+            "endTime": "5:00",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 908,
+            "startTime": "8:52"
+          },
+          {
+            "endQuarter": "Q3",
+            "endSeconds": 1441,
+            "endTime": "11:59",
+            "startQuarter": "Q3",
+            "startSeconds": 1440,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 6,
+        "name": "吳永盛",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 323,
+            "startTime": "6:37"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 962,
+            "endTime": "7:58",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1328,
+            "startTime": "1:52"
+          }
+        ],
+        "started": false
+      }
+    ],
+    "homeTeam": [
+      {
+        "jerseyNumber": 5,
+        "name": "牧倫斯",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 487,
+            "endTime": "3:53",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 868,
+            "startTime": "9:32"
+          },
+          {
+            "endQuarter": "Q3",
+            "endSeconds": 1957,
+            "endTime": "3:23",
+            "startQuarter": "Q3",
+            "startSeconds": 1440,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 55,
+        "name": "曼尼高",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 407,
+            "endTime": "5:13",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 487,
+            "startTime": "3:53"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 9,
+        "name": "李愷諺",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 407,
+            "startTime": "5:13"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 962,
+            "endTime": "7:58",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1219,
+            "startTime": "3:41"
+          }
+        ],
+        "started": false
+      }
+    ]
+  }
+]

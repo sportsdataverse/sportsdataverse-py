@@ -1,0 +1,178 @@
+[
+  {
+    "away_team": {
+      "color": "#3C8DC2",
+      "id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e86394aa-3d88-11ed-8ba8-7f44ba46b0b1.png",
+      "name": "臺北富邦勇士"
+    },
+    "fast_break_points": {
+      "away_progress": 30.0,
+      "away_value": 3.0,
+      "home_progress": 70.0,
+      "home_value": 7.0
+    },
+    "game_id": "dfd0b8b3-3ec6-11f1-8e68-e7cdd809ee2b",
+    "home_team": {
+      "color": "#D95F29",
+      "id": "e865bb20-3d88-11ed-a956-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e865bb20-3d88-11ed-a956-7f44ba46b0b1.png",
+      "name": "桃園璞園領航猿"
+    },
+    "home_team_probability_over_time": [
+      50,
+      50.0,
+      50.0
+    ],
+    "leadStats": {
+      "biggestLead": {
+        "away": 12,
+        "home": 12
+      },
+      "biggestScoringRun": {
+        "away": 8,
+        "home": 12
+      },
+      "leadChanges": 10,
+      "leadPerMinutes": [
+        {
+          "away_score": 0,
+          "home_score": 0,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "12:00"
+        },
+        {
+          "away_score": 3,
+          "home_score": 3,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "11:00"
+        },
+        {
+          "away_score": 5,
+          "home_score": 5,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "10:00"
+        }
+      ],
+      "timeLeadingSeconds": {
+        "away": 917,
+        "home": 1714
+      }
+    },
+    "paint_points": {
+      "away_progress": 39.3,
+      "away_value": 22.0,
+      "home_progress": 60.7,
+      "home_value": 34.0
+    },
+    "pbp": [
+      {
+        "away_score": 0,
+        "home_score": 3,
+        "quarter": "q1",
+        "time": "11:49"
+      },
+      {
+        "away_score": 0,
+        "home_score": 3,
+        "quarter": "q1",
+        "time": "11:31"
+      },
+      {
+        "away_score": 0,
+        "home_score": 3,
+        "quarter": "q1",
+        "time": "11:23"
+      }
+    ],
+    "second_chance_points": {
+      "away_progress": 40.9,
+      "away_value": 9.0,
+      "home_progress": 59.1,
+      "home_value": 13.0
+    },
+    "team_comparison": {
+      "assists": {
+        "away_progress": 0.74,
+        "away_value": 17,
+        "home_progress": 1.0,
+        "home_value": 23
+      },
+      "blocks": {
+        "away_progress": 1.0,
+        "away_value": 7,
+        "home_progress": 1.0,
+        "home_value": 7
+      },
+      "field_goal_percentage": {
+        "away_progress": 1.0,
+        "away_value": 26,
+        "home_progress": 0.85,
+        "home_value": 22
+      },
+      "free_throw_percentage": {
+        "away_progress": 0.45,
+        "away_value": 45.0,
+        "home_progress": 0.76,
+        "home_value": 75.8
+      },
+      "points": {
+        "away_progress": 0.96,
+        "away_value": 94,
+        "home_progress": 1.0,
+        "home_value": 98
+      },
+      "rebounds": {
+        "away_progress": 1.0,
+        "away_value": 54,
+        "home_progress": 0.8,
+        "home_value": 43
+      },
+      "steals": {
+        "away_progress": 0.5,
+        "away_value": 7,
+        "home_progress": 1.0,
+        "home_value": 14
+      },
+      "three_points_percentage": {
+        "away_progress": 0.43,
+        "away_value": 43.2,
+        "home_progress": 0.37,
+        "home_value": 36.7
+      },
+      "turnovers": {
+        "away_progress": 1.0,
+        "away_value": 20,
+        "home_progress": 0.55,
+        "home_value": 11
+      },
+      "two_points_percentage": {
+        "away_progress": 0.36,
+        "away_value": 35.9,
+        "home_progress": 0.4,
+        "home_value": 40.0
+      }
+    },
+    "top_performers": {
+      "away_player": {
+        "assists": 5,
+        "jersey_number": "10",
+        "name": "古德溫",
+        "photo_url": "https://photonew.preciser.io/plg/players/2025-26/7ed3338c-a035-11f0-839a-4f2487421d24.png",
+        "points": 16,
+        "rebound": 11
+      },
+      "home_player": {
+        "assists": 2,
+        "jersey_number": "21",
+        "name": "伯朗",
+        "photo_url": "https://photonew.preciser.io/plg/players/2025-26/93e6fd68-9fd8-11ee-8762-d3b17c82d68c.png",
+        "points": 29,
+        "rebound": 12
+      }
+    }
+  }
+]

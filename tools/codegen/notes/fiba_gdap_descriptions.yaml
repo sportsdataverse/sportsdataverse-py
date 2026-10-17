@@ -1,0 +1,1482 @@
+fiba_gdap_awards:
+  award_code: Award code (ALLSTAR, MVP...).
+  award_date: Date awarded, YYYY-MM-DD.
+  award_label: Extra label; null in every sample.
+  award_level: 'Level the award is given at: Competition.'
+  award_level_id: 'Id of the object the award is attached to: the competitionId when
+    awardLevel is Competition.'
+  award_name: Award name (All-Star 5, MVP...).
+  competition_end_date: Last day of the competition, YYYY-MM-DD.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_official_name: Official name of the competition edition the award was
+    given in.
+  competition_season: 'Season key, three rules: the END year for club competitions
+    (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023
+    = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament
+    year, not the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket
+    2029 pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  player_date_of_birth: Awarded player's date of birth, YYYY-MM-DD.
+  player_first_name: Awarded player's first name.
+  player_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  player_last_name: Awarded player's last name.
+  player_nationality: Awarded player's nationality, FIBA code.
+  teams: Teams the awarded player played for in the competition. Stored as a JSON
+    string.
+fiba_gdap_competition:
+  age_category: Age category (Senior, Under 16...).
+  competition_category_age_type: 'Age type code: S senior, U16.'
+  competition_category_code: Category code (WC World Cup, OLY Olympic Tournament,
+    CCC-1 continental club tier 1).
+  competition_category_is_league: True for league-format club competitions.
+  competition_category_name: Name of the competition's category (FIBA Basketball World
+    Cup, Olympic Basketball Tournament...).
+  competition_code: Competition code (WMM men's World Cup, WOLYM, BCL, ELW...).
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_marketing_name_code: Family code; null in every sample.
+  competition_marketing_name_competition_marketing_name_id: Competition family id
+    (201 = World Cup, 112 = BCL tier 1, 211 = EuroLeague Women); the <histId> of /en/history/
+    pages.
+  competition_marketing_name_marketing_name: Competition family name; slugified it
+    is the <histSlug> of /en/history/ pages.
+  competition_type: National Teams or Clubs.
+  discipline: Discipline (Basketball; 3x3 is a separate platform).
+  end: Last day, YYYY-MM-DD.
+  fiba_zone: FIBA zone the competition belongs to (World, Europe, Americas...).
+  gender: 'Men or Women: the gender of the competition.'
+  hosts: Host countries with their cities. Stored as a JSON string.
+  official: Official-status label.
+  official_flag_item_code: 'Official-status code: O = official.'
+  official_flag_item_name: Official-status label.
+  official_name: Edition title (FIBA Basketball World Cup; Paris 2024 Men's Olympic
+    Basketball Tournament).
+  season: 'Season key, three rules: the END year for club competitions (BCL 2024-25
+    = 2025) and the event year for national-team events (World Cup 2023 = 2023), both
+    equal to the sdv season key; qualifiers carry the TARGET tournament year, not
+    the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket 2029
+    pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  start: First day, YYYY-MM-DD.
+  status: 'Competition status: In Progress, Completed, Closed.'
+  zone_information_top_zone_code: Parent zone code; always null in the samples, values
+    unverified.
+  zone_information_top_zone_id: Parent zone id; null for top zones.
+  zone_information_top_zone_official_name: Parent zone name; always null in the samples,
+    values unverified.
+  zone_information_zone_code: Zone code (W, E, AF, AM, AS, OC).
+  zone_information_zone_id: FIBA zone id (1 = World, 23 = Europe; zone table key space).
+  zone_information_zone_official_name: Official name of the competition's FIBA zone
+    (FIBA Europe, FIBA Americas, World).
+fiba_gdap_editions:
+  age_category: Age category (Senior, Under 16...).
+  competition_category_age_type: 'Age type code: S senior, U16.'
+  competition_category_code: Category code (WC World Cup, OLY Olympic Tournament,
+    CCC-1 continental club tier 1).
+  competition_category_is_league: True for league-format club competitions.
+  competition_category_name: Name of the competition's category (FIBA Basketball World
+    Cup, Olympic Basketball Tournament...).
+  competition_code: Competition code (WMM men's World Cup, WOLYM, BCL, ELW...).
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_marketing_name_code: Family code; null in every sample.
+  competition_marketing_name_competition_marketing_name_id: Competition family id
+    (201 = World Cup, 112 = BCL tier 1, 211 = EuroLeague Women); the <histId> of /en/history/
+    pages.
+  competition_marketing_name_marketing_name: Competition family name; slugified it
+    is the <histSlug> of /en/history/ pages.
+  competition_type: National Teams or Clubs.
+  discipline: Discipline (Basketball; 3x3 is a separate platform).
+  end: Last day, YYYY-MM-DD.
+  fiba_zone: FIBA zone the competition belongs to (World, Europe, Americas...).
+  gender: 'Men or Women: the gender of the competition.'
+  hosts: Host countries with their cities. Stored as a JSON string.
+  official: Official-status label.
+  official_flag_item_code: 'Official-status code: O = official.'
+  official_flag_item_name: Official-status label.
+  official_name: Edition title (FIBA Basketball World Cup; Paris 2024 Men's Olympic
+    Basketball Tournament).
+  season: 'Season key, three rules: the END year for club competitions (BCL 2024-25
+    = 2025) and the event year for national-team events (World Cup 2023 = 2023), both
+    equal to the sdv season key; qualifiers carry the TARGET tournament year, not
+    the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket 2029
+    pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  start: First day, YYYY-MM-DD.
+  status: 'Competition status: In Progress, Completed, Closed.'
+  zone_information_top_zone_code: Parent zone code; always null in the samples, values
+    unverified.
+  zone_information_top_zone_id: Parent zone id; null for top zones.
+  zone_information_top_zone_official_name: Parent zone name; always null in the samples,
+    values unverified.
+  zone_information_zone_code: Zone code (W, E, AF, AM, AS, OC).
+  zone_information_zone_id: FIBA zone id (1 = World, 23 = Europe; zone table key space).
+  zone_information_zone_official_name: Official name of the competition's FIBA zone
+    (FIBA Europe, FIBA Americas, World).
+fiba_gdap_federation_games:
+  chrono: Game clock of the current period, 'mm:ss' ('00:00' when finished).
+  competition_age_category: Age category (Senior, Under 16...).
+  competition_competition_category_age_type: 'Age type code: S senior, U16.'
+  competition_competition_category_code: Category code (WC World Cup, OLY Olympic
+    Tournament, CCC-1 continental club tier 1).
+  competition_competition_category_is_league: True for league-format club competitions.
+  competition_competition_category_name: Name of the competition's category (FIBA
+    Basketball World Cup, Olympic Basketball Tournament...).
+  competition_competition_code: Competition code (WMM men's World Cup, WOLYM, BCL,
+    ELW...).
+  competition_competition_id: 'FIBA competition id (GDAP key space): one per edition
+    (2023 World Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_competition_marketing_name: Competition family, shared by every edition;
+    always null in the samples, values unverified.
+  competition_competition_type: National Teams or Clubs.
+  competition_discipline: Discipline (Basketball; 3x3 is a separate platform).
+  competition_end: Last day, YYYY-MM-DD.
+  competition_fiba_zone: FIBA zone the competition belongs to (World, Europe, Americas...).
+  competition_gender: 'Men or Women: the gender of the competition.'
+  competition_official: Official-status label.
+  competition_official_flag_item_code: 'Official-status code: O = official.'
+  competition_official_flag_item_name: Official-status label.
+  competition_official_name: Edition title (FIBA Basketball World Cup; Paris 2024
+    Men's Olympic Basketball Tournament).
+  competition_season: 'Season key, three rules: the END year for club competitions
+    (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023
+    = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament
+    year, not the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket
+    2029 pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  competition_start: First day, YYYY-MM-DD.
+  competition_status: 'Competition status: In Progress, Completed, Closed.'
+  competition_zone_information_top_zone_code: Parent zone code; always null in the
+    samples, values unverified.
+  competition_zone_information_top_zone_id: Parent zone id; null for top zones.
+  competition_zone_information_top_zone_official_name: Parent zone name; always null
+    in the samples, values unverified.
+  competition_zone_information_zone_code: Zone code (W, E, AF, AM, AS, OC).
+  competition_zone_information_zone_id: FIBA zone id (1 = World, 23 = Europe; zone
+    table key space).
+  competition_zone_information_zone_official_name: Official name of the competition's
+    FIBA zone (FIBA Europe, FIBA Americas, World).
+  current_period: Last period reached ('Q4', 'OT1').
+  current_period_status: 'State of the current period: E = ended (the only value sampled).'
+  game_date_time: Tip-off in venue-local wall-clock time, ISO 8601 without offset
+    (T00:00:00 when hasTimeGameDateTime is false).
+  game_date_time_utc: Tip-off in UTC, ISO 8601 without the Z.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  game_name: Technical game name '<roundId>-<groupPairingCode>-<gameNumber>'.
+  game_number: 'Game number within the round or pairing (a string: ''1'', ''A'').'
+  game_play_by_play_status_code: 'Play-by-play availability flag: VALID or EMPTY.
+    UNRELIABLE: World Cup 2014 and EuroBasket 2017 say EMPTY but their game pages
+    carry full play-by-play; always check the page.'
+  game_result_additional_information: Free-text result note (forfeit, overtime remark);
+    null when none.
+  game_result_status_code: 'Result validation status: VALID.'
+  game_statistic_status_code: 'Box-score validation status: VALID.'
+  group_id: Group id (GDAP key space).
+  group_pairing_code: Group letter (group play) or pairing number (knockout bracket
+    slot).
+  has_time_game_date_time: False when only the date is known (the time part is then
+    00:00:00).
+  host_city: City of the venue.
+  host_country: Country of the venue (name; a FIBA code in getgdapgameswithleaderdetailsbyteamid).
+  host_country_code: FIBA code of the venue's country.
+  iana_time_zone: IANA time zone of the venue.
+  is_live: True while the game is being played.
+  is_played_behind_closed_doors: True when played without spectators.
+  is_postponed: True when the game was postponed.
+  live_game_status: 'Live state code: 999 on every finished game; 5 seen on a finished
+    2024 youth game; mapping unverified.'
+  round_end_date: Round end, local date-time (23:59:59.9999999 on the last day).
+  round_game_system: Pairing system label (Single, Home and Away, Best of 3).
+  round_game_system_code: 'Pairing system code: S single game, HA home and away, BOF3
+    best of three.'
+  round_round_code: Round code (GP group phase, QF, SF, F final, RS regular season,
+    CL17-32 classification...).
+  round_round_id: Round id (GDAP key space, unique across competitions); the first
+    segment of gameName.
+  round_round_kind: Standard Round or Qualifiers.
+  round_round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_round_number: Round number within the competition (1-based).
+  round_round_order: Display order of the round.
+  round_round_status_code: 'Round status: COMPL completed, PROGR in progress, CLOS
+    closed.'
+  round_round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  round_start_date: Round start, local date-time.
+  spectators: Attendance at the game, as recorded by FIBA.
+  statistic_system: 'Live-stats system that scored the game: OVR (FIBA''s Olympic/World
+    Cup system), FLS (FIBA LiveStats), null before about 2006.'
+  status_code: 'Game status code: VALID (validated result), CLOS (closed, pre-2000
+    rows).'
+  team_a_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as OOST).'
+  team_a_from: How team A qualified for this slot ('Winner of Game 87', '1st of group
+    C'); null in group play.
+  team_a_official_name: 'Official name of team A: the country for a national team,
+    the club for a club team.'
+  team_a_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_a_score: Final score of team A.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
+  team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_b_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as NANT).'
+  team_b_from: How team B qualified for this slot ('Winner of Game 88', '2nd of group
+    A'); null in group play.
+  team_b_official_name: 'Official name of team B: the country for a national team,
+    the club for a club team.'
+  team_b_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_b_score: Final score of team B.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
+  team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  utc_offset: Venue UTC offset at tip-off, hours.
+  venue_capacity: Venue capacity (0 = unknown).
+  venue_id: Venue id (GDAP key space; 0 = unknown).
+  venue_name: Name of the arena the game is played in.
+  window_code: Qualifier window code; null otherwise.
+  window_name: Qualifier window name; null otherwise.
+fiba_gdap_federation_ranking:
+  as_of_date: 'Date of the ranking returned: the latest ranking published on or before
+    the requested date.'
+  comments: Ranking note; null in every sample.
+  country_name: Country name in English.
+  current_points: Ranking points (one decimal).
+  fiba_code: FIBA three-letter country code (GER, USA; historic URS, YUG).
+  ioc_code: IOC country code.
+  world_rank: Position in the FIBA world ranking (1 = best).
+  world_rank_variation: Change in world rank since the previous release (positive
+    = up).
+  zone_rank: Rank within the zone.
+  zone_ranking_code: Ranking zone code (WORLD, AFRICA...).
+  zone_ranking_official_name: Ranking zone official name.
+fiba_gdap_final_standings:
+  competition_id: FIBA competition id (Int64) the final ranking belongs to; the comp
+    argument.
+  final_rank: Final rank in the competition.
+  team_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_profile: Team profile; null in this route.
+  team_short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
+  team_status_code: Team entry status; always null in the samples, values unverified.
+  team_status_name: Team entry status label; always null in the samples, values unverified.
+  team_team_code: Team abbreviation (FIBA country code or club abbreviation).
+  team_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+fiba_gdap_game:
+  chrono: Game clock of the current period, 'mm:ss' ('00:00' when finished).
+  current_period: Last period reached ('Q4', 'OT1').
+  current_period_status: 'State of the current period: E = ended (the only value sampled).'
+  game_date_time: Tip-off in venue-local wall-clock time, ISO 8601 without offset
+    (T00:00:00 when hasTimeGameDateTime is false).
+  game_date_time_utc: Tip-off in UTC, ISO 8601 without the Z.
+  game_day: Game day number within the round.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  game_number: 'Game number within the round or pairing (a string: ''1'', ''A'').'
+  game_play_by_play_status_code: 'Play-by-play availability flag: VALID or EMPTY.
+    UNRELIABLE: World Cup 2014 and EuroBasket 2017 say EMPTY but their game pages
+    carry full play-by-play; always check the page.'
+  game_result_additional_information: Free-text result note (forfeit, overtime remark);
+    null when none.
+  game_result_status_code: 'Result validation status: VALID.'
+  game_statistic_status_code: 'Box-score validation status: VALID.'
+  group_pairing_code: Group letter (group play) or pairing number (knockout bracket
+    slot).
+  has_time_game_date_time: False when only the date is known (the time part is then
+    00:00:00).
+  host_city: City of the venue.
+  host_country: Country of the venue (name; a FIBA code in getgdapgameswithleaderdetailsbyteamid).
+  host_country_code: FIBA code of the venue's country.
+  iana_time_zone: IANA time zone of the venue.
+  is_live: True while the game is being played.
+  is_played_behind_closed_doors: True when played without spectators.
+  is_postponed: True when the game was postponed.
+  live_game_status: 'Live state code: 999 on every finished game; 5 seen on a finished
+    2024 youth game; mapping unverified.'
+  round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  spectators: Attendance at the game, as recorded by FIBA.
+  status_code: 'Game status code: VALID (validated result), CLOS (closed, pre-2000
+    rows).'
+  team_a_aggregated_score: Two-leg aggregate score of team A (0 when not a two-leg
+    tie).
+  team_a_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as OOST).'
+  team_a_from: How team A qualified for this slot ('Winner of Game 87', '1st of group
+    C'); null in group play.
+  team_a_official_name: 'Official name of team A: the country for a national team,
+    the club for a club team.'
+  team_a_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_a_score: Final score of team A.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
+  team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_b_aggregated_score: Two-leg aggregate score of team B (0 when not a two-leg
+    tie).
+  team_b_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as NANT).'
+  team_b_from: How team B qualified for this slot ('Winner of Game 88', '2nd of group
+    A'); null in group play.
+  team_b_official_name: 'Official name of team B: the country for a national team,
+    the club for a club team.'
+  team_b_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_b_score: Final score of team B.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
+  team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  technical_name: Technical game name '<roundId>-<groupPairingCode>-<gameNumber>'.
+  utc_offset: Venue UTC offset at tip-off, hours.
+  venue_capacity: Venue capacity (0 = unknown).
+  venue_id: Venue id (GDAP key space; 0 = unknown).
+  venue_name: Name of the arena the game is played in.
+  window_code: Qualifier window code; null otherwise.
+  window_id: Qualifier window id; null otherwise.
+  window_name: Qualifier window name; null otherwise.
+fiba_gdap_game_officials:
+  default_nationality: FIBA code of the official's main nationality.
+  first_name: Given name(s) as registered with FIBA.
+  game_id: FIBA game id (Int64) of the game the official was nominated to.
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  last_name: 'Last name (officials: upper case).'
+  license_nationality: FIBA code of the federation that licenses the official.
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  role_code: Role code (REF, FIBATDEL...).
+  role_name: Role name on the game (Crew chief, Umpire, Commissioner, Assistant scorer...).
+  role_order: Order within the role; a numeric string or null.
+fiba_gdap_game_periods:
+  game_id: FIBA game id (Int64) of the game the period belongs to.
+  name: Period name ('Q1'...'OT1').
+  number: Period number (1-based).
+  team_a_from: How team A qualified for this slot ('Winner of Game 87', '1st of group
+    C'); null in group play.
+  team_a_score: Team A points in the period.
+  team_b_from: How team B qualified for this slot ('Winner of Game 88', '2nd of group
+    A'); null in group play.
+  team_b_score: Team B points in the period.
+fiba_gdap_games_between:
+  chrono: Game clock of the current period, 'mm:ss' ('00:00' when finished).
+  competition_age_category: Age category (Senior, Under 16...).
+  competition_competition_category_age_type: 'Age type code: S senior, U16.'
+  competition_competition_category_code: Category code (WC World Cup, OLY Olympic
+    Tournament, CCC-1 continental club tier 1).
+  competition_competition_category_is_league: True for league-format club competitions.
+  competition_competition_category_name: Name of the competition's category (FIBA
+    Basketball World Cup, Olympic Basketball Tournament...).
+  competition_competition_code: Competition code (WMM men's World Cup, WOLYM, BCL,
+    ELW...).
+  competition_competition_id: 'FIBA competition id (GDAP key space): one per edition
+    (2023 World Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_competition_marketing_name: Competition family, shared by every edition;
+    always null in the samples, values unverified.
+  competition_competition_type: National Teams or Clubs.
+  competition_discipline: Discipline (Basketball; 3x3 is a separate platform).
+  competition_end: Last day, YYYY-MM-DD.
+  competition_fiba_zone: FIBA zone the competition belongs to (World, Europe, Americas...).
+  competition_gender: 'Men or Women: the gender of the competition.'
+  competition_official: Official-status label.
+  competition_official_flag_item_code: 'Official-status code: O = official.'
+  competition_official_flag_item_name: Official-status label.
+  competition_official_name: Edition title (FIBA Basketball World Cup; Paris 2024
+    Men's Olympic Basketball Tournament).
+  competition_season: 'Season key, three rules: the END year for club competitions
+    (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023
+    = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament
+    year, not the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket
+    2029 pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  competition_start: First day, YYYY-MM-DD.
+  competition_status: 'Competition status: In Progress, Completed, Closed.'
+  competition_zone_information_top_zone_code: Parent zone code; always null in the
+    samples, values unverified.
+  competition_zone_information_top_zone_id: Parent zone id; null for top zones.
+  competition_zone_information_top_zone_official_name: Parent zone name; always null
+    in the samples, values unverified.
+  competition_zone_information_zone_code: Zone code (W, E, AF, AM, AS, OC).
+  competition_zone_information_zone_id: FIBA zone id (1 = World, 23 = Europe; zone
+    table key space).
+  competition_zone_information_zone_official_name: Official name of the competition's
+    FIBA zone (FIBA Europe, FIBA Americas, World).
+  current_period: Last period reached ('Q4', 'OT1').
+  current_period_status: 'State of the current period: E = ended (the only value sampled).'
+  game_date_time: Tip-off in venue-local wall-clock time, ISO 8601 without offset
+    (T00:00:00 when hasTimeGameDateTime is false).
+  game_date_time_utc: Tip-off in UTC, ISO 8601 without the Z.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  game_name: Technical game name '<roundId>-<groupPairingCode>-<gameNumber>'.
+  game_number: 'Game number within the round or pairing (a string: ''1'', ''A'').'
+  game_play_by_play_status_code: 'Play-by-play availability flag: VALID or EMPTY.
+    UNRELIABLE: World Cup 2014 and EuroBasket 2017 say EMPTY but their game pages
+    carry full play-by-play; always check the page.'
+  game_result_additional_information: Free-text result note (forfeit, overtime remark);
+    null when none.
+  game_result_status_code: 'Result validation status: VALID.'
+  game_statistic_status_code: 'Box-score validation status: VALID.'
+  group_id: Group id (GDAP key space).
+  group_pairing_code: Group letter (group play) or pairing number (knockout bracket
+    slot).
+  has_time_game_date_time: False when only the date is known (the time part is then
+    00:00:00).
+  host_city: City of the venue.
+  host_country: Country of the venue (name; a FIBA code in getgdapgameswithleaderdetailsbyteamid).
+  host_country_code: FIBA code of the venue's country.
+  iana_time_zone: IANA time zone of the venue.
+  is_live: True while the game is being played.
+  is_played_behind_closed_doors: True when played without spectators.
+  is_postponed: True when the game was postponed.
+  live_game_status: 'Live state code: 999 on every finished game; 5 seen on a finished
+    2024 youth game; mapping unverified.'
+  round_end_date: Round end, local date-time (23:59:59.9999999 on the last day).
+  round_game_system: Pairing system label (Single, Home and Away, Best of 3).
+  round_game_system_code: 'Pairing system code: S single game, HA home and away, BOF3
+    best of three.'
+  round_round_code: Round code (GP group phase, QF, SF, F final, RS regular season,
+    CL17-32 classification...).
+  round_round_id: Round id (GDAP key space, unique across competitions); the first
+    segment of gameName.
+  round_round_kind: Standard Round or Qualifiers.
+  round_round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_round_number: Round number within the competition (1-based).
+  round_round_order: Display order of the round.
+  round_round_status_code: 'Round status: COMPL completed, PROGR in progress, CLOS
+    closed.'
+  round_round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  round_start_date: Round start, local date-time.
+  spectators: Attendance at the game, as recorded by FIBA.
+  statistic_system: 'Live-stats system that scored the game: OVR (FIBA''s Olympic/World
+    Cup system), FLS (FIBA LiveStats), null before about 2006.'
+  status_code: 'Game status code: VALID (validated result), CLOS (closed, pre-2000
+    rows).'
+  team_a_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as OOST).'
+  team_a_from: How team A qualified for this slot ('Winner of Game 87', '1st of group
+    C'); null in group play.
+  team_a_official_name: 'Official name of team A: the country for a national team,
+    the club for a club team.'
+  team_a_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_a_score: Final score of team A.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
+  team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_b_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as NANT).'
+  team_b_from: How team B qualified for this slot ('Winner of Game 88', '2nd of group
+    A'); null in group play.
+  team_b_official_name: 'Official name of team B: the country for a national team,
+    the club for a club team.'
+  team_b_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_b_score: Final score of team B.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
+  team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  utc_offset: Venue UTC offset at tip-off, hours.
+  venue_capacity: Venue capacity (0 = unknown).
+  venue_id: Venue id (GDAP key space; 0 = unknown).
+  venue_name: Name of the arena the game is played in.
+  window_code: Qualifier window code; null otherwise.
+  window_name: Qualifier window name; null otherwise.
+fiba_gdap_gateway_competition_ids:
+  competition_id: FIBA competition id (Int64, GDAP key space) of a competition that
+    runs in the window.
+fiba_gdap_gateway_federation_ranking:
+  as_of_date: 'Date of the ranking returned: the latest ranking published on or before
+    the requested date.'
+  comments: Ranking note; null in every sample.
+  country_name: Country name in English.
+  current_points: Ranking points (one decimal).
+  fiba_code: FIBA three-letter country code (GER, USA; historic URS, YUG).
+  ioc_code: IOC country code.
+  organisation_id: 'Organisation id, stable across competitions and seasons: the national
+    federation for a national team (64 = Germany), the club for a club team (396 =
+    Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  organisation_status_code: 'Organisation status: ACT active.'
+  world_rank: Position in the FIBA world ranking (1 = best).
+  world_rank_variation: Change in world rank since the previous release (positive
+    = up).
+  zone_rank: Rank within the zone.
+  zone_ranking_code: Ranking zone code (WORLD, AFRICA...).
+  zone_ranking_official_name: Ranking zone official name.
+fiba_gdap_medal_count:
+  fiba_code: FIBA three-letter country code (GER, USA; historic URS, YUG).
+  organisation_id: 'Organisation id, stable across competitions and seasons: the national
+    federation for a national team (64 = Germany), the club for a club team (396 =
+    Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  rank: Rank (1 = first).
+  team_name: Team name (country or club).
+  team_zone_code: Zone code of the team (E Europe, NAM Americas north...).
+  total_first_rank: Gold medals (first places).
+  total_participations: Editions played.
+  total_second_rank: Number of silver medals the federation has won in the competition
+    family.
+  total_third_rank: Number of bronze medals the federation has won in the competition
+    family.
+fiba_gdap_national_teams:
+  country_fiba_code: FIBA code of the federation's country.
+  country_id: FIBA country id (country table key space; not an organisationId).
+  country_name: Country name in English.
+  display_name: English display name of the federation (the country), as the FIBA
+    site shows it.
+  membership_status_code: 'FIBA membership status: ACT active.'
+  national_federation_id: 'Federation organisation id (organisationId key space: 64
+    = Germany).'
+  official_name: Federation's official name.
+  organisation_status_code: 'Organisation status: ACT active.'
+  zone_id: FIBA zone id (1 = World, 23 = Europe; zone table key space).
+  zone_name: FIBA zone (Europe, Africa...).
+fiba_gdap_nominations:
+  affiliated_national_federation_country_code: FIBA code of the federation the official
+    is affiliated to.
+  affiliated_national_federation_country_name: Country of the federation the official
+    is affiliated to.
+  competition_level: 'Level the nomination is attached to: Competition.'
+  competition_level_id: 'Id of the object the nomination is attached to: the competitionId
+    when competitionLevel is Competition.'
+  competition_role: Role label at competition level; null in every sample.
+  first_name: Given name(s) as registered with FIBA.
+  game_assignment_role: Role on a game assignment; null at competition level.
+  game_assignment_role_code: Code of gameAssignmentRole; null at competition level.
+  game_assignment_role_order: Order of gameAssignmentRole; null at competition level.
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  last_name: 'Last name (officials: upper case).'
+  license_nationality: FIBA code of the federation that licenses the official.
+  nationalities: Nationalities (FIBA codes on player info; country objects on rosters
+    and officials). Stored as a JSON string.
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  role: 'Role: Referee, FIBA Table Officials, FIBA Certified Statisticians, FIBA Technical
+    Delegate, FIBA Referee Instructor.'
+  role_code: Role code (REF, FIBATDEL...).
+fiba_gdap_player_game_stats:
+  assists: Assists in the game.
+  blocked_shots: Blocked shots in the game.
+  competition_id: FIBA competition id (Int64) the game log belongs to; the comp argument.
+  defensive_rebounds: Defensive rebounds in the game.
+  efficiency: Efficiency (FIBA EFF) in the game.
+  field_goals_attempted: Field goals attempted in the game.
+  field_goals_made: Field goals made in the game.
+  field_goals_percentage: Field-goal percentage, 0-100 (in the game; full float precision
+    in averages).
+  free_throws_attempted: Free throws attempted in the game.
+  free_throws_made: Free throws made in the game.
+  free_throws_percentage: Free-throw percentage, 0-100 (in the game; full float precision
+    in averages).
+  game_day: Game day number within the round.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  offensive_rebounds: Offensive rebounds in the game.
+  personal_fouls: Personal fouls in the game.
+  play_duration_in_seconds: Playing time in seconds in the game.
+  player_id: FIBA person id (Int64), global; the player_id argument.
+  plus_minus: Plus/minus (point differential while on court) in the game.
+  points: Points in the game.
+  rebounds: Rebounds in the game.
+  round_code: Round code (GP group phase, QF, SF, F final, RS regular season, CL17-32
+    classification...).
+  round_id: Round id (GDAP key space, unique across competitions); the first segment
+    of gameName.
+  round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  steals: Steals in the game.
+  team_code: Player's team code.
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_name: Player's team name.
+  team_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  three_points_attempted: Three-point field goals attempted in the game.
+  three_points_made: Three-point field goals made in the game.
+  three_points_percentage: Three-point field-goal percentage, 0-100 (in the game;
+    full float precision in averages).
+  turnovers: Turnovers in the game.
+  two_points_attempted: Two-point field goals attempted in the game.
+  two_points_made: Two-point field goals made in the game.
+  two_points_percentage: Two-point field-goal percentage, 0-100 (in the game; full
+    float precision in averages).
+  versus_team_code: Opponent's code.
+  versus_team_id: Opponent's competition team id (see teamId).
+  versus_team_name: Opponent's name.
+  versus_team_organisation_id: Opponent's organisation id (see organisationId).
+fiba_gdap_player_info:
+  assists_per_game: The player's average assists per game played.
+  assists_per_game_per_competition_category: Average assists per game across the competition
+    category, the comparison baseline (unverified).
+  birth_date: Date of birth, YYYY-MM-DD.
+  club_code: Club abbreviation; always null in the samples, values unverified.
+  club_name: Club at the time of the competition.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_team_id: 'Competition team id: one per team per competition (Germany
+    = 279569 at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  first_name: Given name(s) as registered with FIBA.
+  height_cm: Height in centimetres.
+  height_ft_in: Height, feet and inches string.
+  is_player_free_agent: True when the player had no club.
+  last_name: 'Last name (officials: upper case).'
+  nationalities: Nationalities (FIBA codes on player info; country objects on rosters
+    and officials). Stored as a JSON string.
+  organisation_id: 'Organisation id, stable across competitions and seasons: the national
+    federation for a national team (64 = Germany), the club for a club team (396 =
+    Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  player_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  points_per_game: The player's average points per game played.
+  points_per_game_per_competition_category: Average points per game across the competition
+    category, the comparison baseline (unverified).
+  rank_assists_per_game: Rank in the competition by assists per game (1 = highest).
+  rank_points_per_game: Rank in the competition by points per game (1 = highest).
+  rank_rebounds_per_game: Rank in the competition by rebounds per game (1 = highest).
+  rebounds_per_game: The player's average rebounds per game played.
+  rebounds_per_game_per_competition_category: Average rebounds per game across the
+    competition category, the comparison baseline (unverified).
+  social_media_facebook: Facebook handle or URL; always null in the samples, values
+    unverified.
+  social_media_instagram: Instagram handle; always null in the samples, values unverified.
+  social_media_twitter: X/Twitter handle; always null in the samples, values unverified.
+  social_media_website: Website URL; always null in the samples, values unverified.
+  social_media_youtube: YouTube handle; always null in the samples, values unverified.
+  social_networks: Social-network handles. Stored as a JSON string.
+fiba_gdap_player_stats:
+  assists_per_game: The player's average assists per game played.
+  blocks_per_game: The player's average blocked shots per game played.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  efficiency_per_game: The player's average efficiency (FIBA EFF) per game played.
+  fast_break_points_per_game: The player's average fast-break points per game played.
+  field_goals_attempted_per_game: The player's average field goals attempted per game
+    played.
+  field_goals_made_per_game: The player's average field goals made per game played.
+  field_goals_percentage: Field-goal percentage, 0-100 (over the competition; full
+    float precision in averages).
+  fouls_per_game: The player's average personal fouls per game played.
+  free_throws_attempted_per_game: The player's average free throws attempted per game
+    played.
+  free_throws_made_per_game: The player's average free throws made per game played.
+  free_throws_percentage: Free-throw percentage, 0-100 (over the competition; full
+    float precision in averages).
+  play_time_in_seconds_per_game: The player's average playing time in seconds per
+    game played.
+  player_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  plus_minus_per_game: The player's average plus/minus (point differential while on
+    court) per game played.
+  points_from_turnovers_per_game: The player's average points from turnovers per game
+    played.
+  points_in_the_paint_per_game: The player's average points in the paint per game
+    played.
+  points_per_game: The player's average points per game played.
+  rank_assists_per_game: Rank in the competition by assists per game (1 = highest).
+  rank_points_per_game: Rank in the competition by points per game (1 = highest).
+  rank_rebounds_per_game: Rank in the competition by rebounds per game (1 = highest).
+  rebounds_defensive_per_game: The player's average defensive rebounds per game played.
+  rebounds_offensive_per_game: The player's average offensive rebounds per game played.
+  rebounds_per_game: The player's average rebounds per game played.
+  second_chance_points_per_game: The player's average second-chance points per game
+    played.
+  steals_per_game: The player's average steals per game played.
+  three_points_attempted_per_game: The player's average three-point field goals attempted
+    per game played.
+  three_points_made_per_game: The player's average three-point field goals made per
+    game played.
+  three_points_percentage: Three-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+  total_assists: The player's total assists over the games played.
+  total_blocks: The player's total blocked shots over the games played.
+  total_double_doubles: The player's total double-doubles over the games played.
+  total_efficiency: The player's total efficiency (FIBA EFF) over the games played.
+  total_fast_break_points: The player's total fast-break points over the games played.
+  total_field_goals_attempted: The player's total field goals attempted over the games
+    played.
+  total_field_goals_made: The player's total field goals made over the games played.
+  total_fouls: The player's total personal fouls over the games played.
+  total_free_throws_attempted: The player's total free throws attempted over the games
+    played.
+  total_free_throws_made: The player's total free throws made over the games played.
+  total_games_lost: The player's total games lost over the games played.
+  total_games_played: The player's total games played over the games played.
+  total_games_won: The player's total games won over the games played.
+  total_play_time_in_seconds: The player's total playing time in seconds over the
+    games played.
+  total_plus_minus: The player's total plus/minus (point differential while on court)
+    over the games played.
+  total_points: The player's total points over the games played.
+  total_points_from_turnovers: The player's total points from turnovers over the games
+    played.
+  total_points_in_the_paint: The player's total points in the paint over the games
+    played.
+  total_quadruple_doubles: The player's total quadruple-doubles over the games played.
+  total_quintuple_doubles: The player's total quintuple-doubles over the games played.
+  total_rebounds: The player's total rebounds over the games played.
+  total_rebounds_defensive: The player's total defensive rebounds over the games played.
+  total_rebounds_offensive: The player's total offensive rebounds over the games played.
+  total_second_chance_points: The player's total second-chance points over the games
+    played.
+  total_steals: The player's total steals over the games played.
+  total_three_points_attempted: The player's total three-point field goals attempted
+    over the games played.
+  total_three_points_made: The player's total three-point field goals made over the
+    games played.
+  total_triple_doubles: The player's total triple-doubles over the games played.
+  total_turnovers: The player's total turnovers over the games played.
+  total_two_points_attempted: The player's total two-point field goals attempted over
+    the games played.
+  total_two_points_made: The player's total two-point field goals made over the games
+    played.
+  turnovers_per_game: The player's average turnovers per game played.
+  two_points_attempted_per_game: The player's average two-point field goals attempted
+    per game played.
+  two_points_made_per_game: The player's average two-point field goals made per game
+    played.
+  two_points_percentage: Two-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+fiba_gdap_ranking_zones:
+  code: Ranking zone code (W, AF, AM, AS, EU).
+  official_name: Official name of the ranking zone (World, FIBA Europe, FIBA Americas...).
+  zone_ranking_id: 'Ranking zone id (getgdaprankingzones key space: 1 = World ...
+    5 = Europe).'
+fiba_gdap_roster:
+  club_country_fiba_code: FIBA code of the club's country.
+  club_id: Organisation id of the player's club (organisationId key space).
+  club_name: Club at the time of the competition.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  country_fiba_code: FIBA code of the country the person represents.
+  date_of_birth: Date of birth, YYYY-MM-DD.
+  final_roster_member_status_code: 'Roster entry status: VALID, PARTIAL (incomplete
+    registration).'
+  first_name: Given name(s) as registered with FIBA.
+  games_played: Games played in the competition.
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  height_in_cm: Player height in centimetres.
+  height_in_feet_inches: Height, feet and inches string (6'7").
+  is_captain: True for the team captain.
+  is_on_final_roster: True when on the final (12-player) roster.
+  is_player_free_agent: True when the player had no club.
+  last_name: 'Last name (officials: upper case).'
+  nationality: FIBA code of the main nationality.
+  organisation_id: Stable federation or club id (Int64), the same in every competition
+    and season (64 = Germany).
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  position: 'Playing position (roster: Point Guard...; game page: PG, SG, SF, PF,
+    C).'
+  team_code: Team code (FIBA country code or club abbreviation).
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_name: Team name (the country for a national team, the club for a club team).
+  uniform_name: Name printed on the jersey.
+  uniform_number: Jersey number (a string).
+fiba_gdap_roster_coaches:
+  coach_display_order: Display order; null when unset.
+  coach_license_country_code: FIBA code of the licensing federation's country.
+  coach_license_organisation_name: Federation that issued the coaching licence.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  final_roster_member_status_code: 'Roster entry status: VALID, PARTIAL (incomplete
+    registration).'
+  first_name: Given name(s) as registered with FIBA.
+  function: 'Role: Head Coach, Coach, Assistant Coach.'
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  is_accompanying_coach: Accompanying-coach flag; always null in the samples, values
+    unverified.
+  is_assistant_coach: 1 for an assistant coach, else null (integer flag).
+  is_head_coach: 1 for the head coach, 0 otherwise (an integer flag, not a boolean).
+  is_on_final_roster: True when on the final (12-player) roster.
+  last_name: 'Last name (officials: upper case).'
+  nationalities: Nationalities (FIBA codes on player info; country objects on rosters
+    and officials). Stored as a JSON string.
+  organisation_id: Stable federation or club id (Int64), the same in every competition
+    and season (64 = Germany).
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  team_code: Team code (FIBA country code or club abbreviation).
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_name: Team name (the country for a national team, the club for a club team).
+fiba_gdap_roster_latest:
+  club_country_fiba_code: FIBA code of the club's country.
+  club_id: Organisation id of the player's club (organisationId key space).
+  club_name: Club at the time of the competition.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  country_fiba_code: FIBA code of the country the person represents.
+  date_of_birth: Date of birth, YYYY-MM-DD.
+  final_roster_member_status_code: 'Roster entry status: VALID, PARTIAL (incomplete
+    registration).'
+  first_name: Given name(s) as registered with FIBA.
+  games_played: Games played in the competition.
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  height_in_cm: Player height in centimetres.
+  height_in_feet_inches: Height, feet and inches string (6'7").
+  is_captain: True for the team captain.
+  is_on_final_roster: True when on the final (12-player) roster.
+  is_player_free_agent: True when the player had no club.
+  last_name: 'Last name (officials: upper case).'
+  nationality: FIBA code of the main nationality.
+  organisation_id: Stable federation or club id (Int64), the same in every competition
+    and season (64 = Germany).
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  position: 'Playing position (roster: Point Guard...; game page: PG, SG, SF, PF,
+    C).'
+  team_code: Team code (FIBA country code or club abbreviation).
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_name: Team name (the country for a national team, the club for a club team).
+  uniform_name: Name printed on the jersey.
+  uniform_number: Jersey number (a string).
+fiba_gdap_round_gamedays:
+  competition_id: FIBA competition id (Int64) the rounds belong to; the comp argument.
+  gamedays: Game days of the round as a JSON string; empty (null) for the competitions
+    sampled.
+  round_end_date: Round end, local date-time (23:59:59.9999999 on the last day).
+  round_game_system: Pairing system label (Single, Home and Away, Best of 3).
+  round_game_system_code: 'Pairing system code: S single game, HA home and away, BOF3
+    best of three.'
+  round_has_teams_assigned: True once the round's teams are known.
+  round_parent_round_id: roundId of the round this one belongs to; null for a top-level
+    round.
+  round_qualified_team_information: Qualification note of the round; null in every
+    sample.
+  round_round_code: Round code (GP group phase, QF, SF, F final, RS regular season,
+    CL17-32 classification...).
+  round_round_id: Round id (GDAP key space, unique across competitions); the first
+    segment of gameName.
+  round_round_kind: Standard Round or Qualifiers.
+  round_round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_round_number: Round number within the competition (1-based).
+  round_round_order: Display order of the round.
+  round_round_status_code: 'Round status: COMPL completed, PROGR in progress, CLOS
+    closed.'
+  round_round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  round_round_type_code: 'Round type code: G group, NG non-group (knockout), S super
+    round.'
+  round_standing_header_code: Code of the standings table the round feeds.
+  round_standing_header_name: Name of the standings table the round feeds.
+  round_start_date: Round start, local date-time.
+fiba_gdap_round_standings:
+  draw_points: Points for a draw (0); null when not applicable.
+  final_position: Final position in the group.
+  games_lost: Losses in the group.
+  games_played: Games played in the group.
+  games_won: Wins in the group.
+  group_game_results: This team's games in the group. Stored as a JSON string.
+  group_name: Group name within the round (A, B...).
+  group_status_code: Group status code (COMPL when the group is complete).
+  penalty_points: Standing points deducted.
+  plus_minus: Point differential (pointsFor - pointsAgainst).
+  points: Standing points (2 per win, 1 per loss).
+  points_against: Points conceded.
+  points_for: Points the team scored in the group's games.
+  rank: Rank in the group.
+  round_code: Round code (a short code such as G or F).
+  round_id: Round id (Int64) the group belongs to.
+  round_name: Round name (Preliminary Round, Final Round...).
+  starting_position: Seed / draw position in the group.
+  team_code: Team code (FIBA country code or club abbreviation).
+  team_official_name: Official team name (the country for a national team, the club
+    for a club team).
+  team_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
+  team_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+fiba_gdap_rounds:
+  end_date: Round end, local date-time (23:59:59.9999999 on the last day).
+  game_system: Pairing system label (Single, Home and Away, Best of 3).
+  game_system_code: 'Pairing system code: S single game, HA home and away, BOF3 best
+    of three.'
+  has_teams_assigned: True once the round's teams are known.
+  parent_round_id: roundId of the round this one belongs to; null for a top-level
+    round.
+  qualified_team_information: Qualification note of the round; null in every sample.
+  round_code: Round code (GP group phase, QF, SF, F final, RS regular season, CL17-32
+    classification...).
+  round_id: Round id (GDAP key space, unique across competitions); the first segment
+    of gameName.
+  round_kind: Standard Round or Qualifiers.
+  round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_number: Round number within the competition (1-based).
+  round_order: Display order of the round.
+  round_status_code: 'Round status: COMPL completed, PROGR in progress, CLOS closed.'
+  round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  round_type_code: 'Round type code: G group, NG non-group (knockout), S super round.'
+  standing_header_code: Code of the standings table the round feeds.
+  standing_header_name: Name of the standings table the round feeds.
+  start_date: Round start, local date-time.
+fiba_gdap_schedule:
+  chrono: Game clock of the current period, 'mm:ss' ('00:00' when finished).
+  competition_age_category: Age category (Senior, Under 16...).
+  competition_competition_category_age_type: 'Age type code: S senior, U16.'
+  competition_competition_category_code: Category code (WC World Cup, OLY Olympic
+    Tournament, CCC-1 continental club tier 1).
+  competition_competition_category_is_league: True for league-format club competitions.
+  competition_competition_category_name: Name of the competition's category (FIBA
+    Basketball World Cup, Olympic Basketball Tournament...).
+  competition_competition_code: Competition code (WMM men's World Cup, WOLYM, BCL,
+    ELW...).
+  competition_competition_id: 'FIBA competition id (GDAP key space): one per edition
+    (2023 World Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  competition_competition_marketing_name_code: Family code; null in every sample.
+  competition_competition_marketing_name_competition_marketing_name_id: Competition
+    family id (201 = World Cup, 112 = BCL tier 1, 211 = EuroLeague Women); the <histId>
+    of /en/history/ pages.
+  competition_competition_marketing_name_marketing_name: Competition family name;
+    slugified it is the <histSlug> of /en/history/ pages.
+  competition_competition_type: National Teams or Clubs.
+  competition_discipline: Discipline (Basketball; 3x3 is a separate platform).
+  competition_end: Last day, YYYY-MM-DD.
+  competition_fiba_zone: FIBA zone the competition belongs to (World, Europe, Americas...).
+  competition_gender: 'Men or Women: the gender of the competition.'
+  competition_official: Official-status label.
+  competition_official_flag_item_code: 'Official-status code: O = official.'
+  competition_official_flag_item_name: Official-status label.
+  competition_official_name: Edition title (FIBA Basketball World Cup; Paris 2024
+    Men's Olympic Basketball Tournament).
+  competition_season: 'Season key, three rules: the END year for club competitions
+    (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023
+    = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament
+    year, not the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket
+    2029 pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision.'
+  competition_start: First day, YYYY-MM-DD.
+  competition_status: 'Competition status: In Progress, Completed, Closed.'
+  competition_zone_information_top_zone_code: Parent zone code; always null in the
+    samples, values unverified.
+  competition_zone_information_top_zone_id: Parent zone id; null for top zones.
+  competition_zone_information_top_zone_official_name: Parent zone name; always null
+    in the samples, values unverified.
+  competition_zone_information_zone_code: Zone code (W, E, AF, AM, AS, OC).
+  competition_zone_information_zone_id: FIBA zone id (1 = World, 23 = Europe; zone
+    table key space).
+  competition_zone_information_zone_official_name: Official name of the competition's
+    FIBA zone (FIBA Europe, FIBA Americas, World).
+  current_period: Last period reached ('Q4', 'OT1').
+  current_period_status: 'State of the current period: E = ended (the only value sampled).'
+  game_date_time: Tip-off in venue-local wall-clock time, ISO 8601 without offset
+    (T00:00:00 when hasTimeGameDateTime is false).
+  game_date_time_utc: Tip-off in UTC, ISO 8601 without the Z.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  game_name: Technical game name '<roundId>-<groupPairingCode>-<gameNumber>'.
+  game_number: 'Game number within the round or pairing (a string: ''1'', ''A'').'
+  game_play_by_play_status_code: 'Play-by-play availability flag: VALID or EMPTY.
+    UNRELIABLE: World Cup 2014 and EuroBasket 2017 say EMPTY but their game pages
+    carry full play-by-play; always check the page.'
+  game_result_additional_information: Free-text result note (forfeit, overtime remark);
+    null when none.
+  game_result_status_code: 'Result validation status: VALID.'
+  game_statistic_status_code: 'Box-score validation status: VALID.'
+  group_id: Group id (GDAP key space).
+  group_pairing_code: Group letter (group play) or pairing number (knockout bracket
+    slot).
+  has_time_game_date_time: False when only the date is known (the time part is then
+    00:00:00).
+  host_city: City of the venue.
+  host_country: Country of the venue (name; a FIBA code in getgdapgameswithleaderdetailsbyteamid).
+  host_country_code: FIBA code of the venue's country.
+  iana_time_zone: IANA time zone of the venue.
+  is_live: True while the game is being played.
+  is_played_behind_closed_doors: True when played without spectators.
+  is_postponed: True when the game was postponed.
+  live_game_status: 'Live state code: 999 on every finished game; 5 seen on a finished
+    2024 youth game; mapping unverified.'
+  round_end_date: Round end, local date-time (23:59:59.9999999 on the last day).
+  round_game_system: Pairing system label (Single, Home and Away, Best of 3).
+  round_game_system_code: 'Pairing system code: S single game, HA home and away, BOF3
+    best of three.'
+  round_round_code: Round code (GP group phase, QF, SF, F final, RS regular season,
+    CL17-32 classification...).
+  round_round_id: Round id (GDAP key space, unique across competitions); the first
+    segment of gameName.
+  round_round_kind: Standard Round or Qualifiers.
+  round_round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  round_round_number: Round number within the competition (1-based).
+  round_round_order: Display order of the round.
+  round_round_status_code: 'Round status: COMPL completed, PROGR in progress, CLOS
+    closed.'
+  round_round_type: 'Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid
+    uses the code G/NG here).'
+  round_start_date: Round start, local date-time.
+  spectators: Attendance at the game, as recorded by FIBA.
+  statistic_system: 'Live-stats system that scored the game: OVR (FIBA''s Olympic/World
+    Cup system), FLS (FIBA LiveStats), null before about 2006.'
+  status_code: 'Game status code: VALID (validated result), CLOS (closed, pre-2000
+    rows).'
+  team_a_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as OOST).'
+  team_a_from: How team A qualified for this slot ('Winner of Game 87', '1st of group
+    C'); null in group play.
+  team_a_official_name: 'Official name of team A: the country for a national team,
+    the club for a club team.'
+  team_a_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_a_score: Final score of team A.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
+  team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_b_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as NANT).'
+  team_b_from: How team B qualified for this slot ('Winner of Game 88', '2nd of group
+    A'); null in group play.
+  team_b_official_name: 'Official name of team B: the country for a national team,
+    the club for a club team.'
+  team_b_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_b_score: Final score of team B.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
+  team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  utc_offset: Venue UTC offset at tip-off, hours.
+  venue_capacity: Venue capacity (0 = unknown).
+  venue_id: Venue id (GDAP key space; 0 = unknown).
+  venue_name: Name of the arena the game is played in.
+  window_code: Qualifier window code; null otherwise.
+  window_name: Qualifier window name; null otherwise.
+fiba_gdap_team_games:
+  buy_tickets_url: Ticket link; always '' in the samples.
+  game_date_time: Tip-off in venue-local wall-clock time, ISO 8601 without offset
+    (T00:00:00 when hasTimeGameDateTime is false).
+  game_date_time_utc: Tip-off in UTC, ISO 8601 without the Z.
+  game_day: Game day number within the round.
+  game_id: 'FIBA game id, global across competitions (GDAP key space): gdapGameId,
+    the <gameId> of a game-page URL.'
+  game_number: 'Game number within the round or pairing (a string: ''1'', ''A'').'
+  game_play_by_play_status_code: 'Play-by-play availability flag: VALID or EMPTY.
+    UNRELIABLE: World Cup 2014 and EuroBasket 2017 say EMPTY but their game pages
+    carry full play-by-play; always check the page.'
+  game_result_additional_information: Free-text result note (forfeit, overtime remark);
+    null when none.
+  game_result_status_code: 'Result validation status: VALID.'
+  game_statistic_status_code: 'Box-score validation status: VALID.'
+  has_time_game_date_time: False when only the date is known (the time part is then
+    00:00:00).
+  host_city: City of the venue.
+  host_country: Country of the venue (name; a FIBA code in getgdapgameswithleaderdetailsbyteamid).
+  host_country_code: FIBA code of the venue's country; always null in the samples,
+    values unverified.
+  iana_time_zone: IANA time zone of the venue.
+  is_live: True while the game is being played.
+  is_played_behind_closed_doors: True when played without spectators.
+  is_postponed: True when the game was postponed.
+  leaders_team_a_assists_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_a_assists_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_a_assists_leader_nationality: FIBA code of the main nationality.
+  leaders_team_a_assists_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_a_assists_leader_rank: Rank (1 = first).
+  leaders_team_a_assists_leader_statistics_value: Leader's value for the statistic.
+  leaders_team_a_points_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_a_points_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_a_points_leader_nationality: FIBA code of the main nationality.
+  leaders_team_a_points_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_a_points_leader_rank: Rank (1 = first).
+  leaders_team_a_points_leader_statistics_value: Leader's value for the statistic.
+  leaders_team_a_rebounds_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_a_rebounds_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_a_rebounds_leader_nationality: FIBA code of the main nationality.
+  leaders_team_a_rebounds_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_a_rebounds_leader_rank: Rank (1 = first).
+  leaders_team_a_rebounds_leader_statistics_value: Leader's value for the statistic.
+  leaders_team_b_assists_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_b_assists_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_b_assists_leader_nationality: FIBA code of the main nationality.
+  leaders_team_b_assists_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_b_assists_leader_rank: Rank (1 = first).
+  leaders_team_b_assists_leader_statistics_value: Leader's value for the statistic.
+  leaders_team_b_points_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_b_points_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_b_points_leader_nationality: FIBA code of the main nationality.
+  leaders_team_b_points_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_b_points_leader_rank: Rank (1 = first).
+  leaders_team_b_points_leader_statistics_value: Leader's value for the statistic.
+  leaders_team_b_rebounds_leader_first_name: Given name(s) as registered with FIBA.
+  leaders_team_b_rebounds_leader_last_name: 'Last name (officials: upper case).'
+  leaders_team_b_rebounds_leader_nationality: FIBA code of the main nationality.
+  leaders_team_b_rebounds_leader_player_id: 'FIBA person id, global across competitions
+    and roles (player, coach, official): roster personId = play-by-play pId = game-page
+    P_<id> = gdapPlayerId.'
+  leaders_team_b_rebounds_leader_rank: Rank (1 = first).
+  leaders_team_b_rebounds_leader_statistics_value: Leader's value for the statistic.
+  periods: Score by period. Stored as a JSON string.
+  round_name: Round label (Group Phase, Quarter-Finals, Final...).
+  spectators: Attendance at the game, as recorded by FIBA.
+  status: Game status label (Validated).
+  status_code: 'Game status code: VALID (validated result), CLOS (closed, pre-2000
+    rows).'
+  team_a_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as OOST).'
+  team_a_from: How team A qualified for this slot; null in group play.
+  team_a_official_name: 'Official name of team A: the country for a national team,
+    the club for a club team.'
+  team_a_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_a_score: Team A points in the period.
+  team_a_short_name: 'Short name of team A: the country code for a national team,
+    the club''s short name for a club.'
+  team_a_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  team_b_code: 'Team code (national: FIBA country code; club: a club abbreviation
+    such as NANT).'
+  team_b_from: How team B qualified for this slot; null in group play.
+  team_b_official_name: 'Official name of team B: the country for a national team,
+    the club for a club team.'
+  team_b_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  team_b_score: Team B points in the period.
+  team_b_short_name: 'Short name of team B: the country code for a national team,
+    the club''s short name for a club.'
+  team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  utc_offset: Venue UTC offset at tip-off, hours.
+  venue_capacity: Venue capacity (0 = unknown).
+  venue_id: Venue id (GDAP key space; 0 = unknown).
+  venue_name: Name of the arena the game is played in.
+  watch_url: Stream link; always '' in the samples.
+fiba_gdap_team_player_stats:
+  assists_per_game: The player's average assists per game played.
+  blocks_per_game: The player's average blocked shots per game played.
+  competition_id: FIBA competition id (Int64) the averages belong to.
+  efficiency_per_game: The player's average efficiency (FIBA EFF) per game played.
+  fast_break_points_per_game: The player's average fast-break points per game played.
+  field_goals_attempted_per_game: The player's average field goals attempted per game
+    played.
+  field_goals_made_per_game: The player's average field goals made per game played.
+  field_goals_percentage: Field-goal percentage, 0-100 (over the competition; full
+    float precision in averages).
+  first_name: Given name(s) as registered with FIBA.
+  fouls_per_game: The player's average personal fouls per game played.
+  free_throws_attempted_per_game: The player's average free throws attempted per game
+    played.
+  free_throws_made_per_game: The player's average free throws made per game played.
+  free_throws_percentage: Free-throw percentage, 0-100 (over the competition; full
+    float precision in averages).
+  last_name: 'Last name (officials: upper case).'
+  play_time_in_seconds_per_game: The player's average playing time in seconds per
+    game played.
+  player_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  plus_minus_per_game: The player's average plus/minus (point differential while on
+    court) per game played.
+  points_from_turnovers_per_game: The player's average points from turnovers per game
+    played.
+  points_in_the_paint_per_game: The player's average points in the paint per game
+    played.
+  points_per_game: The player's average points per game played.
+  rank: Rank (1 = first).
+  rebounds_defensive_per_game: The player's average defensive rebounds per game played.
+  rebounds_offensive_per_game: The player's average offensive rebounds per game played.
+  rebounds_per_game: The player's average rebounds per game played.
+  second_chance_points_per_game: The player's average second-chance points per game
+    played.
+  steals_per_game: The player's average steals per game played.
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  three_points_attempted_per_game: The player's average three-point field goals attempted
+    per game played.
+  three_points_made_per_game: The player's average three-point field goals made per
+    game played.
+  three_points_percentage: Three-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+  total_assists: The player's total assists over the games played.
+  total_blocks: The player's total blocked shots over the games played.
+  total_double_doubles: The player's total double-doubles over the games played.
+  total_efficiency: The player's total efficiency (FIBA EFF) over the games played.
+  total_fast_break_points: The player's total fast-break points over the games played.
+  total_field_goals_attempted: The player's total field goals attempted over the games
+    played.
+  total_field_goals_made: The player's total field goals made over the games played.
+  total_fouls: The player's total personal fouls over the games played.
+  total_free_throws_attempted: The player's total free throws attempted over the games
+    played.
+  total_free_throws_made: The player's total free throws made over the games played.
+  total_games_lost: The player's total games lost over the games played.
+  total_games_played: The player's total games played over the games played.
+  total_games_won: The player's total games won over the games played.
+  total_play_time_in_seconds: The player's total playing time in seconds over the
+    games played.
+  total_plus_minus: The player's total plus/minus (point differential while on court)
+    over the games played.
+  total_points: The player's total points over the games played.
+  total_points_from_turnovers: The player's total points from turnovers over the games
+    played.
+  total_points_in_the_paint: The player's total points in the paint over the games
+    played.
+  total_quadruple_doubles: The player's total quadruple-doubles over the games played.
+  total_quintuple_doubles: The player's total quintuple-doubles over the games played.
+  total_rebounds: The player's total rebounds over the games played.
+  total_rebounds_defensive: The player's total defensive rebounds over the games played.
+  total_rebounds_offensive: The player's total offensive rebounds over the games played.
+  total_second_chance_points: The player's total second-chance points over the games
+    played.
+  total_steals: The player's total steals over the games played.
+  total_three_points_attempted: The player's total three-point field goals attempted
+    over the games played.
+  total_three_points_made: The player's total three-point field goals made over the
+    games played.
+  total_triple_doubles: The player's total triple-doubles over the games played.
+  total_turnovers: The player's total turnovers over the games played.
+  total_two_points_attempted: The player's total two-point field goals attempted over
+    the games played.
+  total_two_points_made: The player's total two-point field goals made over the games
+    played.
+  turnovers_per_game: The player's average turnovers per game played.
+  two_points_attempted_per_game: The player's average two-point field goals attempted
+    per game played.
+  two_points_made_per_game: The player's average two-point field goals made per game
+    played.
+  two_points_percentage: Two-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+  uniform_number: Jersey number (a string).
+fiba_gdap_team_staff:
+  coach_display_order: Display order; null when unset.
+  coach_license_country_code: FIBA code of the licensing federation's country.
+  coach_license_organisation_name: Federation that issued the coaching licence.
+  final_roster_member_status_code: Roster entry status; always null in the samples,
+    values unverified.
+  first_name: Given name(s) as registered with FIBA.
+  function: 'Role: Head Coach, Coach, Assistant Coach.'
+  gender: 'Sex of the person: M or F (Male/Female on getgdapcompetitionnominationsbyid).'
+  is_accompanying_coach: Accompanying-coach flag; always null in the samples, values
+    unverified.
+  is_assistant_coach: 1 for an assistant coach, else null (integer flag).
+  is_head_coach: 1 for the head coach, 0 otherwise (an integer flag, not a boolean).
+  is_on_final_roster: True when on the final (12-player) roster.
+  last_name: 'Last name (officials: upper case).'
+  nationalities: Nationalities (FIBA codes on player info; country objects on rosters
+    and officials). Stored as a JSON string.
+  person_id: 'FIBA person id, global across competitions and roles (player, coach,
+    official): roster personId = play-by-play pId = game-page P_<id> = gdapPlayerId.'
+  team_code: Team code (GER, USA...) the coach is registered with.
+  team_id: FIBA team id (Int64), one per team per competition; the team the coach
+    is registered with.
+  team_name: Team name the coach is registered with.
+fiba_gdap_team_stats:
+  assists_per_game: The team's average assists per game played.
+  bench_fouls_per_game: The bench players' average personal fouls per game played.
+  bench_rebounds_defensive_per_game: The bench players' average defensive rebounds
+    per game played.
+  bench_rebounds_offensive_per_game: The bench players' average offensive rebounds
+    per game played.
+  bench_rebounds_per_game: The bench players' average rebounds per game played.
+  bench_total_fouls: The bench players' total personal fouls over the games played.
+  bench_total_games_played: The bench players' total games played over the games played.
+  bench_total_rebounds: The bench players' total rebounds over the games played.
+  bench_total_rebounds_defensive: The bench players' total defensive rebounds over
+    the games played.
+  bench_total_rebounds_offensive: The bench players' total offensive rebounds over
+    the games played.
+  bench_total_turnovers: The bench players' total turnovers over the games played.
+  bench_turnovers_per_game: The bench players' average turnovers per game played.
+  biggest_lead: Team's biggest lead in any game of the competition, points.
+  blocks_per_game: The team's average blocked shots per game played.
+  competition_id: 'FIBA competition id (GDAP key space): one per edition (2023 World
+    Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  efficiency_per_game: The team's average efficiency (FIBA EFF) per game played.
+  fast_break_points_per_game: The team's average fast-break points per game played.
+  field_goals_attempted_per_game: The team's average field goals attempted per game
+    played.
+  field_goals_made_per_game: The team's average field goals made per game played.
+  field_goals_percentage: Field-goal percentage, 0-100 (over the competition; full
+    float precision in averages).
+  fouls_per_game: The bench players' average personal fouls per game played.
+  free_throws_attempted_per_game: The team's average free throws attempted per game
+    played.
+  free_throws_made_per_game: The team's average free throws made per game played.
+  free_throws_percentage: Free-throw percentage, 0-100 (over the competition; full
+    float precision in averages).
+  from_bench_points_per_game: The team's average points by bench players per game
+    played.
+  play_time_in_seconds_per_game: The team's average playing time in seconds per game
+    played.
+  plus_minus_per_game: The team's average plus/minus (point differential while on
+    court) per game played.
+  points_from_turnovers_per_game: The team's average points from turnovers per game
+    played.
+  points_in_the_paint_per_game: The team's average points in the paint per game played.
+  points_per_game: The team's average points per game played.
+  rebounds_defensive_per_game: The bench players' average defensive rebounds per game
+    played.
+  rebounds_offensive_per_game: The bench players' average offensive rebounds per game
+    played.
+  rebounds_per_game: The bench players' average rebounds per game played.
+  second_chance_points_per_game: The team's average second-chance points per game
+    played.
+  steals_per_game: The team's average steals per game played.
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  three_points_attempted_per_game: The team's average three-point field goals attempted
+    per game played.
+  three_points_made_per_game: The team's average three-point field goals made per
+    game played.
+  three_points_percentage: Three-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+  total_assists: The team's total assists over the games played.
+  total_blocks: The team's total blocked shots over the games played.
+  total_double_doubles: The team's total double-doubles over the games played.
+  total_efficiency: The team's total efficiency (FIBA EFF) over the games played.
+  total_fast_break_points: The team's total fast-break points over the games played.
+  total_field_goals_attempted: The team's total field goals attempted over the games
+    played.
+  total_field_goals_made: The team's total field goals made over the games played.
+  total_fouls: The bench players' total personal fouls over the games played.
+  total_free_throws_attempted: The team's total free throws attempted over the games
+    played.
+  total_free_throws_made: The team's total free throws made over the games played.
+  total_from_bench_points: The team's total points by bench players over the games
+    played.
+  total_games_lost: The team's total games lost over the games played.
+  total_games_played: The bench players' total games played over the games played.
+  total_games_won: The team's total games won over the games played.
+  total_play_time_in_seconds: The team's total playing time in seconds over the games
+    played.
+  total_plus_minus: The team's total plus/minus (point differential while on court)
+    over the games played.
+  total_points: The team's total points over the games played.
+  total_points_from_turnovers: The team's total points from turnovers over the games
+    played.
+  total_points_in_the_paint: The team's total points in the paint over the games played.
+  total_quadruple_doubles: The team's total quadruple-doubles over the games played.
+  total_quintuple_doubles: The team's total quintuple-doubles over the games played.
+  total_rebounds: The bench players' total rebounds over the games played.
+  total_rebounds_defensive: The bench players' total defensive rebounds over the games
+    played.
+  total_rebounds_offensive: The bench players' total offensive rebounds over the games
+    played.
+  total_second_chance_points: The team's total second-chance points over the games
+    played.
+  total_steals: The team's total steals over the games played.
+  total_three_points_attempted: The team's total three-point field goals attempted
+    over the games played.
+  total_three_points_made: The team's total three-point field goals made over the
+    games played.
+  total_triple_doubles: The team's total triple-doubles over the games played.
+  total_turnovers: The bench players' total turnovers over the games played.
+  total_two_points_attempted: The team's total two-point field goals attempted over
+    the games played.
+  total_two_points_made: The team's total two-point field goals made over the games
+    played.
+  turnovers_per_game: The bench players' average turnovers per game played.
+  two_points_attempted_per_game: The team's average two-point field goals attempted
+    per game played.
+  two_points_made_per_game: The team's average two-point field goals made per game
+    played.
+  two_points_percentage: Two-point field-goal percentage, 0-100 (over the competition;
+    full float precision in averages).
+fiba_gdap_teams:
+  organisation_id: 'Organisation id, stable across competitions and seasons: the national
+    federation for a national team (64 = Germany), the club for a club team (396 =
+    Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  profile_assists_per_game: The team's average assists per game played.
+  profile_code: Team code (FIBA country code or club abbreviation).
+  profile_competition_id: 'FIBA competition id (GDAP key space): one per edition (2023
+    World Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId.'
+  profile_country_code: Country FIBA code.
+  profile_country_name: Country of the team, in English.
+  profile_facebook: Facebook handle or URL; always null in the samples, values unverified.
+  profile_final_ranking: Final rank in the competition.
+  profile_gender: 'Men or Women: the gender of the team''s competition.'
+  profile_instagram: Instagram handle; always null in the samples, values unverified.
+  profile_name: Team name as registered for the competition.
+  profile_organisation_id: 'Organisation id, stable across competitions and seasons:
+    the national federation for a national team (64 = Germany), the club for a club
+    team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play
+    oId and the game page''s T_<id>.'
+  profile_points_per_game: The team's average points per game played.
+  profile_rank_assists_per_game: Rank in the competition by assists per game (1 =
+    highest).
+  profile_rank_points_per_game: Rank in the competition by points per game (1 = highest).
+  profile_rank_rebounds_per_game: Rank in the competition by rebounds per game (1
+    = highest).
+  profile_rebounds_per_game: The team's average rebounds per game played.
+  profile_social_networks: Social-network handles. Stored as a JSON string.
+  profile_team_id: 'Competition team id: one per team per competition (Germany = 279569
+    at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
+  profile_total_games_lost: The team's total games lost over the games played.
+  profile_total_games_won: The team's total games won over the games played.
+  profile_twitter: X/Twitter handle; always null in the samples, values unverified.
+  profile_website: The team's website address.
+  profile_you_tube: YouTube handle; always null in the samples, values unverified.
+  short_name: 'Short team name: the country code for a national team, the club''s
+    short name for a club.'
+  status_code: 'Team entry status: APPR approved.'
+  status_name: Team entry status label (Approved).
+  team_code: Team abbreviation (FIBA country code or club abbreviation).
+  team_id: 'Competition team id: one per team per competition (Germany = 279569 at
+    the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
+    / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'

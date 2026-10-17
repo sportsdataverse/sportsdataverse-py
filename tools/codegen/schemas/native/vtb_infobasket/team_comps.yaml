@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: comp_id
+  type: integer
+- description: ''
+  name: comp_type
+  type: integer
+- description: ''
+  name: comp_sort
+  type: integer
+- description: ''
+  name: level
+  type: integer
+- description: ''
+  name: comp_name_ru
+  type: character
+- description: ''
+  name: comp_name_en
+  type: character
+- description: ''
+  name: parent_comp_id
+  type: integer
+kind: dataframe
+schema: vtb_infobasket_team_comps

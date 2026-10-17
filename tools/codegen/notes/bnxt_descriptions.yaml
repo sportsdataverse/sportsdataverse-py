@@ -1,0 +1,954 @@
+sportpress_club_seasons:
+  season: Season END year in which the clubs (countries) have teams; includes 2021
+    = 2020-21.
+sportpress_competition_staff:
+  competition_id: Competition id of the team the staff member works for.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  name: Staff member name 'First Last' (free text).
+  staff_id: 'Staff member id (key space: sportpress staff).'
+  title_id: 'Staff title id: 1 = Head coach; Assistant coach has its own id.'
+  title_name: 'Staff title in English: Head coach or Assistant coach.'
+sportpress_competition_teams:
+  club_id: 'Country of the team (key space: sportpress clubs): 1 = Belgium, 2 = Netherlands.
+    The provider calls the country a club.'
+  club_name: Country name in English, Belgium or Netherlands.
+  competition_id: 'Competition id the team plays in (key space: sportpress competitions);
+    the competition_id the route was asked for.'
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  season: Season END year of the team's competition.
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  uu_team_id: 'Stable club key across seasons (key space: sportpress clubs-as-teams);
+    competition_team_id changes every season, this does not.'
+sportpress_game_box:
+  assist: Assists (passes leading directly to a made basket).
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  block: Shots blocked by the player.
+  block_against: Own shots blocked by an opponent.
+  competition_id: Competition id the box score was asked for; checked against the
+    game.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'Fouls DRAWN (suffered), despite the name: equals the opponent''s
+    foul count up to scorer corrections.'
+  defensive_rebound: Defensive rebounds.
+  dunk_all: Dunks attempted.
+  dunk_made: Dunks made (a subset of the two-point field goals).
+  dunk_percent: Dunk percentage 0-100; 0 when none were attempted.
+  first_name: Given name of the player as entered in the CMS.
+  foul: Personal fouls committed.
+  free_throw_all: Free throws attempted.
+  free_throw_made: Free throws made.
+  free_throw_percent: Free-throw percentage 0-100.
+  game_id: Game id the box score was asked for (the body does not echo it).
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  last_name: Family name of the player as entered in the CMS.
+  minute: Minutes played; for a team total, the sum over its players (200 + 25 per
+    overtime).
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  offensive_rebound: Offensive rebounds.
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  plusminus: 'Plus/minus: the score margin while the player (or team) was on court;
+    for a team total it is the game margin.'
+  points: Points scored (2 x two-pointers + 3 x three-pointers + free throws).
+  position: 'Playing position: point_guard, shooting_guard, small_forward, power_forward
+    or center.'
+  position_id: 'Playing position id (key space: sportpress positions); null on 21
+    of 14,142 sampled lines.'
+  roster_id: Roster id of the line; null when the line has no player (15 of 14,142
+    sampled lines).
+  starter: True when the player was in the starting five.
+  steal: Steals (balls taken from an opponent).
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  three_point_all: Three-point field goals attempted.
+  three_point_made: Three-point field goals made.
+  three_point_percent: Three-point percentage 0-100.
+  throw_all: All field goals attempted, two- plus three-pointers (the provider calls
+    them 'throw').
+  throw_made: All field goals made, two- plus three-pointers (the provider calls them
+    'throw').
+  throw_percent: Field-goal percentage 0-100.
+  total_rebound: Total rebounds (offensive plus defensive).
+  turnover: Turnovers committed.
+  two_point_all: Two-point field goals attempted.
+  two_point_made: Two-point field goals made.
+  two_point_percent: Two-point percentage 0-100.
+  value: 'Efficiency rating (PIR with fouls drawn): points + rebounds + assists +
+    steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers.'
+sportpress_game_film:
+  away_score: Running away score AFTER the event; the maximum is the final score.
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  competition_id: Competition id the film was asked for; checked against the game.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  event_code: 'Provider event code: 1000 made shot, 1001 missed shot, 1002 defensive
+    rebound, 1003 offensive rebound, 1004 steal, 1005 turnover, 1006 foul drawn, 1007
+    foul committed, 1008 assist, 1009 block, 1011 substitution, 1101 period marker;
+    2xxx team events (meaning unverified).'
+  event_subcode: 'Provider sub-type of the event: for shots 1, 2 and 5 = two-pointer,
+    3 = three-pointer, 4 = free throw; turnover and foul sub-types are unnamed by
+    the provider.'
+  first_name: Given name of the player as entered in the CMS.
+  game_id: Game id the film was asked for (the body does not echo it).
+  home_score: Running home score AFTER the event; the maximum is the final score.
+  last_name: Family name of the player as entered in the CMS.
+  minute: Whole minutes ELAPSED in the period (not clock remaining).
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  order: Event sequence number in the game, strictly increasing from 0.
+  period: 'Period of the event: 1-4 quarters, 5 and up overtimes.'
+  player2_first_name: Given name of the second player; substitutions only.
+  player2_id: Player id of the second player; filled on substitutions only.
+  player2_last_name: Family name of the second player; substitutions only.
+  player_id: Player id of the actor; null on team events and period markers.
+  second: Seconds elapsed within that minute.
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  x: Court x position of the event in the provider's integer court coordinates (0
+    on events with none); the coordinate system and orientation are unverified.
+  y: Court y position of the event in the provider's integer court coordinates (0
+    on events with none); the coordinate system and orientation are unverified.
+sportpress_game_find:
+  arena: Name of the arena where the game is played.
+  away_competition_team_id: 'Away side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  away_score: Away side. Final points of the side, including overtime.
+  away_team: 'Away side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  away_team_short_name: Away side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  game_time: Tip-off as a naive datetime. The source carries no offset; the league's
+    local time is assumed and unverified.
+  home_competition_team_id: 'Home side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  home_score: Home side. Final points of the side, including overtime.
+  home_team: 'Home side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  home_team_short_name: Home side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  last_game_id: Latest finished meeting of the same two teams in the competition,
+    which can be LATER than this game; null when none.
+  next_game_id: Next meeting of the same two teams; null in every sample.
+  period_name: Name of the period the game is in or ended in; 'Extra2' means the second
+    overtime.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  phase_name: Phase name as entered in the CMS ('Regular season 2026-27').
+  round_name: Round label as entered in the CMS; often empty.
+  round_priority: Sort order of the round within the phase (provider's priority);
+    meaning of the values is unverified.
+  season: Season END year (2026 = 2025-26), the sdv convention and the API's own season
+    key.
+  status: 'Game status: finished, or ready for an upcoming game.'
+sportpress_game_leaders:
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  first_name: Given name of the player as entered in the CMS.
+  game_id: Game id the overview was asked for (the body does not echo it).
+  last_name: Family name of the player as entered in the CMS.
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  stat: Statistic the leader leads, in the provider's column name (points, total_rebound,
+    value, ...).
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  value: The leader's count (or percentage) in that statistic in this game.
+sportpress_game_overview:
+  assist: 'The team''s total: assists (passes leading directly to a made basket).'
+  block: 'The team''s total: shots blocked by the player.'
+  block_against: 'The team''s total: own shots blocked by an opponent.'
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'The team''s total: fouls DRAWN (suffered), despite the name: equals
+    the opponent''s foul count up to scorer corrections.'
+  defensive_rebound: 'The team''s total: defensive rebounds.'
+  dunk_all: 'The team''s total: dunks attempted.'
+  dunk_made: 'The team''s total: dunks made (a subset of the two-point field goals).'
+  dunk_percent: 'The team''s total: dunk percentage 0-100; 0 when none were attempted.'
+  foul: 'The team''s total: personal fouls committed.'
+  free_throw_all: 'The team''s total: free throws attempted.'
+  free_throw_made: 'The team''s total: free throws made.'
+  free_throw_percent: 'The team''s total: free-throw percentage 0-100.'
+  game_id: Game id the overview was asked for (the body does not echo it).
+  minute: 'The team''s total: minutes played; for a team total, the sum over its players
+    (200 + 25 per overtime).'
+  offensive_rebound: 'The team''s total: offensive rebounds.'
+  plusminus: 'The team''s total: plus/minus: the score margin while the player (or
+    team) was on court; for a team total it is the game margin.'
+  points: 'The team''s total: points scored (2 x two-pointers + 3 x three-pointers
+    + free throws).'
+  score: Final score of the side.
+  steal: 'The team''s total: steals (balls taken from an opponent).'
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  three_point_all: 'The team''s total: three-point field goals attempted.'
+  three_point_made: 'The team''s total: three-point field goals made.'
+  three_point_percent: 'The team''s total: three-point percentage 0-100.'
+  throw_all: 'The team''s total: all field goals attempted, two- plus three-pointers
+    (the provider calls them ''throw'').'
+  throw_made: 'The team''s total: all field goals made, two- plus three-pointers (the
+    provider calls them ''throw'').'
+  throw_percent: 'The team''s total: field-goal percentage 0-100.'
+  total_rebound: 'The team''s total: total rebounds (offensive plus defensive).'
+  turnover: 'The team''s total: turnovers committed.'
+  two_point_all: 'The team''s total: two-point field goals attempted.'
+  two_point_made: 'The team''s total: two-point field goals made.'
+  two_point_percent: 'The team''s total: two-point percentage 0-100.'
+  value: 'The team''s total: efficiency rating (PIR with fouls drawn): points + rebounds
+    + assists + steals + blocks + fouls drawn - missed field goals - missed free throws
+    - turnovers.'
+sportpress_game_periods:
+  competition_team_id: Competition-team id of the side.
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  period: 'Period number: 1-4 are the quarters, 5 and up are overtimes (5 = first
+    overtime).'
+  score: Points the side scored IN that period (not cumulative).
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+sportpress_game_slider:
+  away_competition_team_id: 'Away side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  away_score: Away side. Final points of the side, including overtime.
+  away_team: 'Away side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  away_team_short_name: Away side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  game_time: Tip-off as a naive datetime. The source carries no offset; the league's
+    local time is assumed and unverified.
+  genius_id: 'Genius Sports LiveStats match id (organisation BNXT): the join to the
+    genius family. Upcoming games already carry one; null for the 2020-21 competition.'
+  home_competition_team_id: 'Home side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  home_score: Home side. Final points of the side, including overtime.
+  home_team: 'Home side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  home_team_short_name: Home side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  phase_name: Phase name as entered in the CMS ('Regular season 2026-27').
+  season: Season END year (2026 = 2025-26), the sdv convention and the API's own season
+    key.
+  status: 'Game status: finished, or ready for an upcoming game.'
+sportpress_game_team_box:
+  assist: 'The team''s total: assists (passes leading directly to a made basket).'
+  block: 'The team''s total: shots blocked by the player.'
+  block_against: 'The team''s total: own shots blocked by an opponent.'
+  competition_id: Competition id the box score was asked for; checked against the
+    game.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'The team''s total: fouls DRAWN (suffered), despite the name: equals
+    the opponent''s foul count up to scorer corrections.'
+  defensive_rebound: 'The team''s total: defensive rebounds.'
+  dunk_all: 'The team''s total: dunks attempted.'
+  dunk_made: 'The team''s total: dunks made (a subset of the two-point field goals).'
+  dunk_percent: 'The team''s total: dunk percentage 0-100; 0 when none were attempted.'
+  foul: 'The team''s total: personal fouls committed.'
+  free_throw_all: 'The team''s total: free throws attempted.'
+  free_throw_made: 'The team''s total: free throws made.'
+  free_throw_percent: 'The team''s total: free-throw percentage 0-100.'
+  game_id: Game id the box score was asked for (the body does not echo it).
+  minute: 'The team''s total: minutes played; for a team total, the sum over its players
+    (200 + 25 per overtime).'
+  offensive_rebound: 'The team''s total: offensive rebounds.'
+  plusminus: 'The team''s total: plus/minus: the score margin while the player (or
+    team) was on court; for a team total it is the game margin.'
+  points: Team points in the box score; can differ from the schedule final score (about
+    18 of 1,246 sampled team boxes, by 2-21 points).
+  steal: 'The team''s total: steals (balls taken from an opponent).'
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  three_point_all: 'The team''s total: three-point field goals attempted.'
+  three_point_made: 'The team''s total: three-point field goals made.'
+  three_point_percent: 'The team''s total: three-point percentage 0-100.'
+  throw_all: 'The team''s total: all field goals attempted, two- plus three-pointers
+    (the provider calls them ''throw'').'
+  throw_made: 'The team''s total: all field goals made, two- plus three-pointers (the
+    provider calls them ''throw'').'
+  throw_percent: 'The team''s total: field-goal percentage 0-100.'
+  total_rebound: 'The team''s total: total rebounds (offensive plus defensive).'
+  turnover: 'The team''s total: turnovers committed.'
+  two_point_all: 'The team''s total: two-point field goals attempted.'
+  two_point_made: 'The team''s total: two-point field goals made.'
+  two_point_percent: 'The team''s total: two-point percentage 0-100.'
+  value: 'The team''s total: efficiency rating (PIR with fouls drawn): points + rebounds
+    + assists + steals + blocks + fouls drawn - missed field goals - missed free throws
+    - turnovers.'
+sportpress_game_top_performers:
+  assist: Assists (passes leading directly to a made basket).
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  block: Shots blocked by the player.
+  block_against: Own shots blocked by an opponent.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'Fouls DRAWN (suffered), despite the name: equals the opponent''s
+    foul count up to scorer corrections.'
+  defensive_rebound: Defensive rebounds.
+  dunk_all: Dunks attempted.
+  dunk_made: Dunks made (a subset of the two-point field goals).
+  dunk_percent: Dunk percentage 0-100; 0 when none were attempted.
+  first_name: Given name of the player as entered in the CMS.
+  foul: Personal fouls committed.
+  free_throw_all: Free throws attempted.
+  free_throw_made: Free throws made.
+  free_throw_percent: Free-throw percentage 0-100.
+  game_id: Game id the overview was asked for (the body does not echo it).
+  jersey: Shirt number as text.
+  last_name: Family name of the player as entered in the CMS.
+  minute: Minutes played; for a team total, the sum over its players (200 + 25 per
+    overtime).
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  offensive_rebound: Offensive rebounds.
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  points: Points scored (2 x two-pointers + 3 x three-pointers + free throws).
+  starter: True when the player started the game.
+  steal: Steals (balls taken from an opponent).
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  team_side: 'Side of the game the row belongs to: home or away (the provider''s is_home,
+    or side 1 / 2).'
+  three_point_all: Three-point field goals attempted.
+  three_point_made: Three-point field goals made.
+  three_point_percent: Three-point percentage 0-100.
+  throw_all: All field goals attempted, two- plus three-pointers (the provider calls
+    them 'throw').
+  throw_made: All field goals made, two- plus three-pointers (the provider calls them
+    'throw').
+  throw_percent: Field-goal percentage 0-100.
+  total_rebound: Total rebounds (offensive plus defensive).
+  turnover: Turnovers committed.
+  two_point_all: Two-point field goals attempted.
+  two_point_made: Two-point field goals made.
+  two_point_percent: Two-point percentage 0-100.
+  value: 'Efficiency rating (PIR with fouls drawn): points + rebounds + assists +
+    steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers.'
+sportpress_nationality_codes:
+  nationality_code: A distinct nationality code of the season's players, as served
+    (dirty).
+  season: Season END year the codes were asked for.
+sportpress_phases:
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_name: Competition name, 'BNXT League 2025-2026'.
+  phase_id: 'Phase id (key space: sportpress phases); the {phaseId} of the standings
+    route. New every season.'
+  phase_name: Phase name as entered in the CMS; names differ every season.
+  season: Season END year (2026 = 2025-26), the sdv convention and the API's own season
+    key.
+  standings_visible: Whether the phase shows standings; false for playoff phases,
+    which answer the standings route empty.
+sportpress_player_career:
+  assist: Assists (passes leading directly to a made basket). Per-game mean over the
+    games played (fractional).
+  block: Shots blocked by the player. Per-game mean over the games played (fractional).
+  block_against: Own shots blocked by an opponent. Per-game mean over the games played
+    (fractional).
+  club_id: 'Country of the team (key space: sportpress clubs): 1 = Belgium, 2 = Netherlands.
+    The provider calls the country a club.'
+  club_name: Country name in English, Belgium or Netherlands.
+  competition_id: Competition id of the season row.
+  competition_name: Competition name of the season row.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'Fouls DRAWN (suffered), despite the name: equals the opponent''s
+    foul count up to scorer corrections. Per-game mean over the games played (fractional).'
+  defensive_rebound: Defensive rebounds. Per-game mean over the games played (fractional).
+  dunk_all: Dunks attempted. Per-game mean over the games played (fractional).
+  dunk_made: Dunks made (a subset of the two-point field goals). Per-game mean over
+    the games played (fractional).
+  dunk_percent: Dunk percentage 0-100; 0 when none were attempted. Per-game mean over
+    the games played (fractional).
+  foul: Personal fouls committed. Per-game mean over the games played (fractional).
+  free_throw_all: Free throws attempted. Per-game mean over the games played (fractional).
+  free_throw_made: Free throws made. Per-game mean over the games played (fractional).
+  free_throw_percent: Free-throw percentage 0-100. Per-game mean over the games played
+    (fractional).
+  games_started: Games started (a count, not a mean).
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  minute: Minutes played; for a team total, the sum over its players (200 + 25 per
+    overtime). Per-game mean over the games played (fractional).
+  offensive_rebound: Offensive rebounds. Per-game mean over the games played (fractional).
+  played_games: Games played in the season.
+  points: Points scored (2 x two-pointers + 3 x three-pointers + free throws). Per-game
+    mean over the games played (fractional).
+  position: Playing position; null in every sample.
+  roster_id: Roster id the career was asked for; the rows are the person's seasons,
+    each with its own roster.
+  season: Season END year of the row.
+  steal: Steals (balls taken from an opponent). Per-game mean over the games played
+    (fractional).
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  three_point_all: Three-point field goals attempted. Per-game mean over the games
+    played (fractional).
+  three_point_made: Three-point field goals made. Per-game mean over the games played
+    (fractional).
+  three_point_percent: Three-point percentage 0-100. Per-game mean over the games
+    played (fractional).
+  throw_all: All field goals attempted, two- plus three-pointers (the provider calls
+    them 'throw'). Per-game mean over the games played (fractional).
+  throw_made: All field goals made, two- plus three-pointers (the provider calls them
+    'throw'). Per-game mean over the games played (fractional).
+  throw_percent: Field-goal percentage 0-100. Per-game mean over the games played
+    (fractional).
+  total_rebound: Total rebounds (offensive plus defensive). Per-game mean over the
+    games played (fractional).
+  turnover: Turnovers committed. Per-game mean over the games played (fractional).
+  two_point_all: Two-point field goals attempted. Per-game mean over the games played
+    (fractional).
+  two_point_made: Two-point field goals made. Per-game mean over the games played
+    (fractional).
+  two_point_percent: Two-point percentage 0-100. Per-game mean over the games played
+    (fractional).
+  value: 'Efficiency rating (PIR with fouls drawn): points + rebounds + assists +
+    steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers.
+    Per-game mean over the games played (fractional).'
+sportpress_player_games:
+  arena: Name of the arena where the game is played.
+  assist: Assists (passes leading directly to a made basket).
+  away_competition_team_id: 'Away side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  away_score: Away side. Final points of the side, including overtime.
+  away_team: 'Away side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  away_team_short_name: Away side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  block: Shots blocked by the player.
+  block_against: Own shots blocked by an opponent.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_team_id: Competition-team id the player played for in the game.
+  defensive_foul: 'Fouls DRAWN (suffered), despite the name: equals the opponent''s
+    foul count up to scorer corrections.'
+  defensive_rebound: Defensive rebounds.
+  dunk_all: Dunks attempted.
+  dunk_made: Dunks made (a subset of the two-point field goals).
+  dunk_percent: Dunk percentage 0-100; 0 when none were attempted.
+  foul: Personal fouls committed.
+  free_throw_all: Free throws attempted.
+  free_throw_made: Free throws made.
+  free_throw_percent: Free-throw percentage 0-100.
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  game_time: Tip-off as a naive datetime. The source carries no offset; the league's
+    local time is assumed and unverified.
+  home_competition_team_id: 'Home side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  home_score: Home side. Final points of the side, including overtime.
+  home_team: 'Home side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  home_team_short_name: Home side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  minute: Minutes played; for a team total, the sum over its players (200 + 25 per
+    overtime).
+  offensive_rebound: Offensive rebounds.
+  period_name: Name of the period the game is in or ended in; 'Extra2' means the second
+    overtime.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  phase_name: Phase name as entered in the CMS ('Regular season 2026-27').
+  points: Points scored (2 x two-pointers + 3 x three-pointers + free throws).
+  roster_id: Roster id the lines were asked for.
+  round_name: Round label as entered in the CMS; often empty.
+  round_priority: Sort order of the round within the phase (provider's priority);
+    meaning of the values is unverified.
+  season: Season END year of the game's competition.
+  starter: True when the player started the game.
+  status: 'Game status: finished, or ready for an upcoming game.'
+  steal: Steals (balls taken from an opponent).
+  three_point_all: Three-point field goals attempted.
+  three_point_made: Three-point field goals made.
+  three_point_percent: Three-point percentage 0-100.
+  throw_all: All field goals attempted, two- plus three-pointers (the provider calls
+    them 'throw').
+  throw_made: All field goals made, two- plus three-pointers (the provider calls them
+    'throw').
+  throw_percent: Field-goal percentage 0-100.
+  total_rebound: Total rebounds (offensive plus defensive).
+  turnover: Turnovers committed.
+  two_point_all: Two-point field goals attempted.
+  two_point_made: Two-point field goals made.
+  two_point_percent: Two-point percentage 0-100.
+  value: 'Efficiency rating (PIR with fouls drawn): points + rebounds + assists +
+    steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers.'
+sportpress_player_rankings:
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  category: 'Ranking category: efficiency, points, total_rebound, block, assist, steal,
+    two_point_percent, three_point_percent or free_throw_percent.'
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  first_name: Given name of the player as entered in the CMS.
+  last_name: Family name of the player as entered in the CMS.
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  rank: Place in the category list, 1 = the leader (the list is sorted best first).
+  roster_id: 'Roster id (key space: sportpress roster entries): one player on one
+    competition team in one season, so a player has a new roster_id for every team
+    and season. player_id is the person.'
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  throw_attempted: Field goals attempted per game; filled in the three percentage
+    categories only.
+  throw_made: Field goals made per game; filled in the three percentage categories
+    only.
+  value: The player's per-game mean (or percentage 0-100) in the row's category.
+sportpress_referees:
+  name: Referee name 'First Last' (free text).
+  staff_id: 'Staff member id (key space: sportpress staff); the referees are title
+    2.'
+  title_id: 'Staff title id: 1 = Head coach, 2 = Referee; Assistant coach has its
+    own id.'
+  title_name: 'Staff title in English: Head coach, Assistant coach or Referee.'
+sportpress_roster_find:
+  active: True for a current roster entry; former entries are false.
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  competition_id: Competition id the roster entry's team plays in.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  first_name: Given name of the player as entered in the CMS.
+  height: Height in cm; null when unknown.
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  last_name: Family name of the player as entered in the CMS.
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  position: 'Position code: point_guard, shooting_guard, small_forward, power_forward,
+    center, and the hybrids point_guard-shooting_guard, shooting_guard-small_forward,
+    small_forward-power_forward, power_forward-center.'
+  position_id: 'Position id (key space: sportpress positions; 3 = small_forward).'
+  roster_id: 'Roster id (key space: sportpress roster entries): one player on one
+    competition team in one season, so a player has a new roster_id for every team
+    and season. player_id is the person.'
+  season: Season END year of the roster entry's competition.
+  team: Team display name including the sponsor.
+  team_short_name: Three-letter club code of the team.
+  uu_team_id: Stable club key across seasons of the team.
+  weight: Weight in kg; null when unknown.
+sportpress_schedule:
+  arena: Name of the arena where the game is played.
+  away_competition_team_id: 'Away side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  away_score: Away side. Final points of the side, including overtime.
+  away_team: 'Away side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  away_team_short_name: Away side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  game_time: Tip-off as a naive datetime. The source carries no offset; the league's
+    local time is assumed and unverified.
+  home_competition_team_id: 'Home side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  home_score: Home side. Final points of the side, including overtime.
+  home_team: 'Home side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  home_team_short_name: Home side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  period_name: Name of the period the game is in or ended in; 'Extra2' means the second
+    overtime.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  phase_name: Phase name as entered in the CMS ('Regular season 2026-27').
+  round_name: Round label as entered in the CMS; often empty.
+  round_priority: Sort order of the round within the phase (provider's priority);
+    meaning of the values is unverified.
+  season: Season END year of the game's competition.
+  status: 'Game status: finished, or ready for an upcoming game.'
+sportpress_season_roster:
+  active: True for a current roster entry; the lists hold current entries only.
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  first_name: Given name of the player as entered in the CMS.
+  height: Height in cm; null when unknown.
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  last_name: Family name of the player as entered in the CMS.
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  position: 'Position code: point_guard, shooting_guard, small_forward, power_forward,
+    center, and the hybrids point_guard-shooting_guard, shooting_guard-small_forward,
+    small_forward-power_forward, power_forward-center.'
+  position_id: 'Position id (key space: sportpress positions; 3 = small_forward).'
+  roster_id: 'Roster id (key space: sportpress roster entries): one player on one
+    competition team in one season, so a player has a new roster_id for every team
+    and season. player_id is the person.'
+  season: Season END year the roster was asked for.
+  weight: Weight in kg; null when unknown.
+sportpress_standings:
+  against: Points conceded in the phase.
+  away_loss: Losses in away games.
+  away_win: Wins in away games.
+  club_id: 'Country of the team (key space: sportpress clubs): 1 = Belgium, 2 = Netherlands.
+    The provider calls the country a club.'
+  club_name: Country name in English, Belgium or Netherlands.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  even: Games drawn; 0 in every sample (basketball has no draws).
+  group: Group label for split phases; null in every sample.
+  home_loss: Losses in home games.
+  home_win: Wins in home games.
+  last5_loss: Losses among the last five games.
+  last5_win: Wins among the last five games.
+  loss: Games lost in the phase.
+  percent: Win percentage 0-100, rounded to 1 decimal.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  played: Games played in the phase (win + loss + even).
+  point: 'League points: 2 per win plus 1 per loss.'
+  point_percent: Share of the possible league points won, 0-1 rounded to 2 decimals.
+  position: Rank in the table, 1 = first.
+  score: Points scored in the phase.
+  score_difference: score - against.
+  streak_count: Length of the current streak in games.
+  streak_is_win: True for a winning streak, false for a losing one.
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  win: Games won in the phase.
+sportpress_team_find:
+  average_score_against: Points conceded per game; null for a team with no statistics.
+  average_score_for: Points scored per game by the team over the season; null for
+    a team with no statistics.
+  club_id: 'Country of the team (key space: sportpress clubs): 1 = Belgium, 2 = Netherlands.
+    The provider calls the country a club.'
+  club_name: Country name in English, Belgium or Netherlands.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_name: Competition name, 'BNXT League 2026-2027'.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  field_goal_percent: Team field-goal percentage 0-100; null for a team with no statistics.
+  season: Season END year of the team's competition.
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  uu_team_id: 'Stable club key across seasons (key space: sportpress clubs-as-teams);
+    competition_team_id changes every season, this does not.'
+sportpress_team_games:
+  arena: Name of the arena where the game is played.
+  assist: The team's own assists (passes leading directly to a made basket).
+  away_competition_team_id: 'Away side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  away_score: Away side. Final points of the side, including overtime.
+  away_team: 'Away side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  away_team_short_name: Away side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  block: The team's own shots blocked by the player.
+  block_against: The team's own own shots blocked by an opponent.
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_team_id: Competition-team id the games were asked for (the team the
+    totals belong to).
+  defensive_foul: 'The team''s own fouls DRAWN (suffered), despite the name: equals
+    the opponent''s foul count up to scorer corrections.'
+  defensive_rebound: The team's own defensive rebounds.
+  dunk_all: The team's own dunks attempted.
+  dunk_made: The team's own dunks made (a subset of the two-point field goals).
+  dunk_percent: The team's own dunk percentage 0-100; 0 when none were attempted.
+  foul: The team's own personal fouls committed.
+  free_throw_all: The team's own free throws attempted.
+  free_throw_made: The team's own free throws made.
+  free_throw_percent: The team's own free-throw percentage 0-100.
+  game_id: 'Game id (key space: sportpress games), unique across seasons: the key
+    of every game route.'
+  game_time: Tip-off as a naive datetime. The source carries no offset; the league's
+    local time is assumed and unverified.
+  home_competition_team_id: 'Home side. Competition-team id (key space: sportpress
+    competition teams): a team in ONE competition, so the same club has a new id every
+    season (Antwerp = 3 in 2021-22, 506 in 2025-26, 541 in 2026-27). Joins competitors,
+    rosters, box scores, film and standings. The stable club key across seasons is
+    `uu_team_id`.'
+  home_score: Home side. Final points of the side, including overtime.
+  home_team: 'Home side. Display name incl. the sponsor. Teams of the playoff phases
+    carry a '' playoff'' suffix (2025-26), and standings names vary with X-Localization
+    (''Partena Professional Okapi Aalst Playoff'' (en) vs ''Okapi Aalst Playoff''
+    (nl, fr)): never join on it.'
+  home_team_short_name: Home side. Three-letter club code (CHA, OOS, ANT, MON, LIM,
+    ...), stable across seasons in the samples.
+  minute: The team's own minutes played; for a team total, the sum over its players
+    (200 + 25 per overtime).
+  offensive_rebound: The team's own offensive rebounds.
+  period_name: Name of the period the game is in or ended in; 'Extra2' means the second
+    overtime.
+  phase_id: 'Phase id (key space: sportpress phases), a stage of one competition such
+    as the regular season or the playoffs; new every season.'
+  phase_name: Phase name as entered in the CMS ('Regular season 2026-27').
+  plusminus: 'The team''s own plus/minus: the score margin while the player (or team)
+    was on court; for a team total it is the game margin.'
+  points: The team's own points scored (2 x two-pointers + 3 x three-pointers + free
+    throws).
+  round_name: Round label as entered in the CMS; often empty.
+  round_priority: Sort order of the round within the phase (provider's priority);
+    meaning of the values is unverified.
+  season: Season END year of the game's competition.
+  status: 'Game status: finished, or ready for an upcoming game.'
+  steal: The team's own steals (balls taken from an opponent).
+  three_point_all: The team's own three-point field goals attempted.
+  three_point_made: The team's own three-point field goals made.
+  three_point_percent: The team's own three-point percentage 0-100.
+  throw_all: The team's own all field goals attempted, two- plus three-pointers (the
+    provider calls them 'throw').
+  throw_made: The team's own all field goals made, two- plus three-pointers (the provider
+    calls them 'throw').
+  throw_percent: The team's own field-goal percentage 0-100.
+  total_rebound: The team's own total rebounds (offensive plus defensive).
+  turnover: The team's own turnovers committed.
+  two_point_all: The team's own two-point field goals attempted.
+  two_point_made: The team's own two-point field goals made.
+  two_point_percent: The team's own two-point percentage 0-100.
+  value: 'The team''s own efficiency rating (PIR with fouls drawn): points + rebounds
+    + assists + steals + blocks + fouls drawn - missed field goals - missed free throws
+    - turnovers.'
+sportpress_team_player_averages:
+  assist: Assists (passes leading directly to a made basket). Per-game mean over the
+    games played (fractional).
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  block: Shots blocked by the player. Per-game mean over the games played (fractional).
+  block_against: Own shots blocked by an opponent. Per-game mean over the games played
+    (fractional).
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  defensive_foul: 'Fouls DRAWN (suffered), despite the name: equals the opponent''s
+    foul count up to scorer corrections. Per-game mean over the games played (fractional).'
+  defensive_rebound: Defensive rebounds. Per-game mean over the games played (fractional).
+  dunk_all: Dunks attempted. Per-game mean over the games played (fractional).
+  dunk_made: Dunks made (a subset of the two-point field goals). Per-game mean over
+    the games played (fractional).
+  dunk_percent: Dunk percentage 0-100; 0 when none were attempted. Per-game mean over
+    the games played (fractional).
+  first_name: Given name of the player as entered in the CMS.
+  foul: Personal fouls committed. Per-game mean over the games played (fractional).
+  free_throw_all: Free throws attempted. Per-game mean over the games played (fractional).
+  free_throw_made: Free throws made. Per-game mean over the games played (fractional).
+  free_throw_percent: Free-throw percentage 0-100. Per-game mean over the games played
+    (fractional).
+  games_started: Games started (a count, not a mean).
+  last_name: Family name of the player as entered in the CMS.
+  minute: Minutes played; for a team total, the sum over its players (200 + 25 per
+    overtime). Per-game mean over the games played (fractional).
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  offensive_rebound: Offensive rebounds. Per-game mean over the games played (fractional).
+  played_games: Games the player played in the season.
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  points: Points scored (2 x two-pointers + 3 x three-pointers + free throws). Per-game
+    mean over the games played (fractional).
+  roster_id: 'Roster id (key space: sportpress roster entries): one player on one
+    competition team in one season, so a player has a new roster_id for every team
+    and season. player_id is the person.'
+  steal: Steals (balls taken from an opponent). Per-game mean over the games played
+    (fractional).
+  three_point_all: Three-point field goals attempted. Per-game mean over the games
+    played (fractional).
+  three_point_made: Three-point field goals made. Per-game mean over the games played
+    (fractional).
+  three_point_percent: Three-point percentage 0-100. Per-game mean over the games
+    played (fractional).
+  throw_all: All field goals attempted, two- plus three-pointers (the provider calls
+    them 'throw'). Per-game mean over the games played (fractional).
+  throw_made: All field goals made, two- plus three-pointers (the provider calls them
+    'throw'). Per-game mean over the games played (fractional).
+  throw_percent: Field-goal percentage 0-100. Per-game mean over the games played
+    (fractional).
+  total_rebound: Total rebounds (offensive plus defensive). Per-game mean over the
+    games played (fractional).
+  turnover: Turnovers committed. Per-game mean over the games played (fractional).
+  two_point_all: Two-point field goals attempted. Per-game mean over the games played
+    (fractional).
+  two_point_made: Two-point field goals made. Per-game mean over the games played
+    (fractional).
+  two_point_percent: Two-point percentage 0-100. Per-game mean over the games played
+    (fractional).
+  value: 'Efficiency rating (PIR with fouls drawn): points + rebounds + assists +
+    steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers.
+    Per-game mean over the games played (fractional).'
+sportpress_team_rankings:
+  category: 'Ranking category: efficiency, points, total_rebound, block, assist, steal,
+    two_point_percent, three_point_percent or free_throw_percent.'
+  competition_id: 'Competition id (key space: sportpress competitions): ONE season
+    of the league (24 = 2025-26, 25 = 2026-27). Not the season number. The key of
+    the standings, ranking, slider and box routes.'
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  rank: Place in the category list, 1 = the leader (the list is sorted best first).
+  team: 'Team display name including the sponsor; varies with language and playoff
+    suffixes: never join on it.'
+  team_short_name: Three-letter club code (ANT, MON, ...), stable across seasons in
+    the samples.
+  value: The team's per-game mean (or percentage 0-100) in the row's category.
+sportpress_team_roster:
+  active: True for a current roster entry; the lists hold current entries only.
+  birth_date: Date of birth as shown on the public player page; null when unknown.
+  competition_team_id: 'Competition-team id (key space: sportpress competition teams):
+    a team in ONE competition, so a club has a new id every season (Antwerp = 3 in
+    2021-22, 506 in 2025-26, 541 in 2026-27). uu_team_id is the stable club key.'
+  first_name: Given name of the player as entered in the CMS.
+  height: Height in cm; null when unknown.
+  jersey: Shirt number as text; the box score sends it as an integer, so a zero-padded
+    '00' is already lost there.
+  last_name: Family name of the player as entered in the CMS.
+  nationality_code: 'Nationality code in FIBA style (USA, BEL, NED): DIRTY, with lower-case
+    variants, ''/''-joined pairs (USA/BEL), the empty string and ''HOL''; normalise
+    before joining.'
+  player_id: 'Player id (key space: sportpress persons): stable across seasons and
+    teams, distinct from roster_id. Not a Genius or FIBA person id.'
+  position: 'Position code: point_guard, shooting_guard, small_forward, power_forward,
+    center, and the hybrids point_guard-shooting_guard, shooting_guard-small_forward,
+    small_forward-power_forward, power_forward-center.'
+  position_id: 'Position id (key space: sportpress positions; 3 = small_forward).'
+  roster_id: 'Roster id (key space: sportpress roster entries): one player on one
+    competition team in one season, so a player has a new roster_id for every team
+    and season. player_id is the person.'
+  weight: Weight in kg; null when unknown.
+sportpress_ui_strings:
+  key: Dotted UI string key such as 'statistics.individual.points'; 302 keys per language.
+  language: 'ISO 639-1 code of the UI language: en, fr (French) or nl (Dutch).'
+  text: The UI text in that language; 11 keys label statistics columns, the rest are
+    menus and buttons.

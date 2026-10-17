@@ -1,0 +1,167 @@
+{
+  "season_id": 3,
+  "season_label": "2007-2008 m. sezonas",
+  "season_end_year": 2008,
+  "seasons": [
+    {
+      "season_id": 35,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 34,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 33,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "full": [
+    {
+      "position": 1,
+      "team_slug": "rytas",
+      "team_name": "Lietuvos Rytas",
+      "played": 18,
+      "won": 17,
+      "lost": 1,
+      "win_pct": null,
+      "streak": -1,
+      "points_for_avg": 96.3,
+      "points_against_avg": 70.3,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 18,
+      "won": 16,
+      "lost": 2,
+      "win_pct": null,
+      "streak": 8,
+      "points_for_avg": 96.2,
+      "points_against_avg": 75.6,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "siauliai",
+      "team_name": "Šiauliai",
+      "played": 18,
+      "won": 12,
+      "lost": 6,
+      "win_pct": null,
+      "streak": 5,
+      "points_for_avg": 85.3,
+      "points_against_avg": 80.3,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    }
+  ],
+  "home": [
+    {
+      "position": 1,
+      "team_slug": "rytas",
+      "team_name": "Lietuvos Rytas",
+      "played": 9,
+      "won": 9,
+      "lost": 0,
+      "points_for_avg": 100.1,
+      "points_against_avg": 69.7,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 9,
+      "won": 9,
+      "lost": 0,
+      "points_for_avg": 98.7,
+      "points_against_avg": 78.4,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "siauliai",
+      "team_name": "Šiauliai",
+      "played": 9,
+      "won": 6,
+      "lost": 3,
+      "points_for_avg": 89.3,
+      "points_against_avg": 81.6,
+      "last5": [
+        "W",
+        "L",
+        "W"
+      ]
+    }
+  ],
+  "away": [
+    {
+      "position": 1,
+      "team_slug": "rytas",
+      "team_name": "Lietuvos Rytas",
+      "played": 9,
+      "won": 8,
+      "lost": 1,
+      "points_for_avg": 92.6,
+      "points_against_avg": 71.0,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 9,
+      "won": 7,
+      "lost": 2,
+      "points_for_avg": 93.8,
+      "points_against_avg": 72.7,
+      "last5": [
+        "L",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "siauliai",
+      "team_name": "Šiauliai",
+      "played": 9,
+      "won": 6,
+      "lost": 3,
+      "points_for_avg": 81.2,
+      "points_against_avg": 79.0,
+      "last5": [
+        "W",
+        "L",
+        "W"
+      ]
+    }
+  ],
+  "final": []
+}

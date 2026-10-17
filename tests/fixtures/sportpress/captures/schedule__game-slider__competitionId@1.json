@@ -1,0 +1,241 @@
+{
+  "data": [
+    {
+      "id": 332,
+      "game_time": "2022-05-28 20:00:00",
+      "status": "finished",
+      "genius_id": 2097530,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 74,
+          "competition_team": {
+            "id": 4,
+            "name": "Belfius Mons-Hainaut",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Belfius Mons-Hainaut",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/H/g/HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/H/g/small-HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                "medium": "https://bnxt.sportpress.info/storage/H/g/medium-HgKJuFFFXpiBzclzztpp6HmL71663600659.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 69,
+          "competition_team": {
+            "id": 20,
+            "name": "Stella Artois Leuven Bears",
+            "short_name": "LEU",
+            "ticket_url": "https://leuvenbears.ordering.be/o/2",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Stella Artois Leuven Bears",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/e/0/e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/e/0/small-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png",
+                "medium": "https://bnxt.sportpress.info/storage/e/0/medium-e0OlZjkQtZqo8M5MjyBmTcCOd1663600857.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        }
+      ],
+      "phase": {
+        "id": 10,
+        "name": "BNXT Playoff",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      }
+    },
+    {
+      "id": 377,
+      "game_time": "2022-05-29 15:00:00",
+      "status": "finished",
+      "genius_id": 2097994,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 74,
+          "competition_team": {
+            "id": 12,
+            "name": "ZZ Leiden",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 81,
+          "competition_team": {
+            "id": 18,
+            "name": "Heroes Den Bosch",
+            "short_name": "DBO",
+            "ticket_url": "https://heroes.shop.eventgoose.com",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Heroes Den Bosch",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/U/T/UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/U/T/small-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+                "medium": "https://bnxt.sportpress.info/storage/U/T/medium-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        }
+      ],
+      "phase": {
+        "id": 12,
+        "name": "Domestic Netherlands Playoff",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      }
+    },
+    {
+      "id": 331,
+      "game_time": "2022-05-30 20:00:00",
+      "status": "finished",
+      "genius_id": 2097324,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 102,
+          "competition_team": {
+            "id": 3,
+            "name": "Telenet Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Telenet Giants Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 88,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          }
+        }
+      ],
+      "phase": {
+        "id": 10,
+        "name": "BNXT Playoff",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "stats": [
+    {
+      "category": "points",
+      "player_id": 3943,
+      "name": "Carlton",
+      "surname": "Myers",
+      "team_name": "Teamsystem Bologna",
+      "tv_name": "Teamsystem BO",
+      "year": 1995,
+      "category_filter_total": 798,
+      "attempts": 0,
+      "presences": 31,
+      "minutes": "35.967741935483871",
+      "score_40_min": 28.62780269058296,
+      "score": "25.7419354838709677",
+      "team_id": 257,
+      "player_photo_key": null
+    },
+    {
+      "category": "points",
+      "player_id": 2821,
+      "name": "Michael",
+      "surname": "Iuzzolino",
+      "team_name": "Mash J. Verona",
+      "tv_name": "Mash J. VR",
+      "year": 1995,
+      "category_filter_total": 620,
+      "attempts": 0,
+      "presences": 25,
+      "minutes": "38.68",
+      "score_40_min": 25.646328852119957,
+      "score": "24.8",
+      "team_id": 270,
+      "player_photo_key": null
+    },
+    {
+      "category": "points",
+      "player_id": 5950,
+      "name": "Henry",
+      "surname": "Williams",
+      "team_name": "Benetton Treviso",
+      "tv_name": "Benetton TV",
+      "year": 1995,
+      "category_filter_total": 821,
+      "attempts": 0,
+      "presences": 34,
+      "minutes": "37.8529411764705882",
+      "score_40_min": 25.516705516705514,
+      "score": "24.1470588235294118",
+      "team_id": 268,
+      "player_photo_key": null
+    }
+  ],
+  "filters": {
+    "order_by": [
+      {
+        "code": "sum",
+        "description": "Totale"
+      },
+      {
+        "code": "avg",
+        "description": "Media"
+      },
+      {
+        "code": "40_perc",
+        "description": "40 min/%"
+      }
+    ],
+    "categories": [
+      {
+        "code": "points",
+        "description": "Punti"
+      },
+      {
+        "code": "rating_lega",
+        "description": "Valutazione"
+      },
+      {
+        "code": "total_rebound",
+        "description": "Rimbalzi"
+      }
+    ]
+  },
+  "cache_key": "_cmpCK:1791747819_season_range:off|year:1995|championship_series_id:1|category:points|advanced:true|order_by:avg",
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com"
+}

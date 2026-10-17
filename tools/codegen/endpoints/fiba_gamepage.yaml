@@ -1,0 +1,501 @@
+api: fiba_gamepage
+docstring:
+  example_import: true
+  notes:
+  - FIBA's terms restrict this source. The GDAP developer-portal terms limit API use
+    to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader
+    use 'is not authorised'; the fiba.basketball terms say no portion of the site
+    may be duplicated, redistributed or manipulated. The package owner reviewed both
+    clauses on 2026-10-12, accepted them and approved the full intake, published data
+    releases included. Users who are not themselves authorised by FIBA should check
+    the terms before using the wrappers.
+  - The GDAP subscription key is public (fiba.basketball ships it in every page);
+    the runtime reads it from the live page at run time and never logs it. Officials'
+    contact details and coaches' and officials' dates of birth are dropped from every
+    body.
+  - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182) and
+    game_id is global across competitions (the <gameId> of a game-page URL). team_id
+    is per team per competition (Germany is 279569 at the 2023 World Cup and 281545
+    at Paris 2024), while organisation_id is the stable federation or club (64 = Germany,
+    every year); the game page''s T_<id> and the play-by-play oId are organisation
+    ids, not team ids.'
+  - The wrapper takes the game id and its competition (comp) and builds the real page
+    URL from GDAP (the competition's marketing name gives the history slug, its schedule
+    gives the two team codes; a competition with an event page is tried at its event
+    URL when the archive URL answers the not-found shell, and the Champions League
+    host last). The 'Example URL' above is the wrapper's route, not a page FIBA serves.
+  - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+    and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+    a game still live raises AssetFetchError. fiba.basketball answers plain requests
+    with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+    install sportsdataverse[all]). Shot x/y are image pixels with an unverified scale.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404,
+    GDAP answered {} or [] for an unknown id, a game the competition does not list,
+    or a game page with no box score).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not
+    about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500,
+    a body for another game, competition, team, player, federation, family or season,
+    the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+  - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested
+    without comp.'
+  raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+    ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+  see_also:
+  - name: FIBA
+    note: the federation whose events and clubs the wrappers read
+    url: https://www.fiba.basketball/
+endpoints:
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_box_players
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/box_players
+  short: box_players
+  summary: Player box score of one FIBA game.
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_box_teams
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/box_teams
+  short: box_teams
+  summary: Team box score of one FIBA game, with the game-level figures.
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_lineup
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/lineup
+  short: lineup
+  summary: Lineup card (the players who were registered for the game) of both teams
+    of one FIBA game.
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_pbp
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/pbp
+  short: pbp
+  summary: 'Play-by-play of one FIBA game: every action with period, clock, running
+    score, actor and shot x/y.'
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_period_scores
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/period_scores
+  short: period_scores
+  summary: Points by period of both teams of one FIBA game.
+- docstring:
+    example_import: true
+    notes:
+    - FIBA's terms restrict this source. The GDAP developer-portal terms limit API
+      use to 'Authorized Users' (federations, organisers, FIBA partners) and say any
+      broader use 'is not authorised'; the fiba.basketball terms say no portion of
+      the site may be duplicated, redistributed or manipulated. The package owner
+      reviewed both clauses on 2026-10-12, accepted them and approved the full intake,
+      published data releases included. Users who are not themselves authorised by
+      FIBA should check the terms before using the wrappers.
+    - The GDAP subscription key is public (fiba.basketball ships it in every page);
+      the runtime reads it from the live page at run time and never logs it. Officials'
+      contact details and coaches' and officials' dates of birth are dropped from
+      every body.
+    - 'Id key spaces: competition_id is one per edition (2023 World Cup = 208182)
+      and game_id is global across competitions (the <gameId> of a game-page URL).
+      team_id is per team per competition (Germany is 279569 at the 2023 World Cup
+      and 281545 at Paris 2024), while organisation_id is the stable federation or
+      club (64 = Germany, every year); the game page''s T_<id> and the play-by-play
+      oId are organisation ids, not team ids.'
+    - The wrapper takes the game id and its competition (comp) and builds the real
+      page URL from GDAP (the competition's marketing name gives the history slug,
+      its schedule gives the two team codes; a competition with an event page is tried
+      at its event URL when the archive URL answers the not-found shell, and the Champions
+      League host last). The 'Example URL' above is the wrapper's route, not a page
+      FIBA serves.
+    - 'Box scores start about 2006; play-by-play with shot x/y about 2012 (OVR events)
+      and 2017-18 (FLS club competitions). A game with no box score raises NoDataError;
+      a game still live raises AssetFetchError. fiba.basketball answers plain requests
+      with HTTP 403, so the page transport is curl_cffi with Chrome TLS (extra: pip
+      install sportsdataverse[all]). Shot x/y are image pixels with an unverified
+      scale.'
+    raises:
+    - 'sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP
+      404, GDAP answered {} or [] for an unknown id, a game the competition does not
+      list, or a game page with no box score).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      not about the request (an error envelope, HTTP 401 after a key refresh, HTTP
+      500, a body for another game, competition, team, player, federation, family
+      or season, the HTTP 200 ''not-found shell'' of a wrong game page, a live game).'
+    - 'ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page
+      requested without comp.'
+    raw_doc: the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``,
+      ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved
+    see_also:
+    - name: FIBA
+      note: the federation whose events and clubs the wrappers read
+      url: https://www.fiba.basketball/
+  example_args:
+    comp: 208182
+    game_id: 100720
+  extra_params:
+  - description: 'Required. FIBA competition id (GDAP key space), one per edition:
+      competition.competitionId of any game row (208182 = World Cup 2023, 208722 =
+      Paris 2024 men, 208850 = BCL 2024-25). The game must belong to it. Find it with
+      fiba_gdap_editions or fiba_gdap_games_between.'
+    name: comp
+    query_key: comp
+    required: true
+    transform: _int_id
+    type: int
+  parser: parse_fiba_gamepage_shots
+  path: /en/games/{game_id}
+  path_params:
+  - description: 'FIBA game id (global): gameId of a gdap schedule row, e.g. 100720
+      = the World Cup 2023 final.'
+    name: game_id
+    required: true
+    transform: _int_id
+    type: int
+  returns_schema: native/fiba_gamepage/shots
+  short: shots
+  summary: Shot attempts of one FIBA game (two- and three-pointers and free throws)
+    with their x/y.
+getter_module: sportsdataverse.basketball.fiba_hub.fiba_runtime
+host: https://www.fiba.basketball
+module: fiba_gamepage
+name_pattern: fiba_gamepage_{short}
+parser_columns: true
+parser_module: basketball.fiba_hub.fiba_gamepage_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+- _int_id
+schema_prefix: fiba_gamepage_

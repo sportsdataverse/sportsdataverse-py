@@ -1,0 +1,120 @@
+{
+  "gameId": 123773,
+  "roundName": "Regular Season - Second Round",
+  "technicalName": "29067-F-10",
+  "roundType": "Group Round",
+  "groupPairingCode": "F",
+  "gameNumber": "10",
+  "statusCode": "VALID",
+  "gameDay": 4,
+  "teamAFrom": "2nd of group D",
+  "teamBFrom": "1st of group C",
+  "teamA": {
+    "teamId": 282284,
+    "organisationId": 65512,
+    "code": "ZVVZ",
+    "officialName": "ZVVZ USK Praha",
+    "shortName": "ZVVZ USK Praha"
+  },
+  "teamB": {
+    "teamId": 282300,
+    "organisationId": 65448,
+    "code": "FENER",
+    "officialName": "Fenerbahce Opet",
+    "shortName": "Fenerbahce Opet"
+  },
+  "teamAScore": 54,
+  "teamBScore": 63,
+  "teamAAggregatedScore": 0,
+  "teamBAggregatedScore": 0,
+  "hostCity": "Prague",
+  "hostCountry": "Czechia",
+  "hostCountryCode": "CZE",
+  "venueId": 51903,
+  "venueName": "Kralovka Arena",
+  "gameDateTime": "2025-01-15T19:00:00",
+  "gameDateTimeUTC": "2025-01-15T18:00:00",
+  "hasTimeGameDateTime": true,
+  "ianaTimeZone": "Europe/Prague",
+  "utcOffset": 1,
+  "isPostponed": false,
+  "isPlayedBehindClosedDoors": false,
+  "venueCapacity": 0,
+  "spectators": 1250,
+  "nominations": [
+    {
+      "personId": 18676,
+      "firstName": "Rasa",
+      "lastName": "Liuimiene",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "COMM",
+      "roleName": "Commissioner",
+      "roleOrder": null,
+      "defaultNationality": "LTU",
+      "licenseNationality": "LTU"
+    },
+    {
+      "personId": 163595,
+      "firstName": "Cecília",
+      "lastName": "Montgomery-Tóth",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "CC",
+      "roleName": "Crew chief",
+      "roleOrder": null,
+      "defaultNationality": "HUN",
+      "licenseNationality": "HUN"
+    },
+    {
+      "personId": 18221,
+      "firstName": "Viola",
+      "lastName": "Gyorgyi",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "UMP",
+      "roleName": "Umpire",
+      "roleOrder": "1",
+      "defaultNationality": "ROU",
+      "licenseNationality": "NOR"
+    }
+  ],
+  "periods": [
+    {
+      "name": "Q1",
+      "number": 1,
+      "teamAScore": 18,
+      "teamBScore": 12,
+      "teamAFrom": "2nd of group D",
+      "teamBFrom": "1st of group C"
+    },
+    {
+      "name": "Q2",
+      "number": 2,
+      "teamAScore": 16,
+      "teamBScore": 23,
+      "teamAFrom": "2nd of group D",
+      "teamBFrom": "1st of group C"
+    },
+    {
+      "name": "Q3",
+      "number": 3,
+      "teamAScore": 11,
+      "teamBScore": 15,
+      "teamAFrom": "2nd of group D",
+      "teamBFrom": "1st of group C"
+    }
+  ],
+  "isLive": false,
+  "currentPeriod": "Q4",
+  "chrono": "00:00",
+  "liveGameStatus": 999,
+  "currentPeriodStatus": "E",
+  "gameStatisticStatusCode": "VALID",
+  "gamePlayByPlayStatusCode": "VALID",
+  "gameResultStatusCode": "VALID",
+  "gameResultAdditionalInformation": "None",
+  "windowId": null,
+  "windowCode": null,
+  "windowName": null
+}
