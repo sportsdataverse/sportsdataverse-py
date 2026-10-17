@@ -1,6 +1,6 @@
 ---
-title: ABA — ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)
-sidebar_label: ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)
+title: "ABA — ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)"
+sidebar_label: "ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)"
 description: "ABA — ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2

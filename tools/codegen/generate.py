@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlencode
 
+import yaml
+
 # Make ``tools`` importable when run as a script (`python tools/codegen/generate.py`),
 # where sys.path[0] is this file's dir rather than the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -5152,7 +5154,7 @@ def _split_family_pages(
         overview, family_pages, fn_slug = split
         page = rel[len(ref_dir) : -3]
         out[rel] = overview
-        meta = dict(line.split(": ", 1) for line in _FRONTMATTER.match(overview).group(1).split("\n") if ": " in line)
+        meta = yaml.safe_load(_FRONTMATTER.match(overview).group(1)) or {}
         out[f"{rel[:-3]}/_category_.json"] = render_category(
             meta.get("sidebar_label", page), int(meta.get("sidebar_position", 1)), True, link_doc=rel[:-3]
         )

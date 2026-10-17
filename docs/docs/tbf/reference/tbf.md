@@ -1,6 +1,6 @@
 ---
-title: TBF — TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)
-sidebar_label: TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)
+title: "TBF — TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)"
+sidebar_label: "TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)"
 description: "TBF — TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL) — endpoint reference in sdv-py, the SportsDataverse Python package."
 sidebar_position: 10
 toc_max_heading_level: 2
