@@ -1,0 +1,608 @@
+api: scb
+docstring:
+  example_import: true
+  notes:
+  - 'Unofficial use of a public source: these wrappers read the front-end API of the
+    German Bundesliga sites (easycredit-bbl.de, toyota-dbbl.de), run by SCB; payloads
+    are not redistributed as release assets.'
+  - 'Legal notice: the BBL Impressum forbids storing BBL content (`Inhalte`) in an
+    information system without BBL''s written permission. That is a copyright term,
+    not a robots rule (the API host has no robots.txt). The owner reviewed it and
+    accepted the intake (2026-10-12 ruling); keep requests slow (the runtime waits
+    at least 1 s per host) and raise any published data release with the owner. The
+    DBBL host is the same operator and API; its site notice was not separately reviewed.'
+  - 'Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that
+    rotates. The runtime derives the secret on first use from the key embedded in
+    an easycredit-bbl.de page (reversed, `:` turned into `-`) and never logs or returns
+    it. The derivation was reverse-engineered from observed requests and responses
+    and has not been checked against the site''s own front-end code; if the site
+    changes how it signs requests, every call fails with AssetFetchError.'
+  - 'Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper''s END-year
+    `season` is sent as `season - 1`. Teams are keyed by teamId (seasonTeamId equals
+    it in every sample). seasonPlayerId is per player per season and per club (a player
+    traded mid-season has two); realPlayerId is the person. playerId is ambiguous
+    (the seasonPlayerId in box scores, records and /season-players; the person in
+    /transfers). Game ids are strings.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown
+    id, a game before 2002-03 or not yet started, an empty table, a playoff bracket
+    not yet drawn).'
+  see_also:
+  - name: easyCredit BBL
+    note: the BBL site whose API these wrappers read
+    url: https://www.easycredit-bbl.de/
+  - name: Toyota DBBL
+    note: the DBBL site (same API, second host)
+    url: https://www.toyota-dbbl.de/
+  - name: hoopR
+    note: SportsDataverse men's basketball package (R)
+    url: https://hoopR.sportsdataverse.org
+  - name: wehoop
+    note: SportsDataverse women's basketball package (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args: {}
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_seasons
+  path: /seasons
+  returns_schema: native/scb/seasons
+  short: seasons
+  summary: Seasons, newest first, with the active flag (BBL back to 1966, DBBL 2024
+    on).
+- example_args:
+    season: 2027
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_season_players
+  path: /seasons/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/season_players
+  short: season_players
+  summary: 'Every player registered in a season: the id crosswalk (season_player_id,
+    real_player_id, season_team_id).'
+- example_args:
+    season: 2027
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_season_teams
+  path: /seasons/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/season_teams
+  short: season_teams
+  summary: 'Every team of a season: club id, season-team id, name and three-letter
+    code.'
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_playoff_series
+  path: /seasons/{season}/playoff-tree
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/playoff_series
+  short: playoff_series
+  summary: 'Playoff bracket of a season: one row per series (quarter-finals, semi-finals,
+    finals).'
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_playoff_games
+  path: /seasons/{season}/playoff-tree
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/playoff_games
+  short: playoff_games
+  summary: Every playoff game of a season with its series and the points of each series
+    team.
+- example_args:
+    display_type: MAIN_ROUND
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  - choices:
+    - MAIN_ROUND
+    - PLAYOFFS
+    - PLAYOFFS_TOTAL
+    - MAIN_ROUND_AND_PLAY_OFFS
+    - CUP
+    default: MAIN_ROUND
+    description: 'Which games the table covers: MAIN_ROUND (regular season), PLAYOFFS,
+      PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP.'
+    name: display_type
+    query_key: displayType
+    type: str
+  parser: parse_scb_player_statistics
+  path: /seasons/{season}/player-statistics
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/player_statistics
+  short: player_statistics
+  summary: 'Season player stat table: totals and per-game values, one row per player
+    and stat block.'
+- example_args:
+    display_type: MAIN_ROUND
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  - choices:
+    - MAIN_ROUND
+    - PLAYOFFS
+    - PLAYOFFS_TOTAL
+    - MAIN_ROUND_AND_PLAY_OFFS
+    - CUP
+    default: MAIN_ROUND
+    description: 'Which games the table covers: MAIN_ROUND (regular season), PLAYOFFS,
+      PLAYOFFS_TOTAL, MAIN_ROUND_AND_PLAY_OFFS or CUP.'
+    name: display_type
+    query_key: displayType
+    type: str
+  parser: parse_scb_team_statistics
+  path: /seasons/{season}/team-statistics
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/team_statistics
+  short: team_statistics
+  summary: 'Season team stat table: totals and per-game values, one row per team and
+    stat block.'
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1). Omitted = the season in progress.
+    name: season
+    query_key: seasonId
+    transform: season_id
+    type: int
+  - description: 'Competition filter: BBL, BBL_CUP (Pokal), ALLSTAR, CHAMPIONS_CUP
+      on the BBL host; DBBL, DBBL_CUP on the DBBL host. Omitted = all. The other host''s
+      competition answers an empty page.'
+    name: competition
+    query_key: competition
+    type: str
+  - choices:
+    - finished
+    - scheduled
+    - all
+    description: Finished, scheduled or all games. Omitted = all.
+    name: game_type
+    query_key: gameType
+    type: str
+  - description: Only the games of this team, home or guest (the club id equals the
+      season-team id).
+    name: team_id
+    query_key: seasonTeamId
+    type: str
+  - default: 500
+    description: Rows per page. The wrapper reads page 1 and refuses a result that
+      needs more pages, so keep it large enough for the whole result (500 covers a
+      season).
+    name: page_size
+    query_key: pageSize
+    type: int
+  fixed_params:
+    currentPage: 1
+  parser: parse_scb_games
+  path: /games
+  returns_schema: native/scb/games
+  short: games
+  summary: 'Games of a season (the whole season in one page): teams, score by period,
+    officials, venue and top scorer.'
+- example_args: {}
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  - description: Games per bucket (past, present, future); the API's default is 9.
+    name: slot_size
+    query_key: slotSize
+    type: int
+  parser: parse_scb_games_recent
+  path: /games/recent
+  returns_schema: native/scb/games_recent
+  short: games_recent
+  summary: Recent, live and upcoming games, one row per game with its past / present
+    / future bucket.
+- example_args:
+    game_id: '2006920'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_games
+  path: /games/{game_id}
+  path_params:
+  - description: Game id (`game_id` in `scb_games`), e.g. 2006920 (BBL) or 10130 (DBBL).
+      One sequence per league.
+    name: game_id
+    required: true
+    type: str
+  returns_schema: native/scb/game
+  short: game
+  summary: 'One game header: teams, score by period, officials, venue and top scorer.'
+- example_args:
+    game_id: '2006920'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_game_players
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Game id (`game_id` in `scb_games`), e.g. 2006920 (BBL) or 10130 (DBBL).
+      One sequence per league.
+    name: game_id
+    required: true
+    type: str
+  returns_schema: native/scb/game_players
+  short: game_players
+  summary: 'Box score of a finished game: one row per player line of both teams (2002-03
+    on).'
+- example_args:
+    game_id: '2006920'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_game_teams
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Game id (`game_id` in `scb_games`), e.g. 2006920 (BBL) or 10130 (DBBL).
+      One sequence per league.
+    name: game_id
+    required: true
+    type: str
+  returns_schema: native/scb/game_teams
+  short: game_teams
+  summary: 'Box score of a finished game: one row per team, with the head coach and
+    the team line.'
+- example_args:
+    game_id: '2006920'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_game_actions
+  path: /games/{game_id}/stats
+  path_params:
+  - description: Game id (`game_id` in `scb_games`), e.g. 2006920 (BBL) or 10130 (DBBL).
+      One sequence per league.
+    name: game_id
+    required: true
+    type: str
+  returns_schema: native/scb/game_actions
+  short: game_actions
+  summary: Play-by-play of a finished game with shot x/y (BBL 2008-09 on, DBBL 2024-25
+    on).
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1). Omitted = the season in progress. Seasons
+      before about 2000 answer an empty table.
+    name: season
+    query_key: seasonId
+    transform: season_id
+    type: int
+  - description: 'Competition: BBL, BBL_CUP, ALLSTAR, CHAMPIONS_CUP (BBL host) or
+      DBBL, DBBL_CUP (DBBL host). BBL_CUP answers an empty table.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_scb_standings
+  path: /standings
+  returns_schema: native/scb/standings
+  short: standings
+  summary: 'League table of a season: record, home / away split, streaks and tie-break
+    detail (2005-06 on).'
+- example_args:
+    season_player_id: '56414'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_season_player
+  path: /season-players/{season_player_id}
+  path_params:
+  - description: 'Season-player id (`season_player_id` in a box score, an action or
+      `scb_season_players`): one player''s engagement with one club.'
+    name: season_player_id
+    required: true
+    type: str
+  returns_schema: native/scb/season_player
+  short: season_player
+  summary: 'Player profile by season-player id: bio, position, club and previous clubs.'
+- example_args:
+    team_id: '413'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_team
+  path: /teams/{team_id}
+  path_params:
+  - description: Club id (`team_id` in `scb_season_teams`), e.g. 413 (ALBA BERLIN).
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/scb/team
+  short: team
+  summary: 'Club profile: names, code, home page, ticket shop, year joined and honours.'
+- example_args:
+    team_id: '413'
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_team_seasons
+  path: /teams/{team_id}
+  path_params:
+  - description: Club id (`team_id` in `scb_season_teams`), e.g. 413 (ALBA BERLIN).
+    name: team_id
+    required: true
+    type: str
+  returns_schema: native/scb/team_seasons
+  short: team_seasons
+  summary: 'Every season a club played: its name that season and its championship
+    and cup titles.'
+- example_args: {}
+  extra_params:
+  - default: 100
+    description: Rows per page. 100 returns all current officials in one page; a result
+      that needs more pages is refused.
+    name: page_size
+    query_key: pageSize
+    type: int
+  fixed_params:
+    currentPage: 1
+  parser: parse_scb_referees
+  path: /referees
+  returns_schema: native/scb/referees
+  short: referees
+  summary: Current referees and commissioners (BBL only).
+- example_args: {}
+  parser: parse_scb_transfers
+  path: /transfers
+  returns_schema: native/scb/transfers
+  short: transfers
+  summary: Latest transfers, one row per move (BBL only).
+- example_args: {}
+  parser: parse_scb_transfers_teams
+  path: /transfers/teams
+  returns_schema: native/scb/transfers_teams
+  short: transfers_teams
+  summary: Per club, the players joining and leaving, one row per move with its direction
+    (BBL only).
+- example_args: {}
+  parser: parse_scb_team_rosters
+  path: /transfers/teams
+  returns_schema: native/scb/team_rosters
+  short: team_rosters
+  summary: Per club, the current roster, one row per player (BBL only).
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_records_per_game
+  path: /records/per-game/{season}
+  path_params:
+  - description: Season END year (2026 = 2025-26, the sdv key). Sent to the API as
+      its START-year seasonId (season - 1).
+    name: season
+    required: true
+    transform: season_id
+    type: int
+  returns_schema: native/scb/records_per_game
+  short: records_per_game
+  summary: 'Single-game records: the season''s and the all-time ones, one row per
+    record.'
+- example_args: {}
+  extra_params:
+  - choices:
+    - bbl
+    - dbbl
+    default: bbl
+    description: 'League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de)
+      or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world).
+      The two share one API; game ids overlap, so a game is (league, game_id).'
+    name: league
+    query_key: league
+    type: str
+  parser: parse_scb_records_season_averages
+  path: /records/season-averages
+  returns_schema: native/scb/records_season_averages
+  short: records_season_averages
+  summary: All-time season-average records (points, rebounds, assists, ...), one row
+    per record.
+getter_module: sportsdataverse.basketball.scb.scb_runtime
+host: https://api.basketball-bundesliga.de
+module: scb
+name_pattern: scb_{short}
+parser_columns: true
+parser_module: basketball.scb.scb_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: scb_

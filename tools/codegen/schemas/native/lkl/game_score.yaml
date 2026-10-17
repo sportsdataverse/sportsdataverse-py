@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+- description: ''
+  name: clock
+  type: character
+kind: dataframe
+schema: lkl_game_score

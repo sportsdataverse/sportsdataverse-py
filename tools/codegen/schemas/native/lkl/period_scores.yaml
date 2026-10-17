@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_type
+  type: character
+- description: ''
+  name: points
+  type: integer
+kind: dataframe
+schema: lkl_period_scores

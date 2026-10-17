@@ -1,0 +1,115 @@
+{
+  "game_id": 11590,
+  "game_status": "Pasibaigė",
+  "referees": "Saulius Račys, Dovydas Kairys, Milita Stalaučinskaitė",
+  "has_actions": true,
+  "is_streaming": false,
+  "teams_info": {
+    "home": {
+      "id": 6,
+      "name": "Rytas",
+      "short_name": "RYT",
+      "slug": "rytas",
+      "logo": "http://lkl.lt/media/teams/svg/9HeCOlpWX1ZZmvNBSKRV9od4akkVpxGhqUJANCwR.svg",
+      "winner": false,
+      "coach": "Nedas Pacevičius",
+      "assistant_coach": "Mindaugas Brazys"
+    },
+    "away": {
+      "id": 60,
+      "name": "Gargždai",
+      "short_name": "GAR",
+      "slug": "gargzdai",
+      "logo": "http://lkl.lt/media/teams/svg/sQ4a0Ns4gi5QPEv1k1RHG9fxWVBob3dATIuixWiZ.svg",
+      "winner": true,
+      "coach": "Paulius Malašauskas",
+      "assistant_coach": "Vidas Ginevičius"
+    }
+  },
+  "main_videos": {
+    "highlightsVideo": {
+      "label": "Rungtynių apžvalga",
+      "title": "LKL, kurią remia Betsson, rungtynių apžvalga: „Rytas“ - „Gargždai“ [2026-10-03]",
+      "id": "qM7vu2MuKlQ",
+      "thumbnail": "/media/videos/470x304/90bb5b2d32b1a754dbe3ddaa719b0333.jpg"
+    },
+    "commentsVideo": {
+      "label": "Trenerių komentarai",
+      "title": "N. Pacevičius: „Esminis klausimas – kaip sugebėsime į pralaimėjimą sureaguoti“",
+      "id": "HJx9d_8Y2s4",
+      "thumbnail": "/media/videos/470x304/0959cdbf1a961820ac7997c544975c6e.jpg"
+    }
+  },
+  "game_info": {
+    "time": "2026  m. Spalio 3 d., 16:50",
+    "arena": "Arena Vilnius",
+    "attendance": "3012 žiūrovai"
+  },
+  "players": {
+    "home": [
+      {
+        "id": 293,
+        "name": "Martynas Paliukėnas",
+        "jersey": "77",
+        "slug": "martynas-paliukenas"
+      },
+      {
+        "id": 50,
+        "name": "Artūras Gudaitis",
+        "jersey": "8",
+        "slug": "arturas-gudaitis"
+      },
+      {
+        "id": 9,
+        "name": "Gytis Masiulis",
+        "jersey": "21",
+        "slug": "gytis-masiulis"
+      }
+    ],
+    "away": [
+      {
+        "id": 175,
+        "name": "Evaldas Šaulys",
+        "jersey": "5",
+        "slug": "evaldas-saulys"
+      },
+      {
+        "id": 41,
+        "name": "Arūnas Mikalauskas",
+        "jersey": "0",
+        "slug": "arunas-mikalauskas"
+      },
+      {
+        "id": 759,
+        "name": "Laurynas Vaištaras",
+        "jersey": "22",
+        "slug": "laurynas-vaistaras"
+      }
+    ]
+  },
+  "players_ids": {
+    "home": [
+      293,
+      50,
+      9
+    ],
+    "away": [
+      175,
+      41,
+      759
+    ],
+    "all": [
+      293,
+      50,
+      9
+    ]
+  },
+  "quarters": [
+    1,
+    2,
+    3
+  ],
+  "start_date": "2026-10-03",
+  "start_time": "16:50",
+  "attendance_count": 3012
+}

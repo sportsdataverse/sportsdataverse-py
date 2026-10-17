@@ -1,0 +1,274 @@
+{
+  "data": {
+    "team_totals": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 101,
+          "competition_team": {
+            "id": 37,
+            "name": "Hubo Limburg United",
+            "short_name": "LIM",
+            "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Hubo Limburg United",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/j/q/jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/j/q/small-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+                "medium": "https://bnxt.sportpress.info/storage/j/q/medium-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 29
+            },
+            {
+              "period_id": 3,
+              "score": 26
+            }
+          ]
+        },
+        "is_home": true,
+        "total": []
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 79,
+          "competition_team": {
+            "id": 36,
+            "name": "Belfius Mons-Hainaut",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Belfius Mons-Hainaut",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/H/g/HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/H/g/small-HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                "medium": "https://bnxt.sportpress.info/storage/H/g/medium-HgKJuFFFXpiBzclzztpp6HmL71663600659.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 18
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 27
+            }
+          ]
+        },
+        "is_home": false,
+        "total": []
+      }
+    ],
+    "top_performer": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 101,
+          "competition_team": {
+            "id": 37,
+            "name": "Hubo Limburg United",
+            "short_name": "LIM",
+            "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Hubo Limburg United",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/j/q/jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/j/q/small-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+                "medium": "https://bnxt.sportpress.info/storage/j/q/medium-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 29
+            },
+            {
+              "period_id": 3,
+              "score": 26
+            }
+          ]
+        },
+        "is_home": true,
+        "player": []
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 79,
+          "competition_team": {
+            "id": 36,
+            "name": "Belfius Mons-Hainaut",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Belfius Mons-Hainaut",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/H/g/HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/H/g/small-HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                "medium": "https://bnxt.sportpress.info/storage/H/g/medium-HgKJuFFFXpiBzclzztpp6HmL71663600659.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 18
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 27
+            }
+          ]
+        },
+        "is_home": false,
+        "player": []
+      }
+    ],
+    "game_leaders": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 101,
+          "competition_team": {
+            "id": 37,
+            "name": "Hubo Limburg United",
+            "short_name": "LIM",
+            "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Hubo Limburg United",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/j/q/jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/j/q/small-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+                "medium": "https://bnxt.sportpress.info/storage/j/q/medium-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 27
+            },
+            {
+              "period_id": 2,
+              "score": 29
+            },
+            {
+              "period_id": 3,
+              "score": 26
+            }
+          ]
+        },
+        "is_home": true,
+        "leaders": []
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 79,
+          "competition_team": {
+            "id": 36,
+            "name": "Belfius Mons-Hainaut",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Belfius Mons-Hainaut",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/H/g/HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/H/g/small-HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                "medium": "https://bnxt.sportpress.info/storage/H/g/medium-HgKJuFFFXpiBzclzztpp6HmL71663600659.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 18
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 27
+            }
+          ]
+        },
+        "is_home": false,
+        "leaders": []
+      }
+    ]
+  }
+}

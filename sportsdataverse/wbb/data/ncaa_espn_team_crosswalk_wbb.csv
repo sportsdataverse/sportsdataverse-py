@@ -5971,3 +5971,366 @@ season,ncaa_team_id,ncaa_team,ncaa_conference,conference_id,espn_team_id,espn_di
 2025-26,609986,Xavier,Big East,wbb:big-east,2752,Xavier Musketeers,Xavier,Musketeers,XAV,Big East Conference,4,exact
 2025-26,609987,Yale,Ivy League,wbb:ivy,43,Yale Bulldogs,Yale,Bulldogs,YALE,Ivy League,12,exact
 2025-26,609989,Youngstown St.,Horizon,wbb:horizon,2754,Youngstown State Penguins,Youngstown State,Penguins,YSU,Horizon League,45,exact
+2026-27,628770,A&M-Corpus Christi,Southland,wbb:southland,357,Texas A&M-Corpus Christi Islanders,Texas A&M-Corpus Christi,Islanders,AMCC,Southland Conference,25,dict
+2026-27,628820,Abilene Christian,WAC,wbb:wac,2000,Abilene Christian Wildcats,Abilene Christian,Wildcats,ACU,United Athletic Conference,30,exact
+2026-27,628725,Air Force,MWC,wbb:mountain-west,2005,Air Force Falcons,Air Force,Falcons,AF,Mountain West Conference,44,exact
+2026-27,628821,Akron,MAC,wbb:mac,2006,Akron Zips,Akron,Zips,AKR,Mid-American Conference,14,exact
+2026-27,628824,Alabama,SEC,wbb:sec,333,Alabama Crimson Tide,Alabama,Crimson Tide,ALA,Southeastern Conference,23,exact
+2026-27,628822,Alabama A&M,SWAC,wbb:swac,2010,Alabama A&M Bulldogs,Alabama A&M,Bulldogs,AAMU,Southwestern Athletic Conference,26,exact
+2026-27,628823,Alabama St.,SWAC,wbb:swac,2011,Alabama State Hornets,Alabama State,Hornets,ALST,Southwestern Athletic Conference,26,exact
+2026-27,628763,Alcorn,SWAC,wbb:swac,2016,Alcorn State Braves,Alcorn State,Braves,ALCN,Southwestern Athletic Conference,26,dict
+2026-27,628764,American,Patriot,wbb:patriot,44,American University Eagles,American University,Eagles,AMER,Patriot League,22,exact
+2026-27,628765,App State,Sun Belt,wbb:sun-belt,2026,App State Mountaineers,App State,Mountaineers,APP,Sun Belt Conference,27,exact
+2026-27,628847,Arizona,Big 12,wbb:big-12,12,Arizona Wildcats,Arizona,Wildcats,ARIZ,Big 12 Conference,8,exact
+2026-27,628766,Arizona St.,Big 12,wbb:big-12,9,Arizona State Sun Devils,Arizona State,Sun Devils,ASU,Big 12 Conference,8,exact
+2026-27,628768,Ark.-Pine Bluff,SWAC,wbb:swac,2029,Arkansas-Pine Bluff Golden Lions,Arkansas-Pine Bluff,Golden Lions,UAPB,Southwestern Athletic Conference,26,dict
+2026-27,628849,Arkansas,SEC,wbb:sec,8,Arkansas Razorbacks,Arkansas,Razorbacks,ARK,Southeastern Conference,23,exact
+2026-27,628848,Arkansas St.,Sun Belt,wbb:sun-belt,2032,Arkansas State Red Wolves,Arkansas State,Red Wolves,ARST,Sun Belt Conference,27,exact
+2026-27,628726,Army West Point,Patriot,wbb:patriot,349,Army Black Knights,Army,Black Knights,ARMY,Patriot League,22,dict
+2026-27,628851,Auburn,SEC,wbb:sec,2,Auburn Tigers,Auburn,Tigers,AUB,Southeastern Conference,23,exact
+2026-27,628852,Austin Peay,WAC,wbb:wac,2046,Austin Peay Governors,Austin Peay,Governors,APSU,United Athletic Conference,30,exact
+2026-27,628863,BYU,Big 12,wbb:big-12,252,BYU Cougars,BYU,Cougars,BYU,Big 12 Conference,8,exact
+2026-27,628853,Ball St.,MAC,wbb:mac,2050,Ball State Cardinals,Ball State,Cardinals,BALL,Mid-American Conference,14,exact
+2026-27,628855,Baylor,Big 12,wbb:big-12,239,Baylor Bears,Baylor,Bears,BAY,Big 12 Conference,8,exact
+2026-27,628723,Bellarmine,ASUN,wbb:asun,91,Bellarmine Knights,Bellarmine,Knights,BELL,ASUN Conference,46,exact
+2026-27,628812,Belmont,MVC,wbb:mvc,2057,Belmont Bruins,Belmont,Bruins,BEL,Missouri Valley Conference,18,exact
+2026-27,628856,Bethune-Cookman,SWAC,wbb:swac,2065,Bethune-Cookman Wildcats,Bethune-Cookman,Wildcats,BCU,Southwestern Athletic Conference,26,exact
+2026-27,628857,Binghamton,America East,wbb:america-east,2066,Binghamton Bearcats,Binghamton,Bearcats,BING,America East Conference,1,exact
+2026-27,628858,Boise St.,Pac-12,wbb:pac-12,68,Boise State Broncos,Boise State,Broncos,BOIS,Pac-12 Conference,21,exact
+2026-27,628859,Boston College,ACC,wbb:acc,103,Boston College Eagles,Boston College,Eagles,BC,Atlantic Coast Conference,2,exact
+2026-27,628860,Boston U.,Patriot,wbb:patriot,104,Boston University Terriers,Boston University,Terriers,BU,Patriot League,22,exact
+2026-27,628861,Bowling Green,MAC,wbb:mac,189,Bowling Green Falcons,Bowling Green,Falcons,BGSU,Mid-American Conference,14,exact
+2026-27,628862,Bradley,MVC,wbb:mvc,71,Bradley Braves,Bradley,Braves,BRAD,Missouri Valley Conference,18,exact
+2026-27,628864,Brown,Ivy League,wbb:ivy,225,Brown Bears,Brown,Bears,BRWN,Ivy League,12,exact
+2026-27,628865,Bryant,America East,wbb:america-east,2803,Bryant Bulldogs,Bryant,Bulldogs,BRY,America East Conference,1,exact
+2026-27,628866,Bucknell,Patriot,wbb:patriot,2083,Bucknell Bison,Bucknell,Bison,BUCK,Patriot League,22,exact
+2026-27,628867,Buffalo,MAC,wbb:mac,2084,Buffalo Bulls,Buffalo,Bulls,BUF,Mid-American Conference,14,exact
+2026-27,628868,Butler,Big East,wbb:big-east,2086,Butler Bulldogs,Butler,Bulldogs,BTLR,Big East Conference,4,exact
+2026-27,628870,CSU Bakersfield,Big West,wbb:big-west,2934,Cal State Bakersfield Roadrunners,Cal State Bakersfield,Roadrunners,CSUB,Big West Conference,9,alias
+2026-27,628829,CSUN,Big West,wbb:big-west,2463,Cal State Northridge Matadors,Cal State Northridge,Matadors,CSUN,Big West Conference,9,exact
+2026-27,628869,Cal Poly,Big West,wbb:big-west,13,Cal Poly Mustangs,Cal Poly,Mustangs,CP,Big West Conference,9,exact
+2026-27,628827,Cal St. Fullerton,Big West,wbb:big-west,2239,Cal State Fullerton Titans,Cal State Fullerton,Titans,CSUF,Big West Conference,9,exact
+2026-27,628832,California,ACC,wbb:acc,25,California Golden Bears,California,Golden Bears,CAL,Atlantic Coast Conference,2,exact
+2026-27,628772,California Baptist,Big West,wbb:big-west,2856,California Baptist Lancers,California Baptist,Lancers,CBU,Big West Conference,9,exact
+2026-27,628836,Campbell,CAA,wbb:caa,2097,Campbell Fighting Camels,Campbell,Fighting Camels,CAM,Coastal Athletic Association,10,exact
+2026-27,628837,Canisius,MAAC,wbb:maac,2099,Canisius Golden Griffins,Canisius,Golden Griffins,CAN,Metro Atlantic Athletic Conference,13,exact
+2026-27,628757,Central Ark.,WAC,wbb:wac,2110,Central Arkansas Bears,Central Arkansas,Bears,CARK,United Athletic Conference,30,exact
+2026-27,628838,Central Conn. St.,NEC,wbb:nec,2115,Central Connecticut Blue Devils,Central Connecticut,Blue Devils,CCSU,Northeast Conference,19,dict
+2026-27,628840,Central Mich.,MAC,wbb:mac,2117,Central Michigan Chippewas,Central Michigan,Chippewas,CMU,Mid-American Conference,14,exact
+2026-27,628854,Charleston So.,Big South,wbb:big-south,2127,Charleston Southern Buccaneers,Charleston Southern,Buccaneers,CHSO,Big South Conference,6,exact
+2026-27,629048,Charlotte,AAC,wbb:american,2429,Charlotte 49ers,Charlotte,49ers,CLT,American Conference,62,exact
+2026-27,628797,Chattanooga,SoCon,wbb:socon,236,Chattanooga Mocs,Chattanooga,Mocs,UTC,Southern Conference,24,exact
+2026-27,628841,Chicago St.,NEC,wbb:nec,2130,Chicago State Cougars,Chicago State,Cougars,CHST,Northeast Conference,19,exact
+2026-27,628842,Cincinnati,Big 12,wbb:big-12,2132,Cincinnati Bearcats,Cincinnati,Bearcats,CIN,Big 12 Conference,8,exact
+2026-27,628843,Clemson,ACC,wbb:acc,228,Clemson Tigers,Clemson,Tigers,CLEM,Atlantic Coast Conference,2,exact
+2026-27,628844,Cleveland St.,Horizon,wbb:horizon,325,Cleveland State Vikings,Cleveland State,Vikings,CLE,Horizon League,45,exact
+2026-27,628845,Coastal Carolina,Sun Belt,wbb:sun-belt,324,Coastal Carolina Chanticleers,Coastal Carolina,Chanticleers,CCU,Sun Belt Conference,27,exact
+2026-27,628758,Col. of Charleston,CAA,wbb:caa,232,Charleston Cougars,Charleston,Cougars,COFC,Coastal Athletic Association,10,dict
+2026-27,628846,Colgate,Patriot,wbb:patriot,2142,Colgate Raiders,Colgate,Raiders,COLG,Patriot League,22,exact
+2026-27,628944,Colorado,Big 12,wbb:big-12,38,Colorado Buffaloes,Colorado,Buffaloes,COLO,Big 12 Conference,8,exact
+2026-27,628943,Colorado St.,Pac-12,wbb:pac-12,36,Colorado State Rams,Colorado State,Rams,CSU,Pac-12 Conference,21,exact
+2026-27,628945,Columbia,Ivy League,wbb:ivy,171,Columbia Lions,Columbia,Lions,COLU,Ivy League,12,exact
+2026-27,628946,Coppin St.,MEAC,wbb:meac,2154,Coppin State Eagles,Coppin State,Eagles,COPP,Mid-Eastern Athletic Conference,16,exact
+2026-27,628947,Cornell,Ivy League,wbb:ivy,172,Cornell Big Red,Cornell,Big Red,COR,Ivy League,12,exact
+2026-27,628948,Creighton,Big East,wbb:big-east,156,Creighton Bluejays,Creighton,Bluejays,CREI,Big East Conference,4,exact
+2026-27,628949,Dartmouth,Ivy League,wbb:ivy,159,Dartmouth Big Green,Dartmouth,Big Green,DART,Ivy League,12,exact
+2026-27,628950,Davidson,Atlantic 10,wbb:atlantic-10,2166,Davidson Wildcats,Davidson,Wildcats,DAV,Atlantic 10 Conference,3,exact
+2026-27,628951,Dayton,Atlantic 10,wbb:atlantic-10,2168,Dayton Flyers,Dayton,Flyers,DAY,Atlantic 10 Conference,3,exact
+2026-27,628952,DePaul,Big East,wbb:big-east,305,DePaul Blue Demons,DePaul,Blue Demons,DEP,Big East Conference,4,exact
+2026-27,628954,Delaware,C-USA,wbb:cusa,48,Delaware Blue Hens,Delaware,Blue Hens,DEL,Conference USA,11,exact
+2026-27,628953,Delaware St.,MEAC,wbb:meac,2169,Delaware State Hornets,Delaware State,Hornets,DSU,Mid-Eastern Athletic Conference,16,exact
+2026-27,628955,Denver,WCC,wbb:wcc,2172,Denver Pioneers,Denver,Pioneers,DEN,West Coast Conference,29,exact
+2026-27,628956,Detroit Mercy,Horizon,wbb:horizon,2174,Detroit Mercy Titans,Detroit Mercy,Titans,DETM,Horizon League,45,exact
+2026-27,628775,Drake,MVC,wbb:mvc,2181,Drake Bulldogs,Drake,Bulldogs,DRKE,Missouri Valley Conference,18,exact
+2026-27,628776,Drexel,CAA,wbb:caa,2182,Drexel Dragons,Drexel,Dragons,DREX,Coastal Athletic Association,10,exact
+2026-27,628957,Duke,ACC,wbb:acc,150,Duke Blue Devils,Duke,Blue Devils,DUKE,Atlantic Coast Conference,2,exact
+2026-27,628958,Duquesne,Atlantic 10,wbb:atlantic-10,2184,Duquesne Dukes,Duquesne,Dukes,DUQ,Atlantic 10 Conference,3,exact
+2026-27,628960,ETSU,SoCon,wbb:socon,2193,East Tennessee State Buccaneers,East Tennessee State,Buccaneers,ETSU,Southern Conference,24,exact
+2026-27,628959,East Carolina,AAC,wbb:american,151,East Carolina Pirates,East Carolina,Pirates,ECU,American Conference,62,exact
+2026-27,628804,East Texas A&M,Southland,wbb:southland,2837,East Texas A&M Lions,East Texas A&M,Lions,ETAM,Southland Conference,25,exact
+2026-27,628961,Eastern Ill.,OVC,wbb:ovc,2197,Eastern Illinois Panthers,Eastern Illinois,Panthers,EIU,Ohio Valley Conference,20,exact
+2026-27,628963,Eastern Ky.,WAC,wbb:wac,2198,Eastern Kentucky Colonels,Eastern Kentucky,Colonels,EKU,United Athletic Conference,30,exact
+2026-27,628964,Eastern Mich.,MAC,wbb:mac,2199,Eastern Michigan Eagles,Eastern Michigan,Eagles,EMU,Mid-American Conference,14,exact
+2026-27,628777,Eastern Wash.,Big Sky,wbb:big-sky,331,Eastern Washington Eagles,Eastern Washington,Eagles,EWU,Big Sky Conference,5,exact
+2026-27,628759,Elon,CAA,wbb:caa,2210,Elon Phoenix,Elon,Phoenix,ELON,Coastal Athletic Association,10,exact
+2026-27,628965,Evansville,MVC,wbb:mvc,339,Evansville Purple Aces,Evansville,Purple Aces,EVAN,Missouri Valley Conference,18,exact
+2026-27,628966,FDU,NEC,wbb:nec,161,Fairleigh Dickinson Knights,Fairleigh Dickinson,Knights,FDU,Northeast Conference,19,exact
+2026-27,628771,FGCU,ASUN,wbb:asun,526,Florida Gulf Coast Eagles,Florida Gulf Coast,Eagles,FGCU,ASUN Conference,46,exact
+2026-27,628969,FIU,C-USA,wbb:cusa,2229,Florida International Panthers,Florida International,Panthers,FIU,Conference USA,11,exact
+2026-27,628778,Fairfield,MAAC,wbb:maac,2217,Fairfield Stags,Fairfield,Stags,FAIR,Metro Atlantic Athletic Conference,13,exact
+2026-27,628968,Fla. Atlantic,AAC,wbb:american,2226,Florida Atlantic Owls,Florida Atlantic,Owls,FAU,American Conference,62,exact
+2026-27,628971,Florida,SEC,wbb:sec,57,Florida Gators,Florida,Gators,FLA,Southeastern Conference,23,exact
+2026-27,628967,Florida A&M,SWAC,wbb:swac,50,Florida A&M Rattlers,Florida A&M,Rattlers,FAMU,Southwestern Athletic Conference,26,exact
+2026-27,628970,Florida St.,ACC,wbb:acc,52,Florida State Seminoles,Florida State,Seminoles,FSU,Atlantic Coast Conference,2,exact
+2026-27,628972,Fordham,Atlantic 10,wbb:atlantic-10,2230,Fordham Rams,Fordham,Rams,FOR,Atlantic 10 Conference,3,exact
+2026-27,628871,Fresno St.,Pac-12,wbb:pac-12,278,Fresno State Bulldogs,Fresno State,Bulldogs,FRES,Pac-12 Conference,21,exact
+2026-27,628973,Furman,SoCon,wbb:socon,231,Furman Paladins,Furman,Paladins,FUR,Southern Conference,24,exact
+2026-27,628977,Ga. Southern,Sun Belt,wbb:sun-belt,290,Georgia Southern Eagles,Georgia Southern,Eagles,GASO,Sun Belt Conference,27,exact
+2026-27,628760,Gardner-Webb,Big South,wbb:big-south,2241,Gardner-Webb Runnin' Bulldogs,Gardner-Webb,Runnin' Bulldogs,GWEB,Big South Conference,6,exact
+2026-27,628974,George Mason,Atlantic 10,wbb:atlantic-10,2244,George Mason Patriots,George Mason,Patriots,GMU,Atlantic 10 Conference,3,exact
+2026-27,628975,George Washington,Atlantic 10,wbb:atlantic-10,45,George Washington Revolutionaries,George Washington,Revolutionaries,GW,Atlantic 10 Conference,3,exact
+2026-27,628976,Georgetown,Big East,wbb:big-east,46,Georgetown Hoyas,Georgetown,Hoyas,GTWN,Big East Conference,4,exact
+2026-27,628980,Georgia,SEC,wbb:sec,61,Georgia Bulldogs,Georgia,Bulldogs,UGA,Southeastern Conference,23,exact
+2026-27,628978,Georgia St.,Sun Belt,wbb:sun-belt,2247,Georgia State Panthers,Georgia State,Panthers,GAST,Sun Belt Conference,27,exact
+2026-27,628979,Georgia Tech,ACC,wbb:acc,59,Georgia Tech Yellow Jackets,Georgia Tech,Yellow Jackets,GT,Atlantic Coast Conference,2,exact
+2026-27,628981,Gonzaga,Pac-12,wbb:pac-12,2250,Gonzaga Bulldogs,Gonzaga,Bulldogs,GONZ,Pac-12 Conference,21,exact
+2026-27,628982,Grambling,SWAC,wbb:swac,2755,Grambling Tigers,Grambling,Tigers,GRAM,Southwestern Athletic Conference,26,exact
+2026-27,628761,Grand Canyon,MWC,wbb:mountain-west,2253,Grand Canyon Lopes,Grand Canyon,Lopes,GCU,Mountain West Conference,44,exact
+2026-27,628799,Green Bay,Horizon,wbb:horizon,2739,Green Bay Phoenix,Green Bay,Phoenix,GB,Horizon League,45,exact
+2026-27,628983,Hampton,CAA,wbb:caa,2261,Hampton Pirates,Hampton,Pirates,HAMP,Coastal Athletic Association,10,exact
+2026-27,628984,Harvard,Ivy League,wbb:ivy,108,Harvard Crimson,Harvard,Crimson,HARV,Ivy League,12,exact
+2026-27,628985,Hawaii,MWC,wbb:mountain-west,62,Hawai'i Rainbow Warriors,Hawai'i,Rainbow Warriors,HAW,Mountain West Conference,44,dict
+2026-27,628813,High Point,Big South,wbb:big-south,2272,High Point Panthers,High Point,Panthers,HPU,Big South Conference,6,exact
+2026-27,628986,Hofstra,CAA,wbb:caa,2275,Hofstra Pride,Hofstra,Pride,HOF,Coastal Athletic Association,10,exact
+2026-27,628779,Holy Cross,Patriot,wbb:patriot,107,Holy Cross Crusaders,Holy Cross,Crusaders,HC,Patriot League,22,exact
+2026-27,628988,Houston,Big 12,wbb:big-12,248,Houston Cougars,Houston,Cougars,HOU,Big 12 Conference,8,exact
+2026-27,628987,Houston Christian,Southland,wbb:southland,2277,Houston Christian Huskies,Houston Christian,Huskies,HCU,Southland Conference,25,exact
+2026-27,628989,Howard,MEAC,wbb:meac,47,Howard Bison,Howard,Bison,HOW,Mid-Eastern Athletic Conference,16,exact
+2026-27,628769,IU Indy,Horizon,wbb:horizon,85,IU Indianapolis Jaguars,IU Indianapolis,Jaguars,IUIN,Horizon League,45,exact
+2026-27,628991,Idaho,Big Sky,wbb:big-sky,70,Idaho Vandals,Idaho,Vandals,IDHO,Big Sky Conference,5,exact
+2026-27,628990,Idaho St.,Big Sky,wbb:big-sky,304,Idaho State Bengals,Idaho State,Bengals,IDST,Big Sky Conference,5,exact
+2026-27,628993,Illinois,Big Ten,wbb:big-ten,356,Illinois Fighting Illini,Illinois,Fighting Illini,ILL,Big Ten Conference,7,exact
+2026-27,628992,Illinois St.,MVC,wbb:mvc,2287,Illinois State Redbirds,Illinois State,Redbirds,ILST,Missouri Valley Conference,18,exact
+2026-27,628996,Indiana,Big Ten,wbb:big-ten,84,Indiana Hoosiers,Indiana,Hoosiers,IU,Big Ten Conference,7,exact
+2026-27,628995,Indiana St.,MVC,wbb:mvc,282,Indiana State Sycamores,Indiana State,Sycamores,INST,Missouri Valley Conference,18,exact
+2026-27,628998,Iona,MAAC,wbb:maac,314,Iona Gaels,Iona,Gaels,IONA,Metro Atlantic Athletic Conference,13,exact
+2026-27,628780,Iowa,Big Ten,wbb:big-ten,2294,Iowa Hawkeyes,Iowa,Hawkeyes,IOWA,Big Ten Conference,7,exact
+2026-27,628999,Iowa St.,Big 12,wbb:big-12,66,Iowa State Cyclones,Iowa State,Cyclones,ISU,Big 12 Conference,8,exact
+2026-27,628781,Jackson St.,SWAC,wbb:swac,2296,Jackson State Tigers,Jackson State,Tigers,JKST,Southwestern Athletic Conference,26,exact
+2026-27,629001,Jacksonville,ASUN,wbb:asun,294,Jacksonville Dolphins,Jacksonville,Dolphins,JAX,ASUN Conference,46,exact
+2026-27,629000,Jacksonville St.,C-USA,wbb:cusa,55,Jacksonville State Gamecocks,Jacksonville State,Gamecocks,JXST,Conference USA,11,exact
+2026-27,629002,James Madison,Sun Belt,wbb:sun-belt,256,James Madison Dukes,James Madison,Dukes,JMU,Sun Belt Conference,27,exact
+2026-27,629004,Kansas,Big 12,wbb:big-12,2305,Kansas Jayhawks,Kansas,Jayhawks,KU,Big 12 Conference,8,exact
+2026-27,628807,Kansas City,Summit League,wbb:summit,140,Kansas City Roos,Kansas City,Roos,KC,The Summit League,47,exact
+2026-27,629003,Kansas St.,Big 12,wbb:big-12,2306,Kansas State Wildcats,Kansas State,Wildcats,KSU,Big 12 Conference,8,exact
+2026-27,628762,Kennesaw St.,C-USA,wbb:cusa,338,Kennesaw State Owls,Kennesaw State,Owls,KENN,Conference USA,11,exact
+2026-27,628782,Kent St.,MAC,wbb:mac,2309,Kent State Golden Flashes,Kent State,Golden Flashes,KENT,Mid-American Conference,14,exact
+2026-27,629005,Kentucky,SEC,wbb:sec,96,Kentucky Wildcats,Kentucky,Wildcats,UK,Southeastern Conference,23,exact
+2026-27,629011,LIU,NEC,wbb:nec,112358,Long Island University Sharks,Long Island University,Sharks,LIU,Northeast Conference,19,exact
+2026-27,629018,LMU (CA),WCC,wbb:wcc,2351,Loyola Marymount Lions,Loyola Marymount,Lions,LMU,West Coast Conference,29,dict
+2026-27,629013,LSU,SEC,wbb:sec,99,LSU Tigers,LSU,Tigers,LSU,Southeastern Conference,23,exact
+2026-27,629058,LSU New Orleans,Southland,wbb:southland,2443,LSU New Orleans Privateers,LSU New Orleans,Privateers,NOLA,Southland Conference,25,exact
+2026-27,629006,La Salle,Atlantic 10,wbb:atlantic-10,2325,La Salle Explorers,La Salle,Explorers,LAS,Atlantic 10 Conference,3,exact
+2026-27,629007,Lafayette,Patriot,wbb:patriot,322,Lafayette Leopards,Lafayette,Leopards,LAF,Patriot League,22,exact
+2026-27,629008,Lamar University,Southland,wbb:southland,2320,Lamar Cardinals,Lamar,Cardinals,LAM,Southland Conference,25,dict
+2026-27,628806,Le Moyne,NEC,wbb:nec,2330,Le Moyne Dolphins,Le Moyne,Dolphins,LEM,Northeast Conference,19,exact
+2026-27,629009,Lehigh,Patriot,wbb:patriot,2329,Lehigh Mountain Hawks,Lehigh,Mountain Hawks,LEH,Patriot League,22,exact
+2026-27,629010,Liberty,C-USA,wbb:cusa,2335,Liberty Flames,Liberty,Flames,LIB,Conference USA,11,exact
+2026-27,628802,Lindenwood,OVC,wbb:ovc,2815,Lindenwood Lions,Lindenwood,Lions,LIN,Ohio Valley Conference,20,exact
+2026-27,628814,Lipscomb,ASUN,wbb:asun,288,Lipscomb Bisons,Lipscomb,Bisons,LIP,ASUN Conference,46,exact
+2026-27,628850,Little Rock,WAC,wbb:wac,2031,Little Rock Trojans,Little Rock,Trojans,LR,United Athletic Conference,30,exact
+2026-27,628828,Long Beach St.,Big West,wbb:big-west,299,Long Beach State Beach,Long Beach State,Beach,LBSU,Big West Conference,9,exact
+2026-27,629012,Longwood,Big South,wbb:big-south,2344,Longwood Lancers,Longwood,Lancers,LONG,Big South Conference,6,exact
+2026-27,628934,Louisiana,Sun Belt,wbb:sun-belt,309,Louisiana Ragin' Cajuns,Louisiana,Ragin' Cajuns,UL,Sun Belt Conference,27,exact
+2026-27,629014,Louisiana Tech,Sun Belt,wbb:sun-belt,2348,Louisiana Tech Bulldogs,Louisiana Tech,Bulldogs,LT,Sun Belt Conference,27,exact
+2026-27,629015,Louisville,ACC,wbb:acc,97,Louisville Cardinals,Louisville,Cardinals,LOU,Atlantic Coast Conference,2,exact
+2026-27,629019,Loyola Chicago,Atlantic 10,wbb:atlantic-10,2350,Loyola Chicago Ramblers,Loyola Chicago,Ramblers,LUC,Atlantic 10 Conference,3,exact
+2026-27,629017,Loyola Maryland,Patriot,wbb:patriot,2352,Loyola Maryland Greyhounds,Loyola Maryland,Greyhounds,L-MD,Patriot League,22,exact
+2026-27,628783,Maine,America East,wbb:america-east,311,Maine Black Bears,Maine,Black Bears,ME,America East Conference,1,exact
+2026-27,629020,Manhattan,MAAC,wbb:maac,2363,Manhattan Jaspers,Manhattan,Jaspers,MAN,Metro Atlantic Athletic Conference,13,exact
+2026-27,629021,Marist,MAAC,wbb:maac,2368,Marist Red Foxes,Marist,Red Foxes,MRST,Metro Atlantic Athletic Conference,13,exact
+2026-27,629022,Marquette,Big East,wbb:big-east,269,Marquette Golden Eagles,Marquette,Golden Eagles,MARQ,Big East Conference,4,exact
+2026-27,628784,Marshall,Sun Belt,wbb:sun-belt,276,Marshall Thundering Herd,Marshall,Thundering Herd,MRSH,Sun Belt Conference,27,exact
+2026-27,629024,Maryland,Big Ten,wbb:big-ten,120,Maryland Terrapins,Maryland,Terrapins,MD,Big Ten Conference,7,exact
+2026-27,629026,Massachusetts,MAC,wbb:mac,113,Massachusetts Minutemen,Massachusetts,Minutemen,MASS,Mid-American Conference,14,exact
+2026-27,629027,McNeese,Southland,wbb:southland,2377,McNeese Cowboys,McNeese,Cowboys,MCN,Southland Conference,25,exact
+2026-27,629028,Memphis,AAC,wbb:american,235,Memphis Tigers,Memphis,Tigers,MEM,American Conference,62,exact
+2026-27,629029,Mercer,SoCon,wbb:socon,2382,Mercer Bears,Mercer,Bears,MER,Southern Conference,24,exact
+2026-27,629070,Mercyhurst,NEC,wbb:nec,2385,Mercyhurst Lakers,Mercyhurst,Lakers,MERC,Northeast Conference,19,exact
+2026-27,628816,Merrimack,MAAC,wbb:maac,2771,Merrimack Warriors,Merrimack,Warriors,MRMK,Metro Atlantic Athletic Conference,13,exact
+2026-27,629031,Miami (FL),ACC,wbb:acc,2390,Miami Hurricanes,Miami,Hurricanes,MIA,Atlantic Coast Conference,2,dict
+2026-27,629030,Miami (OH),MAC,wbb:mac,193,Miami (OH) RedHawks,Miami (OH),RedHawks,M-OH,Mid-American Conference,14,exact
+2026-27,629033,Michigan,Big Ten,wbb:big-ten,130,Michigan Wolverines,Michigan,Wolverines,MICH,Big Ten Conference,7,exact
+2026-27,629032,Michigan St.,Big Ten,wbb:big-ten,127,Michigan State Spartans,Michigan State,Spartans,MSU,Big Ten Conference,7,exact
+2026-27,628785,Middle Tenn.,C-USA,wbb:cusa,2393,Middle Tennessee Blue Raiders,Middle Tennessee,Blue Raiders,MTSU,Conference USA,11,exact
+2026-27,628751,Milwaukee,Horizon,wbb:horizon,270,Milwaukee Panthers,Milwaukee,Panthers,MILW,Horizon League,45,exact
+2026-27,629034,Minnesota,Big Ten,wbb:big-ten,135,Minnesota Golden Gophers,Minnesota,Golden Gophers,MINN,Big Ten Conference,7,exact
+2026-27,629035,Mississippi St.,SEC,wbb:sec,344,Mississippi State Bulldogs,Mississippi State,Bulldogs,MSST,Southeastern Conference,23,exact
+2026-27,629036,Mississippi Val.,SWAC,wbb:swac,2400,Mississippi Valley State Delta Devils,Mississippi Valley State,Delta Devils,MVSU,Southwestern Athletic Conference,26,dict
+2026-27,629038,Missouri,SEC,wbb:sec,142,Missouri Tigers,Missouri,Tigers,MIZ,Southeastern Conference,23,exact
+2026-27,628932,Missouri St.,C-USA,wbb:cusa,2623,Missouri State Bears,Missouri State,Bears,MOST,Conference USA,11,exact
+2026-27,629039,Monmouth,CAA,wbb:caa,2405,Monmouth Hawks,Monmouth,Hawks,MONM,Coastal Athletic Association,10,exact
+2026-27,629041,Montana,Big Sky,wbb:big-sky,149,Montana Grizzlies,Montana,Grizzlies,MONT,Big Sky Conference,5,exact
+2026-27,629040,Montana St.,Big Sky,wbb:big-sky,147,Montana State Bobcats,Montana State,Bobcats,MTST,Big Sky Conference,5,exact
+2026-27,629042,Morehead St.,OVC,wbb:ovc,2413,Morehead State Eagles,Morehead State,Eagles,MORE,Ohio Valley Conference,20,exact
+2026-27,629043,Morgan St.,MEAC,wbb:meac,2415,Morgan State Bears,Morgan State,Bears,MORG,Mid-Eastern Athletic Conference,16,exact
+2026-27,629044,Mount St. Mary's,MAAC,wbb:maac,116,Mount St. Mary's Mountaineers,Mount St. Mary's,Mountaineers,MSM,Metro Atlantic Athletic Conference,13,exact
+2026-27,629045,Murray St.,MVC,wbb:mvc,93,Murray State Racers,Murray State,Racers,MUR,Missouri Valley Conference,18,exact
+2026-27,629061,N.C. A&T,CAA,wbb:caa,2448,North Carolina A&T Aggies,North Carolina A&T,Aggies,NCAT,Coastal Athletic Association,10,exact
+2026-27,629062,N.C. Central,MEAC,wbb:meac,2428,North Carolina Central Eagles,North Carolina Central,Eagles,NCCU,Mid-Eastern Athletic Conference,16,exact
+2026-27,629063,NC State,ACC,wbb:acc,152,NC State Wolfpack,NC State,Wolfpack,NCSU,Atlantic Coast Conference,2,exact
+2026-27,628874,NIU,Horizon,wbb:horizon,2459,Northern Illinois Huskies,Northern Illinois,Huskies,NIU,Horizon League,45,exact
+2026-27,629055,NJIT,America East,wbb:america-east,2885,NJIT Highlanders,NJIT,Highlanders,NJIT,America East Conference,1,exact
+2026-27,628727,Navy,Patriot,wbb:patriot,2426,Navy Midshipmen,Navy,Midshipmen,NAVY,Patriot League,22,exact
+2026-27,629051,Nebraska,Big Ten,wbb:big-ten,158,Nebraska Cornhuskers,Nebraska,Cornhuskers,NEB,Big Ten Conference,7,exact
+2026-27,629053,Nevada,MWC,wbb:mountain-west,2440,Nevada Wolf Pack,Nevada,Wolf Pack,NEV,Mountain West Conference,44,exact
+2026-27,629054,New Hampshire,America East,wbb:america-east,160,New Hampshire Wildcats,New Hampshire,Wildcats,UNH,America East Conference,1,exact
+2026-27,628942,New Haven,NEC,wbb:nec,2441,New Haven Chargers,New Haven,Chargers,NHVN,Northeast Conference,19,exact
+2026-27,629057,New Mexico,MWC,wbb:mountain-west,167,New Mexico Lobos,New Mexico,Lobos,UNM,Mountain West Conference,44,exact
+2026-27,629056,New Mexico St.,C-USA,wbb:cusa,166,New Mexico State Aggies,New Mexico State,Aggies,NMSU,Conference USA,11,exact
+2026-27,629059,Niagara,MAAC,wbb:maac,315,Niagara Purple Eagles,Niagara,Purple Eagles,NIA,Metro Atlantic Athletic Conference,13,exact
+2026-27,629060,Nicholls,Southland,wbb:southland,2447,Nicholls Colonels,Nicholls,Colonels,NICH,Southland Conference,25,exact
+2026-27,628787,Norfolk St.,MEAC,wbb:meac,2450,Norfolk State Spartans,Norfolk State,Spartans,NORF,Mid-Eastern Athletic Conference,16,exact
+2026-27,628819,North Ala.,WAC,wbb:wac,2453,North Alabama Lions,North Alabama,Lions,UNA,United Athletic Conference,30,exact
+2026-27,629047,North Carolina,ACC,wbb:acc,153,North Carolina Tar Heels,North Carolina,Tar Heels,UNC,Atlantic Coast Conference,2,exact
+2026-27,629065,North Dakota,Summit League,wbb:summit,155,North Dakota Fighting Hawks,North Dakota,Fighting Hawks,UND,The Summit League,47,exact
+2026-27,629064,North Dakota St.,Summit League,wbb:summit,2449,North Dakota State Bison,North Dakota State,Bison,NDSU,The Summit League,47,exact
+2026-27,628808,North Florida,ASUN,wbb:asun,2454,North Florida Ospreys,North Florida,Ospreys,UNF,ASUN Conference,46,exact
+2026-27,629066,North Texas,AAC,wbb:american,249,North Texas Mean Green,North Texas,Mean Green,UNT,American Conference,62,exact
+2026-27,629068,Northeastern,CAA,wbb:caa,111,Northeastern Huskies,Northeastern,Huskies,NE,Coastal Athletic Association,10,exact
+2026-27,628872,Northern Ariz.,Big Sky,wbb:big-sky,2464,Northern Arizona Lumberjacks,Northern Arizona,Lumberjacks,NAU,Big Sky Conference,5,exact
+2026-27,628873,Northern Colo.,Big Sky,wbb:big-sky,2458,Northern Colorado Bears,Northern Colorado,Bears,UNCO,Big Sky Conference,5,exact
+2026-27,628876,Northern Ky.,Horizon,wbb:horizon,94,Northern Kentucky Norse,Northern Kentucky,Norse,NKU,Horizon League,45,exact
+2026-27,628878,Northwestern,Big Ten,wbb:big-ten,77,Northwestern Wildcats,Northwestern,Wildcats,NU,Big Ten Conference,7,exact
+2026-27,628877,Northwestern St.,Southland,wbb:southland,2466,Northwestern State Demons,Northwestern State,Demons,NWST,Southland Conference,25,exact
+2026-27,628788,Notre Dame,ACC,wbb:acc,87,Notre Dame Fighting Irish,Notre Dame,Fighting Irish,ND,Atlantic Coast Conference,2,exact
+2026-27,628879,Oakland,Horizon,wbb:horizon,2473,Oakland Golden Grizzlies,Oakland,Golden Grizzlies,OAK,Horizon League,45,exact
+2026-27,628881,Ohio,MAC,wbb:mac,195,Ohio Bobcats,Ohio,Bobcats,OHIO,Mid-American Conference,14,exact
+2026-27,628880,Ohio St.,Big Ten,wbb:big-ten,194,Ohio State Buckeyes,Ohio State,Buckeyes,OSU,Big Ten Conference,7,exact
+2026-27,628883,Oklahoma,SEC,wbb:sec,201,Oklahoma Sooners,Oklahoma,Sooners,OU,Southeastern Conference,23,exact
+2026-27,628882,Oklahoma St.,Big 12,wbb:big-12,197,Oklahoma State Cowboys,Oklahoma State,Cowboys,OKST,Big 12 Conference,8,exact
+2026-27,628884,Old Dominion,Sun Belt,wbb:sun-belt,295,Old Dominion Monarchs,Old Dominion,Monarchs,ODU,Sun Belt Conference,27,exact
+2026-27,629037,Ole Miss,SEC,wbb:sec,145,Ole Miss Rebels,Ole Miss,Rebels,MISS,Southeastern Conference,23,exact
+2026-27,629052,Omaha,Summit League,wbb:summit,2437,Omaha Mavericks,Omaha,Mavericks,OMA,The Summit League,47,exact
+2026-27,628885,Oral Roberts,Summit League,wbb:summit,198,Oral Roberts Golden Eagles,Oral Roberts,Golden Eagles,ORU,The Summit League,47,exact
+2026-27,628887,Oregon,Big Ten,wbb:big-ten,2483,Oregon Ducks,Oregon,Ducks,ORE,Big Ten Conference,7,exact
+2026-27,628886,Oregon St.,Pac-12,wbb:pac-12,204,Oregon State Beavers,Oregon State,Beavers,ORST,Pac-12 Conference,21,exact
+2026-27,628888,Pacific,WCC,wbb:wcc,279,Pacific Tigers,Pacific,Tigers,PAC,West Coast Conference,29,exact
+2026-27,628891,Penn,Ivy League,wbb:ivy,219,Pennsylvania Quakers,Pennsylvania,Quakers,PENN,Ivy League,12,exact
+2026-27,628890,Penn St.,Big Ten,wbb:big-ten,213,Penn State Nittany Lions,Penn State,Nittany Lions,PSU,Big Ten Conference,7,exact
+2026-27,628892,Pepperdine,WCC,wbb:wcc,2492,Pepperdine Waves,Pepperdine,Waves,PEPP,West Coast Conference,29,exact
+2026-27,628893,Pittsburgh,ACC,wbb:acc,221,Pittsburgh Panthers,Pittsburgh,Panthers,PITT,Atlantic Coast Conference,2,exact
+2026-27,628789,Portland,WCC,wbb:wcc,2501,Portland Pilots,Portland,Pilots,PORT,West Coast Conference,29,exact
+2026-27,628894,Portland St.,Big Sky,wbb:big-sky,2502,Portland State Vikings,Portland State,Vikings,PRST,Big Sky Conference,5,exact
+2026-27,628895,Prairie View,SWAC,wbb:swac,2504,Prairie View A&M Panthers,Prairie View A&M,Panthers,PV,Southwestern Athletic Conference,26,exact
+2026-27,628800,Presbyterian,Big South,wbb:big-south,2506,Presbyterian Blue Hose,Presbyterian,Blue Hose,PRES,Big South Conference,6,exact
+2026-27,628790,Princeton,Ivy League,wbb:ivy,163,Princeton Tigers,Princeton,Tigers,PRIN,Ivy League,12,exact
+2026-27,628896,Providence,Big East,wbb:big-east,2507,Providence Friars,Providence,Friars,PROV,Big East Conference,4,exact
+2026-27,628897,Purdue,Big Ten,wbb:big-ten,2509,Purdue Boilermakers,Purdue,Boilermakers,PUR,Big Ten Conference,7,exact
+2026-27,628997,Purdue Fort Wayne,Horizon,wbb:horizon,2870,Purdue Fort Wayne Mastodons,Purdue Fort Wayne,Mastodons,PFW,Horizon League,45,exact
+2026-27,628801,Queens (NC),ASUN,wbb:asun,2511,Queens University Royals,Queens University,Royals,QUC,ASUN Conference,46,dict
+2026-27,628898,Quinnipiac,MAAC,wbb:maac,2514,Quinnipiac Bobcats,Quinnipiac,Bobcats,QUIN,Metro Atlantic Athletic Conference,13,exact
+2026-27,628899,Radford,Big South,wbb:big-south,2515,Radford Highlanders,Radford,Highlanders,RAD,Big South Conference,6,exact
+2026-27,628900,Rhode Island,Atlantic 10,wbb:atlantic-10,227,Rhode Island Rams,Rhode Island,Rams,URI,Atlantic 10 Conference,3,exact
+2026-27,628791,Rice,AAC,wbb:american,242,Rice Owls,Rice,Owls,RICE,American Conference,62,exact
+2026-27,628792,Richmond,Atlantic 10,wbb:atlantic-10,257,Richmond Spiders,Richmond,Spiders,RICH,Atlantic 10 Conference,3,exact
+2026-27,628901,Rider,MAAC,wbb:maac,2520,Rider Broncs,Rider,Broncs,RID,Metro Atlantic Athletic Conference,13,exact
+2026-27,628902,Robert Morris,Horizon,wbb:horizon,2523,Robert Morris Colonials,Robert Morris,Colonials,RMU,Horizon League,45,exact
+2026-27,628903,Rutgers,Big Ten,wbb:big-ten,164,Rutgers Scarlet Knights,Rutgers,Scarlet Knights,RUTG,Big Ten Conference,7,exact
+2026-27,628936,SFA,Southland,wbb:southland,2617,Stephen F. Austin Lumberjacks,Stephen F. Austin,Lumberjacks,SFA,Southland Conference,25,exact
+2026-27,628927,SIUE,OVC,wbb:ovc,2565,SIU Edwardsville Cougars,SIU Edwardsville,Cougars,SIUE,Ohio Valley Conference,20,exact
+2026-27,628928,SMU,ACC,wbb:acc,2567,SMU Mustangs,SMU,Mustangs,SMU,Atlantic Coast Conference,2,exact
+2026-27,628830,Sacramento St.,Big West,wbb:big-west,16,Sacramento State Hornets,Sacramento State,Hornets,SAC,Big West Conference,9,exact
+2026-27,628793,Sacred Heart,MAAC,wbb:maac,2529,Sacred Heart Pioneers,Sacred Heart,Pioneers,SHU,Metro Atlantic Athletic Conference,13,exact
+2026-27,628907,Saint Joseph's,Atlantic 10,wbb:atlantic-10,2603,Saint Joseph's Hawks,Saint Joseph's,Hawks,JOES,Atlantic 10 Conference,3,exact
+2026-27,628908,Saint Louis,Atlantic 10,wbb:atlantic-10,139,Saint Louis Billikens,Saint Louis,Billikens,SLU,Atlantic 10 Conference,3,exact
+2026-27,628909,Saint Mary's (CA),WCC,wbb:wcc,2608,Saint Mary's Gaels,Saint Mary's,Gaels,SMC,West Coast Conference,29,dict
+2026-27,628910,Saint Peter's,MAAC,wbb:maac,2612,Saint Peter's Peacocks,Saint Peter's,Peacocks,SPU,Metro Atlantic Athletic Conference,13,exact
+2026-27,628911,Sam Houston,C-USA,wbb:cusa,2534,Sam Houston Bearkats,Sam Houston,Bearkats,SHSU,Conference USA,11,exact
+2026-27,628912,Samford,SoCon,wbb:socon,2535,Samford Bulldogs,Samford,Bulldogs,SAM,Southern Conference,24,exact
+2026-27,628914,San Diego,WCC,wbb:wcc,301,San Diego Toreros,San Diego,Toreros,USD,West Coast Conference,29,exact
+2026-27,628913,San Diego St.,Pac-12,wbb:pac-12,21,San Diego State Aztecs,San Diego State,Aztecs,SDSU,Pac-12 Conference,21,exact
+2026-27,628915,San Francisco,WCC,wbb:wcc,2539,San Francisco Dons,San Francisco,Dons,SF,West Coast Conference,29,exact
+2026-27,628916,San Jose St.,MWC,wbb:mountain-west,23,San José State Spartans,San José State,Spartans,SJSU,Mountain West Conference,44,dict
+2026-27,628917,Santa Clara,WCC,wbb:wcc,2541,Santa Clara Broncos,Santa Clara,Broncos,SCU,West Coast Conference,29,exact
+2026-27,628767,Seattle U,WCC,wbb:wcc,2547,Seattle U Redhawks,Seattle U,Redhawks,SEA,West Coast Conference,29,exact
+2026-27,628918,Seton Hall,Big East,wbb:big-east,2550,Seton Hall Pirates,Seton Hall,Pirates,HALL,Big East Conference,4,exact
+2026-27,628919,Siena,MAAC,wbb:maac,2561,Siena Saints,Siena,Saints,SIE,Metro Atlantic Athletic Conference,13,exact
+2026-27,628920,South Alabama,Sun Belt,wbb:sun-belt,6,South Alabama Jaguars,South Alabama,Jaguars,USA,Sun Belt Conference,27,exact
+2026-27,628794,South Carolina,SEC,wbb:sec,2579,South Carolina Gamecocks,South Carolina,Gamecocks,SC,Southeastern Conference,23,exact
+2026-27,628921,South Carolina St.,MEAC,wbb:meac,2569,South Carolina State Bulldogs,South Carolina State,Bulldogs,SCST,Mid-Eastern Athletic Conference,16,exact
+2026-27,628922,South Dakota,Summit League,wbb:summit,233,South Dakota Coyotes,South Dakota,Coyotes,SDAK,The Summit League,47,exact
+2026-27,628795,South Dakota St.,Summit League,wbb:summit,2571,South Dakota State Jackrabbits,South Dakota State,Jackrabbits,SDST,The Summit League,47,exact
+2026-27,628923,South Fla.,AAC,wbb:american,58,South Florida Bulls,South Florida,Bulls,USF,American Conference,62,exact
+2026-27,628924,Southeast Mo. St.,OVC,wbb:ovc,2546,Southeast Missouri State Redhawks,Southeast Missouri State,Redhawks,SEMO,Ohio Valley Conference,20,exact
+2026-27,628925,Southeastern La.,Southland,wbb:southland,2545,SE Louisiana Lions,SE Louisiana,Lions,SELA,Southland Conference,25,dict
+2026-27,628796,Southern California,Big Ten,wbb:big-ten,30,USC Trojans,USC,Trojans,USC,Big Ten Conference,7,dict
+2026-27,628926,Southern Ill.,MVC,wbb:mvc,79,Southern Illinois Salukis,Southern Illinois,Salukis,SIU,Missouri Valley Conference,18,exact
+2026-27,628805,Southern Ind.,OVC,wbb:ovc,88,Southern Indiana Screaming Eagles,Southern Indiana,Screaming Eagles,USI,Ohio Valley Conference,20,alias
+2026-27,628929,Southern Miss.,Sun Belt,wbb:sun-belt,2572,Southern Miss Golden Eagles,Southern Miss,Golden Eagles,USM,Sun Belt Conference,27,dict
+2026-27,628930,Southern U.,SWAC,wbb:swac,2582,Southern Jaguars,Southern,Jaguars,SOU,Southwestern Athletic Conference,26,dict
+2026-27,628931,Southern Utah,Big Sky,wbb:big-sky,253,Southern Utah Thunderbirds,Southern Utah,Thunderbirds,SUU,Big Sky Conference,5,exact
+2026-27,628904,St. Bonaventure,Atlantic 10,wbb:atlantic-10,179,St. Bonaventure Bonnies,St. Bonaventure,Bonnies,SBU,Atlantic 10 Conference,3,exact
+2026-27,628906,St. John's (NY),Big East,wbb:big-east,2599,St. John's Red Storm,St. John's,Red Storm,SJU,Big East Conference,4,dict
+2026-27,628962,St. Thomas (MN),Summit League,wbb:summit,2900,St. Thomas Tommies,St. Thomas,Tommies,STMN,The Summit League,47,alias
+2026-27,628935,Stanford,ACC,wbb:acc,24,Stanford Cardinal,Stanford,Cardinal,STAN,Atlantic Coast Conference,2,exact
+2026-27,628937,Stetson,ASUN,wbb:asun,56,Stetson Hatters,Stetson,Hatters,STET,ASUN Conference,46,exact
+2026-27,628803,Stonehill,NEC,wbb:nec,284,Stonehill Skyhawks,Stonehill,Skyhawks,STO,Northeast Conference,19,exact
+2026-27,628938,Stony Brook,CAA,wbb:caa,2619,Stony Brook Seawolves,Stony Brook,Seawolves,STBK,Coastal Athletic Association,10,exact
+2026-27,628939,Syracuse,ACC,wbb:acc,183,Syracuse Orange,Syracuse,Orange,SYR,Atlantic Coast Conference,2,exact
+2026-27,628712,TCU,Big 12,wbb:big-12,2628,TCU Horned Frogs,TCU,Horned Frogs,TCU,Big 12 Conference,8,exact
+2026-27,628818,Tarleton St.,WAC,wbb:wac,2627,Tarleton State Texans,Tarleton State,Texans,TAR,United Athletic Conference,30,exact
+2026-27,628940,Temple,AAC,wbb:american,218,Temple Owls,Temple,Owls,TEM,American Conference,62,exact
+2026-27,628709,Tennessee,SEC,wbb:sec,2633,Tennessee Volunteers,Tennessee,Volunteers,TENN,Southeastern Conference,23,exact
+2026-27,628941,Tennessee St.,OVC,wbb:ovc,2634,Tennessee State Tigers,Tennessee State,Tigers,TNST,Ohio Valley Conference,20,exact
+2026-27,628708,Tennessee Tech,SoCon,wbb:socon,2635,Tennessee Tech Golden Eagles,Tennessee Tech,Golden Eagles,TNTC,Southern Conference,24,exact
+2026-27,628798,Texas,SEC,wbb:sec,251,Texas Longhorns,Texas,Longhorns,TEX,Southeastern Conference,23,exact
+2026-27,628711,Texas A&M,SEC,wbb:sec,245,Texas A&M Aggies,Texas A&M,Aggies,TA&M,Southeastern Conference,23,exact
+2026-27,628713,Texas Southern,SWAC,wbb:swac,2640,Texas Southern Tigers,Texas Southern,Tigers,TXSO,Southwestern Athletic Conference,26,exact
+2026-27,628933,Texas St.,Pac-12,wbb:pac-12,326,Texas State Bobcats,Texas State,Bobcats,TXST,Pac-12 Conference,21,exact
+2026-27,628714,Texas Tech,Big 12,wbb:big-12,2641,Texas Tech Red Raiders,Texas Tech,Red Raiders,TTU,Big 12 Conference,8,exact
+2026-27,628718,Toledo,MAC,wbb:mac,2649,Toledo Rockets,Toledo,Rockets,TOL,Mid-American Conference,14,exact
+2026-27,628719,Towson,CAA,wbb:caa,119,Towson Tigers,Towson,Tigers,TOW,Coastal Athletic Association,10,exact
+2026-27,628720,Troy,Sun Belt,wbb:sun-belt,2653,Troy Trojans,Troy,Trojans,TROY,Sun Belt Conference,27,exact
+2026-27,628721,Tulane,AAC,wbb:american,2655,Tulane Green Wave,Tulane,Green Wave,TULN,American Conference,62,exact
+2026-27,628724,Tulsa,AAC,wbb:american,202,Tulsa Golden Hurricane,Tulsa,Golden Hurricane,TLSA,American Conference,62,exact
+2026-27,628825,UAB,AAC,wbb:american,5,UAB Blazers,UAB,Blazers,UAB,American Conference,62,exact
+2026-27,628826,UAlbany,America East,wbb:america-east,399,UAlbany Great Danes,UAlbany,Great Danes,UALB,America East Conference,1,exact
+2026-27,628833,UC Davis,MWC,wbb:mountain-west,302,UC Davis Aggies,UC Davis,Aggies,UCD,Mountain West Conference,44,exact
+2026-27,628773,UC Irvine,Big West,wbb:big-west,300,UC Irvine Anteaters,UC Irvine,Anteaters,UCI,Big West Conference,9,exact
+2026-27,628835,UC Riverside,Big West,wbb:big-west,27,UC Riverside Highlanders,UC Riverside,Highlanders,UCR,Big West Conference,9,exact
+2026-27,628817,UC San Diego,Big West,wbb:big-west,28,UC San Diego Tritons,UC San Diego,Tritons,UCSD,Big West Conference,9,exact
+2026-27,628831,UC Santa Barbara,Big West,wbb:big-west,2540,UC Santa Barbara Gauchos,UC Santa Barbara,Gauchos,UCSB,Big West Conference,9,exact
+2026-27,628839,UCF,Big 12,wbb:big-12,2116,UCF Knights,UCF,Knights,UCF,Big 12 Conference,8,exact
+2026-27,628834,UCLA,Big Ten,wbb:big-ten,26,UCLA Bruins,UCLA,Bruins,UCLA,Big Ten Conference,7,exact
+2026-27,628774,UConn,Big East,wbb:big-east,41,UConn Huskies,UConn,Huskies,CONN,Big East Conference,4,exact
+2026-27,628994,UIC,MVC,wbb:mvc,82,UIC Flames,UIC,Flames,UIC,Missouri Valley Conference,18,exact
+2026-27,628809,UIW,Southland,wbb:southland,2916,Incarnate Word Cardinals,Incarnate Word,Cardinals,UIW,Southland Conference,25,exact
+2026-27,629067,ULM,Sun Belt,wbb:sun-belt,2433,UL Monroe Warhawks,UL Monroe,Warhawks,ULM,Sun Belt Conference,27,exact
+2026-27,629023,UMBC,America East,wbb:america-east,2378,UMBC Retrievers,UMBC,Retrievers,UMBC,America East Conference,1,exact
+2026-27,629025,UMES,MEAC,wbb:meac,2379,Maryland Eastern Shore Hawks,Maryland Eastern Shore,Hawks,UMES,Mid-Eastern Athletic Conference,16,exact
+2026-27,629016,UMass Lowell,America East,wbb:america-east,2349,UMass Lowell River Hawks,UMass Lowell,River Hawks,UML,America East Conference,1,exact
+2026-27,629046,UNC Asheville,Big South,wbb:big-south,2427,UNC Asheville Bulldogs,UNC Asheville,Bulldogs,UNCA,Big South Conference,6,exact
+2026-27,629049,UNC Greensboro,SoCon,wbb:socon,2430,UNC Greensboro Spartans,UNC Greensboro,Spartans,UNCG,Southern Conference,24,exact
+2026-27,629050,UNCW,CAA,wbb:caa,350,UNC Wilmington Seahawks,UNC Wilmington,Seahawks,UNCW,Coastal Athletic Association,10,exact
+2026-27,628875,UNI,MVC,wbb:mvc,2460,Northern Iowa Panthers,Northern Iowa,Panthers,UNI,Missouri Valley Conference,18,exact
+2026-27,628786,UNLV,MWC,wbb:mountain-west,2439,UNLV Rebels,UNLV,Rebels,UNLV,Mountain West Conference,44,exact
+2026-27,628811,USC Upstate,Big South,wbb:big-south,2908,South Carolina Upstate Spartans,South Carolina Upstate,Spartans,UPST,Big South Conference,6,dict
+2026-27,628715,UT Arlington,WAC,wbb:wac,250,UT Arlington Mavericks,UT Arlington,Mavericks,UTA,United Athletic Conference,30,exact
+2026-27,628710,UT Martin,OVC,wbb:ovc,2630,UT Martin Skyhawks,UT Martin,Skyhawks,UTM,Ohio Valley Conference,20,exact
+2026-27,628716,UTEP,MWC,wbb:mountain-west,2638,UTEP Miners,UTEP,Miners,UTEP,Mountain West Conference,44,exact
+2026-27,628889,UTRGV,Southland,wbb:southland,292,UT Rio Grande Valley Vaqueros,UT Rio Grande Valley,Vaqueros,RGV,Southland Conference,25,dict
+2026-27,628717,UTSA,AAC,wbb:american,2636,UTSA Roadrunners,UTSA,Roadrunners,UTSA,American Conference,62,exact
+2026-27,628729,Utah,Big 12,wbb:big-12,254,Utah Utes,Utah,Utes,UTAH,Big 12 Conference,8,exact
+2026-27,628728,Utah St.,Pac-12,wbb:pac-12,328,Utah State Aggies,Utah State,Aggies,USU,Pac-12 Conference,21,exact
+2026-27,628722,Utah Tech,Big Sky,wbb:big-sky,3101,Utah Tech Trailblazers,Utah Tech,Trailblazers,UTU,Big Sky Conference,5,exact
+2026-27,628815,Utah Valley,Big West,wbb:big-west,3084,Utah Valley Wolverines,Utah Valley,Wolverines,UVU,Big West Conference,9,exact
+2026-27,628734,VCU,Atlantic 10,wbb:atlantic-10,2670,VCU Rams,VCU,Rams,VCU,Atlantic 10 Conference,3,exact
+2026-27,628730,Valparaiso,MVC,wbb:mvc,2674,Valparaiso Beacons,Valparaiso,Beacons,VAL,Missouri Valley Conference,18,exact
+2026-27,628731,Vanderbilt,SEC,wbb:sec,238,Vanderbilt Commodores,Vanderbilt,Commodores,VAN,Southeastern Conference,23,exact
+2026-27,628732,Vermont,America East,wbb:america-east,261,Vermont Catamounts,Vermont,Catamounts,UVM,America East Conference,1,exact
+2026-27,628733,Villanova,Big East,wbb:big-east,222,Villanova Wildcats,Villanova,Wildcats,VILL,Big East Conference,4,exact
+2026-27,628736,Virginia,ACC,wbb:acc,258,Virginia Cavaliers,Virginia,Cavaliers,UVA,Atlantic Coast Conference,2,exact
+2026-27,628735,Virginia Tech,ACC,wbb:acc,259,Virginia Tech Hokies,Virginia Tech,Hokies,VT,Atlantic Coast Conference,2,exact
+2026-27,628737,Wagner,NEC,wbb:nec,2681,Wagner Seahawks,Wagner,Seahawks,WAG,Northeast Conference,19,exact
+2026-27,628738,Wake Forest,ACC,wbb:acc,154,Wake Forest Demon Deacons,Wake Forest,Demon Deacons,WAKE,Atlantic Coast Conference,2,exact
+2026-27,628740,Washington,Big Ten,wbb:big-ten,264,Washington Huskies,Washington,Huskies,WASH,Big Ten Conference,7,exact
+2026-27,628739,Washington St.,Pac-12,wbb:pac-12,265,Washington State Cougars,Washington State,Cougars,WSU,Pac-12 Conference,21,exact
+2026-27,628741,Weber St.,Big Sky,wbb:big-sky,2692,Weber State Wildcats,Weber State,Wildcats,WEB,Big Sky Conference,5,exact
+2026-27,629270,West Florida,ASUN,wbb:asun,2697,West Florida Argonauts,West Florida,Argonauts,WFL,ASUN Conference,46,exact
+2026-27,629069,West Ga.,WAC,wbb:wac,2698,West Georgia Wolves,West Georgia,Wolves,WGA,United Athletic Conference,30,exact
+2026-27,628742,West Virginia,Big 12,wbb:big-12,277,West Virginia Mountaineers,West Virginia,Mountaineers,WVU,Big 12 Conference,8,exact
+2026-27,628743,Western Caro.,SoCon,wbb:socon,2717,Western Carolina Catamounts,Western Carolina,Catamounts,WCU,Southern Conference,24,exact
+2026-27,628744,Western Ill.,OVC,wbb:ovc,2710,Western Illinois Leathernecks,Western Illinois,Leathernecks,WIU,Ohio Valley Conference,20,exact
+2026-27,628745,Western Ky.,C-USA,wbb:cusa,98,Western Kentucky Hilltoppers,Western Kentucky,Hilltoppers,WKU,Conference USA,11,exact
+2026-27,628746,Western Mich.,MAC,wbb:mac,2711,Western Michigan Broncos,Western Michigan,Broncos,WMU,Mid-American Conference,14,exact
+2026-27,628747,Wichita St.,AAC,wbb:american,2724,Wichita State Shockers,Wichita State,Shockers,WICH,American Conference,62,exact
+2026-27,628748,William & Mary,CAA,wbb:caa,2729,William & Mary Tribe,William & Mary,Tribe,W&M,Coastal Athletic Association,10,exact
+2026-27,628749,Winthrop,Big South,wbb:big-south,2737,Winthrop Eagles,Winthrop,Eagles,WIN,Big South Conference,6,exact
+2026-27,628750,Wisconsin,Big Ten,wbb:big-ten,275,Wisconsin Badgers,Wisconsin,Badgers,WIS,Big Ten Conference,7,exact
+2026-27,628810,Wofford,SoCon,wbb:socon,2747,Wofford Terriers,Wofford,Terriers,WOF,Southern Conference,24,exact
+2026-27,628752,Wright St.,Horizon,wbb:horizon,2750,Wright State Raiders,Wright State,Raiders,WRST,Horizon League,45,exact
+2026-27,628753,Wyoming,MWC,wbb:mountain-west,2751,Wyoming Cowboys,Wyoming,Cowboys,WYO,Mountain West Conference,44,exact
+2026-27,628754,Xavier,Big East,wbb:big-east,2752,Xavier Musketeers,Xavier,Musketeers,XAV,Big East Conference,4,exact
+2026-27,628755,Yale,Ivy League,wbb:ivy,43,Yale Bulldogs,Yale,Bulldogs,YALE,Ivy League,12,exact
+2026-27,628756,Youngstown St.,Horizon,wbb:horizon,2754,Youngstown State Penguins,Youngstown State,Penguins,YSU,Horizon League,45,exact

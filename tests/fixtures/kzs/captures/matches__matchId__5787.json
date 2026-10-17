@@ -1,0 +1,86 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 5787,
+    "round": 1,
+    "dateTime": "2007-10-13T17:00:00Z",
+    "attendance": 150,
+    "organiserTeam": {},
+    "firstTeam": {
+      "id": 11561,
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "secondTeam": {
+      "id": 11562,
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "sportHall": {
+      "id": 197,
+      "name": "ŠD Šoštanj"
+    },
+    "firstTeamScore": 61,
+    "secondTeamScore": 67,
+    "scoreInsertedManually": false,
+    "status": "FINISHED",
+    "scores": [
+      {
+        "id": 18,
+        "matchPart": "QUARTER1",
+        "firstTeamScore": 13,
+        "secondTeamScore": 19
+      },
+      {
+        "id": 19,
+        "matchPart": "QUARTER2",
+        "firstTeamScore": 17,
+        "secondTeamScore": 13
+      },
+      {
+        "id": 20,
+        "matchPart": "QUARTER3",
+        "firstTeamScore": 11,
+        "secondTeamScore": 19
+      }
+    ],
+    "competitions": [
+      {
+        "competitionId": 1,
+        "competitionName": "Liga Telemach",
+        "competitionType": "LEAGUE",
+        "competitionPhase": {
+          "id": 3653,
+          "name": "1. del"
+        },
+        "transferred": false
+      }
+    ],
+    "liveStreams": [],
+    "streams": [],
+    "gender": "MALE",
+    "liveStats": false,
+    "withoutStats": false,
+    "conclusions": [],
+    "delegated": false,
+    "delegationChanges": [],
+    "moveRequests": [],
+    "bests": [
+      {
+        "statCategory": "POINTS",
+        "firstTeamPlayer": {
+          "playerId": 47963,
+          "playerFirstName": "Aleš",
+          "playerLastName": "Kunc",
+          "value": 14
+        },
+        "secondTeamPlayer": {
+          "playerId": 47973,
+          "playerFirstName": "Jure",
+          "playerLastName": "Eržen",
+          "value": 17
+        }
+      }
+    ]
+  }
+}

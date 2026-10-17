@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: group
+  type: character
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: label
+  type: character
+- description: ''
+  name: home_value
+  type: character
+- description: ''
+  name: home_percentage
+  type: numeric
+- description: ''
+  name: home_graph_length
+  type: numeric
+- description: ''
+  name: home_winning
+  type: logical
+- description: ''
+  name: away_value
+  type: character
+- description: ''
+  name: away_percentage
+  type: numeric
+- description: ''
+  name: away_graph_length
+  type: numeric
+- description: ''
+  name: away_winning
+  type: logical
+kind: dataframe
+schema: lkl_summary

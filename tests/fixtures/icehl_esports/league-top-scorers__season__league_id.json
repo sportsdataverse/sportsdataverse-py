@@ -1,0 +1,47 @@
+[
+  {
+    "playerId": 4795,
+    "name": "Joshua Darren",
+    "surname": "Lawrence",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4795_1788869990_4951_6a8c22a6f0d14_1787568806_Joshua Lawrence.png",
+    "birthdate": "2002-01-28",
+    "teamId": 10,
+    "teamName": "Olimpija Ljubljana",
+    "teamShortcut": "OLL",
+    "goals": 8,
+    "assists": 7,
+    "points": 15,
+    "shots": 44,
+    "penaltyMinutes": 2
+  },
+  {
+    "playerId": 4716,
+    "name": "Brady",
+    "surname": "Shaw",
+    "photo": null,
+    "birthdate": "1992-10-02",
+    "teamId": 13,
+    "teamName": "Steinbach Black Wings Linz",
+    "teamShortcut": "BWL",
+    "goals": 7,
+    "assists": 8,
+    "points": 15,
+    "shots": 55,
+    "penaltyMinutes": 2
+  },
+  {
+    "playerId": 4024,
+    "name": "Nick",
+    "surname": "Swaney",
+    "photo": "https://esports.ice.hockey/upload/player/photo/4024_1760100753_SWANEY_NICK.png",
+    "birthdate": "1997-09-09",
+    "teamId": 9,
+    "teamName": "Moser Medical Graz99ers",
+    "teamShortcut": "G99",
+    "goals": 7,
+    "assists": 8,
+    "points": 15,
+    "shots": 70,
+    "penaltyMinutes": 2
+  }
+]

@@ -1,0 +1,497 @@
+api: liiga
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: Liiga has nothing for the request (an unknown
+    game, a tournament not played that season, a shot map before 2016).'
+  see_also:
+  - name: Liiga
+    note: the site whose API v2 these wrappers read
+    url: https://liiga.fi/
+  - name: fastRhockey
+    note: SportsDataverse hockey package (R)
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- parser: parse_liiga
+  path: /tournament
+  returns_schema: native/liiga/tournament
+  short: tournament
+  summary: 'Current state of the league: game week of the season in progress and its
+    last game week.'
+- example_args:
+    season: 2026
+    tournament: runkosarja
+  extra_params:
+  - description: Season END year (2026 = 2025-26). Omitted = the season in progress.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Omitted =
+      every tournament, preseason included.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga_games
+  path: /games
+  returns_schema: native/liiga/games
+  short: games
+  summary: 'Every game of a season and tournament: teams, score, xG, power plays,
+    periods and rink.'
+- example_args:
+    season: 2026
+    tournament: runkosarja
+  extra_params:
+  - description: Season END year (2026 = 2025-26). Omitted = the season in progress.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Omitted =
+      every tournament, preseason included.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga_goals
+  path: /games
+  returns_schema: native/liiga/goals
+  short: goals
+  summary: 'Every goal of a season and tournament: scorer, assists, strength codes
+    and skaters on ice.'
+- example_args:
+    season: 2026
+    tournament: runkosarja
+  extra_params:
+  - description: Season END year (2026 = 2025-26). Omitted = the season in progress.
+    name: season
+    query_key: season
+    type: int
+  - description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Omitted =
+      runkosarja.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga_schedule
+  path: /schedule
+  returns_schema: native/liiga/schedule
+  short: schedule
+  summary: 'Schedule of a season and tournament: game ids, teams, goals, xG, start
+    and rink.'
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26). Omitted = the season in progress.
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - runkosarja
+    - playoffs
+    - playout
+    - qualifications
+    - valmistavat_ottelut
+    - chl
+    default: runkosarja
+    description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Required by
+      the API; defaults to runkosarja.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga
+  path: /gameweeks
+  returns_schema: native/liiga/gameweeks
+  short: gameweeks
+  summary: Number of game weeks of a season and tournament.
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game
+  short: game
+  summary: 'One game''s header: teams, score, xG, power plays, periods, rink, referees
+    and attendance.'
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_goals
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_goals
+  short: game_goals
+  summary: 'One game''s goals: scorer, assists, strength codes and skaters on ice.'
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_penalties
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_penalties
+  short: game_penalties
+  summary: 'One game''s penalties, both teams: player, fault, minutes, start and end.'
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_shootout
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_shootout
+  short: game_shootout
+  summary: 'One game''s shootout attempts: shooter, goalkeeper and result (none for
+    a game without one).'
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_lineups
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_lineups
+  short: game_lineups
+  summary: 'One game''s lineups, both teams: line, role, jersey, captaincy and bio.'
+- example_args:
+    game_id: 1
+    season: 2026
+  fixed_params:
+    dataType: playersWithStats
+  parser: parse_liiga_game_players_stats
+  path: /games/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_players_stats
+  short: game_players_stats
+  summary: One game's lineups with each player's all-time, season, season-in-team
+    and versus-team stats.
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_stats
+  path: /games/stats/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_stats
+  short: game_stats
+  summary: One game's per-period player box score, skaters and goalies, with tracking
+    where Liiga has it.
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_game_team_stats
+  path: /games/stats/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/game_team_stats
+  short: game_team_stats
+  summary: One game's per-period team stats with puck possession.
+- example_args:
+    game_id: 1
+    season: 2026
+  parser: parse_liiga_shotmap
+  path: /shotmap/{season}/{game_id}
+  path_params:
+  - description: Season END year (2026 = 2025-26). Game ids repeat across seasons,
+      so a game is (season, game_id).
+    name: season
+    required: true
+    type: int
+  - description: Game id (game_id in liiga_schedule or liiga_games), e.g. 1; unique
+      only within a season.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/liiga/shotmap
+  short: shotmap
+  summary: One game's shots with rink-image coordinates (pixels), shooter, blocker
+    and skaters on ice; from 2016.
+- example_args:
+    season: 2026
+  extra_params:
+  - description: Season END year (2026 = 2025-26). Omitted = the season in progress.
+    name: season
+    query_key: season
+    type: int
+  parser: parse_liiga_standings
+  path: /standings/
+  returns_schema: native/liiga/standings
+  short: standings
+  summary: 'Standings of a season: regular season, playoffs, preseason, playout and
+    qualifications tables.'
+- example_args: {}
+  fixed_params:
+    team: all
+  parser: parse_liiga
+  path: /teams/info
+  returns_schema: native/liiga/teams_history
+  short: teams_history
+  summary: Every team's regular-season record, one row per team and season since 1976.
+- example_args: {}
+  parser: parse_liiga_teams
+  path: /teams/info
+  returns_schema: native/liiga/teams
+  short: teams
+  summary: 'Team directory: every current and past team with logos, venue capacity
+    and club info.'
+- example_args:
+    data_type: shots
+    season_from: 2026
+    season_to: 2026
+  extra_params:
+  - choices:
+    - shots
+    - passes
+    - faceoffs
+    - penalties
+    - powerplay
+    - penalty_kill
+    - even_strength
+    description: 'Stat table: shots, passes, faceoffs, penalties, powerplay, penalty_kill,
+      even_strength.'
+    name: data_type
+    query_key: dataType
+    required: true
+    type: str
+  - description: First season (END year) of the range.
+    name: season_from
+    query_key: seasonFrom
+    type: int
+  - description: Last season (END year) of the range.
+    name: season_to
+    query_key: seasonTo
+    type: int
+  - choices:
+    - runkosarja
+    - playoffs
+    - playout
+    - qualifications
+    - valmistavat_ottelut
+    - chl
+    default: runkosarja
+    description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Required by
+      the API; defaults to runkosarja.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga
+  path: /teams/stats
+  returns_schema: native/liiga/team_stats
+  short: team_stats
+  summary: Team stat table of a season range, by data_type.
+- example_args:
+    season_from: 2026
+    season_to: 2026
+  extra_params:
+  - description: First season (END year) of the range.
+    name: season_from
+    query_key: fromSeason
+    type: int
+  - description: Last season (END year) of the range.
+    name: season_to
+    query_key: toSeason
+    type: int
+  - choices:
+    - runkosarja
+    - playoffs
+    - playout
+    - qualifications
+    - valmistavat_ottelut
+    - chl
+    default: runkosarja
+    description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League). Required by
+      the API; defaults to runkosarja.'
+    name: tournament
+    query_key: tournament
+    type: str
+  parser: parse_liiga_players_info
+  path: /players/info
+  returns_schema: native/liiga/players_info
+  short: players_info
+  summary: Roster and bio of every player in a season range.
+- example_args:
+    player_id: 21870028
+  parser: parse_liiga_player
+  path: /players/info/{player_id}
+  path_params:
+  - description: Player id (player_id in liiga_players_info or a lineup; equals fihaId),
+      e.g. 21870028.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/liiga/player
+  short: player
+  summary: One player's bio, teams by season and active seasons.
+- example_args:
+    player_id: 21870028
+  parser: parse_liiga_player_career
+  path: /players/info/{player_id}
+  path_params:
+  - description: Player id (player_id in liiga_players_info or a lineup; equals fihaId),
+      e.g. 21870028.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/liiga/player_career
+  short: player_career
+  summary: 'One player''s career: season totals by tournament.'
+- example_args:
+    player_id: 21870028
+    season: 2026
+  parser: parse_liiga_player_game_log
+  path: /players/info/{player_id}/games/{season}
+  path_params:
+  - description: Player id (player_id in liiga_players_info or a lineup; equals fihaId),
+      e.g. 21870028.
+    name: player_id
+    required: true
+    type: int
+  - description: Season END year (2026 = 2025-26).
+    name: season
+    required: true
+    type: int
+  returns_schema: native/liiga/player_game_log
+  short: player_game_log
+  summary: One player's game log for a season, every tournament.
+- example_args:
+    season_from: 2026
+    season_to: 2026
+    tournament: runkosarja
+  extra_params:
+  - choices:
+    - basicStats
+    - basicStatsGk
+    - advancedStats
+    - goalStats
+    - shotStats
+    - skatingStats
+    - faceOffStats
+    - penaltyStats
+    - powerplayPenaltykillStats
+    - passes
+    - winningShotComp
+    - winningShotCompGk
+    - gameTime
+    default: basicStats
+    description: 'Stat table: basicStats, basicStatsGk, advancedStats, goalStats,
+      shotStats, skatingStats, faceOffStats, penaltyStats, powerplayPenaltykillStats,
+      passes, winningShotComp, winningShotCompGk, gameTime.'
+    name: data_type
+    query_key: dataType
+    type: str
+  parser: parse_liiga
+  path: /players/stats/summed/{season_from}/{season_to}/{tournament}/true
+  path_params:
+  - description: First season (END year) of the range, e.g. 2026.
+    name: season_from
+    required: true
+    type: int
+  - description: Last season (END year) of the range, e.g. 2026.
+    name: season_to
+    required: true
+    type: int
+  - choices:
+    - runkosarja
+    - playoffs
+    - playout
+    - qualifications
+    - valmistavat_ottelut
+    - chl
+    description: 'Tournament: runkosarja (regular season), playoffs, playout, qualifications,
+      valmistavat_ottelut (preseason) or chl (Champions Hockey League).'
+    name: tournament
+    required: true
+    type: str
+  returns_schema: native/liiga/player_stats
+  short: player_stats
+  summary: Player stat table summed over a season range, by data_type (the whole league,
+    unfiltered).
+getter_module: sportsdataverse.hockey.liiga.liiga_runtime
+host: https://liiga.fi/api/v2
+module: liiga
+name_pattern: liiga_{short}
+parser_columns: true
+parser_module: hockey.liiga.liiga_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: liiga_

@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: league_title
+  type: character
+- description: ''
+  name: season
+  type: integer
+kind: dataframe
+schema: wjbl_leagues

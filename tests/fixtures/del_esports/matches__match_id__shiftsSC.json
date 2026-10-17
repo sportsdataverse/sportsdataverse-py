@@ -1,0 +1,59 @@
+[
+  {
+    "id": 11415946,
+    "startTime": {
+      "time": 0,
+      "realtime": "2026-10-11 14:30:08"
+    },
+    "endTime": {
+      "time": 60,
+      "realtime": "2026-10-11 14:31:49"
+    },
+    "player": {
+      "id": 1382,
+      "name": "Boaz Bassen"
+    },
+    "team": {
+      "id": 15,
+      "name": "Schwenninger Wild Wings"
+    }
+  },
+  {
+    "id": 11415947,
+    "startTime": {
+      "time": 0,
+      "realtime": "2026-10-11 14:30:08"
+    },
+    "endTime": {
+      "time": 62,
+      "realtime": "2026-10-11 14:31:51"
+    },
+    "player": {
+      "id": 1435,
+      "name": "Austin Ortega"
+    },
+    "team": {
+      "id": 15,
+      "name": "Schwenninger Wild Wings"
+    }
+  },
+  {
+    "id": 11415948,
+    "startTime": {
+      "time": 0,
+      "realtime": "2026-10-11 14:30:08"
+    },
+    "endTime": {
+      "time": 35,
+      "realtime": "2026-10-11 14:31:24"
+    },
+    "player": {
+      "id": 2835,
+      "name": "Thomas Schemitsch"
+    },
+    "team": {
+      "id": 15,
+      "name": "Schwenninger Wild Wings"
+    }
+  }
+]

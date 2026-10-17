@@ -1,0 +1,1095 @@
+{
+  "event": {
+    "game_state_key": "finished",
+    "period": -1,
+    "hd": true,
+    "id": 2786714,
+    "season": "2025/2026",
+    "stage_id": 370,
+    "type_id": 18,
+    "commentator": true,
+    "likes_enabled": false,
+    "is_vertical_video": false,
+    "khl_id": 898236,
+    "arena": {
+      "id": 469,
+      "capacity": 12396,
+      "phone": "+7 (495) 643-1818",
+      "website": "http://www.hockey-palace.ru/",
+      "name": "Megasport Arena",
+      "address": "Khodynsky blvd 3, Moscow, Russia, 125252",
+      "city": "Moscow",
+      "image": "https://www.khl.ru/images/arenas/4/1.jpg",
+      "geo": {
+        "lat": 55.786967,
+        "long": 37.539933
+      }
+    },
+    "team_a": {
+      "id": 18,
+      "khl_id": 7,
+      "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+      "name": "Spartak",
+      "location": "Moscow",
+      "shots": 33,
+      "gf": 2,
+      "ppg": 0,
+      "shg": 0,
+      "ppc": 5,
+      "vbr": 29,
+      "pim": 10,
+      "total_puck_control_time": 21.81,
+      "total_distance_travelled": 70.89,
+      "offensive_blue_line_crossings_count": 82,
+      "top_players": [
+        {
+          "id": "hardestShot",
+          "name": "Hardest shot",
+          "value": "143.24 km/h",
+          "player": {
+            "id": 1144,
+            "khl_id": 17624,
+            "shirt_number": 94,
+            "name": "Mironov Andrei A.",
+            "image": "https://www.khl.ru/img/teamplayers_db/15558/17624.jpg"
+          }
+        },
+        {
+          "id": "playerWithMostDistanceTravelled",
+          "name": "Most distance travelled",
+          "value": "5.18 km",
+          "player": {
+            "id": 35859,
+            "khl_id": 41928,
+            "shirt_number": 4,
+            "name": "Keane Joseph",
+            "image": "https://www.khl.ru/img/teamplayers_db/15558/41928.jpg"
+          }
+        },
+        {
+          "id": "playerWithHighestTopSpeed",
+          "name": "Fastest player",
+          "value": "35.21 km/h",
+          "player": {
+            "id": 21745,
+            "khl_id": 26742,
+            "shirt_number": 17,
+            "name": "Morozov Ivan D.",
+            "image": "https://www.khl.ru/img/teamplayers_db/15558/26742.jpg"
+          }
+        }
+      ],
+      "start_fives": [
+        {
+          "id": 48031,
+          "khl_id": 21376,
+          "shirt_number": 40,
+          "name": "Georgiyev Alexander",
+          "role_key": "goaltender",
+          "image": "https://www.khl.ru/img/teamplayers_db/15461/21376.jpg"
+        },
+        {
+          "id": 35859,
+          "khl_id": 41928,
+          "shirt_number": 4,
+          "name": "Keane Joseph",
+          "role_key": "defensemen",
+          "image": "https://www.khl.ru/img/teamplayers_db/15558/41928.jpg"
+        },
+        {
+          "id": 28841,
+          "khl_id": 22149,
+          "shirt_number": 35,
+          "name": "Korostelyov Nikita",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15549/22149.jpg"
+        }
+      ],
+      "players": [
+        {
+          "id": 33405,
+          "khl_id": 24862,
+          "shirt_number": 98,
+          "name": "Belyayev Alexander Vl.",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15558/24862.jpg",
+          "match_stats": [
+            {
+              "id": "shots",
+              "title": "Shots",
+              "val": 0,
+              "max": 6
+            },
+            {
+              "id": "goals",
+              "title": "Goals",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "fo",
+              "title": "Faceoff",
+              "val": 1,
+              "max": 24
+            }
+          ]
+        },
+        {
+          "id": 33881,
+          "khl_id": 30201,
+          "shirt_number": 78,
+          "name": "Bychkov Roman",
+          "role_key": "defensemen",
+          "image": "https://www.khl.ru/img/teamplayers_db/15461/30201.jpg",
+          "match_stats": [
+            {
+              "id": "shots",
+              "title": "Shots",
+              "val": 1,
+              "max": 6
+            },
+            {
+              "id": "goals",
+              "title": "Goals",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "fo",
+              "title": "Faceoff",
+              "val": 0,
+              "max": 24
+            }
+          ]
+        },
+        {
+          "id": 568,
+          "khl_id": 15299,
+          "shirt_number": 55,
+          "name": "Vishnevsky Dmitry",
+          "role_key": "defensemen",
+          "image": "https://www.khl.ru/img/teamplayers_db/15558/15299.jpg",
+          "match_stats": [
+            {
+              "id": "shots",
+              "title": "Shots",
+              "val": 1,
+              "max": 6
+            },
+            {
+              "id": "goals",
+              "title": "Goals",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "fo",
+              "title": "Faceoff",
+              "val": 0,
+              "max": 24
+            }
+          ]
+        }
+      ],
+      "active": true
+    },
+    "team_b": {
+      "id": 36,
+      "khl_id": 71,
+      "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png",
+      "name": "Neftekhimik",
+      "location": "Nizhnekamsk",
+      "shots": 36,
+      "gf": 3,
+      "ppg": 0,
+      "shg": 0,
+      "ppc": 3,
+      "vbr": 29,
+      "pim": 6,
+      "total_puck_control_time": 17.06,
+      "total_distance_travelled": 70.13,
+      "offensive_blue_line_crossings_count": 88,
+      "top_players": [
+        {
+          "id": "hardestShot",
+          "name": "Hardest shot",
+          "value": "159.16 km/h",
+          "player": {
+            "id": 30281,
+            "khl_id": 27216,
+            "shirt_number": 24,
+            "name": "Serikov Artyom",
+            "image": "https://www.khl.ru/img/teamplayers_db/15553/27216.jpg"
+          }
+        },
+        {
+          "id": "playerWithMostDistanceTravelled",
+          "name": "Most distance travelled",
+          "value": "5.48 km",
+          "player": {
+            "id": 25833,
+            "khl_id": 20700,
+            "shirt_number": 71,
+            "name": "Belozyorov Andrei Al.",
+            "image": "https://www.khl.ru/img/teamplayers_db/15553/20700.jpg"
+          }
+        },
+        {
+          "id": "playerWithHighestTopSpeed",
+          "name": "Fastest player",
+          "value": "35.57 km/h",
+          "player": {
+            "id": 30281,
+            "khl_id": 27216,
+            "shirt_number": 24,
+            "name": "Serikov Artyom",
+            "image": "https://www.khl.ru/img/teamplayers_db/15553/27216.jpg"
+          }
+        }
+      ],
+      "start_fives": [
+        {
+          "id": 25833,
+          "khl_id": 20700,
+          "shirt_number": 71,
+          "name": "Belozyorov Andrei Al.",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15553/20700.jpg"
+        },
+        {
+          "id": 40947,
+          "khl_id": 23431,
+          "shirt_number": 53,
+          "name": "Dolganov Filipp",
+          "role_key": "goaltender",
+          "image": "https://www.khl.ru/img/teamplayers_db/15553/23431.jpg"
+        },
+        {
+          "id": 754,
+          "khl_id": 17591,
+          "shirt_number": 88,
+          "name": "Zhafyarov Damir",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15553/17591.jpg"
+        }
+      ],
+      "players": [
+        {
+          "id": 38867,
+          "khl_id": 41257,
+          "shirt_number": 69,
+          "name": "Artamonov Nikita",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15555/41257.jpg",
+          "match_stats": [
+            {
+              "id": "shots",
+              "title": "Shots",
+              "val": 2,
+              "max": 6
+            },
+            {
+              "id": "goals",
+              "title": "Goals",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "fo",
+              "title": "Faceoff",
+              "val": 0,
+              "max": 24
+            }
+          ]
+        },
+        {
+          "id": 25833,
+          "khl_id": 20700,
+          "shirt_number": 71,
+          "name": "Belozyorov Andrei Al.",
+          "role_key": "forward",
+          "image": "https://www.khl.ru/img/teamplayers_db/15553/20700.jpg",
+          "match_stats": [
+            {
+              "id": "shots",
+              "title": "Shots",
+              "val": 4,
+              "max": 6
+            },
+            {
+              "id": "goals",
+              "title": "Goals",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "fo",
+              "title": "Faceoff",
+              "val": 0,
+              "max": 24
+            }
+          ]
+        },
+        {
+          "id": 40947,
+          "khl_id": 23431,
+          "shirt_number": 53,
+          "name": "Dolganov Filipp",
+          "role_key": "goaltender",
+          "image": "https://www.khl.ru/img/teamplayers_db/15553/23431.jpg",
+          "match_stats": [
+            {
+              "id": "toi",
+              "title": "Time on ice",
+              "val": 65.0,
+              "max": 65.0
+            },
+            {
+              "id": "pim",
+              "title": "Penalty in minutes",
+              "val": 0,
+              "max": 2
+            },
+            {
+              "id": "topSpeed",
+              "title": "Top speed, km/h",
+              "val": 0.0,
+              "max": 35.57
+            }
+          ]
+        }
+      ],
+      "active": true
+    },
+    "quotes": [
+      {
+        "quote": {
+          "id": 2447971,
+          "start_ts": 1774033122000,
+          "finish_ts": 1774033317000,
+          "is_vertical_video": false,
+          "description": "Spartak - Neftekhimik. Game recap.",
+          "image_url": "https://bl.webcaster.pro/quotes/2447971/main_thumbnail/big.jpg",
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_3ee473c82e00bbe415bad6c6ec0cfb6d/q2447971/f9922c4be0dfd938e56a0c69430e034f/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_3ee473c82e00bbe415bad6c6ec0cfb6d/q2447971/f9922c4be0dfd938e56a0c69430e034f/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_3ee473c82e00bbe415bad6c6ec0cfb6d/q2447971/f9922c4be0dfd938e56a0c69430e034f/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_3ee473c82e00bbe415bad6c6ec0cfb6d/q2447971/f9922c4be0dfd938e56a0c69430e034f/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "quote_type_name_key": "Summary",
+          "quote_type_name": "Summary",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Саммари",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "quote": {
+          "id": 2447299,
+          "start_ts": 1774029273000,
+          "finish_ts": 1774029390005,
+          "is_vertical_video": false,
+          "description": "Спартак - Нефтехимик. Лучшие моменты второго периода",
+          "image_url": "https://bl.webcaster.pro/quotes/2447299/main_thumbnail/big.jpg",
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_f14e4d7f7b6737acc76c4ca240628f50/q2447299/aa876ca3f09a350f068287c46f0a4e18/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_f14e4d7f7b6737acc76c4ca240628f50/q2447299/aa876ca3f09a350f068287c46f0a4e18/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_f14e4d7f7b6737acc76c4ca240628f50/q2447299/aa876ca3f09a350f068287c46f0a4e18/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_f14e4d7f7b6737acc76c4ca240628f50/q2447299/aa876ca3f09a350f068287c46f0a4e18/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "quote_type_name_key": "Summary",
+          "quote_type_name": "Summary",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Саммари",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "quote": {
+          "id": 2446639,
+          "start_ts": 1774026050000,
+          "finish_ts": 1774026108000,
+          "is_vertical_video": false,
+          "description": "Спартак - Нефтехимик. Лучшие моменты первого периода",
+          "image_url": "https://bl.webcaster.pro/quotes/2446639/main_thumbnail/big.jpg",
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_bef0a1d468ad4a66aa8e21d23b93301a/q2446639/b7149e7acf88f759cf8029de033534ec/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_bef0a1d468ad4a66aa8e21d23b93301a/q2446639/b7149e7acf88f759cf8029de033534ec/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_bef0a1d468ad4a66aa8e21d23b93301a/q2446639/b7149e7acf88f759cf8029de033534ec/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_bef0a1d468ad4a66aa8e21d23b93301a/q2446639/b7149e7acf88f759cf8029de033534ec/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "quote_type_name_key": "Summary",
+          "quote_type_name": "Summary",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Саммари",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      }
+    ],
+    "goals": [
+      {
+        "time": 3900,
+        "score": "2:3",
+        "period": null,
+        "status": "Shootout",
+        "status_abbr": "SO",
+        "assistants": [],
+        "author": {
+          "shirt_number": 69,
+          "name": "Artamonov Nikita",
+          "gps": 3,
+          "team_id": 36
+        },
+        "quote": {
+          "id": 2447927,
+          "start_ts": 1774032887000,
+          "finish_ts": 1774032914000,
+          "is_vertical_video": false,
+          "description": "Goal. 2:3. Artamonov Nikita (Neftekhimik). Shootout.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_d54959fcf012adcc7a6ad54718d7de62/q2447927/c794ab3331265192bb8e0ffb1fa56e5f/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_d54959fcf012adcc7a6ad54718d7de62/q2447927/c794ab3331265192bb8e0ffb1fa56e5f/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_d54959fcf012adcc7a6ad54718d7de62/q2447927/c794ab3331265192bb8e0ffb1fa56e5f/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_d54959fcf012adcc7a6ad54718d7de62/q2447927/c794ab3331265192bb8e0ffb1fa56e5f/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447927/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "time": 2108,
+        "score": "2:2",
+        "period": 2,
+        "status": "Even strength",
+        "status_abbr": "ES",
+        "assistants": [
+          {
+            "shirt_number": 33,
+            "name": "Tochilkin German",
+            "aps": 16
+          }
+        ],
+        "author": {
+          "shirt_number": 21,
+          "name": "Seleznyov Grigory",
+          "gps": 8,
+          "team_id": 36
+        },
+        "quote": {
+          "id": 2447171,
+          "start_ts": 1774028747000,
+          "finish_ts": 1774028813000,
+          "is_vertical_video": false,
+          "description": "Goal. 2:2. Seleznyov Grigory (Neftekhimik). Assistant: Tochilkin German. Even strength.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_94ad461131fa38763e5695513a462071/q2447171/10331734888f0f01fc3b76e42ec60ff6/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_94ad461131fa38763e5695513a462071/q2447171/10331734888f0f01fc3b76e42ec60ff6/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_94ad461131fa38763e5695513a462071/q2447171/10331734888f0f01fc3b76e42ec60ff6/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_94ad461131fa38763e5695513a462071/q2447171/10331734888f0f01fc3b76e42ec60ff6/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447171/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "time": 2087,
+        "score": "2:1",
+        "period": 2,
+        "status": "Even strength",
+        "status_abbr": "ES",
+        "assistants": [
+          {
+            "shirt_number": 99,
+            "name": "Filin Yegor",
+            "aps": 16
+          },
+          {
+            "shirt_number": 87,
+            "name": "Gutik Daniil",
+            "aps": 28
+          }
+        ],
+        "author": {
+          "shirt_number": 95,
+          "name": "Rubtsov German",
+          "gps": 15,
+          "team_id": 18
+        },
+        "quote": {
+          "id": 2447151,
+          "start_ts": 1774028665002,
+          "finish_ts": 1774028735009,
+          "is_vertical_video": false,
+          "description": "Goal. 2:1. Rubtsov German (Spartak). Assistants: Filin Yegor, Gutik Daniil. Even strength.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_8c9d4e7a2ea6a4f5f2a4d9aa6da7343c/q2447151/7de7d46897c0dc86bde556eb74d4bfad/1791847193.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_8c9d4e7a2ea6a4f5f2a4d9aa6da7343c/q2447151/7de7d46897c0dc86bde556eb74d4bfad/1791847193?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_8c9d4e7a2ea6a4f5f2a4d9aa6da7343c/q2447151/7de7d46897c0dc86bde556eb74d4bfad/1791847193?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_8c9d4e7a2ea6a4f5f2a4d9aa6da7343c/q2447151/7de7d46897c0dc86bde556eb74d4bfad/1791847193?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447151/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Голы",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      }
+    ],
+    "violations": [
+      {
+        "time": 3528,
+        "penalty_time": 2,
+        "period": 3,
+        "penalty_reason": "Too Many Players on the Ice",
+        "violator": null,
+        "quote": {
+          "id": 2447759,
+          "start_ts": 1774031894000,
+          "finish_ts": 1774031959000,
+          "is_vertical_video": false,
+          "description": "Penalty. (Spartak). Too many players on the ice. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_83c2c4c0e38239551027d923124aecbf/q2447759/1ee39c163709efe53c96d00a2b618f02/1791847194.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_83c2c4c0e38239551027d923124aecbf/q2447759/1ee39c163709efe53c96d00a2b618f02/1791847194?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_83c2c4c0e38239551027d923124aecbf/q2447759/1ee39c163709efe53c96d00a2b618f02/1791847194?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_83c2c4c0e38239551027d923124aecbf/q2447759/1ee39c163709efe53c96d00a2b618f02/1791847194?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447759/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "time": 3331,
+        "penalty_time": 2,
+        "period": 3,
+        "penalty_reason": "High Sticking",
+        "violator": {
+          "shirt_number": 17,
+          "name": "Morozov Ivan D.",
+          "team_id": 18,
+          "team": {
+            "id": 18
+          }
+        },
+        "quote": {
+          "id": 2447703,
+          "start_ts": 1774031597000,
+          "finish_ts": 1774031664000,
+          "is_vertical_video": false,
+          "description": "Penalty. Morozov Ivan D. (Spartak). High sticking. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_436f609ca718cb6d5efe27a087388ca8/q2447703/d7d87c2963f3b445a61fd4c15c1ed54c/1791847194.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_436f609ca718cb6d5efe27a087388ca8/q2447703/d7d87c2963f3b445a61fd4c15c1ed54c/1791847194?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_436f609ca718cb6d5efe27a087388ca8/q2447703/d7d87c2963f3b445a61fd4c15c1ed54c/1791847194?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_436f609ca718cb6d5efe27a087388ca8/q2447703/d7d87c2963f3b445a61fd4c15c1ed54c/1791847194?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447703/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      },
+      {
+        "time": 3200,
+        "penalty_time": 2,
+        "period": 3,
+        "penalty_reason": "Hooking",
+        "violator": {
+          "shirt_number": 16,
+          "name": "Pivchulin Danil",
+          "team_id": 18,
+          "team": {
+            "id": 18
+          }
+        },
+        "quote": {
+          "id": 2447651,
+          "start_ts": 1774031369000,
+          "finish_ts": 1774031429000,
+          "is_vertical_video": false,
+          "description": "Penalty. Pivchulin Danil (Spartak). Hooking. 2 min.",
+          "audio_tracks": [
+            {
+              "id": "main",
+              "title": "Main"
+            },
+            {
+              "id": "a_noise",
+              "title": "Intersound"
+            }
+          ],
+          "m3u8_url": "https://bl.webcaster.pro/quote/start/free_ee60593c311d0e2e6842108f70653c88/q2447651/8fc1b76be77d9828084794f19c7b9aaf/1791847194.m3u8?locale=en&sr=109",
+          "feed_url": "https://bl.webcaster.pro/feed/start/free_ee60593c311d0e2e6842108f70653c88/q2447651/8fc1b76be77d9828084794f19c7b9aaf/1791847194?sr=109&locale=en&type_id=18",
+          "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_ee60593c311d0e2e6842108f70653c88/q2447651/8fc1b76be77d9828084794f19c7b9aaf/1791847194?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+          "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_ee60593c311d0e2e6842108f70653c88/q2447651/8fc1b76be77d9828084794f19c7b9aaf/1791847194?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+          "image_url": "https://bl.webcaster.pro/quotes/2447651/main_thumbnail/big.jpg",
+          "stage_id": 370,
+          "free": true,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "quote",
+          "event_or_quote_type_name": "Удаления",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026"
+        }
+      }
+    ],
+    "other_events_with_both_teams": [
+      {
+        "event": {
+          "id": 2786242,
+          "score": "2:0",
+          "type_id": 18,
+          "khl_id": 898118,
+          "team_a": {
+            "id": 36,
+            "tv_image": "/images/khl_tv/teams/36.png",
+            "khl_id": 71,
+            "name": "Neftekhimik",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png"
+          },
+          "team_b": {
+            "id": 18,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "khl_id": 7,
+            "name": "Spartak",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "name": "Neftekhimik - Spartak",
+          "start_at": 1771605000000,
+          "event_start_at": 1771604100000,
+          "end_at": 1771613572000,
+          "scores": {
+            "first_period": "1:0",
+            "second_period": "0:0",
+            "third_period": "1:0",
+            "overtime": null,
+            "bullitt": null
+          }
+        }
+      },
+      {
+        "event": {
+          "id": 2538599,
+          "score": "2:4",
+          "type_id": 18,
+          "khl_id": 890606,
+          "team_a": {
+            "id": 18,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "khl_id": 7,
+            "name": "Spartak",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "team_b": {
+            "id": 36,
+            "tv_image": "/images/khl_tv/teams/36.png",
+            "khl_id": 71,
+            "name": "Neftekhimik",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png"
+          },
+          "name": "Spartak - Neftekhimik",
+          "start_at": 1742315400000,
+          "event_start_at": 1742314800000,
+          "end_at": 1742323902000,
+          "scores": {
+            "first_period": "0:0",
+            "second_period": "2:4",
+            "third_period": "0:0",
+            "overtime": null,
+            "bullitt": null
+          }
+        }
+      },
+      {
+        "event": {
+          "id": 2536971,
+          "score": "4:3",
+          "type_id": 18,
+          "khl_id": 890199,
+          "team_a": {
+            "id": 36,
+            "tv_image": "/images/khl_tv/teams/36.png",
+            "khl_id": 71,
+            "name": "Neftekhimik",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png"
+          },
+          "team_b": {
+            "id": 18,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "khl_id": 7,
+            "name": "Spartak",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "name": "Neftekhimik - Spartak",
+          "start_at": 1732811400000,
+          "event_start_at": 1732810500000,
+          "end_at": 1732821704000,
+          "scores": {
+            "first_period": "2:1",
+            "second_period": "0:0",
+            "third_period": "1:2",
+            "overtime": "1:0",
+            "bullitt": null
+          }
+        }
+      }
+    ],
+    "social_tags": [
+      "HCSpartak",
+      "ХКСпартак",
+      "нефтехимик"
+    ],
+    "free": false,
+    "yandex_rights": true,
+    "yandex_id": "m730107",
+    "match_id": "898236",
+    "balancer_type": "record",
+    "event_or_quote_type_name": "Архив",
+    "outer_stage_id": 1369,
+    "stage_name": "Regular 2025/2026",
+    "parent_id": null,
+    "name": "Spartak - Neftekhimik",
+    "mref1": "Беляев Сергей",
+    "mref2": "Гофман Антон",
+    "lref1": "Зайцев Валентин",
+    "lref2": "Строганов Максим",
+    "announce": null,
+    "views": "7,579",
+    "stage_type": "regular",
+    "audio_tracks": [
+      {
+        "id": "main",
+        "title": "Main"
+      },
+      {
+        "id": "a_noise",
+        "title": "Intersound"
+      }
+    ],
+    "image_big": "https://thumbs.webcaster.pro/rec-2-5.webcaster.pro/fc/02/thumbnails/events/2786714/10830664815.jpg",
+    "location": "Moscow",
+    "start_at_day": 1773954000,
+    "start_at": 1774024200000,
+    "event_start_at": 1774023600000,
+    "end_at": 1774033381000,
+    "tickets": null,
+    "text_events": [
+      {
+        "seconds": 3902,
+        "type": "state",
+        "period": null,
+        "time_s": "21:56",
+        "text": "End of the game",
+        "score": "2:3",
+        "m3u8_url": null,
+        "feed_url": null,
+        "iframe_url": null,
+        "iframe_code": null,
+        "quote_id": null,
+        "quote_name": null,
+        "is_vertical_video": null,
+        "stage_id": 370,
+        "free": true,
+        "yandex_rights": true,
+        "yandex_id": "m730107",
+        "match_id": "898236",
+        "balancer_type": null,
+        "event_or_quote_type_name": null,
+        "outer_stage_id": 1369,
+        "stage_name": "Regular 2025/2026"
+      },
+      {
+        "seconds": 3901,
+        "type": "info",
+        "period": null,
+        "time_s": "- min",
+        "text": "Статистика матча: Броски: 61-54 ; Броски в створ: 33-36 ; Голы: 2-2 ; Вбрасывания: 29-29 ; Блокированные броски: 8-14 ; Силовые приемы: 9-7 ; Отборы: 7-3 ; Потери: 24-24 ; Перехваты: 4-1 ; Время в атаке: 18:11-13:24 ; Штраф: 10-6",
+        "score": "2:3",
+        "m3u8_url": null,
+        "feed_url": null,
+        "iframe_url": null,
+        "iframe_code": null,
+        "quote_id": null,
+        "quote_name": null,
+        "is_vertical_video": null,
+        "stage_id": 370,
+        "free": true,
+        "yandex_rights": true,
+        "yandex_id": "m730107",
+        "match_id": "898236",
+        "balancer_type": null,
+        "event_or_quote_type_name": null,
+        "outer_stage_id": 1369,
+        "stage_name": "Regular 2025/2026"
+      },
+      {
+        "seconds": 3900,
+        "type": "goal",
+        "period": null,
+        "time_s": "65:00",
+        "text": "Goal. 2:3. 69.Artamonov Nikita. Neftekhimik. Shootout",
+        "score": "2:3",
+        "m3u8_url": "https://bl.webcaster.pro/quote/start/free_cdb657d2c454baf316249e9bd64ea8ad/q2447927/f39078543d8e0c43a814aca687f2a9c0/1791847194.m3u8?locale=en&sr=109",
+        "feed_url": "https://bl.webcaster.pro/feed/start/free_cdb657d2c454baf316249e9bd64ea8ad/q2447927/f39078543d8e0c43a814aca687f2a9c0/1791847194?sr=109&locale=en&type_id=18",
+        "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_cdb657d2c454baf316249e9bd64ea8ad/q2447927/f39078543d8e0c43a814aca687f2a9c0/1791847194?sr=109&type_id=18&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+        "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_cdb657d2c454baf316249e9bd64ea8ad/q2447927/f39078543d8e0c43a814aca687f2a9c0/1791847194?sr=109&type_id=18&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+        "quote_id": 2447927,
+        "quote_name": "Goal. 2:3. Artamonov Nikita (Neftekhimik). Shootout.",
+        "is_vertical_video": false,
+        "stage_id": 370,
+        "free": true,
+        "yandex_rights": true,
+        "yandex_id": "m730107",
+        "match_id": "898236",
+        "balancer_type": "quote",
+        "event_or_quote_type_name": "Голы",
+        "outer_stage_id": 1369,
+        "stage_name": "Regular 2025/2026"
+      }
+    ],
+    "not_regular": false,
+    "infographics": "With scoreboard",
+    "infographics_enabled": true,
+    "score": "2:3",
+    "condensed_game": {
+      "id": 2953643,
+      "name": "Condensed game Spartak - Neftekhimik",
+      "start_ts": 1774023600000,
+      "m3u8_url": "https://bl.webcaster.pro/file/start/free_709b57652b3d37efe75215820565573e/2_6652080802/3cc2374607d0d7729530358451fda674/1791847194.m3u8?locale=en&sr=109",
+      "feed_url": "https://bl.webcaster.pro/feed/start/free_709b57652b3d37efe75215820565573e/2_6652080802/3cc2374607d0d7729530358451fda674/1791847194?sr=109&locale=en&type_id=59",
+      "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_709b57652b3d37efe75215820565573e/2_6652080802/3cc2374607d0d7729530358451fda674/1791847194?sr=109&type_id=59&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+      "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_709b57652b3d37efe75215820565573e/2_6652080802/3cc2374607d0d7729530358451fda674/1791847194?sr=109&type_id=59&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+      "finish_ts": 1774025184000,
+      "image_url": "https://thumbs.webcaster.pro/rec-2-5.webcaster.pro/fc/04/thumbnails/events/2953643/10831092191.jpg",
+      "description": "Condensed game",
+      "audio_tracks": [],
+      "is_vertical_video": false,
+      "stage_id": 370,
+      "free": true,
+      "yandex_rights": true,
+      "yandex_id": "m730107",
+      "match_id": "898236",
+      "balancer_type": "file",
+      "event_or_quote_type_name": "Condensed games",
+      "outer_stage_id": 1369,
+      "stage_name": "Regular 2025/2026"
+    },
+    "highlight": {
+      "id": 2953695,
+      "name": "Spartak vs Neftekhimik I 20.03.2026 I Highlight Fonbet KHL",
+      "start_ts": 1774023600000,
+      "m3u8_url": "https://bl.webcaster.pro/file/start/free_b5d938e9dd11d5cc60f4eac63657d750/2_2817381131/b06077d0ddd15d0ece829891a928f3cd/1791847194.m3u8?locale=en&sr=109",
+      "feed_url": "https://bl.webcaster.pro/feed/start/free_b5d938e9dd11d5cc60f4eac63657d750/2_2817381131/b06077d0ddd15d0ece829891a928f3cd/1791847194?sr=109&locale=en&type_id=4",
+      "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_b5d938e9dd11d5cc60f4eac63657d750/2_2817381131/b06077d0ddd15d0ece829891a928f3cd/1791847194?sr=109&type_id=4&width=640&height=397&iframe_width=640&iframe_height=397&lang=en&skin_name=khl",
+      "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_b5d938e9dd11d5cc60f4eac63657d750/2_2817381131/b06077d0ddd15d0ece829891a928f3cd/1791847194?sr=109&type_id=4&width=100%25&height=100%25&iframe_width=640&iframe_height=397&lang=en&skin_name=khl\" width=\"640\"></iframe>",
+      "finish_ts": 1774024210390,
+      "image_url": "https://thumbs.webcaster.pro/rec-2-13.webcaster.pro/fc/sda/thumbnails/events/2953695/10831149463.jpg",
+      "description": "0:1 - Точилкин Герман (Селезнёв Григорий, Квартальнов Данила) 22:02 В равенстве&lt;br&gt;1:1 - Рубцов Герман (Гутик Даниил, Филин Егор) 23:41 В равенстве&lt;br&gt;2:1 - Рубцов Герман (Филин Егор, Гутик Даниил) 34:47 В равенстве&lt;br&gt;2:2 - Селезнёв Григорий (Точилкин Герман) 35:08 В равенстве&lt;br&gt;2:3 - Артамонов Никита 65:00 Буллит&lt;br&gt;&lt;br&gt;Вратари: Георгиев Александр - Озолин Ярослав, Долганов Филипп&lt;br&gt;Броски: 33 - 36&lt;br&gt;Штраф: 10 - 6&lt;br&gt;Вбрасывания: 29 - 29&lt;br&gt;",
+      "audio_tracks": [
+        {
+          "id": "main",
+          "title": "Main"
+        }
+      ],
+      "is_vertical_video": false,
+      "stage_id": null,
+      "free": true,
+      "yandex_rights": true,
+      "yandex_id": "m730107",
+      "match_id": "898236",
+      "balancer_type": "file",
+      "event_or_quote_type_name": "Хайлайты",
+      "outer_stage_id": null,
+      "stage_name": null
+    },
+    "outer_url": "https://www.khl.ru/game/1369/898236/preview/",
+    "m3u8_url": null,
+    "feed_url": null,
+    "iframe_url": "//api-video.khl.ru/iframe/feed/start/na_4415522af302809878095c19b595731d/2_898236/8bf5e1653c3c42383b6e429eeb12603b/1791849474?sr=42&type_id=18&width=730&height=397&iframe_width=730&iframe_height=397&lang=en&skin_name=khl",
+    "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/na_4415522af302809878095c19b595731d/2_898236/8bf5e1653c3c42383b6e429eeb12603b/1791849474?sr=42&type_id=18&width=100%25&height=100%25&iframe_width=730&iframe_height=397&lang=en&skin_name=khl\" width=\"730\"></iframe>",
+    "scores": {
+      "first_period": "0:0",
+      "second_period": "2:2",
+      "third_period": "0:0",
+      "overtime": "0:0",
+      "bullitt": "0:1"
+    },
+    "this_pair_stat": {
+      "events_count": 33,
+      "team_a": {
+        "wins_count": 16,
+        "goals_count": 81,
+        "points_count": 42
+      },
+      "team_b": {
+        "wins_count": 17,
+        "goals_count": 89,
+        "points_count": 45
+      }
+    },
+    "transaction_types": [
+      {
+        "id": 12,
+        "platforms": "browser,smarttv",
+        "android_app_product_id": "",
+        "ios_app_product_id": "",
+        "smarttv_app_product_id": "535618c5-29a0-49f2-a58b-5fae0a6b0507",
+        "name": "Archive match",
+        "time": 0,
+        "amount": 3000,
+        "season": false,
+        "events_filter_rule": "one_from_all",
+        "event_ids": "",
+        "teams_filter_rule": "all",
+        "team_ids": "",
+        "stages_filter_rule": "all",
+        "stage_ids": "",
+        "description": "",
+        "custom_data": null
+      },
+      {
+        "id": 1213,
+        "platforms": "ios",
+        "android_app_product_id": "",
+        "ios_app_product_id": "ru.khl.app_buy_one_game",
+        "smarttv_app_product_id": "",
+        "name": "One game (HD)",
+        "time": 0,
+        "amount": 9900,
+        "season": false,
+        "events_filter_rule": "one_from_all",
+        "event_ids": "",
+        "teams_filter_rule": "all",
+        "team_ids": "",
+        "stages_filter_rule": "all",
+        "stage_ids": "",
+        "description": "",
+        "custom_data": null
+      }
+    ],
+    "sscore": null,
+    "commentators_names": "Vitaly Magranov, Artem Batrak",
+    "transactions": [],
+    "has_video": true,
+    "geo_error": null
+  }
+}

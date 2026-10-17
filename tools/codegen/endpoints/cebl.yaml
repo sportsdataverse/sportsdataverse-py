@@ -1,0 +1,390 @@
+api: cebl
+docstring:
+  example_import: true
+  notes:
+  - 'CEBL own API, owner-approved gray area: these wrappers read the league''s own
+    FastAPI service (api.data.cebl.ca, the backend of the CEBL Stats Hub) with the
+    X-Api-Key that the hub''s own page bundle ships to every browser. The key is not
+    issued to third parties and no developer terms were found; cebl.ca''s terms of
+    use were not reviewed. The runtime reads the key from the bundle at run time,
+    falls back to a documented constant, never prints it, and raises AssetFetchError
+    with a ''key rotated?'' hint on a persistent 401. www.cebl.ca/robots.txt disallows
+    nothing. Payloads are not redistributed as release assets; requests are spaced
+    at least 1 s apart.'
+  - 'Season is the calendar year (May to August) = the sdv END year: no mapping. The
+    first season is 2019. An unknown season, team or player answers an empty list,
+    which the runtime raises as NoDataError. Ids are CEBL''s own; a relocated franchise
+    has two team ids (cebl_teams lists all 15).'
+  - 'This API has no box-score, play-by-play or shot route. They live in Genius LiveStats
+    (organisation CEBL, see the genius family): cebl_games and cebl_player_gamelog
+    carry the Genius match id as genius_match_id, parsed from the stats URLs (derived,
+    not fetched; the match of a cancelled game may have no data). home_team_id is
+    Genius team 1 and away_team_id team 2 (checked on match 2600563).'
+  - Some completed schedule rows have null scores (2026), and a cancelled game has
+    status CANELLED (the API's spelling) with null or zero scores. The schedule lists
+    unplayed games too, so no wrapper refuses an unfinished game. Aggregates are decimal
+    strings upstream and Float64 here. Players' names, nationality and birth date
+    are the public bio; no contact data is served.
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown
+    season, team or player answers an empty list, an all-null profile; an empty news
+    feed).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body,
+    an error envelope, a body for another season, team or player).'
+  - 'ValueError: a mode, competition, segment or conference outside its set, a season
+    that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a
+    missing required query parameter).'
+  raw_doc: 'the raw record (``dict``): ``{''rows'': <API body>, ''_request'': {...}}``
+    with the request (kind, season, mode, competition, segment, ids) stamped under
+    ``_request``'
+  see_also:
+  - name: CEBL Stats Hub
+    note: the league's stats site whose API these wrappers read
+    url: https://cebl-stats-hub.web.app
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_cebl_seasons
+  path: /seasons/
+  returns_schema: native/cebl/seasons
+  short: seasons
+  summary: Every CEBL season (2019 on), with the active and live flags.
+- example_args: {}
+  parser: parse_cebl_teams
+  path: /teams/
+  returns_schema: native/cebl/teams
+  short: teams
+  summary: Every franchise identity, past and present (15 team ids; a relocated franchise
+    has a second id).
+- example_args:
+    season: 2025
+  parser: parse_cebl_standings
+  path: /teams/{season}/
+  path_params:
+  - description: 'Required. Season: the calendar year it is played in (May to August)
+      = the sdv END year (2025 = the 2025 season). The CEBL''s first season is 2019.
+      A season with no data answers NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/cebl/standings
+  short: standings
+  summary: 'Standings of one season, one row per team: record, home/away splits, games
+    behind, streak.'
+- example_args:
+    season: 2025
+    team_id: 14
+  parser: parse_cebl_roster
+  path: /teams/{team_id}/roster/{season}/
+  path_params:
+  - description: Required. CEBL team id of that season (``team_id`` in cebl_standings),
+      e.g. 20 (Ottawa BlackJacks).
+    name: team_id
+    required: true
+    type: int
+  - description: 'Required. Season: the calendar year it is played in (May to August)
+      = the sdv END year (2025 = the 2025 season). The CEBL''s first season is 2019.
+      A season with no data answers NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/cebl/roster
+  short: roster
+  summary: 'One team''s roster in one season: player, nationality, birth date, position
+    and jersey.'
+- example_args:
+    competition: REGULAR
+    mode: TOTALS
+    season: 2025
+  extra_params:
+  - choices:
+    - TOTALS
+    - PER_GAME
+    default: PER_GAME
+    description: TOTALS (sums over the selected games) or PER_GAME (per-game averages);
+      the API requires one.
+    name: mode
+    query_key: mode
+    type: str
+  - description: 'Season: the calendar year (May to August) = the sdv END year. None
+      = every season combined (the Stats Hub''s All-Time). An unknown year answers
+      NoDataError.'
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - REGULAR
+    - FINALS
+    description: REGULAR (regular season) or FINALS (the playoffs). None = both.
+    name: competition
+    query_key: competition
+    type: str
+  - choices:
+    - HOME
+    - AWAY
+    - L7D
+    - L5G
+    - L10G
+    - MAY
+    - JUNE
+    - JULY
+    - AUGUST
+    description: 'Game subset: HOME, AWAY, L7D (last 7 days), L5G (last 5 games),
+      L10G (last 10 games), MAY, JUNE, JULY or AUGUST. None = all games. Values from
+      the CEBL Stats Hub bundle.'
+    name: segment
+    query_key: segment
+    type: str
+  - description: 'CEBL team id of the opponent: only games against that team count.'
+    name: vs_team_id
+    query_key: vs_team_id
+    type: int
+  - choices:
+    - EAST
+    - WEST
+    description: 'EAST or WEST: only games against that conference''s teams count.'
+    name: vs_conference
+    query_key: vs_conference
+    type: str
+  parser: parse_cebl_team_stats
+  path: /teams/statistics/aggregated/
+  returns_schema: native/cebl/team_stats
+  short: team_stats
+  summary: Team statistic table (totals or per game) with a league row; filter by
+    season, competition, segment, opponent team or opponent conference.
+- example_args:
+    season: 2025
+  extra_params:
+  - description: 'CEBL team id (``team_id`` in cebl_teams): limits the rows to that
+      team; the rows echo it.'
+    name: team_id
+    query_key: team_id
+    type: int
+  parser: parse_cebl_games
+  path: /games/{season}/
+  path_params:
+  - description: 'Required. Season: the calendar year it is played in (May to August)
+      = the sdv END year (2025 = the 2025 season). The CEBL''s first season is 2019.
+      A season with no data answers NoDataError.'
+    name: season
+    required: true
+    type: int
+  returns_schema: native/cebl/games
+  short: games
+  summary: Schedule and results of one season (regular season and finals), with the
+    Genius match id that joins play-by-play and shots; optionally one team's games.
+- example_args:
+    mode: PER_GAME
+    season: 2025
+  extra_params:
+  - choices:
+    - TOTALS
+    - PER_GAME
+    default: PER_GAME
+    description: TOTALS (sums over the selected games) or PER_GAME (per-game averages);
+      the API requires one.
+    name: mode
+    query_key: mode
+    type: str
+  - description: 'Season: the calendar year (May to August) = the sdv END year. None
+      = every season combined (the Stats Hub''s All-Time). An unknown year answers
+      NoDataError.'
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - REGULAR
+    - FINALS
+    description: REGULAR (regular season) or FINALS (the playoffs). None = both.
+    name: competition
+    query_key: competition
+    type: str
+  - choices:
+    - HOME
+    - AWAY
+    - L7D
+    - L5G
+    - L10G
+    - MAY
+    - JUNE
+    - JULY
+    - AUGUST
+    description: 'Game subset: HOME, AWAY, L7D (last 7 days), L5G (last 5 games),
+      L10G (last 10 games), MAY, JUNE, JULY or AUGUST. None = all games. Values from
+      the CEBL Stats Hub bundle.'
+    name: segment
+    query_key: segment
+    type: str
+  - description: 'CEBL team id (``team_id`` in cebl_teams): limits the rows to that
+      team; the rows echo it.'
+    name: team_id
+    query_key: team_id
+    type: int
+  parser: parse_cebl_player_stats
+  path: /players/statistics/aggregated/
+  returns_schema: native/cebl/player_stats
+  short: player_stats
+  summary: Player statistic table (totals or per game) for a season or all-time; filter
+    by competition, segment or team.
+- example_args:
+    mode: PER_GAME
+    season: 2025
+    statistics: POINTS,ASSISTS
+  extra_params:
+  - default: POINTS,REBOUNDS,ASSISTS,TARGET_SCORES
+    description: 'Comma-separated statistic names; the frame has one block per name.
+      Names the Stats Hub sends: POINTS, REBOUNDS, ASSISTS, BLOCKS, STEALS, TARGET_SCORES,
+      FIELD_GOAL_PERCENTAGE, THREE_POINTS_MADE, THREE_POINT_PERCENTAGE, FREE_THROW_PERCENTAGE,
+      FOULS, TURNOVERS, MINUTES.'
+    name: statistics
+    query_key: statistics
+    type: str
+  - choices:
+    - TOTALS
+    - PER_GAME
+    default: PER_GAME
+    description: TOTALS (sums over the selected games) or PER_GAME (per-game averages);
+      the API requires one.
+    name: mode
+    query_key: mode
+    type: str
+  - description: 'Season: the calendar year (May to August) = the sdv END year. None
+      = every season combined (the Stats Hub''s All-Time). An unknown year answers
+      NoDataError.'
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - REGULAR
+    - FINALS
+    description: REGULAR (regular season) or FINALS (the playoffs). None = both.
+    name: competition
+    query_key: competition
+    type: str
+  - description: 'CEBL team id (``team_id`` in cebl_teams): limits the rows to that
+      team; the rows echo it.'
+    name: team_id
+    query_key: team_id
+    type: int
+  parser: parse_cebl_player_leaders
+  path: /players/statistics/leaders/
+  returns_schema: native/cebl/player_leaders
+  short: player_leaders
+  summary: Top five players per requested statistic (long frame, one row per statistic
+    and leader).
+- example_args:
+    mode: PER_GAME
+    player_id: 570965
+  extra_params:
+  - choices:
+    - TOTALS
+    - PER_GAME
+    default: PER_GAME
+    description: TOTALS (sums over the selected games) or PER_GAME (per-game averages);
+      the API requires one.
+    name: mode
+    query_key: mode
+    type: str
+  - default: false
+    description: True returns the career row alone; False the per-season rows and
+      the career row.
+    name: career_only
+    query_key: career_only
+    type: bool
+  - choices:
+    - REGULAR
+    - FINALS
+    description: REGULAR (regular season) or FINALS (the playoffs). None = both.
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_cebl_player_seasons
+  path: /players/{player_id}/statistics/
+  path_params:
+  - description: Required. CEBL player id (global across seasons and teams), e.g.
+      570965 (Javonte Smart); ``player_id`` in cebl_player_stats.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cebl/player_seasons
+  short: player_seasons
+  summary: One player's per-season rows and career row (totals or per game).
+- example_args:
+    player_id: 570965
+  parser: parse_cebl_player
+  path: /players/{player_id}/
+  path_params:
+  - description: Required. CEBL player id (global across seasons and teams), e.g.
+      570965 (Javonte Smart); ``player_id`` in cebl_player_stats.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cebl/player
+  short: player
+  summary: 'One player''s profile and current team: name, nationality, birth date,
+    position, jersey.'
+- example_args:
+    player_id: 570965
+    season: 2025
+  extra_params:
+  - description: 'Season: the calendar year (May to August) = the sdv END year. None
+      = every season combined (the Stats Hub''s All-Time). An unknown year answers
+      NoDataError.'
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - REGULAR
+    - FINALS
+    description: REGULAR (regular season) or FINALS (the playoffs). None = both.
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_cebl_player_gamelog
+  path: /players/{player_id}/gamelog/
+  path_params:
+  - description: Required. CEBL player id (global across seasons and teams), e.g.
+      570965 (Javonte Smart); ``player_id`` in cebl_player_stats.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/cebl/player_gamelog
+  short: player_gamelog
+  summary: 'One player''s game log: one row per game played, with the Genius match
+    id of the game.'
+- example_args:
+    language: en
+  extra_params:
+  - description: 'CEBL team id: only that team''s articles.'
+    name: team_source_id
+    query_key: team_source_id
+    type: int
+  parser: parse_cebl_news
+  path: /news/articles/{language}/
+  path_params:
+  - description: Required. Language code, e.g. ``en``; every language tried answered
+      an empty list.
+    name: language
+    required: true
+    type: str
+  returns_schema: native/cebl/news
+  short: news
+  summary: News articles in one language. The API answered an empty list on every
+    probe, so this raises NoDataError.
+getter_module: sportsdataverse.basketball.cebl.cebl_runtime
+host: https://api.data.cebl.ca
+module: cebl
+name_pattern: cebl_{short}
+parser_columns: false
+parser_module: basketball.cebl.cebl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: cebl_

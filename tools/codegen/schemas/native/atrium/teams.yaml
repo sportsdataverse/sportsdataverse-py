@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: website_id
+  type: integer
+- description: ''
+  name: season_id
+  type: character
+- description: ''
+  name: entity_id
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: image_url
+  type: character
+kind: dataframe
+schema: atrium_teams

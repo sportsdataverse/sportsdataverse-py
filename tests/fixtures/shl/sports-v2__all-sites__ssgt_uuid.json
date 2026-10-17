@@ -1,0 +1,23 @@
+[
+  {
+    "id": "bif1_bif",
+    "instanceId": "bif1_bif",
+    "publicUrl": "http://www.brynas.se/",
+    "name": "Brynäs IF",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg"
+  },
+  {
+    "id": "dif1_dif",
+    "instanceId": "dif1_dif",
+    "publicUrl": "http://www.difhockey.se/",
+    "name": "Djurgårdens IF",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg"
+  },
+  {
+    "id": "fbk1_fbk",
+    "instanceId": "fbk1_fbk",
+    "publicUrl": "http://www.farjestadbk.se/",
+    "name": "Färjestad BK",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg"
+  }
+]
