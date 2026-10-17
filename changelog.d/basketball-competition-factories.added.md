@@ -7,4 +7,4 @@
   `teams`, box, `pbp`, `shots`). Each binds the competition (`comp` / `org` / `website_id`) and resolves
   an END-year `season` to the edition; `comp=` / `comp_id=` override.
   The reference pages show each minted function's returns table, read from its base wrapper's native
-  schema (`__sdv_schema__`), with the base's column descriptions. (#TBD)
+  schema (`__sdv_schema__`), with the base's column descriptions. (#862)
