@@ -73,10 +73,10 @@ def {{ ep.fn_name }}(
 {% endfor %}
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
-{% for k, v in ep.fixed_params.items() %}
+{% for k, v in ep.url_fixed.items() %}
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
-{% for p in ep.query_params %}
+{% for p in ep.url_params %}
 {% if p.transform %}
         "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
 {% else %}
@@ -88,6 +88,20 @@ def {{ ep.fn_name }}(
 {% endif %}
     }
     _params.update(_caller_params)
+{% if ep.body_kind != "query" %}
+    _body = {
+{% for k, v in ep.body_fixed.items() %}
+        "{{ k }}": {{ v|py_repr }},
+{% endfor %}
+{% for p in ep.body_params %}
+{% if p.transform %}
+        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% else %}
+        "{{ p.api }}": {{ p.python_name }},
+{% endif %}
+{% endfor %}
+    }
+{% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
     raw = _get(
@@ -97,6 +111,9 @@ def {{ ep.fn_name }}(
         {{ ep.url_literal }},
 {% endif %}
         params=_params,
+{% if ep.body_kind != "query" %}
+        {{ "data" if ep.body_kind == "form" else "json" }}=_body,
+{% endif %}
 {% if auth %}
         headers=headers,
 {% endif %}

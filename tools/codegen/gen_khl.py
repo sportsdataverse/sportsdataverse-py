@@ -668,7 +668,8 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
                 "path": path,
                 "parser": parser,
                 "returns_schema": f"native/khl_rest/{short}",
-                "method": "post",  # khl_runtime._get POSTs params as the form
+                "method": "post",
+                "body": "form",  # khl_runtime._get POSTs ``data=`` as the form
                 "example_args": example,
             }
             if params:

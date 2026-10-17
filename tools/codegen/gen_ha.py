@@ -504,7 +504,7 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
         "parser": parser.__name__,
         "returns_schema": f"native/ha/{short}",
         # The runtime POSTs every route but these two (docstrings say POST / body field).
-        **({} if path in ("/api/game", "/pages/matcher") else {"method": "post"}),
+        **({} if path in ("/api/game", "/pages/matcher") else {"method": "post", "body": "json"}),
         **copy.deepcopy(fields),  # no shared objects, so the YAML carries no anchors
     }
 

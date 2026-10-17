@@ -105,8 +105,10 @@ def _example_url(
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
         return ""
     vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in params}
-    qs = {**ep.fixed_params}
+    qs = {**ep.url_fixed}
     for p in ep.query_params:
+        if p.in_body:
+            continue
         v = vals[p.python_name]
         qs[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
     for p in ep.path_params:  # same statement order as _build_path_expr
@@ -128,6 +130,23 @@ def _example_url(
         built = build(qs)
         qs = built[0] if isinstance(built, tuple) else built
     return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
+
+
+def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
+    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint."""
+    body = {**ep.body_fixed}
+    for p in ep.query_params:
+        if p.in_body:
+            v = ep.example_args.get(p.python_name, p.default)
+            body[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
+    return {k: v for k, v in body.items() if v is not None}
+
+
+def _example_curl(url: str, body: dict, kind: str) -> str:
+    """A curl-style POST of ``body`` to ``url`` (JSON, or form fields)."""
+    if kind == "json":
+        return f"curl -X POST '{url}' -H 'Content-Type: application/json' -d '{json.dumps(body)}'"
+    return f"curl -X POST '{url}' -d '{urlencode(body, doseq=True)}'"
 
 
 def _example_call(ep: spec.Endpoint, fn_name: str, league: str = "") -> str:
@@ -242,6 +261,7 @@ def _build_docstring(
     import_from: str = "",
     returns_frames: bool = False,
     vocab_raises: bool = False,
+    curl_example: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -278,6 +298,8 @@ def _build_docstring(
     lines.append(f"Endpoint: ``{ep.method.upper()} {host_url}{ep.path}``")
     if example_url:
         lines.append(f"Example URL: {example_url}")
+    if curl_example:
+        lines.append(f"Example request: ``{curl_example}``")
     lines.append("")
 
     def _arg_doc(p: spec.Param, generic: str) -> str:
@@ -288,8 +310,9 @@ def _build_docstring(
     lines.append("Args:")
     for p in ep.path_params:
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
-    q_kind = "body field" if ep.method == "post" else "query parameter"
     for p in ep.query_params:
+        in_body = p.in_body if ep.body != "query" else ep.method == "post"
+        q_kind = "body field" if in_body else "query parameter"
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} {q_kind}.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
@@ -1139,6 +1162,18 @@ class _EndpointView:
             self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
         self.example_url = _example_url(ep_host, ep, league.sport, league.league, getter_module)
+        # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
+        # ``in: query`` params and the rest travels in the body, so show a curl request instead.
+        self.body_kind = ep.body
+        self.url_params = [p for p in ep.query_params if not p.in_body]
+        self.body_params = [p for p in ep.query_params if p.in_body]
+        self.url_fixed = ep.url_fixed
+        self.body_fixed = ep.body_fixed
+        self.curl_example = ""
+        if ep.body != "query":
+            if self.example_url:
+                self.curl_example = _example_curl(self.example_url, _example_body(ep, getter_module), ep.body)
+            self.example_url = ""
         self.example_call = _example_call(ep, fn_name, league.league if league.league_param else "")
         self.docstring = _build_docstring(
             ep,
@@ -1154,6 +1189,7 @@ class _EndpointView:
             import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
             vocab_raises=getter_module in _VOCAB_GETTERS,
+            curl_example=self.curl_example,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
