@@ -441,13 +441,14 @@ def _guard(url: str, fn: Callable[[], None]) -> None:
         raise type(exc)(f"{_rt._where(url)}: {exc}") from None
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """Fetch one HockeyAllsvenskan route (GET page / GET JSON / POST JSON by path), checked and stamped.
 
     Args:
         url: fully-built request URL.
         params: the wrapper's parameters: the query string of ``/api/game``, the JSON body
             fields of a POST route (``None`` keeps the route default), unused by ``/pages/matcher``.
+        json: the JSON body fields of a POST route (the generated wrappers send them here); merged over ``params``.
         **kwargs: forwarded to the transport (``timeout``).
 
     Returns:
@@ -471,7 +472,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         body = euro_hockey_runtime._get(url, clean, **kwargs)
         _guard(url, lambda: _check(path, body, clean, {}))
         return body
-    request, stamp = build_body(path, params)
+    request, stamp = build_body(path, {**(params or {}), **(json or {})})
     body = _rt._download_json(_post, url, json=request, **kwargs)
     _guard(url, lambda: _check(path, body, request, stamp))
     return _stamped(body, stamp)

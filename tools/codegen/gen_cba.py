@@ -758,6 +758,11 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     }
     if method == "post":
         doc["method"] = "post"
+        doc["body"] = "json"  # paging keys stay in the query string, every other field is the JSON body
+        doc["fixed_in_query"] = [k for k in doc.get("fixed_params", {}) if k in ("pageNumber", "pageSize", "startNum")]
+        for p in doc.get("extra_params", []):
+            if p["query_key"] in ("pageNumber", "pageSize", "startNum"):
+                p["in"] = "query"
     return doc
 
 
