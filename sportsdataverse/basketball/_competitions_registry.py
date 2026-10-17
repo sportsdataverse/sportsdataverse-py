@@ -1,0 +1,205 @@
+"""Competition registry of the per-competition basketball families (package data).
+
+``REGISTRY[platform]`` is the list of competition entries of ``fiba`` / ``genius`` / ``atrium``, in
+registry order. Written by ``tools/codegen/gen_basketball_competitions.py`` from
+``tools/codegen/basketball_competitions.yaml``; do not edit.
+"""
+
+from typing import Any, Dict, List
+
+__all__: List[str] = []
+
+# fmt: off
+REGISTRY: Dict[str, List[Dict[str, Any]]] = {
+    "fiba": [
+        {
+            "key": "world_cup",
+            "prefix": "fiba_wc",
+            "label": "FIBA Basketball World Cup",
+            "family_id": 201,
+            "gender": "men",
+            "season_rule": "event year (World Cup 2023 = 2023)"
+        },
+        {
+            "key": "womens_world_cup",
+            "prefix": "fiba_wwc",
+            "label": "FIBA Women's Basketball World Cup",
+            "family_id": 306,
+            "gender": "women",
+            "season_rule": "event year (2022 = 2022)"
+        },
+        {
+            "key": "olympics_men",
+            "prefix": "fiba_oly",
+            "label": "Men's Olympic Basketball Tournament",
+            "family_id": 320,
+            "gender": "men",
+            "season_rule": "event year (Paris 2024 = 2024)"
+        },
+        {
+            "key": "olympics_women",
+            "prefix": "fiba_woly",
+            "label": "Women's Olympic Basketball Tournament",
+            "family_id": 352,
+            "gender": "women",
+            "season_rule": "event year (Paris 2024 = 2024)"
+        },
+        {
+            "key": "bcl",
+            "prefix": "fiba_bcl",
+            "label": "Basketball Champions League (FIBA Men's European Club Competitions Tier 1)",
+            "family_id": 112,
+            "gender": "men",
+            "season_rule": "END year (2024-25 = 2025)"
+        },
+        {
+            "key": "euroleague_women",
+            "prefix": "fiba_elw",
+            "label": "EuroLeague Women (FIBA Women's European Club Competitions Tier 1)",
+            "family_id": 211,
+            "gender": "women",
+            "season_rule": "END year (2024-25 = 2025)"
+        },
+        {
+            "key": "afrobasket",
+            "prefix": "fiba_afrobasket",
+            "label": "FIBA AfroBasket",
+            "family_id": 179,
+            "gender": "men",
+            "season_rule": "event year (2025 = 2025)"
+        },
+        {
+            "key": "womens_eurobasket",
+            "prefix": "fiba_weurobasket",
+            "label": "FIBA Women's EuroBasket",
+            "family_id": 297,
+            "gender": "women",
+            "season_rule": "event year (2025 = 2025)"
+        }
+    ],
+    "genius": [
+        {
+            "key": "wbbl",
+            "prefix": "wbbl",
+            "label": "Women's British Basketball League",
+            "org": "WBBL",
+            "gender": "women",
+            "label_include": "Championship",
+            "label_exclude": "Play-?Offs",
+            "season_rule": "END year; the label span 2025-26 = 2026"
+        },
+        {
+            "key": "slb",
+            "prefix": "slb",
+            "label": "Super League Basketball (UK)",
+            "org": "SLB",
+            "gender": "men",
+            "label_include": "Championship",
+            "label_exclude": "^$",
+            "season_rule": "END year; the label span 2025-26 = 2026"
+        },
+        {
+            "key": "bal",
+            "prefix": "bal",
+            "label": "Basketball Africa League",
+            "org": "BAL",
+            "gender": "men",
+            "label_include": ".",
+            "label_exclude": "^$",
+            "season_rule": "calendar year (BAL 2025 = 2025); 2023 lists two competitions, so pass comp_id"
+        },
+        {
+            "key": "nznbl",
+            "prefix": "nznbl",
+            "label": "New Zealand National Basketball League",
+            "org": "NZNBL",
+            "gender": "men",
+            "label_include": "national basketball league|sals nbl",
+            "label_exclude": "rapid|women",
+            "season_rule": "calendar year (2025 = 2025)"
+        },
+        {
+            "key": "esake",
+            "prefix": "esake",
+            "label": "Greek Basket League (ESAKE)",
+            "org": "ESAKE",
+            "gender": "men",
+            "label_include": "basket league|gbl",
+            "label_exclude": "super cup|woman",
+            "season_rule": "END year; Genius year + 1 (2022-23 = 2023)"
+        },
+        {
+            "key": "lfb",
+            "prefix": "lfb",
+            "label": "Ligue Feminine de Basket (France, FFBB)",
+            "org": "FFBB",
+            "gender": "women",
+            "label_include": "^ligue feminine( de basket)?$",
+            "label_exclude": "^$",
+            "season_rule": "END year; Genius year + 1 (2018-19 = 2019)"
+        },
+        {
+            "key": "lnbm",
+            "prefix": "lnbm",
+            "label": "Liga Nationala de Baschet Masculin (Romania)",
+            "org": "FRB",
+            "gender": "men",
+            "label_include": "lnbm|liga nationala de baschet masculin",
+            "label_exclude": "^$",
+            "season_rule": "END year; Genius year + 1 (2016-17 = 2017)"
+        },
+        {
+            "key": "lub",
+            "prefix": "lub",
+            "label": "Liga Uruguaya de Basquetbol",
+            "org": "FUBB",
+            "gender": "men",
+            "label_include": "liga uruguaya|^lub",
+            "label_exclude": "amistosos|femenina",
+            "season_rule": "END year; Genius year + 1 (2025-26 = 2026)"
+        }
+    ],
+    "atrium": [
+        {
+            "key": "lnb",
+            "prefix": "lnb",
+            "label": "LNB (France)",
+            "website_id": 12,
+            "gender": "men",
+            "season_rule": "END year (2026 = 2025-26; the site's own year is the START year)"
+        },
+        {
+            "key": "lnbp",
+            "prefix": "lnbp",
+            "label": "LNBP (Mexico, with COPA VALUE and LNBP FEMENIL)",
+            "website_id": 14,
+            "gender": "both",
+            "season_rule": "calendar year"
+        },
+        {
+            "key": "nbl1",
+            "prefix": "nbl1",
+            "label": "NBL1 (Australia)",
+            "website_id": 3,
+            "gender": "both",
+            "season_rule": "calendar year, Mar-Aug (END year); conferences are competition_ids"
+        },
+        {
+            "key": "lmb",
+            "prefix": "lmb",
+            "label": "Liga Mayor de Baloncesto (El Salvador)",
+            "website_id": 13,
+            "gender": "both",
+            "season_rule": "calendar year"
+        },
+        {
+            "key": "lpb",
+            "prefix": "lpb",
+            "label": "LPB / LPBF Liga Profesional de Baloncesto (Panama)",
+            "website_id": 22,
+            "gender": "both",
+            "season_rule": "calendar year"
+        }
+    ]
+}
+# fmt: on

@@ -9,13 +9,15 @@ description: "sdv-py GENIUS: endpoint references, dataset loaders and parsers fo
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [Genius Sports LiveStats](#genius-sports-livestats) | `fibalivestats.dcd.shared.geniussports.com` | 11 | none |
+| [Genius Sports LiveStats](#genius-sports-livestats) | `fibalivestats.dcd.shared.geniussports.com` | 59 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 48 | — |
 
 ## Genius Sports LiveStats {#genius-sports-livestats}
 
 | Reference | Functions |
 |---|---:|
 | [Genius Sports LiveStats (fibalivestats.dcd.shared.geniussports.com, 20+ competitions)](reference/genius) | 11 |
+| [Hand-written wrappers](reference/additional) | 48 |
 
 ## Examples
 

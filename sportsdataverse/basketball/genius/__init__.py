@@ -29,4 +29,8 @@ from sportsdataverse.basketball.genius import genius_parsers as _parsers
 from sportsdataverse.basketball.genius.genius import *  # noqa: F401,F403
 from sportsdataverse.basketball.genius.genius_parsers import *  # noqa: F401,F403
 
-__all__ = [*_api.__all__, *_parsers.__all__]
+# The per-competition families (wbbl_*, slb_*, ...), minted from the competition registry.
+from sportsdataverse.basketball.genius import genius_competitions_runtime as _competitions
+from sportsdataverse.basketball.genius.genius_competitions_runtime import *  # noqa: F401,F403
+
+__all__ = [*_api.__all__, *_parsers.__all__, *_competitions.__all__]
