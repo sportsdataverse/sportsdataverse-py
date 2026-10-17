@@ -21,7 +21,7 @@ def espn_wbb_schedule(
     """espn_wbb_schedule - look up the women's college basketball schedule for a given season
 
     Args:
-        dates (int): Used to define different seasons. 2002 is the earliest available season.
+        dates (int): Used to define different seasons. 2001 is the earliest available season.
         groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
         season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
         limit (int): number of records to return, default: 500.
@@ -193,7 +193,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     """espn_wbb_calendar - look up the women's college basketball calendar for a given season
 
     Args:
-        season (int): Used to define different seasons. 2002 is the earliest available season.
+        season (int): Used to define different seasons. 2001 is the earliest available season.
         ondays (boolean): Used to return dates for calendar ondays
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -201,7 +201,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
-        ValueError: If `season` is less than 2002.
+        ValueError: If `season` is less than 2001.
 
     Example:
         Calendar dates for a single season::
@@ -229,8 +229,8 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         .. _cfbfastR: https://cfbfastR.sportsdataverse.org
         .. _ESPN: https://www.espn.com
     """
-    if int(season) < 2002:
-        raise SeasonNotFoundError("season cannot be less than 2002")
+    if int(season) < 2001:  # ESPN serves a WBB calendar from 2000-01 (2001); 2000 and earlier answer an empty one
+        raise SeasonNotFoundError("season cannot be less than 2001")
     if ondays is not None:
         full_schedule = __ondays_wbb_calendar(season, **kwargs)
     else:
