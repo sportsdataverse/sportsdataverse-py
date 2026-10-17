@@ -45,6 +45,10 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
         if v.parser:
             kwargs["return_parsed"] = False
         fn = getattr(mod, v.fn_name)
+        if getattr(v, "body_kind", "query") != "query":  # POST body endpoint: no fetchable URL, a curl example instead
+            assert not v.valid_url and v.curl_example and v.curl_example in v.docstring, v.fn_name
+            checked += 1
+            continue
         if not v.valid_url:  # only when the example omits a required argument
             with pytest.raises(TypeError):
                 fn(**kwargs)
