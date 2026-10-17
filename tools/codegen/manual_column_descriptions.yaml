@@ -37229,8 +37229,10 @@ load_mbb_pbp:
   athlete_name_1: Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt).
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
   athlete_name_3: Display name of the third athlete in the ESPN play participants, when present.
+  away_score: Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   away_timeout_called: True when the away team called a timeout on the play.
   end_period_seconds_remaining: Seconds left in the period when the play ended.
+  home_score: Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   home_timeout_called: True when the home team called a timeout on the play.
   lag_period: Period number of the previous play in the same game (period_number shifted forward one row within game_id),
     and null on each game's first play.
@@ -37239,6 +37241,7 @@ load_mbb_pbp:
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
   pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2003, 2006-07 to 2019-20 and the 2021+ republishes); absent on other seasons (rules/mbb.yaml#mbb-2003-pbp-wp-columns).
+  score_source: "Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it."
   short_description: Shortened version of ESPN's play description text, without score context.
   start_period_seconds_remaining: Seconds left in the current period when the play started, computed as 60 times the game
     clock minutes plus the seconds, so 1200 at the tip of each 20-minute half and 300 at the start of an overtime.
@@ -37617,9 +37620,12 @@ load_nba_pbp:
   athlete_name_1: Name of the primary athlete involved in the play (pairs with athlete_id_1).
   athlete_name_2: Name of the secondary athlete involved in the play (e.g. the assister or fouled player).
   athlete_name_3: Name of the tertiary athlete involved in the play.
+  away_score: Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   away_timeout_called: Whether the play is a timeout called by the away team.
+  home_score: Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   home_timeout_called: Whether the play is a timeout called by the home team.
   points_attempted: Point value attempted on the shot (2 or 3; 1 for a free throw).
+  score_source: "Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it."
   short_description: Short text description of the play from ESPN.
 load_nba_player_crosswalk:
   nba_jersey_num: Player's jersey number as listed by the NBA Stats API.
@@ -44854,14 +44860,17 @@ load_wbb_pbp:
   athlete_name_1: Display name of the first athlete in the ESPN play participants (e.g., the shooter on a shot attempt).
   athlete_name_2: Display name of the second athlete in the ESPN play participants (e.g., the assisting player), when present.
   athlete_name_3: Display name of the third athlete in the ESPN play participants, when present.
+  away_score: Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   away_timeout_called: Flag set on plays where a timeout was charged to the away team.
   espn_away_wp: ESPN's own published win probability for the away team (0-1), carried through unchanged.
   espn_home_wp: ESPN's own published win probability for the home team (0-1), carried through unchanged.
   espn_tie_percentage: ESPN's published tie probability; present in the feed but always 0.0 in the published asset.
+  home_score: Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   home_timeout_called: Flag set on plays where a timeout was charged to the home team.
   points_attempted: Point value at stake on the shot attempt (3 for threes, 2 for other field goals, 1 for free throws), from
     the ESPN play type.
   pregame_home_prob: Model's pre-game win probability for the home team (0-1), constant within a game. Present only on assets published with the WP model (2012-13 onward); absent on earlier seasons (rules/wbb.yaml#wbb-2013-pbp-wp-columns).
+  score_source: "Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it."
   score_value: Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play
     to identify points actually scored.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
@@ -45015,9 +45024,12 @@ load_wnba_pbp:
     order.
   athlete_name_2: Display name of the secondary athlete on the play (e.g. the assister or fouled player), when present.
   athlete_name_3: Display name of the third athlete listed on the play, when present.
+  away_score: Away team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   away_timeout_called: True when the play is a timeout charged to the away team.
+  home_score: Home team's score after the play. Rebuilt from the scoring plays in feed order when that reaches the official final (score_source 'rebuilt'), otherwise ESPN's per-play value (score_source 'espn'). Seasons published before the repair carry ESPN's per-play value.
   home_timeout_called: True when the play is a timeout charged to the home team.
   points_attempted: Point value at stake on the play's shot attempt (1, 2, or 3); 0 for non-shooting plays.
+  score_source: "Where this game's home_score/away_score come from: 'rebuilt' (summed from the scoring plays and equal to the official final on the last play) or 'espn' (ESPN's per-play values, kept when the rebuild misses the final or the game has no final). Absent from seasons published before the repair. Select it by name: it is the play-by-play builder's last column, but a release can carry columns after it."
   score_value: Point value of the attempt (1 / 2 / 3), carried even on misses (a missed free throw still shows 1); use scoring_play
     to identify points actually scored.
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.

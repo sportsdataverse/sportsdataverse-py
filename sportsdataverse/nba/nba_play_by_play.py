@@ -58,6 +58,11 @@ def helper_nba_play_by_play(final: dict) -> pl.DataFrame:
         pl.DataFrame: One row per play. Empty (zero-column) frame when the
         payload has ``playByPlaySource == "none"`` or 10 or fewer plays
         (R guard) -- season builders skip empty frames.
+        ``home_score`` / ``away_score`` are rebuilt from the scoring plays
+        when that reproduces the header's official final, otherwise they are
+        ESPN's per-play values; the last column, ``score_source``
+        (``"rebuilt"`` / ``"espn"``), says which. Select it by name: a
+        release built from this frame can carry columns after it.
 
     Example:
         Quick start::

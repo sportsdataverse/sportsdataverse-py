@@ -143,6 +143,7 @@ def load_nba_pbp(seasons, return_as_pandas: bool = False):
         |athlete_name_2                  |String                                                 |
         |athlete_name_3                  |String                                                 |
         |type_abbreviation               |String                                                 |
+        |score_source                    |String                                                 |
 
     Raises:
         SeasonNotFoundError: if a requested season is below 2002.
