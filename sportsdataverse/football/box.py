@@ -123,7 +123,10 @@ def _avg_start_ep(
     A drive starts at its first scrimmage snap's ``start.yardsToEndzone``; its value is the
     curve's EP at own yard line ``100 - start.yardsToEndzone`` (clipped to 1..99), and a
     team's value is the mean over its drives. This is the number Game on Paper put in its
-    Drives table and feeds its Paper Index field-position input.
+    Drives table and feeds its Paper Index field-position input. Only scrimmage snaps count, as
+    in Game on Paper: a drive that opens with a pre-snap penalty is valued at the post-penalty
+    spot, and a drive with no scrimmage snap is left out, so the drive count can differ from
+    the ``drives`` and ``avg_field_position`` rows.
 
     ``full_game`` is the whole game's frame when ``play_df`` is a window of it (a quarter,
     a half): the window's drives are the ones with a snap in it, each valued at its first
@@ -142,11 +145,16 @@ def _avg_start_ep(
     starts = _drive_first_snaps(play_df)
     if isinstance(full_game, pl.DataFrame) and _START_EP_NEED <= set(full_game.columns):
         game = _drive_first_snaps(full_game).rename({"start_yte": "_game_yte"}).with_columns(_in_game=pl.lit(True))
+        for k in keys:  # join keys must agree: a window frame typed apart from its game would mis-match
+            assert starts.schema[k] == game.schema[k], f"{k}: {starts.schema[k]} vs {game.schema[k]}"
         starts = starts.join(game, on=keys, how="left").with_columns(
-            start_yte=pl.when(pl.col("_in_game")).then(pl.col("_game_yte")).otherwise(pl.col("start_yte"))
+            start_yte=pl.when(pl.col("_in_game") == True)  # noqa: E712
+            .then(pl.col("_game_yte"))
+            .otherwise(pl.col("start_yte"))
         )
     if starts.height == 0:
         return empty
+    assert curve.schema["yardline_own"] == pl.Int64, f"curve yardline_own is {curve.schema['yardline_own']}"
     return (
         starts.with_columns(yardline_own=(100 - pl.col("start_yte")).cast(pl.Int64).clip(1, 99))
         .join(curve.select("yardline_own", "ep"), on="yardline_own", how="left")

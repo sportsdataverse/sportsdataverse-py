@@ -5,4 +5,5 @@
   input, moved into the package. On a window of a game (`create_box_score` on a slice of
   `plays_frame`, as Game on Paper's quarter and half boxes do) each drive with a snap in the window
   is valued at its first snap of the whole game, so a drive carried over from the previous quarter
-  keeps its real start. The `espn_{cfb,nfl}_adv_drives` releases pick it up on their next rebuild.
+  keeps its real start. Only scrimmage snaps count (Game on Paper's definition), so a drive with no
+  scrimmage snap is not averaged. The `espn_{cfb,nfl}_adv_drives` releases pick it up on their next rebuild.
