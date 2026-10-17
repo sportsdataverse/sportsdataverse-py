@@ -442,7 +442,9 @@ endpoints:
     - skaters
     - all
     description: 'Position group: goalies, defenses, forwards, skaters or all. None
-      = the site''s default.'
+      = the site''s default. The site orders goalies by goals-against average ascending,
+      so goalies=page 1 lists goalies without a game first; page on (or filter by
+      club) to reach the starters.'
     name: position
     query_key: values[amplua_full]
     type: str

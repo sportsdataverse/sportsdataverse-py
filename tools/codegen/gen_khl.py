@@ -215,7 +215,11 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "query_key": "values[amplua_full]",
                     "type": "str",
                     "choices": ["goalies", "defenses", "forwards", "skaters", "all"],
-                    "description": "Position group: goalies, defenses, forwards, skaters or all. None = the site's default.",
+                    "description": (
+                        "Position group: goalies, defenses, forwards, skaters or all. None = the site's default. "
+                        "The site orders goalies by goals-against average ascending, so goalies=page 1 lists "
+                        "goalies without a game first; page on (or filter by club) to reach the starters."
+                    ),
                 },
                 {
                     "name": "club",
