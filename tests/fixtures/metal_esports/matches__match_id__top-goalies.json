@@ -1,0 +1,230 @@
+[
+  {
+    "playerId": 400,
+    "name": "Mathieu",
+    "surname": "Caron",
+    "photo": null,
+    "birthdate": "2000-03-29",
+    "teamId": 8,
+    "teamName": "Rødovre Mighty Bulls",
+    "teamShortcut": "ROD",
+    "teamType": "home",
+    "jersey": 62,
+    "matches": 1,
+    "wonMatches": 0,
+    "lostMatches": 1,
+    "saves": 0,
+    "goalsAgainst": 3,
+    "shotsAgainst": 3,
+    "savesPercent": 0.0,
+    "average": 4.5,
+    "zeros": 0,
+    "timeOnIce": 2400,
+    "secondsPerGame": 2400.0,
+    "minutesInPlay": 100.0,
+    "visibleGames": false,
+    "visibleShutouts": false,
+    "visibleWins": false,
+    "starsGames": 0,
+    "starsShutouts": 0,
+    "starsWins": 0,
+    "milestoneGames": 10.0,
+    "milestoneShutouts": 0.0,
+    "milestoneWins": 0.0,
+    "xG": 0.0,
+    "xGA": 0.0,
+    "GSAx": 0.0,
+    "xS": 0.0,
+    "gateZone": {
+      "ur": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ul": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "br": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "fh": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "bl": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ce": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      }
+    },
+    "rank": 1
+  },
+  {
+    "playerId": 412,
+    "name": "Kristers",
+    "surname": "Steinbergs",
+    "photo": null,
+    "birthdate": "2005-05-23",
+    "teamId": 4,
+    "teamName": "Aalborg Pirates",
+    "teamShortcut": "AAL",
+    "teamType": "visitor",
+    "jersey": 1,
+    "matches": 1,
+    "wonMatches": 1,
+    "lostMatches": 0,
+    "saves": 0,
+    "goalsAgainst": 1,
+    "shotsAgainst": 1,
+    "savesPercent": 0.0,
+    "average": 1.5,
+    "zeros": 0,
+    "timeOnIce": 2400,
+    "secondsPerGame": 2400.0,
+    "minutesInPlay": 100.0,
+    "visibleGames": false,
+    "visibleShutouts": false,
+    "visibleWins": false,
+    "starsGames": 0,
+    "starsShutouts": 0,
+    "starsWins": 0,
+    "milestoneGames": 10.0,
+    "milestoneShutouts": 0.0,
+    "milestoneWins": 10.0,
+    "xG": 0.0,
+    "xGA": 0.0,
+    "GSAx": 0.0,
+    "xS": 0.0,
+    "gateZone": {
+      "ur": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ul": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "br": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "fh": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "bl": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ce": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      }
+    },
+    "rank": 2
+  },
+  {
+    "playerId": 322,
+    "name": "Bertram",
+    "surname": "Witomski",
+    "photo": null,
+    "birthdate": "2006-08-11",
+    "teamId": 0,
+    "teamName": "",
+    "teamShortcut": "",
+    "teamType": null,
+    "jersey": 0,
+    "matches": 0,
+    "wonMatches": 0,
+    "lostMatches": 0,
+    "saves": 0,
+    "goalsAgainst": 0,
+    "shotsAgainst": 0,
+    "savesPercent": 0,
+    "average": 0,
+    "zeros": 0,
+    "timeOnIce": 0,
+    "secondsPerGame": 0,
+    "minutesInPlay": 0,
+    "visibleGames": false,
+    "visibleShutouts": false,
+    "visibleWins": false,
+    "starsGames": 0,
+    "starsShutouts": 0,
+    "starsWins": 0,
+    "milestoneGames": 0.0,
+    "milestoneShutouts": 0.0,
+    "milestoneWins": 0.0,
+    "xG": 0.0,
+    "xGA": 0.0,
+    "GSAx": 0.0,
+    "xS": 0.0,
+    "gateZone": {
+      "ur": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ul": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "br": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "fh": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "bl": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      },
+      "ce": {
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "saves": 0,
+        "savesPercent": 0
+      }
+    },
+    "rank": 3
+  }
+]

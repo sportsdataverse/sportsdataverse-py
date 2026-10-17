@@ -1,0 +1,78 @@
+[
+  {
+    "leaguePartId": 44,
+    "leaguePartName": "DEL 2026/27",
+    "tableData": {
+      "table": [
+        {
+          "id": 3,
+          "partTeamId": 495,
+          "name": "Eisbären Berlin",
+          "shortcut": "EBB",
+          "position": 1,
+          "points": 20,
+          "games": 8,
+          "wins": 6,
+          "winsOt": 1,
+          "ties": 0,
+          "lossesOt": 0,
+          "losses": 1,
+          "score1": 31,
+          "score2": 12,
+          "onlySOwins": 1,
+          "onlySOlosts": 0,
+          "onlyOTwins": 0,
+          "onlyOTlosts": 0,
+          "bonus": 0,
+          "ppg": 2.5
+        },
+        {
+          "id": 2,
+          "partTeamId": 497,
+          "name": "Adler Mannheim",
+          "shortcut": "MAN",
+          "position": 2,
+          "points": 17,
+          "games": 9,
+          "wins": 5,
+          "winsOt": 0,
+          "ties": 0,
+          "lossesOt": 2,
+          "losses": 2,
+          "score1": 30,
+          "score2": 24,
+          "onlySOwins": 0,
+          "onlySOlosts": 1,
+          "onlyOTwins": 0,
+          "onlyOTlosts": 1,
+          "bonus": 0,
+          "ppg": 1.889
+        },
+        {
+          "id": 14,
+          "partTeamId": 501,
+          "name": "Nürnberg Ice Tigers",
+          "shortcut": "NIT",
+          "position": 3,
+          "points": 16,
+          "games": 9,
+          "wins": 5,
+          "winsOt": 0,
+          "ties": 0,
+          "lossesOt": 1,
+          "losses": 3,
+          "score1": 29,
+          "score2": 23,
+          "onlySOwins": 0,
+          "onlySOlosts": 1,
+          "onlyOTwins": 0,
+          "onlyOTlosts": 0,
+          "bonus": 0,
+          "ppg": 1.778
+        }
+      ],
+      "state": "playing",
+      "datetime": "2026-10-11 21:21:06"
+    }
+  }
+]

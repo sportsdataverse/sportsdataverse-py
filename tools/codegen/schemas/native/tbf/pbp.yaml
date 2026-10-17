@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: action_number
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_type
+  type: integer
+- description: ''
+  name: clock
+  type: character
+- description: ''
+  name: seconds_remaining
+  type: integer
+- description: ''
+  name: home_score
+  type: integer
+- description: ''
+  name: away_score
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: action
+  type: character
+- description: ''
+  name: action_en
+  type: character
+kind: dataframe
+schema: tbf_pbp

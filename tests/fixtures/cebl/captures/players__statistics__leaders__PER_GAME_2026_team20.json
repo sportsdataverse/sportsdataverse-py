@@ -1,0 +1,178 @@
+{
+  "POINTS": [
+    {
+      "id": 570965,
+      "full_name": "Javonte Smart",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/e4e635fdd477bfcd31e2d4a00b0153f8M1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "23.8",
+      "ranking": 1
+    },
+    {
+      "id": 940584,
+      "full_name": "Matthew Cleveland",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/d91e9c9abbc147a7291ed3143bb253efM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "21.2",
+      "ranking": 2
+    },
+    {
+      "id": 36982,
+      "full_name": "Isaih Moore",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/94506ba398c5329f8204b44e7e6e92cbM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "16.4",
+      "ranking": 3
+    }
+  ],
+  "REBOUNDS": [
+    {
+      "id": 36982,
+      "full_name": "Isaih Moore",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/94506ba398c5329f8204b44e7e6e92cbM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "9.2",
+      "ranking": 1
+    },
+    {
+      "id": 940584,
+      "full_name": "Matthew Cleveland",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/d91e9c9abbc147a7291ed3143bb253efM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "7.0",
+      "ranking": 2
+    },
+    {
+      "id": 938454,
+      "full_name": "Alex Fudge",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/4566c0a1844f0b1b23b998df77ed0f5dM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "5.8",
+      "ranking": 3
+    }
+  ],
+  "ASSISTS": [
+    {
+      "id": 570965,
+      "full_name": "Javonte Smart",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/e4e635fdd477bfcd31e2d4a00b0153f8M1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "6.9",
+      "ranking": 1
+    },
+    {
+      "id": 411821,
+      "full_name": "Kobe Elvis",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/974d68668549c19af28a7230ae9ca806M1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "4.3",
+      "ranking": 2
+    },
+    {
+      "id": 940584,
+      "full_name": "Matthew Cleveland",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/d91e9c9abbc147a7291ed3143bb253efM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "3.1",
+      "ranking": 3
+    }
+  ],
+  "TARGET_SCORES": [
+    {
+      "id": 938454,
+      "full_name": "Alex Fudge",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/4566c0a1844f0b1b23b998df77ed0f5dM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "0.1",
+      "ranking": 1
+    },
+    {
+      "id": 570965,
+      "full_name": "Javonte Smart",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/e4e635fdd477bfcd31e2d4a00b0153f8M1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "0.1",
+      "ranking": 2
+    },
+    {
+      "id": 936013,
+      "full_name": "Justin Harmon",
+      "photo_url": "https://images.statsengine.playbyplay.api.geniussports.com/bc209db510b47e7d463c1b7c5112bcaaM1.png",
+      "team_id": 20,
+      "team_name_en": "Ottawa BlackJacks",
+      "team_short_name_en": "Ottawa",
+      "team_abbreviated_name": "OTT",
+      "team_name_fr": "BlackJacks d'Ottawa",
+      "team_short_name_fr": "Ottawa",
+      "team_logo_url": "https://storage.googleapis.com/cebl-project.appspot.com/logos/ottawa.png",
+      "value": "0.1",
+      "ranking": 3
+    }
+  ]
+}

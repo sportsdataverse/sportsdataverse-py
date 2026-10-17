@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: organisation_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: jersey
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: is_captain
+  type: logical
+kind: dataframe
+schema: fiba_gamepage_lineup

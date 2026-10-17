@@ -1,0 +1,703 @@
+{
+  "items": [
+    {
+      "id": "2006720",
+      "seasonId": 2026,
+      "sourceId": 2006720,
+      "stage": "FIRST_ROUND",
+      "competition": "BBL_CUP",
+      "status": "OFFICIAL",
+      "homeTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": null,
+        "isForeign": true,
+        "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/446",
+        "tlc": "CRA",
+        "name": "HAKRO Merlins Crailsheim",
+        "teamId": "446",
+        "logoUrl": "https://api.2basketballbundesliga.de/pics2/2026_2027/lo/446",
+        "seasonTeamId": "446",
+        "streak": "L",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "L"
+        ],
+        "last10Losses": 1,
+        "last10Victories": 0,
+        "totalGames": "1",
+        "rank": 9,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "guestTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": "https://phoenix-hagen.reservix.de/",
+        "isForeign": false,
+        "foreignLink": "",
+        "tlc": "HAG",
+        "name": "Phoenix Hagen",
+        "teamId": "473",
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/473",
+        "seasonTeamId": "473",
+        "streak": "W",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "W"
+        ],
+        "last10Losses": 0,
+        "last10Victories": 1,
+        "totalGames": "1",
+        "rank": 7,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "result": {
+        "homeTeamFinalScore": 86,
+        "guestTeamFinalScore": 93,
+        "latestPeriod": "Q4",
+        "homeTeamQ1Score": 20,
+        "homeTeamQ2Score": 19,
+        "homeTeamQ3Score": 19,
+        "homeTeamQ4Score": 28,
+        "guestTeamQ1Score": 12,
+        "guestTeamQ2Score": 24,
+        "guestTeamQ3Score": 24,
+        "guestTeamQ4Score": 33,
+        "homeTeamOT1Score": 0,
+        "homeTeamOT2Score": 0,
+        "homeTeamOT3Score": 0,
+        "homeTeamOT4Score": 0,
+        "homeTeamOT5Score": 0,
+        "homeTeamOT6Score": 0,
+        "homeTeamOT7Score": 0,
+        "homeTeamOT8Score": 0,
+        "homeTeamOT9Score": 0,
+        "guestTeamOT1Score": 0,
+        "guestTeamOT2Score": 0,
+        "guestTeamOT3Score": 0,
+        "guestTeamOT4Score": 0,
+        "guestTeamOT5Score": 0,
+        "guestTeamOT6Score": 0,
+        "guestTeamOT7Score": 0,
+        "guestTeamOT8Score": 0,
+        "guestTeamOT9Score": 0,
+        "spectators": 2166
+      },
+      "scheduledTime": "2026-09-10T16:30:00Z",
+      "isHidden": 0,
+      "matchDay": 1,
+      "coachComments": [
+        {
+          "content": "Glückwunsch an Chris und Hagen. Zuerst möchte ich meiner Mannschaft zu einer kämpferisch überragenden Leistung gratulieren. Wir haben versucht sehr physisch zu spielen und vor allem Defensiv den Fokus zu legen. Das hat auch dazu geführt, dass wir offensiv den Rhythmus gefunden haben. Ich denke man hat auch klar gesehen, dass unsere Limitation heute physischer Natur war. Es war nicht der fehlende Wille. Die Energie hat uns am Ende etwas gefehlt und hat zu Fehlern geführt, die wir hoffentlich zum Saisonstart nicht mehr machen. Für mich ist es aber sehr positiv, dass wir gegen ein BBL-Team so mitgehalten haben und uns in die Situation gebracht haben, das Spiel gewinnen zu können. Nichtsdestotrotz müssen wir weiter arbeiten, werden das Spiel aufarbeiten und unsere Lehren daraus ziehen.",
+          "seasonCoach": {
+            "id": "2003166",
+            "seasonTeam": {
+              "id": "446",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/446",
+              "name": "HAKRO Merlins Crailsheim"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2003166",
+            "firstName": "Florian",
+            "lastName": "Flabb",
+            "isHeadCoach": true
+          }
+        },
+        {
+          "content": "Ich gratuliere den Merlins, auch wenn am Ende eine Niederlage steht. Das wäre ein verdienter Sieg für Crailsheim gewesen, sie haben das maximale herausgeholt. Davon war ich wirklich beeindruckt. Sie haben mit ihrer Physis unser Spiel zerstört. Sie haben nur wenige freie Würfe zugelassen, die wir dann auch noch verlegt haben. Wir haben kurz vor der Halbzeit etwas umgestellt und hintenraus schwere Würfe getroffen, da war das Glück dann auf unserer Seite. Nochmal, ihr habt ein tolles Team was in der ProA Spaß machen wird.",
+          "seasonCoach": {
+            "id": "4415",
+            "seasonTeam": {
+              "id": "473",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/473",
+              "name": "Phoenix Hagen"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/4415",
+            "firstName": "Chris",
+            "lastName": "Harris",
+            "isHeadCoach": true
+          }
+        }
+      ],
+      "isTBD": false,
+      "referee1": {
+        "firstName": "Johannes",
+        "lastName": "Hack",
+        "birthDate": "1981-09-28",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/20",
+        "officialFunction": "REFEREE",
+        "profession": "Gymnasiallehrer",
+        "refId": "20",
+        "salutation": "",
+        "participations": 484,
+        "yearJoinedBBL": 2009
+      },
+      "referee2": {
+        "firstName": "Benedikt",
+        "lastName": "Loder",
+        "birthDate": "1996-10-06",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/725",
+        "officialFunction": "REFEREE",
+        "profession": "",
+        "refId": "725",
+        "salutation": "",
+        "participations": 134,
+        "yearJoinedBBL": 2018
+      },
+      "referee3": {
+        "firstName": "Andreas",
+        "lastName": "Bohn",
+        "birthDate": "1982-04-02",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/650",
+        "officialFunction": "REFEREE",
+        "profession": "IT Systemadministrator",
+        "refId": "650",
+        "salutation": "",
+        "participations": 291,
+        "yearJoinedBBL": 2017
+      },
+      "commissioner": {
+        "firstName": "Michael",
+        "lastName": "Schmitt",
+        "birthDate": "1965-02-11",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/758",
+        "officialFunction": "COMMISSIONER",
+        "profession": "",
+        "refId": "758",
+        "salutation": "",
+        "participations": 51,
+        "yearJoinedBBL": "2024"
+      },
+      "tvChannel": [
+        {
+          "channelId": 11,
+          "name": "DYN Pokal",
+          "logo": "https://api.basketball-bundesliga.de/images/tv_channel/logo/2026/11",
+          "url": "https://www.dyn.sport/competition/BBL_Pokal_65003"
+        }
+      ],
+      "tvType": "",
+      "isFreeTV": false,
+      "venue": {
+        "id": "215",
+        "name": "Arena Hohenlohe",
+        "address": "Justus-von-Liebig-Straße 1, 74532 Ilshofen",
+        "isMain": true,
+        "capacity": 3000
+      },
+      "topScore": 23,
+      "topScorer": {
+        "id": "2003992",
+        "firstName": "Trenton",
+        "lastName": "Gibson",
+        "playerSourceId": 140183237,
+        "previousTeams": [],
+        "isActive": true,
+        "position": "SHOOTING_GUARD",
+        "playerId": "2003992",
+        "realPlayerId": 140183237,
+        "shirtNumber": 33,
+        "height": 1.93,
+        "weight": 91,
+        "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2003992",
+        "isAllStar": false,
+        "isYoung": false,
+        "isVisible": true,
+        "seasonId": 2026,
+        "seasonTeamId": "473",
+        "birthDate": "2000-04-19",
+        "nationalities": [
+          "US"
+        ],
+        "yearJoinedBBL": "TODO_YEARJOINEDBBL",
+        "socialMediaLinks": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "gameTime": "00:00:00",
+      "videos": [
+        {
+          "type": "GAME_HIGHLIGHTS",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006720-GAME_HIGHLIGHTS-desktop.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/446/473",
+          "width": 1920,
+          "height": 1080
+        }
+      ],
+      "bettingOdds": []
+    },
+    {
+      "id": "2006724",
+      "seasonId": 2026,
+      "sourceId": 2006724,
+      "stage": "FIRST_ROUND",
+      "competition": "BBL_CUP",
+      "status": "OFFICIAL",
+      "homeTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": null,
+        "isForeign": true,
+        "foreignLink": "https://www.2basketballbundesliga.de/teams/kader/439",
+        "tlc": "BRE",
+        "name": "Eisbären Bremerhaven",
+        "teamId": "439",
+        "logoUrl": "https://api.2basketballbundesliga.de/pics2/2026_2027/lo/439",
+        "seasonTeamId": "439",
+        "streak": "L",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "L"
+        ],
+        "last10Losses": 1,
+        "last10Victories": 0,
+        "totalGames": "1",
+        "rank": 13,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "guestTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": "https://www.eventimsports.de/ols/basketball-braunschweig/",
+        "isForeign": false,
+        "foreignLink": "",
+        "tlc": "BRA",
+        "name": "Basketball Löwen Braunschweig",
+        "teamId": "422",
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/422",
+        "seasonTeamId": "422",
+        "streak": "W",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "W"
+        ],
+        "last10Losses": 0,
+        "last10Victories": 1,
+        "totalGames": "1",
+        "rank": 4,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "result": {
+        "homeTeamFinalScore": 67,
+        "guestTeamFinalScore": 87,
+        "latestPeriod": "Q4",
+        "homeTeamQ1Score": 12,
+        "homeTeamQ2Score": 12,
+        "homeTeamQ3Score": 24,
+        "homeTeamQ4Score": 19,
+        "guestTeamQ1Score": 20,
+        "guestTeamQ2Score": 22,
+        "guestTeamQ3Score": 30,
+        "guestTeamQ4Score": 15,
+        "homeTeamOT1Score": 0,
+        "homeTeamOT2Score": 0,
+        "homeTeamOT3Score": 0,
+        "homeTeamOT4Score": 0,
+        "homeTeamOT5Score": 0,
+        "homeTeamOT6Score": 0,
+        "homeTeamOT7Score": 0,
+        "homeTeamOT8Score": 0,
+        "homeTeamOT9Score": 0,
+        "guestTeamOT1Score": 0,
+        "guestTeamOT2Score": 0,
+        "guestTeamOT3Score": 0,
+        "guestTeamOT4Score": 0,
+        "guestTeamOT5Score": 0,
+        "guestTeamOT6Score": 0,
+        "guestTeamOT7Score": 0,
+        "guestTeamOT8Score": 0,
+        "guestTeamOT9Score": 0,
+        "spectators": 1328
+      },
+      "scheduledTime": "2026-09-10T18:00:00Z",
+      "isHidden": 0,
+      "matchDay": 1,
+      "coachComments": [
+        {
+          "content": "I want to congratulate Braunschweig with a well deserved win today. They dominated the game physically from start to finish. From our side, I’m very happy how the team responded in the second half, after being down, continuing to find reasons to fight, which is an important quality to have. With that being said, this is also a big lesson for us, that shows that we have a lot of work ahead of us in order to reach the level that we want as a team.",
+          "seasonCoach": {
+            "id": "2004265",
+            "seasonTeam": {
+              "id": "439",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/439",
+              "name": "Eisbären Bremerhaven"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2004265",
+            "firstName": "Ferried",
+            "lastName": "Naciri",
+            "isHeadCoach": true
+          }
+        },
+        {
+          "content": "Zunächst einmal freuen wir uns sehr über den Sieg. Wir haben sehr hart gearbeitet und die Jungs haben sich diesen Sieg verdient. In der ersten Halbzeit haben wir hervorragende Arbeit geleistet, vor allem in der Verteidigung. Heute sah es so aus, als könnten wir gut verteidigen. Dank dieser starken Verteidigung und unserer Dominanz bei den Rebounds hatten wir die Möglichkeit, schnell und in der Transition zu spielen. Und ich denke, das war der Schlüssel zum Spiel: wir sind aus der Verteidigung in den Angriff gekommen. In der zweiten Halbzeit wurden wir müde und spielten nicht mehr so gut. Das lag auch an unserer kurzen Rotation. Ich bin nicht zu 100 Prozent zufrieden, aber wir haben einen Weg gefunden, guten Basketball zu spielen. Wir müssen die gleiche Mentalität beibehalten, weiter hart arbeiten und uns jetzt auf das erste BBL-Spiel vorbereiten.",
+          "seasonCoach": {
+            "id": "2003105",
+            "seasonTeam": {
+              "id": "422",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/422",
+              "name": "Basketball Löwen Braunschweig"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2003105",
+            "firstName": "Ramon",
+            "lastName": "Diaz Sanchez",
+            "isHeadCoach": true
+          }
+        }
+      ],
+      "isTBD": false,
+      "referee1": {
+        "firstName": "Gentian",
+        "lastName": "Cici",
+        "birthDate": "1981-04-07",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/731",
+        "officialFunction": "REFEREE",
+        "profession": "Schiedsrichter BBL, Euroleague ",
+        "refId": "731",
+        "salutation": "",
+        "participations": 320,
+        "yearJoinedBBL": 2019
+      },
+      "referee2": {
+        "firstName": "Dennis",
+        "lastName": "Sirowi",
+        "birthDate": "1987-08-22",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/769",
+        "officialFunction": "REFEREE",
+        "profession": "Business Develpment Krankenkasse",
+        "refId": "769",
+        "salutation": "",
+        "participations": 233,
+        "yearJoinedBBL": 2018
+      },
+      "referee3": {
+        "firstName": "Aleksandra",
+        "lastName": "Pawlik",
+        "birthDate": "1985-03-10",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/749",
+        "officialFunction": "REFEREE",
+        "profession": "Projektleitung ",
+        "refId": "749",
+        "salutation": "",
+        "participations": 83,
+        "yearJoinedBBL": 2023
+      },
+      "commissioner": {
+        "firstName": "Markus",
+        "lastName": "Horn",
+        "birthDate": "1971-09-23",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/773",
+        "officialFunction": "COMMISSIONER",
+        "profession": "Vermögensberater",
+        "refId": "773",
+        "salutation": "",
+        "participations": 202,
+        "yearJoinedBBL": "2018"
+      },
+      "tvChannel": [
+        {
+          "channelId": 11,
+          "name": "DYN Pokal",
+          "logo": "https://api.basketball-bundesliga.de/images/tv_channel/logo/2026/11",
+          "url": "https://www.dyn.sport/competition/BBL_Pokal_65003"
+        }
+      ],
+      "tvType": "",
+      "isFreeTV": false,
+      "venue": {
+        "id": "525",
+        "name": "ÖVB-Arena Bremen",
+        "address": "Findorffstraße 101, 28215 Bremen",
+        "isMain": false,
+        "capacity": 9456
+      },
+      "topScore": 19,
+      "topScorer": {
+        "id": "2004243",
+        "firstName": "Sheldon",
+        "lastName": "Edwards",
+        "playerSourceId": 140183326,
+        "previousTeams": [],
+        "isActive": true,
+        "position": "SHOOTING_GUARD",
+        "playerId": "2004243",
+        "realPlayerId": 140183326,
+        "shirtNumber": 13,
+        "height": 1.91,
+        "weight": 86,
+        "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2004243",
+        "isAllStar": false,
+        "isYoung": false,
+        "isVisible": true,
+        "seasonId": 2026,
+        "seasonTeamId": "422",
+        "birthDate": "2000-08-13",
+        "nationalities": [
+          "US"
+        ],
+        "yearJoinedBBL": "TODO_YEARJOINEDBBL",
+        "socialMediaLinks": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "gameTime": "00:00:00",
+      "videos": [
+        {
+          "type": "GAME_HIGHLIGHTS",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006724-GAME_HIGHLIGHTS-desktop.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/439/422",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "type": "GAME_HIGHLIGHTS",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006724-GAME_HIGHLIGHTS-mobile.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/439/422",
+          "width": 608,
+          "height": 1080
+        }
+      ],
+      "bettingOdds": []
+    },
+    {
+      "id": "2006728",
+      "seasonId": 2026,
+      "sourceId": 2006728,
+      "stage": "FIRST_ROUND",
+      "competition": "BBL_CUP",
+      "status": "OFFICIAL",
+      "homeTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": "https://tickets.hamburgtowers.de/",
+        "isForeign": false,
+        "foreignLink": "",
+        "tlc": "HAM",
+        "name": "Veolia Towers Hamburg",
+        "teamId": "554",
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/554",
+        "seasonTeamId": "554",
+        "streak": "W",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "W"
+        ],
+        "last10Losses": 0,
+        "last10Victories": 1,
+        "totalGames": "1",
+        "rank": 6,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "guestTeam": {
+        "ticketPhone": "REDACTED",
+        "ticketUrl": "http://tickets.seawolves.de",
+        "isForeign": false,
+        "foreignLink": "",
+        "tlc": "HRO",
+        "name": "ROSTOCK SEAWOLVES",
+        "teamId": "551",
+        "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/551",
+        "seasonTeamId": "551",
+        "streak": "L",
+        "streakCount": 1,
+        "last10Outcomes": [
+          "L"
+        ],
+        "last10Losses": 1,
+        "last10Victories": 0,
+        "totalGames": "1",
+        "rank": 11,
+        "magentaSportId": "TODO_MAGENTASPORTID"
+      },
+      "result": {
+        "homeTeamFinalScore": 90,
+        "guestTeamFinalScore": 81,
+        "latestPeriod": "Q4",
+        "homeTeamQ1Score": 17,
+        "homeTeamQ2Score": 31,
+        "homeTeamQ3Score": 23,
+        "homeTeamQ4Score": 19,
+        "guestTeamQ1Score": 27,
+        "guestTeamQ2Score": 21,
+        "guestTeamQ3Score": 13,
+        "guestTeamQ4Score": 20,
+        "homeTeamOT1Score": 0,
+        "homeTeamOT2Score": 0,
+        "homeTeamOT3Score": 0,
+        "homeTeamOT4Score": 0,
+        "homeTeamOT5Score": 0,
+        "homeTeamOT6Score": 0,
+        "homeTeamOT7Score": 0,
+        "homeTeamOT8Score": 0,
+        "homeTeamOT9Score": 0,
+        "guestTeamOT1Score": 0,
+        "guestTeamOT2Score": 0,
+        "guestTeamOT3Score": 0,
+        "guestTeamOT4Score": 0,
+        "guestTeamOT5Score": 0,
+        "guestTeamOT6Score": 0,
+        "guestTeamOT7Score": 0,
+        "guestTeamOT8Score": 0,
+        "guestTeamOT9Score": 0,
+        "spectators": 2066
+      },
+      "scheduledTime": "2026-09-11T18:00:00Z",
+      "isHidden": 0,
+      "matchDay": 1,
+      "coachComments": [
+        {
+          "content": "„Es hat sich heute alles bewahrheitet, was wir von Hamburg erwartet haben. Sie haben einen sehr, sehr interessanten Kader zusammengestellt – ganz besonders, was Defensive, Physis und Länge angeht. Das hat uns in der Offensive gezwungen, viele schwere Würfe zu nehmen, die wir heute nicht getroffen haben. Und auf der anderen Seite haben sie mit Thomasson und Kangudia zwei gute Guards gehabt, die uns sehr, sehr viele Probleme gemacht haben. Wir konnten sie nicht konstant stoppen, das ist heute der Unterschied gewesen.",
+          "seasonCoach": {
+            "id": "2000834",
+            "seasonTeam": {
+              "id": "551",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/551",
+              "name": "ROSTOCK SEAWOLVES"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2000834",
+            "firstName": "Przemyslaw",
+            "lastName": "Frasunkiewicz",
+            "isHeadCoach": true
+          }
+        },
+        {
+          "content": "„Ich freue mich riesig, dass es heute ein Heimspiel war. Die Arena hat uns heute richtig getragen. Es war eine wahre Freude, nach der langen Pause wieder vor unseren Fans spielen zu dürfen. Wir haben uns über die gesamte Zeit die richtigen Würfe herausgespielt, auch wenn wir sie im ersten Viertel noch nicht getroffen haben. Wir haben dann aber nicht aufgehört, nicht den Kopf verloren und dann hinten auch die großen Würfe getroffen.“",
+          "seasonCoach": {
+            "id": "56379",
+            "seasonTeam": {
+              "id": "554",
+              "logoUrl": "https://api.basketball-bundesliga.de/images/teams/logo/2026/554",
+              "name": "Veolia Towers Hamburg"
+            },
+            "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/56379",
+            "firstName": "Benka",
+            "lastName": "Barloschky",
+            "isHeadCoach": true
+          }
+        }
+      ],
+      "isTBD": false,
+      "referee1": {
+        "firstName": "Robert",
+        "lastName": "Lottermoser",
+        "birthDate": "1976-06-03",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/27",
+        "officialFunction": "REFEREE",
+        "profession": "Diplom-Bauingenieur",
+        "refId": "27",
+        "salutation": "",
+        "participations": 1092,
+        "yearJoinedBBL": 2002
+      },
+      "referee2": {
+        "firstName": "Nermin",
+        "lastName": "Hodzic",
+        "birthDate": "1995-10-06",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/629",
+        "officialFunction": "REFEREE",
+        "profession": "Lehrer",
+        "refId": "629",
+        "salutation": "",
+        "participations": 190,
+        "yearJoinedBBL": 2020
+      },
+      "referee3": {
+        "firstName": "Dogu Berk",
+        "lastName": "Innal",
+        "birthDate": "1993-09-13",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/755",
+        "officialFunction": "REFEREE",
+        "profession": "",
+        "refId": "755",
+        "salutation": "",
+        "participations": 22,
+        "yearJoinedBBL": 2024
+      },
+      "commissioner": {
+        "firstName": "Ingo",
+        "lastName": "Holsten",
+        "birthDate": "1962-06-12",
+        "imageUrl": "https://api.basketball-bundesliga.de/images/referee/portrait/2026/45",
+        "officialFunction": "COMMISSIONER",
+        "profession": "Apotheker\n",
+        "refId": "45",
+        "salutation": "",
+        "participations": 595,
+        "yearJoinedBBL": "2005"
+      },
+      "tvChannel": [
+        {
+          "channelId": 11,
+          "name": "DYN Pokal",
+          "logo": "https://api.basketball-bundesliga.de/images/tv_channel/logo/2026/11",
+          "url": "https://www.dyn.sport/competition/BBL_Pokal_65003"
+        }
+      ],
+      "tvType": "",
+      "isFreeTV": false,
+      "venue": {
+        "id": "68",
+        "name": "Inselpark Arena",
+        "address": "Kurt-Emmerich-Platz 10-12, 21109 Hamburg",
+        "isMain": true,
+        "capacity": 3400
+      },
+      "topScore": 27,
+      "topScorer": {
+        "id": "2004006",
+        "firstName": "Noah",
+        "lastName": "Thomasson",
+        "playerSourceId": 140183252,
+        "previousTeams": [],
+        "isActive": true,
+        "position": "POINT_GUARD",
+        "playerId": "2004006",
+        "realPlayerId": 140183252,
+        "shirtNumber": 2,
+        "height": 1.9,
+        "weight": 100,
+        "imageUrl": "https://api.basketball-bundesliga.de/images/player/portrait/2026/2004006",
+        "isAllStar": false,
+        "isYoung": false,
+        "isVisible": true,
+        "seasonId": 2026,
+        "seasonTeamId": "554",
+        "birthDate": "2001-06-04",
+        "nationalities": [
+          "US"
+        ],
+        "yearJoinedBBL": "TODO_YEARJOINEDBBL",
+        "socialMediaLinks": [
+          "",
+          "",
+          ""
+        ]
+      },
+      "gameTime": "00:00:00",
+      "videos": [
+        {
+          "type": "GAME_HIGHLIGHTS",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006728-GAME_HIGHLIGHTS-desktop.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/554/551",
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "type": "GAME_HIGHLIGHTS",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006728-GAME_HIGHLIGHTS-mobile.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/554/551",
+          "width": 608,
+          "height": 1080
+        },
+        {
+          "type": "GAME_PREVIEW",
+          "hlsManifestUrl": "https://nbg1.your-objectstorage.com/bbl/2006728-GAME_PREVIEW-desktop.m3u8",
+          "imageURL": "https://api.basketball-bundesliga.de/images/video/2026/554/551",
+          "width": 1920,
+          "height": 1080
+        }
+      ],
+      "bettingOdds": []
+    }
+  ],
+  "totalPages": 1,
+  "currentPage": 1,
+  "pageSize": 500
+}

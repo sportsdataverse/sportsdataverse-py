@@ -1,0 +1,457 @@
+{
+  "data": [
+    {
+      "game": {
+        "id": 107,
+        "game_time": "2021-11-21 15:00:00",
+        "status": "finished",
+        "video_url": null,
+        "competitors": [
+          {
+            "side": 1,
+            "finalScore": 90,
+            "competition_team": {
+              "id": 3,
+              "name": "Telenet Giants Antwerp",
+              "short_name": "ANT",
+              "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+              "club": {
+                "id": 1,
+                "name": "Belgium"
+              },
+              "team_logo": {
+                "name": "Telenet Giants Antwerp",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                  "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 19
+              },
+              {
+                "period_id": 2,
+                "score": 17
+              },
+              {
+                "period_id": 3,
+                "score": 28
+              }
+            ]
+          },
+          {
+            "side": 2,
+            "finalScore": 81,
+            "competition_team": {
+              "id": 1,
+              "name": "Spirou Basket",
+              "short_name": "CHA",
+              "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+              "club": {
+                "id": 1,
+                "name": "Belgium"
+              },
+              "team_logo": {
+                "name": "Spirou Basket",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/0/I/0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/0/I/small-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+                  "medium": "https://bnxt.sportpress.info/storage/0/I/medium-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 15
+              },
+              {
+                "period_id": 2,
+                "score": 28
+              },
+              {
+                "period_id": 3,
+                "score": 16
+              }
+            ]
+          }
+        ],
+        "period": {
+          "name": "Extra1"
+        },
+        "round": {
+          "name": "",
+          "priority": 20
+        },
+        "phase": {
+          "id": 6,
+          "name": "Domestic Belgium",
+          "standings_visible": true
+        },
+        "competition": {
+          "id": 1,
+          "season": 2022,
+          "visible": true,
+          "standings_visible": true,
+          "simple_team_view": false,
+          "summer_season": false,
+          "name": "BNXT League 2021-2022",
+          "logo": null,
+          "ticket_url": null,
+          "video_url": null,
+          "created_at": "2022-08-10"
+        },
+        "arena": {
+          "name": "Lotto Arena"
+        },
+        "referees": [],
+        "created_at": "2022-08-25"
+      },
+      "competition_team_id": 3,
+      "starter": false,
+      "minute": 14,
+      "foul": 2,
+      "defensive_foul": 3,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 1,
+      "two_point_all": 3,
+      "two_point_percent": 33.3,
+      "three_point_made": 0,
+      "three_point_all": 0,
+      "three_point_percent": 0,
+      "throw_made": 1,
+      "throw_all": 3,
+      "throw_percent": 33.33,
+      "free_throw_made": 0,
+      "free_throw_all": 3,
+      "free_throw_percent": 0,
+      "offensive_rebound": 0,
+      "defensive_rebound": 0,
+      "total_rebound": 0,
+      "block": 0,
+      "block_against": 1,
+      "turnover": 0,
+      "steal": 0,
+      "assist": 0,
+      "points": 2,
+      "value": 0,
+      "jersey": 9
+    },
+    {
+      "game": {
+        "id": 247,
+        "game_time": "2022-04-02 20:00:00",
+        "status": "finished",
+        "video_url": null,
+        "competitors": [
+          {
+            "side": 1,
+            "finalScore": 92,
+            "competition_team": {
+              "id": 12,
+              "name": "ZZ Leiden",
+              "short_name": "LEI",
+              "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+              "club": {
+                "id": 2,
+                "name": "Netherlands"
+              },
+              "team_logo": {
+                "name": "ZZ Leiden",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                  "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 28
+              },
+              {
+                "period_id": 2,
+                "score": 14
+              },
+              {
+                "period_id": 3,
+                "score": 20
+              }
+            ]
+          },
+          {
+            "side": 2,
+            "finalScore": 96,
+            "competition_team": {
+              "id": 3,
+              "name": "Telenet Giants Antwerp",
+              "short_name": "ANT",
+              "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+              "club": {
+                "id": 1,
+                "name": "Belgium"
+              },
+              "team_logo": {
+                "name": "Telenet Giants Antwerp",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                  "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 21
+              },
+              {
+                "period_id": 2,
+                "score": 25
+              },
+              {
+                "period_id": 3,
+                "score": 22
+              }
+            ]
+          }
+        ],
+        "period": {
+          "name": "Extra1"
+        },
+        "round": {
+          "name": "",
+          "priority": 20
+        },
+        "phase": {
+          "id": 7,
+          "name": "ELITE Gold",
+          "standings_visible": true
+        },
+        "competition": {
+          "id": 1,
+          "season": 2022,
+          "visible": true,
+          "standings_visible": true,
+          "simple_team_view": false,
+          "summer_season": false,
+          "name": "BNXT League 2021-2022",
+          "logo": null,
+          "ticket_url": null,
+          "video_url": null,
+          "created_at": "2022-08-10"
+        },
+        "arena": {
+          "name": "Sportcomplex 1574"
+        },
+        "referees": [],
+        "created_at": "2022-09-05"
+      },
+      "competition_team_id": 3,
+      "starter": false,
+      "minute": 15,
+      "foul": 1,
+      "defensive_foul": 0,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 2,
+      "two_point_all": 3,
+      "two_point_percent": 66.7,
+      "three_point_made": 1,
+      "three_point_all": 2,
+      "three_point_percent": 50,
+      "throw_made": 3,
+      "throw_all": 5,
+      "throw_percent": 60,
+      "free_throw_made": 0,
+      "free_throw_all": 0,
+      "free_throw_percent": 0,
+      "offensive_rebound": 0,
+      "defensive_rebound": 2,
+      "total_rebound": 2,
+      "block": 0,
+      "block_against": 0,
+      "turnover": 2,
+      "steal": 1,
+      "assist": 2,
+      "points": 7,
+      "value": 8,
+      "jersey": 9
+    },
+    {
+      "game": {
+        "id": 347,
+        "game_time": "2022-05-05 20:00:00",
+        "status": "finished",
+        "video_url": null,
+        "competitors": [
+          {
+            "side": 1,
+            "finalScore": 77,
+            "competition_team": {
+              "id": 4,
+              "name": "Belfius Mons-Hainaut",
+              "short_name": "MON",
+              "ticket_url": "https://shop.monshainaut.be",
+              "club": {
+                "id": 1,
+                "name": "Belgium"
+              },
+              "team_logo": {
+                "name": "Belfius Mons-Hainaut",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/H/g/HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/H/g/small-HgKJuFFFXpiBzclzztpp6HmL71663600659.png",
+                  "medium": "https://bnxt.sportpress.info/storage/H/g/medium-HgKJuFFFXpiBzclzztpp6HmL71663600659.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 14
+              },
+              {
+                "period_id": 2,
+                "score": 22
+              },
+              {
+                "period_id": 3,
+                "score": 13
+              }
+            ]
+          },
+          {
+            "side": 2,
+            "finalScore": 73,
+            "competition_team": {
+              "id": 3,
+              "name": "Telenet Giants Antwerp",
+              "short_name": "ANT",
+              "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+              "club": {
+                "id": 1,
+                "name": "Belgium"
+              },
+              "team_logo": {
+                "name": "Telenet Giants Antwerp",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                  "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "period_scores": [
+              {
+                "period_id": 1,
+                "score": 18
+              },
+              {
+                "period_id": 2,
+                "score": 23
+              },
+              {
+                "period_id": 3,
+                "score": 10
+              }
+            ]
+          }
+        ],
+        "period": {
+          "name": "Extra1"
+        },
+        "round": {
+          "name": "Negyedd. 2.m",
+          "priority": 22
+        },
+        "phase": {
+          "id": 11,
+          "name": "Domestic Belgium Playoff",
+          "standings_visible": false
+        },
+        "competition": {
+          "id": 1,
+          "season": 2022,
+          "visible": true,
+          "standings_visible": true,
+          "simple_team_view": false,
+          "summer_season": false,
+          "name": "BNXT League 2021-2022",
+          "logo": null,
+          "ticket_url": null,
+          "video_url": null,
+          "created_at": "2022-08-10"
+        },
+        "arena": {
+          "name": "mons.arena"
+        },
+        "referees": [],
+        "created_at": "2022-09-05"
+      },
+      "competition_team_id": 3,
+      "starter": true,
+      "minute": 25,
+      "foul": 3,
+      "defensive_foul": 6,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 1,
+      "two_point_all": 2,
+      "two_point_percent": 50,
+      "three_point_made": 1,
+      "three_point_all": 3,
+      "three_point_percent": 33.3,
+      "throw_made": 2,
+      "throw_all": 5,
+      "throw_percent": 40,
+      "free_throw_made": 1,
+      "free_throw_all": 2,
+      "free_throw_percent": 50,
+      "offensive_rebound": 0,
+      "defensive_rebound": 1,
+      "total_rebound": 1,
+      "block": 0,
+      "block_against": 0,
+      "turnover": 3,
+      "steal": 0,
+      "assist": 3,
+      "points": 6,
+      "value": 9,
+      "jersey": 0
+    }
+  ]
+}

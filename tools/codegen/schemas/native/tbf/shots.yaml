@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_type
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: shot_player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: x
+  type: integer
+- description: ''
+  name: y
+  type: integer
+- description: ''
+  name: made
+  type: logical
+kind: dataframe
+schema: tbf_shots

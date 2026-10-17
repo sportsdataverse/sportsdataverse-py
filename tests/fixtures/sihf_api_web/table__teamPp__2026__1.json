@@ -1,0 +1,228 @@
+{
+  "title": "Team Stats",
+  "description": "Team Stats - PP",
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "ppPercent",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:26.3188228+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Goals",
+      "rowIdentifierKey": "goalsFor",
+      "isOrderDescending": true,
+      "alias": "teamGoal"
+    },
+    {
+      "name": "Goals Pos/Nation",
+      "rowIdentifierKey": "goalsForFw",
+      "isOrderDescending": true,
+      "alias": "teamGoalPosNation"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "teamShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        9
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "PP OP",
+      "description": "Überzahl Gelegenheiten",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppOpportunities"
+    },
+    {
+      "name": "PP OP/GP",
+      "description": "Überzahl Gelgenheiten pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppOpportunitiesQuotient"
+    },
+    {
+      "name": "PPG",
+      "description": "Erzielte Tore in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsFor"
+    },
+    {
+      "name": "PPG/GP",
+      "description": "Erzielte Tore in Überzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsForQuotient"
+    },
+    {
+      "name": "PP%",
+      "description": "Effizienz in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppPercent"
+    },
+    {
+      "name": "PPT",
+      "description": "Zeit in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "powerPlayTime"
+    },
+    {
+      "name": "PP time/GP",
+      "description": "Zeit in Überzahl pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "powerPlayTimeQuotient"
+    },
+    {
+      "name": "PP GA",
+      "description": "Erhaltene Tore in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsAgainst"
+    },
+    {
+      "name": "PP GA/GP",
+      "description": "Erhaltene Tore in Überzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsAgainstQuotient"
+    }
+  ],
+  "data": [
+    [
+      "14",
+      {
+        "id": 101060,
+        "name": "SC Rapperswil-Jona Lakers",
+        "acronym": "SCRJ",
+        "signed": false,
+        "type": "team"
+      },
+      "74",
+      "258",
+      "3.49",
+      "41",
+      "0.55",
+      "15.89",
+      "407:35",
+      "05:30",
+      "10",
+      "0.14"
+    ],
+    [
+      "13",
+      {
+        "id": 102126,
+        "name": "SC Bern",
+        "acronym": "SCB",
+        "signed": false,
+        "type": "team"
+      },
+      "60",
+      "156",
+      "2.60",
+      "25",
+      "0.42",
+      "16.03",
+      "265:59",
+      "04:25",
+      "3",
+      "0.05"
+    ],
+    [
+      "12",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "56",
+      "142",
+      "2.54",
+      "23",
+      "0.41",
+      "16.20",
+      "245:01",
+      "04:22",
+      "5",
+      "0.09"
+    ]
+  ],
+  "alias": "teamPp"
+}

@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: hokejcz_game_id
+  type: integer
+- description: ''
+  name: key
+  type: character
+- description: ''
+  name: last_modified
+  type: character
+- description: ''
+  name: size
+  type: integer
+kind: dataframe
+schema: elh_list_objects

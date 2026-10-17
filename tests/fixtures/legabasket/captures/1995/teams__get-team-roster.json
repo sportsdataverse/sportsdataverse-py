@@ -1,0 +1,125 @@
+{
+  "team": {
+    "id": 267,
+    "name": "Illycaffe' Trieste",
+    "year": 1995,
+    "club_id": 55,
+    "club_code": "TS",
+    "updated_at": "2021-07-21T12:12:31.502+02:00",
+    "logo_key": null
+  },
+  "ranking": [
+    {
+      "id": 1471,
+      "year": 1995,
+      "team_id": 267,
+      "result": "13ª Posizione (su 14) con 12 punti",
+      "team_name": "Illycaffe' Trieste",
+      "championship_type_name": "Regular Season",
+      "championship_series_name": "Serie A",
+      "championships_name": "Regular Season A1"
+    }
+  ],
+  "rnk_sum": {
+    "cat": {
+      "points": {
+        "pos": 11,
+        "avg": 79.90625
+      },
+      "total_rebound": {
+        "pos": 8,
+        "avg": 31.6875
+      },
+      "assists": {
+        "pos": 8,
+        "avg": 7.1875
+      }
+    },
+    "r_s": {
+      "pos": 13,
+      "points": 12,
+      "mw": 6,
+      "ml": 26
+    }
+  },
+  "coach": {
+    "id": 468,
+    "name": "Furio",
+    "surname": "Steffè",
+    "birth_date": "1965-05-09",
+    "place_of_birth": "Trieste",
+    "coach_type_id": 1,
+    "coach_type_description": "Allenatore",
+    "coach_type_code": "1",
+    "team_name": "Illycaffe' TS",
+    "coach_picture_key": null,
+    "team_logo_key": null
+  },
+  "players": [
+    {
+      "id": 1443,
+      "name": "Jevon",
+      "surname": "Crudup",
+      "code": "CRU-JEV",
+      "place_of_birth": "Kansas City",
+      "birth_date": "1972-07-27",
+      "player_number": "0",
+      "country": null,
+      "uefa_ratio": "X",
+      "height": 0,
+      "weight": 0,
+      "year": 1995,
+      "start_date": "1995-07-01",
+      "end_date": "1996-06-30",
+      "player_role_id": 9,
+      "player_role": "-",
+      "team_name": "Illycaffe' TS",
+      "player_picture_key": null,
+      "team_logo_key": null
+    },
+    {
+      "id": 2421,
+      "name": "Simone",
+      "surname": "Gironi",
+      "code": "GIR-SIM",
+      "place_of_birth": "Verona",
+      "birth_date": "1976-04-26",
+      "player_number": "0",
+      "country": null,
+      "uefa_ratio": "X",
+      "height": 0,
+      "weight": 0,
+      "year": 1995,
+      "start_date": "1995-07-01",
+      "end_date": "1996-06-30",
+      "player_role_id": 9,
+      "player_role": "-",
+      "team_name": "Illycaffe' TS",
+      "player_picture_key": null,
+      "team_logo_key": null
+    },
+    {
+      "id": 2473,
+      "name": "Francesco",
+      "surname": "Gori",
+      "code": "GOR-FRA",
+      "place_of_birth": "Livorno",
+      "birth_date": "1977-05-30",
+      "player_number": "0",
+      "country": null,
+      "uefa_ratio": "X",
+      "height": 0,
+      "weight": 0,
+      "year": 1995,
+      "start_date": "1995-07-01",
+      "end_date": "1996-06-30",
+      "player_role_id": 9,
+      "player_role": "-",
+      "team_name": "Illycaffe' TS",
+      "player_picture_key": null,
+      "team_logo_key": null
+    }
+  ],
+  "cdn_url": "https://lba-media.s3.eu-south-1.amazonaws.com",
+  "cache_key": "tCK:_tCK:1790250236_mlCK:_mlCK:1791828530"
+}

@@ -1,0 +1,135 @@
+{
+  "home": {
+    "gameSourceId": 2289328,
+    "gameId": 2289328,
+    "teamId": "22256",
+    "teamName": "Svendborg Rabbits",
+    "teamCode": "SVE",
+    "teamNumber": 1,
+    "place": "home",
+    "source": "genius-basketball-stream-reader",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 80
+          },
+          {
+            "key": "FGM",
+            "value": 27
+          },
+          {
+            "key": "A",
+            "value": 18
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 25
+          },
+          {
+            "key": "FGM",
+            "value": 10
+          },
+          {
+            "key": "A",
+            "value": 7
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 18
+          },
+          {
+            "key": "FGM",
+            "value": 6
+          },
+          {
+            "key": "A",
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  "away": {
+    "gameSourceId": 2289328,
+    "gameId": 2289328,
+    "teamId": "22249",
+    "teamName": "Horsens IC",
+    "teamCode": "HIC",
+    "teamNumber": 2,
+    "place": "away",
+    "source": "genius-basketball-stream-reader",
+    "statistics": [
+      {
+        "period": 0,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 77
+          },
+          {
+            "key": "FGM",
+            "value": 28
+          },
+          {
+            "key": "A",
+            "value": 14
+          }
+        ]
+      },
+      {
+        "period": 1,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 11
+          },
+          {
+            "key": "FGM",
+            "value": 3
+          },
+          {
+            "key": "A",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "period": 2,
+        "parsedTotalStatistics": [
+          {
+            "key": "TP",
+            "value": 24
+          },
+          {
+            "key": "FGM",
+            "value": 9
+          },
+          {
+            "key": "A",
+            "value": 5
+          }
+        ]
+      }
+    ],
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "j3nfc1b8og",
+    "liveState": "decided"
+  },
+  "provider": "genius-basketball"
+}

@@ -148,6 +148,288 @@ providers:
       - sportsdataverse.pwhl.*
       - sportsdataverse.nhl.pwhl_microstat
 
+  sihf:
+    label: SIHF statistics API
+    home: https://data.sihf.ch
+    auth: none
+    flat_apis: [sihf_api_web]
+    modules:
+      - sportsdataverse.hockey.sihf.sihf_runtime
+
+  # European hockey leagues. Each family's own runtime (if any) is
+  # sportsdataverse.hockey.<home>.<stem>_runtime; the shared throttle
+  # sportsdataverse.hockey.euro_hockey_runtime has no public names.
+  esports_hokejovyzapis:
+    label: eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen)
+    home: https://s3.eu-west-1.amazonaws.com
+    auth: none
+    flat_apis: [del_esports, icehl_esports, eihl_esports, metal_esports]
+    modules:
+      - sportsdataverse.hockey.del_.*_runtime
+      - sportsdataverse.hockey.icehl.*_runtime
+      - sportsdataverse.hockey.eihl.*_runtime
+      - sportsdataverse.hockey.metal.*_runtime
+
+  hokej_cz:
+    label: hokej.cz (Czech Extraliga)
+    home: https://www.hokej.cz
+    auth: none
+    flat_apis: [elh]
+    modules:
+      - sportsdataverse.hockey.elh.*_runtime
+
+  liiga:
+    label: Liiga API
+    home: https://liiga.fi
+    auth: none
+    flat_apis: [liiga]
+    modules:
+      - sportsdataverse.hockey.liiga.*_runtime
+
+  shl:
+    label: SHL site API
+    home: https://www.shl.se
+    auth: none
+    flat_apis: [shl]
+    modules:
+      - sportsdataverse.hockey.shl.*_runtime
+
+  hockeyallsvenskan:
+    label: HockeyAllsvenskan site API
+    home: https://hockeyallsvenskan.se
+    auth: none
+    flat_apis: [ha]
+    modules:
+      - sportsdataverse.hockey.ha.*_runtime
+
+  nationalleague:
+    label: National League app API
+    home: https://www.nationalleague.ch
+    auth: none
+    flat_apis: [nationalleague]
+    modules:
+      - sportsdataverse.hockey.nl.*_runtime
+
+  ligue_magnus:
+    label: Ligue Magnus
+    home: https://liguemagnus.com
+    auth: none
+    flat_apis: [magnus]
+    modules:
+      - sportsdataverse.hockey.magnus.*_runtime
+
+  khl:
+    label: KHL (site REST + webcaster API)
+    home: https://www.khl.ru
+    auth: none  # keyless; the runtime primes a session cookie (sessid) itself
+    flat_apis: [khl_rest, khl_webcaster]
+    modules:
+      - sportsdataverse.hockey.khl.*_runtime
+
+  vhl:
+    label: VHL
+    home: https://www.vhlru.ru
+    auth: none
+    flat_apis: [vhl]
+    modules:
+      - sportsdataverse.hockey.vhl.*_runtime
+
+  # International basketball. Each family's own runtime (if any) is claimed here; the shared
+  # basketball_runtime is private plumbing and needs no rule.
+
+  feb:
+    label: Spanish FEB LiveStats + baloncestoenvivo
+    home: https://baloncestoenvivo.feb.es
+    auth: none  # the runtime reads the public site's per-page bearer token itself; never printed
+    flat_apis: [feb]
+    modules:
+      - sportsdataverse.basketball.feb.*_runtime
+
+  scb:
+    label: SCB basketball API (BBL, DBBL)
+    home: https://www.easycredit-bbl.de
+    auth: none  # public constant headers plus a per-run derived secret
+    flat_apis: [scb]
+    modules:
+      - sportsdataverse.basketball.scb.*_runtime
+
+  genius_livestats:
+    label: Genius Sports LiveStats
+    home: https://fibalivestats.dcd.shared.geniussports.com
+    auth: none  # CloudFront refuses datacenter IPs: optional GENIUS_PROXY (a proxy URL, never printed)
+    flat_apis: [genius]
+    modules:
+      - sportsdataverse.basketball.genius.*_runtime
+
+  atrium_embed:
+    label: Sportradar Atrium embed API
+    home: https://embed-api.eui.connect.sportradar.com
+    auth: none
+    flat_apis: [atrium]
+    modules:
+      - sportsdataverse.basketball.atrium.*_runtime
+      - sportsdataverse.basketball.atrium.atrium_parsers
+
+  nbl_rosetta:
+    label: NBL Rosetta proxy (NBL, WNBL, NBL1)
+    home: https://www.nbl.com.au
+    auth: none  # referer gate, not a key
+    flat_apis: [nbl_rosetta]
+    modules:
+      - sportsdataverse.basketball.nbl_au.*_runtime
+
+  fiba:
+    label: FIBA digital API and game pages
+    home: https://www.fiba.basketball
+    auth: none  # public APIM key read from the site at run time
+    flat_apis: [fiba_gdap, fiba_gamepage]
+    modules:
+      - sportsdataverse.basketball.fiba_hub.*_runtime
+
+  legabasket:
+    label: Lega Basket Serie A
+    home: https://www.legabasket.it
+    auth: none
+    flat_apis: [legabasket]
+    modules:
+      - sportsdataverse.basketball.lba.*_runtime
+
+  acb:
+    label: ACB (Liga Endesa)
+    home: https://www.acb.com
+    auth: none
+    flat_apis: [acb]
+    modules:
+      - sportsdataverse.basketball.acb.*_runtime
+
+  ibba:
+    label: IBBA (Israeli Premier League) and Segev Stats
+    home: https://basket.co.il
+    auth: none
+    flat_apis: [ibba, ibba_segev]
+    modules:
+      - sportsdataverse.basketball.ibba.*_runtime
+
+  wjbl:
+    label: W League (Japan)
+    home: https://www.wjbl.org
+    auth: none
+    flat_apis: [wjbl]
+    modules:
+      - sportsdataverse.basketball.wjbl.*_runtime
+
+  vtb:
+    label: VTB United League
+    home: https://www.vtb-league.com
+    auth: none
+    flat_apis: [vtb_infobasket, vtb_league]
+    modules:
+      - sportsdataverse.basketball.vtb.*_runtime
+
+  kbl:
+    label: KBL (Korea)
+    home: https://www.kbl.or.kr
+    auth: none
+    flat_apis: [kbl]
+    modules:
+      - sportsdataverse.basketball.kbl.*_runtime
+
+  bleague:
+    label: B.LEAGUE (Japan)
+    home: https://www.bleague.jp
+    auth: none
+    flat_apis: [bleague]
+    modules:
+      - sportsdataverse.basketball.bleague.*_runtime
+
+  kzs:
+    label: KZS (Basketball Federation of Slovenia)
+    home: https://api.kzs.si
+    auth: none
+    flat_apis: [kzs]
+    modules:
+      - sportsdataverse.basketball.kzs.*_runtime
+
+  lkl:
+    label: LKL (Lithuania)
+    home: https://lkl.lt
+    auth: none
+    flat_apis: [lkl]
+    modules:
+      - sportsdataverse.basketball.lkl.*_runtime
+
+  tbf:
+    label: TBF app API (BSL, TBL, KBSL)
+    home: https://miniappapi.tbf.org.tr
+    auth: none
+    flat_apis: [tbf]
+    modules:
+      - sportsdataverse.basketball.tbf.*_runtime
+
+  cebl:
+    label: CEBL stats API
+    home: https://www.cebl.ca
+    auth: none  # the stats API key the site ships
+    flat_apis: [cebl]
+    modules:
+      - sportsdataverse.basketball.cebl.*_runtime
+
+  aba_liga:
+    label: ABA League
+    home: https://www.aba-liga.com
+    auth: none
+    flat_apis: [aba]
+    modules:
+      - sportsdataverse.basketball.aba.*_runtime
+
+  easl:
+    label: EASL (third-party sync server over Sportradar DataCore)
+    home: https://www.easl.basketball
+    auth: none
+    flat_apis: [easl]
+    modules:
+      - sportsdataverse.basketball.easl.*_runtime
+
+  sportpress:
+    label: BNXT League (Sportpress)
+    home: https://bnxt.sportpress.info
+    auth: none
+    flat_apis: [sportpress]
+    modules:
+      - sportsdataverse.basketball.bnxt.*_runtime
+
+  tpbl:
+    label: TPBL (Taiwan)
+    home: https://tpbl.basketball
+    auth: none
+    flat_apis: [tpbl]
+    modules:
+      - sportsdataverse.basketball.tpbl.*_runtime
+
+  pleague:
+    label: P. LEAGUE+ (Taiwan) and Preciser
+    home: https://pleagueofficial.com
+    auth: none
+    flat_apis: [pleague, pleague_preciser]
+    modules:
+      - sportsdataverse.basketball.plg.*_runtime
+
+  cba:
+    label: CBA data API (China)
+    home: https://www.cbaleague.com
+    auth: none  # bodies are AES-128-ECB encrypted; the host refuses datacenter IPs: optional CBA_PROXY (a proxy URL, never printed)
+    flat_apis: [cba]
+    modules:
+      - sportsdataverse.basketball.cba.*_runtime
+
+  sportality:
+    label: Basketligaen (Denmark, Sportality)
+    home: https://www.basketligaen.dk
+    auth: none
+    flat_apis: [sportality]
+    modules:
+      - sportsdataverse.basketball.dbl.*_runtime
+
   ncaa_stats:
     label: stats.ncaa.org
     home: https://stats.ncaa.org

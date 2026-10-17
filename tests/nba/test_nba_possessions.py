@@ -546,6 +546,7 @@ def _install_fixture_fetchers(
     rotation_raises: bool = False,
     rotation_empty: bool = False,
     rotation_partial: bool = False,
+    rotation_overlapping: bool = False,
     quarter_box_raises: bool = False,
 ) -> dict[str, int]:
     root = FXROOT / game_id
@@ -580,6 +581,13 @@ def _install_fixture_fetchers(
             for rs in raw.get("resultSets", []):
                 if rs.get("name") == "AwayTeam":
                     rs["rowSet"] = []
+        if rotation_overlapping:
+            # A malformed payload: the home team's stints duplicated, so ten
+            # "on court" at once. Every slot still fills, so only the stint-sum
+            # guard can see it. In-memory copy only, never the fixture.
+            for rs in raw.get("resultSets", []):
+                if rs.get("name") == "HomeTeam":
+                    rs["rowSet"] = rs["rowSet"] + rs["rowSet"]
         return raw
 
     monkeypatch.setattr(npm, "_fetch_rotation", _rot)
@@ -657,6 +665,18 @@ def test_lineup_source_auto_falls_back_on_partial_rotation(monkeypatch: pytest.M
     off_def_cols = [f"off_player_{i}" for i in range(1, 6)] + [f"def_player_{i}" for i in range(1, 6)]
     for col in off_def_cols:
         assert df[col].null_count() == 0, f"quarter_box fallback left nulls in {col}"
+
+
+def test_lineup_source_auto_falls_back_on_overlapping_rotation(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Auto mode falls to quarter_box when the stints do not sum to five players' game.
+
+    Real WNBA payloads (58 of 2016-2026's) overlap stints this way; mapped
+    faithfully they credit players with whole halves they never played.
+    """
+    calls = _install_fixture_fetchers(monkeypatch, "0022200001", rotation_overlapping=True)
+    df = npm.nba_possessions("0022200001", lineup_source="auto")
+    assert calls["rotation"] == 1
+    assert df["lineup_source"].unique().to_list() == ["quarter_box"]
 
 
 def test_lineup_source_auto_falls_back_to_pbp_when_quarter_box_also_fails(monkeypatch: pytest.MonkeyPatch) -> None:

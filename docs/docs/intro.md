@@ -87,6 +87,16 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [NBA](nba/) | `sportsdataverse.nba` | ESPN (122), sportsdataverse-data releases (53), NBA Stats API (130), Fox Sports API (26), Basketball-Reference (9), RealGM (18), Public model datasets (7) |
 | [WNBA](wnba/) | `sportsdataverse.wnba` | ESPN (123), sportsdataverse-data releases (39), WNBA Stats API (113), Fox Sports API (26) |
 | [NBA G League](nbagl/) | `sportsdataverse.nbagl` | ESPN (112) |
+| [NBL](nbl/) | `sportsdataverse.nbl` | ESPN (112) |
+| [FIBA](fiba/) | `sportsdataverse.fiba` | ESPN (112) |
+| [Olympics men's basketball](olympics_mbk/) | `sportsdataverse.olympics_mbk` | ESPN (112) |
+| [Olympics women's basketball](olympics_wbk/) | `sportsdataverse.olympics_wbk` | ESPN (112) |
+| [NBA Summer League (Las Vegas)](nbasl_lv/) | `sportsdataverse.nbasl_lv` | ESPN (112) |
+| [NBA Summer League (Utah)](nbasl_ut/) | `sportsdataverse.nbasl_ut` | ESPN (112) |
+| [NBA Summer League (California)](nbasl_ca/) | `sportsdataverse.nbasl_ca` | ESPN (112) |
+| [NBA Summer League (Sacramento)](nbasl_sac/) | `sportsdataverse.nbasl_sac` | ESPN (112) |
+| [NBA Summer League (Orlando)](nbasl_orl/) | `sportsdataverse.nbasl_orl` | ESPN (112) |
+| [NBA Summer League (Golden State)](nbasl_gs/) | `sportsdataverse.nbasl_gs` | ESPN (112) |
 | [MBB](mbb/) | `sportsdataverse.mbb` | ESPN (128), sportsdataverse-data releases (34), stats.ncaa.org (118), KenPom (32), Bart Torvik T-Rank (5), Fox Sports API (27) |
 | [WBB](wbb/) | `sportsdataverse.wbb` | ESPN (129), sportsdataverse-data releases (34), stats.ncaa.org (111), Bart Torvik Women's T-Rank (1), Fox Sports API (27), Her Hoop Stats (5) |
 | [CFB](cfb/) | `sportsdataverse.cfb` | ESPN (131), sportsdataverse-data releases (74), stats.ncaa.org (1), On3 Recruit Database (82), 247Sports Recruit Database (47), Yahoo Sports Shangrila (7), Fox Sports API (29) |
@@ -142,6 +152,43 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Formula 1](f1/) | `sportsdataverse.f1` | Jolpica F1 API (Ergast-compatible) (16) |
 | [ESPN content (news)](espn_content/) | `sportsdataverse.espn_content` | ESPN (3) |
 | [TheSportsDB](thesportsdb/) | `sportsdataverse.thesportsdb` | TheSportsDB (12) |
+| [SIHF (Swiss hockey)](sihf/) | `sportsdataverse.hockey.sihf` | SIHF statistics API (33) |
+| [DEL](del/) | `sportsdataverse.hockey.del_` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
+| [ICE Hockey League](icehl/) | `sportsdataverse.hockey.icehl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (12) |
+| [EIHL](eihl/) | `sportsdataverse.hockey.eihl` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (9) |
+| [Metal Ligaen](metal/) | `sportsdataverse.hockey.metal` | eSports hokejovyzapis (DEL, ICEHL, EIHL, Metal Ligaen) (8) |
+| [Czech Extraliga](elh/) | `sportsdataverse.hockey.elh` | hokej.cz (Czech Extraliga) (8) |
+| [Liiga](liiga/) | `sportsdataverse.hockey.liiga` | Liiga API (23) |
+| [SHL](shl/) | `sportsdataverse.hockey.shl` | SHL site API (29) |
+| [HockeyAllsvenskan](ha/) | `sportsdataverse.hockey.ha` | HockeyAllsvenskan site API (11) |
+| [National League](nl/) | `sportsdataverse.hockey.nl` | National League app API (17) |
+| [Ligue Magnus](magnus/) | `sportsdataverse.hockey.magnus` | Ligue Magnus (11) |
+| [KHL](khl/) | `sportsdataverse.hockey.khl` | KHL (site REST + webcaster API) (23) |
+| [VHL](vhl/) | `sportsdataverse.hockey.vhl` | VHL (13) |
+| [FIBA (digital API and game pages)](fiba_hub/) | `sportsdataverse.basketball.fiba_hub` | FIBA digital API and game pages (37) |
+| [Genius Sports LiveStats](genius/) | `sportsdataverse.basketball.genius` | Genius Sports LiveStats (11) |
+| [Sportradar Atrium](atrium/) | `sportsdataverse.basketball.atrium` | Sportradar Atrium embed API (22) |
+| [NBL Australia (Rosetta)](nbl_au/) | `sportsdataverse.basketball.nbl_au` | NBL Rosetta proxy (NBL, WNBL, NBL1) (22) |
+| [Spanish FEB](feb/) | `sportsdataverse.basketball.feb` | Spanish FEB LiveStats + baloncestoenvivo (11) |
+| [BBL / DBBL (SCB)](scb/) | `sportsdataverse.basketball.scb` | SCB basketball API (BBL, DBBL) (23) |
+| [Lega Basket Serie A](lba/) | `sportsdataverse.basketball.lba` | Lega Basket Serie A (19) |
+| [ACB](acb/) | `sportsdataverse.basketball.acb` | ACB (Liga Endesa) (45) |
+| [Israeli Premier League](ibba/) | `sportsdataverse.basketball.ibba` | IBBA (Israeli Premier League) and Segev Stats (22) |
+| [W League (Japan)](wjbl/) | `sportsdataverse.basketball.wjbl` | W League (Japan) (19) |
+| [VTB](vtb/) | `sportsdataverse.basketball.vtb` | VTB United League (38) |
+| [KBL](kbl/) | `sportsdataverse.basketball.kbl` | KBL (Korea) (22) |
+| [B.LEAGUE](bleague/) | `sportsdataverse.basketball.bleague` | B.LEAGUE (Japan) (14) |
+| [KZS](kzs/) | `sportsdataverse.basketball.kzs` | KZS (Basketball Federation of Slovenia) (23) |
+| [LKL](lkl/) | `sportsdataverse.basketball.lkl` | LKL (Lithuania) (14) |
+| [TBF](tbf/) | `sportsdataverse.basketball.tbf` | TBF app API (BSL, TBL, KBSL) (32) |
+| [CEBL](cebl/) | `sportsdataverse.basketball.cebl` | CEBL stats API (12) |
+| [ABA League](aba/) | `sportsdataverse.basketball.aba` | ABA League (12) |
+| [EASL](easl/) | `sportsdataverse.basketball.easl` | EASL (third-party sync server over Sportradar DataCore) (18) |
+| [BNXT League](bnxt/) | `sportsdataverse.basketball.bnxt` | BNXT League (Sportpress) (28) |
+| [TPBL](tpbl/) | `sportsdataverse.basketball.tpbl` | TPBL (Taiwan) (16) |
+| [P. LEAGUE+](plg/) | `sportsdataverse.basketball.plg` | P. LEAGUE+ (Taiwan) and Preciser (18) |
+| [CBA](cba/) | `sportsdataverse.basketball.cba` | CBA data API (China) (27) |
+| [Basketligaen](dbl/) | `sportsdataverse.basketball.dbl` | Basketligaen (Denmark, Sportality) (27) |
 <!-- END generated: leagues-and-sources -->
 
 ## Errors (0.1.5)

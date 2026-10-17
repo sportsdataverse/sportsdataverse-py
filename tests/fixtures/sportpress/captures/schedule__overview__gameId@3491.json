@@ -1,0 +1,1784 @@
+{
+  "data": {
+    "team_totals": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 82,
+          "competition_team": {
+            "id": 44,
+            "name": "ZZ Leiden",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 14
+            },
+            {
+              "period_id": 2,
+              "score": 14
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": true,
+        "total": {
+          "minute": 200,
+          "starter": true,
+          "foul": 22,
+          "defensive_foul": 26,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 22,
+          "two_point_all": 41,
+          "two_point_percent": 53.66,
+          "three_point_made": 8,
+          "three_point_all": 22,
+          "three_point_percent": 36.36,
+          "throw_made": 30,
+          "throw_all": 63,
+          "throw_percent": 47.62,
+          "free_throw_made": 14,
+          "free_throw_all": 20,
+          "free_throw_percent": 70,
+          "offensive_rebound": 10,
+          "defensive_rebound": 21,
+          "total_rebound": 31,
+          "block": 1,
+          "block_against": 2,
+          "turnover": 11,
+          "steal": 8,
+          "assist": 18,
+          "points": 82,
+          "value": 116,
+          "plusminus": -9
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 81,
+          "competition_team": {
+            "id": 39,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 20
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 24
+            }
+          ]
+        },
+        "is_home": false,
+        "total": {
+          "minute": 200,
+          "starter": true,
+          "foul": 26,
+          "defensive_foul": 22,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 23,
+          "two_point_all": 44,
+          "two_point_percent": 52.27,
+          "three_point_made": 8,
+          "three_point_all": 18,
+          "three_point_percent": 44.44,
+          "throw_made": 31,
+          "throw_all": 62,
+          "throw_percent": 50,
+          "free_throw_made": 11,
+          "free_throw_all": 19,
+          "free_throw_percent": 57.89,
+          "offensive_rebound": 11,
+          "defensive_rebound": 22,
+          "total_rebound": 33,
+          "block": 2,
+          "block_against": 1,
+          "turnover": 16,
+          "steal": 8,
+          "assist": 15,
+          "points": 81,
+          "value": 106,
+          "plusminus": -2
+        }
+      }
+    ],
+    "top_performer": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 82,
+          "competition_team": {
+            "id": 44,
+            "name": "ZZ Leiden",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 14
+            },
+            {
+              "period_id": 2,
+              "score": 14
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": true,
+        "player": {
+          "player": {
+            "id": 582,
+            "birthdate": "1997-01-09",
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Thomas",
+            "last_name": "Rutherford",
+            "nationality_code": "USA",
+            "profile_image": {
+              "name": "Thomas Rutherford",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "starter": true,
+          "minute": 25,
+          "foul": 4,
+          "defensive_foul": 6,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 5,
+          "two_point_all": 7,
+          "two_point_percent": 71.4,
+          "three_point_made": 0,
+          "three_point_all": 0,
+          "three_point_percent": 0,
+          "throw_made": 5,
+          "throw_all": 7,
+          "throw_percent": 71.43,
+          "free_throw_made": 4,
+          "free_throw_all": 6,
+          "free_throw_percent": 66.7,
+          "offensive_rebound": 1,
+          "defensive_rebound": 5,
+          "total_rebound": 6,
+          "block": 0,
+          "block_against": 0,
+          "turnover": 1,
+          "steal": 0,
+          "assist": 1,
+          "points": 14,
+          "value": 22,
+          "jersey": 42
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 81,
+          "competition_team": {
+            "id": 39,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 20
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 24
+            }
+          ]
+        },
+        "is_home": false,
+        "player": {
+          "player": {
+            "id": 73,
+            "birthdate": "1998-03-12",
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "first_name": "Clay",
+            "last_name": "Mounce",
+            "nationality_code": "USA",
+            "profile_image": {
+              "name": "Clay",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "starter": true,
+          "minute": 34,
+          "foul": 3,
+          "defensive_foul": 3,
+          "dunk_made": 0,
+          "dunk_all": 0,
+          "dunk_percent": 0,
+          "two_point_made": 6,
+          "two_point_all": 10,
+          "two_point_percent": 60,
+          "three_point_made": 3,
+          "three_point_all": 3,
+          "three_point_percent": 100,
+          "throw_made": 9,
+          "throw_all": 13,
+          "throw_percent": 69.23,
+          "free_throw_made": 3,
+          "free_throw_all": 4,
+          "free_throw_percent": 75,
+          "offensive_rebound": 2,
+          "defensive_rebound": 5,
+          "total_rebound": 7,
+          "block": 1,
+          "block_against": 0,
+          "turnover": 5,
+          "steal": 1,
+          "assist": 4,
+          "points": 24,
+          "value": 30,
+          "jersey": 61
+        }
+      }
+    ],
+    "game_leaders": [
+      {
+        "competitor": {
+          "side": 1,
+          "finalScore": 82,
+          "competition_team": {
+            "id": 44,
+            "name": "ZZ Leiden",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/2/y/2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/2/y/small-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png",
+                "medium": "https://bnxt.sportpress.info/storage/2/y/medium-2yifus3qGcrDZzbvJ9tt8xXlR1663601496.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 14
+            },
+            {
+              "period_id": 2,
+              "score": 14
+            },
+            {
+              "period_id": 3,
+              "score": 22
+            }
+          ]
+        },
+        "is_home": true,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 33
+          },
+          "foul": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 5
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 582,
+              "birthdate": "1997-01-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Rutherford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Thomas Rutherford",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                  "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 6
+          },
+          "dunk_made": {
+            "player": {
+              "id": 585,
+              "birthdate": "2002-08-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Duko",
+              "last_name": "Bos",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "11 BOS Duko",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/M/6/M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/M/6/small-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                  "medium": "https://bnxt.sportpress.info/storage/M/6/medium-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 585,
+              "birthdate": "2002-08-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Duko",
+              "last_name": "Bos",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "11 BOS Duko",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/M/6/M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/M/6/small-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                  "medium": "https://bnxt.sportpress.info/storage/M/6/medium-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 585,
+              "birthdate": "2002-08-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Duko",
+              "last_name": "Bos",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "11 BOS Duko",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/M/6/M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/M/6/small-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png",
+                  "medium": "https://bnxt.sportpress.info/storage/M/6/medium-M6BmpWGRioBIScRhYFn2AXzDd1745335584.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 8
+          },
+          "two_point_all": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 11
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 301,
+              "birthdate": "2000-07-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lucas",
+              "last_name": "Kruithof",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Kruithof",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/i/e/ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/i/e/small-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+                  "medium": "https://bnxt.sportpress.info/storage/i/e/medium-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "three_point_made": {
+            "player": {
+              "id": 302,
+              "birthdate": "1996-02-24",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Luuk",
+              "last_name": "van Bree",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Van Bree",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/L/x/LxAizfO489ZLKUYN3oVXLCAHu1788804081.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/L/x/small-LxAizfO489ZLKUYN3oVXLCAHu1788804081.png",
+                  "medium": "https://bnxt.sportpress.info/storage/L/x/medium-LxAizfO489ZLKUYN3oVXLCAHu1788804081.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "three_point_all": {
+            "player": {
+              "id": 302,
+              "birthdate": "1996-02-24",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Luuk",
+              "last_name": "van Bree",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Van Bree",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/L/x/LxAizfO489ZLKUYN3oVXLCAHu1788804081.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/L/x/small-LxAizfO489ZLKUYN3oVXLCAHu1788804081.png",
+                  "medium": "https://bnxt.sportpress.info/storage/L/x/medium-LxAizfO489ZLKUYN3oVXLCAHu1788804081.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 6
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 1391,
+              "birthdate": "1998-05-31",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "David",
+              "last_name": "Collins",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Collins",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/l/DlIC4csybU7kybjHInChMpZjL1710323085.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/l/small-DlIC4csybU7kybjHInChMpZjL1710323085.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/l/medium-DlIC4csybU7kybjHInChMpZjL1710323085.png"
+                }
+              },
+              "created_at": "2023-02-02"
+            },
+            "value": 100
+          },
+          "throw_all": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 17
+          },
+          "throw_made": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 8
+          },
+          "throw_percent": {
+            "player": {
+              "id": 301,
+              "birthdate": "2000-07-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Lucas",
+              "last_name": "Kruithof",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Kruithof",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/i/e/ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/i/e/small-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png",
+                  "medium": "https://bnxt.sportpress.info/storage/i/e/medium-ieCoVm6eJzNhSoZIOvvyqjuJp1788858275.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 582,
+              "birthdate": "1997-01-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Rutherford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Thomas Rutherford",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                  "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 4
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 582,
+              "birthdate": "1997-01-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Rutherford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Thomas Rutherford",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                  "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 6
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 584,
+              "birthdate": "2000-05-28",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Erikas",
+              "last_name": "Venskus",
+              "nationality_code": "LTU",
+              "profile_image": {
+                "name": "VENSKUS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/j/4/j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/j/4/small-j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png",
+                  "medium": "https://bnxt.sportpress.info/storage/j/4/medium-j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 581,
+              "birthdate": "1988-07-29",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Roeland",
+              "last_name": "Schaftenaar",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "LEI - SCHAFTENAAR",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/p/Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/p/small-Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/p/medium-Dp40irbYpqvS9GVAhqfZmC7161758876855.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 5
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 582,
+              "birthdate": "1997-01-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Rutherford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Thomas Rutherford",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                  "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 5
+          },
+          "total_rebound": {
+            "player": {
+              "id": 581,
+              "birthdate": "1988-07-29",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Roeland",
+              "last_name": "Schaftenaar",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "LEI - SCHAFTENAAR",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/p/Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/p/small-Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/p/medium-Dp40irbYpqvS9GVAhqfZmC7161758876855.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 8
+          },
+          "block": {
+            "player": {
+              "id": 584,
+              "birthdate": "2000-05-28",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Erikas",
+              "last_name": "Venskus",
+              "nationality_code": "LTU",
+              "profile_image": {
+                "name": "VENSKUS",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/j/4/j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/j/4/small-j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png",
+                  "medium": "https://bnxt.sportpress.info/storage/j/4/medium-j4ge9rEK4NpTd7X0sYTbMH7eJ1695379972.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 1
+          },
+          "block_against": {
+            "player": {
+              "id": 581,
+              "birthdate": "1988-07-29",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Roeland",
+              "last_name": "Schaftenaar",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "LEI - SCHAFTENAAR",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/p/Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/p/small-Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/p/medium-Dp40irbYpqvS9GVAhqfZmC7161758876855.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 1391,
+              "birthdate": "1998-05-31",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "David",
+              "last_name": "Collins",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Collins",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/D/l/DlIC4csybU7kybjHInChMpZjL1710323085.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/D/l/small-DlIC4csybU7kybjHInChMpZjL1710323085.png",
+                  "medium": "https://bnxt.sportpress.info/storage/D/l/medium-DlIC4csybU7kybjHInChMpZjL1710323085.png"
+                }
+              },
+              "created_at": "2023-02-02"
+            },
+            "value": 3
+          },
+          "steal": {
+            "player": {
+              "id": 294,
+              "birthdate": "1998-09-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Marijn",
+              "last_name": "Ververs",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Ververs",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/V/TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/V/small-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/V/medium-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "assist": {
+            "player": {
+              "id": 294,
+              "birthdate": "1998-09-17",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Marijn",
+              "last_name": "Ververs",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "Ververs",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/T/V/TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/T/V/small-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png",
+                  "medium": "https://bnxt.sportpress.info/storage/T/V/medium-TVZ84hSuP1WPrgU9hlDNWsVL11790342001.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 8
+          },
+          "points": {
+            "player": {
+              "id": 583,
+              "birthdate": "1999-06-05",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Deion",
+              "last_name": "Hammond",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Hammond",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/q/F/qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/q/F/small-qF2RT7pD0xelw0452iBSfg1je1790342045.png",
+                  "medium": "https://bnxt.sportpress.info/storage/q/F/medium-qF2RT7pD0xelw0452iBSfg1je1790342045.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 18
+          },
+          "value": {
+            "player": {
+              "id": 582,
+              "birthdate": "1997-01-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Thomas",
+              "last_name": "Rutherford",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Thomas Rutherford",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/v/7/v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/v/7/small-v7paOmcwyxxWAes6m7m3zxexc1667380824.png",
+                  "medium": "https://bnxt.sportpress.info/storage/v/7/medium-v7paOmcwyxxWAes6m7m3zxexc1667380824.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 22
+          }
+        }
+      },
+      {
+        "competitor": {
+          "side": 2,
+          "finalScore": 81,
+          "competition_team": {
+            "id": 39,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-09-14"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 20
+            },
+            {
+              "period_id": 2,
+              "score": 16
+            },
+            {
+              "period_id": 3,
+              "score": 24
+            }
+          ]
+        },
+        "is_home": false,
+        "leaders": {
+          "minute": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 34
+          },
+          "foul": {
+            "player": {
+              "id": 94,
+              "birthdate": "1995-07-31",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Willem",
+              "last_name": "Brandwijk",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "19 BRANDWIJK Willem",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/t/c/tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/t/c/small-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                  "medium": "https://bnxt.sportpress.info/storage/t/c/medium-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "defensive_foul": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 9
+          },
+          "dunk_made": {
+            "player": {
+              "id": 499,
+              "birthdate": "2002-02-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Gimon",
+              "last_name": "Arkema",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "dunk_all": {
+            "player": {
+              "id": 499,
+              "birthdate": "2002-02-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Gimon",
+              "last_name": "Arkema",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "dunk_percent": {
+            "player": {
+              "id": 499,
+              "birthdate": "2002-02-03",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Gimon",
+              "last_name": "Arkema",
+              "nationality_code": "NED",
+              "profile_image": null,
+              "created_at": "2022-09-14"
+            },
+            "value": 0
+          },
+          "two_point_made": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 6
+          },
+          "two_point_all": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 10
+          },
+          "two_point_percent": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 75
+          },
+          "three_point_made": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 3
+          },
+          "three_point_all": {
+            "player": {
+              "id": 1111,
+              "birthdate": "1996-01-14",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Andrej",
+              "last_name": "Magdevski",
+              "nationality_code": "MKD",
+              "profile_image": {
+                "name": "Mazg",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/i/x/ixukF6hzjYzhXKzR1ANUuLCRW1677228498.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/i/x/small-ixukF6hzjYzhXKzR1ANUuLCRW1677228498.png",
+                  "medium": "https://bnxt.sportpress.info/storage/i/x/medium-ixukF6hzjYzhXKzR1ANUuLCRW1677228498.png"
+                }
+              },
+              "created_at": "2022-12-11"
+            },
+            "value": 4
+          },
+          "three_point_percent": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 100
+          },
+          "throw_all": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 13
+          },
+          "throw_made": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 9
+          },
+          "throw_percent": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 69.23
+          },
+          "free_throw_made": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 4
+          },
+          "free_throw_all": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 7
+          },
+          "free_throw_percent": {
+            "player": {
+              "id": 394,
+              "birthdate": "1995-11-07",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Stephaun",
+              "last_name": "Branch",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "stephaun branch",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/Y/Y/YYwKpjdrrn9B7P912m5Pu7AyS1681380812.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/Y/Y/small-YYwKpjdrrn9B7P912m5Pu7AyS1681380812.png",
+                  "medium": "https://bnxt.sportpress.info/storage/Y/Y/medium-YYwKpjdrrn9B7P912m5Pu7AyS1681380812.png"
+                }
+              },
+              "created_at": "2022-08-12"
+            },
+            "value": 100
+          },
+          "offensive_rebound": {
+            "player": {
+              "id": 466,
+              "birthdate": "1991-12-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Peter",
+              "last_name": "Olisemeka",
+              "nationality_code": "ITA",
+              "profile_image": null,
+              "created_at": "2022-09-08"
+            },
+            "value": 4
+          },
+          "defensive_rebound": {
+            "player": {
+              "id": 1032,
+              "birthdate": "1992-10-08",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Viktor",
+              "last_name": "Gaddefors",
+              "nationality_code": "SWE",
+              "profile_image": {
+                "name": "Gadde",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/G/j/GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/G/j/small-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png",
+                  "medium": "https://bnxt.sportpress.info/storage/G/j/medium-GjeUtQ6ST42zZDkKf9qq1kXir1677228482.png"
+                }
+              },
+              "created_at": "2022-11-17"
+            },
+            "value": 5
+          },
+          "total_rebound": {
+            "player": {
+              "id": 466,
+              "birthdate": "1991-12-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Peter",
+              "last_name": "Olisemeka",
+              "nationality_code": "ITA",
+              "profile_image": null,
+              "created_at": "2022-09-08"
+            },
+            "value": 8
+          },
+          "block": {
+            "player": {
+              "id": 466,
+              "birthdate": "1991-12-09",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Peter",
+              "last_name": "Olisemeka",
+              "nationality_code": "ITA",
+              "profile_image": null,
+              "created_at": "2022-09-08"
+            },
+            "value": 1
+          },
+          "block_against": {
+            "player": {
+              "id": 94,
+              "birthdate": "1995-07-31",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Willem",
+              "last_name": "Brandwijk",
+              "nationality_code": "NED",
+              "profile_image": {
+                "name": "19 BRANDWIJK Willem",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/t/c/tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/t/c/small-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png",
+                  "medium": "https://bnxt.sportpress.info/storage/t/c/medium-tc3QP6VtNGbOsWnOdJKWPJv8u1741957965.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 1
+          },
+          "turnover": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 5
+          },
+          "steal": {
+            "player": {
+              "id": 498,
+              "birthdate": "1987-02-15",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Vernon",
+              "last_name": "Taylor",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Vernon",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/j/3/j3V7A8SoI3oJr06CY3emQv5931664542457.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/j/3/small-j3V7A8SoI3oJr06CY3emQv5931664542457.png",
+                  "medium": "https://bnxt.sportpress.info/storage/j/3/medium-j3V7A8SoI3oJr06CY3emQv5931664542457.png"
+                }
+              },
+              "created_at": "2022-09-14"
+            },
+            "value": 3
+          },
+          "assist": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 4
+          },
+          "points": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 24
+          },
+          "value": {
+            "player": {
+              "id": 73,
+              "birthdate": "1998-03-12",
+              "facebook": null,
+              "twitter": null,
+              "instagram": null,
+              "first_name": "Clay",
+              "last_name": "Mounce",
+              "nationality_code": "USA",
+              "profile_image": {
+                "name": "Clay",
+                "description": null,
+                "alt": null,
+                "keywords": null,
+                "public_url": "https://bnxt.sportpress.info/storage/l/E/lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                "thumbnails": {
+                  "small": "https://bnxt.sportpress.info/storage/l/E/small-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png",
+                  "medium": "https://bnxt.sportpress.info/storage/l/E/medium-lEwUegKbn1bOLJmEYi7rcGX1x1664544092.png"
+                }
+              },
+              "created_at": "2022-08-10"
+            },
+            "value": 30
+          }
+        }
+      }
+    ]
+  }
+}

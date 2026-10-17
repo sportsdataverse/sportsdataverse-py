@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: is_active
+  type: logical
+- description: ''
+  name: active
+  type: logical
+- description: ''
+  name: season
+  type: integer
+kind: dataframe
+schema: kzs_seasons

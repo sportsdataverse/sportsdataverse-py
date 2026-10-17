@@ -1,0 +1,5 @@
+[
+ "/v2/leagues",
+ "/v2/leagues/{league}/seasons",
+ "/v2/leagues/{league}/seasons/{season}/matches"
+]

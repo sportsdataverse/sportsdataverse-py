@@ -1,0 +1,731 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Player",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "TP",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Player": 0,
+        "Team": 0,
+        "GP": 52,
+        "G": 30,
+        "A": 37,
+        "AFirsts": 22,
+        "ASeconds": 15,
+        "TP": 67,
+        "PPG": 9,
+        "PPA": 17,
+        "PPTP": 26,
+        "EQG": 20,
+        "EQA": 20,
+        "EQTP": 40,
+        "SHG": 1,
+        "SHA": 0,
+        "SHTP": 1,
+        "TOI_GP": "19:02",
+        "info": {
+          "uuid": "qQ9-322eZcouc",
+          "fullName": "Oscar Lindberg",
+          "firstName": "Oscar",
+          "lastName": "Lindberg",
+          "birthDate": "1991-10-29",
+          "nationality": "SE",
+          "number": 24,
+          "position": "CE",
+          "shoots": "-",
+          "gender": "male",
+          "weight": {
+            "value": 88,
+            "format": "kg"
+          },
+          "height": {
+            "value": 183,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42653,
+            "mediaString": "image|ramses_sports|player_portrait_05d2ab46-edaf-410e-aac1-9763190744e924 Oscar Lindberg.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "50e6-50e6DYeWM",
+            "name": "Skellefteå AIK",
+            "code": "SKE",
+            "media": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+            "ownerInstanceId": "saik1_saik",
+            "siteDisplayName": "Skellefteå AIK"
+          },
+          "teamCode": "SAIK",
+          "teamId": "50e6-50e6DYeWM"
+        }
+      },
+      {
+        "Rank": 2,
+        "Player": 0,
+        "Team": 0,
+        "GP": 52,
+        "G": 20,
+        "A": 36,
+        "AFirsts": 24,
+        "ASeconds": 12,
+        "TP": 56,
+        "PPG": 8,
+        "PPA": 11,
+        "PPTP": 19,
+        "EQG": 12,
+        "EQA": 25,
+        "EQTP": 37,
+        "SHG": 0,
+        "SHA": 0,
+        "SHTP": 0,
+        "TOI_GP": "19:04",
+        "info": {
+          "uuid": "qRh-1Lnn3OfJt",
+          "fullName": "Rickard Hugg",
+          "firstName": "Rickard",
+          "lastName": "Hugg",
+          "birthDate": "1999-01-18",
+          "nationality": "SE",
+          "number": 96,
+          "position": "F",
+          "shoots": "-",
+          "gender": "male",
+          "weight": {
+            "value": 83,
+            "format": "kg"
+          },
+          "height": {
+            "value": 179,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 42665,
+            "mediaString": "image|ramses_sports|player_portrait_822d4289-f33c-499a-9cc3-1194b24c73ec96 Rickard Hugg.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "50e6-50e6DYeWM",
+            "name": "Skellefteå AIK",
+            "code": "SKE",
+            "media": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+            "ownerInstanceId": "saik1_saik",
+            "siteDisplayName": "Skellefteå AIK"
+          },
+          "teamCode": "SAIK",
+          "teamId": "50e6-50e6DYeWM"
+        }
+      },
+      {
+        "Rank": 3,
+        "Player": 0,
+        "Team": 0,
+        "GP": 50,
+        "G": 30,
+        "A": 25,
+        "AFirsts": 18,
+        "ASeconds": 7,
+        "TP": 55,
+        "PPG": 11,
+        "PPA": 13,
+        "PPTP": 24,
+        "EQG": 19,
+        "EQA": 12,
+        "EQTP": 31,
+        "SHG": 0,
+        "SHA": 0,
+        "SHTP": 0,
+        "TOI_GP": "18:11",
+        "info": {
+          "uuid": "qQ9-19d1gvUAS",
+          "fullName": "Jonathan Dahlén",
+          "firstName": "Jonathan",
+          "lastName": "Dahlén",
+          "birthDate": "1997-12-20",
+          "nationality": "SE",
+          "shoots": "-",
+          "gender": "",
+          "weight": {
+            "value": 87,
+            "format": "kg"
+          },
+          "height": {
+            "value": 182,
+            "format": "cm"
+          },
+          "playerMedia": {
+            "id": 40979,
+            "mediaString": "image|ramses_sports|player_portrait_0d8c9386-e0ad-453d-b67e-9c013229eabfJonathan Dahlen.png",
+            "type": "portrait",
+            "sortOrder": 0
+          },
+          "team": {
+            "uuid": "31d1-31d1NbSlR",
+            "name": "Timrå IK",
+            "code": "TIK",
+            "media": "https://sportality.cdn.s8y.se/team-logos/tik1_tik.svg",
+            "ownerInstanceId": "tik1_tik",
+            "siteDisplayName": "Timrå IK"
+          },
+          "teamCode": "TIK",
+          "teamId": "31d1-31d1NbSlR"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "50e6-50e6DYeWM": {
+        "type": "team",
+        "id": "SAIK",
+        "teamCode": "SAIK",
+        "siteDisplayName": "Skellefteå AIK",
+        "name": "SAIK",
+        "uuid": "50e6-50e6DYeWM",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "saik1-saik-ba23a",
+        "lastModified": "2024-11-18T09:21:40.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "saik1_saik",
+        "ownersite": "SAIK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "teamNames": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey",
+          "code_site": "SKE",
+          "short_site": "Skellefteå",
+          "full_site": "Skellefteå AIK Hockey",
+          "long_site": "Skellefteå AIK"
+        },
+        "clubName": {
+          "code": "SKE",
+          "short": "Skellefteå",
+          "long": "Skellefteå AIK",
+          "full": "Skellefteå AIK Hockey"
+        },
+        "teamInfo": {
+          "founded": "1921",
+          "golds": "3 st (1978, 2013, 2014)",
+          "finals": "8 st (1978, 2011, 2012, 2013, 2014, 2015, 2016, 2018)",
+          "address": "Skellefteå AIK, Skellefteå Kraft Arena, Mossgatan 27, Box 185, 931 22 Skellefteå",
+          "phone": "0910-79 20 00",
+          "fax": "0910-79 20 10",
+          "email": "info@skellefteaaik.se",
+          "chairman": "Kenneth Fahlgren",
+          "manager": "Pea Israelsson",
+          "accreditation": "Anna Hägglund, anna.hagglund@skellefteaaik.se",
+          "facebook": "https://www.facebook.com/skellefteaaikhockey",
+          "instagram": "https://www.instagram.com/skellefteaaik/",
+          "twitter": "https://twitter.com/skelleftea_aik"
+        },
+        "teamExtIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 29,
+            "extId": "SAIK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 30,
+            "extId": "10",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/saik1_saik.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "31d1-31d1NbSlR": {
+        "type": "team",
+        "id": "TIK",
+        "teamCode": "TIK",
+        "siteDisplayName": "Timrå IK",
+        "name": "NOT",
+        "uuid": "31d1-31d1NbSlR",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "tik1-tik-9d6bb",
+        "lastModified": "2025-03-06T08:44:33.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "tik1_tik",
+        "ownersite": "TIK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/tik1_tik.svg",
+        "teamNames": {
+          "code": "TIK",
+          "short": "Timrå",
+          "long": "Timrå IK",
+          "full": "Timrå Idrottsklubb",
+          "codeSite": "TIK",
+          "shortSite": "Timrå",
+          "fullSite": "Timrå Idrottsklubb",
+          "longSite": "Timrå IK"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1928",
+          "golds": "0 st",
+          "finals": "0 st",
+          "retired_numbers": "# 05 Lennart \"Lill-Strimma\" Svedberg\r\n# 20 Henrik \"Zäta\" Zetterberg",
+          "address": "Timrå IK SCA Arena Box 263, 861 26 TIMRÅ, Lill-Strimmas väg 1, 860 30 SÖRBERGE",
+          "phone": "060-789 10 00",
+          "fax": "060-789 10 01",
+          "email": "huvudsektion@timraik.se",
+          "chairman": "Lars Backlund",
+          "accreditation": "David Åberg, david.aberg@timraik.se",
+          "manager": "Jonas Torines",
+          "facebook": "https://www.facebook.com/timraik.se/",
+          "instagram": "https://www.instagram.com/timra_ik/",
+          "twitter": "https://x.com/timra_ik"
+        },
+        "teamExtIds": [
+          {
+            "id": 31,
+            "extId": "TIK",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 32,
+            "extId": "11",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          },
+          {
+            "id": 135,
+            "extId": "36825",
+            "locked": false,
+            "extIdType": {
+              "uuid": "9f4c-1284S7mMn",
+              "code": "impleo_tournament-team-id",
+              "createdAt": "2016-12-01T17:20:56.000Z",
+              "createdBy": "ramses",
+              "deleted": false,
+              "lastModified": "2016-12-01T17:20:56.000Z",
+              "visible": true,
+              "name": "Impleo / Swehockey: Serie lagid"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 31,
+            "extId": "TIK",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 32,
+            "extId": "11",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          },
+          {
+            "id": 135,
+            "extId": "36825",
+            "locked": false,
+            "extIdType": {
+              "uuid": "9f4c-1284S7mMn",
+              "code": "impleo_tournament-team-id",
+              "createdAt": "2016-12-01T17:20:56.000Z",
+              "createdBy": "ramses",
+              "deleted": false,
+              "lastModified": "2016-12-01T17:20:56.000Z",
+              "visible": true,
+              "name": "Impleo / Swehockey: Serie lagid"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/tik1_tik.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "82eb-82ebmgaJ8": {
+        "type": "team",
+        "id": "OHK",
+        "teamCode": "OHK",
+        "siteDisplayName": "Örebro Hockey",
+        "name": "OHK",
+        "uuid": "82eb-82ebmgaJ8",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "",
+        "graphicsLibrary": "ohk1-ohk-0ab2b",
+        "lastModified": "2024-10-18T16:55:23.000Z",
+        "nationality": "SE",
+        "ownerInstanceId": "ohk1_ohk",
+        "ownersite": "OHK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/ohk1_ohk.svg",
+        "teamNames": {
+          "code": "ÖRE",
+          "short": "Örebro",
+          "long": "Örebro Hockey",
+          "full": "Örebro Hockey"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1990",
+          "golds": "0 st",
+          "finals": "0 st",
+          "retired_numbers": "#13 Björn \"Nalle\" Johansson\r\n#3   Lars \"Mozart\" Andersson",
+          "address": "Orvar Bergmarks Plats 5\r\n702 23 Örebro",
+          "phone": "019 - 13 00 30",
+          "fax": "019 - 13 00 31",
+          "email": "info@orebrohockey.se",
+          "chairman": "Ulf Gejhammar",
+          "manager": "Pontus Gustafsson",
+          "accreditation": "Lars \"Mozart\" Andersson lars.andersson@orebrohockey.se"
+        },
+        "teamExtIds": [
+          {
+            "id": 25,
+            "extId": "OHK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 26,
+            "extId": "14",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 25,
+            "extId": "OHK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 26,
+            "extId": "14",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/ohk1_ohk.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "athlete",
+    "totalCount": 473,
+    "players": {
+      "214": {
+        "type": "athlete",
+        "id": 214,
+        "firstName": "Nicklas",
+        "lastName": "Bäckström",
+        "jerseyNumber": 19,
+        "position": "F",
+        "shoots": "L",
+        "uuid": "evrn569cti",
+        "fullName": "Nicklas Bäckström",
+        "dateOfBirth": "1987-11-23",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 92,
+        "height": 184,
+        "playerMedia": {
+          "id": 43166,
+          "mediaString": "image|ramses_sports|player_portrait_01d993eb-0764-477e-b862-8d1d193289ceNicklas Bckstrm.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      },
+      "524": {
+        "type": "athlete",
+        "id": 524,
+        "firstName": "Linus",
+        "lastName": "Omark",
+        "shoots": "L",
+        "uuid": "qQ9-3b0amwpx9",
+        "fullName": "Linus Omark",
+        "dateOfBirth": "1987-02-05",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 82,
+        "height": 180,
+        "playerMedia": {
+          "id": 38361,
+          "mediaString": "image|ramses_sports|player_portrait_fc63f756-65c7-4e4f-ba60-c68e785065a2Linus Omark.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      },
+      "664": {
+        "type": "athlete",
+        "id": 664,
+        "firstName": "Per",
+        "lastName": "Åslund",
+        "jerseyNumber": 22,
+        "position": "F",
+        "shoots": "L",
+        "uuid": "qQ9-e9d5REkBM",
+        "fullName": "Per Åslund",
+        "dateOfBirth": "1986-08-21",
+        "nationality": "SE",
+        "gender": "male",
+        "weight": 83,
+        "height": 187,
+        "playerMedia": {
+          "id": 42565,
+          "mediaString": "image|ramses_sports|player_portrait_3db105f6-0c8b-4e81-a875-e925d3f2511e22PerAslundIMG0035.png",
+          "type": "portrait",
+          "sortOrder": 0
+        },
+        "epUrl": ""
+      }
+    }
+  }
+]

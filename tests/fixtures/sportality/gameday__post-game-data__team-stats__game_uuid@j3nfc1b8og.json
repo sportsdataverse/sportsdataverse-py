@@ -1,0 +1,109 @@
+{
+  "homeTeam": {
+    "name": "Svendborg Rabbits",
+    "logo": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg"
+  },
+  "awayTeam": {
+    "name": "Horsens IC",
+    "logo": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg"
+  },
+  "stats": [
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 16
+        },
+        "right": {
+          "type": "2PA",
+          "value": 35
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 46
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 19
+        },
+        "right": {
+          "type": "2PA",
+          "value": 42
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 45
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 11
+        },
+        "right": {
+          "type": "3PA",
+          "value": 23
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 48
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 9
+        },
+        "right": {
+          "type": "3PA",
+          "value": 29
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 31
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 15
+        },
+        "right": {
+          "type": "FTA",
+          "value": 19
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 79
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 12
+        },
+        "right": {
+          "type": "FTA",
+          "value": 16
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 75
+        }
+      }
+    }
+  ],
+  "provider": "genius-basketball"
+}

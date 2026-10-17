@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: jersey
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_name_he
+  type: character
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: is_replaced
+  type: logical
+- description: ''
+  name: is_local
+  type: logical
+- description: ''
+  name: photo_path
+  type: character
+- description: ''
+  name: height_m
+  type: numeric
+- description: ''
+  name: position_he
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: birth_date
+  type: character
+kind: dataframe
+schema: ibba_players

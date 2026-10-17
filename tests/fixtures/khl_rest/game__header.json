@@ -1,0 +1,377 @@
+{
+  "status": "success",
+  "data": {
+    "hasProto": true,
+    "hasTextData": false,
+    "showstatus": "матч завершен",
+    "teams": {
+      "home": {
+        "name": "Спартак",
+        "city": "Москва",
+        "logo": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+        "cid": 14934,
+        "link": "/clubs/spartak/"
+      },
+      "visitor": {
+        "name": "Нефтехимик",
+        "city": "Нижнекамск",
+        "logo": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+        "cid": 14929,
+        "link": "/clubs/neftekhimik/"
+      }
+    },
+    "game": {
+      "tnId": 1369,
+      "id": 898236,
+      "round": "29",
+      "roundname": "Неделя 29",
+      "roundname_en": "Week 29",
+      "date": "2026-03-20",
+      "dayofweek": "6",
+      "time": "19:30:00",
+      "changes": "0",
+      "number": "746",
+      "teama": 7,
+      "homeId": 14934,
+      "homeName_l3": "СПР",
+      "homeName_en": "Spartak",
+      "homeName_l3_en": "SPR",
+      "homeCity_en": "Moscow",
+      "teamb": 71,
+      "visitorId": 14929,
+      "visitorName_l3": "НХК",
+      "visitorName_en": "Neftekhimik",
+      "visitorName_l3_en": "NKH",
+      "visitorCity_en": "Nizhnekamsk",
+      "arenaid": 4,
+      "arena": "ДС «Мегаспорт»",
+      "arena_en": "Megasport Arena",
+      "arena_city": "Москва",
+      "arena_city_en": "Moscow",
+      "msktime_sft": 0,
+      "gmttime_sft": 3,
+      "temp": "",
+      "score": "2:3",
+      "ots": "SO",
+      "attendance": "7145",
+      "approved": 1,
+      "formatDateDay": "2026-03-20",
+      "time_format": "19:30",
+      "full_date": 1774024200,
+      "dateType": "last",
+      "type": "sogame",
+      "homeScore": 2,
+      "visitorScore": 3,
+      "winner": "B",
+      "links": {
+        "preview": "/game/1369/898236/preview/",
+        "stat": "/game/1369/898236/headtohead/",
+        "text": "/game/1369/898236/text/",
+        "teams": "/game/1369/898236/teams/",
+        "ics": "",
+        "resume": "/game/1369/898236/resume/",
+        "protocol": "/game/1369/898236/protocol/"
+      },
+      "visibleDate": "20 мар",
+      "visibleDateFull": "20 марта",
+      "visibleDateFull2": "20 марта 2026",
+      "visibleDateDay": "пт",
+      "scP": [
+        "0:0",
+        "2:2",
+        "0:0"
+      ],
+      "win": 71
+    },
+    "proto": {
+      "goals": {
+        "2": [
+          {
+            "num": 1,
+            "scoreA": "0",
+            "scoreB": "1",
+            "per": 2,
+            "pmg_time": "22:02",
+            "teamAB": "B",
+            "scorer": {
+              "name": "Точилкин Герман",
+              "photo": "//img.khl.ru/teamplayers/14929/39868/200.jpg",
+              "link": "/players/39868/",
+              "num": "33"
+            },
+            "assist_1": {
+              "name": "Селезнёв Григорий",
+              "photo": "//img.khl.ru/teamplayers/14929/35141/200.jpg",
+              "link": "/players/35141/",
+              "num": "21"
+            },
+            "assist_2": {
+              "name": "Квартальнов Данила",
+              "photo": "//img.khl.ru/teamplayers/14929/21593/200.jpg",
+              "link": "/players/21593/",
+              "num": "23"
+            },
+            "isShootoutLastGoal": false,
+            "pmg": "РАВ",
+            "pmg_trans": "В равенстве",
+            "video": {
+              "video": "https://video.khl.ru/quotes/2446827",
+              "img": "https://bl.webcaster.pro/quotes/2446827/main_thumbnail/big.jpg"
+            }
+          },
+          {
+            "num": 2,
+            "scoreA": "1",
+            "scoreB": "1",
+            "per": 2,
+            "pmg_time": "23:41",
+            "teamAB": "A",
+            "scorer": {
+              "name": "Рубцов Герман",
+              "photo": "//img.khl.ru/teamplayers/14934/22494/200.jpg",
+              "link": "/players/22494/",
+              "num": "95"
+            },
+            "assist_1": {
+              "name": "Гутик Даниил",
+              "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+              "link": "/players/29928/",
+              "num": "87"
+            },
+            "assist_2": {
+              "name": "Филин Егор",
+              "photo": "//img.khl.ru/teamplayers/14934/24118/200.jpg",
+              "link": "/players/24118/",
+              "num": "99"
+            },
+            "isShootoutLastGoal": false,
+            "pmg": "РАВ",
+            "pmg_trans": "В равенстве",
+            "video": {
+              "video": "https://video.khl.ru/quotes/2446883",
+              "img": "https://bl.webcaster.pro/quotes/2446883/main_thumbnail/big.jpg"
+            }
+          },
+          {
+            "num": 3,
+            "scoreA": "2",
+            "scoreB": "1",
+            "per": 2,
+            "pmg_time": "34:47",
+            "teamAB": "A",
+            "scorer": {
+              "name": "Рубцов Герман",
+              "photo": "//img.khl.ru/teamplayers/14934/22494/200.jpg",
+              "link": "/players/22494/",
+              "num": "95"
+            },
+            "assist_1": {
+              "name": "Филин Егор",
+              "photo": "//img.khl.ru/teamplayers/14934/24118/200.jpg",
+              "link": "/players/24118/",
+              "num": "99"
+            },
+            "assist_2": {
+              "name": "Гутик Даниил",
+              "photo": "//img.khl.ru/teamplayers/14934/29928/200.jpg",
+              "link": "/players/29928/",
+              "num": "87"
+            },
+            "isShootoutLastGoal": false,
+            "pmg": "РАВ",
+            "pmg_trans": "В равенстве",
+            "video": {
+              "video": "https://video.khl.ru/quotes/2447151",
+              "img": "https://bl.webcaster.pro/quotes/2447151/main_thumbnail/big.jpg"
+            }
+          }
+        ],
+        "5": [
+          {
+            "num": 5,
+            "scoreA": "2",
+            "scoreB": "3",
+            "per": 5,
+            "pmg_time": "65:00",
+            "teamAB": "B",
+            "scorer": {
+              "name": "Артамонов Никита",
+              "photo": "//img.khl.ru/teamplayers/14929/41257/200.jpg",
+              "link": "/players/41257/",
+              "num": "69"
+            },
+            "isShootoutLastGoal": true,
+            "pmg": "РБ",
+            "pmg_trans": "Решающий буллит",
+            "video": {
+              "video": "https://video.khl.ru/quotes/2447927",
+              "img": "https://bl.webcaster.pro/quotes/2447927/main_thumbnail/big.jpg"
+            }
+          }
+        ]
+      },
+      "ref": {
+        "m": [
+          {
+            "name": "35. Беляев Сергей",
+            "link": "/officials/581/"
+          },
+          {
+            "name": "20. Гофман Антон",
+            "link": "/officials/1050/"
+          }
+        ],
+        "l": [
+          {
+            "name": "80. Зайцев Валентин",
+            "link": "/officials/2043/"
+          },
+          {
+            "name": "63. Строганов Максим",
+            "link": "/officials/1146/"
+          }
+        ]
+      },
+      "coaches": {
+        "A": {
+          "name": "Жамнов Алексей Юрьевич",
+          "img": "//img.khl.ru/coaches/1445/200.jpg",
+          "link": "/coaches/1445/"
+        },
+        "B": {
+          "name": "Гришин Игорь Владимирович",
+          "img": "//img.khl.ru/coaches/669/200.jpg",
+          "link": "/coaches/669/"
+        }
+      }
+    },
+    "last": {
+      "a": [
+        {
+          "team_1": "Лада",
+          "team_1_id": 66,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/66/200.png?u=2026",
+          "team_2": "Спартак",
+          "team_2_id": 7,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+          "team_score": "2 — 5",
+          "win": true,
+          "date": "08 мар",
+          "town": "Тольятти",
+          "ots": "",
+          "link": "/game/1369/898185/protocol/"
+        },
+        {
+          "team_1": "Ак Барс",
+          "team_1_id": 53,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/53/200.png?u=2026",
+          "team_2": "Спартак",
+          "team_2_id": 7,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+          "team_score": "4 — 1",
+          "win": false,
+          "date": "10 мар",
+          "town": "Казань",
+          "ots": "",
+          "link": "/game/1369/898192/protocol/"
+        },
+        {
+          "team_1": "Спартак",
+          "team_1_id": 7,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/7/200.png?u=2026",
+          "team_2": "Амур",
+          "team_2_id": 54,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/54/200.png?u=2026",
+          "team_score": "1 — 0",
+          "win": true,
+          "date": "13 мар",
+          "town": "Москва",
+          "ots": "OT",
+          "link": "/game/1369/898201/protocol/"
+        }
+      ],
+      "b": [
+        {
+          "team_1": "Адмирал",
+          "team_1_id": 418,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/418/200.png?u=2026",
+          "team_2": "Нефтехимик",
+          "team_2_id": 71,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+          "team_score": "7 — 3",
+          "win": false,
+          "date": "05 мар",
+          "town": "Владивосток",
+          "ots": "",
+          "link": "/game/1369/898170/protocol/"
+        },
+        {
+          "team_1": "Адмирал",
+          "team_1_id": 418,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/418/200.png?u=2026",
+          "team_2": "Нефтехимик",
+          "team_2_id": 71,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+          "team_score": "3 — 4",
+          "win": true,
+          "date": "07 мар",
+          "town": "Владивосток",
+          "ots": "",
+          "link": "/game/1369/898178/protocol/"
+        },
+        {
+          "team_1": "Нефтехимик",
+          "team_1_id": 71,
+          "team_1_image": "//img.khl.ru/teams/ru/1369/71/200.png?u=2026",
+          "team_2": "Трактор",
+          "team_2_id": 25,
+          "team_2_image": "//img.khl.ru/teams/ru/1369/25/200.png?u=2026",
+          "team_score": "2 — 1",
+          "win": true,
+          "date": "10 мар",
+          "town": "Нижнекамск",
+          "ots": "OT",
+          "link": "/game/1369/898190/protocol/"
+        }
+      ]
+    },
+    "page": "resume",
+    "text": {
+      "game": "Матч",
+      "attendance": "Зрителей",
+      "coach": "Тренер",
+      "OT": "ОТ",
+      "SO": "Б",
+      "down": "Свернуть",
+      "up": "Развернуть",
+      "per": {
+        "1": "Период",
+        "2": "Период",
+        "3": "Период"
+      },
+      "ref": {
+        "m": "Главный",
+        "l": "Линейный"
+      }
+    },
+    "type": "Регулярный чемпионат",
+    "menu": [
+      {
+        "key": "resume",
+        "name": "Главная",
+        "link": "/game/1369/898236/resume/"
+      },
+      {
+        "key": "text",
+        "name": "Текстовая трансляция",
+        "link": "/game/1369/898236/text/"
+      },
+      {
+        "key": "teams",
+        "name": "составы",
+        "link": "/game/1369/898236/teams/"
+      }
+    ]
+  },
+  "errors": []
+}

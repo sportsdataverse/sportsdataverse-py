@@ -10,10 +10,14 @@ pair (:func:`_write_idmap` / :func:`_load_idmap`) is the builder's hand-off form
 offline test fixture. Today only the NFL ESPN <-> Shield <-> nflverse leg is
 materialised, from nfl-raw's ``nfl/espn/crosswalk/{games,teams}.json``; the Yahoo NFL ids are
 pure functions of that row (``nfl.g.{ET date}{ESPN home id:03d}``, ``nfl.t.{ESPN team id}``)
-and are filled in the same pass. CBS / Fox / NCAA columns exist in the schema and stay null
-until their builders land (CBS ids come from the week scoreboard page; Fox and Yahoo CFB from
-``cfb_schedule_crosswalk``; NCAA from ``ncaa-mfb-football-raw`` stage 06 restricted to its
-pre-game tiers).
+and are filled in the same pass (checked against Yahoo's own scoreboard ids on 29 weeks of
+2013-2026, every regular-season and postseason game). The NFL CBS and Fox game ids come from
+each source's week scoreboard (``nfl.cbs_pbp.game_id`` / ``nfl.fox_pbp.game_id``), which
+sdv-db's nightly resolves into the stored table; Fox and Yahoo CFB come from
+``cfb_schedule_crosswalk``; CBS CFB from the CFB week scoreboard (``cfb.cbs_pbp.game_id``,
+FBS + FCS, nightly) and, for past seasons, the stored cards of the ``cfbfastR-cfb-alt-raw``
+harvest (``_match_cbs_card``); NCAA from ``ncaa-mfb-football-raw`` stage 06 restricted to its
+pre-game tiers.
 """
 
 from __future__ import annotations
@@ -120,7 +124,8 @@ def _build_nfl_idmap(
         |---|---|
         | shield_game_id, nflverse_game_id | crosswalk verbatim |
         | yahoo_game_id, yahoo_team_id | computed (:func:`_yahoo_nfl_game_id`; ``nfl.t.{espn id}``) |
-        | cbs_*, fox_*, ncaa_* | null until their builders land |
+        | fox_team_id | :data:`...nfl.fox_pbp.game_id._FOX_TEAM_BY_ESPN` (static 32-row table) |
+        | cbs_*, fox_event_id, ncaa_* | null here; sdv-db's nightly fills the CBS and Fox game ids from each source's week scoreboard |
         | spread_line, total_line, odds_source | null here; the nightly job fills them from the nflverse schedule (NFL) / CFBD lines (CFB) |
     """
     built_at = built_at or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -152,6 +157,9 @@ def _build_nfl_idmap(
         ],
         schema=GAME_SCHEMA,
     )
+    # lazy: importing sportsdataverse.nfl from this module at import time is circular
+    from sportsdataverse.nfl.fox_pbp.game_id import _FOX_TEAM_BY_ESPN
+
     trows = json.loads(Path(teams_json).read_text(encoding="utf-8"))
     teams = pl.DataFrame(
         [
@@ -163,7 +171,7 @@ def _build_nfl_idmap(
                 "nflverse_abbr": t.get("nflverse_abbr"),
                 "cbs_team_id": None,
                 "yahoo_team_id": f"nfl.t.{int(t['espn_team_id'])}",
-                "fox_team_id": None,
+                "fox_team_id": _FOX_TEAM_BY_ESPN.get(str(t["espn_team_id"])),
                 "ncaa_team_id": None,
             }
             for t in trows

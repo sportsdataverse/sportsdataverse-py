@@ -1,0 +1,41 @@
+{
+  "gid": 13,
+  "uuid": null,
+  "status_zh": "已完賽",
+  "date": "2020-12-19",
+  "time": "14:30",
+  "venue_zh": "彰化縣立體育館",
+  "game_label_zh": "例行賽G01",
+  "away_name_zh": "臺北富邦勇士",
+  "away_name_en": null,
+  "away_logo": "//d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_1_1605758005.png",
+  "away_score": 89,
+  "home_name_zh": "福爾摩沙台新夢想家",
+  "home_name_en": null,
+  "home_logo": "https:////d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_4_1605758051.png",
+  "home_score": 86,
+  "quarters": {
+    "q1_away": 30,
+    "q1_home": 31,
+    "q2_away": 23,
+    "q2_home": 23,
+    "q3_away": 18,
+    "q3_home": 19,
+    "q4_away": 18,
+    "q4_home": 13
+  },
+  "officials": [
+    {
+      "role_zh": "主裁判",
+      "name_zh": "林崑霖"
+    },
+    {
+      "role_zh": "第一檢查員",
+      "name_zh": "洪永昱"
+    },
+    {
+      "role_zh": "第二檢查員",
+      "name_zh": "王立昌"
+    }
+  ]
+}

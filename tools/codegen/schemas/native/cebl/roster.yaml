@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: nationality
+  type: character
+- description: ''
+  name: birth_date
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: photo_url
+  type: character
+kind: dataframe
+schema: cebl_roster

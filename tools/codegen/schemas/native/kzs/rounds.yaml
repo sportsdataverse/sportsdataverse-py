@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: phase_id
+  type: integer
+- description: ''
+  name: rounds
+  type: integer
+kind: dataframe
+schema: kzs_rounds

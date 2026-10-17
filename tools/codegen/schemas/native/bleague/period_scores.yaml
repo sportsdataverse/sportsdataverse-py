@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: schedule_key
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: feed
+  type: character
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: points
+  type: integer
+kind: dataframe
+schema: bleague_period_scores

@@ -1,0 +1,45 @@
+{
+  "gid": 206,
+  "uuid": "e74f5828-3e5b-11ed-899b-5d17350689cf",
+  "status_zh": "已完賽",
+  "date": "2022-11-20",
+  "time": "17:00",
+  "venue_zh": "新竹縣體育館",
+  "game_label_zh": "例行賽G10",
+  "away_name_zh": "臺北富邦勇士",
+  "away_name_en": "Taipei Fubon Braves",
+  "away_logo": "//d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_1_1605758005.png",
+  "away_score": 104,
+  "home_name_zh": "新竹攻城獅",
+  "home_name_en": "Hsinchu Jko Lioneers",
+  "home_logo": "https:////d36fypkbmmogz6.cloudfront.net/upload/p_team/logo_3_1607584510.png",
+  "home_score": 108,
+  "quarters": {
+    "q1_away": 16,
+    "q1_home": 24,
+    "q2_away": 34,
+    "q2_home": 29,
+    "q3_away": 18,
+    "q3_home": 23,
+    "q4_away": 18,
+    "q4_home": 10,
+    "ot1_away": 10,
+    "ot1_home": 10,
+    "ot2_away": 8,
+    "ot2_home": 12
+  },
+  "officials": [
+    {
+      "role_zh": "主裁判",
+      "name_zh": "陳朝宏"
+    },
+    {
+      "role_zh": "第一檢查員",
+      "name_zh": "王立昌"
+    },
+    {
+      "role_zh": "第二檢查員",
+      "name_zh": "梅明聖"
+    }
+  ]
+}
