@@ -1,4 +1,4 @@
-"""The ESPN scoreboard ``broadcast`` column keeps every network name ("ESPNU/ESPN+"), on real captures.
+"""The ESPN scoreboard ``broadcast`` column keeps every network name ("ESPNU, ESPN+"), on real captures.
 
 ``_scoreboard_event_parsing`` is shared by every ESPN league's scoreboard, so the test runs it over the
 committed scoreboard captures of several sports and proves that only rows with more than one network
@@ -44,7 +44,7 @@ def test_only_multi_network_rows_change(path: Path) -> None:
     for ev in json.loads(path.read_text("utf-8"))["events"]:
         comp = ev["competitions"][0]
         got = _scoreboard_event_parsing(ev)["broadcast"]
-        assert got == "/".join(_names(comp))
+        assert got == ", ".join(_names(comp))
         entries = comp.get("broadcasts") or []
         single = len(entries) <= 1 and all(len(b.get("names") or []) <= 1 for b in entries)
         if single:
@@ -65,9 +65,9 @@ def test_a_multi_name_broadcast_keeps_every_name_in_feed_order() -> None:
             }
         ],
     }
-    assert _scoreboard_event_parsing(ev)["broadcast"] == "ESPNU/ESPN+/SECN/away"
+    assert _scoreboard_event_parsing(ev)["broadcast"] == "ESPNU, ESPN+, SECN, away"
     dup: Any = {"id": "1", "competitions": [{"competitors": [], "broadcasts": [{"names": ["A", "A", "B"]}]}]}
-    assert _scoreboard_event_parsing(dup)["broadcast"] == "A/B"
+    assert _scoreboard_event_parsing(dup)["broadcast"] == "A, B"
 
 
 def test_no_broadcasts_is_an_empty_string_and_the_column_stays_text() -> None:
