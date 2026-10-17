@@ -1,0 +1,113 @@
+{
+  "status": "OK",
+  "data": {
+    "firstTeamPlayers": [
+      {
+        "id": 55792,
+        "firstName": "Maša",
+        "lastName": "Verčič"
+      },
+      {
+        "id": 54773,
+        "firstName": "Sara",
+        "lastName": "Haralović"
+      },
+      {
+        "id": 55846,
+        "firstName": "Merisa",
+        "lastName": "Dedić"
+      }
+    ],
+    "secondTeamPlayers": [
+      {
+        "id": 49719,
+        "firstName": "Eva",
+        "lastName": "Brdnik"
+      },
+      {
+        "id": 49946,
+        "firstName": "Tea",
+        "lastName": "Ramšak"
+      },
+      {
+        "id": 50104,
+        "firstName": "Maruša",
+        "lastName": "Podgrajšek"
+      }
+    ],
+    "matchParts": [
+      "QUARTER1",
+      "QUARTER2",
+      "QUARTER3"
+    ],
+    "actions": [
+      {
+        "source": "GENIUS_SPORTS",
+        "clock": "10:00:00",
+        "actionType": "game",
+        "subType": "start",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 762532,
+        "playerId": 55846,
+        "matchTeamPlayerFirstName": "Merisa",
+        "matchTeamPlayerLastName": "Dedić",
+        "teamApplicationId": 33079,
+        "teamName": "VBO Maribor",
+        "matchTeamId": 125159,
+        "clock": "09:58:00",
+        "actionType": "jumpball",
+        "subType": "won",
+        "qualifiers": "",
+        "x": 0.0,
+        "y": 0.0,
+        "area": "",
+        "side": "RIGHT",
+        "success": true,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "4ed114d1-b8a7-490d-a51b-099391f06a77",
+        "shirtNumber": "88"
+      },
+      {
+        "source": "GENIUS_SPORTS",
+        "matchTeamPlayerId": 762541,
+        "playerId": 82788,
+        "matchTeamPlayerFirstName": "Ajša",
+        "matchTeamPlayerLastName": "Sivka",
+        "teamApplicationId": 39076,
+        "teamName": "Pro-Bit Konjice",
+        "matchTeamId": 125160,
+        "clock": "09:31:00",
+        "actionType": "2pt",
+        "subType": "jumpshot",
+        "qualifiers": "fromturnover",
+        "x": 17.0,
+        "y": 86.0,
+        "area": "insideright",
+        "success": false,
+        "score1": "0",
+        "score2": "0",
+        "period": 1,
+        "periodType": "REGULAR",
+        "part": "QUARTER1",
+        "playerPhotoUuid": "484b188e-bb89-4092-8e3b-23bd64371387",
+        "shirtNumber": "13"
+      }
+    ]
+  }
+}

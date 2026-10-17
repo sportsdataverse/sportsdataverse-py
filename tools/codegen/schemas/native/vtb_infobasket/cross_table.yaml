@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: comp_id
+  type: integer
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: game_status
+  type: integer
+- description: ''
+  name: score
+  type: character
+- description: ''
+  name: plus_minus
+  type: integer
+- description: ''
+  name: game_date
+  type: character
+- description: ''
+  name: team1_id
+  type: integer
+- description: ''
+  name: team2_id
+  type: integer
+- description: ''
+  name: team1_place
+  type: integer
+- description: ''
+  name: team2_place
+  type: integer
+- description: ''
+  name: home_team
+  type: integer
+- description: ''
+  name: win_team
+  type: integer
+- description: ''
+  name: score1
+  type: integer
+- description: ''
+  name: score2
+  type: integer
+kind: dataframe
+schema: vtb_infobasket_cross_table

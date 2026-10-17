@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: category
+  type: character
+- description: ''
+  name: category_label
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: side
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: value
+  type: numeric
+kind: dataframe
+schema: tbf_game_leaders

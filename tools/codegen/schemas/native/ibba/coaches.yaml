@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: coach_id
+  type: integer
+- description: ''
+  name: coach_type
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: coach_name_he
+  type: character
+- description: ''
+  name: coach_name
+  type: character
+- description: ''
+  name: is_replaced
+  type: logical
+- description: ''
+  name: photo_path
+  type: character
+- description: ''
+  name: sort_order
+  type: integer
+kind: dataframe
+schema: ibba_coaches

@@ -14,9 +14,9 @@ drift gate, but they are not the same pipeline — see
 
 | Input | What it carries |
 |---|---|
-| `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (30 leagues) and the shared parameter catalog |
+| `endpoints/leagues.yaml`, `endpoints/parameters.yaml` | the league registry (40 leagues) and the shared parameter catalog |
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
-| the 50 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the vendor networks) |
+| the 78 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
 | `espn_rename_map.yaml` | the ESPN short-name renames |
 | `sources.yaml` | provider / category registry: which source each public function belongs to |
@@ -42,7 +42,7 @@ each one `ruff format`s exactly what it wrote:
 | `build()` | the `tools/codegen/_generated/` staging copies |
 | `build_live()` | `sportsdataverse/<league>/<prefix>_espn_ext.py` + the container `__init__` files |
 | `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
-| `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` under its container (`hockey/sihf/`, `hockey/liiga/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
+| `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` (hockey) or `generate._BASKETBALL_HOMES` (international basketball) under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
 | `build_loaders_live()` | `sportsdataverse/<lg>/<lg>_loaders.py` for the 8 `_GENERATED_LOADER_LEAGUES` |
 | `build_docs()` | the docs tree (below) |
 
@@ -77,7 +77,7 @@ are hand-authored and preserved.
   family slug, and `docs/src/clientModules/anchorForward.ts` forwards a stale deep
   link at runtime.
 - **League registry.** `render_leagues_json()` writes `docs/src/data/leagues.json`
-  — 71 leagues across six sports — which drives the sidebar's
+  — 105 leagues across six sports — which drives the sidebar's
   `sidebarItemsGenerator`, the home page's league grid and the per-league search
   contexts in `docusaurus.config.ts`.
 - **Autodoc pages.** The *coverage gap*: in-scope public names not documented by

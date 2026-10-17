@@ -1,0 +1,42 @@
+{
+  "play_schedule_id": 4243,
+  "game_status": "fixed",
+  "home": {
+    "team_id": 8,
+    "season_team_name": "JX-ENEOSサンフラワーズ",
+    "season_team_short_name": "JX-ENEOS",
+    "team_logo_image": "/static/images/base_team/Rrfl1wu4CAww9VXr6hiXOlCWrC4jARyj.png",
+    "team_entry_flg": 1,
+    "season_team_area": null,
+    "free_text": "",
+    "winner_flg": 1,
+    "score": 59,
+    "score_p1": 16,
+    "score_p2": 19,
+    "score_p3": 8,
+    "score_p4": 16,
+    "score_ot1": null,
+    "score_ot2": null,
+    "score_ot3": null,
+    "score_ot4": null
+  },
+  "away": {
+    "team_id": 12,
+    "season_team_name": "デンソーアイリス",
+    "season_team_short_name": "デンソー",
+    "team_logo_image": "/assets/img/team/iris.png",
+    "team_entry_flg": 1,
+    "season_team_area": null,
+    "free_text": "",
+    "winner_flg": -1,
+    "score": 55,
+    "score_p1": 17,
+    "score_p2": 18,
+    "score_p3": 9,
+    "score_p4": 11,
+    "score_ot1": null,
+    "score_ot2": null,
+    "score_ot3": null,
+    "score_ot4": null
+  }
+}

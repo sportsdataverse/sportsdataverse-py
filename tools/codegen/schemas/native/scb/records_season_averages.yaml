@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: stat
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: place
+  type: integer
+- description: ''
+  name: order_id
+  type: integer
+- description: ''
+  name: value
+  type: numeric
+- description: ''
+  name: ratio
+  type: numeric
+- description: ''
+  name: season_player_id
+  type: character
+- description: ''
+  name: real_player_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_tlc
+  type: character
+kind: dataframe
+schema: scb_records_season_averages

@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: as_of_date
+  type: character
+- description: ''
+  name: zone_ranking_code
+  type: character
+- description: ''
+  name: zone_ranking_official_name
+  type: character
+- description: ''
+  name: world_rank
+  type: integer
+- description: ''
+  name: country_name
+  type: character
+- description: ''
+  name: zone_rank
+  type: integer
+- description: ''
+  name: ioc_code
+  type: character
+- description: ''
+  name: fiba_code
+  type: character
+- description: ''
+  name: current_points
+  type: numeric
+- description: ''
+  name: world_rank_variation
+  type: integer
+- description: ''
+  name: comments
+  type: character
+- description: ''
+  name: organisation_id
+  type: integer
+- description: ''
+  name: organisation_status_code
+  type: character
+kind: dataframe
+schema: fiba_gdap_gateway_federation_ranking
