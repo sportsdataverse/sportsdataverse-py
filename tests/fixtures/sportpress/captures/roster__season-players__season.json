@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "id": 10233,
+      "competition_team_id": 502,
+      "jersey": "22",
+      "weight": 87,
+      "height": 195,
+      "active": true,
+      "player_position": {
+        "id": 2,
+        "name": "shooting_guard"
+      },
+      "player": {
+        "id": 231,
+        "birthdate": "2002-02-15",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Quinten",
+        "last_name": "Smout",
+        "nationality_code": "BEL",
+        "profile_image": {
+          "name": "CHA - Smout",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/G/P/GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/G/P/small-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png",
+            "medium": "https://bnxt.sportpress.info/storage/G/P/medium-GPAjUWHwFkRn3vThfPLpyHDq61756897402.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2025-08-11"
+    },
+    {
+      "id": 10237,
+      "competition_team_id": 522,
+      "jersey": "13",
+      "weight": 98,
+      "height": 205,
+      "active": true,
+      "player_position": {
+        "id": 5,
+        "name": "center"
+      },
+      "player": {
+        "id": 118,
+        "birthdate": "2001-05-10",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Sam",
+        "last_name": "Huurman",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "LEI - HUURMAN",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/i/6/i6P5eatpXWbBqv1YQRFtqBn3c1758876906.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/i/6/small-i6P5eatpXWbBqv1YQRFtqBn3c1758876906.png",
+            "medium": "https://bnxt.sportpress.info/storage/i/6/medium-i6P5eatpXWbBqv1YQRFtqBn3c1758876906.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2025-08-11"
+    },
+    {
+      "id": 10241,
+      "competition_team_id": 522,
+      "jersey": "10",
+      "weight": 109,
+      "height": 211,
+      "active": true,
+      "player_position": {
+        "id": 5,
+        "name": "center"
+      },
+      "player": {
+        "id": 581,
+        "birthdate": "1988-07-29",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Roeland",
+        "last_name": "Schaftenaar",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "LEI - SCHAFTENAAR",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/D/p/Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/D/p/small-Dp40irbYpqvS9GVAhqfZmC7161758876855.png",
+            "medium": "https://bnxt.sportpress.info/storage/D/p/medium-Dp40irbYpqvS9GVAhqfZmC7161758876855.png"
+          }
+        },
+        "created_at": "2022-09-14"
+      },
+      "created_at": "2025-08-11"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+[
+ "/games",
+ "/games/recent",
+ "/games/{gameId}",
+ "/games/{gameId}/stats",
+ "/records/per-game/{seasonId}",
+ "/records/season-averages",
+ "/referees",
+ "/season-players/{seasonPlayerId}",
+ "/seasons",
+ "/seasons/{seasonId}",
+ "/seasons/{seasonId}/player-statistics",
+ "/seasons/{seasonId}/playoff-tree",
+ "/seasons/{seasonId}/team-statistics",
+ "/standings",
+ "/teams/{teamId}",
+ "/transfers",
+ "/transfers/teams"
+]

@@ -1,0 +1,9 @@
+columns:
+- description: ''
+  name: board_id
+  type: integer
+- description: ''
+  name: board_name_he
+  type: character
+kind: dataframe
+schema: ibba_boards_ex

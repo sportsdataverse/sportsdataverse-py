@@ -1,0 +1,23 @@
+[
+  {
+    "away_team": {
+      "color": "#3C8DC2",
+      "english_name": "Braves",
+      "id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e86394aa-3d88-11ed-8ba8-7f44ba46b0b1.png",
+      "name": "勇士"
+    },
+    "game_id": "f0fb9d22-97c8-11f0-a94d-5750f9c0ef1a",
+    "home_team": {
+      "color": "#D95F29",
+      "english_name": "Pilots",
+      "id": "e865bb20-3d88-11ed-a956-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e865bb20-3d88-11ed-a956-7f44ba46b0b1.png",
+      "name": "領航猿"
+    },
+    "injury_report": {
+      "away": null,
+      "home": null
+    }
+  }
+]

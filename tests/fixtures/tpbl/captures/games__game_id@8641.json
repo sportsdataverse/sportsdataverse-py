@@ -1,0 +1,74 @@
+{
+ "id": 8641,
+ "gohoops_id": 9701,
+ "division_id": 35,
+ "gohoops_division_id": 576,
+ "code": "G7",
+ "home_team": {
+  "id": 3,
+  "gohoops_id": 941,
+  "gohoops_squad_id": 11936,
+  "gohoops_event_id": 490,
+  "gohoops_season_id": 213,
+  "name": "福爾摩沙夢想家",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+   "alt_name": "dreamers"
+  },
+  "is_league": false,
+  "won_score": 90,
+  "lost_score": 78
+ },
+ "away_team": {
+  "id": 7,
+  "gohoops_id": 945,
+  "gohoops_squad_id": 11932,
+  "gohoops_event_id": 490,
+  "gohoops_season_id": 213,
+  "name": "新北國王",
+  "status": "ACTIVE",
+  "meta": {
+   "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+   "alt_name": "kings"
+  },
+  "is_league": false,
+  "won_score": 78,
+  "lost_score": 90
+ },
+ "referees": [
+  {
+   "id": 25,
+   "gohoops_id": 215,
+   "name": "林原佃",
+   "type": "BASKETBALL_CHIEF_REFEREE"
+  },
+  {
+   "id": 28,
+   "gohoops_id": 221,
+   "name": "侯淳仁",
+   "type": "BASKETBALL_FIRST_ASSISTANT_REFEREE"
+  },
+  {
+   "id": 57,
+   "gohoops_id": 228,
+   "name": "游府融",
+   "type": "BASKETBALL_SECOND_ASSISTANT_REFEREE"
+  }
+ ],
+ "venue": "洲際迷你蛋",
+ "status": "COMPLETED",
+ "is_live": false,
+ "round": 4,
+ "meta": {
+  "recap": "https://youtu.be/l3xRHGavA1s",
+  "visitors": "3000",
+  "live_stream_url": "https://youtube.com/live/_fqQ6SDUMZs?feature=share",
+  "judgement_report": "https://drive.google.com/file/d/1n6LkLGqYJv4S1uRxl2zaMKjNkI4Qgh06/view?usp=sharing",
+  "ticket_url": null
+ },
+ "game_date": "2026-06-06",
+ "game_day_of_week": "(六)",
+ "game_time": "17:00:00",
+ "gamed_at": "2026-06-06 17:00:00"
+}

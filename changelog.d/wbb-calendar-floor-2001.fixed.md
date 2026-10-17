@@ -1,0 +1,1 @@
+- `espn_wbb_calendar` accepts season 2001 (ESPN serves a women's college basketball calendar from 2000-01); it refused every season before 2002, which kept the older-seasons backfill from fetching WBB 2001.

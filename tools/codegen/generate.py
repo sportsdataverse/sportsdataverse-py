@@ -14,6 +14,8 @@ import sys
 from pathlib import Path
 from urllib.parse import urlencode
 
+import yaml
+
 # Make ``tools`` importable when run as a script (`python tools/codegen/generate.py`),
 # where sys.path[0] is this file's dir rather than the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -151,6 +153,34 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse._codegen_runtime",
         "sportsdataverse.euroleague.euroleague_runtime",
         "sportsdataverse.hockey.euro_hockey_runtime",
+        "sportsdataverse.basketball.basketball_runtime",
+        "sportsdataverse.basketball.fiba_hub.fiba_runtime",
+        "sportsdataverse.basketball.genius.genius_runtime",
+        "sportsdataverse.basketball.atrium.atrium_runtime",
+        "sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime",
+        "sportsdataverse.basketball.feb.feb_runtime",
+        "sportsdataverse.basketball.scb.scb_runtime",
+        "sportsdataverse.basketball.lba.lba_runtime",
+        "sportsdataverse.basketball.acb.acb_runtime",
+        "sportsdataverse.basketball.ibba.ibba_runtime",
+        "sportsdataverse.basketball.ibba.ibba_segev_runtime",
+        "sportsdataverse.basketball.kzs.kzs_runtime",
+        "sportsdataverse.basketball.lkl.lkl_runtime",
+        "sportsdataverse.basketball.aba.aba_runtime",
+        "sportsdataverse.basketball.bnxt.bnxt_runtime",
+        "sportsdataverse.basketball.dbl.sportality_runtime",
+        "sportsdataverse.basketball.vtb.vtb_infobasket_runtime",
+        "sportsdataverse.basketball.vtb.vtb_league_runtime",
+        "sportsdataverse.basketball.wjbl.wjbl_runtime",
+        "sportsdataverse.basketball.kbl.kbl_runtime",
+        "sportsdataverse.basketball.bleague.bleague_runtime",
+        "sportsdataverse.basketball.cba.cba_runtime",
+        "sportsdataverse.basketball.tbf.tbf_runtime",
+        "sportsdataverse.basketball.tpbl.tpbl_runtime",
+        "sportsdataverse.basketball.plg.pleague_runtime",
+        "sportsdataverse.basketball.plg.pleague_preciser_runtime",
+        "sportsdataverse.basketball.cebl.cebl_runtime",
+        "sportsdataverse.basketball.easl.easl_runtime",
         "sportsdataverse.hockey.sihf.sihf_runtime",
         "sportsdataverse.hockey.esports_runtime",
         "sportsdataverse.hockey.elh.elh_runtime",
@@ -470,6 +500,37 @@ _LEAGUE_R_PACKAGE = {
 # each, nested under ``hockey/`` through _NESTED_HOMES below. Ordered as the docs list them.
 _EURO_HOCKEY_HOMES = ("del", "icehl", "eihl", "metal", "elh", "liiga", "shl", "ha", "nl", "magnus", "khl", "vhl")
 
+# The international basketball homes (sdv-internal-refs Phase A intake): one docs/registry prefix each, nested under
+# ``basketball/`` through _NESTED_HOMES below. Ordered as the docs list them. A prefix is the short snake_case name
+# of a provider family, not always a league: ``genius``/``atrium`` serve many competitions, ``scb`` serves BBL and
+# DBBL, ``fiba_hub``/``nbl_au`` avoid the ESPN ``fiba``/``nbl`` prefixes (function names keep ``fiba_*``/``nbl_*``), ``bnxt`` is the Sportpress family, ``dbl`` the Sportality one, ``plg`` the P. LEAGUE+ pair.
+_BASKETBALL_HOMES = (
+    "fiba_hub",
+    "genius",
+    "atrium",
+    "nbl_au",
+    "feb",
+    "scb",
+    "lba",
+    "acb",
+    "ibba",
+    "wjbl",
+    "vtb",
+    "kbl",
+    "bleague",
+    "kzs",
+    "lkl",
+    "tbf",
+    "cebl",
+    "aba",
+    "easl",
+    "bnxt",
+    "tpbl",
+    "plg",
+    "cba",
+    "dbl",
+)
+
 # Package homes that are not ESPN leagues: they carry flat-API families but no ESPN league, no
 # loaders and no R counterpart. Ordered, because _doc_leagues() appends them in this order.
 _NONLEAGUE_HOMES = (
@@ -483,6 +544,7 @@ _NONLEAGUE_HOMES = (
     "thesportsdb",
     "sihf",
     *_EURO_HOCKEY_HOMES,
+    *_BASKETBALL_HOMES,
 )
 
 # Homes that live inside a sport-group container from their first release, so they have no
@@ -494,6 +556,7 @@ _NONLEAGUE_HOMES = (
 _NESTED_HOMES = {
     "sihf": "hockey.sihf",
     **{h: f"hockey.{h}" for h in _EURO_HOCKEY_HOMES},
+    **{h: f"basketball.{h}" for h in _BASKETBALL_HOMES},
     "del": "hockey.del_",
 }
 
@@ -536,6 +599,35 @@ _NO_R_DICT_FAMILIES = frozenset(
         "khl_rest",
         "khl_webcaster",
         "vhl",
+        # International basketball: no hoopR / wehoop mirror yet (Phase C will add them).
+        "fiba_gdap",
+        "fiba_gamepage",
+        "genius",
+        "atrium",
+        "nbl_rosetta",
+        "feb",
+        "scb",
+        "legabasket",
+        "acb",
+        "ibba",
+        "ibba_segev",
+        "wjbl",
+        "vtb_infobasket",
+        "vtb_league",
+        "kbl",
+        "bleague",
+        "kzs",
+        "lkl",
+        "tbf",
+        "cebl",
+        "aba",
+        "easl",
+        "sportpress",
+        "tpbl",
+        "pleague",
+        "pleague_preciser",
+        "cba",
+        "sportality",
     },
 )
 
@@ -2307,6 +2399,37 @@ FLAT_APIS = [
     ("khl_rest", "khl"),
     ("khl_webcaster", "khl"),
     ("vhl", "vhl"),
+    # International basketball (sdv-internal-refs Phase A: feb/, scb/, genius-livestats/, atrium-embed/, nbl-rosetta/,
+    # fiba/, legabasket/, acb/, ibba/, wjbl/, vtb/, kbl/, bleague/, kzs/, lkl/, tbf/, cebl/, aba-liga/, easl/,
+    # sportpress/, tpbl/, pleague/, cba/, sportality/), homed under basketball/<lg>/
+    ("fiba_gdap", "fiba_hub"),
+    ("fiba_gamepage", "fiba_hub"),
+    ("genius", "genius"),
+    ("atrium", "atrium"),
+    ("nbl_rosetta", "nbl_au"),
+    ("feb", "feb"),
+    ("scb", "scb"),
+    ("legabasket", "lba"),
+    ("acb", "acb"),
+    ("ibba", "ibba"),
+    ("ibba_segev", "ibba"),
+    ("wjbl", "wjbl"),
+    ("vtb_infobasket", "vtb"),
+    ("vtb_league", "vtb"),
+    ("kbl", "kbl"),
+    ("bleague", "bleague"),
+    ("kzs", "kzs"),
+    ("lkl", "lkl"),
+    ("tbf", "tbf"),
+    ("cebl", "cebl"),
+    ("aba", "aba"),
+    ("easl", "easl"),
+    ("sportpress", "bnxt"),
+    ("tpbl", "tpbl"),
+    ("pleague", "plg"),
+    ("pleague_preciser", "plg"),
+    ("cba", "cba"),
+    ("sportality", "dbl"),
 ]
 
 
@@ -2698,6 +2821,7 @@ _COVERAGE_LEAGUES = [
     "thesportsdb",
     "sihf",
     *_EURO_HOCKEY_HOMES,
+    *_BASKETBALL_HOMES,
     # Joined in 0.1.5: each has hand-written modules, so until now the gates never
     # saw their functions and they had no Additional page.
     "soccer",
@@ -3100,6 +3224,34 @@ _FLAT_API_DOC = {
     "khl_rest": "KHL site REST (www.khl.ru/rest)",
     "khl_webcaster": "KHL webcaster mobile API (khl.api.webcaster.pro)",
     "vhl": "VHL (vhlru.ru server-rendered pages, parsed)",
+    "fiba_gdap": "FIBA digital API (GDAP, digital-api.fiba.basketball)",
+    "fiba_gamepage": "FIBA game pages (fiba.basketball, RSC payload parsed)",
+    "genius": "Genius Sports LiveStats (fibalivestats.dcd.shared.geniussports.com, 20+ competitions)",
+    "atrium": "Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)",
+    "nbl_rosetta": "NBL / WNBL / NBL1 Rosetta proxy (prod.rosetta.nbl.com.au, Australia)",
+    "feb": "FEB LiveStats API + baloncestoenvivo.feb.es (Spain)",
+    "scb": "SCB basketball API (BBL and DBBL, Germany)",
+    "legabasket": "Lega Basket Serie A site API (www.legabasket.it/api, Italy)",
+    "acb": "ACB API (api2.acb.com, Spain)",
+    "ibba": "IBBA ASMX web service (basket.co.il, Israel)",
+    "ibba_segev": "Segev Stats live-stats API (stats.segevstats.com, Israel play-by-play)",
+    "wjbl": "W League API (api.wjbl.01core.app, Japan women)",
+    "vtb_infobasket": "VTB United League Infobasket (Russia)",
+    "vtb_league": "VTB United League API (api.vtb-league.com)",
+    "kbl": "KBL API (api.kbl.or.kr, Korea)",
+    "bleague": "B.LEAGUE game contexts (S3) and pages (www.bleague.jp, Japan)",
+    "kzs": "KZS FMS public API (Basketball Federation of Slovenia)",
+    "lkl": "LKL site API (lkl.lt, Lithuania)",
+    "tbf": "TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL)",
+    "cebl": "CEBL stats API (api.data.cebl.ca, Canada)",
+    "aba": "ABA League sites (aba-liga.com, Adriatic: ABA League and ABA League 2)",
+    "easl": "EASL sync server (easl.joshricha.com, third-party over Sportradar DataCore)",
+    "sportpress": "BNXT League Sportpress API (bnxt.sportpress.info, Belgium and the Netherlands)",
+    "tpbl": "TPBL API (api.tpbl.basketball, Taiwan)",
+    "pleague": "P. LEAGUE+ site (pleagueofficial.com, Taiwan)",
+    "pleague_preciser": "P. LEAGUE+ vendor API (api.preciser.io, Taiwan)",
+    "cba": "CBA data API (data-server.cbaleague.com, China; encrypted bodies)",
+    "sportality": "Basketligaen site API (www.basketligaen.dk/api, Denmark; Sportality)",
     "football_data": "Football-Data.co.uk CSV archive (football-data.co.uk)",
     "openligadb": "OpenLigaDB (api.openligadb.de, community German football)",
     "polymarket": "Polymarket read APIs (gamma-api + clob.polymarket.com)",
@@ -5002,7 +5154,7 @@ def _split_family_pages(
         overview, family_pages, fn_slug = split
         page = rel[len(ref_dir) : -3]
         out[rel] = overview
-        meta = dict(line.split(": ", 1) for line in _FRONTMATTER.match(overview).group(1).split("\n") if ": " in line)
+        meta = yaml.safe_load(_FRONTMATTER.match(overview).group(1)) or {}
         out[f"{rel[:-3]}/_category_.json"] = render_category(
             meta.get("sidebar_label", page), int(meta.get("sidebar_position", 1)), True, link_doc=rel[:-3]
         )
@@ -5051,6 +5203,14 @@ _LEAGUE_LABELS = {
     "ligamx": "Liga MX",
     "ligue1": "Ligue 1",
     "nbagl": "NBA G League",
+    "olympics_mbk": "Olympics men's basketball",
+    "olympics_wbk": "Olympics women's basketball",
+    "nbasl_lv": "NBA Summer League (Las Vegas)",
+    "nbasl_ut": "NBA Summer League (Utah)",
+    "nbasl_ca": "NBA Summer League (California)",
+    "nbasl_sac": "NBA Summer League (Sacramento)",
+    "nbasl_orl": "NBA Summer League (Orlando)",
+    "nbasl_gs": "NBA Summer League (Golden State)",
     "odds": "Betting odds",
     "euroleague": "EuroLeague",
     "f1": "Formula 1",
@@ -5064,6 +5224,20 @@ _LEAGUE_LABELS = {
     "ha": "HockeyAllsvenskan",
     "nl": "National League",
     "magnus": "Ligue Magnus",
+    "genius": "Genius Sports LiveStats",
+    "atrium": "Sportradar Atrium",
+    "nbl_au": "NBL Australia (Rosetta)",
+    "fiba_hub": "FIBA (digital API and game pages)",
+    "scb": "BBL / DBBL (SCB)",
+    "lba": "Lega Basket Serie A",
+    "wjbl": "W League (Japan)",
+    "bleague": "B.LEAGUE",
+    "bnxt": "BNXT League",
+    "plg": "P. LEAGUE+",
+    "dbl": "Basketligaen",
+    "aba": "ABA League",
+    "feb": "Spanish FEB",
+    "ibba": "Israeli Premier League",
     "seriea": "Serie A",
     "soccer": "Soccer (all)",
     "yahoo": "Yahoo Sports",

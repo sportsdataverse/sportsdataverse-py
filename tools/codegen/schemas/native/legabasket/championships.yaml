@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: championship_id
+  type: integer
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: status
+  type: integer
+- description: ''
+  name: championship_type_id
+  type: integer
+- description: ''
+  name: championship_series_id
+  type: integer
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: focus_on
+  type: logical
+- description: ''
+  name: ctype_code
+  type: character
+- description: ''
+  name: ctype_name
+  type: character
+- description: ''
+  name: cserie_code
+  type: character
+- description: ''
+  name: cserie_name
+  type: character
+- description: ''
+  name: logo_key
+  type: character
+kind: dataframe
+schema: lba_championships

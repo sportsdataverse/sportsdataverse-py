@@ -1,0 +1,61 @@
+{
+  "instanceContext": {
+    "siteTeamIsInGame": true,
+    "siteTeamIsHomeTeam": true,
+    "siteTeamIsAwayTeam": true
+  },
+  "gameInfo": {
+    "gameUuid": "j3nfc1b8og",
+    "extId": "2289328",
+    "startDateTime": "2023-09-14T17:15:00.000Z",
+    "arenaName": "Rise Sparekasse Arena",
+    "state": "post_game",
+    "overtime": false,
+    "shootout": null,
+    "seriesCode": "DBL",
+    "seriesName": "Basketligaen",
+    "roundNumber": 0,
+    "roundLabel": "",
+    "seriesDisplayName": "Basketligaen"
+  },
+  "homeTeam": {
+    "names": {
+      "code": "SVE",
+      "short": "Svendborg Rabbits",
+      "long": "Svendborg Rabbits",
+      "full": "Svendborg Rabbits",
+      "codeSite": "SVE",
+      "shortSite": "Svendborg Rabbits",
+      "fullSite": "Svendborg Rabbits",
+      "longSite": "Svendborg Rabbits"
+    },
+    "uuid": "kgmhwo9l5d",
+    "instanceId": "sve1_sve",
+    "foundedOn": "2006",
+    "address": "",
+    "email": "",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+    "score": 80
+  },
+  "awayTeam": {
+    "names": {
+      "code": "HIC",
+      "short": "Horsens IC",
+      "long": "Horsens IC",
+      "full": "Horsens IC",
+      "codeSite": "HIC",
+      "shortSite": "Horsens IC",
+      "fullSite": "Horsens IC",
+      "longSite": "Horsens IC"
+    },
+    "uuid": "hip2m60a45",
+    "instanceId": "hic1_hic",
+    "foundedOn": "",
+    "address": "",
+    "email": "",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+    "score": 77
+  },
+  "ssgtUuid": "xb0jh5c4s9",
+  "seriesUuid": "m1ay3mpa4t"
+}
