@@ -826,7 +826,7 @@ def _ot_shootout_state_wp(play_df, naive: bool):
         .with_columns(
             flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False),
             # the period's first attempt does not start tied, so no score in that period is the game's
-            untied=(pl.col("mask") & ~pl.col("second") & (pl.col("m0") != 0))
+            untied=(pl.col("mask") & (pl.col("second") == False) & (pl.col("m0") != 0))
             .fill_null(False)
             .any()
             .over("period.number"),

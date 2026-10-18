@@ -229,6 +229,20 @@
   expected: kill
   note: the pre-fix state; 401628439's attempts read 0.0 or 1.0 from ESPN's 50-42
 
+- id: cfb-ot-shootout-untied-whole-game
+  group: cfb-ot-shootout-attempts
+  finding: R890-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    .any()
+                .over("period.number"),
+  mutant: |-
+    .any()
+                .over(pl.lit(1)),
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: one untied period nulls the whole game; 401112489's sixth-overtime attempt (period 10, opens tied) loses its value
+
 - id: cfb-ot-shootout-untied-only-beyond-2
   group: cfb-ot-shootout-attempts
   finding: R890-3

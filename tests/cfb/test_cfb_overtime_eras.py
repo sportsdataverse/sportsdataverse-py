@@ -162,6 +162,10 @@ def test_2019_20_the_untyped_shootout_attempts_are_attempts() -> None:
     assert missed["pos_score_diff_start"].abs().to_list() == [3, 3, 3]
     for col in ("wp_before", "wp_after", "wp_before_naive", "wp_after_naive"):
         assert missed[col].null_count() == 3, col
+    # the guard is per period: the sixth overtime (period 10) opens tied, so its attempt keeps its value
+    (won,) = attempts.filter(pl.col("period") == 10).iter_rows(named=True)
+    assert won["text"] == "Quincy Patterson Run for Two-Point Conversion" and won["pos_score_diff_start"] == 0
+    assert won["wp_before"] is not None and won["wp_before_naive"] is not None
 
 
 def test_a_shootout_attempt_on_impossible_espn_scores_has_no_win_probability() -> None:
