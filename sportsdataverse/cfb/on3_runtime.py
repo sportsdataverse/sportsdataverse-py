@@ -78,7 +78,7 @@ def _extract_build_id(text: str) -> Optional[str]:
     return m.group(1) if m else None
 
 
-def _current_build_id(page_url: str, stale: Optional[str] = None, *, refresh: bool = False, **kwargs: Any) -> str:
+def _current_build_id(page_url: str, stale: str | None = None, *, refresh: bool = False, **kwargs: Any) -> str:
     """The cached buildId, discovered when there is none (or, with ``refresh``, when it is still
     the ``stale`` one a data route 404'd on -- another thread may have refreshed it already)."""
     global _build_id

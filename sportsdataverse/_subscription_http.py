@@ -73,7 +73,7 @@ _SESSION_TTL = 1800.0  # seconds; a subscription cookie outlives this comfortabl
 _SESSION_CACHE_MAX = 8
 # key -> (session, expiry). ponytail: module-global dict + one lock; per-key locks
 # only if a caller ever logs into many sites concurrently (realistic cardinality is 1-2).
-_sessions: Dict[Tuple[str, str, str, str], Tuple[requests.Session, float]] = {}
+_sessions: dict[tuple[str, str, str, str], tuple[requests.Session, float]] = {}
 _lock = threading.Lock()
 _login_lock = threading.Lock()  # serializes a cache-miss login (see login())
 
@@ -349,7 +349,7 @@ def _login(
     resolved_email: str,
     resolved_pw: str,
     proxies: Any,
-    session: Optional[requests.Session],
+    session: requests.Session | None,
     timeout: float,
 ) -> requests.Session:
     """One login round trip (no cache): GET the form, POST the credentials, check the answer."""

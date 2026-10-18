@@ -218,7 +218,7 @@ def set_default_ttl(ttl: Optional[Union[timedelta, int]]) -> None:
 
 def _resolve_ttl(
     url: str,
-    override: Optional[Union[timedelta, float]] = None,
+    override: timedelta | float | None = None,
     *,
     params: Optional[Dict[str, Any]] = None,
 ) -> timedelta:
@@ -317,7 +317,7 @@ def cache_get(
     url: str,
     params: Optional[Dict[str, Any]] = None,
     *,
-    ttl: Optional[Union[timedelta, float]] = None,
+    ttl: timedelta | float | None = None,
 ) -> Optional[Dict[str, Any]]:
     """Fetch a cached body. Returns ``None`` on miss / expiry / mode=off."""
     if _MODE == "off":
@@ -393,7 +393,7 @@ def cache_set(
     params: Optional[Dict[str, Any]],
     body: Any,
     *,
-    ttl: Optional[Union[timedelta, float]] = None,
+    ttl: timedelta | float | None = None,
 ) -> None:
     """Persist a body to the cache. No-op when mode=off or TTL=LIVE."""
     if _MODE == "off":

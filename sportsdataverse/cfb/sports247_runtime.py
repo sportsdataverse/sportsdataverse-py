@@ -57,7 +57,7 @@ _jwt: Optional[str] = None
 _jwt_lock = threading.Lock()
 
 
-def _guest_jwt(stale: Optional[str] = None, *, refresh: bool = False) -> Optional[str]:
+def _guest_jwt(stale: str | None = None, *, refresh: bool = False) -> str | None:
     """The cached guest JWT, minted when there is none (or, with ``refresh``, when it is still
     the ``stale`` one a 401/403 refused -- another thread may have re-minted it already)."""
     global _jwt
