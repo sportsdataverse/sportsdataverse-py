@@ -137,7 +137,7 @@ def test_bracket_tolerates_a_wrong_type_games_value(games: Any) -> None:
 
 
 @pytest.mark.parametrize("short", sorted(CASES))
-@pytest.mark.parametrize("raw", [{}, [], None, "x", 3, {"overview": "x"}])
+@pytest.mark.parametrize("raw", [{}, [], None, "x", 3, {"overview": "x"}, {"data": None}])
 def test_empty_or_malformed_payload_is_a_zero_row_documented_frame(short: str, raw: Any) -> None:
     if raw == {"overview": "x"} and short.startswith(("player_season", "player_stats", "top_", "team_p", "team_info")):
         pytest.skip("an object is a valid one-row body for this parser")

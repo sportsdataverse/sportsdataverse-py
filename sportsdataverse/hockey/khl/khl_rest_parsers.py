@@ -139,6 +139,9 @@ def _str(value: Any) -> Optional[str]:
     return text if text.strip() else None
 
 
+_IDS = pl.List(pl.Int64)
+
+
 def _coerce(value: Any, dtype: Any) -> Any:
     if dtype == pl.Int64:
         return _int(value)
@@ -146,6 +149,8 @@ def _coerce(value: Any, dtype: Any) -> Any:
         return _float(value)
     if dtype == pl.Boolean:
         return None if value is None or value == "" else bool(value)
+    if dtype == _IDS:
+        return [i for i in map(_int, value) if i is not None] or None if isinstance(value, list) else None
     return _str(value)
 
 
@@ -155,7 +160,7 @@ def _typed(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.D
     return pl.DataFrame({c: [_coerce(r.get(c), t) for r in rows] for c, t in schema.items()}, schema=dict(schema))
 
 
-_CODES = {"i": pl.Int64, "f": pl.Float64, "s": pl.Utf8, "b": pl.Boolean}
+_CODES = {"i": pl.Int64, "f": pl.Float64, "s": pl.Utf8, "b": pl.Boolean, "l": _IDS}
 #: Every KHL returns schema (``khl_<short>`` / ``khl_webcaster_<short>``) as ``{column: dtype}``, from
 #: :mod:`sportsdataverse.hockey.khl.khl_schemas` (generated from ``tools/codegen/schemas/native/khl_*``).
 SCHEMAS: Dict[str, Dict[str, Any]] = {
@@ -213,6 +218,7 @@ def _cell(value: Any) -> Any:
 def _generic(rows: Iterable[Any], columns: Columns = None) -> pl.DataFrame:
     """Row dicts -> flattened (dotted keys) -> snake_case -> list cells as JSON text -> lossless Int64 ids."""
     flat = [_flatten(r) for r in rows if isinstance(r, dict)]
+    flat = [r for r in flat if any(v is not None for v in r.values())]  # {"data": null} -> no row
     if not flat:
         return _empty(columns)
     keys = list(dict.fromkeys(k for r in flat for k in r))
@@ -990,7 +996,7 @@ _BRACKET_SCHEMA = {
     "club_id": pl.Int64,
     "name": pl.Utf8,
     "series_wins": pl.Int64,
-    "game_ids": pl.Utf8,
+    "game_ids": _IDS,
 }
 
 
@@ -999,7 +1005,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
 
     ``data.LIST[]`` is one entry per round; its ``couple`` maps a pair number to the two teams of the
     series. ``seed`` is the team's conference seed, ``series_wins`` its wins in the series and
-    ``game_ids`` the comma-joined khl.ru game ids of its series games (unplayed slots are skipped).
+    ``game_ids`` the khl.ru game ids of its series games as ``List(Int64)`` (unplayed slots are skipped).
 
     Args:
         raw: the ``/standings/playoff/`` body.
@@ -1034,7 +1040,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
         for pair, teams in _obj(rnd.get("couple")).items():
             for team in _obj(teams).values():
                 team = _obj(team)
-                games = [str(g.get("id")) for g in _list(team.get("games")) if isinstance(g, dict) and g.get("id")]
+                games = [g.get("id") for g in _list(team.get("games")) if isinstance(g, dict) and g.get("id")]
                 rows.append(
                     {
                         "round": rnd.get("number"),
@@ -1045,7 +1051,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
                         "club_id": team.get("id"),
                         "name": _obj(clubs.get(str(team.get("id")))).get("name"),
                         "series_wins": team.get("score"),
-                        "game_ids": ",".join(games) or None,
+                        "game_ids": games or None,
                     }
                 )
     return _out(_typed(rows, _BRACKET_SCHEMA), return_as_pandas)

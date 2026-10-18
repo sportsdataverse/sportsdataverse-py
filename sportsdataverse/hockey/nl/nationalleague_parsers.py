@@ -211,7 +211,8 @@ def _flat_rows(
     """Flattened, renamed rows of ``raw``; ``lists_only`` refuses an object (a list route's malformed body)."""
     if lists_only and not isinstance(raw, list):
         return []
-    return [_rename(_flatten(r), renames or {}) for r in _rows(_scrub(raw))]
+    flat = (_rename(_flatten(r), renames or {}) for r in _rows(_scrub(raw)))
+    return [r for r in flat if any(v is not None for v in r.values())]  # {"data": null} -> no row
 
 
 # ---------------------------------------------------------------------------
