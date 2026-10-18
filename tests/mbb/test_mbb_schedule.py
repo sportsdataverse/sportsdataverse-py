@@ -25,7 +25,7 @@ def _season_route(monkeypatch, fail_day: str = "", fail=(500, "")):
     scoreboard (its ``leagues[0].calendar`` lists 148 game days), each captured day its real
     events, ``fail_day`` the ``fail`` answer, every other calendar day an empty slate."""
     calendar = _capture("scoreboard_mbb_dates_2024.json")
-    days = json.loads(_capture("scoreboard_mbb_2024_season_days.json"))
+    days = json.loads(_capture("mbb_season_days_2024.json"))
 
     def answer(url: str):
         day = url.split("dates=")[1].split("&")[0]

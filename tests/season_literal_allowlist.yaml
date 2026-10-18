@@ -81,7 +81,7 @@
   reason: 'college penalty-yardage sanity cap: 25 from 2014, 50 before (old spot-foul pass interference); no catalogue rule yet'
 - file: sportsdataverse/mbb/mbb_schedule.py
   scope: 'espn_mbb_calendar'
-  snippet: 'int(season) < 2002'
+  snippet: 'season < 2002'
   count: 1
   id: C-T3
   rule: mbb-2002-espn-pbp-coverage
@@ -490,7 +490,7 @@
   reason: 'ESPN play ids line up with GSIS ids only from 2014 (Shield-to-ESPN coverage study); no catalogue rule yet'
 - file: sportsdataverse/wbb/wbb_schedule.py
   scope: 'espn_wbb_calendar'
-  snippet: 'int(season) < 2002'
+  snippet: 'season < 2001'
   count: 1
   id: C-T3
-  reason: 'ESPN calendar floor (2002); wbb-2004-espn-pbp-coverage covers pbp, not the calendar'
+  reason: 'ESPN calendar floor (2001: ESPN serves the 2000-01 WBB calendar, #860); wbb-2004-espn-pbp-coverage covers pbp, not the calendar'
