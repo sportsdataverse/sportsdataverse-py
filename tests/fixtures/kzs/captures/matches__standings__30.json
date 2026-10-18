@@ -1,0 +1,370 @@
+{
+  "status": "OK",
+  "data": {
+    "competition": {
+      "id": 30,
+      "name": "1. SKL za ženske",
+      "phases": [],
+      "teams": [],
+      "socialMedias": []
+    },
+    "phases": [
+      {
+        "competitionPhase": {
+          "id": 5200,
+          "name": "1. del",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [
+          {
+            "teamId": 195,
+            "teamName": "Cinkarna Celje",
+            "clubCode": "CEL",
+            "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+            "team": {
+              "id": 195,
+              "clubCode": "CEL",
+              "name": "Cinkarna Celje"
+            },
+            "gamesPlayed": 14,
+            "won": 12,
+            "lost": 2,
+            "ptsPlus": 1139,
+            "ptsMinus": 714,
+            "homeWon": 6,
+            "homeLost": 1,
+            "awayWon": 6,
+            "awayLost": 1,
+            "points": 26,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 425
+          },
+          {
+            "teamId": 83,
+            "teamName": "Triglav",
+            "clubCode": "TRI",
+            "logoUuid": "06336d43-1ab2-4ba8-ac1c-02b29c859434",
+            "team": {
+              "id": 83,
+              "clubCode": "TRI",
+              "name": "Triglav"
+            },
+            "gamesPlayed": 14,
+            "won": 12,
+            "lost": 2,
+            "ptsPlus": 944,
+            "ptsMinus": 781,
+            "homeWon": 6,
+            "homeLost": 1,
+            "awayWon": 6,
+            "awayLost": 1,
+            "points": 26,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 163
+          },
+          {
+            "teamId": 118,
+            "teamName": "Derby Ježica",
+            "clubCode": "JEŽ",
+            "logoUuid": "4fb8f750-d9a0-4643-8243-00ab9cb4efd4",
+            "team": {
+              "id": 118,
+              "clubCode": "JEŽ",
+              "name": "Derby Ježica"
+            },
+            "gamesPlayed": 14,
+            "won": 11,
+            "lost": 3,
+            "ptsPlus": 990,
+            "ptsMinus": 775,
+            "homeWon": 7,
+            "homeLost": 0,
+            "awayWon": 4,
+            "awayLost": 3,
+            "points": 25,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 215
+          }
+        ],
+        "groups": []
+      },
+      {
+        "competitionPhase": {
+          "id": 5209,
+          "name": "2. del",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [
+          {
+            "teamId": 195,
+            "teamName": "Cinkarna Celje",
+            "clubCode": "CEL",
+            "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+            "team": {
+              "id": 195,
+              "clubCode": "CEL",
+              "name": "Cinkarna Celje"
+            },
+            "gamesPlayed": 14,
+            "won": 13,
+            "lost": 1,
+            "ptsPlus": 1241,
+            "ptsMinus": 712,
+            "homeWon": 7,
+            "homeLost": 0,
+            "awayWon": 6,
+            "awayLost": 1,
+            "points": 27,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 529
+          },
+          {
+            "teamId": 83,
+            "teamName": "Triglav",
+            "clubCode": "TRI",
+            "logoUuid": "06336d43-1ab2-4ba8-ac1c-02b29c859434",
+            "team": {
+              "id": 83,
+              "clubCode": "TRI",
+              "name": "Triglav"
+            },
+            "gamesPlayed": 14,
+            "won": 13,
+            "lost": 1,
+            "ptsPlus": 952,
+            "ptsMinus": 764,
+            "homeWon": 7,
+            "homeLost": 0,
+            "awayWon": 6,
+            "awayLost": 1,
+            "points": 27,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 188
+          },
+          {
+            "teamId": 118,
+            "teamName": "Derby Ježica",
+            "clubCode": "JEŽ",
+            "logoUuid": "4fb8f750-d9a0-4643-8243-00ab9cb4efd4",
+            "team": {
+              "id": 118,
+              "clubCode": "JEŽ",
+              "name": "Derby Ježica"
+            },
+            "gamesPlayed": 14,
+            "won": 9,
+            "lost": 5,
+            "ptsPlus": 854,
+            "ptsMinus": 784,
+            "homeWon": 5,
+            "homeLost": 2,
+            "awayWon": 4,
+            "awayLost": 3,
+            "points": 23,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 70
+          }
+        ],
+        "groups": []
+      },
+      {
+        "competitionPhase": {
+          "id": 5214,
+          "name": "3. del",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [],
+        "groups": [
+          {
+            "competitionPhaseGroup": {
+              "id": 4010,
+              "name": "Finale",
+              "teams": [],
+              "playAgainWithTransferred": false
+            },
+            "standings": [
+              {
+                "teamId": 195,
+                "teamName": "Cinkarna Celje",
+                "clubCode": "CEL",
+                "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+                "team": {
+                  "id": 195,
+                  "clubCode": "CEL",
+                  "name": "Cinkarna Celje"
+                },
+                "gamesPlayed": 5,
+                "won": 5,
+                "lost": 0,
+                "ptsPlus": 361,
+                "ptsMinus": 232,
+                "homeWon": 3,
+                "homeLost": 0,
+                "awayWon": 2,
+                "awayLost": 0,
+                "points": 10,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": 129
+              },
+              {
+                "teamId": 195,
+                "teamName": "Cinkarna Celje",
+                "clubCode": "CEL",
+                "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+                "team": {
+                  "id": 195,
+                  "clubCode": "CEL",
+                  "name": "Cinkarna Celje"
+                },
+                "gamesPlayed": 5,
+                "won": 5,
+                "lost": 0,
+                "ptsPlus": 361,
+                "ptsMinus": 232,
+                "homeWon": 3,
+                "homeLost": 0,
+                "awayWon": 2,
+                "awayLost": 0,
+                "points": 10,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": 129
+              },
+              {
+                "teamId": 83,
+                "teamName": "Triglav",
+                "clubCode": "TRI",
+                "logoUuid": "06336d43-1ab2-4ba8-ac1c-02b29c859434",
+                "team": {
+                  "id": 83,
+                  "clubCode": "TRI",
+                  "name": "Triglav"
+                },
+                "gamesPlayed": 6,
+                "won": 2,
+                "lost": 4,
+                "ptsPlus": 331,
+                "ptsMinus": 384,
+                "homeWon": 2,
+                "homeLost": 1,
+                "awayWon": 0,
+                "awayLost": 3,
+                "points": 8,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": -53
+              }
+            ]
+          },
+          {
+            "competitionPhaseGroup": {
+              "id": 4009,
+              "name": "Polfinale",
+              "teams": [],
+              "playAgainWithTransferred": false
+            },
+            "standings": [
+              {
+                "teamId": 195,
+                "teamName": "Cinkarna Celje",
+                "clubCode": "CEL",
+                "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+                "team": {
+                  "id": 195,
+                  "clubCode": "CEL",
+                  "name": "Cinkarna Celje"
+                },
+                "gamesPlayed": 5,
+                "won": 5,
+                "lost": 0,
+                "ptsPlus": 361,
+                "ptsMinus": 232,
+                "homeWon": 3,
+                "homeLost": 0,
+                "awayWon": 2,
+                "awayLost": 0,
+                "points": 10,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": 129
+              },
+              {
+                "teamId": 195,
+                "teamName": "Cinkarna Celje",
+                "clubCode": "CEL",
+                "logoUuid": "d83e0a7e-061e-489a-8819-cf3bd6aaf136",
+                "team": {
+                  "id": 195,
+                  "clubCode": "CEL",
+                  "name": "Cinkarna Celje"
+                },
+                "gamesPlayed": 5,
+                "won": 5,
+                "lost": 0,
+                "ptsPlus": 361,
+                "ptsMinus": 232,
+                "homeWon": 3,
+                "homeLost": 0,
+                "awayWon": 2,
+                "awayLost": 0,
+                "points": 10,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": 129
+              },
+              {
+                "teamId": 83,
+                "teamName": "Triglav",
+                "clubCode": "TRI",
+                "logoUuid": "06336d43-1ab2-4ba8-ac1c-02b29c859434",
+                "team": {
+                  "id": 83,
+                  "clubCode": "TRI",
+                  "name": "Triglav"
+                },
+                "gamesPlayed": 6,
+                "won": 2,
+                "lost": 4,
+                "ptsPlus": 331,
+                "ptsMinus": 384,
+                "homeWon": 2,
+                "homeLost": 1,
+                "awayWon": 0,
+                "awayLost": 3,
+                "points": 8,
+                "draws": 0,
+                "lostPoints": 0,
+                "ptsDifference": -53
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

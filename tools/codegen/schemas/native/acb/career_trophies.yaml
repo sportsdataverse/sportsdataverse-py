@@ -1,0 +1,15 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: times_champion
+  type: integer
+- description: ''
+  name: times_runner_up
+  type: integer
+kind: dataframe
+schema: acb_career_trophies

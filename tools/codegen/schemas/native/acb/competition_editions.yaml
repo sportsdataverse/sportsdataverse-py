@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season_start_year
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: n_rounds
+  type: integer
+- description: ''
+  name: n_weeks
+  type: integer
+kind: dataframe
+schema: acb_competition_editions

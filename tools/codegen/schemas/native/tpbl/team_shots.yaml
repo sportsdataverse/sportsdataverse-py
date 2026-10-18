@@ -1,0 +1,24 @@
+columns:
+- description: ''
+  name: division_id
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: rounds
+  type: character
+- description: ''
+  name: is_made
+  type: logical
+- description: ''
+  name: point_x
+  type: integer
+- description: ''
+  name: point_y
+  type: integer
+- description: ''
+  name: offense_basket
+  type: integer
+kind: dataframe
+schema: tpbl_team_shots

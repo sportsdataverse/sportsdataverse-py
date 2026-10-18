@@ -1,0 +1,307 @@
+{
+ "title": "Rangliste",
+ "description": null,
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2025-03-02T13:00:00.2893616+01:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2025",
+   "type": "Dropdown",
+   "alias": "Season"
+  },
+  {
+   "title": "Heim/Auswärts",
+   "entries": [
+    {
+     "name": "Heim/Auswärts",
+     "alias": "All"
+    },
+    {
+     "name": "Heim",
+     "alias": "Home"
+    },
+    {
+     "name": "Auswärts",
+     "alias": "Away"
+    }
+   ],
+   "selected": "All",
+   "type": "Dropdown",
+   "alias": "ContentType"
+  }
+ ],
+ "secondaryMenu": null,
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    6,
+    10,
+    12
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "PTS",
+   "description": "Punktetotal",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "points"
+  },
+  {
+   "name": "P/GP",
+   "description": "Punktetotal pro Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pointsQuotient"
+  },
+  {
+   "name": "W",
+   "description": "Siege nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonInTime"
+  },
+  {
+   "name": "OTW",
+   "description": "Siege nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonExtraTime"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonPenalty"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostPenalty"
+  },
+  {
+   "name": "OTL",
+   "description": "Niederlage nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostExtraTime"
+  },
+  {
+   "name": "L",
+   "description": "Niederlagen nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostInTime"
+  },
+  {
+   "name": "GF",
+   "description": "Tore geschossen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsFor"
+  },
+  {
+   "name": "GA",
+   "description": "Tore erhalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainst"
+  },
+  {
+   "name": "GDF",
+   "description": "Tordifferenz",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsDifference"
+  },
+  {
+   "name": "Streak",
+   "description": "Letzte Spiele",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "streak"
+  }
+ ],
+ "data": [
+  [
+   "1",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "97",
+   "1.865",
+   "25",
+   "6",
+   "3",
+   "3",
+   "1",
+   "14",
+   "153",
+   "128",
+   "25",
+   "W-W+L+W+W+L-W+L+L+L+"
+  ],
+  [
+   "2",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "93",
+   "1.788",
+   "22",
+   "7",
+   "4",
+   "2",
+   "3",
+   "14",
+   "156",
+   "121",
+   "35",
+   "L-L+W+L-W-L+W-L+L+W+"
+  ],
+  [
+   "3",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "91",
+   "1.750",
+   "24",
+   "3",
+   "0",
+   "4",
+   "9",
+   "12",
+   "165",
+   "139",
+   "26",
+   "W-W+L+W+W+L-W+W+L+W+"
+  ],
+  [
+   "4",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "88",
+   "1.692",
+   "25",
+   "4",
+   "1",
+   "0",
+   "3",
+   "19",
+   "173",
+   "136",
+   "37",
+   "L+W+L+W-W+L+W+L+L+W+"
+  ]
+ ],
+ "alias": "standing"
+}

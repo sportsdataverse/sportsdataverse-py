@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: org
+  type: character
+- description: ''
+  name: season_id
+  type: character
+- description: ''
+  name: rosetta_season_id
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: season_year
+  type: integer
+- description: ''
+  name: season_type
+  type: character
+- description: ''
+  name: start_date
+  type: character
+- description: ''
+  name: end_date
+  type: character
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: competition_age_group
+  type: character
+- description: ''
+  name: next_match_start_datetime
+  type: character
+- description: ''
+  name: season_end_year
+  type: integer
+kind: dataframe
+schema: nbl_rosetta_seasons_current

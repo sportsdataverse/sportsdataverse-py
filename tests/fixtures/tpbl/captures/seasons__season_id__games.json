@@ -1,0 +1,164 @@
+[
+ {
+  "id": 9,
+  "gohoops_id": 1245,
+  "division_id": 2,
+  "gohoops_division_id": 65,
+  "code": "1",
+  "home_team": {
+   "id": 3,
+   "gohoops_id": 941,
+   "gohoops_squad_id": 8210,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "福爾摩沙夢想家",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+    "alt_name": "dreamers"
+   },
+   "is_league": false,
+   "won_score": 88,
+   "lost_score": 74
+  },
+  "away_team": {
+   "id": 6,
+   "gohoops_id": 944,
+   "gohoops_squad_id": 8213,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "新北中信特攻",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dea.webp",
+    "alt_name": "dea"
+   },
+   "is_league": false,
+   "won_score": 74,
+   "lost_score": 88
+  },
+  "venue": "臺中洲際迷你蛋",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/7Lh1t30JWPk",
+   "visitors": "3000",
+   "live_stream_url": "https://youtube.com/live/j1FaxjbBrNQ?feature=share",
+   "judgement_report": "https://drive.google.com/file/d/1DylEOmcqOxzPksQm-HXkNlquN31bEu-T/view?usp=sharing",
+   "ticket_url": null
+  },
+  "game_date": "2024-10-19",
+  "game_day_of_week": "(六)",
+  "game_time": "14:30:00",
+  "gamed_at": "2024-10-19 14:30:00"
+ },
+ {
+  "id": 10,
+  "gohoops_id": 1246,
+  "division_id": 2,
+  "gohoops_division_id": 65,
+  "code": "2",
+  "home_team": {
+   "id": 2,
+   "gohoops_id": 940,
+   "gohoops_squad_id": 8209,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "高雄全家海神",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/aquas.webp",
+    "alt_name": "aquas"
+   },
+   "is_league": false,
+   "won_score": 78,
+   "lost_score": 88
+  },
+  "away_team": {
+   "id": 7,
+   "gohoops_id": 945,
+   "gohoops_squad_id": 8214,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "新北國王",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/kings.webp",
+    "alt_name": "kings"
+   },
+   "is_league": false,
+   "won_score": 88,
+   "lost_score": 78
+  },
+  "venue": "高雄巨蛋",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/WWj4q1O1W2Y",
+   "visitors": "8156",
+   "live_stream_url": "https://youtube.com/live/o1LkJkqLLs4?feature=share",
+   "judgement_report": "https://drive.google.com/file/d/1Grfpc8aERc61u7HrAalO-RKzyDMC3Ua7/view?usp=drive_link",
+   "ticket_url": null
+  },
+  "game_date": "2024-10-19",
+  "game_day_of_week": "(六)",
+  "game_time": "17:00:00",
+  "gamed_at": "2024-10-19 17:00:00"
+ },
+ {
+  "id": 11,
+  "gohoops_id": 1247,
+  "division_id": 2,
+  "gohoops_division_id": 65,
+  "code": "3",
+  "home_team": {
+   "id": 3,
+   "gohoops_id": 941,
+   "gohoops_squad_id": 8210,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "福爾摩沙夢想家",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/dreamers.webp",
+    "alt_name": "dreamers"
+   },
+   "is_league": false,
+   "won_score": 105,
+   "lost_score": 85
+  },
+  "away_team": {
+   "id": 8,
+   "gohoops_id": 946,
+   "gohoops_squad_id": 8215,
+   "gohoops_event_id": 319,
+   "gohoops_season_id": 101,
+   "name": "臺北台新戰神",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/mars.webp",
+    "alt_name": "mars"
+   },
+   "is_league": false,
+   "won_score": 85,
+   "lost_score": 105
+  },
+  "venue": "臺中洲際迷你蛋",
+  "status": "COMPLETED",
+  "is_live": false,
+  "round": 4,
+  "meta": {
+   "recap": "https://youtu.be/NHCtiHSXu0E",
+   "visitors": "3000",
+   "live_stream_url": "https://youtube.com/live/WWy37sBYN2Y?feature=share",
+   "judgement_report": "https://drive.google.com/file/d/19ZDvd_8VLVBbLCD2d9Xgv-3EGpgXT9lq/view?usp=sharing",
+   "ticket_url": null
+  },
+  "game_date": "2024-10-20",
+  "game_day_of_week": "(日)",
+  "game_time": "14:30:00",
+  "gamed_at": "2024-10-20 14:30:00"
+ }
+]

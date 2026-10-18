@@ -1,0 +1,439 @@
+{
+  "data": [
+    {
+      "id": 86,
+      "game_time": "2021-11-07 15:00:00",
+      "status": "finished",
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 85,
+          "competition_team": {
+            "id": 3,
+            "name": "Telenet Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Telenet Giants Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 16
+            },
+            {
+              "period_id": 2,
+              "score": 20
+            },
+            {
+              "period_id": 3,
+              "score": 13
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 88,
+          "competition_team": {
+            "id": 2,
+            "name": "Filou Oostende",
+            "short_name": "OOS",
+            "ticket_url": "https://bcoostende.be/tickets/",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Filou Oostende",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/j/Q/jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/j/Q/small-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png",
+                "medium": "https://bnxt.sportpress.info/storage/j/Q/medium-jQWGBEO5UFG33Yp2e22Y4kV9g1663600585.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 14
+            },
+            {
+              "period_id": 2,
+              "score": 23
+            },
+            {
+              "period_id": 3,
+              "score": 18
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Extra1"
+      },
+      "round": null,
+      "phase": {
+        "id": 6,
+        "name": "Domestic Belgium",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "arena": {
+        "name": "Lotto Arena"
+      },
+      "referees": [],
+      "total": {
+        "minute": 225,
+        "starter": true,
+        "foul": 24,
+        "defensive_foul": 19,
+        "dunk_made": 0,
+        "dunk_all": 0,
+        "dunk_percent": 0,
+        "two_point_made": 19,
+        "two_point_all": 46,
+        "two_point_percent": 41.3,
+        "three_point_made": 11,
+        "three_point_all": 33,
+        "three_point_percent": 33.33,
+        "throw_made": 30,
+        "throw_all": 79,
+        "throw_percent": 37.97,
+        "free_throw_made": 14,
+        "free_throw_all": 19,
+        "free_throw_percent": 73.68,
+        "offensive_rebound": 14,
+        "defensive_rebound": 26,
+        "total_rebound": 40,
+        "block": 0,
+        "block_against": 3,
+        "turnover": 9,
+        "steal": 7,
+        "assist": 19,
+        "points": 85,
+        "value": 107,
+        "plusminus": -11
+      }
+    },
+    {
+      "id": 107,
+      "game_time": "2021-11-21 15:00:00",
+      "status": "finished",
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 90,
+          "competition_team": {
+            "id": 3,
+            "name": "Telenet Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Telenet Giants Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 19
+            },
+            {
+              "period_id": 2,
+              "score": 17
+            },
+            {
+              "period_id": 3,
+              "score": 28
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 81,
+          "competition_team": {
+            "id": 1,
+            "name": "Spirou Basket",
+            "short_name": "CHA",
+            "ticket_url": "https://shop.utick.be/?pos=SPIROUBASKET&module=ACTIVITYSERIEDETAILS&s=966F953A-5AB6-F8A5-8065-22C274230F12",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Spirou Basket",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/0/I/0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/0/I/small-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png",
+                "medium": "https://bnxt.sportpress.info/storage/0/I/medium-0ID1pCdRNVzBQKELTf2dYrbMf1663600528.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 15
+            },
+            {
+              "period_id": 2,
+              "score": 28
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Extra1"
+      },
+      "round": null,
+      "phase": {
+        "id": 6,
+        "name": "Domestic Belgium",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "arena": {
+        "name": "Lotto Arena"
+      },
+      "referees": [],
+      "total": {
+        "minute": 225,
+        "starter": true,
+        "foul": 20,
+        "defensive_foul": 21,
+        "dunk_made": 0,
+        "dunk_all": 0,
+        "dunk_percent": 0,
+        "two_point_made": 21,
+        "two_point_all": 42,
+        "two_point_percent": 50,
+        "three_point_made": 11,
+        "three_point_all": 22,
+        "three_point_percent": 50,
+        "throw_made": 32,
+        "throw_all": 64,
+        "throw_percent": 50,
+        "free_throw_made": 15,
+        "free_throw_all": 19,
+        "free_throw_percent": 78.95,
+        "offensive_rebound": 6,
+        "defensive_rebound": 25,
+        "total_rebound": 31,
+        "block": 2,
+        "block_against": 4,
+        "turnover": 16,
+        "steal": 6,
+        "assist": 20,
+        "points": 90,
+        "value": 118,
+        "plusminus": 14
+      }
+    },
+    {
+      "id": 234,
+      "game_time": "2022-03-27 15:00:00",
+      "status": "finished",
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 93,
+          "competition_team": {
+            "id": 3,
+            "name": "Telenet Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Telenet Giants Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+                "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 24
+            },
+            {
+              "period_id": 2,
+              "score": 20
+            },
+            {
+              "period_id": 3,
+              "score": 14
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 95,
+          "competition_team": {
+            "id": 7,
+            "name": "Donar Groningen",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/k/f/kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/k/f/small-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png",
+                "medium": "https://bnxt.sportpress.info/storage/k/f/medium-kfHmPILiBLyYTbPjcr7Ffi6vm1663601130.png"
+              }
+            },
+            "created_at": "2022-08-10"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 15
+            },
+            {
+              "period_id": 2,
+              "score": 18
+            },
+            {
+              "period_id": 3,
+              "score": 20
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Extra2"
+      },
+      "round": null,
+      "phase": {
+        "id": 7,
+        "name": "ELITE Gold",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "arena": {
+        "name": "Lotto Arena"
+      },
+      "referees": [],
+      "total": {
+        "minute": 250,
+        "starter": true,
+        "foul": 23,
+        "defensive_foul": 27,
+        "dunk_made": 0,
+        "dunk_all": 0,
+        "dunk_percent": 0,
+        "two_point_made": 24,
+        "two_point_all": 42,
+        "two_point_percent": 57.14,
+        "three_point_made": 8,
+        "three_point_all": 32,
+        "three_point_percent": 25,
+        "throw_made": 32,
+        "throw_all": 74,
+        "throw_percent": 43.24,
+        "free_throw_made": 21,
+        "free_throw_all": 33,
+        "free_throw_percent": 63.64,
+        "offensive_rebound": 9,
+        "defensive_rebound": 32,
+        "total_rebound": 41,
+        "block": 5,
+        "block_against": 3,
+        "turnover": 18,
+        "steal": 8,
+        "assist": 15,
+        "points": 93,
+        "value": 117,
+        "plusminus": -5
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: filter
+  type: character
+- description: ''
+  name: filter_name
+  type: character
+- description: ''
+  name: value
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: def
+  type: integer
+- description: ''
+  name: active
+  type: integer
+kind: dataframe
+schema: khl_stat_filters

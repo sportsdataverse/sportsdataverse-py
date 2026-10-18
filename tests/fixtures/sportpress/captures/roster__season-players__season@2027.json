@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "id": 11297,
+      "competition_team_id": 549,
+      "jersey": "3",
+      "weight": 79,
+      "height": 192,
+      "active": true,
+      "player_position": {
+        "id": 1,
+        "name": "point_guard"
+      },
+      "player": {
+        "id": 74,
+        "birthdate": "1994-07-13",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Boy",
+        "last_name": "Van Vliet",
+        "nationality_code": "NED",
+        "profile_image": {
+          "name": "Van Vliet",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/t/G/tG1kPlEOpHkH21NpcC2CeOJBs1789375915.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/t/G/small-tG1kPlEOpHkH21NpcC2CeOJBs1789375915.png",
+            "medium": "https://bnxt.sportpress.info/storage/t/G/medium-tG1kPlEOpHkH21NpcC2CeOJBs1789375915.png"
+          }
+        },
+        "created_at": "2022-08-10"
+      },
+      "created_at": "2026-09-04"
+    },
+    {
+      "id": 11301,
+      "competition_team_id": 549,
+      "jersey": "9",
+      "weight": 77,
+      "height": 196,
+      "active": true,
+      "player_position": {
+        "id": 2,
+        "name": "shooting_guard"
+      },
+      "player": {
+        "id": 4222,
+        "birthdate": "1998-03-10",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Devin",
+        "last_name": "Whitfield",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Whitfield",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/F/x/FxWp3m3ewBOjDh0hwsGmm3M4h1789376970.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/F/x/small-FxWp3m3ewBOjDh0hwsGmm3M4h1789376970.png",
+            "medium": "https://bnxt.sportpress.info/storage/F/x/medium-FxWp3m3ewBOjDh0hwsGmm3M4h1789376970.png"
+          }
+        },
+        "created_at": "2024-08-28"
+      },
+      "created_at": "2026-09-04"
+    },
+    {
+      "id": 11303,
+      "competition_team_id": 549,
+      "jersey": "22",
+      "weight": 102,
+      "height": 197,
+      "active": true,
+      "player_position": {
+        "id": 3,
+        "name": "small_forward"
+      },
+      "player": {
+        "id": 5619,
+        "birthdate": "2001-10-11",
+        "facebook": null,
+        "twitter": null,
+        "instagram": null,
+        "first_name": "Isaiah",
+        "last_name": "Johnson",
+        "nationality_code": "USA",
+        "profile_image": {
+          "name": "Johnson",
+          "description": null,
+          "alt": null,
+          "keywords": null,
+          "public_url": "https://bnxt.sportpress.info/storage/d/q/dqa6Uuw8mF0hxi2Z6JpfEawCO1789374926.png",
+          "thumbnails": {
+            "small": "https://bnxt.sportpress.info/storage/d/q/small-dqa6Uuw8mF0hxi2Z6JpfEawCO1789374926.png",
+            "medium": "https://bnxt.sportpress.info/storage/d/q/medium-dqa6Uuw8mF0hxi2Z6JpfEawCO1789374926.png"
+          }
+        },
+        "created_at": "2026-09-04"
+      },
+      "created_at": "2026-09-04"
+    }
+  ]
+}

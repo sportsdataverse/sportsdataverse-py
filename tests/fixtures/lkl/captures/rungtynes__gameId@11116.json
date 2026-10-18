@@ -1,0 +1,115 @@
+{
+  "game_id": 11116,
+  "game_status": "Pasibaigė",
+  "referees": "Gytis Vilius, Juozas Barkauskas, Gintaras Vitkauskas",
+  "has_actions": true,
+  "is_streaming": false,
+  "teams_info": {
+    "home": {
+      "id": 6,
+      "name": "Rytas",
+      "short_name": "RYT",
+      "slug": "rytas",
+      "logo": "http://lkl.lt/media/teams/svg/9HeCOlpWX1ZZmvNBSKRV9od4akkVpxGhqUJANCwR.svg",
+      "winner": false,
+      "coach": "Giedrius Žibėnas",
+      "assistant_coach": "Georgios Dedas"
+    },
+    "away": {
+      "id": 5,
+      "name": "Neptūnas",
+      "short_name": "NEP",
+      "slug": "neptunas",
+      "logo": "http://lkl.lt/media/teams/svg/GKanfxqGpxv115qVzaXi9R0FyY0I8A8agBklYBx4.svg",
+      "winner": true,
+      "coach": "Georgios Vovoras",
+      "assistant_coach": "Vidas Ginevičius"
+    }
+  },
+  "main_videos": {
+    "highlightsVideo": {
+      "label": "Rungtynių apžvalga",
+      "title": "„Betsafe–LKL“ rungtynių apžvalga: „Rytas“ - „Neptūnas“ [2024-09-21]",
+      "id": "gn_VSgrlmjQ",
+      "thumbnail": "/media/videos/470x304/f1e7755c9b98404cb08b79791ac7686b.jpg"
+    },
+    "commentsVideo": {
+      "label": "Trenerių komentarai",
+      "title": "G. Vovoras: „Desure'as savo metimais įpūtė pasitikėjimo visai komandai“",
+      "id": "kCkNCUcANfU",
+      "thumbnail": "/media/videos/470x304/4559633a2335b1b2957db772e553b310.jpg"
+    }
+  },
+  "game_info": {
+    "time": "2024  m. Rugsėjo 21 d., 19:00",
+    "arena": "Jeep arena",
+    "attendance": "2259 žiūrovai"
+  },
+  "players": {
+    "home": [
+      {
+        "id": 293,
+        "name": "Martynas Paliukėnas",
+        "jersey": "77",
+        "slug": "martynas-paliukenas"
+      },
+      {
+        "id": 9,
+        "name": "Gytis Masiulis",
+        "jersey": "21",
+        "slug": "gytis-masiulis"
+      },
+      {
+        "id": 54,
+        "name": "Margiris Normantas",
+        "jersey": "2",
+        "slug": "margiris-normantas"
+      }
+    ],
+    "away": [
+      {
+        "id": 45,
+        "name": "Deividas Gailius",
+        "jersey": "13",
+        "slug": "deividas-gailius"
+      },
+      {
+        "id": 98,
+        "name": "Žygimantas Janavičius",
+        "jersey": "4",
+        "slug": "zygimantas-janavicius"
+      },
+      {
+        "id": 32,
+        "name": "Mindaugas Girdžiūnas",
+        "jersey": "8",
+        "slug": "mindaugas-girdziunas"
+      }
+    ]
+  },
+  "players_ids": {
+    "home": [
+      293,
+      9,
+      54
+    ],
+    "away": [
+      45,
+      98,
+      32
+    ],
+    "all": [
+      293,
+      9,
+      54
+    ]
+  },
+  "quarters": [
+    1,
+    2,
+    3
+  ],
+  "start_date": "2024-09-21",
+  "start_time": "19:00",
+  "attendance_count": 2259
+}

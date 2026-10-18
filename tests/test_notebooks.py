@@ -106,6 +106,49 @@ def test_every_reference_link_resolves(nb):
     assert not broken, f"{nb.stem} links to pages that do not exist: {sorted(set(broken))}"
 
 
+# Wrong-but-existing pages found when this test landed, outside #801's scope: fixing one flips it to XPASS.
+_PAGE_FORM_OPEN = {
+    "08_wnba_intro": "additional.md#play-by-play-schedule--rosters: that section heading no longer exists",
+    "13_soccer_intro": "espn_soccer_player_info is on site.md, espn_soccer_game_probabilities on core/game.md, "
+    "espn_soccer_player_stats on web.md",
+}
+
+
+@pytest.mark.parametrize(
+    "nb",
+    [
+        pytest.param(nb, marks=pytest.mark.xfail(strict=True, raises=AssertionError, reason=_PAGE_FORM_OPEN[nb.stem]))
+        if nb.stem in _PAGE_FORM_OPEN
+        else nb
+        for nb in NOTEBOOKS
+    ],
+    ids=lambda p: p.stem,
+)
+def test_every_page_form_link_names_the_page_that_documents_it(nb):
+    """A page that exists is not enough: the function must be documented on it.
+
+    `reference/<page>.md#fn` is right when `fn` is in that page's family map (the relinker expands it)
+    or is a heading on the page itself. `06_mbb_intro` sent `espn_mbb_conferences` and
+    `espn_mbb_team_schedule` to `additional.md`; they live on `site.md`, and the relinker cannot heal that.
+    """
+    from tools.codegen import generate
+
+    families = json.loads((ROOT / "docs" / "static" / "anchor-map.json").read_text(encoding="utf-8"))
+    rendered = DOCS / "tutorials" / f"{nb.stem}.md"
+    bodies = [_src(nb)] + ([rendered.read_text(encoding="utf-8")] if rendered.exists() else [])
+    wrong = []
+    for body in bodies:
+        for lg, page, anchor in re.findall(
+            r"\]\(\.\./([a-z0-9_]+)/reference/([a-z0-9_-]+)\.md#([A-Za-z0-9_-]+)\)", body
+        ):
+            target = DOCS / lg / "reference" / f"{page}.md"
+            if anchor in families.get(f"/docs/{lg}/reference/{page}", {}) or not target.exists():
+                continue  # a family link the relinker expands; a missing page is the test above's
+            if anchor not in {i for _off, i in generate._heading_ids(target.read_text(encoding="utf-8"))}:
+                wrong.append(f"../{lg}/reference/{page}.md#{anchor}")
+    assert not wrong, f"{nb.stem} links to pages that do not document the function: {sorted(set(wrong))}"
+
+
 def test_rendered_tutorials_have_no_broken_family_links():
     """The committed tutorial pages must match the CURRENT family slugs.
 

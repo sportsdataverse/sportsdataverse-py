@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: league
+  type: character
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_team_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: is_championship_winner
+  type: logical
+- description: ''
+  name: is_cup_winner
+  type: logical
+kind: dataframe
+schema: scb_team_seasons

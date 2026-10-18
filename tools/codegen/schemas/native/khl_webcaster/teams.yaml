@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: id
+  type: integer
+- description: ''
+  name: khl_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: location
+  type: character
+- description: ''
+  name: image
+  type: character
+- description: ''
+  name: division
+  type: character
+- description: ''
+  name: division_key
+  type: character
+- description: ''
+  name: conference
+  type: character
+- description: ''
+  name: conference_key
+  type: character
+kind: dataframe
+schema: khl_webcaster_teams

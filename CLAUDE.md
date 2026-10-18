@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (1,765 fixture files across 105 directories)](#test-fixtures-1765-fixture-files-across-105-directories)
+    - [Test fixtures (3,365 fixture files across 142 directories)](#test-fixtures-3365-fixture-files-across-142-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -192,7 +192,10 @@ sportsdataverse/
   odds/       # Odds & betting lines
   pwhl/       # PWHL (HockeyTech flagship — richer surface, top-level)
   hockeytech/ # HockeyTech core (_client/_leagues/_family/_parsers/_analytics)
-  hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN)
+  hockey/     # 20 HockeyTech league families + college hockey (mch/wch, ESPN) + SIHF (sihf, Swiss)
+              #   + European leagues (del_, icehl, eihl, metal, elh, liiga, shl, ha, nl, magnus, khl, vhl)
+  basketball/ # international basketball families (fiba_hub, genius, atrium, nbl_au, feb, scb, lba, acb, ibba, wjbl, vtb, kbl,
+              #   bleague, kzs, lkl, tbf, cebl, aba, easl, bnxt, tpbl, plg, cba, dbl) + the shared basketball_runtime
   baseball/   # College baseball + softball (ESPN + stats.ncaa.org pbp parsers)
   soccer/     # ESPN soccer (league-parameterized wrappers)
   cricket/    # ESPN cricket + bundled win-probability models
@@ -365,10 +368,10 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (1,765 fixture files across 105 directories)
+### Test fixtures (3,365 fixture files across 142 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 103 directories
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 142 directories
 in all). Each directory has a
 `README.md` documenting provenance (URL + capture date). See
 each fixture directory's own `README.md` for provenance (URL + capture date).
@@ -771,6 +774,25 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - Full API reference + the live/dead + schema accounting: `sdv-internal-refs/
   hockeytech/` (`README.md`, `SCHEMAS.md`, `ACCOUNTING.md`, `hockeytech.openapi.yaml`
   mirrored to `sdv-swagger/`).
+- **SIHF lives beside them, not among them.** `sportsdataverse.hockey.sihf` (Swiss leagues,
+  `data.sihf.ch`) is a codegen flat-API family (`sihf_api_web`), not a `LEAGUES` entry.
+  Codegen nests it through `generate._NESTED_HOMES`, because `leagues.yaml` (ESPN) has no
+  `sihf` and it never had a top-level `_MOVED` alias. `sihf_standings` always sends
+  `ContentType` (`venue="All"`): without it SIHF answers the away-games table.
+- **The European leagues nest the same way** (`generate._EURO_HOCKEY_HOMES` -> `_NESTED_HOMES`):
+  `sportsdataverse.hockey.<lg>` for `icehl`, `eihl`, `metal`, `elh`, `liiga`, `shl`, `ha`, `nl`,
+  `magnus`, `khl`, `vhl`. DEL's docs prefix is `del` but its package is `hockey.del_`: `del` is a
+  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime spaces
+  requests at least 1 s apart through `hockey/euro_hockey_runtime.py`, and takes the season as the
+  END year, mapping it to the provider's key at the boundary.
+- **The international basketball families nest the same way** (`generate._BASKETBALL_HOMES` ->
+  `_NESTED_HOMES`): `sportsdataverse.basketball.<home>`. `basketball/` is a generated container (like
+  `hockey/`), so its `__init__.py` is never hand-edited. A home is a short provider-family name, not
+  always a league: `genius` and `atrium` serve many competitions, `scb` serves BBL and DBBL, `bnxt` is the
+  Sportpress family, `dbl` the Sportality one, `plg` the P. LEAGUE+ pair. Requests are spaced at least 1 s
+  through `basketball/basketball_runtime.py` (a throttled `SESSION`, plus an optional proxy read from a named
+  environment variable, `GENIUS_PROXY` / `CBA_PROXY`, never logged); the season is the END year at the
+  public API and each runtime maps it to the provider's key.
 
 ### MBB / WBB / CFB / college baseball — stats.ncaa.org families (0.0.72+)
 
@@ -1300,8 +1322,16 @@ NHL APIs (`nhl_api_web`, `nhl_edge`, `nhl_stats_rest`, `nhl_records`), `nba_stat
 RealGM, public model datasets (DARKO / EPM / LEBRON), On3 and 247Sports (`on3`,
 `sports247`), `asa`, `mls_api`, `nwsl_api`, `fotmob`, `uefa`, `fifa`, kloppy open
 event data, Football-Data.co.uk (`football_data`), OpenLigaDB (`openligadb`),
-TheSportsDB (`thesportsdb`), `euroleague`, Jolpica (`f1`), `cbs_napi`,
-`yahoo_shangrila`, `fox_api`, HockeyTech, stats.ncaa.org, The Odds API, and the
+TheSportsDB (`thesportsdb`), `euroleague`, SIHF (`sihf`), Jolpica (`f1`), `cbs_napi`,
+`yahoo_shangrila`, `fox_api`, HockeyTech, the European hockey leagues (the eSports
+hokejovyzapis S3 feeds `del_esports` / `icehl_esports` / `eihl_esports` / `metal_esports`,
+hokej.cz (`elh`), Liiga (`liiga`), SHL (`shl`), HockeyAllsvenskan (`ha`), National League
+(`nationalleague`), Ligue Magnus (`magnus`), KHL (`khl_rest`, `khl_webcaster`) and VHL (`vhl`)), the international
+basketball leagues (FIBA `fiba_gdap` / `fiba_gamepage`, Genius Sports LiveStats (`genius`), Sportradar Atrium (`atrium`),
+NBL Australia (`nbl_rosetta`), FEB (`feb`), BBL and DBBL (`scb`), Lega Basket (`legabasket`), ACB (`acb`), IBBA (`ibba`,
+`ibba_segev`), W League (`wjbl`), VTB (`vtb_infobasket`, `vtb_league`), KBL (`kbl`), B.LEAGUE (`bleague`), KZS (`kzs`),
+LKL (`lkl`), TBF (`tbf`), CEBL (`cebl`), ABA League (`aba`), EASL (`easl`), BNXT (`sportpress`), TPBL (`tpbl`), P. LEAGUE+
+(`pleague`, `pleague_preciser`), CBA (`cba`) and Basketligaen (`sportality`)), stats.ncaa.org, The Odds API, and the
 prediction markets Polymarket (`polymarket`) and Kalshi (`kalshi`). ESPN's content API
 (`espn_content`) files under ESPN.
 
@@ -1337,7 +1367,7 @@ The parts worth repeating here:
 - **Schema sources are four shapes**: `schemas/<name>.yaml`,
   `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/` and
   `schemas/autodoc/<league>/`.
-- **`FLAT_APIS` has 36 families**, not three.
+- **`FLAT_APIS` has 78 families**, not three.
 - **The documented leagues come from `docs/src/data/leagues.json`**, written by
   `render_leagues_json()`; `docs/sidebars.ts` reads that file and hard-codes nothing.
 - **Returns-table descriptions go in `manual_column_descriptions.yaml`**, never in

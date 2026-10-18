@@ -69,6 +69,11 @@ class Endpoint:
     # that dict INSTEAD of ``example_args`` (not merged), so a league that ignores a
     # default example param (football and ``date``) can swap in ones it honours.
     league_example_args: Dict[str, Dict[str, object]] = field(default_factory=dict)
+    # HTTP method the family's getter sends (``get`` | ``post``). Docs only: the
+    # rendered call is the same ``_get(url, params=...)`` either way, and a POST
+    # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
+    # the docstring say ``POST`` and call the arguments body fields.
+    method: str = "get"
 
 
 @dataclass(frozen=True)
@@ -118,6 +123,10 @@ class FlatApi:
     # ``columns=[...]`` (and the module carries them as ``_PARSER_COLUMNS``), so an empty
     # payload parses to a zero-row frame WITH the documented schema (f1).
     parser_columns: bool = False
+    # Prefix of the ``schema:`` key of this family's native returns-schemas, which is what
+    # manual_column_descriptions.yaml is keyed by. Empty = the bare endpoint short; set it when a
+    # bare short already names another family's descriptions (sihf: ``standings`` -> ``sihf_standings``).
+    schema_prefix: str = ""
 
     @property
     def prefix(self) -> str:
@@ -304,7 +313,10 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         fixed_params=dict(e.get("fixed_params") or {}),
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
+        method=str(e.get("method") or "get").lower(),
     )
+    if ep.method not in ("get", "post"):
+        raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")
@@ -391,4 +403,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         raw_types=list(raw.get("raw_types") or ["Dict"]),
         docstring=dict(raw.get("docstring") or {}),
         parser_columns=bool(raw.get("parser_columns", False)),
+        schema_prefix=str(raw.get("schema_prefix") or ""),
     )

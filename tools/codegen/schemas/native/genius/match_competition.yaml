@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: comp_id
+  type: integer
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: org_label
+  type: character
+- description: ''
+  name: og_description
+  type: character
+- description: ''
+  name: org
+  type: character
+kind: dataframe
+schema: genius_match_competition
