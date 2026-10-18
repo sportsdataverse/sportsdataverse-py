@@ -400,6 +400,13 @@ def parse_elh_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.elh import elh_pbp
             pbp = elh_pbp(season=2027, match_id=2928321)
             pbp.filter(pl.col("event_type") == "goal")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_pbp` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_latest` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = [_pbp_row(c) for c in _comments(raw)]
     return _frame(_sorted(rows), _PBP, return_as_pandas)
@@ -428,6 +435,12 @@ def parse_elh_pbp_goals(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.elh import elh_pbp_goals
             on_ice = elh_pbp_goals(season=2027, match_id=2928321)
             on_ice.group_by("on_ice_team_code").len()
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_goals` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     out: List[Dict[str, Any]] = []
     for entry in _sorted([dict(_pbp_row(c), _entry=c) for c in _comments(raw)]):
@@ -489,6 +502,12 @@ def parse_elh_pbp_mobile(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
             from sportsdataverse.hockey.elh import elh_pbp_mobile
             text = elh_pbp_mobile(season=2027, match_id=2928321)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_mobile` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     events = _dict(raw).get("commentEvents")
     rows = [
@@ -511,10 +530,11 @@ def parse_elh_shots(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """One row per shot attempt (``visualization/shots/{id}.json``) with rink coordinates.
 
     Ids are HOKEJ.CZ ids (``hokejcz_player_id``, ``hokejcz_team_id``), not the onlajny ids of
-    :func:`parse_elh_pbp`. ``coordinate_x`` runs along the rink LENGTH (goal to goal),
-    centred at 0 and normalised so the home team shoots at +x and the away team at -x;
-    ``coordinate_y`` runs across the WIDTH; both are about -100..100. That scaling and
-    orientation are inferred from the data; the provider does not document them. The provider's
+    :func:`parse_elh_pbp`. ``coordinate_x`` runs along the rink LENGTH (goal to goal), centred
+    at 0, about 1 unit = 1 ft with the goal lines near +-89; the home team shoots at +x and the
+    away team at -x in every period. ``coordinate_y`` runs across the WIDTH, normalised so +-100
+    are the boards (1 unit is about 0.425 ft); which board is +y is not verified. Scale and
+    orientation are measured on the committed fixtures; the provider does not document them. The provider's
     ``match_shot_resutl_id`` (sic) is kept and aliased ``shot_result_id``: ``4`` = goal
     (``is_goal``); ``1`` / ``2`` / ``3`` / ``5`` are unknown. ``time`` is seconds from the
     start of the game, EXCEPT in 2016-17, where it is only the period's start offset
@@ -535,6 +555,12 @@ def parse_elh_shots(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.elh import elh_shots
             shots = elh_shots(match_id=2928321)
             shots.filter(pl.col("is_goal") == True)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_shots` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     match = _dict(_dict(raw).get("match"))
     home_id, away_id = _id(match.get("home_id")), _id(match.get("visitor_id"))
@@ -601,6 +627,12 @@ def parse_elh_events(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.elh import elh_events
             minutes = elh_events(match_id=2928321)
             minutes.filter(pl.col("minute") == 60)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_events` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _dict(raw)
     rows = []
@@ -665,6 +697,12 @@ def parse_elh_scoreboard(
             from sportsdataverse.hockey.elh import elh_scoreboard
             games = elh_scoreboard(date="2026-10-11")
             games.select("hokejcz_game_id", "onlajny_game_id")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_scoreboard` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = []
     for key, league in _dict(raw).items():
@@ -743,6 +781,12 @@ def parse_elh_game_ids(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
             from sportsdataverse.hockey.elh import elh_list_objects
             page = elh_list_objects(prefix="match/2026/full/")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_list_objects` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     pages: Iterable[Any] = raw if isinstance(raw, list) else [raw]
     rows = []

@@ -55,7 +55,7 @@ Shot-zone profile of the two teams of a game. NOT game data: the teams' current 
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list?scheduleId=100105799](https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -134,7 +134,7 @@ Four-factors table of the two teams of a game. NOT game data: the teams' previou
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/teams/schedule-four-elements`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/teams/schedule-four-elements?scheduleId=100105799](https://data-server.cbaleague.com/api/teams/schedule-four-elements?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/schedule-four-elements' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

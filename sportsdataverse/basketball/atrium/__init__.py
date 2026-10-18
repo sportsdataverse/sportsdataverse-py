@@ -32,4 +32,8 @@ from sportsdataverse.basketball.atrium.atrium import *  # noqa: F401,F403
 from sportsdataverse.basketball.atrium.atrium_parsers import *  # noqa: F401,F403
 from sportsdataverse.basketball.atrium.atrium_runtime import *  # noqa: F401,F403
 
-__all__ = [*_api.__all__, *_parsers.__all__, *_runtime.__all__]
+# The per-competition families (lnb_*, lnbp_*, nbl1_*, ...), minted from the competition registry.
+from sportsdataverse.basketball.atrium import atrium_competitions_runtime as _competitions
+from sportsdataverse.basketball.atrium.atrium_competitions_runtime import *  # noqa: F401,F403
+
+__all__ = [*_api.__all__, *_parsers.__all__, *_runtime.__all__, *_competitions.__all__]
