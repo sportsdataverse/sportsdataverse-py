@@ -217,6 +217,56 @@ html[data-theme='light'] .navbar__title {
   border-top: none;
 }
 
+/*
+ * Laptop widths, from Docusaurus's 996px drawer breakpoint to 1200px. Above, the navbar has room; below,
+ * the drawer takes over. In this band the 640px mega-menu, hung from a toggle in the left half, ran past the
+ * right edge, and a hidden Docusaurus dropdown still takes layout space, so every page scrolled sideways. The
+ * crowded bar also cut the site title to an ellipsis and wrapped "SDV" under its caret.
+ * The menu is pinned to the viewport's right edge; while it is open a transparent strip, under the menu, spans
+ * the navbar's lower edge and the first rows so the pointer never crosses a gap that closes it. The range syntax
+ * (996px < width) leaves no sub-pixel gap with Docusaurus's own (max-width: 996px).
+ */
+@media (996px < width < 1200px) {
+  .navbar__brand,
+  .navbar__title {
+    flex-shrink: 0;
+  }
+  .navbar__item {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+  .navbar__link,
+  .navbar__title {
+    white-space: nowrap;
+  }
+  .dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu {
+    position: fixed;
+    top: calc(var(--ifm-navbar-height) - 8px);
+    right: 1rem;
+    left: auto;
+    z-index: 2;
+  }
+  .dropdown:has(> .sdv-packages-dropdown):is(:hover, .dropdown--show)::after {
+    content: "";
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: calc(var(--ifm-navbar-height) - 26px);
+    height: 48px;
+  }
+}
+
+@media (996px < width < 1080px) {
+  .navbar__item {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
+  .navbar__items .navbar__link {
+    font-size: 0.9rem;
+  }
+}
+
 /* ---- footer: the same navy, a hairline where it meets a navy page ---- */
 .footer--dark {
   --ifm-footer-background-color: var(--sdv-navy);
