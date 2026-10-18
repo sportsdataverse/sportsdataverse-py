@@ -150,7 +150,8 @@ def ncaa_wbb_play_by_play(
     """Scrape many WBB games' play-by-play (wbigballR ``get_play_by_play``, era-aware).
 
     Same driver as :func:`sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-    (drop missing ids, shared fetcher session, one retry per empty scrape) with
+    (drop missing ids, shared fetcher session, one retry per empty or failed scrape
+    except a page the format guard rejected) with
     the WBB period model for each game's era bound.
 
     Args:
@@ -167,6 +168,11 @@ def ncaa_wbb_play_by_play(
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Warns:
+        UnsupportedPageFormatWarning: Once per game whose page is in a layout
+            the parser does not read (the 2018 format); that game is not
+            re-fetched. Escalated to an error, it propagates instead.
 
     Example:
         Quick start::

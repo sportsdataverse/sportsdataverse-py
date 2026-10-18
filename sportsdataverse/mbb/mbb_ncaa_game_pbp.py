@@ -1339,8 +1339,9 @@ def ncaa_mbb_play_by_play(
     """Scrape many MBB games' play-by-play (bigballR ``get_play_by_play``).
 
     Ports ``bigballR/R/all_functions.R:1857-1897``: drops missing ids, shares
-    one fetcher session across games, retries each empty/failed game once,
-    row-binds the survivors, and logs the removed ids.
+    one fetcher session across games, retries each empty/failed game once
+    (except a page the format guard rejected: its layout cannot change on a
+    re-fetch), row-binds the survivors, and logs the removed ids.
 
     Args:
         game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
@@ -1353,6 +1354,11 @@ def ncaa_mbb_play_by_play(
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Warns:
+        UnsupportedPageFormatWarning: Once per game whose page is in a layout
+            the parser does not read (the 2018 format); that game is not
+            re-fetched. Escalated to an error, it propagates instead.
 
     Example:
         Quick start::

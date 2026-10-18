@@ -294,7 +294,8 @@ df = ncaa_wbb_game_pbp("1613299", season=2015)
 Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware).
 
 Same driver as `sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-(drop missing ids, shared fetcher session, one retry per empty scrape) with
+(drop missing ids, shared fetcher session, one retry per empty or failed scrape
+except a page the format guard rejected) with
 the WBB period model for each game's era bound.
 
 **Parameters**
