@@ -176,8 +176,10 @@ jobs:
     # Per-row timings are printed. Every row runs on every PR, split round-robin into the matrix's
     # shards (`run_mutants.py --shard I/N`, I/N taken from strategy.job-index/job-total; a shard that
     # selects no rows fails; tests/tools/test_run_mutants.py asserts the shards partition the
-    # registry). Measured: 71 rows = 1023 s of rows serially (run 38156528933, 17m04s job), so ~4-5 min
-    # per shard; 15 min gives ~3x headroom for phase-2 rows. Add a shard when one nears ~10 min.
+    # registry). Measured: 71 rows = 1023 s of rows serially (run 38156528933, 17m04s job), ~4-5 min per
+    # shard at 4 shards. By 10-18 the topic registries had grown and 4-shard jobs hit the 15-min timeout
+    # (EX-CI-a), so the matrix went to 6: 74 rows ran in 4-6 min per shard (#879). Add a shard when one
+    # nears ~10 min.
     name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
     runs-on: ubuntu-latest
     timeout-minutes: 15
