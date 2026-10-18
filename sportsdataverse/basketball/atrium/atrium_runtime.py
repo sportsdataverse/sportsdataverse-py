@@ -27,7 +27,10 @@ than 200; a body whose ``links.self`` is another site or type than the one asked
 front of the API); a body that echoes another ``seasonId``, ``fixtureId``, ``personId``, team
 (``entity_detail``) or ``sub`` than the request (an unknown ``sub`` is not an error: the API
 returns a summary body, which must not be mistaken for a box score); a default ``fixtures`` page
-whose season is not in its own season list. A well-formed body with no rows (an empty fixture
+whose season is not in its own season list; a game (``fixture_detail``) whose ``seasonId`` is not in
+the site's season list (the API serves any site's fixture under any ``websiteId``, and seasonIds
+are never shared across sites; the list is the cached one the season lookup reads, and site 236,
+which lists no seasons, is not checked). A well-formed body with no rows (an empty fixture
 list, a game with no play-by-play yet, an empty ribbon) raises ``NoDataError``.
 """
 
@@ -166,8 +169,11 @@ def _rows_missing(typ: str, p: Dict[str, Any], data: Dict[str, Any]) -> bool:
     return False
 
 
-def _check(url: str, website_id: int, typ: str, p: Dict[str, Any], body: Any, rows: bool = True) -> None:
-    """Raise unless ``body`` is a real answer to the request (see the module docstring)."""
+def _check(url: str, website_id: int, typ: str, p: Dict[str, Any], body: Any, rows: bool = True, **kwargs: Any) -> None:
+    """Raise unless ``body`` is a real answer to the request (see the module docstring).
+
+    ``kwargs`` go to the HTTP getter when a game's site check has to fetch the season list.
+    """
     where = _rt._where(url)
     if not isinstance(body, dict):
         raise AssetFetchError(f"{where}: the answer is not a JSON object")
@@ -204,6 +210,14 @@ def _check(url: str, website_id: int, typ: str, p: Dict[str, Any], body: Any, ro
             raise AssetFetchError(
                 f"{where}: the default season {data.get('seasonId')!r} is not in the site's own season list"
             )
+    if typ == "fixture_detail":
+        sid = _dict(data.get("fixture")).get("seasonId", data.get("seasonId"))
+        listed = {r["season_id"] for r in _fetch_seasons(website_id, **kwargs)}
+        if listed and sid not in listed:
+            raise AssetFetchError(
+                f"{where}: the game's season {sid!r} is not one of site {website_id}'s seasons "
+                "(a fixture of another site: wrong scope)"
+            )
     if rows and _rows_missing(typ, p, data):
         raise NoDataError(f"{where}: the site has no rows for this request")
 
@@ -226,8 +240,9 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         NoDataError: the host answered 404, the site lists no such season, or the body has no rows.
         ValueError: the host answered 400 / 422, ``season`` and ``seasonId`` were both given, or the
             season cannot be mapped (see :func:`atrium_season_id`).
-        AssetFetchError: any other failed fetch, an error / stub / wrong-scope body, or a body of
-            another site, type, season, game, player or team than the one asked for.
+        AssetFetchError: any other failed fetch, an error / stub / wrong-scope body, a body of
+            another site, type, season, game, player or team than the one asked for, or a game
+            whose season the site does not list (a fixture of another site).
     """
     m = _PATH.search(urlsplit(url).path)
     if not m:
@@ -242,5 +257,5 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         if typ not in _COMPETITION_TYPES:
             p.pop("competitionId", None)
     body = _bb._get(url, p, **kwargs)
-    _check(url, site, typ, p, body)
+    _check(url, site, typ, p, body, **kwargs)
     return body

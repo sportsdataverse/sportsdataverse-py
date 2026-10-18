@@ -19,15 +19,17 @@ Two sources, one runtime, both measured live on 2026-10-12:
 
 Refusals (each is a mocked-transport test):
 
-* **NoDataError**: HTTP 404; GDAP ``{}`` / ``[]`` / ``null``; a game the competition does not
-  list; a game page that carries only the header (pre-2006 games and games not yet played: no
-  ``gameDetails``).
+* **NoDataError**: HTTP 404; GDAP ``{}`` / ``[]`` / ``null``; a game id GDAP does not know at
+  all; a game the competition lists without its two teams (not drawn yet); a game page that carries
+  only the header (pre-2006 games and games not yet played: no ``gameDetails``).
 * **AssetFetchError**: 401 after a key refresh; HTTP 500 and every other non-2xx; an APIM error
   envelope (``{"statusCode", "message"}``); a ``{"Error": ...}`` object; a body for another
   game, competition, team, player, federation, family or season than asked (type-strict id
   comparison, a row without the field to check is refused, never skipped); a
   ``getgdapgamesbetweentwodates`` row outside ``[dateFrom, dateTo)`` on its local
-  ``gameDateTime``; a game page that is not ``text/x-component``; the **not-found shell** (HTTP
+  ``gameDateTime``; a game page asked under a competition that does not list it (the game exists
+  in GDAP, so it belongs to another edition: a wrong-scope request); a game page that is not
+  ``text/x-component``; the **not-found shell** (HTTP
   200, 120-150 KB, the UI's ``playByPlay`` config but no game header for the asked id); an
   unresolvable flight token; a game page of another game or competition; a game still live.
 
@@ -397,22 +399,39 @@ def _competition_slug(comp: int) -> str:
     return f"{fam}-{_slugify(name)}"
 
 
-_codes: Dict[int, Dict[int, Tuple[str, str]]] = {}
+#: competition -> its scheduled games -> ``(teamA code, teamB code)``, or ``None`` while the teams are not drawn.
+_codes: Dict[int, Dict[int, Optional[Tuple[str, str]]]] = {}
 
 
 def _team_codes(comp: int, game_id: int) -> Tuple[str, str]:
-    """``(teamA code, teamB code)`` of a game from its competition's schedule (cached per competition)."""
+    """``(teamA code, teamB code)`` of a game from its competition's schedule (cached per competition).
+
+    A game the schedule does not list is looked up in GDAP: an unknown id is ``NoDataError``, a
+    real game of another edition is ``AssetFetchError`` (the request is outside the competition).
+    """
     for fresh in (False, True):  # a game the cached schedule lacks may have been added since
         if fresh or comp not in _codes:
             rows = _gdap(f"{GDAP_URL}/getgdapgamesbycompetitionid", {"gdapCompetitionId": comp})
             _codes[comp] = {
-                r["gameId"]: (str(r["teamA"]["code"]).upper(), str(r["teamB"]["code"]).upper())
+                r["gameId"]: (str(a).upper(), str(b).upper())
+                if (a := r.get("teamA", {}).get("code")) and (b := r.get("teamB", {}).get("code"))
+                else None
                 for r in rows
-                if type(r.get("gameId")) is int and r.get("teamA", {}).get("code") and r.get("teamB", {}).get("code")
+                if type(r.get("gameId")) is int
             }
-        if game_id in _codes[comp]:
-            return _codes[comp][game_id]
-    raise NoDataError(f"competition {comp} lists no game {game_id} with two team codes")
+        codes = _codes[comp].get(game_id)
+        if codes:
+            return codes
+    if game_id in _codes[comp]:
+        raise NoDataError(f"competition {comp} lists game {game_id} without its two team codes (not drawn yet)")
+    try:
+        _gdap(f"{GDAP_URL}/getgdapgamebyid", {"gdapGameId": game_id})
+    except NoDataError:
+        raise NoDataError(f"FIBA has no game {game_id} (competition {comp} does not list it)") from None
+    raise AssetFetchError(
+        f"game {game_id} is not a game of competition {comp}: it belongs to another edition (wrong scope); "
+        "pass the comp that lists it"
+    )
 
 
 def _page_url(game_id: int, comp: int) -> str:
@@ -568,11 +587,11 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         "playersTeamB"}`` for a game page (``playByPlay`` is absent when the page has none).
 
     Raises:
-        NoDataError: 404, an empty GDAP answer, a game the competition does not list, or a game
-            page with no box score.
+        NoDataError: 404, an empty GDAP answer, an unknown game id, a game whose teams are not
+            drawn yet, or a game page with no box score.
         ValueError: 400 / 422, a malformed id, season or date, or a game page without ``comp``.
         AssetFetchError: any other failed fetch, an error envelope, a body outside the request,
-            the not-found shell, a live game, or an unresolvable flight token.
+            a game of another competition than ``comp``, the not-found shell, a live game, or an unresolvable flight token.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     parts = urlsplit(url)
