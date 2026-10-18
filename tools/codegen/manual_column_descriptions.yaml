@@ -58542,6 +58542,8 @@ scoreboard:
   away_score: Away team's score. For cricket, the innings string.
   away_team: Away team display name.
   away_team_id: Away team ESPN id.
+  broadcast: Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives
+    its market); "" when the game lists no broadcast.
   date: Match start timestamp (ISO 8601, UTC).
   event_id: ESPN event id for the match.
   home_score: Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)').
@@ -63825,12 +63827,11 @@ elh_shots:
   is_goal: True when the result code is 4 (goal).
   time: Seconds from the start of the game; in 2016-17 only the period's start offset (0 / 1200 / 2400), use real_date.
   period: Period number derived from the game clock (20-minute periods; 4 = overtime); null on a clockless entry.
-  coordinate_x: 'Shot position along the rink LENGTH (goal to goal), centred at 0, normalised so the home team shoots at +x
-    and the away team at -x; about -100..100. The scaling (units) and the orientation are inferred from the data, not
-    documented by the provider.'
-  coordinate_y: 'Shot position across the rink WIDTH (board to board), centred at 0; about -100..100. The scaling (each axis
-    looks independently scaled to -100..100) and which board is positive are inferred from the data, not documented by the
-    provider.'
+  coordinate_x: 'Shot position along the rink LENGTH (goal to goal), centred at 0, about 1 unit = 1 ft (goal lines near
+    +-89). The home team shoots at +x and the away team at -x in every period. Measured on the fixtures, not documented by
+    the provider.'
+  coordinate_y: 'Shot position across the rink WIDTH, centred at 0 and normalised so +-100 are the boards (1 unit is about
+    0.425 ft). Which board is positive is not verified. Measured on the fixtures, not documented by the provider.'
   real_date: Wall-clock time of the shot, local YYYY-MM-DD HH:MM:SS.
 # European hockey: KHL (khl_rest, khl_webcaster).
 khl_game_header:
@@ -64118,12 +64119,15 @@ khl_player_stats:
   fo_pct: Faceoff win percentage
   fow: Faceoffs won by the player
   g: Goals scored by the player
+  ga: Goals against (goalies only)
+  gaa: Goals-against average, 60 min x goals against / time on ice (goalies only)
   gp: Games played by the player
   group: List the row comes from (position group / roster section)
   gwg: Game-winning goals
   hits: Hits (body checks)
   image: Player photo URL on khl.ru (team-season specific)
   jn: Jersey number (not an id; 0 on a team event)
+  l: Losses (goalies only)
   minus: Minus (on ice for a goal against)
   otg: Overtime goals scored by the player
   pim: Penalty minutes
@@ -64134,23 +64138,29 @@ khl_player_stats:
   ppg: Power-play goals
   pts: Points (goals plus assists)
   rank: 1-based position in its table / list
+  so: Shutouts, games without a goal against (goalies only)
+  sop: Games that went to a shootout (goalies only)
   sds: Shootout-deciding goals
   sft_avg: Average shifts per game
   sfte_avg: Average even-strength shifts per game
   sftpp_avg: Average power-play shifts per game
   sftsh_avg: Average short-handed shifts per game
   shg: Short-handed goals
-  sog: Shots on goal by the player
+  sog: Shots on goal by the player (shots faced for a goalie)
   sog_avg: Shots on goal per game
   sog_pct: Shooting percentage
+  sv: Saves, shots on goal stopped (goalies only)
+  sv_pct: Save percentage (goalies only)
   tie_avg: Average even-strength time on ice per game
   tipp_avg: Average power-play time on ice per game
   tish_avg: Average short-handed time on ice per game
   toi_avg: Average time on ice per game (mm:ss)
+  toi: Total time on the ice (goalies only; text, null when none)
+  w: Wins (goalies only)
 khl_playoff_bracket:
   club_id: khl.ru CLUB id (stable across seasons; joins webcaster team khl_id)
   conference: Conference (west / east)
-  game_ids: khl.ru game ids of the series, comma-joined
+  game_ids: khl.ru game ids of the series games, a List(Int64) in feed order (unplayed slots skipped)
   name: Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration
   pair: Series number within the round
   round: Playoff round number
@@ -64201,9 +64211,10 @@ khl_shots:
   time_seconds: Game-elapsed seconds (null on period marker rows)
   tournament_id: 'khl.ru tournament (stage) id, tnId: 1369 = 2025-26 regular season, 1370 its playoff; equals webcaster stage
     khl_id'
-  x: Shot x on the site's 1000-wide rink grid (indent_left = x/10 %); whether shots are normalised to one attacking direction
-    is UNVERIFIED
-  y: Shot y on the site's 500-high rink grid (indent_top = y/5 %); orientation UNVERIFIED
+  x: 'Shot x on the site''s 1000 x 500 rink grid, origin top-left (indent_left = x/10 %); goal lines near x = 55 and 945.
+    Team A (home) attacks +x and team B -x in every period, overtime included'
+  y: 'Shot y on the site''s 1000 x 500 grid, origin top-left, increasing downward (indent_top = y/5 %); the grid is stretched
+    in y, about 1.18x against a 200 x 85 ft rink'
 khl_standings:
   club_id: khl.ru CLUB id (stable across seasons; joins webcaster team khl_id)
   goals_against: Goals allowed by the team
@@ -67026,7 +67037,8 @@ liiga_player_career:
   ties: Ties (player, that season and tournament).
   time_on_ice: Time on ice (player, that season and tournament). Seconds.
   tournament: 'Tournament of the career row, uppercase: RUNKOSARJA (regular season), PLAYOFFS, PRACTICE (preseason), ...'
-  win_percentage: Win percentage (player, that season and tournament). Percent, 0-100, sent as a STRING.
+  win_percentage: '(wins + 0.5 x ties) / games x 10,000, NOT 0-100 (sent as "4,583.33", comma = thousands separator):
+    divide by 10,000 for the standings 0-1 scale. Practice rows can show 0.00 despite wins; unreliable there.'
   winning_goals: Winning goals (player, that season and tournament).
   wins: Wins (player, that season and tournament).
 liiga_player_game_log:

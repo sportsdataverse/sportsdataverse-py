@@ -33,7 +33,7 @@ goalies alike.
 
 **Returns**
 
-polars.DataFrame | pandas.DataFrame: one row per player: `player_id` (isa, `Int64`), `athlete_uuid` (null where SHL has none, common before about 2005), names, birth date, nationality, position, jersey number, height and weight.
+polars.DataFrame | pandas.DataFrame: one row per player: `player_id` (isa, `Int64`), `athlete_uuid` (`Utf8`; null where SHL has none, common before about 2005), `first_name`, `last_name`, `full_name`, `date_of_birth` (`YYYY-MM-DD`), `nationality`, `gender`, `position`, `shoots`, `ep_url` (all `Utf8`), `jersey_number`, `weight` (kg) and `height` (cm) (`Int64`).
 
 **Raises**
 

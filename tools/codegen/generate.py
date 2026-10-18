@@ -89,8 +89,20 @@ def _transform(name: str, module: str = "sportsdataverse._codegen_runtime"):
     return found
 
 
-def _example_url(
-    host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
+def _apply_transform(p: spec.Param, value: object, vals: dict, getter_module: str) -> object:
+    """What the wrapper computes for ``p`` from ``value`` (see :meth:`spec.Param.transform_call`)."""
+    if p.transform_offset is not None:
+        return None if value is None else int(value) + p.transform_offset
+    return _transform(p.transform, getter_module)(value, *[vals[w] for w in p.transform_with])
+
+
+def _example_request(
+    host_url: str,
+    ep: spec.Endpoint,
+    sport: str,
+    league: str,
+    getter_module: str = "sportsdataverse._codegen_runtime",
+    route_getter_module: str | None = None,
 ) -> str:
     """The URL the generated wrapper requests when called with ``ep.example_args``.
 
@@ -99,8 +111,14 @@ def _example_url(
     ``transform``, ``[optional segments]`` and ``now_variant``, then every non-None
     query param in ``_params`` order -- passed through the getter module's own
     ``_build_query`` when it has one (SIHF folds its filters into ``searchQuery`` /
-    ``filterBy`` / ``filterQuery`` before requesting). Empty when the example omits a
+    ``filterBy`` / ``filterQuery`` before requesting). Empty URL when the example omits a
     required argument, since that call raises before it requests anything.
+
+    A body endpoint (``body: form|json``) keeps only its ``in: query`` params and ``fixed_in_query``
+    keys in the URL; :func:`_example_body` builds the rest.
+
+    ``getter_module`` supplies the transforms; ``route_getter_module`` (the route's own ``getter:``
+    module, default the same) supplies the ``_build_query`` rewrite.
     """
     import importlib
 
@@ -113,12 +131,12 @@ def _example_url(
         if p.in_body:
             continue
         v = vals[p.python_name]
-        qs[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
+        qs[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
     for p in ep.path_params:  # same statement order as _build_path_expr
         if p.default_from and vals[p.python_name] is None:
             vals[p.python_name] = vals[p.default_from]
-        if p.transform:
-            vals[p.python_name] = _transform(p.transform, getter_module)(vals[p.python_name])
+        if p.has_transform:
+            vals[p.python_name] = _apply_transform(p, vals[p.python_name], vals, getter_module)
     path = ep.path
     if "[" in path:
         head, rest = path.split("[", 1)
@@ -128,11 +146,34 @@ def _example_url(
         path = ep.now_variant
     path = _PATH_TOKEN.sub(lambda m: str(vals.get(m.group(1), m.group(0))), _sub_slugs(path, sport, league))
     qs = {k: v for k, v in qs.items() if v is not None}  # _get strips None params
-    build = getattr(importlib.import_module(getter_module), "_build_query", None)
+    build = getattr(importlib.import_module(route_getter_module or getter_module), "_build_query", None)
     if build is not None:  # the runtime rewrites the query before it requests (sihf_runtime)
         built = build(qs)
         qs = built[0] if isinstance(built, tuple) else built
     return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
+
+
+def _route_getter(ep: spec.Endpoint, api: spec.FlatApi) -> tuple[str, str, tuple[str, str, str] | None]:
+    """``(module, call name, import)`` of the getter a flat route's wrapper calls.
+
+    No ``getter:`` -> the family's ``_get``. A bare name comes from the family ``getter_module`` (it joins
+    the module's runtime import). ``pkg.module:fn`` is imported as ``_<fn>_<module leaf>`` -- the third
+    item is ``(module, fn, alias)`` for that import line, ``None`` for the other two.
+    """
+    if not ep.getter:
+        return api.getter_module, "_get", None
+    if ":" not in ep.getter:
+        return api.getter_module, ep.getter, None
+    module, fn = ep.getter.split(":", 1)
+    alias = f"_{fn.lstrip('_')}_{module.rsplit('.', 1)[-1]}"
+    return module, alias, (module, fn, alias)
+
+
+def _example_url(
+    host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
+) -> str:
+    """The URL the generated wrapper requests when called with ``ep.example_args`` (see :func:`_example_request`)."""
+    return _example_request(host_url, ep, sport, league, getter_module)
 
 
 def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
@@ -140,10 +181,11 @@ def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
     passed through the endpoint's ``body_builder`` when it declares one (as the wrapper does).
     Only top-level None values are dropped; a builder owns None handling inside what it nests."""
     body = {**ep.body_fixed}
+    vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in (*ep.path_params, *ep.query_params)}
     for p in ep.query_params:
         if p.in_body:
-            v = ep.example_args.get(p.python_name, p.default)
-            body[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
+            v = vals[p.python_name]
+            body[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
             if p.wire_transform and body[p.api] is not None:  # what the runtime really sends
                 body[p.api] = _transform(p.wire_transform, getter_module)(body[p.api])
     if ep.body_builder:
@@ -257,6 +299,13 @@ _VOCAB_RAISES = (
 )
 
 
+def _choices_note(p: spec.Param) -> str:
+    """`` One of: 1, 2, 3.`` for a typed (non-string) ``choices:`` set; a string set is already in its description."""
+    if not p.choices or p.type in ("str", ""):
+        return ""
+    return " One of: " + ", ".join(str(c) for c in p.choices) + "."
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -316,7 +365,7 @@ def _build_docstring(
     def _arg_doc(p: spec.Param, generic: str) -> str:
         # Collapse any embedded newline -- a raw one would land as an unindented
         # continuation line and corrupt the docstring's Args block.
-        return (p.description or generic).replace("\n", " ").strip()
+        return ((p.description or generic).replace("\n", " ").strip() + _choices_note(p)).strip()
 
     lines.append("Args:")
     for p in ep.path_params:
@@ -516,7 +565,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     rows: list[dict] = []
     for p in (*ep.path_params, *ep.query_params):
         # Prefer the authored spec description; fall back to the parsed docstring.
-        raw_desc = p.description or doc_descs.get(p.python_name, "")
+        raw_desc = (p.description or doc_descs.get(p.python_name, "")) + _choices_note(p)
         # Escape pipe chars and collapse newlines so the description is safe
         # inside a single markdown table cell.
         desc = raw_desc.replace("|", "\\|").replace("\n", " ").strip()
@@ -793,31 +842,30 @@ _R_SIBLING_PACKAGES = {
 #: "Whether to include statistical ranks in the returned table."): never used.
 _R_ARGUMENT_TEXT = re.compile(r"^Whether to (?:include|return) .* table\.?$", re.I)
 
-#: Flat families whose tables are player / team AGGREGATES while their sport's R dicts
-#: describe play-by-play ("Binary indicator for if the play ended in a sack" on a season
-#: total), and On3 recruiting tables that render under ``cfb`` but are not cfbfastR's
-#: (SP+ on a recruit rating): no R fallback at all, manual text only. Matched by the bare
-#: returns-schema name.
-_NO_R_FALLBACK_FAMILIES = ("nflpro", "nfl_api", "pff", "pff_api", "on3")
-
 
 @functools.lru_cache(maxsize=1)
 def _no_r_fallback_schemas() -> frozenset:
-    """Bare ``returns_schema`` names of every endpoint in :data:`_NO_R_FALLBACK_FAMILIES`."""
+    """Bare ``returns_schema`` names of every endpoint of a family that declares ``no_r_fallback: true``.
+
+    The flag marks flat families whose tables are player / team AGGREGATES while their sport's R dicts
+    describe play-by-play ("Binary indicator for if the play ended in a sack" on a season total), and
+    On3 recruiting tables that render under ``cfb`` but are not cfbfastR's (SP+ on a recruit rating):
+    no R fallback at all, manual text only."""
     import yaml
 
-    names: dict = {}  # bare schema name -> families returning it
+    names: dict = {}  # bare schema name -> {family stem: flagged}
     for stem, _prefix in FLAT_APIS:
         p = ENDPOINTS / f"{stem}.yaml"
         if not p.exists():
             continue
-        for ep in (yaml.safe_load(p.read_text(encoding="utf-8")) or {}).get("endpoints") or []:
+        doc = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+        for ep in doc.get("endpoints") or []:
             rs = ep.get("returns_schema")
             if rs:
-                names.setdefault(rs.rsplit("/", 1)[-1], set()).add(stem)
+                names.setdefault(rs.rsplit("/", 1)[-1], {})[stem] = bool(doc.get("no_r_fallback", False))
     # The lookup key is the BARE name (what the renderer has), so a name another family also
     # returns (sleeper's ``drafts`` vs on3's) stays ambiguous and keeps its R fallback.
-    return frozenset(n for n, fams in names.items() if fams <= set(_NO_R_FALLBACK_FAMILIES))
+    return frozenset(n for n, fams in names.items() if all(fams.values()))
 
 
 #: Misspellings inherited from upstream R-package roxygen (nflfastR et al.).
@@ -849,7 +897,7 @@ def _r_col_desc(league: str | None, col: str, schema: str | None = None) -> str:
 
     Resolution: the league's package, then its same-sport sibling (:data:`_R_SIBLING_PACKAGES`),
     then ``""``. ``league=None`` or a league with no package gets nothing, and so does a
-    ``schema`` of an aggregate family (:data:`_NO_R_FALLBACK_FAMILIES`). R argument text
+    ``schema`` of a ``no_r_fallback`` family (:func:`_no_r_fallback_schemas`). R argument text
     (:data:`_R_ARGUMENT_TEXT`) is skipped, never returned."""
     if not col or (schema and schema in _no_r_fallback_schemas()):
         return ""
@@ -1136,6 +1184,22 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
     return tbl(cols) if cols else ""
 
 
+def _choice_check(p: spec.Param, unset_ok: str) -> str:
+    """The ``if ...: raise ValueError`` lines checking ``p``'s ``choices:`` before the request.
+
+    A typed set compares typed: an ``int`` choice rejects ``True`` (``True == 1``) and a ``date`` choice
+    accepts the ISO string or a ``datetime.date`` (compared by ``str``); a string set is the plain
+    ``not in`` test. ``unset_ok`` is the None guard of an optional param defaulting to None."""
+    name, choices = p.python_name, tuple(p.choices)
+    if p.type == "int":
+        test = f"{unset_ok}(isinstance({name}, bool) or {name} not in {choices!r})"
+    elif p.type == "date":
+        test = f"{unset_ok}str({name}) not in {choices!r}"
+    else:
+        test = f"{unset_ok}{name} not in {choices!r}"
+    return f"if {test}:\n        raise ValueError(" + f'f"{name} must be one of {choices!r}; got {{{name}!r}}")'
+
+
 class _EndpointView:
     """Template-facing view of an Endpoint with computed render fields.
 
@@ -1159,6 +1223,7 @@ class _EndpointView:
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
         getter_module: str = "sportsdataverse._codegen_runtime",
+        route_getter: tuple[str, str] | None = None,
     ):
         # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
         if league.prefix in ep.league_example_args:
@@ -1202,13 +1267,7 @@ class _EndpointView:
         def _unset_ok(p: spec.Param) -> str:
             return f"{p.python_name} is not None and " if not p.required and p.default is None else ""
 
-        self.choice_checks = [
-            f"if {_unset_ok(p)}{p.python_name} not in {tuple(p.choices)!r}:"
-            + "\n        raise ValueError("
-            + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
-            for p in ordered
-            if p.choices
-        ]
+        self.choice_checks = [_choice_check(p, _unset_ok(p)) for p in ordered if p.choices]
 
         self.league_param = league.league_param
         # In param mode, keep {league} as a runtime f-string token (sport still baked).
@@ -1222,7 +1281,7 @@ class _EndpointView:
             ep.now_variant is not None
             or any(p.optional_segment for p in ep.path_params)
             or any(p.default_from for p in ep.path_params)
-            or any(p.transform for p in ep.path_params)
+            or any(p.has_transform for p in ep.path_params)
         )
         self.has_dynamic_path = needs_build
         if needs_build:
@@ -1235,12 +1294,14 @@ class _EndpointView:
             needs_fstring = bool(ep.path_params) or league.league_param
             self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
-        self.example_url = _example_url(ep_host, ep, league.sport, league.league, getter_module)
+        # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
+        route_module, self.getter_name = route_getter or (getter_module, "_get")
+        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
         # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
         # ``in: query`` params and the rest travels in the body, so show a curl request instead.
         self.body_kind = ep.body
-        self.url_params = [p for p in ep.query_params if not p.in_body]
-        self.body_params = [p for p in ep.query_params if p.in_body]
+        self.url_params = ep.url_params
+        self.body_params = ep.body_params
         self.url_fixed = ep.url_fixed
         self.body_fixed = ep.body_fixed
         self.body_builder = ep.body_builder or ""
@@ -1263,7 +1324,7 @@ class _EndpointView:
             doc_extras=doc_extras,
             import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
-            vocab_raises=getter_module in _VOCAB_GETTERS,
+            vocab_raises=route_module in _VOCAB_GETTERS,
             curl_example=self.curl_example,
         )
 
@@ -1271,7 +1332,7 @@ class _EndpointView:
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
         self.http_method = ep.method.upper()
-        self.valid_url = self.example_url
+        self.valid_url = self.example_url  # empty for a body endpoint (a GET would 405): its docs show the curl request
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.raises_rows = _raises_rows(_raises_lines(doc_extras or {}, getter_module in _VOCAB_GETTERS))
         self.return_table = _return_table(ep.returns_schema, league.prefix)
@@ -1297,8 +1358,8 @@ class _EndpointView:
                 lines.append(
                     f"{p.python_name} = {p.python_name} if {p.python_name} is not None else {p.default_from}",
                 )
-            if p.transform:
-                lines.append(f"{p.python_name} = {p.transform}({p.python_name})")
+            if p.has_transform:
+                lines.append(f"{p.python_name} = {p.transform_call(p.python_name)}")
         if "[" in ep.path:
             head, rest = ep.path.split("[", 1)
             seg, tail = rest.split("]", 1)  # seg e.g. "/{stat_type}" or "/groups/{group_id}"; tail may be ""
@@ -1538,7 +1599,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
     for v in views:
         for p in (*v.path_params, *v.query_params):
             if p.transform:
-                transforms.add(p.transform)
+                transforms.add(p.transform)  # a bare ``offset:`` has no name, so imports nothing
     runtime_imports = ["_get"] + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(
@@ -1618,6 +1679,7 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             fn_name = api.name_pattern.format(short=ep.short)
         used.add(fn_name)
         ep_host = ep.host or api.host
+        route_module, route_name, _ = _route_getter(ep, api)
         view = _EndpointView(
             ep,
             fn_name,
@@ -1627,6 +1689,7 @@ def _flat_views(api: spec.FlatApi, league_prefix: str = "") -> list[_EndpointVie
             auth=api.auth,
             raw_types=api.raw_types,
             getter_module=api.getter_module,
+            route_getter=(route_module, route_name),
             # Per-endpoint extras win over the family block, so a large family
             # can document one wrapper without rewriting all of its siblings.
             doc_extras=ep.docstring or api.docstring,
@@ -1645,7 +1708,7 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
     for v in views:
         for p in (*v.path_params, *v.query_params):
             if p.transform:
-                transforms.add(p.transform)
+                transforms.add(p.transform)  # a bare ``offset:`` has no name, so imports nothing
     # Also count transforms that appear in dynamic path build expressions
     # (e.g. format_nhl_season used in path_build_expr assignments).
     for v in views:
@@ -1655,8 +1718,14 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
                     transforms.add(rt)
         if v.body_builder:
             transforms.add(v.body_builder)
-    # Always include _get; include YAML-declared extras only when actually used.
-    runtime_imports, shared_imports = _split_runtime_imports(["_get", *sorted(transforms)], api.getter_module)
+    # The family getters the routes call (``_get`` first), then the transforms and body builders actually
+    # used, split by the module that defines them. A route's ``pkg.module:fn`` getter is its own import line.
+    routes = [_route_getter(ep, api) for ep in api.endpoints]
+    getters = {name for _, name, imp in routes if imp is None}
+    runtime_imports, shared_imports = _split_runtime_imports(
+        [*sorted(getters, key=lambda n: (n != "_get", n)), *sorted(transforms)], api.getter_module
+    )
+    getter_imports = sorted({imp for _, _, imp in routes if imp is not None})
     template = render.ENV.get_template("api_module.py.jinja")
     return template.render(
         api=api.api,
@@ -1667,6 +1736,7 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
         shared_imports=shared_imports,
+        getter_imports=getter_imports,
         passthrough_query=api.passthrough_query,
         getter_module=api.getter_module,
         auth=api.auth,

@@ -449,8 +449,8 @@ Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
 | `is_goal` | logical | True when the result code is 4 (goal). |
 | `time` | integer | Seconds from the start of the game; in 2016-17 only the period's start offset (0 / 1200 / 2400), use real_date. |
 | `period` | integer | Period number derived from the game clock (20-minute periods; 4 = overtime); null on a clockless entry. |
-| `coordinate_x` | numeric | Shot position along the rink LENGTH (goal to goal), centred at 0, normalised so the home team shoots at +x and the away team at -x; about -100..100. The scaling (units) and the orientation are inferred from the data, not documented by the provider. |
-| `coordinate_y` | numeric | Shot position across the rink WIDTH (board to board), centred at 0; about -100..100. The scaling (each axis looks independently scaled to -100..100) and which board is positive are inferred from the data, not documented by the provider. |
+| `coordinate_x` | numeric | Shot position along the rink LENGTH (goal to goal), centred at 0, about 1 unit = 1 ft (goal lines near +-89). The home team shoots at +x and the away team at -x in every period. Measured on the fixtures, not documented by the provider. |
+| `coordinate_y` | numeric | Shot position across the rink WIDTH, centred at 0 and normalised so +-100 are the boards (1 unit is about 0.425 ft). Which board is positive is not verified. Measured on the fixtures, not documented by the provider. |
 | `real_date` | character | Wall-clock time of the shot, local YYYY-MM-DD HH:MM:SS. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

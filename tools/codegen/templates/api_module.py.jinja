@@ -5,10 +5,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
+{% if runtime_imports %}
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
+{% endif %}
 {% if shared_imports %}
 from sportsdataverse._codegen_runtime import {{ shared_imports|join(", ") }}
 {% endif %}
+{% for mod, fn, alias in getter_imports %}
+from {{ mod }} import {{ fn }} as {{ alias }}
+{% endfor %}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
 
@@ -80,8 +85,8 @@ def {{ ep.fn_name }}(
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
 {% for p in ep.url_params %}
-{% if p.transform %}
-        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
 {% else %}
         "{{ p.api }}": {{ p.python_name }},
 {% endif %}
@@ -97,8 +102,8 @@ def {{ ep.fn_name }}(
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
 {% for p in ep.body_params %}
-{% if p.transform %}
-        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
 {% else %}
         "{{ p.api }}": {{ p.python_name }},
 {% endif %}
@@ -112,10 +117,10 @@ def {{ ep.fn_name }}(
 {% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         __url,
 {% else %}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         {{ ep.url_literal }},
 {% endif %}
         params=_params,

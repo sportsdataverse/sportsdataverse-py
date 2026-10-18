@@ -55,7 +55,7 @@ ESPN endpoint.
 | `venue_city` | character | City where the venue is located. |
 | `venue_state` | character | State (or province/country) where the venue is located. |
 | `venue_indoor` | logical | Whether the home venue is indoors. |
-| `broadcast` | character | Broadcast network short name. |
+| `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character | Home team referencing id. |
 | `home_name` | character |  |

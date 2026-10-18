@@ -168,7 +168,7 @@ One player's career: season totals by tournament.
 | `time_on_ice` | integer | Time on ice (player, that season and tournament). Seconds. |
 | `save_percentage` | numeric | Save percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
 | `goals_against_average` | numeric | Goals against per game (goalkeeper), that season and tournament; sent as a string. |
-| `win_percentage` | numeric | Win percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
+| `win_percentage` | numeric | (wins + 0.5 x ties) / games x 10,000, NOT 0-100 (sent as "4,583.33", comma = thousands separator): divide by 10,000 for the standings 0-1 scale. Practice rows can show 0.00 despite wins; unreliable there. |
 | `shut_out` | character | Shutouts (goalkeeper), that season and tournament; sent as a string (e.g. "0"). |
 | `faceoffs_won` | integer | Faceoffs won (player, that season and tournament). |
 | `faceoffs_percentage` | numeric | Faceoffs percentage (player, that season and tournament). Percent, 0-100, sent as a STRING. |
