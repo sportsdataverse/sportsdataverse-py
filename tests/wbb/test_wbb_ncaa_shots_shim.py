@@ -80,3 +80,20 @@ def test_wbb_shot_locations_season_pins_the_period_model(monkeypatch) -> None:
     ncaa_wbb_shot_locations(["5728709"], season=2015, fetcher=_FakeFetcher())
     ncaa_wbb_shot_locations(["5728709"], season="2015-16", fetcher=_FakeFetcher())
     assert seen == [(4, 600, 300), (2, 1200, 300), (4, 600, 300)]
+
+
+class _RecordingFetcher(_FakeFetcher):
+    def __init__(self) -> None:
+        self.calls: "list[object]" = []
+
+    def fetch_game_box(self, gid: object) -> str:
+        self.calls.append(gid)
+        return super().fetch_game_box(gid)
+
+
+def test_wbb_shot_locations_float_contest_ids_are_integer_strings() -> None:
+    """A float id fetches ``5728709``, never ``5728709.0``; NaN / None are dropped (R853-2)."""
+    fetcher = _RecordingFetcher()
+    got = ncaa_wbb_shot_locations([5728709.0, float("nan"), None], fetcher=fetcher)
+    assert fetcher.calls == ["5728709"]
+    assert got["game_id"].unique().to_list() == ["5728709"]

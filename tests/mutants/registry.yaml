@@ -1209,3 +1209,30 @@
   test: tests/mbb/test_mbb_ncaa_game_pbp.py -k escalated
   expected: kill
   note: Under warnings "error" the driver's broad except swallows the guard, re-fetches, and returns 0 rows (R853-1).
+- id: ncaa-shots-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_shots.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_shots_parity.py -k float_contest_ids
+  expected: kill
+  note: The MBB shots driver fetches contests/6470186.0/ for a float id (R853-2).
+- id: ncaa-wbb-shots-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/wbb/wbb_ncaa_shots.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_contest_ids
+  expected: kill
+  note: The WBB shots driver fetches contests/5728709.0/ for a float id (R853-2).
+- id: ncaa-box-driver-float-contest-ids
+  group: ncaa-era
+  finding: B-L38
+  file: sportsdataverse/mbb/mbb_ncaa_box_stats.py
+  snippet: "    ids = [g for g in map(_utf8_id, game_ids) if g is not None]\n"
+  mutant: "    ids = [g for g in game_ids if g is not None and g == g]\n"
+  test: tests/mbb/test_mbb_ncaa_box_stats_parity.py -k float_contest_ids
+  expected: kill
+  note: The box-score driver fetches contests/6470186.0/ for a float id (R853-2).
