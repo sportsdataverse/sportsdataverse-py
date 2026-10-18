@@ -1186,3 +1186,13 @@
   test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[cfb]
   expected: kill
   note: 'raw= was accepted and ignored'
+
+- id: rosters-athlete-failed-fetch-raises
+  group: espn-rosters
+  finding: B-L5
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: 'except NoDataError:  # a FAILED fetch (AssetFetchError) still raises'
+  mutant: 'except (NoDataError, __import__("sportsdataverse.errors").errors.AssetFetchError):'
+  test: tests/test_espn_game_rosters_family.py -k failed_fetch
+  expected: kill
+  note: 'R878-3: a 403/429/5xx or dropped connection must raise AssetFetchError, never become a dropped athlete'

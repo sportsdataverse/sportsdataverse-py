@@ -11,6 +11,7 @@ import copy
 import importlib
 import json
 import re
+import warnings
 from pathlib import Path
 from typing import Any, Dict
 
@@ -147,3 +148,24 @@ def test_game_rosters_unreadable_logos_warn(monkeypatch):
     with pytest.warns(UserWarning, match="logos have a shape"):
         df = _team_frame(monkeypatch, "nba", team)
     assert df["logo_href"].to_list() == [""] and df["logo_dark_href"].to_list() == [""]
+
+
+@pytest.mark.parametrize("failure", [403, 429, 500, 503, "connection"])
+@pytest.mark.parametrize("league", ["mbb", "nfl"])
+def test_game_rosters_athlete_failed_fetch_raises(league, failure, monkeypatch):
+    """A FAILED athlete fetch is unknown, not absent: it raises AssetFetchError and is never a dropped athlete."""
+    import requests
+
+    from sportsdataverse.errors import AssetFetchError
+
+    monkeypatch.setenv("SDV_PY_HTTP_RETRIES", "2")
+    athlete = _payload("athlete_core", league)
+    if failure == "connection":
+        _route(monkeypatch, lambda url: requests.exceptions.ConnectionError("connection reset"))
+    else:
+        _route(monkeypatch, lambda url: (failure, json.dumps({"message": "upstream failure"}), "application/json"))
+    helper = getattr(_mod(league), f"helper_{league}_athlete_items")
+    with warnings.catch_warnings(record=True) as seen, pytest.raises(AssetFetchError):
+        warnings.simplefilter("always")
+        helper(teams_rosters=pl.DataFrame({"athlete_href": [athlete["$ref"]]}))
+    assert not [w for w in seen if "no athlete resource" in str(w.message)]
