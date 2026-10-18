@@ -5,7 +5,7 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 import re as _re
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     import requests
@@ -303,7 +303,7 @@ class EraCoverageWarning(UserWarning):
     """
 
 
-def _error_envelope_code(body: Any) -> Optional[int]:
+def _error_envelope_code(body: Any) -> int | None:
     """The status of an ESPN-style ``{"code": <4xx/5xx>, "message": ...}`` error body, else ``None``.
 
     Only a dict holding exactly those two keys counts, so a payload that merely carries a

@@ -82,7 +82,8 @@ from __future__ import annotations
 
 import functools
 import warnings
-from typing import Any, Callable, Dict, List
+from collections.abc import Callable
+from typing import Any, Dict, List
 
 import re
 
