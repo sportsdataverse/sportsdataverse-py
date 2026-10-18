@@ -1111,6 +1111,12 @@ Endpoint: `GET https://api.proxybonanza.com/v1/userpackages/{pkg}.json`
 
 One `http://login:password@ip:port` URL per IP in the package.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | Non-200 response. |
+
 **Example**
 
 ```python
@@ -1330,6 +1336,12 @@ One row per game with columns `date, start_time, home, away, box_id, game_id, ho
 | `away_wins` | integer | Away team's wins. |
 | `away_losses` | integer | Away team's losses. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The date's season has no known `season_divisions` id (R returns the string `"Season Not Available"` — deliberate fix), *conference* is not a known conference (R falls back to all conferences), the date is not `MM/DD/YYYY`, the fetched page has no games table, or the game-id link count mismatches the schedule. |
+
 **Example**
 
 ```python
@@ -1419,6 +1431,12 @@ The input pbp frame + `team`, `player`, `x`, `y`, `shot_dist` (null on non-FG ro
 | `x` | double | X. |
 | `y` | double | Y. |
 | `shot_dist` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the pbp and shots game-id sets differ (R `stop("PBP and Shot Locations do not match.")`, `:97-99`), or if a join-key dtype disagrees between the two frames. |
 
 **Example**
 

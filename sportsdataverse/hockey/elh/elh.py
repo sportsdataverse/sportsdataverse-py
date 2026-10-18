@@ -55,8 +55,8 @@ def elh_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -173,8 +173,8 @@ def elh_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -229,8 +229,8 @@ def elh_pbp_goals(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -285,8 +285,8 @@ def elh_pbp_latest(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -341,8 +341,8 @@ def elh_pbp_mobile(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -395,8 +395,8 @@ def elh_scoreboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -447,8 +447,8 @@ def elh_shots(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
-        sportsdataverse.errors.AssetFetchError: an error envelope, a body for another game or day, or a broken listing page.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

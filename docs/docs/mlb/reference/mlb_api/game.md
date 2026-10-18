@@ -25,6 +25,14 @@ GET /api/v1/game/{gamePk}/contextMetrics — WP, leverage index, in-game context
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_game_context_metrics-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_game_context_metrics-example}
 
 ```python
@@ -49,6 +57,14 @@ GET /api/v1/game/{gamePk}/content — articles, highlights, editorial content.
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_mlb_api_list`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_game_content-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_game_content-example}
 
@@ -79,6 +95,14 @@ Retrieve all of the play timecodes for a game in GUMBO feed.
 | `timecode` | character | A timestamp string representing a specific point in time used to query the MLB Stats API for game state changes. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_game_timestamps-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_game_timestamps-example}
 
@@ -175,6 +199,14 @@ View corrected non Statcast information for games
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_game_changes-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_game_changes-example}
 
 ```python
@@ -211,6 +243,14 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_game_guids-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_game_guids-example}
 
 ```python
@@ -240,6 +280,14 @@ View game color commentary info.
 No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the documented example arguments (2026-10-07).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_game_color-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_game_color-example}
 
@@ -271,6 +319,14 @@ No returns table is published for this endpoint: no capture: statsapi.mlb.com an
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_game_color_diff-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_game_color_diff-example}
 
 ```python
@@ -298,6 +354,14 @@ View all of the color timecodes for a game.
 No returns table is published for this endpoint: no capture: statsapi.mlb.com answers 406 to the datacenter IP and 404 through the residential proxy with the documented example arguments (2026-10-07).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_game_color_timestamps-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_game_color_timestamps-example}
 
@@ -387,6 +451,14 @@ View time of game info.
 | `total7_inn_games_completed_early` | double | Number of seven-inning games that were called or completed before the full seven innings were played. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_game_pace-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_game_pace-example}
 

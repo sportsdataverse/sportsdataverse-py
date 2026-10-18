@@ -82,9 +82,9 @@ def kbl_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -139,9 +139,9 @@ def kbl_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -202,9 +202,9 @@ def kbl_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -265,9 +265,9 @@ def kbl_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -324,9 +324,9 @@ def kbl_period_scores(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -383,9 +383,9 @@ def kbl_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -442,9 +442,9 @@ def kbl_player_box(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -501,9 +501,9 @@ def kbl_team_box(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -560,9 +560,9 @@ def kbl_shots(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -619,9 +619,9 @@ def kbl_score_track(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -678,9 +678,9 @@ def kbl_game_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -741,9 +741,9 @@ def kbl_player_totals(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -809,9 +809,9 @@ def kbl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -877,9 +877,9 @@ def kbl_team_tracks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -945,9 +945,9 @@ def kbl_rounds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1009,9 +1009,9 @@ def kbl_playoff_seeds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1068,9 +1068,9 @@ def kbl_playoff_series(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1127,9 +1127,9 @@ def kbl_playoff_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1186,9 +1186,9 @@ def kbl_round_mvps(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1243,9 +1243,9 @@ def kbl_current_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1300,9 +1300,9 @@ def kbl_season_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::
@@ -1357,9 +1357,9 @@ def kbl_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
-        ValueError: a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request).
 
     Example:
         Quick start::

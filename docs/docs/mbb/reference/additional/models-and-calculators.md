@@ -1383,6 +1383,12 @@ player-to-column index, and folds `build_priors` into
 
 A `RapmPlayerContext`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ZeroDivisionError` | If `total_lineups` (derived from `players[0]`'s on/off possession totals) is exactly `0` -- see the module docstring's landmine 2. Not exercised by this task's oracle fixtures. |
+
 **Example**
 
 ```python

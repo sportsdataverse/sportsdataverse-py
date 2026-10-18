@@ -537,6 +537,12 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `two_pt_recommendation` | character | Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp". |
 | `two_pt_wp_diff` | double | two_pt_wp minus xp_wp; positive favors going for two. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When the model needs an era column but neither a `season` column nor a `season` argument is available to derive it. |
+
 **Example**
 
 ```python
@@ -608,6 +614,12 @@ through untouched.
 
 `df` with a `cp` column appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -636,6 +648,12 @@ difference and this function scores rows, not sequences.
 **Returns**
 
 `df` with `ep` (if it was absent) and `epa` appended.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `ep_end` is missing, or an EP feature is. |
 
 **Example**
 
@@ -667,6 +685,12 @@ probabilities to a points expectation using the package's own
 
 `df` with the seven class probability columns and an `ep` column appended.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing. |
+
 **Example**
 
 ```python
@@ -696,6 +720,12 @@ through untouched.
 **Returns**
 
 `df` with an `fg_make_prob` column appended. Named `fg_make_prob`, not `fg_prob`: `calculate_expected_points` emits `fg_prob` for the probability the NEXT SCORE is a field goal, which is a different quantity. Sharing the name made chaining the two silently lossy. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -727,6 +757,12 @@ through untouched.
 
 `df` with `fd_conversion_prob` (probability the gain reaches `distance`) and `fd_expected_yards` appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -756,6 +792,12 @@ through untouched.
 **Returns**
 
 `df` with a `qbr` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -787,6 +829,12 @@ through untouched.
 
 `df` with a `two_pt_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -817,6 +865,12 @@ by whether the caller has spread information at all.
 
 `df` with a `wp` column appended.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names the model actually selected, so a caller can tell which contract failed. |
+
 **Example**
 
 ```python
@@ -844,6 +898,12 @@ Recomputes `wp` when it is absent. Requires `wp_end` for the same reason
 **Returns**
 
 `df` with `wp` (if it was absent) and `wpa` appended.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `wp_end` is missing, or a WP feature is. |
 
 **Example**
 
@@ -874,6 +934,12 @@ through untouched.
 **Returns**
 
 `df` with an `xpass` column (probability the play is a pass) appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -911,6 +977,13 @@ One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+
 **Example**
 
 ```python
@@ -921,41 +994,4 @@ cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 # NFL team summaries (the pre-#598 method; reads wp_before)
 
 cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
-```
-
-### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
-
-`cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
-
-For each week `w` the opponent-strength ridge is fit on `_FIT_WP`-band plays
-from **weeks before `w` only**, then that week's games are adjusted with
-those as-of strengths -- so the value uses no future information and is valid
-as an in-season power-rating / model feature. Week 1 (no prior) yields null
-adjustments; not-yet-seen opponents fall back to the league baseline (an
-average team), and teams seen on few plays are shrunk most of the way there.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-tg = cfb.cfb_adjusted_epa_by_game(pbp)
-tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```

@@ -45,6 +45,14 @@ One event, optionally with its markets nested.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kalshi_event-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#kalshi_event-example}
 
 ```python
@@ -90,6 +98,14 @@ Events, filterable by series and status; cursor-paged.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kalshi_events-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#kalshi_events-example}
 
 ```python
@@ -121,6 +137,14 @@ Exchange and trading status.
 | `trading_active` | logical |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kalshi_exchange_status-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#kalshi_exchange_status-example}
 
@@ -192,6 +216,14 @@ One market.
 | `custom_strike_football_team` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kalshi_market-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#kalshi_market-example}
 
@@ -266,6 +298,14 @@ Markets, filterable by event/series/status; cursor-paged.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kalshi_markets-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#kalshi_markets-example}
 
 ```python
@@ -298,6 +338,14 @@ Order book of a market (fixed-point dollar levels).
 | `size` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kalshi_orderbook-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#kalshi_orderbook-example}
 
@@ -343,6 +391,14 @@ One series.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kalshi_series-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#kalshi_series-example}
 
 ```python
@@ -386,6 +442,14 @@ Series (market families) in a category; the whole category in one body.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kalshi_series_list-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#kalshi_series_list-example}
 
 ```python
@@ -426,6 +490,14 @@ Public trades, filterable by market; cursor-paged.
 | `yes_price_dollars` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kalshi_trades-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#kalshi_trades-example}
 

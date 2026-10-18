@@ -84,9 +84,6 @@ def parse_mls_api(
         every ``*_id`` column pinned to ``Utf8``. A zero-row frame when the
         payload is ``None``, empty or malformed.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -135,9 +132,6 @@ def parse_mls_entity(
         A single row (or one row per element for a list body) with nested objects
         flattened to dotted, snake_cased columns and nested arrays JSON-encoded.
         A zero-row frame when the payload is ``None``, empty or malformed.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -190,8 +184,7 @@ def parse_mls_standings(
           ``competition_id`` / ``season_id`` / ``group`` / ``category`` plus
           ``position``, ``team_id``, record and per-game rate columns.
 
-    Raises:
-        None: malformed payloads yield zero-row frames rather than an exception.
+        Malformed payloads yield zero-row frames rather than an exception.
 
     Example:
         Quick start::
@@ -280,9 +273,7 @@ def parse_mls_match(
         (coaching + official staff with a ``staff_group`` column), ``"referees"``
         (one row per official with ``role``), and ``"last_matches"`` (recent
         head-to-head meetings).
-
-    Raises:
-        None: malformed payloads yield zero-row frames rather than an exception.
+        Malformed payloads yield zero-row frames rather than an exception.
 
     Example:
         Quick start::

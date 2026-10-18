@@ -358,6 +358,12 @@ DataFrame with columns `season` (str, `"YYYY-YY"`), `ncaa_team_id` (Int64 -- the
 | `match_method` | character | Combination of matched sources, e.g. "fox+bart" / "fox_only" / "bart_only" / "espn_only". |
 | `conference_id` | character | SportsDataverse conference (group) id for that season, prefixed by the league (e.g. 'mbb:big-ten'), from the {mbb,wbb}_team_group_seasons release table joined on espn_team_id and the season's ending year. Stable across renames and shared with the {mbb,wbb}_groups tables; null only when that table has no row for the team that season. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *league* is not `"mbb"` or `"wbb"`. |
+
 **Example**
 
 ```python
@@ -509,6 +515,12 @@ for WBB, so it is not joined; Yahoo columns are null placeholders.
 
 No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | The per-team ESPN or Fox rosters failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+
 **Example**
 
 ```python
@@ -552,6 +564,12 @@ games whose teams cannot be resolved to ESPN ids survive as `bart_only`.
 
 No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | The per-date ESPN scoreboard failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+
 **Example**
 
 ```python
@@ -591,6 +609,12 @@ bridge); Torvik on the normalized school name after the
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
 
 No returns table is published for this function: no capture: barttorvik.com answers HTTP 403 to the datacenter IP the docs are built on.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | A source that was not passed in pre-fetched could not be produced: Fox or Torvik failed, or returned no teams for a season they cover, or the conference reference for *season* could not be read. Building on a missing source would emit a well-formed crosswalk whose columns are silently all-null, so it fails here instead. Pass an explicit empty frame (`fox=pl.DataFrame()`) to opt Fox or Torvik out. |
 
 **Example**
 

@@ -24,6 +24,14 @@ Ping the NHL Stats REST API database.
 
 Ping the NHL Stats REST API database.
 
+### Raises {#nhl_stats_rest_ping-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_ping-example}
 
 ```python
@@ -47,6 +55,14 @@ Retrieve the component-season configuration.
 ### Returns {#nhl_stats_rest_component_season-returns}
 
 Retrieve the component-season configuration.
+
+### Raises {#nhl_stats_rest_component_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_component_season-example}
 
@@ -72,6 +88,14 @@ Retrieve the Stats REST API configuration payload.
 
 Retrieve the Stats REST API configuration payload.
 
+### Raises {#nhl_stats_rest_config-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_config-example}
 
 ```python
@@ -96,6 +120,14 @@ Retrieve a content module by template key.
 ### Returns {#nhl_stats_rest_content_module-returns}
 
 Retrieve a content module by template key.
+
+### Raises {#nhl_stats_rest_content_module-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_content_module-example}
 
@@ -137,6 +169,14 @@ Retrieve the list of countries used in NHL data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_country-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_country-example}
 
 ```python
@@ -168,6 +208,14 @@ Retrieve draft data, optionally filtered with Cayenne expressions.
 | `rounds` | integer | Number of rounds in the draft. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_draft-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_draft-example}
 
@@ -201,6 +249,14 @@ Retrieve franchise data.
 | `team_place_name` | character | Team place (city/location) name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_franchise-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_franchise-example}
 
@@ -244,6 +300,14 @@ Retrieve game-level data.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_game-example}
 
 ```python
@@ -279,6 +343,14 @@ Retrieve the NHL Stats glossary of stat definitions.
 | `last_updated` | character | Timestamp the entry was last updated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_glossary-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_glossary-example}
 
@@ -333,6 +405,14 @@ Retrieve a goalie statistical report.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_goalie_report-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_goalie_report-example}
 
 ```python
@@ -378,6 +458,14 @@ Retrieve league leaders for a goalie statistical attribute.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_leaders_goalies-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_leaders_goalies-example}
 
 ```python
@@ -422,6 +510,14 @@ Retrieve league leaders for a skater statistical attribute.
 | `team_tri_code` | character | Team tri-code abbreviation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_leaders_skaters-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_leaders_skaters-example}
 
@@ -469,6 +565,14 @@ Retrieve milestone data for goalies.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_milestones_goalies-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_milestones_goalies-example}
 
 ```python
@@ -515,6 +619,14 @@ Retrieve milestone data for skaters.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_milestones_skaters-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_milestones_skaters-example}
 
 ```python
@@ -539,6 +651,14 @@ Retrieve the NHL player registry.
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_stats_rest`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_players-example}
 
@@ -592,6 +712,14 @@ Retrieve the list of all NHL seasons.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_season-example}
 
 ```python
@@ -639,6 +767,14 @@ Retrieve shift-chart data.
 | `type_code` | integer | Numeric code identifying the high-level event type (e.g., faceoff, goal, penalty) for this shift record. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_shiftcharts-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_shiftcharts-example}
 
@@ -696,6 +832,14 @@ Retrieve a skater statistical report.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_stats_rest_skater_report-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_stats_rest_skater_report-example}
 
 ```python
@@ -730,6 +874,14 @@ Retrieve the list of all NHL teams.
 | `tri_code` | character | Team three-letter code. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_team-example}
 
@@ -766,6 +918,14 @@ Retrieve a single team by its numeric ID.
 | `tri_code` | character | Team three-letter code. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_team_by_id-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_team_by_id-example}
 
@@ -821,6 +981,14 @@ Retrieve a team statistical report.
 | `wins_in_shootout` | integer | Wins in shootout. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_stats_rest_team_report-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_stats_rest_team_report-example}
 

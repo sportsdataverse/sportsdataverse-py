@@ -1,10 +1,10 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four"
-sidebar_label: "Models and calculators: AdjRapmModel–nba_four"
+title: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected"
+sidebar_label: "Models and calculators: AdjRapmModel–nba_expected"
 sidebar_position: 10
-description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_four
+# NBA — additional Python functions — Models and calculators: AdjRapmModel–nba_expected
 
 ### AdjRapmModel {#AdjRapmModel}
 
@@ -547,6 +547,12 @@ full-season point differential associated with one additional win. This is
 
 `float` points of season margin per marginal win.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `team_season` has fewer than 3 rows (a degenerate regression), if `total_margin` has zero variance, or if the fitted slope is exactly zero (undefined points-per-win). |
+
 **Example**
 
 ```python
@@ -585,6 +591,12 @@ this function does not assume or invent any such win-percentage convention.
 **Returns**
 
 `float` replacement_level solving the equation exactly.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `ratings` and `poss` share no `player_id` (an inner join on two non-empty frames producing zero rows — a probable id-source/dtype mismatch), or if the resulting total possession weight sums to zero (the equation is then degenerate). |
 
 **Example**
 
@@ -725,6 +737,12 @@ a brittle display-name join whose `coverage_pct` is the signal to watch.
 
 `ExternalValidityResult`. `corr` and `permutation_p95` are `nan` when fewer than 3 rows matched; `coverage_pct` is `0.0` when `ratings` is empty.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `join` is not `"id"` or `"name"`. |
+
 **Example**
 
 ```python
@@ -799,6 +817,13 @@ halves or four 10-minute quarters); every overtime is 5 minutes. A period past t
 
 Game minutes.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `periods` is `None` or another non-numeric type. |
+| `ValueError` | If `periods` is a string that is not an integer, the league is unknown, or `league` contradicts `league_id`. |
+
 **Example**
 
 ```python
@@ -834,6 +859,14 @@ the warehouse's copies of the same frames.
 **Returns**
 
 `{"pbp", "team_box", "team_game_rates", "player_box", "player_game_rates", "periods", "prior", "league", "regulation_periods", "period_kind", "neutral_site"}`; see `game_page_tables` for the shared keys. Before both team box rows exist, `team_game_rates` and `player_game_rates` are empty frames with their documented columns.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
+| `KeyError` | If `final` lacks the `header` or `plays` keys the converters read. |
+| `polars.exceptions.ColumnNotFoundError` | If a converter frame lacks a column the derivations need. |
 
 **Example**
 
@@ -879,6 +912,13 @@ and calls this too, so a game renders identically from either source. Runs
 
 `{"pbp", "team_game_rates", "player_game_rates", "periods", "regulation_periods", "period_kind", "prior"}`: the scored plays with shot coordinates, the two rate frames (empty with their documented columns without two team rows), the highest period played (the regulation count before tip-off), the regulation periods, `"half"` or `"quarter"`, and `{"home_win_prob", "source", "home_team_spread", "game_spread_available"}`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `pbp` holds more than one game. |
+| `polars.exceptions.ColumnNotFoundError` | If a frame lacks a column the derivations need. |
+
 **Example**
 
 ```python
@@ -920,6 +960,12 @@ always halves, the WNBA halves before 2006 and women's college basketball halves
 
 `2` or `4`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is a string other than the four. |
+
 **Example**
 
 ```python
@@ -948,6 +994,12 @@ Return the `LeagueConstants` for a `league_id`.
 
 The league's `LeagueConstants`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league_id` is not a known key of `LEAGUE_CONSTANTS`. |
+
 **Example**
 
 ```python
@@ -970,6 +1022,12 @@ Shooter-talent shrinkage `k` for a league.
 **Returns**
 
 The pseudo-attempt shrinkage constant (fitted split-half).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown `league_id`. |
 
 **Example**
 
@@ -1006,6 +1064,12 @@ MBB and WBB use `~sportsdataverse.mbb.mbb_game_predict.win_prob_from_margin` wit
 **Returns**
 
 `(probability, source)` with `source` `"spread"`, `"neutral"` or `"hfa"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the league is unknown or `league` contradicts `league_id`. |
 
 **Example**
 
@@ -1073,6 +1137,12 @@ upstream failure (fetch) apart from a parsing bug (parse).
 **Returns**
 
 `(fetch, parse)`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not one of the four. |
 
 **Example**
 
@@ -1281,6 +1351,12 @@ Faithful BPM 2.0 per player, at season or single-game granularity.
 
 No returns table is published for this function: no capture: its positions input is nba_player_positions output, which reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `granularity` is not `"season"`/`"game"`, or if `granularity="game"` is requested but `player_logs` has no `game_id` column. |
+
 **Example**
 
 ```python
@@ -1403,6 +1479,12 @@ Frame with `DECAY_RAPM_SCHEMA`. Empty input, or an `asof` that drops every posse
 | `off_poss` | integer |  |
 | `def_poss` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `asof` is not `None` but *possessions* lacks a `game_date` column. |
+
 **Example**
 
 ```python
@@ -1513,49 +1595,4 @@ t = nba_expected_turnovers("2023-24", base=base_df, player_mix=mix_df)
 # Pipeline next step
 
 t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
-```
-
-### nba_four_factor_rapm {#nba_four_factor_rapm}
-
-`nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
-
-Each factor is regressed on the identical offense/defense design matrix,
-differing only in the per-possession response (`_FACTOR_RESPONSES`).
-Output mirrors the oracle's `RA_*__Off/__Def` layout. **DECISION 5/6/7**
-govern the response definitions.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m, fg3m, ftm, oreb, tov` and the ten lineup columns. Must also carry a `points` column -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally) requires it unconditionally even though none of the four factor responses use it. `offense_team_id` is NOT required here (unlike `nba_la_rapm`): none of the four factor responses need the offense-only shooter join. |
-| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns per factor, plus possession counts. Empty input → zero-row frame.
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `efg__off` | double |  |
-| `efg__def` | double |  |
-| `ftr__off` | double |  |
-| `ftr__def` | double |  |
-| `orbd__off` | double |  |
-| `orbd__def` | double |  |
-| `tov__off` | double |  |
-| `tov__def` | double |  |
-| `off_poss` | integer |  |
-| `def_poss` | integer |  |
-
-**Example**
-
-```python
-from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
-ff = nba_four_factor_rapm(season_poss)
-print(ff.sort("efg__off", descending=True).head())
 ```

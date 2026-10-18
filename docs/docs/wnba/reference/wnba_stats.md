@@ -25,7 +25,7 @@ toc_max_heading_level: 2
 | [wnba_stats_boxscoreplayertrackv3](wnba_stats/boxscore.md#wnba_stats_boxscoreplayertrackv3) | GET /stats/boxscoreplayertrackv3 |
 | [wnba_stats_boxscorescoringv2](wnba_stats/boxscore.md#wnba_stats_boxscorescoringv2) | GET /stats/boxscorescoringv2 |
 | [wnba_stats_boxscorescoringv3](wnba_stats/boxscore.md#wnba_stats_boxscorescoringv3) | GET /stats/boxscorescoringv3 |
-| [wnba_stats_boxscoresummaryv2](wnba_stats/boxscore.md#wnba_stats_boxscoresummaryv2) | GET /stats/boxscoresummaryv2 |
+| [wnba_stats_boxscoresummaryv2](wnba_stats/boxscore-2.md#wnba_stats_boxscoresummaryv2) | GET /stats/boxscoresummaryv2 |
 | [wnba_stats_boxscoresummaryv3](wnba_stats/boxscore-2.md#wnba_stats_boxscoresummaryv3) | GET /stats/boxscoresummaryv3 |
 | [wnba_stats_boxscoretraditionalv2](wnba_stats/boxscore-2.md#wnba_stats_boxscoretraditionalv2) | GET /stats/boxscoretraditionalv2 |
 | [wnba_stats_boxscoretraditionalv3](wnba_stats/boxscore-2.md#wnba_stats_boxscoretraditionalv3) | GET /stats/boxscoretraditionalv3 |
@@ -83,7 +83,7 @@ toc_max_heading_level: 2
 | [wnba_stats_leaguedashplayerstats](wnba_stats/leaguedash.md#wnba_stats_leaguedashplayerstats) | GET /stats/leaguedashplayerstats |
 | [wnba_stats_leaguedashptdefend](wnba_stats/leaguedash.md#wnba_stats_leaguedashptdefend) | GET /stats/leaguedashptdefend |
 | [wnba_stats_leaguedashteamclutch](wnba_stats/leaguedash.md#wnba_stats_leaguedashteamclutch) | GET /stats/leaguedashteamclutch |
-| [wnba_stats_leaguedashteamshotlocations](wnba_stats/leaguedash.md#wnba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |
+| [wnba_stats_leaguedashteamshotlocations](wnba_stats/leaguedash-2.md#wnba_stats_leaguedashteamshotlocations) | GET /stats/leaguedashteamshotlocations |
 | [wnba_stats_leaguedashteamstats](wnba_stats/leaguedash-2.md#wnba_stats_leaguedashteamstats) | GET /stats/leaguedashteamstats |
 
 ## Player
@@ -98,7 +98,7 @@ toc_max_heading_level: 2
 | [wnba_stats_playerfantasyprofile](wnba_stats/player.md#wnba_stats_playerfantasyprofile) | GET /stats/playerfantasyprofile |
 | [wnba_stats_playerfantasyprofilebargraph](wnba_stats/player.md#wnba_stats_playerfantasyprofilebargraph) | GET /stats/playerfantasyprofilebargraph |
 | [wnba_stats_playergamelog](wnba_stats/player.md#wnba_stats_playergamelog) | GET /stats/playergamelog |
-| [wnba_stats_playergamelogs](wnba_stats/player.md#wnba_stats_playergamelogs) | GET /stats/playergamelogs |
+| [wnba_stats_playergamelogs](wnba_stats/player-2.md#wnba_stats_playergamelogs) | GET /stats/playergamelogs |
 | [wnba_stats_playergamestreakfinder](wnba_stats/player-2.md#wnba_stats_playergamestreakfinder) | GET /stats/playergamestreakfinder |
 | [wnba_stats_playerindex](wnba_stats/player-2.md#wnba_stats_playerindex) | GET /stats/playerindex |
 | [wnba_stats_playernextngames](wnba_stats/player-2.md#wnba_stats_playernextngames) | GET /stats/playernextngames |
@@ -172,7 +172,7 @@ toc_max_heading_level: 2
 | [wnba_stats_teamdashboardbyopponent](wnba_stats/teamdash-3.md#wnba_stats_teamdashboardbyopponent) | GET /stats/teamdashboardbyopponent |
 | [wnba_stats_teamdashboardbyshootingsplits](wnba_stats/teamdash-4.md#wnba_stats_teamdashboardbyshootingsplits) | GET /stats/teamdashboardbyshootingsplits |
 | [wnba_stats_teamdashboardbyteamperformance](wnba_stats/teamdash-4.md#wnba_stats_teamdashboardbyteamperformance) | GET /stats/teamdashboardbyteamperformance |
-| [wnba_stats_teamdashboardbyyearoveryear](wnba_stats/teamdash-4.md#wnba_stats_teamdashboardbyyearoveryear) | GET /stats/teamdashboardbyyearoveryear |
+| [wnba_stats_teamdashboardbyyearoveryear](wnba_stats/teamdash-5.md#wnba_stats_teamdashboardbyyearoveryear) | GET /stats/teamdashboardbyyearoveryear |
 | [wnba_stats_teamdashlineups](wnba_stats/teamdash-5.md#wnba_stats_teamdashlineups) | GET /stats/teamdashlineups |
 
 ## Other

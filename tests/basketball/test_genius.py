@@ -275,7 +275,8 @@ def test_columns_argument_is_accepted_and_the_pinned_schema_wins(game):
 def test_every_public_parser_has_an_example_block():
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        assert all(h in doc for h in ("Args:", "Returns:", "Raises:", "Example:")), name
+        assert all(h in doc for h in ("Args:", "Returns:", "Example:")), name
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc, name
 
 
@@ -438,6 +439,30 @@ def test_a_hosted_500_website_error_page_points_at_the_embed_route(answer):
         rt._get(SCHEDULE_URL)
 
 
+@pytest.mark.parametrize(
+    "status,text,transient",
+    [
+        (503, "down", True),
+        (429, "slow down", True),
+        (500, "<html>A website error has occurred</html>", False),  # deterministic: no plain hosted site
+        (403, CLOUDFRONT, False),
+        (403, "<html>forbidden</html>", False),
+    ],
+)
+def test_only_a_transport_failure_or_a_429_5xx_is_marked_transient(answer, status, text, transient):
+    answer(status, text)
+    with pytest.raises(AssetFetchError) as err:
+        rt._get(U_URL)
+    assert getattr(err.value, "transient", False) is transient
+
+
+def test_a_dead_connection_is_marked_transient(answer):
+    answer(ConnectionError("reset"))
+    with pytest.raises(AssetFetchError) as err:
+        rt._get(U_URL)
+    assert err.value.transient is True
+
+
 @pytest.mark.parametrize("text", ["", "   ", "<html>not data</html>", '{"tm": {"1": {}', "[1]"])
 def test_data_json_stubs_and_bad_bodies_are_refused(answer, text):
     answer(200, text)
@@ -521,6 +546,31 @@ def test_a_schedule_block_linking_another_match_is_refused(answer):
     answer(200, text)
     with pytest.raises(AssetFetchError, match="links to"):
         rt._get(SCHEDULE_URL)
+
+
+FFBB_URL = f"https://{rt.HOSTED}/FFBB/en/competition/21849/schedule"
+
+
+def test_a_to_be_determined_block_takes_the_scope_the_other_blocks_prove(answer):
+    # Block 1 of the real FFBB 21849 page is an unfilled play-off slot: no team links, no match link.
+    text = _html("hosted_FFBB_21849_first3.html")
+    assert P._page_record("schedule", text)["matches"][0]["comp_id"] is None
+    answer(200, text)
+    rec = rt._get(FFBB_URL)
+    assert [(m["match_id"], m["comp_id"], m["org"]) for m in rec["matches"]] == [
+        (1145701, 21849, "FFBB"), (909156, 21849, "FFBB"), (909159, 21849, "FFBB")
+    ]  # fmt: skip
+    with pytest.raises(AssetFetchError, match="not the competition asked for"):  # still refused under another comp
+        rt._get(f"https://{rt.HOSTED}/FFBB/en/competition/18540/schedule")
+
+
+def test_a_schedule_of_only_placeholder_blocks_is_refused(answer):
+    text = _html("hosted_FFBB_21849_first3.html")
+    first, second = text.find('<div class="match-wrap '), text.find('<div class="match-wrap ', 100)
+    answer(200, text[:second] + "</body></html>")
+    assert text[first:second].count("extfix_1145701") == 1
+    with pytest.raises(AssetFetchError, match="no block names"):
+        rt._get(FFBB_URL)
 
 
 def test_embed_envelope(answer):
@@ -624,3 +674,23 @@ def test_wrappers_build_the_documented_urls(monkeypatch):
         WIDGET_URL,
     ]
     assert seen[4][1] == {"roundNumber": -1} and seen[5][1] == {"roundNumber": 3}
+
+
+class _BytesResp(_Resp):
+    def __init__(self, content: bytes, headers: Dict[str, str]):
+        super().__init__(200, content.decode("latin-1"), headers)
+        self.content = content
+
+
+def test_body_text_reads_utf8_when_no_charset_is_declared():
+    page = "LIGUE FÉMININE · Παναθηναϊκός".encode("utf-8")
+    resp = _BytesResp(page, {"Content-Type": "text/html"})
+    assert rt._body_text(resp) == "LIGUE FÉMININE · Παναθηναϊκός"
+
+
+def test_body_text_honours_a_declared_charset_and_bad_utf8():
+    declared = _BytesResp("caf\xe9".encode("latin-1"), {"content-type": "text/html; charset=ISO-8859-1"})
+    assert rt._body_text(declared) == "café"
+    not_utf8 = _BytesResp(b"caf\xe9", {"Content-Type": "text/html"})
+    assert rt._body_text(not_utf8) == "café"
+    assert rt._body_text(_Resp(200, "plain")) == "plain"

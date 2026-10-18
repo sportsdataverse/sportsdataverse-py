@@ -909,3 +909,9 @@ Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 **Returns**
 
 A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `fox_data` is an archive-format game (no `modalPlay` geometry on any play), where yards-to-goal is unavailable and the EPA pipeline cannot run. |
