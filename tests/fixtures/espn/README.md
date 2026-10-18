@@ -6,6 +6,7 @@
   - [Returns-table captures (2026-10-07)](#returns-table-captures-2026-10-07)
   - [Schedule and teams captures (2026-06-08, `tools/capture_espn_fixtures.py`)](#schedule-and-teams-captures-2026-06-08-toolscapture_espn_fixturespy)
   - [Provider-gate captures (2026-10-11, task 1.4)](#provider-gate-captures-2026-10-11-task-14)
+  - [MBB bare-year season captures (2026-10-13, task 2.9)](#mbb-bare-year-season-captures-2026-10-13-task-29)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -169,5 +170,16 @@ One request each, from a residential IP on 2026-10-11 (`requests.get`, no creden
 | `scoreboard_cfb_2014_placeholder.json` | `GET http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2014&groups=80&limit=500` (HTTP 200, 4.4 MB) | Trimmed to `events[82:87]` (top-level `leagues`, `groups`, `provider`, `week` kept whole): ESPN's real placeholder event (a bare `{}`, event 84 of 500) between two real games on each side. The 2010 season scoreboard the cfb guard was written for no longer carries a placeholder in its first 500 events (re-checked the same day); 2014 still does. |
 | `error_404_body.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event=1` (HTTP 404), captured 2026-10-11 | ESPN's real 404 body, byte-for-byte: `{code, message}` (not the `{code, detail}` signature `scrape/espn/persist.py` checks, B-L4). |
 | `athlete_statistics_core_nba_1966_2024.json` | `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/athletes/1966/statistics/` (HTTP 200) | LeBron James, 2023-24 regular season, byte-for-byte: 3 categories, 112 stats. Drives `tests/test_common_espn_player_stats.py` (B-M33). |
+
+## MBB bare-year season captures (2026-10-13, task 2.9)
+
+`curl -s` from a residential IP on 2026-10-13, no credentials, events byte-for-byte. They drive
+`tests/mbb/test_mbb_schedule.py` (B-M13, review R855-1): the season sweep reads the calendar,
+then requests each game day.
+
+| file | request | contents |
+|---|---|---|
+| `scoreboard_mbb_dates_2024.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=2024&groups=50&limit=500` (HTTP 200, 8.8 MB, 500 events) | `leagues` whole (its `calendar` lists the 2023-24 season's 148 game days, 2023-11-06 .. 2024-04-08), the first 3 `events`, `eventsDate`. The full answer's events span 2024-01-01 .. 2024-01-13 only: ESPN reads a bare year as the calendar year and stops at `limit` (the B-M13 live TP). |
+| `mbb_season_days_2024.json` | the same URL with `dates=` 20231106, 20231220, 20240120, 20240210, 20240309, 20240321, 20240408 (HTTP 200 each: 184, 43, 145, 155, 102, 16, 1 events) | One object keyed by the requested day; each value is that answer's first 2 `events` (1 on 20240408) plus `eventsDate`. Season 2024 throughout; season type 3 (NCAA tournament) on 20240321 and 20240408. |
 
 - `wbb_calendar_2001.json`: `leagues[0].calendar` of `site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates=2001` (125 dates, 2000-11-10 to 2001-04-01), captured 2026-10-17.

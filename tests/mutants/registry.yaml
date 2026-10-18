@@ -531,25 +531,25 @@
 - id: cfb-schedule-drop-null-competitor-guard
   group: provider-gates
   finding: B-M34
-  file: sportsdataverse/cfb/cfb_schedule.py
-  snippet: 'if not _comps or not (_comps[0].get("competitors") or []):'
-  mutant: 'if False:'
-  test: tests/cfb/test_cfb_schedule_teams_offline.py
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'if not comps or not isinstance(comps[0], dict) or len(comps[0].get("competitors") or []) < 2:'
+  mutant: 'if not comps:'
+  test: tests/cfb/test_cfb_schedule_teams_offline.py -k "placeholder_event_2014 or event_one_competitor"
   expected: kill
   note: >-
-    the real 2014 scoreboard's `{}` placeholder event (and an emptied competitions list) must not
-    discard the day (ledger gate espn-8-league-offline-snapshots; the 2010 capture no longer
-    carries a placeholder)
+    the real 2014 scoreboard's `{}` placeholder event (and a one-sided competitors list) must not
+    discard the day (ledger gate espn-8-league-offline-snapshots). Task 2.9 moved the guard from
+    cfb_schedule.py into the shared schedule assembly, so it now covers all seven copies.
 
 - id: nba-schedule-returns-none
   group: provider-gates
   finding: B-M34
   file: sportsdataverse/nba/nba_schedule.py
-  snippet: 'return ev.to_pandas() if return_as_pandas else ev'
-  mutant: 'return None'
+  snippet: 'return _schedule_frame('
+  mutant: 'return None and _schedule_frame('
   test: tests/nba/test_nba_schedule_teams_offline.py
   expected: kill
-  note: the offline snapshot on scoreboard_nba.json (task 1.4 evidence line)
+  note: the offline snapshot on scoreboard_nba.json (task 1.4 evidence line; call site moved in task 2.9)
 
 - id: player-stats-display-value-first
   group: provider-gates
@@ -874,3 +874,144 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- task 2.9: ESPN schedule family (group espn-schedule) ----------------------------------------
+- id: mlb-schedule-empty-returns-none
+  group: espn-schedule
+  finding: B-H2
+  file: sportsdataverse/mlb/mlb_schedule.py
+  snippet: 'return _empty_schedule("mlb", return_as_pandas)'
+  mutant: 'return None'
+  test: tests/mlb/test_mlb_schedule_teams_offline.py -k empty_slate
+  expected: kill
+  note: 'ledger gate schedule-family-contract MUTATION: mlb returned None on an empty slate (live 2026-10-09)'
+
+- id: schedule-empty-frame-unschemaed
+  group: espn-schedule
+  finding: B-M12
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'return _empty_schedule(league, return_as_pandas)'
+  mutant: 'return pl.DataFrame()'
+  test: tests/nba/test_nba_schedule_teams_offline.py -k empty_slate
+  expected: kill
+  note: 'an empty slate must carry the documented columns, not a (0, 0) frame'
+
+- id: schedule-drop-notes-default
+  group: espn-schedule
+  finding: B-M24
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'if not isinstance(comp.get(key), list):'
+  mutant: 'if False:'
+  test: tests/mbb/test_mbb_schedule_teams_offline.py -k event_missing_notes
+  expected: kill
+  note: 'one event without `notes` must not discard the day (removing the per-event guard)'
+
+- id: schedule-season-guard
+  group: espn-schedule
+  finding: B-M24
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'season = event.get("season") or {}'
+  mutant: 'season = event.get("season")'
+  test: tests/wbb/test_wbb_schedule_teams_offline.py -k event_missing_season
+  expected: kill
+  note: 'one event without `season` must not discard the day'
+
+- id: schedule-parse-copies-event
+  group: espn-schedule
+  finding: B-L2
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'event = copy.deepcopy(event)  # the league parsers pop keys; never touch the caller''s payload'
+  mutant: 'pass'
+  test: tests/nhl/test_nhl_schedule_teams_offline.py -k parse_twice
+  expected: kill
+  note: 'the league parsers pop keys: without the copy a second parse of the same payload raises'
+
+- id: schedule-canceled-masked
+  group: espn-schedule
+  finding: B-GB-21
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'is_in(["Postponed", "Canceled"])'
+  mutant: 'is_in(["Postponed"])'
+  test: tests/wnba/test_wnba_schedule_teams_offline.py -k canceled_masked
+  expected: kill
+  note: 'Canceled games carry null linescores in every league, not only cfb'
+
+- id: schedule-documented-columns-filled
+  group: espn-schedule
+  finding: B-M16
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'fixed.append(pl.lit(None, dtype=dtype).alias(name))'
+  mutant: 'pass'
+  test: tests/mbb/test_mbb_schedule_teams_offline.py -k returns_table_columns
+  expected: kill
+  note: 'shape half: a documented column the day left empty (home_logo_dark) must still be emitted'
+
+- id: schedule-float-integer-restored
+  group: espn-schedule
+  finding: B-M16
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'elif dtype == pl.Int64 and df.schema[name].is_float():'
+  mutant: 'elif False:'
+  test: tests/wbb/test_wbb_schedule_teams_offline.py -k id_dtypes
+  expected: kill
+  note: 'tournament_id arrives Float64 when one event lacks it (the pandas hop); documented integer'
+
+- id: nfl-schedule-rank-default-99
+  group: espn-schedule
+  finding: B-M25
+  file: sportsdataverse/nfl/nfl_schedule.py
+  snippet: '.get("current")  # NFL has no poll: null, not the CFB 99'
+  mutant: '.get("current", 99)'
+  test: tests/nfl/test_nfl_schedule_teams_offline.py -k rank_not_default
+  expected: kill
+  note: 'NFL ranks are null, not the CFB unranked default 99'
+
+- id: mbb-schedule-season-type-key
+  group: espn-schedule
+  finding: B-M14
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: '"seasontype": season_type,'
+  mutant: '"seasonType": season_type,'
+  test: tests/mbb/test_mbb_schedule_teams_offline.py -k query_key
+  expected: kill
+  note: 'the generated scoreboard''s lowercase key (ESPN ignores both when dates is set; harmonized)'
+
+- id: mbb-schedule-bare-year-single-request
+  group: espn-schedule
+  finding: B-M13
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: 'if dates is None or len(str(dates)) != 4:'
+  mutant: 'if True:'
+  test: tests/mbb/test_mbb_schedule.py -k bare_year
+  expected: kill
+  note: 'ledger gate bare-year-calendar-sweep MUTATION: one dates=2024 request yields the Jan 1-13 slice (R855-1: the sweep is now the season calendar, day by day)'
+
+- id: mbb-calendar-season-int
+  group: espn-schedule
+  finding: B-L9
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: 'season = most_recent_mbb_season() if season is None else int(season)'
+  mutant: 'season = season'
+  test: tests/mbb/test_mbb_schedule.py -k calendar_season_is_an_int
+  expected: kill
+  note: 'season=None raised TypeError and 2024.0 reached the URL'
+
+- id: schedule-all-null-column-typed
+  group: espn-schedule
+  finding: R855-3
+  file: sportsdataverse/_espn_schedule.py
+  snippet: 'if name not in df.columns or df[name].null_count() == df.height:  # all-null: documented dtype'
+  mutant: 'if name not in df.columns:'
+  test: tests/nfl/test_nfl_schedule_teams_offline.py -k rank_not_default
+  expected: kill
+  note: 'an all-null column comes back String after the pandas hop; it takes its documented dtype (NFL ranks Int64)'
+
+- id: mbb-season-sweep-failed-day-raises
+  group: espn-schedule
+  finding: R855-1
+  file: sportsdataverse/mbb/mbb_schedule.py
+  snippet: 'raise _AssetFetchError(f"ESPN scoreboard for {day} answered without an events list")'
+  mutant: 'pass'
+  test: tests/mbb/test_mbb_schedule.py -k failed_day_raises
+  expected: kill
+  note: 'a failed day raises instead of becoming a silent gap (HTTP 500 path is _download_json; this row guards the 200-without-events path)'
