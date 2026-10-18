@@ -3,6 +3,9 @@
 Fixtures: ``fixtures/era_play_order/`` (trimmed nfl-raw summaries, README "Era play order") and the
 task 2.20 ``fixtures/td_flag_residuals/`` summaries. Oracle: nflverse ``qtr`` / ``epa`` on the play
 (local ``pbp_<season>.parquet``, joined on ``game_id`` + ``play_id``; values below and in the README).
+
+Every EPA ceiling is the error measured on the fixed code, rounded up. Never lower this gate (or raise a
+ceiling) to pass: a red here is a regression in the period repair or the scoring overlay, so debug that.
 """
 
 from __future__ import annotations
@@ -41,8 +44,9 @@ def _era(game_id: int) -> str:
     return f"era_play_order/summary_{game_id}_trimmed.json.gz"
 
 
-# (game, play) -> nflverse qtr. ESPN's period is wrong on the first and right on the other four, each of
-# which a looser rule would have "repaired" (measured on nfl-raw 2002-2025 against nflverse qtr).
+# (game, play) -> nflverse qtr. 8 cases: ESPN's period is wrong on 3 (261022011/2073, 260910005/2797 and 2843),
+# which the repair lowers, and right on the other 5, each of which a looser rule would have "repaired"
+# (measured on nfl-raw 2002-2025 against nflverse qtr).
 _PERIODS = {
     # R832-10: the Q2 kickoff at 0:08 after the field goal, filed as period 3 between two period-2 rows.
     (261022011, 2073): 2,

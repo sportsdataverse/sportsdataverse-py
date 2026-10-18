@@ -107,7 +107,13 @@ ESPN_FULL_KICK_TEXT_FROM: int = 2009
 #: on both sides of it in id order while the clock runs on (261022011's Q2 kickoff at 0:08 as period
 #: 3): 727 such rows in nfl-raw 2002-2013 (721 of them 2005-08), every one of the 722 that join to
 #: nflverse ``qtr`` agreeing with the neighbours' period. From 2014 the same pattern fires on 3 rows,
-#: one of them (401030749/906) a play whose id is out of order and whose ESPN period is right.
+#: one of them (401030749/906) a play whose id is out of order and whose ESPN period is right; the floor
+#: gives up the other 2, correct repairs, to avoid that 1 wrong one. Each guard of
+#: ``nfl_pbp._repair_espn_period``, measured alone on nfl-raw 2002-2025 against nflverse ``qtr``:
+#: lowering only (raising a sandwiched row would be wrong 50 of 51 times); no repair just before an
+#: "End ..." row (without it 6 early-quarter rows beside a late "End Period" row move the wrong way);
+#: the clock running down across the three rows (it blocks 2 wrong lowerings and 10 right ones, kept so
+#: that no row moves away from nflverse).
 ESPN_PERIOD_REPAIR_BEFORE: int = 2014
 
 
