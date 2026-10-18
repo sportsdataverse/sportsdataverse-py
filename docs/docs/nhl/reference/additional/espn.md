@@ -451,7 +451,7 @@ espn_nhl_teams - look up NHL teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nhl.espn_nhl_teams.clear_cache().
+Polars dataframe of the NHL teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -483,9 +483,8 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 import polars as pl
 teams.filter(pl.col("team_id") == "14").to_dicts()
 
-# Refresh the cache (the call is ``lru_cache``'d) and round-trip to pandas
+# Pandas round-trip
 
-espn_nhl_teams.cache_clear()
 teams_pd = espn_nhl_teams(return_as_pandas=True)
 teams_pd[["team_id", "team_abbreviation", "team_display_name"]].head()
 ```

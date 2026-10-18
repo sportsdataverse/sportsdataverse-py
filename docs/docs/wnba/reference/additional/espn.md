@@ -564,7 +564,7 @@ espn_wnba_teams - look up WNBA teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.wnba.espn_wnba_teams.clear_cache().
+Polars dataframe of the WNBA teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -595,9 +595,8 @@ teams.select(["team_id", "team_abbreviation", "team_display_name"]).head()
 
 teams.filter(__import__("polars").col("team_id") == "17").to_dicts()
 
-# Refresh the cache (the call is ``lru_cache``'d)
+# Pandas round-trip
 
-espn_wnba_teams.cache_clear()  # cached at function-level
 teams_pd = espn_wnba_teams(return_as_pandas=True)
 ```
 

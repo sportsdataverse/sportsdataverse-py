@@ -589,7 +589,7 @@ espn_nba_teams - look up NBA teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nba.espn_nba_teams.clear_cache().
+Polars dataframe of the NBA teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|

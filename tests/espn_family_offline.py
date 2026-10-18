@@ -90,12 +90,7 @@ def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs:
     """
     calls = _route(monkeypatch, lambda url: (200, json.dumps(body), "application/json"))
     fn = getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_{family}"), f"espn_{league}_{family}")
-    clear = getattr(fn, "cache_clear", lambda: None)  # the teams functions are lru_cached
-    clear()
-    try:
-        out = fn(**kwargs)
-    finally:
-        clear()  # never leave a served fixture in the cache for another test
+    out = fn(**kwargs)  # the teams functions no longer cache (task 2.11), so nothing to clear
     assert isinstance(out, pl.DataFrame), f"espn_{league}_{family} returned {type(out).__name__}, not a DataFrame"
     return out, calls
 
