@@ -57,10 +57,12 @@ endpoints:
     name: master_site_instance_id
     query_key: masterSiteInstanceId
     type: str
-  - description: Season END year (2026 = 2025/26); the runtime sends the START year
-      this route takes. None = the player's default (shorter) log.
+  - description: Season END year (2026 = 2025/26); the wrapper sends the START year
+      this route takes (season - 1). None = the player's default (shorter) log.
     name: season
     query_key: season
+    transform:
+      offset: -1
     type: int
   parser: parse_shl_stats_info
   path: /statistics-v2/athlete/playerProfile_seasonGameLog

@@ -5,6 +5,12 @@
 # The list may only shrink: main's #778 removed the C-H4 touchback rows (_KICKOFF_2012_RULES_FROM); plan task
 # 3.11 removes the other CFB/NFL processor rows. A literal that moves into a constant fails the gate until its
 # row's count is lowered to the inline occurrences left, or the row is deleted when none remain.
+- file: sportsdataverse/basketball/nbl_au/nbl_rosetta_runtime.py
+  scope: 'start_year'
+  snippet: 'season <= 1998'
+  count: 1
+  id: C-T3
+  reason: 'Rosetta keys the NBL / WNBL winter seasons through 1998 by calendar year, then by START year; landed with main''s #859, reached this branch in the 10-18 main sync; no catalogue rule yet'
 - file: sportsdataverse/cfb/cfb_pbp.py
   scope: 'CFBPlayProcess.__add_play_type_flags'
   snippet: 'pl.col("season") >= 2018'
@@ -490,7 +496,7 @@
   reason: 'ESPN play ids line up with GSIS ids only from 2014 (Shield-to-ESPN coverage study); no catalogue rule yet'
 - file: sportsdataverse/wbb/wbb_schedule.py
   scope: 'espn_wbb_calendar'
-  snippet: 'int(season) < 2002'
+  snippet: 'int(season) < 2001'
   count: 1
   id: C-T3
-  reason: 'ESPN calendar floor (2002); wbb-2004-espn-pbp-coverage covers pbp, not the calendar'
+  reason: 'ESPN calendar floor (2001; main #860 lowered it from 2002); wbb-2004-espn-pbp-coverage covers pbp, not the calendar'
