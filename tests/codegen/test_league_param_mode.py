@@ -129,10 +129,61 @@ def test_headline_soccer_league_documents_the_parser_it_calls():
 
 
 def test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union():
-    """A-M22: a wrapper that returns a frame by default is not annotated ``-> Dict``."""
+    """A-M22: a wrapper that returns a frame by default is not annotated ``-> Dict``.
+
+    R858-4: one that returns a dict of frames (``summary``, the CDN game/pbp payloads) says so,
+    as its docstring already does.
+    """
     lg, apis, hosts, views = _real_league_views("nba")
     src = gen._league_module_source(lg, apis, hosts)
     assert all(v.parser for v in views)
     assert "-> Dict:" not in src
-    assert src.count(") -> Union[pl.DataFrame, pd.DataFrame, Dict]:") == len(views)
-    assert "    import polars as pl" in src and "    import pandas as pd" in src
+    dicts = [v for v in views if v.parsed_doc_md or v.returns_dict]
+    assert "summary" in {v.short for v in dicts}
+    assert src.count(") -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:") == len(dicts)
+    assert src.count(") -> Union[pl.DataFrame, pd.DataFrame, Dict]:") == len(views) - len(dicts)
+    assert "\nimport polars as pl" in src and "\nimport pandas as pd" in src
+
+
+def test_generated_wrapper_annotations_resolve(tmp_path):
+    """R858-4: ``typing.get_type_hints`` resolves every generated wrapper's annotations.
+
+    ``pl`` / ``pd`` used to be imported only under ``TYPE_CHECKING``, so evaluating an annotation
+    (``get_type_hints``, pydantic, a docs tool) raised ``NameError: name 'pl' is not defined``.
+    The ESPN module is rendered from the template here (so a template change is seen before any
+    regeneration); the flat family is the committed ``cbs_napi``.
+    """
+    import importlib.util
+    import typing
+
+    import pandas as pd
+    import polars as pl
+
+    from sportsdataverse.cbs import cbs_napi
+    from sportsdataverse.mbb import kenpom
+
+    lg, apis, hosts, _ = _real_league_views("nba")
+    path = tmp_path / "_rendered_nba_espn_ext.py"
+    path.write_text(gen._league_module_source(lg, apis, hosts), encoding="utf-8")
+    s = importlib.util.spec_from_file_location("_rendered_nba_espn_ext", path)
+    nba = importlib.util.module_from_spec(s)
+    s.loader.exec_module(nba)
+
+    summary = typing.get_type_hints(nba.espn_nba_summary)["return"]
+    assert typing.get_args(summary)[:2] == (typing.Dict[str, pl.DataFrame], typing.Dict[str, pd.DataFrame])
+    roster = typing.get_type_hints(nba.espn_nba_team_roster)["return"]
+    assert typing.get_args(roster)[:2] == (pl.DataFrame, pd.DataFrame)
+    for mod in (nba, cbs_napi, kenpom):
+        for name in mod.__all__:
+            typing.get_type_hints(getattr(mod, name))
+
+    # R891-2: the family-level ``parsed_doc`` (KenPom: one frame per HTML table) alone makes the parsed
+    # return a dict of frames. ``kenpom_ratings`` also has a dict-of-frames schema; ``kenpom_win_probability``
+    # has a single-table one, so only ``parsed_doc`` carries it.
+    for name in ("kenpom_ratings", "kenpom_win_probability"):
+        hint = typing.get_type_hints(getattr(kenpom, name))["return"]
+        assert typing.get_args(hint)[:2] == (typing.Dict[str, pl.DataFrame], typing.Dict[str, pd.DataFrame]), name
+    fa = spec.load_flat_api(gen.ENDPOINTS / "kenpom.yaml", spec.load_parameters(gen.ENDPOINTS / "parameters.yaml"))
+    wp = next(v for v in gen._flat_views(fa, league_prefix="mbb") if v.fn_name == "kenpom_win_probability")
+    assert wp.parsed_doc_md and not wp.returns_dict
+    assert wp.parsed_annotation.startswith("Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], ")

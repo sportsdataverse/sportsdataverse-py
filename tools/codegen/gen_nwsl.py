@@ -28,7 +28,6 @@ from typing import Any, Dict, List, Optional
 
 from gen_soccer_common import (
     ROOT,
-    _query_params,
     columns_from_frame,
     component_columns,
     get_ops,
@@ -40,6 +39,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.nwsl.nwsl_api_parsers import (

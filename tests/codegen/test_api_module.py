@@ -445,6 +445,33 @@ def test_per_route_getter_only_family_import_is_dropped_when_unused(tmp_path, mo
     assert "from _fake_rt_alldotted import _other as _other__fake_rt_alldotted" in header
 
 
+def test_per_route_getter_documents_the_url_its_own_module_requests(tmp_path, monkeypatch):
+    """R858-7: a ``pkg.module:fn`` route's Valid URL is built by THAT module's ``_build_query``.
+
+    ``test_per_route_getter`` proves which callable each wrapper calls; this proves the documented
+    URL follows the route too. The family module has no ``_build_query``; the route's module rewrites
+    the query (as ``sihf_runtime`` does), so only the routed endpoint's example carries the rewrite.
+    """
+    (tmp_path / "_fake_rt_plainfam.py").write_text(_FAKE_RUNTIME.split("def _build_query")[0], encoding="utf-8")
+    _fake_runtime(tmp_path, monkeypatch, "_fake_rt_route")
+    y = tmp_path / "_gen_routeq.yaml"
+    y.write_text(
+        "api: rq\nhost: 'https://rq.test'\nname_pattern: 'rq_{short}'\nmodule: rq\n"
+        "getter_module: _fake_rt_plainfam\nruntime_imports: [_get]\n"
+        "endpoints:\n"
+        "  - { short: plain, summary: 'Plain.', path: '/plain', example_args: { q: 1 },"
+        " extra_params: [ { name: q, query_key: q, type: int } ] }\n"
+        "  - { short: routed, summary: 'Routed.', path: '/routed', getter: '_fake_rt_route:_other',"
+        " example_args: { q: 1 }, extra_params: [ { name: q, query_key: q, type: int } ] }\n",
+        encoding="utf-8",
+    )
+    views = {v.short: v for v in generate._flat_views(spec.load_flat_api(y, {}))}
+    assert views["plain"].example_url == "https://rq.test/plain?q=1"
+    assert views["routed"].example_url == "https://rq.test/routed?q=1&rewritten=1"
+    assert views["routed"].getter_name == "_other__fake_rt_route"
+    assert "https://rq.test/routed?q=1&rewritten=1" in views["routed"].docstring
+
+
 def test_espn_endpoints_reject_a_getter(tmp_path):
     y = tmp_path / "espn_x.yaml"
     y.write_text(

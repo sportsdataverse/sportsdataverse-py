@@ -904,16 +904,18 @@
   group: codegen-runtime
   finding: A-M22
   file: tools/codegen/templates/espn_league_module.py.jinja
-  snippet: ') -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:'
+  snippet: ') -> {{ ep.parsed_annotation }}:'
   mutant: ') -> Dict:'
   test: tests/codegen/test_league_param_mode.py::test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union
   expected: kill
-  note: All 3,446 ESPN wrappers return a frame by default; `-> Dict` was the annotation before 3.9.
+  note: >-
+    Every ESPN wrapper returns a frame (or a dict of frames) by default; `-> Dict` was the annotation
+    before 3.9. No wrapper count here: it grows with every league and went stale once (R858-6).
 
 - id: codegen-query-params-required-flag
   group: codegen-runtime
   finding: A-M23
-  file: tools/codegen/gen_soccer_common.py
+  file: tools/codegen/openapi_params.py
   snippet: '        if is_required and required in ("flag", "both"):'
   mutant: '        if is_required and required in ("both",):'
   test: tests/codegen/test_query_params.py::test_required_policies
@@ -925,12 +927,100 @@
 - id: codegen-query-params-path-clash-prefix
   group: codegen-runtime
   finding: A-M23
-  file: tools/codegen/gen_soccer_common.py
+  file: tools/codegen/openapi_params.py
   snippet: '            name = f"filter_{name}"'
   mutant: '            pass'
   test: tests/codegen/test_query_params.py::test_names_types_skip_and_clash
   expected: kill
   note: MLS and NWSL rename a query param that clashes with a path token to filter_<name>; CBS/On3 drop it.
+
+# --- 3.9 PR 2: the #858 review follow-ups (R858-2, R858-3, R858-4, R858-7) -------------------------
+- id: codegen-docs-index-sport-schema-league
+  group: codegen-runtime
+  finding: R858-2
+  file: tools/codegen/build_docs_index.py
+  snippet: '            doc = G._schema_doc(w.schema, w.schema_league or w.league) if w.schema else {}'
+  mutant: '            doc = G._schema_doc(w.schema, w.league) if w.schema else {}'
+  test: tests/codegen/test_docs_index.py::test_soccer_wrapper_columns_come_from_the_sport_schema
+  expected: kill
+  note: >-
+    The sdv-docs index stored the generic cross-league summary sections (boxscore_player, plays) for
+    the 12 headline soccer leagues' wrappers, which return the soccer parser's sections.
+
+- id: codegen-docs-index-wrapper-carries-schema-league
+  group: codegen-runtime
+  finding: R858-2
+  file: tools/codegen/build_docs_index.py
+  snippet: '                    v.schema_league,'
+  mutant: '                    None,'
+  test: tests/codegen/test_docs_index.py::test_soccer_wrapper_columns_come_from_the_sport_schema
+  expected: kill
+  note: codegen_wrappers must hand the view's schema key to the Wrapper, or python_columns falls back to the prefix.
+
+- id: codegen-test-loader-restores-sys-path
+  group: codegen-runtime
+  finding: R858-3
+  file: tests/codegen/test_gen_on3.py
+  snippet: '            sys.path.remove(codegen)'
+  mutant: '            pass'
+  test: tests/codegen/test_gen_on3.py::test_loading_the_generator_leaves_sys_path_alone
+  expected: kill
+  note: Loading gen_on3 left tools/codegen on sys.path for every later test in the session.
+
+- id: codegen-dict-of-frames-annotation
+  group: codegen-runtime
+  finding: R858-4
+  file: tools/codegen/generate.py
+  snippet: '            if (self.parsed_doc_md or self.returns_dict)'
+  mutant: '            if False'
+  test: tests/codegen/test_league_param_mode.py::test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union
+  expected: kill
+  note: >-
+    summary and the CDN game payloads return a dict of frames (their docstrings say so) but were
+    annotated as returning one frame.
+
+- id: codegen-wrapper-annotations-import-at-runtime
+  group: codegen-runtime
+  finding: R858-4
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: |-
+    import pandas as pd  # noqa: F401
+    import polars as pl  # noqa: F401
+  mutant: |-
+    from typing import TYPE_CHECKING
+    if TYPE_CHECKING:
+        import pandas as pd
+        import polars as pl
+  test: tests/codegen/test_league_param_mode.py::test_generated_wrapper_annotations_resolve
+  expected: kill
+  note: >-
+    With pl/pd imported only under TYPE_CHECKING, typing.get_type_hints() on any generated wrapper
+    raised NameError (the test renders the module from the template, so no regeneration is needed).
+
+- id: codegen-route-getter-example-url
+  group: codegen-runtime
+  finding: R858-7
+  file: tools/codegen/generate.py
+  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)'
+  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module)'
+  test: tests/codegen/test_api_module.py::test_per_route_getter_documents_the_url_its_own_module_requests
+  expected: kill
+  note: >-
+    A pkg.module:fn route's documented URL must come from that module's _build_query; only
+    test_per_route_getter (which callable runs) guarded route_getter before.
+
+- id: codegen-parsed-doc-dict-annotation
+  group: codegen-runtime
+  finding: R891-2
+  file: tools/codegen/generate.py
+  snippet: '            if (self.parsed_doc_md or self.returns_dict)'
+  mutant: '            if self.returns_dict'
+  test: tests/codegen/test_league_param_mode.py::test_generated_wrapper_annotations_resolve
+  expected: kill
+  note: >-
+    A family-level parsed_doc alone (KenPom: a dict of frames, one per HTML table) makes the parsed
+    return a dict; kenpom_win_probability's schema is a single table, so without it that wrapper is
+    annotated as returning one frame. Only --check caught this before.
 
 # --- the three ESPN parsers repaired against their first real captures (fix/espn-parsers-real-payloads,
 # the coverage prerequisite of task 4.1) --------------------------------------------------------------

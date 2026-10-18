@@ -7,7 +7,6 @@ so a caller's YAML cannot drift by an edit to the shared reader.
 from __future__ import annotations
 
 import importlib.util
-import sys
 from pathlib import Path
 
 import pytest
@@ -16,9 +15,8 @@ _CODEGEN = Path(__file__).resolve().parents[2] / "tools" / "codegen"
 
 
 def _common():
-    if str(_CODEGEN) not in sys.path:
-        sys.path.insert(0, str(_CODEGEN))
-    spec = importlib.util.spec_from_file_location("gen_soccer_common", _CODEGEN / "gen_soccer_common.py")
+    # ``openapi_params`` imports nothing from its siblings, so loading it needs no sys.path entry (R858-3).
+    spec = importlib.util.spec_from_file_location("openapi_params", _CODEGEN / "openapi_params.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod

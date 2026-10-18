@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.basketball.bnxt.bnxt_runtime import _get
 from sportsdataverse.basketball.bnxt.bnxt_parsers import (
@@ -37,10 +42,6 @@ from sportsdataverse.basketball.bnxt.bnxt_parsers import (
     parse_sportpress_team_roster,
     parse_sportpress_ui_strings,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "sportpress_ui_strings",

@@ -37,7 +37,6 @@ from typing import Any, Dict, List
 import polars as pl
 from gen_soccer_common import (
     ROOT,
-    _query_params,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -46,6 +45,7 @@ from gen_soccer_common import (
     rewrite_schema_dir,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.f1.f1_parsers import parse_f1_mrdata

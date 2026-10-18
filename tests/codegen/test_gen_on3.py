@@ -18,14 +18,29 @@ _GEN = Path(__file__).resolve().parents[2] / "tools" / "codegen" / "gen_on3.py"
 
 
 def _load_gen():
-    # gen_on3 imports its sibling ``gen_soccer_common`` (the shared ``_query_params``), as it
-    # does when run as a script from tools/codegen/.
-    if str(_GEN.parent) not in sys.path:
-        sys.path.insert(0, str(_GEN.parent))
-    spec = importlib.util.spec_from_file_location("gen_on3", _GEN)
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
+    # gen_on3 imports its sibling ``openapi_params`` (the shared ``_query_params``), as it does
+    # when run as a script from tools/codegen/. The path entry goes again once the module has
+    # loaded, so it cannot leak into the tests that run after this file (R858-3).
+    codegen = str(_GEN.parent)
+    added = codegen not in sys.path
+    if added:
+        sys.path.insert(0, codegen)
+    try:
+        spec = importlib.util.spec_from_file_location("gen_on3", _GEN)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+    finally:
+        if added:
+            sys.path.remove(codegen)
     return mod
+
+
+def test_loading_the_generator_leaves_sys_path_alone(monkeypatch):
+    """R858-3: loading the generator must not leave tools/codegen on ``sys.path``."""
+    monkeypatch.setattr(sys, "path", [p for p in sys.path if p != str(_GEN.parent)])
+    before = list(sys.path)
+    _load_gen()
+    assert sys.path == before
 
 
 def test_short_from_path():

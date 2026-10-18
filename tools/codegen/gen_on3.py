@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import yaml
-from gen_soccer_common import _query_params
+from openapi_params import _query_params
 
 from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
 from sportsdataverse.dl_utils import underscore

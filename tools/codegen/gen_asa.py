@@ -28,7 +28,6 @@ from typing import Any, Dict
 
 from gen_soccer_common import (
     ROOT,
-    _query_params,
     columns_from_frame,
     get_ops,
     load_spec,
@@ -39,6 +38,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.asa_parsers import parse_asa, parse_asa_goals_added
