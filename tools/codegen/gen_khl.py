@@ -215,7 +215,11 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "query_key": "values[amplua_full]",
                     "type": "str",
                     "choices": ["goalies", "defenses", "forwards", "skaters", "all"],
-                    "description": "Position group: goalies, defenses, forwards, skaters or all. None = the site's default.",
+                    "description": (
+                        "Position group: goalies, defenses, forwards, skaters or all. None = the site's default. "
+                        "The site orders goalies by goals-against average ascending, so goalies=page 1 lists "
+                        "goalies without a game first; page on (or filter by club) to reach the starters."
+                    ),
                 },
                 {
                     "name": "club",
@@ -241,7 +245,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
             ],
             {},
             {"season": 2026, "position": "forwards"},
-            "stat__players.json",
+            ("stat__players.json", "stat__players_goalies.json"),  # skater + goalie columns
         )
     ],
     "/players/profile/": [
@@ -577,10 +581,19 @@ def returns_descriptions(path: Path) -> Dict[str, Dict[str, str]]:
 
 
 def _schema(
-    fixture: Path, parser: Callable[..., Any], key: str, route_docs: Dict[str, str], notes: Dict[str, Dict[str, str]]
+    fixture: Path | tuple[Path, ...],
+    parser: Callable[..., Any],
+    key: str,
+    route_docs: Dict[str, str],
+    notes: Dict[str, Dict[str, str]],
 ) -> Dict[str, Any]:
-    frame = parser(json.loads(fixture.read_text(encoding="utf-8")))
-    assert frame.height, f"{fixture.name}: {parser.__name__} parsed no rows"
+    """A returns schema from the parsed fixture(s); several fixtures declare the union of their columns."""
+    frames = []
+    for path in fixture if isinstance(fixture, tuple) else (fixture,):
+        frame = parser(json.loads(path.read_text(encoding="utf-8")))
+        assert frame.height, f"{path.name}: {parser.__name__} parsed no rows"
+        frames.append(frame)
+    frame = frames[0] if len(frames) == 1 else pl.concat(frames, how="diagonal_relaxed")
     cols = columns_from_frame(frame, [], leaf_fallback=False)
     for col, dtype in zip(cols, frame.dtypes):
         if isinstance(dtype, pl.List):
@@ -684,7 +697,11 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
             write_yaml(
                 schema_dir / f"{short}.yaml",
                 _schema(
-                    FIXTURES / "khl_rest" / fixture, getattr(rest, parser), f"khl_{short}", docs.get(path, {}), notes
+                    tuple(FIXTURES / "khl_rest" / f for f in ((fixture,) if isinstance(fixture, str) else fixture)),
+                    getattr(rest, parser),
+                    f"khl_{short}",
+                    docs.get(path, {}),
+                    notes,
                 ),
             )
     doc = {

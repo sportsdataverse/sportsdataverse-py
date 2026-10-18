@@ -81,7 +81,9 @@ _PLAYER_LINK = re.compile(r"/players/(\d+)/")
 _PDF_IDS = re.compile(r"/pdf/(\d+)/(\d+)/")
 _MMSS = re.compile(r"^(\d+):(\d{2})$")
 #: Rate columns: always Float64, even when the first rows happen to be whole numbers.
-_FLOAT_STATS = frozenset({"ts", "dt", "as", "pcd", "dt_a", "dt_b"})
+_FLOAT_STATS = frozenset({"ts", "dt", "as", "pcd", "dt_a", "dt_b", "gaa"})
+#: Time columns that stay text even when every value on the page is the "-" placeholder (goalie ``toi``).
+_TEXT_STATS = frozenset({"toi"})
 
 
 # --- shared helpers -----------------------------------------------------------------------
@@ -259,7 +261,7 @@ def _stat_cast(df: pl.DataFrame, cols: Iterable[str]) -> pl.DataFrame:
     """
     exprs = []
     for c in cols:
-        if c not in df.columns:
+        if c not in df.columns or c in _TEXT_STATS:
             continue
         text = df[c].cast(pl.Utf8).str.strip_chars()
         values = [v for v in text.to_list() if v not in (None, "", "-")]

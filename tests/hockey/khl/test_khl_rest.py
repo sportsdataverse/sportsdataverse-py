@@ -322,3 +322,20 @@ def test_playoff_bracket_game_ids_are_a_list_of_int64() -> None:
 def test_null_data_body_is_a_zero_row_documented_frame() -> None:
     df = P.parse_khl_playoff_bracket({"data": None})
     assert df.height == 0 and df.schema == P.parse_khl_playoff_bracket({}).schema
+
+
+def test_goalie_stats_columns_are_declared_and_typed():
+    DECL = list(P.SCHEMAS["khl_player_stats"])
+    df = P.parse_khl_player_stats(_load("stat__players_goalies.json"), columns=DECL)
+    goalie = ["w", "l", "sop", "ga", "sv", "sv_pct", "gaa", "so", "toi"]
+    assert set(goalie) <= set(DECL)
+    assert df["group"].unique().to_list() == ["goalies"]
+    # gaa is a rate and toi text even on all-zero / "-" pages
+    assert [df.schema[c] for c in goalie] == [pl.Int64] * 5 + [pl.Float64] * 2 + [pl.Int64, pl.Utf8]
+    assert df.columns[: len(DECL)] == DECL  # no stray extras
+    assert df["gp"].to_list() == [0, 0, 0]  # the site lists no-game goalies first (gaa ascending)
+
+
+def test_goalie_stats_descriptions_exist():
+    manual = yaml.safe_load((ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml").read_text("utf-8"))
+    assert {"w", "l", "sop", "ga", "sv", "sv_pct", "gaa", "so", "toi"} <= set(manual["khl_player_stats"])
