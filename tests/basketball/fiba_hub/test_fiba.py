@@ -149,6 +149,25 @@ def test_a_rate_is_float_even_where_a_body_sends_a_whole_number():
     assert cap.schema == df.schema
 
 
+@pytest.mark.parametrize("name", sorted(p.name for p in (PAGE_FX / "full").glob("*.json")))
+def test_blocks_received_is_int64_in_both_box_tables(name):
+    # the team lines carry no BSR, so box_teams.blocks_received is all null: Int64 like box_players, never String
+    page = _load(PAGE_FX / "full", name)
+    players, teams = pp.parse_fiba_gamepage_box_players(page), pp.parse_fiba_gamepage_box_teams(page)
+    assert players.schema["blocks_received"] == teams.schema["blocks_received"] == pl.Int64
+    shared = set(players.columns) & set(teams.columns)
+    assert {c: (players.schema[c], teams.schema[c]) for c in shared if players.schema[c] != teams.schema[c]} == {}
+
+
+@pytest.mark.parametrize("kind", ["gdap", "gamepage"])
+def test_one_column_name_has_one_type_across_the_family(kind):
+    types: Dict[str, set] = {}
+    for short in ROUTES[kind]:
+        for col in _schema(kind, short):
+            types.setdefault(col["name"], set()).add(col["type"])
+    assert {c: t for c, t in types.items() if len(t) > 1} == {}
+
+
 def test_full_bodies_are_committed_and_under_the_size_budget():
     full = sorted((GDAP_FX / "full").glob("*.json")) + sorted((PAGE_FX / "full").glob("*.json"))
     assert len(full) >= 7

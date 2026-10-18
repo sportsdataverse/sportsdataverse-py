@@ -82,7 +82,8 @@ def test_numeric_dtypes_come_from_the_full_bodies():
     assert box.schema["seconds_played"] == pl.Int64 and box.schema["jersey_number"] == pl.Utf8
     assert box.schema["efficiency"] == pl.Int64 and box.schema["is_starter"] == pl.Boolean
     team = P.parse_tbf_team_box(_stamped("stats"))
-    assert team.schema["efficiency"] == pl.Float64 and team.schema["team_rebounds"] == pl.Int64
+    # the team line sends 92.0: Int64 like the player lines, one dtype per column name across the family
+    assert team.schema["efficiency"] == pl.Int64 and team.schema["team_rebounds"] == pl.Int64
     stats = P.parse_tbf_team_player_stats(_stamped("team_stats", team_process_id=265995))
     assert stats.schema["points"] == pl.Int64 and stats.schema["fg_pct"] == pl.Float64  # strings on the site
     assert stats.schema["plus_minus"] == pl.Float64 and stats.schema["seconds_per_game"] == pl.Int64

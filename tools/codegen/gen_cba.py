@@ -502,7 +502,9 @@ NOTES_DOC = [
     "Access: every response body is AES-128-ECB encrypted with a public key shipped in the site's bundle; "
     "``cba_runtime`` decrypts it (stdlib implementation, no dependency) and refuses anything that does not decrypt. The "
     "host blocks datacenter IPs at TCP: set the environment variable CBA_PROXY to a residential proxy URL (it is never "
-    "logged). Without it the request goes direct and fails from a datacenter.",
+    "logged). Without it the request goes direct and, from a datacenter, fails within seconds (a 5 s connect timeout, "
+    "no retry of a dropped connection). Where direct access works (a residential IP), set CBA_DIRECT=1 for the full "
+    "60 s timeout and retries.",
     "Seasons: the API's season is the START year; every ``season`` argument here is the END year (2026 = 2025-26) and "
     "the runtime sends season - 1. Columns named ``season`` keep the wire value (the START year, so sdv END = season + 1). "
     "The season list reaches 1995-96; box data before 2009-10 is unverified.",

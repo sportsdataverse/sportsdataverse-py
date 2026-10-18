@@ -12,6 +12,7 @@ from __future__ import annotations
 import copy
 import json
 import re
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import parse_qs, urlsplit
@@ -200,10 +201,12 @@ class Site(HTTPAdapter):
         self.handler = handler
         self.calls: List[requests.PreparedRequest] = []
         self.proxies: List[Any] = []
+        self.timeouts: List[Any] = []
 
     def send(self, request: requests.PreparedRequest, **kwargs: Any) -> requests.Response:  # type: ignore[override]
         self.calls.append(request)
         self.proxies.append(kwargs.get("proxies"))
+        self.timeouts.append(kwargs.get("timeout"))
         status, headers, body = self.handler(request)
         resp = requests.Response()
         resp.status_code = status
@@ -279,6 +282,7 @@ def waits(monkeypatch):
 def site(monkeypatch, waits):
     """Mount a Site on a fresh polite session; the finished-game caches start empty and no proxy is set."""
     monkeypatch.delenv(R.PROXY_ENV, raising=False)
+    monkeypatch.delenv(R.DIRECT_ENV, raising=False)
 
     def install(handler=None):
         adapter = Site(handler or _answers())
@@ -530,6 +534,43 @@ def test_the_proxy_is_used_when_set_and_never_appears_in_an_error(site, monkeypa
     with pytest.raises(AssetFetchError, match="set CBA_PROXY"):
         site(boom)
         _call("seasons")
+
+
+@pytest.mark.parametrize("exc", [requests.ConnectTimeout, requests.ConnectionError])
+def test_without_a_proxy_a_dropped_connection_fails_fast(site, exc):
+    # the host drops datacenter connections at TCP: one short connect attempt, not 3 attempts x 60 s (~3 minutes)
+    def drop(req):
+        raise exc("connect timed out / refused")
+
+    adapter = site(drop)
+    start = time.monotonic()
+    with pytest.raises(AssetFetchError, match=r"set CBA_PROXY.*CBA_DIRECT=1") as err:
+        _call("player_box", schedule_id=GAME)
+    assert len(adapter.calls) == 1 and adapter.timeouts[0] == (R.FAST_CONNECT_TIMEOUT, R.TIMEOUT)
+    assert (
+        R.FAST_CONNECT_TIMEOUT * len(adapter.calls) < 30 and time.monotonic() - start < 30
+    )  # worst case on a real drop
+    assert exc.__name__ in str(err.value)
+
+
+def test_direct_override_keeps_the_retries_and_the_full_timeout(site, monkeypatch):
+    monkeypatch.setenv(R.DIRECT_ENV, "1")  # a residential IP where direct access works
+
+    def drop(req):
+        raise requests.ConnectTimeout("connect timed out")
+
+    adapter = site(drop)
+    with pytest.raises(AssetFetchError, match="set CBA_PROXY"):
+        _call("seasons")
+    assert len(adapter.calls) == R.ATTEMPTS and set(adapter.timeouts) == {R.TIMEOUT}
+    ok = site(_answers({"com-code-tables/getSeason": _full("season_list")}))
+    _call("seasons")
+    assert ok.timeouts == [R.TIMEOUT]
+
+
+def test_a_post_route_without_a_json_body_is_refused():
+    with pytest.raises(TypeError, match="json="):
+        R._get("https://data-server.cbaleague.com/api/player-base-list", params={"season": 2026})
 
 
 def test_dl_utils_and_the_shared_session_are_the_transport():

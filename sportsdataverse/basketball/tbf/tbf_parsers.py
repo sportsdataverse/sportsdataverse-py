@@ -489,7 +489,7 @@ TABLES: Dict[str, List[Col]] = {
         c("side", "_side"),
         c("team_process_id", "_team_process_id", INT),
         *_BOX_STATS,
-        c("efficiency", "efficiency", F),
+        c("efficiency", "efficiency", INT),  # the team line sends 92.0: the players' integer ratings summed
         c("team_off_rebounds", "_stats.offensiveRebounds", INT),
         c("team_def_rebounds", "_stats.defensiveRebounds", INT),
         c("team_rebounds", "_stats.totalRebounds", INT),

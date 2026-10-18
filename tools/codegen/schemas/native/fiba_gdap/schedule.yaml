@@ -91,7 +91,7 @@ columns:
   type: character
 - description: ''
   name: utc_offset
-  type: character
+  type: integer
 - description: ''
   name: is_postponed
   type: logical

@@ -1024,8 +1024,8 @@ def _frames(family: str, entry: Entry) -> List[pl.DataFrame]:
     return [parser(load_fixture(family, rel, ctx)) for rel, ctx in fixtures]
 
 
-def _merge_codes(family: str, short: str, frames: List[pl.DataFrame]) -> Dict[str, str]:
-    """``{column: dtype code}`` over every fixture of a wrapper, in first-seen order."""
+def _observed(family: str, short: str, frames: List[pl.DataFrame]) -> Tuple[List[str], Dict[str, set]]:
+    """The columns of a wrapper in first-seen order, and the dtype codes of the ones some fixture fills."""
     seen: Dict[str, set] = {}
     order: List[str] = []
     for df in frames:
@@ -1036,9 +1036,23 @@ def _merge_codes(family: str, short: str, frames: List[pl.DataFrame]) -> Dict[st
                 if dtype not in _CODE:
                     raise SystemExit(f"{family}: {short}.{col} has dtype {dtype}")
                 seen.setdefault(col, set()).add(_CODE[dtype])
+    return order, seen
+
+
+def _merge_codes(
+    family: str, short: str, frames: List[pl.DataFrame], family_seen: Optional[Dict[str, set]] = None
+) -> Dict[str, str]:
+    """``{column: dtype code}`` over every fixture of a wrapper, in first-seen order.
+
+    A column no fixture of the wrapper fills takes the one dtype the family's other wrappers observed for it
+    (``team_box_score.plus_minus`` is null in every sample: Int64 like ``box_score``), else its name rule.
+    """
+    order, seen = _observed(family, short, frames)
     out: Dict[str, str] = {}
     for col in order:
         codes = seen.get(col)
+        if not codes and family_seen and (len(family_seen.get(col, ())) == 1 or family_seen.get(col) == {"i", "f"}):
+            codes = family_seen[col]
         if _is_float_name(col) and codes in (None, {"i"}, {"f"}, {"i", "f"}):
             out[col] = "f"
         elif not codes:
@@ -1209,8 +1223,13 @@ def _build(
     snippet: Dict[str, Dict[str, str]] = {}
     dtypes: Dict[str, Dict[str, str]] = {}
     bad: List[str] = []
+    frames = {short: _frames(family, entry) for short, entry in entries.items()}
+    family_seen: Dict[str, set] = {}
+    for short, fr in frames.items():
+        for col, got in _observed(family, short, fr)[1].items():
+            family_seen.setdefault(col, set()).update(got)
     for short, entry in entries.items():
-        codes = _merge_codes(family, short, _frames(family, entry))
+        codes = _merge_codes(family, short, frames[short], family_seen)
         dtypes[entry[2].__name__] = codes
         key = f"{family}_{short}"
         snippet[key] = {}
