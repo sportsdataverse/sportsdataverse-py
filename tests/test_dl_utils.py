@@ -443,6 +443,14 @@ def test_a_403_from_a_permanent_403_host_is_not_retried(monkeypatch, host):
     assert (len(calls), sleeps) == (1, [])  # was 5 calls and 4 backoffs
 
 
+@pytest.mark.parametrize("status", [429, 503])
+def test_a_permanent_403_host_still_retries_its_transient_statuses(monkeypatch, status):
+    # R880-2: only the 403 is permanent there; a rate limit or a 5xx from api.nfl.com is retried.
+    calls, sleeps = _offline(monkeypatch, status)
+    assert download("https://api.nfl.com/x", num_retries=15).status_code == status
+    assert len(calls) == 5 and len(sleeps) == 4
+
+
 def test_a_403_from_espn_is_still_retried(monkeypatch):
     # ESPN Core v2 answers 403 under load: that one stays transient.
     calls, _ = _offline(monkeypatch, 403)

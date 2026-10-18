@@ -1220,3 +1220,56 @@
   mutant: 'html=any(page in url for page in _HTML_PAGES)'
   test: tests/codegen/test_runtime_errors.py -k path_not_a_substring
   expected: kill
+
+# --- review-880 round 2 (R880-1..5) -------------------------------------------------------------------
+- id: openligadb-string-route-refused
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |2-
+        if isinstance(body, str) and _string_route(url):
+            return body
+  mutant: '    pass'
+  test: tests/codegen/test_runtime_errors.py -k bare_iso_string
+  expected: kill
+  note: R880-1, OpenLigaDB's /getlastchangedate answers a bare ISO string by design
+
+- id: download-permanent-403-host-stops-all-retries
+  group: codegen-runtime
+  finding: A-L19
+  file: sportsdataverse/dl_utils.py
+  snippet: 'retryable = status in retry_statuses and not (status == 403 and permanent_403)'
+  mutant: 'retryable = status in retry_statuses and not permanent_403'
+  test: tests/test_dl_utils.py -k still_retries_its_transient
+  expected: kill
+  note: R880-2
+
+- id: text-body-html-check-without-strip
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'text.lstrip("\ufeff \t\r\n").startswith("<")'
+  mutant: 'text.startswith("<")'
+  test: tests/codegen/test_runtime_errors.py -k whitespace_or_a_bom
+  expected: kill
+  note: R880-3
+
+- id: download-caches-refused-body
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/dl_utils.py
+  snippet: '                    if _is_data_body(url, body):'
+  mutant: '                    if True:'
+  test: tests/codegen/test_runtime_errors.py -k never_cached
+  expected: kill
+  note: R880-4, a cached 2xx error envelope or scalar re-raised for the whole TTL
+
+- id: error-envelope-code-unbounded
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/errors.py
+  snippet: 'and 400 <= code <= 599:'
+  mutant: 'and code >= 400:'
+  test: tests/codegen/test_runtime_errors.py -k business_code
+  expected: kill
+  note: R880-5

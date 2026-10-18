@@ -16,7 +16,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoDataError, _redact_secrets, no_espn_data
+from sportsdataverse.errors import NoDataError, _is_data_body, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -474,7 +474,11 @@ def download(
             # breaks the call.
             if get_cache_mode() != "off" and status is not None and 200 <= status < 300:
                 try:
-                    cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
+                    body = response.json()
+                    # A 2xx error envelope or JSON scalar is a failed fetch the chokepoint raises on; cached,
+                    # it would re-raise for the whole TTL instead of being fetched again (R880-4).
+                    if _is_data_body(url, body):
+                        cache_set(url, _cache_params, body, ttl=cache_ttl)
                 except Exception:  # noqa: BLE001
                     pass
             return response

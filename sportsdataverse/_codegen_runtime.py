@@ -16,7 +16,13 @@ from urllib.parse import urlsplit
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError, NoDataError, _error_envelope_code, _redact_secrets
+from sportsdataverse.errors import (
+    AssetFetchError,
+    NoDataError,
+    _error_envelope_code,
+    _redact_secrets,
+    _string_route,
+)
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
 
 logger = logging.getLogger(__name__)
@@ -132,10 +138,14 @@ def _json_data(url: str, status: Any, body: Any) -> Any:
 
     * A JSON ``null``, number, string or boolean is no payload any parser reads, so it
       raises :class:`~sportsdataverse.errors.AssetFetchError` (B-GB-16): the fetch failed.
+      The one exception is a string from a route that answers one by design
+      (:data:`~sportsdataverse.errors._STRING_ROUTES`, OpenLigaDB's last-change timestamp).
     * ESPN's ``{"code": 4xx/5xx, "message": ...}`` error envelope is classified by its
       code like an HTTP status (A-M13): 404 -> ``NoDataError``, 400 / 422 ->
       ``ValueError``, anything else -> ``AssetFetchError``.
     """
+    if isinstance(body, str) and _string_route(url):
+        return body
     if not isinstance(body, (dict, list)):
         raise AssetFetchError(
             f"{_where(url)} answered HTTP {status} with a JSON {type(body).__name__}, not an object or array: "

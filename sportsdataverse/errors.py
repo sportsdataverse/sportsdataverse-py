@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import re as _re
 from typing import TYPE_CHECKING, Any
+from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
     import requests
@@ -307,13 +308,34 @@ def _error_envelope_code(body: Any) -> int | None:
     """The status of an ESPN-style ``{"code": <4xx/5xx>, "message": ...}`` error body, else ``None``.
 
     Only a dict holding exactly those two keys counts, so a payload that merely carries a
-    ``code`` field next to its data is never mistaken for one (A-M13).
+    ``code`` field next to its data is never mistaken for one (A-M13), and only an HTTP-shaped
+    code (400-599): a provider's own business code such as 1001 is not an HTTP status.
     """
     if isinstance(body, dict) and set(body) == {"code", "message"}:
         code = body["code"]
-        if isinstance(code, int) and not isinstance(code, bool) and code >= 400:
+        if isinstance(code, int) and not isinstance(code, bool) and 400 <= code <= 599:
             return code
     return None
+
+
+#: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other
+#: route's JSON scalar is a failed fetch (B-GB-16). OpenLigaDB's last-change timestamp answers
+#: ``"2025-08-24T19:25:06.787"`` (tools/codegen/endpoints/openligadb.yaml, R880-1).
+_STRING_ROUTES = ("api.openligadb.de/getlastchangedate/",)
+
+
+def _string_route(url: str) -> bool:
+    """Whether ``url`` is one of :data:`_STRING_ROUTES`, the routes allowed a bare string body."""
+    parts = urlsplit(str(url))
+    return f"{parts.netloc}{parts.path}".startswith(_STRING_ROUTES)
+
+
+def _is_data_body(url: str, body: Any) -> bool:
+    """A decoded 2xx body a parser can read: an object or array that is not an error envelope,
+    or a string from a :data:`_STRING_ROUTES` route. Anything else is a failed fetch."""
+    if isinstance(body, str):
+        return _string_route(url)
+    return isinstance(body, (dict, list)) and _error_envelope_code(body) is None
 
 
 def no_espn_data(response: "requests.Response") -> "requests.Response":
