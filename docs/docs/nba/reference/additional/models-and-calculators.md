@@ -22,7 +22,7 @@ a posterior — enabling Oracle ④ (interval calibration).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `prior` | `Dict[int, Tuple[float, float]]` |  | Per-player `{player_id: (o_prior, d_prior)}` in per-100 units. |
-| `alphas` | `ndarray` | `<factory>` | RidgeCV alpha grid forwarded to fit_prior_ridge`. |
+| `alphas` | `ndarray` | `<factory>` | RidgeCV alpha grid forwarded to `_fit_prior_ridge`. |
 | `n_samples` | `int` | `200` | Number of RTO posterior samples. |
 | `seed` | `int` | `0` | RNG seed for the RTO sampler. |
 
@@ -42,7 +42,7 @@ print(report.calibration.coverage)      # non-None: the prior model has a poster
 
 `AdjRapmModel.fit_with_prior(X: 'csr_matrix', y: 'np.ndarray', prior_mean: 'np.ndarray') -> 'FitResult'`
 
-Delegate to fit_prior_ridge` using this model's hyperparameters.
+Delegate to `_fit_prior_ridge` using this model's hyperparameters.
 
 **Parameters**
 
@@ -1091,7 +1091,7 @@ Attach a per-possession `la_points` expected-points response.
 
 **DECISION 2/4**: `la_points = 2*fg2m + 3*Σ_shooter fg3a·p̂3 + Σ_shooter fta·p̂ft`
 (offense-only, "one_way"). 2-pt makes stay realized. `p̂` come from
-`player_rates` when given, else shrunk_shooter_rates` on `shooting`.
+`player_rates` when given, else `_shrunk_shooter_rates` on `shooting`.
 
 **Defense-shooter exclusion (bugfix)**: `shooting`
 (`~sportsdataverse.nba.nba_possessions.build_possession_shooting`)
@@ -1115,8 +1115,8 @@ tech FT).
 | `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m` and the join keys `game_id` + `possession_number` + `offense_team_id`. |
 | `shooting` | `DataFrame` |  | Per-(possession, shooter) frame (`build_possession_shooting`), which may include defense-team shooter rows (e.g. technical FTs) — filtered out here before aggregation. |
 | `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override (e.g. planted truth in tests); `None` → shrink from `shooting`. |
-| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
-| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to shrunk_shooter_rates` when `player_rates` is `None`. |
+| `fg3_k` | `float` | `100.0` | 3-point shrinkage pseudo-count, forwarded to `_shrunk_shooter_rates` when `player_rates` is `None`. |
+| `ft_k` | `float` | `50.0` | Free-throw shrinkage pseudo-count, forwarded to `_shrunk_shooter_rates` when `player_rates` is `None`. |
 
 **Returns**
 
@@ -1182,7 +1182,7 @@ One-shot prior-informed RAPM over a possession frame -> per-player ratings.
 Builds the sparse design matrix via
 `~sportsdataverse.nba.nba_rapm.build_rapm_design`, constructs the
 per-possession `prior_mean` vector from `prior`, fits a residualized
-ridge with an RTO posterior via fit_prior_ridge`, and returns the
+ridge with an RTO posterior via `_fit_prior_ridge`, and returns the
 per-player offensive, defensive, and combined adj-RAPM ratings alongside
 possession counts.
 
@@ -1522,7 +1522,7 @@ t.filter(pl.col("poss") >= 200).sort("ball_security_skill", descending=True)
 Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
 
 Each factor is regressed on the identical offense/defense design matrix,
-differing only in the per-possession response (FACTOR_RESPONSES`).
+differing only in the per-possession response (`_FACTOR_RESPONSES`).
 Output mirrors the oracle's `RA_*__Off/__Def` layout. **DECISION 5/6/7**
 govern the response definitions.
 
