@@ -1,14 +1,14 @@
 {
-  "commit": "2b13d53c15 (devel-test-harness after the 10-18 sync of program-setup 85710b65f4, main 3cda70429a); CI run 39106149074",
-  "measured_at": "2026-10-18T07:18:35+00:00",
+  "commit": "9cbc24460c (devel-hockey after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a); CI run 39114526731",
+  "measured_at": "2026-10-18T10:33:10+00:00",
   "metrics": {
     "handwritten_files": {
-      "value": 848,
+      "value": 849,
       "better": "info",
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 322717,
+      "value": 323824,
       "better": "info",
       "label": "Hand-written lines"
     },
@@ -33,7 +33,7 @@
       "label": "Modules over 1,500 lines"
     },
     "mypy_checked_files": {
-      "value": 561,
+      "value": 562,
       "better": "higher",
       "label": "Files in the mypy strict list"
     },
@@ -113,7 +113,7 @@
       "label": "Functions with over 50 statements (ruff PLR0915)"
     },
     "coverage_handwritten_percent": {
-      "value": 89.27,
+      "value": 89.35,
       "better": "higher",
       "label": "Line coverage of hand-written code (%)"
     },
