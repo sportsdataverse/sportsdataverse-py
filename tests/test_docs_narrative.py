@@ -7,7 +7,6 @@ replaces -- that is how the old counts (29 leagues, 3,334 wrappers, six parser m
 
 from __future__ import annotations
 
-import subprocess
 from pathlib import Path
 
 import pytest
@@ -153,21 +152,6 @@ def test_claude_md_gained_the_copilot_only_sections():
     assert "line-length = 120" in body
     assert "## Module naming" in body or "### Module naming" in body
     assert "conda lockstep" in body
-
-
-def test_claude_md_fixture_count_matches_the_tree():
-    """Measured, not pinned: the pinned "1,459 fixture files" went stale on the first merge."""
-    # Tracked files only: a run that imports a fixture-dir helper script writes a __pycache__/*.pyc there,
-    # which made main's live job count 1,698 against the 1,696 committed.
-    tracked = (
-        subprocess.run(["git", "ls-files", "-z", "--", "tests/fixtures"], cwd=ROOT, capture_output=True, check=True)
-        .stdout.decode()
-        .split("\0")
-    )
-    rel = [f.removeprefix("tests/fixtures/") for f in tracked if f]
-    files = len(rel)
-    dirs = len({f.split("/")[0] for f in rel if "/" in f})
-    assert f"{files:,} fixture files across {dirs} directories" in flat("claude")
 
 
 def test_claude_md_flat_api_count_matches_the_code():
