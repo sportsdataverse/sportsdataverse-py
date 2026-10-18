@@ -93,10 +93,10 @@ def parse_khl_webcaster(raw: Any, *, return_as_pandas: bool = False, columns: Co
             df.select("id", "khl_id", "team_a_name", "team_b_name")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_event` - the route this works on.
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_events` - the route this works on.
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players` - the route this works on.
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players_light` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_event` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_events` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players_light` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -162,7 +162,7 @@ def parse_khl_webcaster_stages(raw: Any, *, return_as_pandas: bool = False, colu
             df.filter(pl.col("season") == 2026)
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -216,7 +216,7 @@ def parse_khl_webcaster_leaders(raw: Any, *, return_as_pandas: bool = False, col
             df.filter(pl.col("rank") == 1)
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_leaders` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_leaders` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -269,7 +269,7 @@ def parse_khl_webcaster_tables(raw: Any, *, return_as_pandas: bool = False, colu
             df.filter(pl.col("season") == 2026).select("rank", "name", "pts")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_tables` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_tables` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

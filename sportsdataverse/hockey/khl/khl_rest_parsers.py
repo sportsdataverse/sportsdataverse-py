@@ -404,7 +404,7 @@ def parse_khl_game_header(raw: Any, *, return_as_pandas: bool = False, columns: 
             df.select("game_id", "home_score", "away_score", "ots")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_game_header` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_game_header` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -445,7 +445,7 @@ def parse_khl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Co
             df.select("game_id", "gk_a_player_id", "gk_b_player_id")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_game_info` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_game_info` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -523,7 +523,7 @@ def parse_khl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: C
             df.filter(pl.col("period") == 0).sort("g", descending=True)
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_player_box` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_player_box` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -613,7 +613,7 @@ def parse_khl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Columns 
             df.filter(pl.col("event_type") == "goal")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_pbp` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_pbp` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -725,7 +725,7 @@ def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Column
             df.group_by("team_side", "shot_type").len()
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_shots` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_shots` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -819,7 +819,7 @@ def parse_khl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Col
             df.filter(pl.col("decision") == "SO").select("game_id", "home_name", "away_name")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -916,7 +916,7 @@ def parse_khl_game_protocol(raw: Any, *, return_as_pandas: bool = False, columns
             df.select("period", "time", "scorer_player_id", "strength")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_game_protocol` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_game_protocol` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1014,7 +1014,7 @@ def parse_khl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Co
             df.filter(pl.col("table") == "league").select("rank", "name", "pts")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_standings` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1090,7 +1090,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
             df.filter(pl.col("round") == 1)
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_playoff_bracket` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_playoff_bracket` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1156,7 +1156,7 @@ def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns:
             df.sort("pts", descending=True).head()
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_player_stats` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_player_stats` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1216,7 +1216,7 @@ def parse_khl_player_profile(raw: Any, *, return_as_pandas: bool = False, column
             df.select("player_id", "summary_stats_gp", "summary_stats_pts")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_player_profile` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_player_profile` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1263,7 +1263,7 @@ def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns
             df.select("season_label", "tournament_id", "gp", "pts")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_player_career` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_player_career` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1327,7 +1327,7 @@ def parse_khl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Colum
             df.filter(pl.col("group") == "goalkeepers")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_roster` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_roster` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1374,7 +1374,7 @@ def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns:
             df.filter(pl.col("filter") == "season")
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_stat_filters` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_stat_filters` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

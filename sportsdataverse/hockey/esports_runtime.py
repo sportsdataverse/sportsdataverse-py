@@ -57,8 +57,8 @@ def season_start_year(season: Any) -> int:
         ValueError: ``season`` is not a four-digit year.
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_schedule` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_schedule` - a route this feeds.
+        * :func:`sportsdataverse.hockey.icehl.icehl_schedule` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

@@ -1403,7 +1403,7 @@ def parse_vhl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
                 games = parse_vhl_schedule(fh.read())
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1485,7 +1485,7 @@ def parse_vhl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
             info = parse_vhl_game_info(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_game_info` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_game_info` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1545,7 +1545,7 @@ def parse_vhl_goals(raw: Any, *, return_as_pandas: bool = False, columns: Option
             goals.filter(pl.col("strength") == "ppg")
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_goals` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_goals` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1596,7 +1596,7 @@ def parse_vhl_penalties(raw: Any, *, return_as_pandas: bool = False, columns: Op
             penalties = parse_vhl_penalties(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_penalties` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_penalties` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1635,7 +1635,7 @@ def parse_vhl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
             goalies = parse_vhl_goalie_box(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_player_box` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_player_box` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1666,7 +1666,7 @@ def parse_vhl_goalie_box(raw: Any, *, return_as_pandas: bool = False, columns: O
             goalies = parse_vhl_goalie_box(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_box` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_box` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1724,7 +1724,7 @@ def parse_vhl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
             events.filter(pl.col("kind") == "goal")
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_pbp` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_pbp` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1771,7 +1771,7 @@ def parse_vhl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
             table = parse_vhl_standings(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_standings` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1815,7 +1815,7 @@ def parse_vhl_skater_stats(
             goalies = parse_vhl_goalie_stats(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_skater_stats` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_skater_stats` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1855,7 +1855,7 @@ def parse_vhl_goalie_stats(
             goalies = parse_vhl_goalie_stats(raw, return_as_pandas=True)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_stats` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_stats` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1903,7 +1903,7 @@ def parse_vhl_player(raw: Any, *, return_as_pandas: bool = False, columns: Optio
             card = parse_vhl_player(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_player` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_player` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1941,7 +1941,7 @@ def parse_vhl_player_career(
             career = parse_vhl_player_career(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_player_career` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_player_career` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -1988,7 +1988,7 @@ def parse_vhl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optio
             roster = parse_vhl_roster(raw)
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_roster` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_roster` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

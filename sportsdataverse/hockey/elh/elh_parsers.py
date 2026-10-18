@@ -402,8 +402,8 @@ def parse_elh_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             pbp.filter(pl.col("event_type") == "goal")
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_pbp` - the route this works on.
-        * :func:`sportsdataverse.hockey.elh.elh_pbp_latest` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_pbp` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_latest` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -437,7 +437,7 @@ def parse_elh_pbp_goals(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             on_ice.group_by("on_ice_team_code").len()
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_pbp_goals` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_goals` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -504,7 +504,7 @@ def parse_elh_pbp_mobile(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             text = elh_pbp_mobile(season=2027, match_id=2928321)
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_pbp_mobile` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_pbp_mobile` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -557,7 +557,7 @@ def parse_elh_shots(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             shots.filter(pl.col("is_goal") == True)
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_shots` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_shots` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -629,7 +629,7 @@ def parse_elh_events(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             minutes.filter(pl.col("minute") == 60)
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_events` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_events` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -699,7 +699,7 @@ def parse_elh_scoreboard(
             games.select("hokejcz_game_id", "onlajny_game_id")
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_scoreboard` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_scoreboard` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -783,7 +783,7 @@ def parse_elh_game_ids(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             page = elh_list_objects(prefix="match/2026/full/")
 
     See Also:
-        * :func:`sportsdataverse.hockey.elh.elh_list_objects` - the route this works on.
+        * :func:`sportsdataverse.hockey.elh.elh_list_objects` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

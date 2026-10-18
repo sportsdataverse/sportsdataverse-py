@@ -379,9 +379,9 @@ def parse_nationalleague_games(raw: Any, *, return_as_pandas: bool = False) -> F
             nl_schedule(season=2026)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_schedule` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_current_games` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_team_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_current_games` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_team_schedule` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -413,8 +413,8 @@ def parse_nationalleague_bracket(raw: Any, *, return_as_pandas: bool = False) ->
             nl_playoffs(season=2026)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_playoffs` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_playouts` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_playoffs` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_playouts` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -456,10 +456,10 @@ def parse_nationalleague_player_stats(raw: Any, *, return_as_pandas: bool = Fals
             nl_player_stats(season=2026, phase=4940)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_player_stats` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_top_scorers` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_team_player_stats` - the route this works on.
-        * :func:`sportsdataverse.hockey.nl.nl_player_season` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_top_scorers` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_team_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_player_season` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -490,7 +490,7 @@ def parse_nationalleague_standings(raw: Any, *, return_as_pandas: bool = False) 
             nl_standings(season=2026, phase=4940)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_standings` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -520,7 +520,7 @@ def parse_nationalleague_team_info(raw: Any, *, return_as_pandas: bool = False) 
             nl_team_info(team_id=101144)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_team_info` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_team_info` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -591,7 +591,7 @@ def parse_nationalleague_game_overview(raw: Any, *, return_as_pandas: bool = Fal
             nl_game_overview(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_game_overview` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_game_overview` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -644,7 +644,7 @@ def parse_nationalleague_pbp(raw: Any, *, return_as_pandas: bool = False) -> Fra
             nl_pbp(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_pbp` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_pbp` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -694,7 +694,7 @@ def parse_nationalleague_lineups(raw: Any, *, return_as_pandas: bool = False) ->
             nl_lineups(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_lineups` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_lineups` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -738,7 +738,7 @@ def parse_nationalleague_player_box(raw: Any, *, return_as_pandas: bool = False)
             nl_player_box(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_player_box` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_player_box` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -782,7 +782,7 @@ def parse_nationalleague_team_stats(raw: Any, *, return_as_pandas: bool = False)
             nl_team_stats(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_team_stats` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_team_stats` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -831,7 +831,7 @@ def parse_nationalleague_shots(raw: Any, *, return_as_pandas: bool = False) -> F
             nl_shots(game_id=20261105000325)
 
     See Also:
-        * :func:`sportsdataverse.hockey.nl.nl_shots` - the route this works on.
+        * :func:`sportsdataverse.hockey.nl.nl_shots` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

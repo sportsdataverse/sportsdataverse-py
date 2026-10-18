@@ -193,7 +193,7 @@ def body_season(season: Optional[int], today: Optional[date] = None) -> Tuple[in
         ValueError: ``season`` is not an integer year.
 
     See Also:
-        * :func:`sportsdataverse.hockey.ha.ha_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -224,7 +224,7 @@ def flight_text(page: str) -> str:
         AssetFetchError: no flight data, or a chunk that is not a JSON string literal.
 
     See Also:
-        * :func:`sportsdataverse.hockey.ha.ha_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -251,7 +251,7 @@ def extract_game_list(page: str) -> Dict[str, Any]:
             ``games`` list.
 
     See Also:
-        * :func:`sportsdataverse.hockey.ha.ha_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -319,7 +319,7 @@ def build_body(path: str, params: Optional[Mapping[str, Any]], today: Optional[d
         NoDataError: a season before 2005/06.
 
     See Also:
-        * :func:`sportsdataverse.hockey.ha.ha_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

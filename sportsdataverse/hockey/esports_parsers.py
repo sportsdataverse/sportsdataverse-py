@@ -255,10 +255,10 @@ def parse_esports(raw: Any, *, return_as_pandas: bool = False, columns: Optional
             df = parse_esports([{"playerId": 1, "savesPercent": 91.2}])
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_top_scorers` - the route this works on.
-        * :func:`sportsdataverse.hockey.del_.del_faceoffs` - the route this works on.
-        * :func:`sportsdataverse.hockey.del_.del_goalie_box` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_top_scorers` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_top_scorers` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.del_.del_faceoffs` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.del_.del_goalie_box` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_top_scorers` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -295,10 +295,10 @@ def parse_esports_schedule(
             df = del_schedule(season=2027)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_schedule` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_schedule` - the route this works on.
-        * :func:`sportsdataverse.hockey.eihl.eihl_schedule` - the route this works on.
-        * :func:`sportsdataverse.hockey.metal.metal_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.eihl.eihl_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.metal.metal_schedule` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -375,10 +375,10 @@ def parse_esports_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Opti
             df = icehl_pbp(match_id=8161)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_pbp` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_pbp` - the route this works on.
-        * :func:`sportsdataverse.hockey.eihl.eihl_pbp` - the route this works on.
-        * :func:`sportsdataverse.hockey.metal.metal_pbp` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_pbp` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_pbp` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.eihl.eihl_pbp` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.metal.metal_pbp` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -427,10 +427,10 @@ def parse_esports_player_stats(
             df = eihl_player_box(match_id=4440, team_id=96)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_team_player_stats` - the route this works on.
-        * :func:`sportsdataverse.hockey.del_.del_player_box` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_league_part_player_stats` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_team_player_stats` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_team_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.del_.del_player_box` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_league_part_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_team_player_stats` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -482,9 +482,9 @@ def parse_esports_shots(raw: Any, *, return_as_pandas: bool = False, columns: Op
             df = icehl_shots(match_id=8161)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_shots` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_shots` - the route this works on.
-        * :func:`sportsdataverse.hockey.eihl.eihl_shots` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_shots` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_shots` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.eihl.eihl_shots` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -537,10 +537,10 @@ def parse_esports_standings(
             df = metal_standings(season=2027)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_standings` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_standings` - the route this works on.
-        * :func:`sportsdataverse.hockey.eihl.eihl_standings` - the route this works on.
-        * :func:`sportsdataverse.hockey.metal.metal_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_standings` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_standings` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.eihl.eihl_standings` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.metal.metal_standings` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -584,7 +584,7 @@ def parse_esports_shifts(raw: Any, *, return_as_pandas: bool = False, columns: O
             df = del_shifts(match_id=4444)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_shifts` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_shifts` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -630,7 +630,7 @@ def parse_esports_lineup(raw: Any, *, return_as_pandas: bool = False, columns: O
             lineup = parse_esports_lineup(icehl_game_info(match_id=8161, return_parsed=False))
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_roster` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_roster` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -671,10 +671,10 @@ def parse_esports_game_info(
             df = eihl_game_info(match_id=4440)
 
     See Also:
-        * :func:`sportsdataverse.hockey.del_.del_game_info` - the route this works on.
-        * :func:`sportsdataverse.hockey.icehl.icehl_game_info` - the route this works on.
-        * :func:`sportsdataverse.hockey.eihl.eihl_game_info` - the route this works on.
-        * :func:`sportsdataverse.hockey.metal.metal_game_info` - the route this works on.
+        * :func:`sportsdataverse.hockey.del_.del_game_info` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.icehl.icehl_game_info` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.eihl.eihl_game_info` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.metal.metal_game_info` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

@@ -227,7 +227,7 @@ def shl_ssgt_uuid(season: int, game_type: str = "regular") -> str:
             shl_ssgt_uuid(2025, "playoff")
 
     See Also:
-        * :func:`sportsdataverse.hockey.shl.shl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.shl.shl_schedule` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -357,8 +357,10 @@ def shl_player_crosswalk(season: int, game_type: str = "regular", *, return_as_p
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player: ``player_id`` (isa, ``Int64``),
-        ``athlete_uuid`` (null where SHL has none, common before about 2005), names, birth date,
-        nationality, position, jersey number, height and weight.
+        ``athlete_uuid`` (``Utf8``; null where SHL has none, common before about 2005),
+        ``first_name``, ``last_name``, ``full_name``, ``date_of_birth`` (``YYYY-MM-DD``), ``nationality``,
+        ``gender``, ``position``, ``shoots``, ``ep_url`` (all ``Utf8``), ``jersey_number``, ``weight`` (kg)
+        and ``height`` (cm) (``Int64``).
 
     Raises:
         NoDataError: layout-info lists no such ssgt, or the table has no rows.
@@ -372,7 +374,7 @@ def shl_player_crosswalk(season: int, game_type: str = "regular", *, return_as_p
             xw.filter(xw["player_id"] == 2427)
 
     See Also:
-        * :func:`sportsdataverse.hockey.ha.ha_crosswalk_runtime.ha_player_crosswalk` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_player_crosswalk` - the HA lookup built on this frame.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

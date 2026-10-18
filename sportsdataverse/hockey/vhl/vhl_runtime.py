@@ -179,7 +179,7 @@ def vhl_tn(season: int, stage: str = "regular") -> int:
             vhl_tn(2026, "playoff")   # 1375
 
     See Also:
-        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - a route this feeds.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

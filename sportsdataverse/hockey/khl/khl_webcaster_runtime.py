@@ -95,7 +95,7 @@ def season_table() -> Tuple[Dict[str, Any], ...]:
         AssetFetchError: ``data.json`` could not be fetched.
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the season table this reads.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -123,7 +123,7 @@ def stage_for(season: Any, stage: Optional[str] = "regular") -> Dict[str, Any]:
         NoDataError: the KHL has no such stage (a season before 2008/09, a playoff not yet drawn).
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the season table this reads.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org

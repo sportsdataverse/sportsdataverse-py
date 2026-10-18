@@ -216,7 +216,7 @@ def parse_magnus_competitions(raw: Any, *, return_as_pandas: bool = False) -> Fr
             print(df.select("season", "competition_id"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_competitions` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_competitions` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -255,7 +255,7 @@ def parse_magnus_phases(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.select("phase_id", "phase", "phase_type_code"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_phases` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_phases` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -305,7 +305,7 @@ def parse_magnus_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.select("team_id", "team"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_teams` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_teams` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -389,8 +389,8 @@ def parse_magnus_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.filter(pl.col("status") == "final").height)
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_round_games` - the route this works on.
-        * :func:`sportsdataverse.hockey.magnus.magnus_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_round_games` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.magnus.magnus_schedule` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -442,7 +442,7 @@ def parse_magnus_rounds(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.select("round", "start_date"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_rounds` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_rounds` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -505,7 +505,7 @@ def parse_magnus_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame
             print(df.select("rank", "team", "points"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_standings` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -587,7 +587,7 @@ def parse_magnus_game(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             header, pbp = parse_magnus_game(sheet), parse_magnus_pbp(sheet)
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_game` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_game` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -752,7 +752,7 @@ def parse_magnus_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.filter(pl.col("event_type") == "goal"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_pbp` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_pbp` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -816,7 +816,7 @@ def parse_magnus_lineups(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.filter(pl.col("position") == "goalie"))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_lineups` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_lineups` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -873,7 +873,7 @@ def parse_magnus_shootout(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             print(df.group_by("team_id").agg(pl.col("scored").sum()))
 
     See Also:
-        * :func:`sportsdataverse.hockey.magnus.magnus_shootout` - the route this works on.
+        * :func:`sportsdataverse.hockey.magnus.magnus_shootout` - the wrapper whose body this parses.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
