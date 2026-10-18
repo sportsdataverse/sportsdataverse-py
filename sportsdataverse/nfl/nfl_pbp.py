@@ -5285,9 +5285,19 @@ class NFLPlayProcess(object):
             # A touchback runs no clock, so a touchback kickoff's EP_end is scored at its START clock,
             # whatever ESPN's end clock says (owner ruling 2026-10-17, R856-2: 271223008/1912 takes
             # its 1:08 end clock from a misordered timeout row). EPA only: end.TimeSecsRem, which the
-            # WP end view reads, keeps ESPN's clock.
+            # WP end view reads, keeps ESPN's clock. A touchback is a kickoff_tb row whose text says so
+            # or whose receiver next snaps at the season's touchback spot: kickoff_tb also flags the
+            # 2006-08 bare "KickOff" rows, most of them returns in nflverse (R831-2), and their return
+            # does run the clock (on the 644 sample games the flag alone moved 1,865 such rows,
+            # sum |EPA - nflverse| 111.9 -> 120.3).
             .with_columns(
-                _ep_end_secs=pl.when(pl.col("kickoff_tb") == True)
+                _ep_end_secs=pl.when(
+                    (pl.col("kickoff_tb") == True)
+                    & (
+                        pl.col("text").str.contains("(?i)touchback")
+                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))
+                    ).fill_null(False)
+                )
                 .then(pl.col("start.TimeSecsRem"))
                 .otherwise(pl.col("end.TimeSecsRem"))
             )

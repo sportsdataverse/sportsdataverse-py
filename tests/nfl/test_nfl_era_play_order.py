@@ -109,3 +109,18 @@ def test_touchback_kickoff_ep_end_at_the_start_clock(game_id, play_id):
     assert row["kickoff_tb"] is True
     assert row["end.TimeSecsRem"] != row["start.TimeSecsRem"]  # ESPN's end clock still moves (WP reads it)
     assert abs(row["EPA"] - _TOUCHBACK_KICKOFFS[(game_id, play_id)]) < 1e-3, (row["EP_start"], row["EP_end"])
+
+
+# The ruling covers touchbacks only: a kickoff_tb row whose text says touchback or whose receiver next snaps
+# at the season's touchback spot. kickoff_tb also flags the 2006-08 bare "KickOff" rows, most of which
+# nflverse has as returns (R831-2), and a return runs the clock. 271209010/3234 (2007, the capture, a bare
+# "KickOff" nflverse returns, epa 0.242) keeps ESPN's end clock: EPA 0.354; at the start clock 0.400.
+_FLAGGED_RETURNS = {(271209010, 3234): (0.242, 0.12)}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_FLAGGED_RETURNS))
+def test_flagged_bare_kickoff_return_keeps_the_end_clock(game_id, play_id):
+    nflverse_epa, ceiling = _FLAGGED_RETURNS[(game_id, play_id)]
+    row = _row(f"summary_{game_id}_trimmed.json.gz", game_id, play_id)
+    assert row["kickoff_tb"] is True and row["text"] == "KickOff"
+    assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EPA"], row["end.yardsToEndzone"])

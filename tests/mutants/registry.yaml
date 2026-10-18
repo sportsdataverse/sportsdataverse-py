@@ -1761,3 +1761,16 @@
     A defence-typed score whose touchdown did not stand takes no scoring overlay: 281109021/3307, a punt
     return touchdown nullified by holding (td_play false), would score the receiver's -6.92 again (EPA -5.833
     against nflverse -1.690).
+
+- id: nfl-touchback-kickoff-start-clock-needs-a-touchback
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))'
+  mutant: '                        | pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271209010"
+  expected: kill
+  note: >-
+    The start clock is for touchbacks only. kickoff_tb alone also flags the 2006-08 bare "KickOff" rows
+    nflverse has as returns (R831-2): 271209010/3234 would score EPA 0.400 (nflverse 0.242, 0.354 at ESPN's
+    end clock); on the 644 sample games 1,865 such rows, sum |EPA - nflverse| 111.9 -> 120.3.
