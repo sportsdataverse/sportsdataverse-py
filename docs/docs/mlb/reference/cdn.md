@@ -682,7 +682,7 @@ espn.com schedule page data, one row per game: up to 7 days starting at `date` (
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
 | `venue_indoor` | logical |  |
-| `broadcast` | character | Broadcast information string. |
+| `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character |  |
 | `home_name` | character |  |
@@ -764,7 +764,7 @@ espn.com scoreboard page data for one day (one week for football), one row per g
 | `venue_city` | character | Venue city. |
 | `venue_state` | character | Venue state / province. |
 | `venue_indoor` | logical |  |
-| `broadcast` | character | Broadcast information string. |
+| `broadcast` | character | Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives its market); "" when the game lists no broadcast. |
 | `note` | character | Event note text from the competition (e.g. a series or game label such as 'World Series - Game 1', or a shootout result); an empty string when there is none. |
 | `home_id` | character |  |
 | `home_name` | character |  |

@@ -694,7 +694,7 @@ Playoff bracket: one row per team per series.
 | `club_id` | integer | khl.ru CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
 | `series_wins` | integer | Wins in the series so far |
-| `game_ids` | list | khl.ru game ids of the series games |
+| `game_ids` | list | khl.ru game ids of the series games, a List(Int64) in feed order (unplayed slots skipped) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
