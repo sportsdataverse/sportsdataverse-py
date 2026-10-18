@@ -214,6 +214,12 @@ def parse_magnus_competitions(raw: Any, *, return_as_pandas: bool = False) -> Fr
             from sportsdataverse.hockey.magnus import magnus_competitions
             df = magnus_competitions()
             print(df.select("season", "competition_id"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_competitions` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _out(_frame(_dicts(_payload(raw)), _COMPETITIONS), return_as_pandas)
 
@@ -247,6 +253,12 @@ def parse_magnus_phases(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_phases
             df = magnus_phases(season=2027)
             print(df.select("phase_id", "phase", "phase_type_code"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_phases` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _out(_frame(_dicts(_payload(raw)), _PHASES), return_as_pandas)
 
@@ -291,6 +303,12 @@ def parse_magnus_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_teams
             df = magnus_teams(phase_id=714)
             print(df.select("team_id", "team"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_teams` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _out(_frame(_dicts(_payload(raw)), _TEAMS), return_as_pandas)
 
@@ -369,6 +387,13 @@ def parse_magnus_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_schedule
             df = magnus_schedule(season=2027)
             print(df.filter(pl.col("status") == "final").height)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_round_games` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.magnus.magnus_schedule` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     payload = _payload(raw)
     if isinstance(payload, dict):  # one round: its games plus the round's own scope
@@ -415,6 +440,12 @@ def parse_magnus_rounds(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_rounds
             df = magnus_rounds(phase_id=714)
             print(df.select("round", "start_date"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_rounds` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _out(_frame(_dicts(_payload(raw)), _ROUNDS), return_as_pandas)
 
@@ -472,6 +503,12 @@ def parse_magnus_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame
             from sportsdataverse.hockey.magnus import magnus_standings
             df = magnus_standings(phase_id=714)
             print(df.select("rank", "team", "points"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     table = _payload(raw)
     standings_id = _at(table, "classement_id")
@@ -548,6 +585,12 @@ def parse_magnus_game(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_game, parse_magnus_game, parse_magnus_pbp
             sheet = magnus_game(game_id=77779, return_parsed=False)
             header, pbp = parse_magnus_game(sheet), parse_magnus_pbp(sheet)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_game` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sheet = _sheet(raw)
     is_sheet = "evenements" in sheet or "scores" in sheet  # an envelope or an error object is not a game
@@ -707,6 +750,12 @@ def parse_magnus_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_pbp
             df = magnus_pbp(game_id=77779)
             print(df.filter(pl.col("event_type") == "goal"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_pbp` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sheet = _sheet(raw)
     game_id, roster = _game_id(sheet), _roster(sheet)
@@ -765,6 +814,12 @@ def parse_magnus_lineups(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_lineups
             df = magnus_lineups(game_id=77779)
             print(df.filter(pl.col("position") == "goalie"))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_lineups` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sheet = _sheet(raw)
     game_id = _game_id(sheet)
@@ -816,6 +871,12 @@ def parse_magnus_shootout(raw: Any, *, return_as_pandas: bool = False) -> Frame:
             from sportsdataverse.hockey.magnus import magnus_shootout
             df = magnus_shootout(game_id=77779)
             print(df.group_by("team_id").agg(pl.col("scored").sum()))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.magnus.magnus_shootout` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     sheet = _sheet(raw)
     game_id = _game_id(sheet)

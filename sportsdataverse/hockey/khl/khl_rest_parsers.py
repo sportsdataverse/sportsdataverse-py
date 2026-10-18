@@ -81,7 +81,9 @@ _PLAYER_LINK = re.compile(r"/players/(\d+)/")
 _PDF_IDS = re.compile(r"/pdf/(\d+)/(\d+)/")
 _MMSS = re.compile(r"^(\d+):(\d{2})$")
 #: Rate columns: always Float64, even when the first rows happen to be whole numbers.
-_FLOAT_STATS = frozenset({"ts", "dt", "as", "pcd", "dt_a", "dt_b"})
+_FLOAT_STATS = frozenset({"ts", "dt", "as", "pcd", "dt_a", "dt_b", "gaa"})
+#: Time columns that stay text even when every value on the page is the "-" placeholder (goalie ``toi``).
+_TEXT_STATS = frozenset({"toi"})
 
 
 # --- shared helpers -----------------------------------------------------------------------
@@ -139,6 +141,9 @@ def _str(value: Any) -> Optional[str]:
     return text if text.strip() else None
 
 
+_IDS = pl.List(pl.Int64)
+
+
 def _coerce(value: Any, dtype: Any) -> Any:
     if dtype == pl.Int64:
         return _int(value)
@@ -146,6 +151,8 @@ def _coerce(value: Any, dtype: Any) -> Any:
         return _float(value)
     if dtype == pl.Boolean:
         return None if value is None or value == "" else bool(value)
+    if dtype == _IDS:
+        return [i for i in map(_int, value) if i is not None] or None if isinstance(value, list) else None
     return _str(value)
 
 
@@ -155,7 +162,7 @@ def _typed(rows: Iterable[Mapping[str, Any]], schema: Mapping[str, Any]) -> pl.D
     return pl.DataFrame({c: [_coerce(r.get(c), t) for r in rows] for c, t in schema.items()}, schema=dict(schema))
 
 
-_CODES = {"i": pl.Int64, "f": pl.Float64, "s": pl.Utf8, "b": pl.Boolean}
+_CODES = {"i": pl.Int64, "f": pl.Float64, "s": pl.Utf8, "b": pl.Boolean, "l": _IDS}
 #: Every KHL returns schema (``khl_<short>`` / ``khl_webcaster_<short>``) as ``{column: dtype}``, from
 #: :mod:`sportsdataverse.hockey.khl.khl_schemas` (generated from ``tools/codegen/schemas/native/khl_*``).
 SCHEMAS: Dict[str, Dict[str, Any]] = {
@@ -213,6 +220,7 @@ def _cell(value: Any) -> Any:
 def _generic(rows: Iterable[Any], columns: Columns = None) -> pl.DataFrame:
     """Row dicts -> flattened (dotted keys) -> snake_case -> list cells as JSON text -> lossless Int64 ids."""
     flat = [_flatten(r) for r in rows if isinstance(r, dict)]
+    flat = [r for r in flat if any(v is not None for v in r.values())]  # {"data": null} -> no row
     if not flat:
         return _empty(columns)
     keys = list(dict.fromkeys(k for r in flat for k in r))
@@ -249,10 +257,14 @@ def _stat_cast(df: pl.DataFrame, cols: Iterable[str]) -> pl.DataFrame:
     A column with any ``mm:ss`` value stays text; a rate (``*_pct`` / ``*_avg`` / ``ts`` / ``dt`` /
     ``as`` / ``pcd``) is always ``Float64``, so a page whose first rows are whole numbers never types a
     rate as an integer; any other all-integer column is ``Int64``, an all-numeric one ``Float64``.
-    ``"-"`` / ``""`` are null.
+    ``"-"`` / ``""`` are null, also in the text columns (goalie ``toi``).
     """
     exprs = []
     for c in cols:
+        if c in _TEXT_STATS and c in df.columns:  # text kept, but the "-" / "" placeholders are null
+            t = df[c].cast(pl.Utf8).str.strip_chars()
+            exprs.append(pl.when(t.is_in(["-", ""])).then(None).otherwise(t).alias(c))
+            continue
         if c not in df.columns:
             continue
         text = df[c].cast(pl.Utf8).str.strip_chars()
@@ -390,6 +402,12 @@ def parse_khl_game_header(raw: Any, *, return_as_pandas: bool = False, columns: 
         Next step::
 
             df.select("game_id", "home_score", "away_score", "ots")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_header` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_game_header")
     return _out(_conform(_game_frame(_game_row(_game(raw)), columns), columns), return_as_pandas)
@@ -425,6 +443,12 @@ def parse_khl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Co
         Next step::
 
             df.select("game_id", "gk_a_player_id", "gk_b_player_id")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_info` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_game_info")
     game = _game(raw)
@@ -497,6 +521,12 @@ def parse_khl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: C
         Next step::
 
             df.filter(pl.col("period") == 0).sort("g", descending=True)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_box` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -581,6 +611,12 @@ def parse_khl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Columns 
         Next step::
 
             df.filter(pl.col("event_type") == "goal")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_pbp` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -655,8 +691,11 @@ _SHOTS_SCHEMA = {
 def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/game/text/`` -> shot map: one row per shot of ``tab_shotsmap.shots`` (2024/25 on).
 
-    ``x`` / ``y`` are on the site's 1000 x 500 rink grid (``indent_*`` the same point as percent offsets
-    from each edge); the direction normalisation is unverified. ``shot_type`` 1 = goal, 2 = saved is
+    ``x`` / ``y`` are on the site's 1000 x 500 rink grid, origin top-left (``indent_left`` = x / 10,
+    ``indent_top`` = y / 5: the same point as percent offsets from each edge). The grid is stretched in y
+    (about 1.18x against a 200 x 85 ft rink); the goal lines sit near x = 55 and x = 945. Team A (home)
+    attacks +x and team B -x in every period, overtime included (verified on the committed fixtures).
+    ``shot_type`` 1 = goal, 2 = saved is
     inferred (unverified upstream). ``time_seconds`` is game-elapsed seconds; ``jn`` is resolved to
     ``player_id`` through ``players``. Earlier seasons have no shot map: zero rows.
 
@@ -684,6 +723,12 @@ def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Column
         Next step::
 
             df.group_by("team_side", "shot_type").len()
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_shots` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -772,6 +817,12 @@ def parse_khl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Col
         Next step::
 
             df.filter(pl.col("decision") == "SO").select("game_id", "home_name", "away_name")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     games = [
@@ -863,6 +914,12 @@ def parse_khl_game_protocol(raw: Any, *, return_as_pandas: bool = False, columns
         Next step::
 
             df.select("period", "time", "scorer_player_id", "strength")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_protocol` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     ids: Dict[str, Optional[int]] = {"tournament_id": None, "game_id": None}
@@ -955,6 +1012,12 @@ def parse_khl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Co
         Next step::
 
             df.filter(pl.col("table") == "league").select("rank", "name", "pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     tables = _obj(_data(raw).get("json"))
     rows = []
@@ -990,7 +1053,7 @@ _BRACKET_SCHEMA = {
     "club_id": pl.Int64,
     "name": pl.Utf8,
     "series_wins": pl.Int64,
-    "game_ids": pl.Utf8,
+    "game_ids": _IDS,
 }
 
 
@@ -999,7 +1062,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
 
     ``data.LIST[]`` is one entry per round; its ``couple`` maps a pair number to the two teams of the
     series. ``seed`` is the team's conference seed, ``series_wins`` its wins in the series and
-    ``game_ids`` the comma-joined khl.ru game ids of its series games (unplayed slots are skipped).
+    ``game_ids`` the khl.ru game ids of its series games as ``List(Int64)`` (unplayed slots are skipped).
 
     Args:
         raw: the ``/standings/playoff/`` body.
@@ -1025,6 +1088,12 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
         Next step::
 
             df.filter(pl.col("round") == 1)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_playoff_bracket` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     clubs = _obj(data.get("CLUBS"))
@@ -1034,7 +1103,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
         for pair, teams in _obj(rnd.get("couple")).items():
             for team in _obj(teams).values():
                 team = _obj(team)
-                games = [str(g.get("id")) for g in _list(team.get("games")) if isinstance(g, dict) and g.get("id")]
+                games = [g.get("id") for g in _list(team.get("games")) if isinstance(g, dict) and g.get("id")]
                 rows.append(
                     {
                         "round": rnd.get("number"),
@@ -1045,7 +1114,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
                         "club_id": team.get("id"),
                         "name": _obj(clubs.get(str(team.get("id")))).get("name"),
                         "series_wins": team.get("score"),
-                        "game_ids": ",".join(games) or None,
+                        "game_ids": games or None,
                     }
                 )
     return _out(_typed(rows, _BRACKET_SCHEMA), return_as_pandas)
@@ -1055,7 +1124,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
 
 
 def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
-    """``/stat/players/`` -> one row per player of the requested page.
+    """``/stat/players/`` -> one row per player of the requested page (goalies: of every page, merged by the runtime).
 
     Rows give the player only as a name cell linking ``/players/<id>/``; ``player_id`` is parsed from
     that link. ``group`` is the position group of the list (``forwards``, ``goalies``, ...); every stat
@@ -1085,6 +1154,12 @@ def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns:
         Next step::
 
             df.sort("pts", descending=True).head()
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_stats")
     rows = []
@@ -1139,6 +1214,12 @@ def parse_khl_player_profile(raw: Any, *, return_as_pandas: bool = False, column
         Next step::
 
             df.select("player_id", "summary_stats_gp", "summary_stats_pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_profile` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_profile")
     person = _obj(_data(raw).get("DATA"))
@@ -1180,6 +1261,12 @@ def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns
         Next step::
 
             df.select("season_label", "tournament_id", "gp", "pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_career` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_career")
     data = _data(raw)
@@ -1238,6 +1325,12 @@ def parse_khl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Colum
         Next step::
 
             df.filter(pl.col("group") == "goalkeepers")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_roster` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_roster")
     rows = [
@@ -1279,6 +1372,12 @@ def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns:
         Next step::
 
             df.filter(pl.col("filter") == "season")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_stat_filters` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_stat_filters")
     rows = [

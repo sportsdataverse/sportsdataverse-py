@@ -357,8 +357,9 @@ def _params(path: str, op: dict) -> Tuple[List[dict], List[dict], Dict[str, Any]
                         "name": "season",
                         "query_key": "season",
                         "type": "int",
-                        "description": "Season END year (2026 = 2025/26); the runtime sends the START year this "
-                        "route takes. None = the player's default (shorter) log.",
+                        "transform": {"offset": -1},  # this route alone takes the START year
+                        "description": "Season END year (2026 = 2025/26); the wrapper sends the START year this "
+                        "route takes (season - 1). None = the player's default (shorter) log.",
                     }
                 )
                 examples["season"] = 2026

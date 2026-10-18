@@ -1136,7 +1136,7 @@ before reconciling via the `poss1` recipe.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `curr` | `LineupEvent` |  | The lineup event whose `players_in`/`players_out` describe the subs to apply. |
-| `prev` | `LineupEvent` |  | The lineup event whose `players` is the starting roster (complete_lineup` passes `curr` for both arguments -- see its docstring). |
+| `prev` | `LineupEvent` |  | The lineup event whose `players` is the starting roster (`_complete_lineup` passes `curr` for both arguments -- see its docstring). |
 
 **Returns**
 
@@ -1165,8 +1165,8 @@ order via `reorder_and_reverse`, then folded through a
 
 * A `SubIn`/`SubOut` event either **opens a new stint** (if the
   current lineup `~LineupBuildingState.is_active`: the just-built
-  lineup is completed via complete_lineup` and appended, and a
-  fresh lineup is started via new_lineup_event`) or **keeps
+  lineup is completed via `_complete_lineup` and appended, and a
+  fresh lineup is started via `_new_lineup_event`) or **keeps
   accumulating** onto the current (not-yet-active) lineup via
   `~LineupBuildingState.with_player_in`/`with_player_out`. A
   `SubIn` event naming literally `"team"` (case-insensitive) is
@@ -1672,13 +1672,13 @@ Split a lineup event into one :class:`~sportsdataverse.mbb
 (`create_player_events`, `LineupUtils.scala:1454-1529`).
 
 First re-tidies `lineup_event_maybe_bad`'s `players`/`players_in`/
-`players_out` against `box_lineup` (via player_tidier`),
+`players_out` against `box_lineup` (via `_player_tidier`),
 dropping any player who doesn't actually resolve to a box-score player --
 this recovers from "impossible" lineups. Then, for each surviving player
 (in lineup-slot order, 0-4), builds their own `enrich_stats` call
 with a per-player `player_filter_coder` + that player's slot index (the
 only caller in this module that ever passes a non-default
-`player_index`, wiring increment_player_3p_shot_info`).
+`player_index`, wiring `_increment_player_3p_shot_info`).
 
 **Parameters**
 
