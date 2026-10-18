@@ -34,7 +34,8 @@ endpoints:
   short: game
   summary: 'One game''s CMS record by slug (2025/26 onward): StatNet game number and
     team ids, scores by period, venue, attendance.'
-- example_args:
+- body: json
+  example_args:
     away_statnet_id: MODO
     home_statnet_id: AIK
     scheduled_date_time: '2026-09-18T17:00:00.000Z'
@@ -74,7 +75,8 @@ endpoints:
   summary: 'One game''s events (2025/26 onward): shots with outcome, goals with assists
     and strength, penalties, goalkeeper changes, timeouts. No coordinates, no on-ice
     players.'
-- example_args:
+- body: json
+  example_args:
     season: 2026
   extra_params:
   - description: Season END year (2026 = 2025/26); the site's START-year key is sent
@@ -83,6 +85,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -150,7 +153,8 @@ endpoints:
   short: games
   summary: 'Every game of a season, played or scheduled (is_played): date, display
     team codes, score, periods, arena, attendance, shots and power play. No game id.'
-- example_args:
+- body: json
+  example_args:
     season: 2026
   extra_params:
   - description: Season END year (2026 = 2025/26); the site's START-year key is sent
@@ -159,6 +163,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -185,7 +190,8 @@ endpoints:
   short: standings
   summary: Standings of a season. Wins and losses are REGULATION only; overtime counts
     include shootouts.
-- example_args:
+- body: json
+  example_args:
     category: summary
     season: 2026
   extra_params:
@@ -195,6 +201,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -303,7 +310,8 @@ endpoints:
   short: skater_stats
   summary: Skater stats of a season, one category (column set) per call. Names and
     StatNet team ids, no player ids.
-- example_args:
+- body: json
+  example_args:
     category: summary
     season: 2026
   extra_params:
@@ -313,6 +321,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -392,7 +401,8 @@ endpoints:
   short: goalie_stats
   summary: Goalkeeper stats of a season, one category per call. Names and StatNet
     team ids, no player ids.
-- example_args:
+- body: json
+  example_args:
     category: results
     season: 2026
   extra_params:
@@ -402,6 +412,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -489,7 +500,8 @@ endpoints:
   short: team_stats
   summary: Team stats of a season, one category per call. W / L are totals including
     overtime and shootout (wins_total / losses_total).
-- example_args:
+- body: json
+  example_args:
     season: 2026
   extra_params:
   - description: Season END year (2026 = 2025/26); the site's START-year key is sent
@@ -498,6 +510,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -515,7 +528,8 @@ endpoints:
   short: teams
   summary: 'Teams of a season with both team keys: StatNet team id <-> display code
     (from the stats tables'' teams list).'
-- example_args:
+- body: json
+  example_args:
     metric: TP
   extra_params:
   - description: 'Leaderboard metric. Seen on the site: TP, G, A, PlusMinus, Hits,
@@ -549,7 +563,8 @@ endpoints:
   short: leaders
   summary: Current-season top 25 of one metric, with the StatNet player id (the only
     stats route that has one).
-- example_args:
+- body: json
+  example_args:
     team: AIK
   extra_params:
   - description: 'Team display code (CMS short name: AIK, MORA, ÖIK, ...). Required:
