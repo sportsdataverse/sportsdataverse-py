@@ -156,6 +156,12 @@ def test_2019_20_the_untyped_shootout_attempts_are_attempts() -> None:
     assert missed["type.text"].to_list() == ["Two-Point Conversion Missed"] * 3
     assert missed["EPA"].to_list() == pytest.approx([-0.92] * 3)
     assert attempts["two_pt_recommendation"].null_count() == 4
+    # ESPN files the three at 37-34, the first-overtime score (the linescore has 41-41): a margin of
+    # 3, which a shootout cannot reach, so they have no win probability
+    assert sum(_linescores(401112489)["home"][:8]) == sum(_linescores(401112489)["away"][:8]) == 41
+    assert missed["pos_score_diff_start"].abs().to_list() == [3, 3, 3]
+    for col in ("wp_before", "wp_after", "wp_before_naive", "wp_after_naive"):
+        assert missed[col].null_count() == 3, col
 
 
 def test_a_shootout_attempt_on_impossible_espn_scores_has_no_win_probability() -> None:
@@ -180,17 +186,61 @@ def test_a_shootout_attempt_on_impossible_espn_scores_has_no_win_probability() -
 
 def test_a_shootout_attempt_left_unknown_does_not_borrow_a_later_board() -> None:
     """401866418, Jacksonville State @ Ohio 2026, four overtimes: tied 27-27 entering the third, the
-    shootout (linescore), four attempts. ESPN's first "End of OT." marker carries 17-34, which
-    reaches the third-overtime attempts as a 7-point margin, and Ohio's winning attempt starts from
-    it too. Those three are left unknown in full: before the guard wp_after was borrowed from a
-    later row past the null boards (0.1 and 0.9). The fourth attempt, at a real margin of 2, keeps
-    its value: Jacksonville State's miss ends the game (0.0)."""
+    shootout (linescore), four attempts. ESPN's period-6 "End of OT." marker carries 17-34, and the
+    third-overtime attempts and Ohio's fourth-overtime one start from it. Those are left unknown in
+    full: before the guard their wp_after was borrowed from a later row past the null boards (0.1 and
+    0.9). The fourth overtime opens on that score, so Jacksonville State's last attempt has no
+    wp_before either; its miss ends the game, so its wp_after is the result (0.0)."""
     ls = _linescores(401866418)
     assert sum(ls["home"][:6]) == sum(ls["away"][:6]) == 27
     plays = _plays(401866418)
     attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
     assert attempts.height == _shootout_attempts_expected(401866418, from_overtime=3) == 4
-    assert attempts["pos_score_diff_start"].abs().to_list() == [7, 7, 7, 2]
-    for col in ("wp_before", "wp_after", "wp_before_naive", "wp_after_naive"):
+    for col in ("wp_before", "wp_before_naive"):
+        assert attempts[col].null_count() == 4, col
+    for col in ("wp_after", "wp_after_naive"):
         assert attempts[col].is_null().to_list() == [True, True, True, False], col
-    assert attempts["wp_after"][-1] == 0.0
+        assert attempts[col][-1] == 0.0
+
+
+def test_a_shootout_period_that_does_not_open_tied_has_no_win_probability() -> None:
+    """401677180, Pittsburgh @ Toledo 2024, six overtimes: the linescore has 42-42 after the third
+    overtime, 44-44 after the fourth and 46-46 after the fifth, but ESPN's scores run Toledo 2 ahead
+    from the third (42-44 after it). Each margin stays within 2, so only the first attempt of a period
+    shows it: the fifth overtime opens on -2 ("Julian Dugger Pass to Gavin Bartholomew", valued 0.12).
+    A period whose first attempt does not start tied has no win probability on any attempt; Toledo's
+    winning attempt keeps the result (1.0)."""
+    ls = _linescores(401677180)
+    assert sum(ls["home"][:7]) == sum(ls["away"][:7]) == 42
+    assert sum(ls["home"][:9]) == sum(ls["away"][:9]) == 46
+    plays = _plays(401677180)
+    attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
+    assert attempts.height == 7  # of 8 by the linescore: Pittsburgh's sixth-overtime miss is not in the feed
+    ot3_second = attempts.filter(pl.col("text").str.starts_with("Tucker Gleason Pass to Terrell")).row(0, named=True)
+    assert ot3_second["end.homeScore"] - ot3_second["end.awayScore"] == 2  # ESPN 42-44 after the third
+    ot5_first = attempts.filter(pl.col("text").str.starts_with("Julian Dugger Pass to Gavin")).row(0, named=True)
+    assert abs(ot5_first["pos_score_diff_start"]) == 2
+    for col in ("wp_before", "wp_before_naive"):
+        assert attempts[col].null_count() == 7, col
+    for col in ("wp_after", "wp_after_naive"):
+        assert attempts[col].null_count() == 6, col
+        assert attempts[col][-1] == 1.0
+
+
+def test_an_unknown_shootout_attempt_stays_unknown_in_a_game_in_progress() -> None:
+    """A game in progress: the latest play has no next play, so its wp_after falls back to the
+    model's end state, restated when the possession changes. An attempt left unknown keeps no value
+    there either: 401866418 read as live, Jacksonville State's last attempt (filed with Ohio as the
+    end team) would take 1 - that end state."""
+    with gzip.open(FIX / "summary_401866418_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    summary["header"]["competitions"][0]["status"]["type"]["completed"] = False
+    proc = CFBPlayProcess(gameId=401866418, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    plays = proc.plays_frame.sort("game_play_number")
+    last = plays.row(-1, named=True)
+    assert last["type.text"] in _TWO_POINT and last["start.pos_team.id"] != last["end.pos_team.id"]
+    attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
+    for col in ("wp_after", "wp_after_naive"):
+        assert attempts[col].null_count() == 4, col

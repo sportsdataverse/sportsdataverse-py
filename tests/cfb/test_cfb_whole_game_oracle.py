@@ -439,17 +439,17 @@ def test_first_half_kickoff_team_received_the_second_half_kickoff(game_id):
 
 
 def test_the_second_half_oracle_covers_the_fallback_captures():
-    """Guard the guard: 121 captures checked, 35 of them without an opening kickoff in period 1."""
-    assert len(_RECEIVER_DEFINED) == 121
+    """Guard the guard: 122 captures checked, 35 of them without an opening kickoff in period 1."""
+    assert len(_RECEIVER_DEFINED) == 122
     fallback = [FEEDS[g] for g in _RECEIVER_DEFINED if g not in _KICKOFF_DEFINED]
     assert len(fallback) == 35
     assert {f.second_half_receiver == f.home_id for f in fallback} == {True, False}
 
 
 def test_the_kickoff_oracle_covers_the_captures_it_should():
-    """Guard the guard: the feed names the opening kicker on 87 of the 129 captures, 43 of them home."""
+    """Guard the guard: the feed names the opening kicker on 88 of the 130 captures, 43 of them home."""
     kicked = [FEEDS[g] for g in _KICKOFF_DEFINED]
-    assert len(kicked) == 87
+    assert len(kicked) == 88
     assert sum(1 for f in kicked if f.opening_kicker == f.home_id) == 43
     # 400547866 (Kansas @ West Virginia, 2014): the away team kicks, the home team receives
     assert FEEDS[400547866].opening_kicker == 2305

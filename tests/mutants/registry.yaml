@@ -219,15 +219,35 @@
   expected: kill
   note: the pre-fix state; 401112489's three untyped missed attempts stay Unknown scrimmage snaps
 
-- id: cfb-ot-shootout-impossible-margin-kept
+- id: cfb-ot-shootout-untied-period-kept
   group: cfb-ot-shootout-attempts
   finding: R792-7
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'impossible = (np.abs(m0) > 2) | (np.abs(m1) > 2)'
-  mutant: 'impossible = np.zeros(len(m0), dtype=bool)'
+  snippet: 'impossible = f["untied"].to_numpy()'
+  mutant: 'impossible = np.zeros(f.height, dtype=bool)'
   test: tests/cfb/test_cfb_overtime_eras.py -k "impossible_espn_scores"
   expected: kill
   note: the pre-fix state; 401628439's attempts read 0.0 or 1.0 from ESPN's 50-42
+
+- id: cfb-ot-shootout-untied-only-beyond-2
+  group: cfb-ot-shootout-attempts
+  finding: R890-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 2))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "does_not_open_tied"
+  expected: kill
+  note: a margin-beyond-2 guard (the first version of this fix); 401677180's fifth overtime opens on -2 and keeps 0.12
+
+- id: cfb-ot-shootout-untied-margin-3-kept
+  group: cfb-ot-shootout-attempts
+  finding: R890-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 3))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: a margin of 3 passes; 401112489's three retyped attempts at 37-34 (41-41 by the linescore) keep a value
 
 - id: cfb-ot-shootout-unknown-as-nan
   group: cfb-ot-shootout-attempts
@@ -248,6 +268,26 @@
   test: tests/cfb/test_cfb_overtime_eras.py -k "borrow"
   expected: kill
   note: 401866418's third-overtime attempts take wp_after 0.1 / 0.9 from a later row past the null boards
+
+- id: cfb-ot-shootout-unknown-in-progress-fallback
+  group: cfb-ot-shootout-attempts
+  finding: R890-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown'
+  mutant: '.and_(pl.lit(True)),'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "in_progress"
+  expected: kill
+  note: a game in progress; the last-row fallback writes 1 - the restated end state onto 401866418's unknown last attempt (possession changes on it)
+
+- id: validation-final-wp-reads-one-sided-last-row
+  group: cfb-ot-shootout-attempts
+  finding: R890-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: 'after = df.get_column("home_wp_after").drop_nulls()'
+  mutant: 'after = nn.get_column("home_wp_after")'
+  test: tests/contracts/test_pbp_invariants.py -k "test_ep_wp"
+  expected: kill
+  note: the both-not-null filter drops a last row with wp_after only and reads the row before (401309856, 0.354)
 
 # --- C-M19: the summary_pickcenter odds are Python scalars, so they round trip as odds_override ----
 # Killer (3.4(b1)): tests/cfb/test_cfb_pbp.py, the offline type + ESPN-value + JSON round trip on

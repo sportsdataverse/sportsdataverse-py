@@ -844,9 +844,13 @@ def _ep_wp(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
         result = home_result(summary)
         if result is not None and df.height:
             nn = df.filter(c("home_wp_after").is_not_null() & c("home_wp_before").is_not_null())
-            if nn.height:
-                last_after = float(nn.get_column("home_wp_after")[-1])
-                first_before = float(nn.get_column("home_wp_before")[0])
+            # each end read on its own: a row can carry one side only (a CFB shootout attempt left
+            # unknown keeps wp_after when it ends the game, 401309856)
+            after = df.get_column("home_wp_after").drop_nulls()
+            before = df.get_column("home_wp_before").drop_nulls()
+            if after.len() and before.len():
+                last_after = float(after[-1])
+                first_before = float(before[0])
                 bad = abs(last_after - result) > 0.1
                 out.append(
                     RuleResult(

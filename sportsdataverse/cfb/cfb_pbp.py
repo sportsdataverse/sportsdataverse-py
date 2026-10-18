@@ -823,7 +823,14 @@ def _ot_shootout_state_wp(play_df, naive: bool):
             second=pl.col("mask") & (pl.col("mask").cast(pl.Int32).cum_sum().over("period.number") >= 2),
             first_team=pl.col("team").filter(pl.col("mask")).first().over("period.number"),
         )
-        .with_columns(flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False))
+        .with_columns(
+            flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False),
+            # the period's first attempt does not start tied, so no score in that period is the game's
+            untied=(pl.col("mask") & ~pl.col("second") & (pl.col("m0") != 0))
+            .fill_null(False)
+            .any()
+            .over("period.number"),
+        )
     )
     flip, second = f["flip"].to_numpy(), f["second"].to_numpy()
     sign = np.where(flip, -1.0, 1.0)
@@ -833,12 +840,15 @@ def _ot_shootout_state_wp(play_df, naive: bool):
     before = _ot_shootout_attempt_wp(sign * m0, tie, second)
     after = _ot_shootout_wp(sign * m1, tie, second)
     before, after = np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
-    # A shootout period opens tied and one attempt moves the margin by 2 at most, so a margin
-    # beyond 2 is ESPN's score, not the game's: 401628439 carries 50-42 on all twelve attempts
-    # (the linescore has 40-40 entering the shootout, 44-42 final), 401112489 37-34 on three
-    # (41-41). The value is left null (NaN here, null in the column), not pinned to 0/1 from
-    # that score and not re-derived from the linescore.
-    impossible = (np.abs(m0) > 2) | (np.abs(m1) > 2)
+    # A shootout period opens tied, so when its first attempt does not, no score in that period
+    # is the game's: 401628439 carries 50-42 on all twelve attempts (the linescore has 40-40
+    # entering the shootout, 44-42 final), 401112489 37-34 on three (41-41), and 401677180's
+    # scores run Toledo 2 ahead from the third overtime (ESPN 42-44 where the linescore has
+    # 42-42), so its fifth opens on -2 and read 0.12. Over the 2019-26 shootout games this
+    # catches every attempt whose own margin is beyond 2 as well. The value is left null (NaN
+    # here, null in the column), not pinned to 0/1 from that score and not re-derived from the
+    # linescore.
+    impossible = f["untied"].to_numpy()
     return f["mask"].to_numpy(), np.where(impossible, np.nan, before), np.where(impossible, np.nan, after)
 
 
@@ -1141,7 +1151,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 .is_null()
                 .and_(pl.col(lwb).is_null())
                 .and_(pl.col("status_type_completed") != True)
-                .and_(pl.col(f"_wa_flip{suffix}").is_not_null()),
+                .and_(pl.col(f"_wa_flip{suffix}").is_not_null())
+                .and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown
             )
             .then(
                 pl.when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
