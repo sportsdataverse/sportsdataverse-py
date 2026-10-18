@@ -22,7 +22,7 @@ espn_mlb_game_rosters - pull the active game rosters for both teams.
 
 **Returns**
 
-One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_starter`.
+One row per (game × team × athlete) with columns `game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey, athlete_position_id, athlete_position_abbreviation, athlete_position_name, athlete_starter`; zero rows with those columns when ESPN lists no competitor roster.
 
 **Example**
 

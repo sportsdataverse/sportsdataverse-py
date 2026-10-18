@@ -1015,3 +1015,174 @@
   test: tests/mbb/test_mbb_schedule.py -k failed_day_raises
   expected: kill
   note: 'a failed day raises instead of becoming a silent gap (HTTP 500 path is _download_json; this row guards the 200-without-events path)'
+
+# --- task 2.10: ESPN roster family (gates/espn-families.md rosters-keep-position) -------------------
+- id: rosters-athlete-position-kept
+  group: espn-rosters
+  finding: B-M26
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: 'athlete["position"] = position'
+  mutant: 'pass'
+  test: tests/test_espn_game_rosters_family.py -k keep_position
+  expected: kill
+  note: 'popping the whole position object again drops position_id/name/abbreviation in all 7 leagues (ledger MUTATION line)'
+
+- id: rosters-athlete-404-per-athlete
+  group: espn-rosters
+  finding: B-L5
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: 'except NoDataError:  # a FAILED fetch (AssetFetchError) still raises'
+  mutant: 'except ZeroDivisionError:'
+  test: tests/test_espn_game_rosters_family.py -k athlete_404
+  expected: kill
+  note: 'one 404 athlete $ref failed the whole game'
+
+- id: rosters-team-one-logo-kept
+  group: espn-rosters
+  finding: B-GB-19
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: 'logo_dark_href=pl.col("logos").list.get(1, null_on_oob=True)'
+  mutant: 'logo_dark_href=pl.col("logos").list.get(1, null_on_oob=False)'
+  test: tests/test_espn_game_rosters_family.py -k one_logo
+  expected: kill
+  note: 'a one-logo team raised out-of-bounds into the blanket except and lost its logo_href too'
+
+- id: rosters-team-unreadable-logos-warn
+  group: espn-rosters
+  finding: B-GB-19
+  file: sportsdataverse/_espn_game_rosters.py
+  snippet: "warnings.warn(\n            f\"ESPN team logos"
+  mutant: "(lambda *a, **k: None)(\n            f\"ESPN team logos"
+  test: tests/test_espn_game_rosters_family.py -k unreadable_logos
+  expected: kill
+  note: 'the logo except wrote "" silently'
+
+- id: mlb-game-rosters-empty-frame
+  group: espn-rosters
+  finding: B-L25
+  file: sportsdataverse/mlb/mlb_game_rosters.py
+  snippet: 'if not rows:  # B-L25: no competitors (or no roster) -> the documented columns, zero rows; was None'
+  mutant: 'if False:'
+  test: tests/test_espn_game_rosters_family.py -k mlb_game_rosters_empty
+  expected: kill
+  note: 'empty competitors returned None (removed) / a zero-column frame'
+
+- id: wbb-officials-skip-null-element
+  group: espn-rosters
+  finding: B-L8
+  file: sportsdataverse/wbb/wbb_game_officials.py
+  snippet: 'officials = [o for o in officials if isinstance(o, dict)]  # B-L8: a null element raised AttributeError'
+  mutant: 'officials = list(officials)'
+  test: tests/wbb/test_wbb_release_helpers.py -k null_element
+  expected: kill
+  note: 'a null officials element raised AttributeError'
+
+- id: wbb-officials-empty-schema
+  group: espn-rosters
+  finding: B-L8
+  file: sportsdataverse/wbb/wbb_game_officials.py
+  snippet: 'return pl.DataFrame(schema=schema)'
+  mutant: 'return pl.DataFrame()'
+  test: tests/wbb/test_wbb_release_helpers.py -k empty_page
+  expected: kill
+  note: 'no officials returned a zero-column frame'
+
+- id: wbb-officials-idless-not-collapsed
+  group: espn-rosters
+  finding: B-GB-18
+  file: sportsdataverse/wbb/wbb_game_officials.py
+  snippet: 'pl.col("official_id").is_null() | pl.struct(pl.all()).is_first_distinct()'
+  mutant: 'pl.struct(pl.all()).is_first_distinct()'
+  test: tests/wbb/test_wbb_release_helpers.py -k without_ids
+  expected: kill
+  note: 'two id-less officials with equal fields collapsed to one row'
+
+- id: wbb-rel-bool-r-spelling
+  group: espn-rosters
+  finding: B-GB-20
+  file: sportsdataverse/wbb/wbb_game_rosters.py
+  snippet: 'return _R_LOGICAL.get(x)'
+  mutant: 'return bool(x)'
+  test: tests/wbb/test_wbb_release_helpers.py -k rel_bool
+  expected: kill
+  note: '_rel_bool("false") was True; R as.logical gives FALSE'
+
+- id: coerce-float-nan-null
+  group: espn-rosters
+  finding: B-GB-20
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: 'return None if out != out else out  # NaN is the only float unequal to itself'
+  mutant: 'return out'
+  test: tests/test_common_espn_player_stats.py -k coerce_float_maps_nan
+  expected: kill
+  note: '_coerce_float(nan) returned nan'
+
+- id: mbb-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/mbb/mbb_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[mbb]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: wbb-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/wbb/wbb_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[wbb]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: nba-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/nba/nba_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[nba]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: wnba-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/wnba/wnba_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[wnba]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: nfl-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/nfl/nfl_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[nfl]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: nhl-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/nhl/nhl_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[nhl]
+  expected: kill
+  note: 'raw= was accepted and ignored'
+
+- id: cfb-game-rosters-raw-honoured
+  group: espn-rosters
+  finding: B-GB-06
+  file: sportsdataverse/cfb/cfb_game_rosters.py
+  snippet: "if raw:\n        return summary"
+  mutant: "if False:\n        return summary"
+  test: tests/test_espn_game_rosters_family.py::test_game_rosters_raw_payload[cfb]
+  expected: kill
+  note: 'raw= was accepted and ignored'

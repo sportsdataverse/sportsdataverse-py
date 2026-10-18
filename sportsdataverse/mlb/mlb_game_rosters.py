@@ -6,6 +6,19 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
 
+_COLUMNS = (
+    "game_id",
+    "team_id",
+    "home_away",
+    "athlete_id",
+    "athlete_full_name",
+    "athlete_jersey",
+    "athlete_position_id",
+    "athlete_position_abbreviation",
+    "athlete_position_name",
+    "athlete_starter",
+)
+
 
 def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: bool = False, **kwargs):
     """espn_mlb_game_rosters - pull the active game rosters for both teams.
@@ -25,7 +38,9 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
     Returns:
         pl.DataFrame: One row per (game × team × athlete) with columns
         ``game_id, team_id, home_away, athlete_id, athlete_full_name, athlete_jersey,
-        athlete_position_id, athlete_position_abbreviation, athlete_starter``.
+        athlete_position_id, athlete_position_abbreviation, athlete_position_name,
+        athlete_starter``; zero rows with those columns when ESPN lists no competitor
+        roster.
 
     Example:
         Pull both lineups for a single game::
@@ -45,8 +60,6 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
     )
     comp_payload = _download_json(download, competitors_url, **kwargs)
     items = comp_payload.get("items") or []
-    if not items:
-        return None
 
     rows = []
     for c in items:
@@ -80,6 +93,9 @@ def espn_mlb_game_rosters(game_id: int, raw: bool = False, return_as_pandas: boo
 
     if raw:
         return {"competitors": items, "rows": rows}
+    if not rows:  # B-L25: no competitors (or no roster) -> the documented columns, zero rows; was None
+        empty = pl.DataFrame(schema={c: pl.Boolean if c == "athlete_starter" else pl.String for c in _COLUMNS})
+        return empty.to_pandas() if return_as_pandas else empty
     df = pd.DataFrame(rows)
     df.columns = [underscore(c) for c in df.columns.tolist()]
     return df if return_as_pandas else pl.from_pandas(df)

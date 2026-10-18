@@ -1,0 +1,110 @@
+{
+ "count": 2,
+ "pageIndex": 1,
+ "pageSize": 25,
+ "pageCount": 1,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5?lang=en&region=us",
+   "id": "5",
+   "uid": "s:70~l:90~t:5",
+   "type": "team",
+   "order": 0,
+   "homeAway": "home",
+   "winner": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/teams/5?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/5/records?lang=en&region=us"
+   },
+   "probables": [
+    {
+     "name": "probableStartingGoalie",
+     "displayName": "Probable Starting Goalie",
+     "shortDisplayName": "Starter",
+     "abbreviation": "SG",
+     "playerId": 5734,
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/athletes/5734?lang=en&region=us"
+     },
+     "status": {
+      "id": "102",
+      "name": "Confirmed",
+      "type": "confirmed",
+      "abbreviation": "Confirmed"
+     }
+    }
+   ],
+   "curatedRank": {
+    "current": 99
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22?lang=en&region=us",
+   "id": "22",
+   "uid": "s:70~l:90~t:22",
+   "type": "team",
+   "order": 1,
+   "homeAway": "away",
+   "winner": true,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/teams/22?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/events/401687987/competitions/401687987/competitors/22/records?lang=en&region=us"
+   },
+   "probables": [
+    {
+     "name": "probableStartingGoalie",
+     "displayName": "Probable Starting Goalie",
+     "shortDisplayName": "Starter",
+     "abbreviation": "SG",
+     "playerId": 4341584,
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/hockey/leagues/nhl/seasons/2025/athletes/4341584?lang=en&region=us"
+     },
+     "status": {
+      "id": "102",
+      "name": "Confirmed",
+      "type": "confirmed",
+      "abbreviation": "Confirmed"
+     }
+    }
+   ],
+   "curatedRank": {
+    "current": 99
+   }
+  }
+ ]
+}

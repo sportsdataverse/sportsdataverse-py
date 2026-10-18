@@ -67,7 +67,7 @@ list(payload.keys())[:8]
 
 ### espn_wnba_game_rosters {#espn_wnba_game_rosters}
 
-`espn_wnba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+`espn_wnba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`
 
 espn_wnba_game_rosters() - Pull the game by id.
 
@@ -76,7 +76,7 @@ espn_wnba_game_rosters() - Pull the game by id.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | Unique game_id, can be obtained from espn_wnba_schedule(). |
-| `raw` |  | `False` |  |
+| `raw` | `bool` | `False` | If True, returns the Core v2 competitors payload (dict) as ESPN sent it; its roster, team and athlete `$ref` links are not followed. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -117,6 +117,11 @@ Polars Data frame of game roster data with columns: 'athlete_id', 'athlete_uid',
 | `status_name` | character | Status label. |
 | `status_type` | character | Status type. |
 | `status_abbreviation` | character | Status abbreviation. |
+| `position_id` | integer | ESPN's numeric identifier of the athlete's listed position (the Core v2 position resource id). |
+| `position_name` | character | Name of the athlete's listed position from ESPN's position resource, e.g. Guard or Forward. |
+| `position_display_name` | character | Display form of the athlete's listed position as ESPN renders it; usually equal to position_name. |
+| `position_abbreviation` | character | Short code of the athlete's listed position (e.g. G, F, RW, OL), from ESPN's position resource. |
+| `position_leaf` | logical | Whether the position is a leaf of ESPN's position tree; False marks a grouping, not a specific role. |
 | `draft_display_text` | character | Draft display text. |
 | `draft_round` | integer | Round of the draft selection. |
 | `draft_year` | integer | Draft year (4-digit). |

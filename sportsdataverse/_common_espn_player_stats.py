@@ -297,20 +297,19 @@ def _is_ref_only(v: Any) -> bool:
 
 
 def _coerce_float(v: Any) -> float | None:
-    """Coerce ``v`` to ``float``; ``None`` if not convertible (e.g. "7.8-15.7")."""
+    """Coerce ``v`` to ``float``; ``None`` if not convertible (e.g. "7.8-15.7") or NaN (B-GB-20)."""
     if v is None or isinstance(v, bool):
         return None
     if isinstance(v, (int, float)):
-        return float(v)
-    if isinstance(v, str):
-        s = v.strip()
-        if not s:
-            return None
+        out = float(v)
+    elif isinstance(v, str) and v.strip():
         try:
-            return float(s)
+            out = float(v.strip())
         except ValueError:
             return None
-    return None
+    else:
+        return None
+    return None if out != out else out  # NaN is the only float unequal to itself
 
 
 def _coerce_int(v: Any) -> int | None:

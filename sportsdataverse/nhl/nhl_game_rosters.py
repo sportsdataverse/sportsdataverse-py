@@ -3,15 +3,24 @@ from __future__ import annotations
 import pandas as pd
 import polars as pl
 
+from sportsdataverse import _espn_game_rosters
 from sportsdataverse._codegen_runtime import _download_json
-from sportsdataverse.dl_utils import download, normalize_team_roster_columns, underscore
+from sportsdataverse.dl_utils import (  # noqa: F401 -- normalize_team_roster_columns leaks via `import *` (coverage_allowlist.yaml)
+    download,
+    normalize_team_roster_columns,
+    underscore,
+)
 
 
-def espn_nhl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwargs) -> pl.DataFrame:
+def espn_nhl_game_rosters(
+    game_id: int, raw=False, return_as_pandas=False, **kwargs
+) -> pl.DataFrame | pd.DataFrame | dict:
     """espn_nhl_game_rosters() - Pull the game by id.
 
     Args:
         game_id (int): Unique game_id, can be obtained from espn_nhl_schedule().
+        raw (bool): If True, returns the Core v2 competitors payload (dict) as ESPN sent it;
+            its roster, team and athlete ``$ref`` links are not followed.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
@@ -33,6 +42,9 @@ def espn_nhl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         'team_display_name', 'team_short_display_name', 'team_color',
         'team_alternate_color', 'is_active', 'is_all_star',
         'logo_href', 'logo_dark_href', 'game_id'
+        plus the athlete's ``position_id``, ``position_name``, ``position_display_name``,
+        ``position_abbreviation`` and ``position_leaf``. With ``raw=True``, the competitors
+        payload (dict).
     Example:
         Pull both teams' rosters for a single game (Stanley Cup Final 2023)::
 
@@ -65,6 +77,8 @@ def espn_nhl_game_rosters(game_id: int, raw=False, return_as_pandas=False, **kwa
         )
     )
     summary = _download_json(download, summary_url, **kwargs)
+    if raw:
+        return summary
     items = helper_nhl_game_items(summary)
     team_rosters = helper_nhl_roster_items(items=items, summary_url=summary_url, **kwargs)
     team_rosters = team_rosters.join(items[["team_id", "order", "home_away", "winner"]], how="left", on="team_id")
@@ -94,50 +108,7 @@ def helper_nhl_game_items(summary):
 
 
 def helper_nhl_team_items(items, **kwargs):
-    pop_cols = [
-        "$ref",
-        "record",
-        "athletes",
-        "venue",
-        "groups",
-        "ranks",
-        "statistics",
-        "leaders",
-        "links",
-        "notes",
-        "againstTheSpreadRecords",
-        "franchise",
-        "events",
-        "college",
-        "depthCharts",
-        "transactions",
-        "awards",
-        "injuries",
-        "coaches",
-        "ranks",
-        "attendance",
-    ]
-    teams_df = pl.DataFrame()
-    for x in items["team_href"]:
-        team = _download_json(download, x, **kwargs)
-        for k in pop_cols:
-            team.pop(k, None)
-        team_row = pl.from_pandas(pd.json_normalize(team, sep="_"))
-        teams_df = pl.concat([teams_df, team_row], how="diagonal")
-
-    teams_df = normalize_team_roster_columns(teams_df)
-    if "logos" in teams_df.columns:
-        try:
-            teams_df = teams_df.with_columns(
-                logo_href=pl.col("logos").list.get(0).struct.field("href").fill_null(""),
-                logo_dark_href=pl.col("logos").list.get(1).struct.field("href").fill_null(""),
-            ).drop("logos")
-        except Exception:
-            teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit("")).drop(["logos"])
-    else:
-        teams_df = teams_df.with_columns(logo_href=pl.lit(""), logo_dark_href=pl.lit(""))
-    teams_df = teams_df.with_columns(team_id=pl.col("team_id").cast(pl.Int32))
-    return teams_df
+    return _espn_game_rosters.team_items(items, **kwargs)
 
 
 def helper_nhl_roster_items(items, summary_url, **kwargs):
@@ -172,39 +143,4 @@ def helper_nhl_roster_items(items, summary_url, **kwargs):
 
 
 def helper_nhl_athlete_items(teams_rosters, **kwargs):
-    athlete_hrefs = list(teams_rosters["athlete_href"])
-    game_athletes = pl.DataFrame()
-    pop_cols = [
-        "links",
-        "injuries",
-        "teams",
-        "team",
-        "college",
-        "proAthlete",
-        "statistics",
-        "notes",
-        "eventLog",
-        "$ref",
-        "position",
-    ]
-    for athlete_href in athlete_hrefs:
-        athlete_resp = _download_json(download, athlete_href, **kwargs)
-        for k in pop_cols:
-            athlete_resp.pop(k, None)
-        athlete = pl.from_pandas(pd.json_normalize(athlete_resp, sep="_"))
-        athlete.columns = [col.replace("$ref", "href") for col in athlete.columns]
-        athlete.columns = [underscore(c) for c in athlete.columns]
-
-        game_athletes = pl.concat([game_athletes, athlete], how="diagonal")
-
-    game_athletes = game_athletes.rename(
-        {
-            "id": "athlete_id",
-            "uid": "athlete_uid",
-            "guid": "athlete_guid",
-            "type": "athlete_type",
-            "display_name": "athlete_display_name",
-        },
-    )
-    game_athletes = game_athletes.with_columns(athlete_id=pl.col("athlete_id").cast(pl.Int64))
-    return game_athletes
+    return _espn_game_rosters.athlete_items(teams_rosters, **kwargs)
