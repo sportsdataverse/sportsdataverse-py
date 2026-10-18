@@ -65,7 +65,9 @@ def test_every_capture_parses_to_snake_case_rows_with_int_ids(fname):
 
 
 @pytest.mark.parametrize("parser", sorted(set(PARSERS.values()), key=lambda f: f.__name__), ids=lambda f: f.__name__)
-@pytest.mark.parametrize("payload", [{}, [], None, "x", 3], ids=["dict", "list", "none", "str", "int"])
+@pytest.mark.parametrize(
+    "payload", [{}, [], None, "x", 3, {"data": None}], ids=["dict", "list", "none", "str", "int", "null-data"]
+)
 def test_empty_or_malformed_payload_is_a_zero_row_frame(parser, payload):
     df = parser(payload)
     assert isinstance(df, pl.DataFrame) and df.height == 0

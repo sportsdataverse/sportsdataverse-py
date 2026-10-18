@@ -38,4 +38,6 @@ from sportsdataverse.basketball.ibba.ibba_parsers import *  # noqa: F401,F403
 from sportsdataverse.basketball.ibba.ibba_segev import *  # noqa: F401,F403
 from sportsdataverse.basketball.ibba.ibba_segev_parsers import *  # noqa: F401,F403
 
-__all__ = [*_api.__all__, *_parsers.__all__, *_segev_api.__all__, *_segev_parsers.__all__]
+from sportsdataverse.basketball.basketball_crosswalk import ibba_segev_game_crosswalk
+
+__all__ = [*_api.__all__, *_parsers.__all__, *_segev_api.__all__, *_segev_parsers.__all__, "ibba_segev_game_crosswalk"]

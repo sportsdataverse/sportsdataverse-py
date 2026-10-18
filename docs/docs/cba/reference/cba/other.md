@@ -163,7 +163,7 @@ Points each side scored in each period of a finished game (up to seven periods).
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo?scheduleId=100105799](https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -381,7 +381,7 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/schedule-eventses/filterPage`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/schedule-eventses/filterPage?startNum=0&scheduleId=100105799](https://data-server.cbaleague.com/api/schedule-eventses/filterPage?startNum=0&scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-eventses/filterPage?startNum=0' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
