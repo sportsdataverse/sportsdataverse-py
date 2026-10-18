@@ -24,7 +24,7 @@ order) over the rows that satisfy nflfastR's `valid_play` filter:
   `score_differential` is null.
 
 The era2..4 + `outdoors` / `retractable` / `dome` dummies and the
-`home` indicator are produced by make_cp_mutations` (the same
+`home` indicator are produced by `_make_cp_mutations` (the same
 nflfastR `make_model_mutations` logic CP uses) rather than re-derived.
 `wp` / `vegas_wp` are the start-of-play win-probability columns and
 must already be present (run after the WP step / inside

@@ -12,8 +12,8 @@ YAML names (``getter_module``); it dispatches on the route:
   fields; they are laid over the route's default body (:data:`BODIES`, the bodies the refs
   capture sends), so a ``None`` keeps the default.
 
-Every request waits on :func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`
-(at least 1 s per host) and goes through the ``_codegen_runtime`` decoders, so the error
+Every request runs inside :func:`sportsdataverse.hockey.euro_hockey_runtime._polite`
+(at least 1 s after the host's last answer) and goes through the ``_codegen_runtime`` decoders, so the error
 vocabulary holds: 404 -> ``NoDataError`` (an unknown play-by-play game), 400 / 422 ->
 ``ValueError`` (a missing required field: the site answers ``{"error": "..."}`` with 400),
 any other non-2xx, a dead connection, or an empty / non-JSON / truncated 200 ->
@@ -62,7 +62,7 @@ import re
 import time
 from datetime import date
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
-from urllib.parse import urlsplit
+from urllib.parse import urlencode, urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _SHARED_SESSION, _parse_retry_after
@@ -191,6 +191,12 @@ def body_season(season: Optional[int], today: Optional[date] = None) -> Tuple[in
     Raises:
         NoDataError: the season is before 2005/06 (:data:`FIRST_SEASON`); nothing is sent.
         ValueError: ``season`` is not an integer year.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - a route this feeds.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     end = current_season(today) if season is None else season
     if isinstance(end, bool) or not isinstance(end, int):
@@ -202,6 +208,11 @@ def body_season(season: Optional[int], today: Optional[date] = None) -> Tuple[in
     return end, str(end - 1)
 
 
+def wire_season(season: Optional[int]) -> str:
+    """The site's START-year ``season`` body key for the public END year (``2026`` -> ``"2025"``)."""
+    return body_season(season)[1]
+
+
 # --- the HTML schedule page ---------------------------------------------------------------------
 
 
@@ -211,6 +222,12 @@ def flight_text(page: str) -> str:
 
     Raises:
         AssetFetchError: no flight data, or a chunk that is not a JSON string literal.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - a route this feeds.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     out = []
     for lit in _PUSH.findall(page):
@@ -232,6 +249,12 @@ def extract_game_list(page: str) -> Dict[str, Any]:
     Raises:
         AssetFetchError: the page has no such element, or its props are not an object with a
             ``games`` list.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - a route this feeds.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     text = flight_text(page)
     m = _GAME_LIST_KEY.search(text)
@@ -263,16 +286,16 @@ def _get_page(url: str, **kwargs: Any) -> Dict[str, Any]:
 def _post(url: str, json: Any = None, timeout: float = 30, attempts: int = 3, **_: Any) -> Any:
     """POST ``json`` with retries (2 s, 4 s) on :data:`RETRY_STATUSES` and transport errors.
 
-    Each attempt waits on the shared throttle. A ``Retry-After`` header on a retried status
+    Each attempt runs inside the shared throttle (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite`). A ``Retry-After`` header on a retried status
     (429 and 503 alike) lengthens the wait to what the server asks, capped at
     ``dl_utils._MAX_RETRY_AFTER``. Any other status returns at once (the caller decodes it
     under the error vocabulary); the last transport error is re-raised.
     """
     for i in range(attempts):
-        euro_hockey_runtime._polite_wait(url)
         retry_after = None
         try:
-            resp = _SESSION.post(url, json=json, headers=_HEADERS, timeout=timeout)
+            with euro_hockey_runtime._polite(url):  # starts >= 1 s after the host's last answer finished
+                resp = _SESSION.post(url, json=json, headers=_HEADERS, timeout=timeout)
         except OSError:  # requests.RequestException
             if i == attempts - 1:
                 raise
@@ -294,6 +317,12 @@ def build_body(path: str, params: Optional[Mapping[str, Any]], today: Optional[d
         ValueError: an unknown route, ``categories`` / ``phase`` outside its list, a leaderboard
             without a ``metric``, or an ``/api/all-players`` call without ``teamShortName``.
         NoDataError: a season before 2005/06.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - a route this feeds.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     if path not in BODIES:
         raise ValueError(f"not a HockeyAllsvenskan POST route: {path!r}")
@@ -441,13 +470,14 @@ def _guard(url: str, fn: Callable[[], None]) -> None:
         raise type(exc)(f"{_rt._where(url)}: {exc}") from None
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """Fetch one HockeyAllsvenskan route (GET page / GET JSON / POST JSON by path), checked and stamped.
 
     Args:
         url: fully-built request URL.
-        params: the wrapper's parameters: the query string of ``/api/game``, the JSON body
-            fields of a POST route (``None`` keeps the route default), unused by ``/pages/matcher``.
+        params: the query string of ``/api/game``; on a POST route the JSON body fields when ``json`` is
+            omitted (``None`` keeps the route default), else extra query-string fields; unused by ``/pages/matcher``.
+        json: the JSON body fields of a POST route (the generated wrappers send them here).
         **kwargs: forwarded to the transport (``timeout``).
 
     Returns:
@@ -471,7 +501,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         body = euro_hockey_runtime._get(url, clean, **kwargs)
         _guard(url, lambda: _check(path, body, clean, {}))
         return body
-    request, stamp = build_body(path, params)
+    if json is None:  # a direct call: the params ARE the body fields
+        request, stamp = build_body(path, params)
+    else:  # the generated wrappers: body in ``json``, caller ``params`` stay on the query string
+        request, stamp = build_body(path, json)
+        query = {k: v for k, v in (params or {}).items() if v is not None}
+        if query:
+            url = f"{url}?{urlencode(query, doseq=True)}"
     body = _rt._download_json(_post, url, json=request, **kwargs)
     _guard(url, lambda: _check(path, body, request, stamp))
     return _stamped(body, stamp)

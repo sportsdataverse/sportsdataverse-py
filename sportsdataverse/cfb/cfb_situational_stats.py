@@ -15,6 +15,8 @@ Derivations beyond raw flags, per the metrics note:
   10-19 / deep 20+); ESPN's pass_depth field is empty in practice.
 """
 
+from __future__ import annotations
+
 import polars as pl
 
 __all__ = ["create_situational_stats"]

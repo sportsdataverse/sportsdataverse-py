@@ -11,13 +11,15 @@ toc_max_heading_level: 2
 
 > **Note:** Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
 
+> **Note:** The documented curl request is schematic: the runtime primes a session (adds the form field `sessid`), maps `season` / `stage` to the form field `values[tournament]` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
+
 ## khl_schedule
 
 Season schedule and results of a tournament, one row per game (All-Star games dropped).
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/calendar/list/`
 
-**Valid URL:** [https://www.khl.ru/rest/calendar/list/?season=2026&stage=regular](https://www.khl.ru/rest/calendar/list/?season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/calendar/list/' -d 'season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -64,7 +66,7 @@ Club roster (current season only): one row per player.
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/clubs/team/`
 
-**Valid URL:** [https://www.khl.ru/rest/clubs/team/?page=team&values%5Bclub_id%5D=7](https://www.khl.ru/rest/clubs/team/?page=team&values%5Bclub_id%5D=7)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/clubs/team/' -d 'page=team&values%5Bclub_id%5D=7'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -103,7 +105,7 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/filters/statplayers/`
 
-**Valid URL:** [https://www.khl.ru/rest/filters/statplayers/?season=2026&stage=regular](https://www.khl.ru/rest/filters/statplayers/?season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/filters/statplayers/' -d 'season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -140,7 +142,7 @@ Game header: status, teams, score, arena (one row).
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/header/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/header/?page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/header/?page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/header/' -d 'page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -219,7 +221,7 @@ Game protocol: one row per goal with scorer, assistants, strength and the jersey
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/protocol/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/protocol/?values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/protocol/?values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/protocol/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -272,7 +274,7 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/text/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -375,7 +377,7 @@ Skater box score by period: one row per period, side and jersey, with the player
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/text/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -437,7 +439,7 @@ Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/text/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -495,7 +497,7 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/game/text/`
 
-**Valid URL:** [https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular](https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -519,8 +521,8 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `shot_type` | integer | 1 = goal, 2 = saved (inferred upstream; unverified) |
-| `x` | integer | Shot x on the site's 1000-wide rink grid (indent_left = x/10 %); whether shots are normalised to one attacking direction is UNVERIFIED |
-| `y` | integer | Shot y on the site's 500-high rink grid (indent_top = y/5 %); orientation UNVERIFIED |
+| `x` | integer | Shot x on the site's 1000 x 500 rink grid, origin top-left (indent_left = x/10 %); goal lines near x = 55 and 945. Team A (home) attacks +x and team B -x in every period, overtime included |
+| `y` | integer | Shot y on the site's 1000 x 500 grid, origin top-left, increasing downward (indent_top = y/5 %); the grid is stretched in y, about 1.18x against a 200 x 85 ft rink |
 | `indent_left` | numeric | Shot position as percent from the left edge |
 | `indent_top` | numeric | Shot position as percent from the top edge |
 | `indent_right` | numeric | Shot position as percent from the right edge |
@@ -542,7 +544,7 @@ Player profile: bio, contract, club (one row).
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/players/profile/`
 
-**Valid URL:** [https://www.khl.ru/rest/players/profile/?values%5Bid%5D=41928](https://www.khl.ru/rest/players/profile/?values%5Bid%5D=41928)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/players/profile/' -d 'values%5Bid%5D=41928'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -602,7 +604,7 @@ Player career: one row per season tournament.
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/players/stats/`
 
-**Valid URL:** [https://www.khl.ru/rest/players/stats/?values%5Bid%5D=41928](https://www.khl.ru/rest/players/stats/?values%5Bid%5D=41928)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/players/stats/' -d 'values%5Bid%5D=41928'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -671,7 +673,7 @@ Playoff bracket: one row per team per series.
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/standings/playoff/`
 
-**Valid URL:** [https://www.khl.ru/rest/standings/playoff/?stage=playoff&values%5Btype%5D=playoff&season=2026](https://www.khl.ru/rest/standings/playoff/?stage=playoff&values%5Btype%5D=playoff&season=2026)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/standings/playoff/' -d 'stage=playoff&values%5Btype%5D=playoff&season=2026'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -692,7 +694,7 @@ Playoff bracket: one row per team per series.
 | `club_id` | integer | khl.ru CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
 | `series_wins` | integer | Wins in the series so far |
-| `game_ids` | character | khl.ru game ids of the series, comma-joined |
+| `game_ids` | list | khl.ru game ids of the series games, a List(Int64) in feed order (unplayed slots skipped) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
@@ -710,7 +712,7 @@ Regular-season standings: one row per team per table (league, conferences, divis
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/standings/regular/`
 
-**Valid URL:** [https://www.khl.ru/rest/standings/regular/?values%5Btype%5D=regular&season=2026](https://www.khl.ru/rest/standings/regular/?values%5Btype%5D=regular&season=2026)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/standings/regular/' -d 'values%5Btype%5D=regular&season=2026'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -753,20 +755,20 @@ _Last validated n/a._
 
 ## khl_player_stats
 
-League player stats of a tournament, one page (one row per player).
+League player stats of a tournament, one page (goalies: every page) (one row per player).
 
 **Endpoint URL:** `POST https://www.khl.ru/rest/stat/players/`
 
-**Valid URL:** [https://www.khl.ru/rest/stat/players/?season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20](https://www.khl.ru/rest/stat/players/?season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20)
+**Example request:** `curl -X POST 'https://www.khl.ru/rest/stat/players/' -d 'season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
 | `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
 | `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
-| `values[amplua_full]` | `position` |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. |
+| `values[amplua_full]` | `position` |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. goalies fetches every page and returns one list sorted by games played, then wins (both descending), then name; page is ignored for it. A partial list raises AssetFetchError. |
 | `values[clubs_full]` | `club` |  |  | `Y` | Club slug (khl_stat_filters, filter clubs_full) or all. None = every club. |
-| `nav[page]` | `page` |  |  | `Y` | 1-based page. Loop until a page comes back shorter than per_page. |
+| `nav[page]` | `page` |  |  | `Y` | 1-based page (skaters); ignored for goalies. Loop until a page comes back shorter than per_page. |
 | `nav[count]` | `per_page` |  |  | `Y` | Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page counts and ranks for 20. |
 
 ### Returns {#khl_player_stats-returns}
@@ -795,7 +797,7 @@ League player stats of a tournament, one page (one row per player).
 | `otg` | integer | Overtime goals scored by the player |
 | `gwg` | integer | Game-winning goals |
 | `sds` | integer | Shootout-deciding goals |
-| `sog` | integer | Shots on goal by the player |
+| `sog` | integer | Shots on goal by the player (shots faced for a goalie) |
 | `sog_pct` | numeric | Shooting percentage |
 | `sog_avg` | numeric | Shots on goal per game |
 | `fo` | integer | Faceoffs taken by the player |
@@ -811,6 +813,15 @@ League player stats of a tournament, one page (one row per player).
 | `sftsh_avg` | numeric | Average short-handed shifts per game |
 | `hits` | integer | Hits (body checks) |
 | `bls` | integer | Shots blocked by the player |
+| `w` | integer | Wins (goalies only) |
+| `l` | integer | Losses (goalies only) |
+| `sop` | integer | Games that went to a shootout (goalies only) |
+| `ga` | integer | Goals against (goalies only) |
+| `sv` | integer | Saves, shots on goal stopped (goalies only) |
+| `sv_pct` | numeric | Save percentage (goalies only) |
+| `gaa` | numeric | Goals-against average, 60 min x goals against / time on ice (goalies only) |
+| `so` | integer | Shutouts, games without a goal against (goalies only) |
+| `toi` | character | Total time on the ice (goalies only; text, null when none) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 

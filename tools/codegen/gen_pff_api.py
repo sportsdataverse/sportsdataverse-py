@@ -359,6 +359,7 @@ def build() -> tuple[dict, Dict[str, dict]]:
         "api": "pff_api",
         "host": HOST,
         "name_pattern": "pff_api_{short}",
+        "no_r_fallback": True,  # aggregate tables: no R-package column descriptions
         "module": "pff_api",
         "parser_module": "nfl.pff_parsers",
         "getter_module": "sportsdataverse.nfl.pff_api_runtime",
