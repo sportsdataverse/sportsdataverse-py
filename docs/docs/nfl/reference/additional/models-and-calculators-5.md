@@ -15,14 +15,14 @@ Derive win probability added (WPA) from pre-scored WP point estimates.
 This is the **derivation half** of `NFLPlayProcess.__process_wpa` lifted
 into a shared, model-free function so the same nflfastR-faithful WPA logic
 can be reused by the streaming `enrich_nfl_pbp` pipeline and by
-process_wpa` itself.  It performs **no** model inference — the caller
+`__process_wpa` itself.  It performs **no** model inference — the caller
 must already have scored the per-play WP point estimates
 (`wp_spread.ubj`) for the start / touchback / end feature views and
 attached them as `wp_before` / `wp_touchback` / `wp_after`.  This
 mirrors `calculate_epa`, which likewise consumes pre-scored EP point
 estimates and leaves prediction to the orchestrator.
 
-Derivation rules (mirror the original process_wpa`):
+Derivation rules (mirror the original `__process_wpa`):
 
 * **Leading overlay (do not drop):** on a kickoff (`type.text` in
   `kickoff_vec`) `wp_before` is replaced by `wp_touchback` — the
@@ -58,14 +58,14 @@ Derivation rules (mirror the original process_wpa`):
 concatenated multi-game frame never leaks WP across game boundaries — the
 `lead_wp_before` / `lead_wp_before2` shifts and the end-of-game
 `game_play_number == max()` lookup are all per-game.  This differs from
-process_wpa` (which runs one game per instance and therefore needs no
+`__process_wpa` (which runs one game per instance and therefore needs no
 grouping).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the WP point estimates `wp_before` (start feature view), `wp_touchback` (touchback feature view) and `wp_after` (end feature view), plus the play-classification / perspective columns `game_id`, `type.text`, `homeTeamId`, `start.pos_team.id`, `end.pos_team.id`, `start.pos_team_receives_2H_kickoff`, `change_of_pos_team`, `scoringPlay`, `kickoff_onside`, `end_of_half`, `status_type_completed`, `pos_score_diff_end`, `lead_play_type`, `lead_pos_team` and `game_play_number`. See WPA_REQUIRED_COLUMNS`. This function does **not** score WP itself — score it first via `calculate_win_probability` / the `wp_spread` feature pipeline. |
+| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the WP point estimates `wp_before` (start feature view), `wp_touchback` (touchback feature view) and `wp_after` (end feature view), plus the play-classification / perspective columns `game_id`, `type.text`, `homeTeamId`, `start.pos_team.id`, `end.pos_team.id`, `start.pos_team_receives_2H_kickoff`, `change_of_pos_team`, `scoringPlay`, `kickoff_onside`, `end_of_half`, `status_type_completed`, `pos_score_diff_end`, `lead_play_type`, `lead_pos_team` and `game_play_number`. See `_WPA_REQUIRED_COLUMNS`. This function does **not** score WP itself — score it first via `calculate_win_probability` / the `wp_spread` feature pipeline. |
 
 **Returns**
 

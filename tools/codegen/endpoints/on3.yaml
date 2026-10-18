@@ -1094,6 +1094,7 @@ getter_module: sportsdataverse.cfb.on3_runtime
 host: https://api.on3.com/public/rdb/v1
 module: on3
 name_pattern: on3_{short}
+no_r_fallback: true
 parser_module: cfb.on3_parsers
 passthrough_query: true
 qualifier: ''

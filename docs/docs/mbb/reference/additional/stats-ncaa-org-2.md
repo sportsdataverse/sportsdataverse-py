@@ -735,7 +735,7 @@ one). Fires only when all three guard conditions hold
 The fix (`:279-283`) removes the good event's sub-outs from the bad
 event's on-floor `players` (value-equality `not in` -- the Scala's
 `filterNot(good.players_out.toSet)`) and appends them to the bad
-event's `players_out` (order-preserving distinct` -- the Scala's
+event's `players_out` (order-preserving `_distinct` -- the Scala's
 `(bad.players_out ++ good.players_out).distinct`). The fix is **accepted
 only if** the result then passes `validate_lineup` (`:284-294`):
 on success the fixed event is returned as the sole `fixed` lineup and
@@ -1026,18 +1026,18 @@ Assemble one lineup's full 254-field `{value}` bucket.
 `lineup_stats_bucket` is the Python entry point for stage 2 of the port (see the
 module docstring) -- the faithful composition of this module's factories in the order
 `commonLineupAggregations.ts` (572-line ES aggregation) issues them: `sum` (
-sum_fields`) -> merge the play-type `pts`/`poss` bucket_script (
-play_type_pts_poss`) -> mint every other rate bucket_script (
-all_rate_fields`) -> the SOS-adjusted-efficiency bucket_script (
-adj_fields`).
+`_sum_fields`) -> merge the play-type `pts`/`poss` bucket_script (
+`_play_type_pts_poss`) -> mint every other rate bucket_script (
+`_all_rate_fields`) -> the SOS-adjusted-efficiency bucket_script (
+`_adj_fields`).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `ev` | `LineupEvent` |  | One already-summed lineup event (`team_stats`/`opponent_stats` populated by stage 1, `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich.enrich_lineup`). |
-| `avg_eff` | `float` | `100.0` | League-average efficiency passed through to adj_fields`. |
-| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to adj_fields`; only `None` (no baselines) is implemented. |
+| `avg_eff` | `float` | `100.0` | League-average efficiency passed through to `_adj_fields`. |
+| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to `_adj_fields`; only `None` (no baselines) is implemented. |
 | `doc_count` | `int` | `1` | The ES `doc_count` for this bucket (number of raw events folded in). |
 
 **Returns**
@@ -1060,7 +1060,7 @@ bucket["off_ppp"]["value"]
 Group events by lineup, fold each group's stats, and mint one bucket per lineup.
 
 Python entry point for the ES `terms` aggregation over `key` (grouping by
-bucket_key`) that feeds each lineup's docs into
+`_bucket_key`) that feeds each lineup's docs into
 `commonLineupAggregations.ts`'s `sum` aggs -- see
 `cbb-on-off-analyzer/src/utils/es-queries/commonLineupAggregations.ts`. This
 is the list-form producer the `LineupStatSet` consumers (`mbb_lineup_stats`)
@@ -1072,11 +1072,11 @@ read from; `lineup_stats_bucket` handles a single already-folded event.
 |---|---|---|---|
 | `evs` | `list[LineupEvent]` |  | Raw per-possession-chunk lineup events (`team_stats`/`opponent_stats` populated by stage 1, `~sportsdataverse.mbb.mbb_ncaa_lineup_enrich .enrich_lineup`), one lineup's floor time possibly split across many events. |
 | `avg_eff` | `float` | `100.0` | League-average efficiency passed through to each bucket. |
-| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to each bucket; only `None` (no baselines) is implemented (see adj_fields`). |
+| `opponent_baselines` | `Optional[dict[str, float]]` | `None` | SOS baseline lookup passed through to each bucket; only `None` (no baselines) is implemented (see `_adj_fields`). |
 
 **Returns**
 
-One `LineupStatSet` per distinct lineup (bucket_key`), in first-seen order, with `doc_count` set to that lineup's event count.
+One `LineupStatSet` per distinct lineup (`_bucket_key`), in first-seen order, with `doc_count` set to that lineup's event count.
 
 **Example**
 
@@ -1191,7 +1191,7 @@ older files even in v1-format seasons) by first flipping it to guaranteed
 v1 shape, then splits on the first space to get `first`/`last`. A
 `last` starting with `"("` is treated as a nickname parenthetical
 (e.g. `"Russell (Deuce) Dean"`) and re-split via
-COMPLEX_V0_CASE_RE` -- **ported verbatim including its literal
+`_COMPLEX_V0_CASE_RE` -- **ported verbatim including its literal
 quirk**: the regex's second capture group keeps the leading space before
 the trailing surname (e.g. yields `" Dean, Russell (Deuce)"`, not
 `"Dean, Russell Deuce"` as the Scala source comment's stated *intent*

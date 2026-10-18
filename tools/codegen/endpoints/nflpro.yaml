@@ -4,6 +4,7 @@ name_pattern: nfl_pro_{short}
 module: nflpro
 parser_module: nfl.nflpro_parsers
 getter_module: sportsdataverse.nfl.nflpro_runtime
+no_r_fallback: true
 qualifier: ''
 # pro.nfl.com serves the Next Gen Stats data that nextgenstats.nfl.com stopped
 # serving. /api/secured/* needs a USER-BOUND bearer carrying an active NFL+ Premium

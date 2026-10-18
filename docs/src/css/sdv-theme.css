@@ -217,6 +217,73 @@ html[data-theme='light'] .navbar__title {
   border-top: none;
 }
 
+/*
+ * Laptop widths, from Docusaurus's 996px drawer breakpoint to 1200px. Above, the navbar has room; below,
+ * the drawer takes over. In this band the 640px mega-menu, hung from a toggle in the left half, ran past the
+ * right edge, and a hidden Docusaurus dropdown still takes layout space, so every page scrolled sideways. The
+ * crowded bar also cut the site title to an ellipsis and wrapped "SDV" under its caret.
+ * In this band the menu spans the navbar's width, so every straight path from the toggle lands in it, and while it
+ * is open a transparent strip bridges the navbar's lower edge to the menu's first rows. Every other navbar item is
+ * raised above that strip, so the strip never takes a click meant for a link, the search box or a toggle. The
+ * range syntax (996px < width) leaves no sub-pixel gap with Docusaurus's own (max-width: 996px).
+ */
+@media (996px < width < 1200px) {
+  .navbar__brand,
+  .navbar__title {
+    flex-shrink: 0;
+  }
+  .navbar__item {
+    padding-left: 0.45rem;
+    padding-right: 0.45rem;
+  }
+  .navbar__link,
+  .navbar__title {
+    white-space: nowrap;
+  }
+  .dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu {
+    position: fixed;
+    top: calc(var(--ifm-navbar-height) - 8px);
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    z-index: 2;
+  }
+  .dropdown:has(> .sdv-packages-dropdown):is(:hover, .dropdown--show)::after {
+    content: "";
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    top: calc(var(--ifm-navbar-height) - 26px);
+    height: 48px;
+  }
+  .navbar__brand,
+  .navbar__items > :not(.dropdown:has(> .sdv-packages-dropdown)) {
+    position: relative;
+    z-index: 3;
+  }
+}
+
+@media (996px < width < 1080px) {
+  .navbar__item {
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+  }
+  .navbar__items .navbar__link {
+    font-size: 0.9rem;
+  }
+}
+
+/*
+ * Category-index cards: Docusaurus's DocCard puts Infima's `text--truncate` (one line, ellipsis) on the card
+ * title and description, so every description ended in "…" at every width. Let both wrap in full.
+ */
+a.card .text--truncate {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
 /* ---- footer: the same navy, a hairline where it meets a navy page ---- */
 .footer--dark {
   --ifm-footer-background-color: var(--sdv-navy);

@@ -1381,6 +1381,7 @@ getter_module: sportsdataverse.nfl.pff_runtime
 host: https://premium.pff.com
 module: pff_core
 name_pattern: pff_{short}
+no_r_fallback: true
 parser_module: nfl.pff_parsers
 runtime_imports:
 - _get

@@ -242,7 +242,7 @@ def _typed(df: pl.DataFrame) -> pl.DataFrame:
 
 
 def _frame(rows: Iterable[Mapping[str, Any]]) -> pl.DataFrame:
-    rows = [r for r in rows if r]
+    rows = [r for r in rows if r and any(v is not None for v in r.values())]  # {"data": null} -> no row
     if not rows:
         return pl.DataFrame()
     try:
@@ -324,6 +324,15 @@ def parse_liiga(raw: Any, *, return_as_pandas: bool = False, columns: Optional[S
 
             from sportsdataverse.hockey.liiga import parse_liiga
             parse_liiga({"teamStats": [{"teamId": 55786244, "goals": 3}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_tournament` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.liiga.liiga_gameweeks` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.liiga.liiga_teams_history` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.liiga.liiga_team_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _finish(_frame(_flatten(r) for r in _rows(raw)), columns, return_as_pandas, "parse_liiga")
 
@@ -371,6 +380,12 @@ def parse_liiga_games(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
             from sportsdataverse.hockey.liiga import parse_liiga_games
             parse_liiga_games([{"id": 1, "season": 2026, "homeTeam": {"teamId": "55786244:hpk"}}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_games` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _finish(_frame(_game_row(g) for g in _list(raw)), columns, return_as_pandas, "parse_liiga_games")
 
@@ -429,6 +444,12 @@ def parse_liiga_goals(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
             from sportsdataverse.hockey.liiga import parse_liiga_goals
             parse_liiga_goals([])  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_goals` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = [r for g in _list(raw) for r in _goal_rows(g, {})]
     return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_goals")
@@ -453,6 +474,12 @@ def parse_liiga_schedule(raw: Any, *, return_as_pandas: bool = False, columns: O
 
             from sportsdataverse.hockey.liiga import parse_liiga_schedule
             parse_liiga_schedule([{"id": 1, "season": 2026, "serie": 1188, "homeTeamId": "55786244:hpk"}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_schedule` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = (_rename(_rename(_flatten(r), "id", "game_id"), "serie", "serie_id") for r in _list(raw))
     return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_schedule")
@@ -485,6 +512,12 @@ def parse_liiga_game(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             from sportsdataverse.hockey.liiga import parse_liiga_game
             parse_liiga_game({"game": {"id": 1, "season": 2026}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game, _ = _game_of(raw)
     return _finish(_frame([_game_row(game)] if game else []), columns, return_as_pandas, "parse_liiga_game")
@@ -508,6 +541,12 @@ def parse_liiga_game_goals(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_goals
             parse_liiga_game_goals({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_goals` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game, ids = _game_of(raw)
     return _finish(_frame(_goal_rows(game, ids) if game else []), columns, return_as_pandas, "parse_liiga_game_goals")
@@ -534,6 +573,12 @@ def parse_liiga_game_penalties(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_penalties
             parse_liiga_game_penalties({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_penalties` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game, ids = _game_of(raw)
     rows = []
@@ -562,6 +607,12 @@ def parse_liiga_game_shootout(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_shootout
             parse_liiga_game_shootout({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_shootout` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game, ids = _game_of(raw)
     rows = [{**ids, **_flatten(ev)} for ev in _list(game.get("winningShotCompetitionEvents"))]
@@ -586,6 +637,12 @@ def parse_liiga_game_lineups(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_lineups
             parse_liiga_game_lineups({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_lineups` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     _, ids = _game_of(raw)
     body = raw if isinstance(raw, dict) else {}
@@ -618,6 +675,12 @@ def parse_liiga_game_players_stats(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_players_stats
             parse_liiga_game_players_stats({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_players_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     req = _request(raw)
     ids = {"season": req.get("season"), "game_id": req.get("game_id")}
@@ -659,6 +722,12 @@ def parse_liiga_game_stats(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_stats
             parse_liiga_game_stats({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = raw if isinstance(raw, dict) else {}
     req = _request(raw)
@@ -710,6 +779,12 @@ def parse_liiga_game_team_stats(
 
             from sportsdataverse.hockey.liiga import parse_liiga_game_team_stats
             parse_liiga_game_team_stats({})  # zero-row frame
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_game_team_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = raw if isinstance(raw, dict) else {}
     req = _request(raw)
@@ -750,6 +825,12 @@ def parse_liiga_shotmap(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             from sportsdataverse.hockey.liiga import parse_liiga_shotmap
             parse_liiga_shotmap([{"shootingTeamId": 651304385, "shotX": 684, "shotY": 491}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_shotmap` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = (_stamp(_flatten(r), _request(r)) for r in _list(raw))
     return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_shotmap")
@@ -781,6 +862,12 @@ def parse_liiga_standings(
 
             from sportsdataverse.hockey.liiga import parse_liiga_standings
             parse_liiga_standings({"season": [{"teamId": "362185137:tappara", "ranking": 1}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = raw if isinstance(raw, dict) else {}
     req = _request(raw)
@@ -811,6 +898,12 @@ def parse_liiga_teams(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
             from sportsdataverse.hockey.liiga import parse_liiga_teams
             parse_liiga_teams({"teams": {"55786244:hpk": {"id": "55786244", "slug": "hpk", "name": "HPK"}}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_teams` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     teams = _obj(raw.get("teams")) if isinstance(raw, dict) else {}
     rows = []
@@ -841,6 +934,12 @@ def parse_liiga_players_info(
 
             from sportsdataverse.hockey.liiga import parse_liiga_players_info
             parse_liiga_players_info([{"id": 21415137, "teamId": "219244634:jyp"}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_players_info` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = (_rename(_flatten(r), "id", "player_id") for r in _list(raw))
     return _finish(_frame(rows), columns, return_as_pandas, "parse_liiga_players_info")
@@ -868,6 +967,12 @@ def parse_liiga_player(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
             from sportsdataverse.hockey.liiga import parse_liiga_player
             parse_liiga_player({"fihaId": 21870028, "firstName": "Harri"})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_player` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = {k: v for k, v in raw.items() if k != "historical"} if isinstance(raw, dict) else {}
     row = _rename(_flatten(body), "fiha_id", "player_id")
@@ -879,8 +984,10 @@ def parse_liiga_player_career(
 ) -> Frame:
     """``/players/info/{playerId}`` -> the career: one row per season and tournament.
 
-    Percentage strings become numbers (``"0,00"`` and ``"4,583.33"`` included; Liiga's
-    ``win_percentage`` here is not a 0-100 rate, it is passed through as sent).
+    Percentage strings become numbers (``"0,00"`` and ``"4,583.33"`` included; the comma is a
+    thousands separator). Liiga's ``win_percentage`` here is (wins + 0.5 * ties) / games x 10,000,
+    not a 0-100 rate: divide by 10,000 for the standings' 0-1 scale (``4583.33`` = 0.4583). Practice
+    rows can show ``0.00`` despite wins; treat that value as unreliable.
     ``end_time`` is an ISO 8601 timestamp here, not seconds.
 
     Args:
@@ -896,6 +1003,12 @@ def parse_liiga_player_career(
 
             from sportsdataverse.hockey.liiga import parse_liiga_player_career
             parse_liiga_player_career({"fihaId": 1, "historical": {"regular": [{"season": 2026}]}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_player_career` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = raw if isinstance(raw, dict) else {}
     pid = body.get("fihaId")
@@ -924,6 +1037,12 @@ def parse_liiga_player_game_log(
 
             from sportsdataverse.hockey.liiga import parse_liiga_player_game_log
             parse_liiga_player_game_log({"regular": [{"gameId": 1, "date": "2025-09-09T15:30:00Z"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.liiga.liiga_player_game_log` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = raw if isinstance(raw, dict) else {}
     req = _request(raw)

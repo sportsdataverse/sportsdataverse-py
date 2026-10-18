@@ -2247,6 +2247,7 @@ getter_module: sportsdataverse.nfl.pff_api_runtime
 host: https://api.pff.com
 module: pff_api
 name_pattern: pff_api_{short}
+no_r_fallback: true
 parser_module: nfl.pff_parsers
 runtime_imports:
 - _get
