@@ -769,6 +769,7 @@ ESPN endpoint.
 | `$ref` | character | Core v2 URL of this draft resource. |
 | `display_name` | character | Full name of the draft (e.g., "2024 National Basketball Association Draft"). |
 | `links` | character | JSON-encoded list of ESPN web links for the draft (href, rel, text). |
+| `needs` | character | JSON-encoded list of the NFL teams' draft needs, one entry per team (its Core v2 team link and the positions it needs, with abbreviations); NFL only. |
 | `number_of_rounds` | integer | Number of rounds in the draft. |
 | `positions` | character | JSON-encoded list of the position resources the draft uses (Core v2 $ref links with abbreviations). |
 | `short_display_name` | character | Short name of the draft (e.g., "2024 NBA Draft"). |

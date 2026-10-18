@@ -661,7 +661,8 @@ def _stat_split_row(cat_name: str, names: list[str], split: dict) -> dict:
     A Web v3 per-season row carries ``season`` instead of a name: its label becomes
     ``split_name`` and the row gains ``season`` (end year), ``team_id`` and ``position``.
     """
-    season = split.get("season") or {}
+    season = split.get("season")
+    season = season if isinstance(season, dict) else {}
     row = {
         "category": cat_name,
         "split_name": split.get("name") or split.get("displayName") or season.get("displayName"),
@@ -675,6 +676,34 @@ def _stat_split_row(cat_name: str, names: list[str], split: dict) -> dict:
     return row
 
 
+def _int64_columns(df: pd.DataFrame, cols: tuple[str, ...]) -> pd.DataFrame:
+    """Cast ``cols`` to nullable Int64 on both branches (A-M15): one null (a Career row) must not
+    turn a year or an id Float64, and ESPN's ``"20"`` must not stay a string."""
+    for col in cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce").astype("Int64")
+    return df
+
+
+def _category_rows(cat: dict) -> list[dict]:
+    """The rows of one stat category: its named ``splits``, or Web v3's per-season ``statistics``
+    followed by a ``"Career"`` row from the category's ``totals`` (season, team and position null)."""
+    cat_name = cat.get("name") or cat.get("displayName") or ""
+    labels = cat.get("labels") or cat.get("names") or []
+    names = cat.get("names") or labels
+    # Web v3 answers one row per season and team under ``statistics`` (real capture, 2026-10-18).
+    splits = cat.get("splits") or cat.get("statistics") or []
+    rows = (
+        [_stat_split_row(cat_name, names, sp) for sp in splits if isinstance(sp, dict)]
+        if isinstance(splits, list)
+        else []
+    )
+    totals = cat.get("totals")
+    if "statistics" in cat and isinstance(totals, list) and totals:
+        rows.append(_stat_split_row(cat_name, names, {"name": "Career", "stats": totals}))
+    return rows
+
+
 def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete stats response into a tidy polars frame.
 
@@ -684,7 +713,10 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     ``splits[].stats[]`` array becomes the values. The Web v3 payload holds
     its rows under ``categories[].statistics[]``, one per season and team:
     ``split_name`` is then the season label (``"2010-11"``) and the row also
-    carries ``season`` (the end year), ``team_id`` and ``position``.
+    carries ``season`` (the end year), ``team_id`` and ``position``; each
+    category's ``totals`` (the career line) adds a ``split_name="Career"`` row
+    whose ``season``, ``team_id`` and ``position`` are null. The stat columns
+    are named from each category's ``names``, so they differ by sport.
 
     Args:
         payload: Raw JSON dict from the athlete stats endpoint.
@@ -712,21 +744,14 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
             return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
-    for cat in categories:
-        cat_name = cat.get("name") or cat.get("displayName") or ""
-        labels: List[str] = cat.get("labels") or cat.get("names") or []
-        names: List[str] = cat.get("names") or labels
-        # Web v3 answers one row per season and team under ``statistics`` (real capture, 2026-10-18).
-        splits = cat.get("splits") or cat.get("statistics") or []
-        rows.extend(_stat_split_row(cat_name, names, split) for split in splits)
+    for cat in categories if isinstance(categories, list) else []:
+        if isinstance(cat, dict):
+            rows.extend(_category_rows(cat))
 
     if not rows:
         return _empty_frame(return_as_pandas)
 
-    out = _to_output(_snake_columns(pd.DataFrame(rows)), return_as_pandas)
-    if isinstance(out, pl.DataFrame) and "team_id" in out.columns:
-        out = out.with_columns(pl.col("team_id").cast(pl.Int64, strict=False))  # ESPN ids are Int64 (A-M15)
-    return out
+    return _to_output(_int64_columns(_snake_columns(pd.DataFrame(rows)), ("season", "team_id")), return_as_pandas)
 
 
 # ===========================================================================
@@ -995,13 +1020,13 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
 def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a draft response into a tidy polars frame.
 
-    Input: raw payload from ``_core_v2_season_draft()`` or
-    ``_site_v2_draft()``.
-    Output: one row per pick from ``rounds[].picks[]``.  Falls back to
-    ``items[]`` or ``picks[]`` when the rounds structure is absent. The Core v2
-    season draft is an index whose ``rounds`` is a ``{"$ref"}`` link, with no
-    picks inline: it parses to one row of the draft's own fields (``year``,
-    ``display_name``, ``number_of_rounds``, the ``$ref`` links).
+    Input: raw payload from the ``season_draft`` (Core v2) or ``draft`` wrappers.
+    Output: the Core v2 season draft is an index whose ``rounds`` is a
+    ``{"$ref"}`` link, with no picks inline, so it parses to ONE row of the
+    draft's own fields (``year``, ``display_name``, ``number_of_rounds``, the
+    ``$ref`` links; NFL adds ``needs``). The picks are a separate endpoint. A
+    payload that does carry its rounds inline gives one row per pick from
+    ``rounds[].picks[]``, falling back to ``items[]`` or ``picks[]``.
 
     Args:
         payload: Raw JSON dict from the draft endpoint.
@@ -1011,9 +1036,9 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         pl.DataFrame: Tidy frame; zero rows if payload is empty.
 
     Note:
-        Shape is uncertain across sports — the rounds/picks structure is
-        confirmed for NFL/NBA. Other sports may use ``items[]`` or a flat
-        ``picks[]`` directly at the top level.
+        The NBA and NFL season drafts (2024 captures) are the index row. The
+        inline ``rounds[].picks[]`` / ``items[]`` / ``picks[]`` shapes have no
+        committed capture.
     """
     if not payload:
         return _empty_frame(return_as_pandas)

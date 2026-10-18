@@ -962,3 +962,39 @@
   mutant: '    if False:'
   test: tests/test_espn_universal_parsers.py -k season_draft_index
   expected: kill
+
+- id: athlete-stats-season-columns-on-named-splits
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if season:'
+  mutant: '    if True:'
+  test: tests/test_espn_universal_parsers.py -k named_splits_carry_no_season
+  expected: kill
+
+- id: athlete-stats-career-line-dropped
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if "statistics" in cat and isinstance(totals, list) and totals:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k career_line
+  expected: kill
+
+- id: athlete-stats-season-not-a-dict
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    season = season if isinstance(season, dict) else {}'
+  mutant: '    pass'
+  test: tests/test_espn_universal_parsers.py -k wrong_typed_containers
+  expected: kill
+
+- id: athlete-stats-ids-cast-on-pandas-branch
+  group: codegen-runtime
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '            df[col] = pd.to_numeric(df[col], errors="coerce").astype("Int64")'
+  mutant: '            pass'
+  test: tests/test_espn_universal_parsers.py -k ids_are_int64_on_both
+  expected: kill

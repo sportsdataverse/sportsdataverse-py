@@ -1991,6 +1991,9 @@ def _return_schema_parsers():
         "team_schedule": (P.parse_team_schedule, "dataframe"),
         "news": (P.parse_news, "dataframe"),
         "injuries": (P.parse_injuries, "dataframe"),
+        # stat columns named from each sport's `names` / NFL-only `needs`: one schema per captured league
+        "athlete_stats": (P.parse_athlete_stats, "dataframe"),
+        "season_draft": (P.parse_draft, "dataframe"),
     }
 
 

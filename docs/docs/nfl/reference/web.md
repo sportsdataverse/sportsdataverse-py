@@ -65,7 +65,7 @@ ESPN endpoint.
 
 **Endpoint URL:** `GET https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/stats`
 
-**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4239/stats](https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4239/stats)
+**Valid URL:** [https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3139477/stats](https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3139477/stats)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -78,60 +78,69 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | ESPN stat category the row belongs to (NBA "averages", "totals" or "miscellaneous"); each category carries its own stat columns, and the other categories' columns are null on its rows. |
-| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload; the split's name on payloads that ship named splits. |
+| `category` | character | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
+| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
 | `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
 | `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
-| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11). |
-| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. |
-| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"). |
+| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
+| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
+| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
 | `games_played` | character | Games played (GP), as ESPN ships it (a string). |
-| `games_started` | character | Games started (GS). |
-| `avg_minutes` | character | Minutes per game (MIN). |
-| `avg_field_goals_made_avg_field_goals_attempted` | character | Field goals made-attempted per game (FG), one "made-attempted" string (e.g., "3.9-9.0"). |
-| `field_goal_pct` | character | Field goal percentage (FG%), FGM / FGA x 100. |
-| `avg_three_point_field_goals_made_avg_three_point_field_goals_attempted` | character | Three-point field goals made-attempted per game (3PT), one "made-attempted" string. |
-| `three_point_field_goal_pct` | character | Three-point field goal percentage (3P%), 3PM / 3PA x 100. |
-| `avg_free_throws_made_avg_free_throws_attempted` | character | Free throws made-attempted per game (FT), one "made-attempted" string. |
-| `free_throw_pct` | character | Free throw percentage (FT%), FTM / FTA x 100. |
-| `avg_offensive_rebounds` | character | Offensive rebounds per game (OR). |
-| `avg_defensive_rebounds` | character | Defensive rebounds per game (DR). |
-| `avg_rebounds` | character | Rebounds per game (REB). |
-| `avg_assists` | character | Assists per game (AST). |
-| `avg_blocks` | character | Blocks per game (BLK). |
-| `avg_steals` | character | Steals per game (STL). |
-| `avg_fouls` | character | Personal fouls per game (PF). |
-| `avg_turnovers` | character | Turnovers per game (TO). |
-| `avg_points` | character | Points per game (PTS). |
-| `field_goals_made_field_goals_attempted` | character | Season field goals made-attempted (FG), one "made-attempted" string. |
-| `three_point_field_goals_made_three_point_field_goals_attempted` | character | Season three-point field goals made-attempted (3PT), one "made-attempted" string. |
-| `free_throws_made_free_throws_attempted` | character | Season free throws made-attempted (FT), one "made-attempted" string. |
-| `offensive_rebounds` | character | Season offensive rebounds (OR). |
-| `defensive_rebounds` | character | Season defensive rebounds (DR). |
-| `total_rebounds` | character | Season rebounds (REB). |
-| `assists` | character | Season assists (AST). |
-| `blocks` | character | Season blocked shots (BLK). |
-| `steals` | character | Season steals (STL). |
-| `fouls` | character | Season personal fouls (PF). |
-| `turnovers` | character | Season turnovers (TO). |
-| `points` | character | Season points (PTS). |
-| `double_double` | character | Games with double figures in two of points, rebounds, assists, steals and blocks (DD2). |
-| `triple_double` | character | Games with double figures in three of points, rebounds, assists, steals and blocks (TD3). |
-| `disqualifications` | character | Times the athlete fouled out (DQ). |
-| `ejections` | character | Times the athlete was ejected (EJECT). |
-| `technical_fouls` | character | Technical fouls called on the athlete (TECH). |
-| `flagrant_fouls` | character | Flagrant fouls called on the athlete (FLAG). |
-| `assist_turnover_ratio` | character | Assists per turnover (AST/TO). |
-| `steal_turnover_ratio` | character | Steals per turnover (STL/TO). |
-| `scoring_efficiency` | character | ESPN's scoring efficiency (SC-EFF). |
-| `shooting_efficiency` | character | ESPN's shooting efficiency (SH-EFF). |
+| `completions` | character | Pass completions (CMP). |
+| `passing_attempts` | character | Pass attempts (ATT). |
+| `completion_pct` | character | Completion percentage (CMP%). |
+| `passing_yards` | character | Passing yards (YDS). |
+| `yards_per_pass_attempt` | character | Passing yards per attempt (AVG). |
+| `passing_touchdowns` | character | Passing touchdowns (TD). |
+| `interceptions` | character | Passes thrown that were intercepted (INT). |
+| `long_passing` | character | Longest completed pass in yards (LNG). |
+| `sacks` | character | Times sacked (SACK) on the passing line; a defender's sacks on the defensive line. |
+| `qb_rating` | character | NFL passer rating (RTG). |
+| `adj_qbr` | character | ESPN's adjusted Total QBR (QBR). |
+| `rushing_attempts` | character | Rushing attempts (CAR). |
+| `rushing_yards` | character | Rushing yards (YDS). |
+| `yards_per_rush_attempt` | character | Rushing yards per attempt (AVG). |
+| `rushing_touchdowns` | character | Rushing touchdowns (TD). |
+| `long_rushing` | character | Longest run in yards (LNG). |
+| `rushing_first_downs` | character | First downs gained by rushing (FD). |
+| `rushing_fumbles` | character | Fumbles on rushing plays (FUM). |
+| `rushing_fumbles_lost` | character | Fumbles on rushing plays that the opponent recovered (LST). |
+| `receptions` | character | Receptions (REC). |
+| `receiving_targets` | character | Times targeted by a pass (TGTS). |
+| `receiving_yards` | character | Receiving yards (YDS). |
+| `yards_per_reception` | character | Receiving yards per reception (AVG). |
+| `receiving_touchdowns` | character | Receiving touchdowns (TD). |
+| `long_reception` | character | Longest reception in yards (LNG). |
+| `receiving_first_downs` | character | First downs gained by reception (FD). |
+| `receiving_fumbles` | character | Fumbles after a reception (FUM). |
+| `receiving_fumbles_lost` | character | Fumbles after a reception that the opponent recovered (LST). |
+| `total_tackles` | character | Total tackles (TOT), solo plus assisted. |
+| `solo_tackles` | character | Unassisted tackles (SOLO). |
+| `assist_tackles` | character | Assisted tackles (AST). |
+| `fumbles_forced` | character | Forced fumbles (FF). |
+| `fumbles_recovered` | character | Fumbles recovered (FR). |
+| `fumbles_recovered_yards` | character | Return yards after fumble recoveries (YDS). |
+| `interception_yards` | character | Return yards after interceptions (YDS). |
+| `avg_interception_yards` | character | Average return yards per interception (AVG). |
+| `interception_touchdowns` | character | Interceptions returned for a touchdown (TD). |
+| `long_interception` | character | Longest interception return in yards (LNG). |
+| `passes_defended` | character | Passes defended (PD). |
+| `stuffs` | character | Runners stopped at or behind the line of scrimmage (STF). |
+| `stuff_yards` | character | Yards lost on stuffs (STFYDS). |
+| `kicks_blocked` | character | Kicks blocked (KB). |
+| `return_touchdowns` | character | Kick and punt return touchdowns (RET). |
+| `total_touchdowns` | character | Touchdowns of every kind (TD). |
+| `total_two_point_convs` | character | Successful two-point conversions (2PT). |
+| `kick_extra_points` | character | Kicked extra points made (PAT). |
+| `field_goals` | character | Field goals made (FG). |
+| `total_points` | character | Points scored (PTS). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
 ### Example {#espn_nfl_player_stats_v3-example}
 
 ```python
-espn_nfl_player_stats_v3(athlete_id='4239')
+espn_nfl_player_stats_v3(athlete_id='3139477')
 ```
 
 _Last validated n/a._

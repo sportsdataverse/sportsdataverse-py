@@ -78,13 +78,13 @@ ESPN endpoint.
 
 | col_name | type | description |
 |---|---|---|
-| `category` | character | ESPN stat category the row belongs to (NBA "averages", "totals" or "miscellaneous"); each category carries its own stat columns, and the other categories' columns are null on its rows. |
-| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload; the split's name on payloads that ship named splits. |
+| `category` | character | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
+| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
 | `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
 | `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
-| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11). |
-| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. |
-| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"). |
+| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
+| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
+| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
 | `games_played` | character | Games played (GP), as ESPN ships it (a string). |
 | `games_started` | character | Games started (GS). |
 | `avg_minutes` | character | Minutes per game (MIN). |
