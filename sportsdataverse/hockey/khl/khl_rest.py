@@ -450,6 +450,15 @@ _PARSER_COLUMNS = {
         "sftsh_avg",
         "hits",
         "bls",
+        "w",
+        "l",
+        "sop",
+        "ga",
+        "sv",
+        "sv_pct",
+        "gaa",
+        "so",
+        "toi",
     ],
 }
 
@@ -1419,7 +1428,7 @@ def khl_player_stats(
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
         stage: Which stage of the season: regular or playoff.
         tournament_id: khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own.
-        position: Position group: goalies, defenses, forwards, skaters or all. None = the site's default.
+        position: Position group: goalies, defenses, forwards, skaters or all. None = the site's default. The site orders goalies by goals-against average ascending, so goalies=page 1 lists goalies without a game first; page on (or filter by club) to reach the starters.
         club: Club slug (khl_stat_filters, filter clubs_full) or all. None = every club.
         page: 1-based page. Loop until a page comes back shorter than per_page.
         per_page: Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page counts and ranks for 20.

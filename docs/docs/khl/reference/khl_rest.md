@@ -694,7 +694,7 @@ Playoff bracket: one row per team per series.
 | `club_id` | integer | khl.ru CLUB id (stable across seasons; joins webcaster team khl_id) |
 | `name` | character | Name in Russian (Cyrillic); the *_en / *en sibling holds the English transliteration |
 | `series_wins` | integer | Wins in the series so far |
-| `game_ids` | character | khl.ru game ids of the series, comma-joined |
+| `game_ids` | list | khl.ru game ids of the series games |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
@@ -766,7 +766,7 @@ League player stats of a tournament, one page (one row per player).
 | `season` | `season` |  |  | `Y` | Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season. |
 | `stage` | `stage` |  |  | `Y` | Which stage of the season: regular or playoff. |
 | `values[tournament]` | `tournament_id` |  |  | `Y` | khl.ru tournament id (tnId), sent as is instead of season / stage (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id column). The All-Star games have their own. |
-| `values[amplua_full]` | `position` |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. |
+| `values[amplua_full]` | `position` |  |  | `Y` | Position group: goalies, defenses, forwards, skaters or all. None = the site's default. The site orders goalies by goals-against average ascending, so goalies=page 1 lists goalies without a game first; page on (or filter by club) to reach the starters. |
 | `values[clubs_full]` | `club` |  |  | `Y` | Club slug (khl_stat_filters, filter clubs_full) or all. None = every club. |
 | `nav[page]` | `page` |  |  | `Y` | 1-based page. Loop until a page comes back shorter than per_page. |
 | `nav[count]` | `per_page` |  |  | `Y` | Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page counts and ranks for 20. |
@@ -797,7 +797,7 @@ League player stats of a tournament, one page (one row per player).
 | `otg` | integer | Overtime goals scored by the player |
 | `gwg` | integer | Game-winning goals |
 | `sds` | integer | Shootout-deciding goals |
-| `sog` | integer | Shots on goal by the player |
+| `sog` | integer | Shots on goal by the player (shots faced for a goalie) |
 | `sog_pct` | numeric | Shooting percentage |
 | `sog_avg` | numeric | Shots on goal per game |
 | `fo` | integer | Faceoffs taken by the player |
@@ -813,6 +813,15 @@ League player stats of a tournament, one page (one row per player).
 | `sftsh_avg` | numeric | Average short-handed shifts per game |
 | `hits` | integer | Hits (body checks) |
 | `bls` | integer | Shots blocked by the player |
+| `w` | integer | Wins (goalies only) |
+| `l` | integer | Losses (goalies only) |
+| `sop` | integer | Games that went to a shootout (goalies only) |
+| `ga` | integer | Goals against (goalies only) |
+| `sv` | integer | Saves, shots on goal stopped (goalies only) |
+| `sv_pct` | numeric | Save percentage (goalies only) |
+| `gaa` | numeric | Goals-against average, 60 min x goals against / time on ice (goalies only) |
+| `so` | integer | Shutouts, games without a goal against (goalies only) |
+| `toi` | character | Total time on the ice (goalies only; text, null when none) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
