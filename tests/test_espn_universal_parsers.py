@@ -16,6 +16,7 @@ import functools
 import importlib
 import inspect
 import json
+import warnings
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -98,6 +99,7 @@ def test_parse_injuries_returns_one_row_per_team():
         ("events_core_nba", 1),  # 1-row capture, $ref-only items
     ],
 )
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_parse_items_handles_items_key(fixture, expected_min_rows):
     from sportsdataverse._common_espn_parsers import parse_items
 
@@ -114,6 +116,22 @@ def test_parse_items_handles_entries_key_for_statisticslog():
 
     df = parse_items(_load("athlete_statslog_lbj"))
     assert df.height >= 1, "parse_items must fall back to the 'entries' key for athlete_statisticslog payloads"
+
+
+def test_parse_items_short_page_warns_naming_limit_and_page():
+    """A-H1: espn_nba_athletes_index() answers page 1 of 7 (count 610); the frame said nothing."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    with pytest.warns(UserWarning, match=r"page 1 of 7 \(25 of 610 items\); pass the wrapper's limit= or page="):
+        assert parse_items(_load("athletes_index_nba")).height == 25
+
+
+def test_parse_items_short_page_warning_spares_a_one_page_answer():
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert parse_items(_load("franchises_nba")).height > 0  # pageCount 1
 
 
 # The three parsers below had never seen a real payload (their schemas said ``unverified``); each test
@@ -173,9 +191,21 @@ def test_athlete_stats_wrong_typed_containers_never_raise():
     payload = _load("athlete_stats_nba")
     payload["categories"][0]["statistics"][0]["season"] = "2010-11"
     payload["categories"][1]["statistics"] = {"season": {}}
+    payload["categories"][2]["statistics"].append(None)  # R889-8: a null row is skipped, not parsed
     df = parse_athlete_stats(payload)
     assert df.filter(pl.col("category") == "totals")["split_name"].to_list() == ["Career"]
     assert df.filter(pl.col("category") == "averages").height == 13
+    assert df.filter(pl.col("category") == "miscellaneous").height == 13  # 12 seasons + Career
+
+
+def test_athlete_stats_empty_totals_add_no_career_row():
+    """R889-9: a category whose ``totals`` is empty has no career line to report."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    payload["categories"][0]["totals"] = []
+    career = parse_athlete_stats(payload).filter(pl.col("split_name") == "Career")
+    assert career["category"].to_list() == ["totals", "miscellaneous"]
 
 
 def test_event_competitor_statistics_reads_the_one_split_object():
@@ -1102,6 +1132,7 @@ def test_recruiting_years_fixture_parses_to_ref_frame():
     assert "$ref" in df.columns
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_athletes_fixture_flattens_inline_athletes():
     """Core v2 ``recruiting/{year}/athletes`` ships INLINE athlete objects
     (unlike most Core v2 lists, which are $ref-only) — the flattened frame
@@ -1114,6 +1145,7 @@ def test_recruiting_athletes_fixture_flattens_inline_athletes():
         assert col in df.columns, f"missing flattened column {col}"
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_wrappers_route_through_parse_items():
     """The generated basketball wrappers accept the shim kwargs and dispatch
     the fixture payload through parse_items. Patch the module-level ``_get``
@@ -1147,6 +1179,7 @@ def test_recruiting_rankings_fixture_parses_to_ref_frame():
     assert "$ref" in df.columns
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_recruiting_athletes_pandas_opt_in():
     import pandas as pd
 
@@ -1405,39 +1438,6 @@ _HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_enve
 # Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
 # case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
 _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
-    "_common_espn_parsers.parse_athlete_gamelog": {"list": AttributeError},
-    "_common_espn_parsers.parse_athlete_overview": {"error_envelope": AssertionError, "list": AttributeError},
-    "_common_espn_parsers.parse_athlete_splits": {"error_envelope": AssertionError, "list": AttributeError},
-    "_common_espn_parsers.parse_athlete_stats": {"error_envelope": AssertionError, "list": AttributeError},
-    "_common_espn_parsers.parse_coaches": {"list": AttributeError},
-    "_common_espn_parsers.parse_draft": {"list": AttributeError},
-    "_common_espn_parsers.parse_event_competitor_linescores": {"list": AttributeError},
-    "_common_espn_parsers.parse_event_competitor_roster": {"list": AttributeError},
-    "_common_espn_parsers.parse_event_competitor_statistics": {
-        "error_envelope": AssertionError,
-        "list": AttributeError,
-    },
-    "_common_espn_parsers.parse_event_plays": {"list": AttributeError},
-    "_common_espn_parsers.parse_fpi": {"list": AttributeError},
-    "_common_espn_parsers.parse_leaders": {"error_envelope": AssertionError, "list": AttributeError},
-    "_common_espn_parsers.parse_scoreboard": {"list": AttributeError},
-    "_common_espn_parsers.parse_single_entity": {"error_envelope": AssertionError},
-    "_common_espn_parsers.parse_standings": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_against_the_spread": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_broadcasts": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_drive_plays": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_drives": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_game_info": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_injuries": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_news": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_odds": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_officials": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_pickcenter": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_scoring_plays": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_season_series": {"list": AttributeError},
-    "_common_espn_parsers.parse_summary_standings": {"list": AttributeError},
-    "_common_espn_parsers.parse_weekly_powerindex": {"list": AttributeError},
     "cbs.cbs_napi_parsers.parse_cbs_napi": {"error_envelope": AssertionError, "list": AssertionError},
     "cfb.on3_parsers.parse_on3_rankings": {"list": AttributeError},
     "cfb.on3_parsers.parse_on3_rdb": {"error_envelope": AssertionError, "list": AssertionError},
@@ -1748,17 +1748,13 @@ _HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {
         )
     },
 }
-# Plan v2.2: task 4.1 owns the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 narrows the
+# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13: none is open above), 4.9 narrows the
 # nhl/mlb/nba parsers' error handling (A-L60), and 4.1b owns every other provider parser (A-L17).
 _TASK_49 = ("nhl.nhl_edge_parsers.", "nhl.nhl_api_web_parsers.", "mlb.mlb_api_parsers.", "nba.nba_stats_parsers.")
 
 
 def _open(qual: str, shape: str) -> str:
     """The finding id and fixing task of an open ``(parser, shape)`` case."""
-    if qual.startswith("_common_espn_parsers.") and qual.rsplit(".", 1)[1] in _parsers():
-        if shape == "error_envelope":
-            return "A-M13: ESPN's 200 error envelope parses to rows; task 4.1"
-        return "A-L17: a non-dict body raises instead of returning a zero-row frame; task 4.1"
     task = "4.1" if qual.startswith("_common_espn_parsers.") else "4.9" if qual.startswith(_TASK_49) else "4.1b"
     return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
 
@@ -1815,6 +1811,7 @@ def test_hostile_sweep_covers_every_public_parser():
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
 def test_dtype_snapshot_matches_every_committed_capture():
     """A-M2: column names AND dtypes per capture; a parser change that retypes a column fails here."""
     want = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))

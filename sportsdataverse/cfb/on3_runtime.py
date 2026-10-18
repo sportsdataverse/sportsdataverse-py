@@ -130,8 +130,7 @@ def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> An
     query = {k: v for k, v in (params or {}).items() if v is not None}
     with _transport_errors(url):
         resp = download(url=url, params=query, headers=headers, **kwargs)
-    body = _json_body(resp, url)
-    return body if isinstance(body, (dict, list)) else {}
+    return _json_body(resp, url)
 
 
 def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Dict:
@@ -161,7 +160,7 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
         ValueError: On3 answered 400 / 422 -- the request is wrong.
         AssetFetchError: the page or data route answered any other non-2xx or a
             connection failure outlived the retries, the page carries no buildId,
-            or a 2xx data body is empty or not JSON.
+            or a 2xx data body is empty, not JSON, or not a JSON object.
     """
     global _build_id
 
@@ -204,5 +203,7 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
                 raise
             continue
         body = _json_body(resp, data_url)
-        return body if isinstance(body, dict) else {}
+        if not isinstance(body, dict):  # every Next.js data route answers {"pageProps": ...}
+            raise AssetFetchError(f"{_where(data_url)} answered a JSON array where an object was expected")
+        return body
     raise AssertionError("unreachable: the second attempt returns or raises")

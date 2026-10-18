@@ -16,7 +16,13 @@ from urllib.parse import urlsplit
 import polars as pl
 
 from sportsdataverse.dl_utils import download
-from sportsdataverse.errors import AssetFetchError, NoDataError, _redact_secrets
+from sportsdataverse.errors import (
+    AssetFetchError,
+    NoDataError,
+    _error_envelope_code,
+    _redact_secrets,
+    _string_route,
+)
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
 
 logger = logging.getLogger(__name__)
@@ -106,11 +112,12 @@ def _check_status(url: str, status: Any, text: str = "", *, label: Optional[str]
 def _json_text(url: str, status: Any, text: str) -> Any:
     """Decode a ``(status, text)`` transport answer under the error vocabulary.
 
-    2xx with a JSON body -> the body; 204 / 205 (no content by definition) -> ``{}``.
+    2xx with a JSON object or array -> the body; 204 / 205 (no content by definition) -> ``{}``.
     A 200 with an EMPTY body is not "nothing": barttorvik's block, pro.nfl.com's
     rejected params and stats-host throttling all answer that way, so it raises
     :class:`~sportsdataverse.errors.AssetFetchError`, as does any non-JSON 2xx body.
-    A non-2xx raises per :func:`_check_status`.
+    A non-2xx raises per :func:`_check_status`; so does a 2xx carrying an error
+    envelope or a bare JSON scalar (see :func:`_json_data`).
     """
     _check_status(url, status, text)
     if status in (204, 205):
@@ -118,10 +125,36 @@ def _json_text(url: str, status: Any, text: str) -> Any:
     if not (text or "").strip():
         raise AssetFetchError(f"{_where(url)} answered HTTP {status} with an empty body")
     try:
-        return json.loads(text)
+        body = json.loads(text)
     except ValueError:  # its ``.doc`` is the whole body: never chain it as __context__
         pass
+    else:
+        return _json_data(url, status, body)
     raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a non-JSON body: {_excerpt(text)}")
+
+
+def _json_data(url: str, status: Any, body: Any) -> Any:
+    """A decoded 2xx JSON body, refused when it is not data.
+
+    * A JSON ``null``, number, string or boolean is no payload any parser reads, so it
+      raises :class:`~sportsdataverse.errors.AssetFetchError` (B-GB-16): the fetch failed.
+      The one exception is a string from a route that answers one by design
+      (:data:`~sportsdataverse.errors._STRING_ROUTES`, OpenLigaDB's last-change timestamp).
+    * ESPN's ``{"code": 4xx/5xx, "message": ...}`` error envelope is classified by its
+      code like an HTTP status (A-M13): 404 -> ``NoDataError``, 400 / 422 ->
+      ``ValueError``, anything else -> ``AssetFetchError``.
+    """
+    if isinstance(body, str) and _string_route(url):
+        return body
+    if not isinstance(body, (dict, list)):
+        raise AssetFetchError(
+            f"{_where(url)} answered HTTP {status} with a JSON {type(body).__name__}, not an object or array: "
+            f"{_excerpt(json.dumps(body))}"
+        )
+    code = _error_envelope_code(body)
+    if code is not None:
+        _check_status(url, code, str(body["message"]), label=f"{_where(url)} (a 2xx error envelope)")
+    return body
 
 
 @contextmanager
@@ -161,24 +194,34 @@ def _check_response(resp: Any, url: str) -> None:
         _check_status(url, status, getattr(resp, "text", "") or "")
 
 
-def _text_body(resp: Any, url: str) -> str:
-    """The checked body of a text (CSV / HTML) response; an empty 200 raises like :func:`_json_text`."""
+def _text_body(resp: Any, url: str, *, html: bool = True) -> str:
+    """The checked body of a text (CSV / HTML) response; an empty 200 raises like :func:`_json_text`.
+
+    ``html=False`` is for a getter that never serves a page (a CSV or JSON host): a 2xx
+    body that opens with ``<`` is then a challenge or error page, not data, and raises
+    :class:`~sportsdataverse.errors.AssetFetchError` (A-L63). No CSV starts with ``<``.
+    """
     _check_response(resp, url)
     text = getattr(resp, "text", "") or ""
     status = getattr(resp, "status_code", 200)
     if not text.strip() and status not in (204, 205):
         raise AssetFetchError(f"{_where(url)} answered HTTP {status} with an empty body")
+    if not html and text.lstrip("\ufeff \t\r\n").startswith("<"):
+        raise AssetFetchError(f"{_where(url)} answered HTTP {status} with a page, not data: {_excerpt(text)}")
     return text
 
 
 def _json_body(resp: Any, url: str) -> Any:
     """Decode a :func:`~sportsdataverse.dl_utils.download` response like :func:`_json_text`."""
     _check_response(resp, url)
+    status = getattr(resp, "status_code", 200)
     try:
-        return resp.json()
-    except ValueError:
+        body = resp.json()
+    except ValueError:  # decoded again below, outside this handler, so the error never chains it
         pass
-    return _json_text(url, getattr(resp, "status_code", 200), getattr(resp, "text", "") or "")
+    else:
+        return _json_data(url, status, body)
+    return _json_text(url, status, getattr(resp, "text", "") or "")
 
 
 #: Re-fetches of a 2xx JSON body that arrived cut off (see :func:`_download_json`).
@@ -187,10 +230,19 @@ _TRUNCATED_JSON_DELAY = 1.0
 
 
 def _truncated_json(resp: Any) -> bool:
-    """A 2xx body that opens like JSON (``{`` / ``[``); called only once it failed to decode."""
+    """A 2xx body that opens like JSON (``{`` / ``[``) but does not decode.
+
+    A body that decodes was refused for what it says (an error envelope), not cut off.
+    """
     status = getattr(resp, "status_code", 200)
     text = (getattr(resp, "text", "") or "").lstrip()
-    return isinstance(status, int) and 200 <= status < 300 and text[:1] in ("{", "[")
+    if not (isinstance(status, int) and 200 <= status < 300 and text[:1] in ("{", "[")):
+        return False
+    try:
+        json.loads(text)
+    except ValueError:
+        return True
+    return False
 
 
 def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> Any:

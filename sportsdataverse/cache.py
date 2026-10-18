@@ -92,7 +92,7 @@ DEFAULT_TTL = MODERATE
 # in order; first match wins.
 _TIER_RULES = [
     # LIVE — never cache anything that's actively updating
-    (re.compile(r"/scoreboard/now\b"), LIVE),
+    (re.compile(r"/scoreboard/(?:[^/?#]+/)?now\b"), LIVE),  # NHL serves /scoreboard/{team}/now too (B-M11)
     (re.compile(r"/score/now\b"), LIVE),
     (re.compile(r"/standings/now\b"), LIVE),
     (re.compile(r"/playerstatusupdate\b"), LIVE),

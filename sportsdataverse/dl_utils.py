@@ -8,6 +8,7 @@ import re
 import time
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from urllib.parse import urlsplit
 from itertools import chain, starmap
 
 import numpy as np
@@ -15,7 +16,7 @@ import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoDataError, _redact_secrets, no_espn_data
+from sportsdataverse.errors import NoDataError, _is_data_body, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -113,12 +114,22 @@ _MAX_RETRY_AFTER = 120.0
 # Transient HTTP status codes worth retrying. 429 (rate limit) + 408 (request
 # timeout) + the 5xx server-error family are universally transient. 403 is
 # included because ESPN's Core v2 API returns it *under load* (not an auth
-# failure): ``download`` is the ESPN / nflverse gateway and does NOT serve the
-# auth'd endpoints — ``nfl_api`` (bearer), ``nba_stats`` / ``wnba_stats``
-# (curl_cffi runtime), and PFF (Clerk cookies) each have their own ``_get`` —
-# so a 403 seen here is far more likely rate-limiting than a permanent
-# forbidden. Retrying a genuine 403 only costs bounded backoff latency.
+# failure); it is NOT retried for the hosts in ``_PERMANENT_403_HOSTS``.
 _RETRYABLE_STATUS = frozenset({403, 408, 429, 500, 502, 503, 504})
+
+# Hosts whose 403 is a real "forbidden" (a bearer token, a session cookie or a
+# subscription the caller lacks), so a retry only burns the backoff (A-L19). Their
+# getters call ``download`` with the default ``retry_statuses``.
+_PERMANENT_403_HOSTS = frozenset({"api.nfl.com", "premium.pff.com", "comp.uefa.com", "kenpom.com", "herhoopstats.com"})
+
+# Total seconds one ``download`` call may sleep between retries (A-N11).
+# ``_MAX_RETRY_AFTER`` bounds ONE honoured ``Retry-After``; without a total, four of
+# them parked a call for 8 minutes that ``timeout`` does not bound. A retry whose wait
+# would cross it is not made: the last response is returned (or the last error raised).
+_MAX_TOTAL_RETRY_WAIT = 180.0
+
+# A single wait longer than this is logged at WARNING, so a long sleep is never silent.
+_LONG_RETRY_WAIT = 10.0
 
 # Status retries reuse the loop but get their OWN small cap so a genuinely
 # permanent 403/forbidden can't spin the full ``num_retries`` (16 requests /
@@ -181,6 +192,14 @@ def _retry_delay(
     delay = min(cap, base * (2**attempt))
     if jitter:
         delay *= 0.5 + random.random() * 0.5
+    return delay
+
+
+def _wait(delay: float, url: str, logger: logging.Logger) -> float:
+    """Sleep ``delay`` seconds before a retry (at WARNING when it is long); returns ``delay``."""
+    if delay > _LONG_RETRY_WAIT:
+        logger.warning("waiting %.0fs before retrying url (%s)", delay, _redact_secrets(str(url)))
+    time.sleep(delay)
     return delay
 
 
@@ -283,7 +302,8 @@ def download(
             ``Retry-After``-aware backoff as connection failures). Defaults to
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
-            403 is a real forbidden rather than ESPN-under-load.
+            403 is a real forbidden rather than ESPN-under-load. A 403 from a host
+            in :data:`_PERMANENT_403_HOSTS` is never retried.
 
     Raises:
         NoDataError: When the host answers 404, or ESPN answers 200 with a
@@ -291,6 +311,8 @@ def download(
             "no data", and retrying only adds load against a rate-limited host.
         requests.exceptions.RequestException: When the retry budget is exhausted
             on a connection-level failure; the most recent exception is re-raised.
+            A malformed request (``MissingSchema``, ``InvalidURL``, ``InvalidHeader``,
+            all ``ValueError`` subclasses) is raised at once, without a retry.
 
     Note:
         Precedence for ``timeout`` / ``num_retries`` is **explicit argument >
@@ -299,6 +321,11 @@ def download(
         malformed or non-positive env value is ignored in favour of the default
         rather than raising -- this runs on every request, so a typo must not take
         the process down.
+
+        The waits between retries share one budget of
+        :data:`_MAX_TOTAL_RETRY_WAIT` seconds per call (a single ``Retry-After`` is
+        capped at :data:`_MAX_RETRY_AFTER`); a retry whose wait would cross it is not
+        made, and a wait over :data:`_LONG_RETRY_WAIT` seconds is logged at WARNING.
 
     Returns:
         The final ``requests.Response``. When the retry budget is exhausted on
@@ -392,7 +419,12 @@ def download(
     response = None
     last_exc: Exception | None = None
     status_retries = 0
+    waited = 0.0
+    permanent_403 = urlsplit(str(url)).hostname in _PERMANENT_403_HOSTS
     for attempt in range(attempts):
+        # A connection error must not reuse the previous attempt's response: its Retry-After would
+        # be honoured again and spend the wait budget on a stale answer.
+        response = None
         try:
             response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
             response = no_espn_data(response)
@@ -402,14 +434,20 @@ def download(
             # capped at `status_budget` (see `_MAX_STATUS_RETRIES`); once spent,
             # return the response unchanged so callers can key on `.status_code`.
             status = getattr(response, "status_code", None)
-            retryable = status in retry_statuses
+            retryable = status in retry_statuses and not (status == 403 and permanent_403)
             # `attempt < attempts - 1` is load-bearing, not redundant with the
             # budget: when status_budget == attempts-1 (small num_retries) a
             # status retry could otherwise `continue` on the FINAL iteration,
             # exhausting the loop into the post-loop `raise last_exc` — which
             # would raise a STALE connection exception from an earlier attempt
             # instead of returning this response. Never retry on the last attempt.
-            if retryable and status_retries < status_budget and attempt < attempts - 1:
+            delay = _retry_delay(response, attempt) if retryable else 0.0
+            if (
+                retryable
+                and status_retries < status_budget
+                and attempt < attempts - 1
+                and waited + delay <= _MAX_TOTAL_RETRY_WAIT
+            ):
                 status_retries += 1
                 logger.warning(
                     "retryable status %s - %s for url (%s) [status retry %d/%d]",
@@ -419,7 +457,7 @@ def download(
                     status_retries,
                     status_budget,
                 )
-                time.sleep(_retry_delay(response, attempt))
+                waited += _wait(delay, url, logger)
                 continue
             if retryable:
                 # Budget spent: surface a terminal line so a persistent
@@ -436,7 +474,11 @@ def download(
             # breaks the call.
             if get_cache_mode() != "off" and status is not None and 200 <= status < 300:
                 try:
-                    cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
+                    body = response.json()
+                    # A 2xx error envelope or JSON scalar is a failed fetch the chokepoint raises on; cached,
+                    # it would re-raise for the whole TTL instead of being fetched again (R880-4).
+                    if _is_data_body(url, body):
+                        cache_set(url, _cache_params, body, ttl=cache_ttl)
                 except Exception:  # noqa: BLE001
                     pass
             return response
@@ -444,6 +486,12 @@ def download(
             # A 404 (or ESPN's 200-with-`code:404` body) is a definitive "no data"
             # answer — retrying cannot change it and only amplifies load against a
             # rate-limited host. Fail fast instead of burning the retry budget.
+            raise
+        except ValueError as e:
+            # A malformed request (requests' MissingSchema / InvalidURL / InvalidSchema /
+            # InvalidHeader are all ValueErrors) fails the same way every time: raise it
+            # now instead of retrying it with backoff for ~50 s (A-L30).
+            _redact_exception(e)
             raise
         except Exception as e:  # noqa: BLE001
             # Before anything logs or re-raises it: requests quotes the URL, key and all.
@@ -455,7 +503,8 @@ def download(
             if hasattr(e, "code") and getattr(e, "code") == 404:
                 logger.error(_redact_secrets(f"404: {url} \nparams: {params}"))
 
-            if remaining <= 0:
+            delay = _retry_delay(response, attempt)
+            if remaining <= 0 or waited + delay > _MAX_TOTAL_RETRY_WAIT:
                 logger.error(_redact_secrets(f"Retry Limit Exceeded: {url} \nparams: {params}\n {e}"))
                 break
 
@@ -482,7 +531,7 @@ def download(
                     attempt + 1,
                     num_retries,
                 )
-            time.sleep(_retry_delay(response, attempt))
+            waited += _wait(delay, url, logger)
 
     # Retry budget exhausted. Re-raise the last captured exception so
     # callers can react (and the test suite can assert on the failure

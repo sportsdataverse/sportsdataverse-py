@@ -12,6 +12,7 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple, Union
 
@@ -90,6 +91,144 @@ def test_empty_200_is_a_failed_fetch(monkeypatch):
     _serve(monkeypatch, 200, "  ")
     with pytest.raises(AssetFetchError, match="example.test/x answered HTTP 200 with an empty body"):
         _get("https://example.test/x")
+
+
+@pytest.mark.parametrize("body", ["null", "42", '"Too many requests"', "true"])
+def test_a_2xx_scalar_body_is_a_failed_fetch(monkeypatch, body):
+    # B-GB-16: a JSON scalar is no payload any parser reads; _json_body returned it as data.
+    _serve(monkeypatch, 200, body)
+    with pytest.raises(AssetFetchError, match="not an object or array"):
+        _get("https://example.test/x")
+
+
+@pytest.mark.parametrize(("code", "err"), [(400, ValueError), (429, AssetFetchError), (503, AssetFetchError)])
+def test_a_2xx_error_envelope_is_classified_by_its_code(monkeypatch, code, err):
+    # A-M13: ESPN's own envelope (espn_site_roster_400.json) served with HTTP 200 was data.
+    envelope = {**json.loads(_body("espn_site_roster_400.json")), "code": code}
+    _serve(monkeypatch, 200, json.dumps(envelope))
+    with pytest.raises(err, match="a 2xx error envelope"):
+        _get("https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/99999/roster")
+
+
+def test_a_code_field_beside_data_is_not_an_error_envelope(monkeypatch):
+    _serve(monkeypatch, 200, '{"code": 500, "message": "x", "items": []}')
+    assert _get("https://example.test/x") == {"code": 500, "message": "x", "items": []}
+
+
+def test_a_business_code_is_not_an_error_envelope(monkeypatch):
+    # R880-5: only an HTTP-shaped code (400-599) is an error envelope; 1001 is a provider's own code.
+    _serve(monkeypatch, 200, '{"code": 1001, "message": "ok"}')
+    assert _get("https://example.test/x") == {"code": 1001, "message": "ok"}
+
+
+_LAST_CHANGE = "https://api.openligadb.de/getlastchangedate/bl1/2025/1"
+
+
+def test_openligadb_last_change_date_keeps_its_bare_iso_string(monkeypatch):
+    # R880-1: /getlastchangedate answers a quoted ISO string by design (openligadb.yaml); the scalar
+    # refusal (B-GB-16) made the wrapper always raise. Real capture, served through the real _get.
+    from sportsdataverse.soccer import openligadb_last_change_date
+
+    body = (FIX.parent / "openligadb" / "getlastchangedate__league__season__group.json").read_text(encoding="utf-8")
+    _serve(monkeypatch, 200, body)
+    assert _get(_LAST_CHANGE) == "2025-08-24T19:25:06.787"
+    assert openligadb_last_change_date("bl1", "2025", "1", return_parsed=False) == "2025-08-24T19:25:06.787"
+    assert openligadb_last_change_date("bl1", "2025", "1").height == 1
+
+
+@pytest.mark.parametrize("body", ['"2025-08-24T19:25:06.787"', "null", "42"])
+def test_the_string_allowance_is_that_route_only(monkeypatch, body):
+    # Another OpenLigaDB route answering a string, or that route answering null / a number, is still a failed fetch.
+    _serve(monkeypatch, 200, body)
+    url = "https://api.openligadb.de/getavailableleagues" if body.startswith('"') else _LAST_CHANGE
+    with pytest.raises(AssetFetchError, match="not an object or array"):
+        _get(url)
+
+
+def _memory_cache(monkeypatch) -> Dict[str, Any]:
+    """A fresh in-memory response cache for one test (download() imports these per call)."""
+    import sportsdataverse.cache as _cache
+
+    store: Dict[str, Any] = {}
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "memory")
+    monkeypatch.setattr(_cache, "cache_get", lambda url, params, ttl=None: store.get(url))
+    monkeypatch.setattr(
+        _cache,
+        "cache_set",
+        lambda url, params, body, ttl=None: store.__setitem__(url, body),
+    )
+    return store
+
+
+@pytest.mark.parametrize("body", ['{"code": 503, "message": "Service Unavailable"}', "42", "null"])
+def test_a_refused_2xx_body_is_never_cached(monkeypatch, body):
+    # R880-4: a 2xx error envelope or scalar was cached, so a transient failure re-raised for the whole TTL.
+    calls = _serve(monkeypatch, 200, body)
+    store = _memory_cache(monkeypatch)
+    for _ in range(2):
+        with pytest.raises(AssetFetchError):
+            _get("https://example.test/x")
+    assert len(calls) == 2 and store == {}
+
+
+def test_data_and_the_allowed_string_are_still_cached(monkeypatch):
+    calls = _serve(monkeypatch, 200, '"2025-08-24T19:25:06.787"')
+    store = _memory_cache(monkeypatch)
+    assert _get(_LAST_CHANGE) == _get(_LAST_CHANGE) == "2025-08-24T19:25:06.787"
+    assert len(calls) == 1 and list(store.values()) == ["2025-08-24T19:25:06.787"]
+
+
+@pytest.mark.parametrize("prefix", ["\n", "﻿", " \r\n\t"])
+def test_a_page_behind_whitespace_or_a_bom_is_still_a_page(monkeypatch, prefix):
+    # R880-3: the HTML check skips leading whitespace and a BOM before looking for "<".
+    from sportsdataverse.mbb import torvik_runtime as rt
+
+    _serve(
+        monkeypatch,
+        200,
+        prefix + "<!DOCTYPE html><html>Just a moment...</html>",
+        "text/html",
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get("https://barttorvik.com/2025_team_results.csv")
+
+
+def test_a_json_array_where_a_yahoo_object_belongs_is_a_failed_fetch(monkeypatch):
+    # A-L18: it became {} ("nothing here").
+    from sportsdataverse.yahoo import yahoo_shangrila_runtime as rt
+
+    _serve(monkeypatch, 200, "[]")
+    with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
+        rt._get("https://graphite-secure.sports.yahoo.com/v1/query/shangrila/leagueNames")
+
+
+def test_statcast_html_leaderboards_still_return_their_page(monkeypatch):
+    # A-L63 refuses a page from a CSV endpoint; the two HTML leaderboards keep theirs.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    page = (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8")
+    _serve(monkeypatch, 200, page, "text/html")
+    assert rt._get("https://baseballsavant.mlb.com/leaderboard/fielding-run-value") == page
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get("https://baseballsavant.mlb.com/leaderboard/expected_statistics")
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://baseballsavant.mlb.com/leaderboard/expected_statistics?next=/leaderboard/fielding-run-value",
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value-extra",
+    ],
+)
+def test_statcast_html_allowance_is_the_path_not_a_substring(monkeypatch, url):
+    # A query or a longer path that merely names an HTML leaderboard is still a CSV endpoint.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    _serve(
+        monkeypatch, 200, (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8"), "text/html"
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get(url)
 
 
 @pytest.mark.parametrize(
@@ -513,36 +652,8 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
-_SCALAR = "B-GB-16: a 2xx scalar JSON body is returned as data; task 4.1 (_json_body: dict or list only)"
-_SCALAR_EMPTY = "A-L18: a 2xx scalar body becomes {} ('nothing here'); task 4.1"
 _NFLPRO = "A-M4: nflpro_runtime._fetch skips _check_status/_json_body; task 4.1b"
 _KNOWN: Dict[Tuple[str, str], str] = {
-    **{
-        (rt, "scalar_200"): _SCALAR
-        for rt in (
-            "_codegen_runtime",
-            "euroleague_runtime",
-            "football_data_runtime",
-            "mls_api_runtime",
-            "mlb_statcast_runtime",
-            "nba_stats_runtime",
-            "nfl_api_runtime",
-            "nwsl_api_runtime",
-            "thesportsdb_runtime",
-            "torvik_runtime",
-            "uefa_runtime",
-            "wnba_stats_runtime",
-        )
-    },
-    **{
-        (rt, "scalar_200"): _SCALAR_EMPTY
-        for rt in ("on3_runtime", "sports247_runtime", "sports247_site_pages_runtime", "yahoo_shangrila_runtime")
-    },
-    ("pff_runtime", "scalar_200"): "B-L75: the LEGACY PFF runtime turns a 200 non-object into {}; task 4.1b",
-    **{
-        (rt, "html_200"): "A-L63: _text_body accepts an HTML challenge page as CSV text; task 4.1"
-        for rt in ("mlb_statcast_runtime", "torvik_runtime")
-    },
     **{
         ("nflpro_runtime", case): _NFLPRO
         for case in ("400", "403", "429", "503", "204", "empty_200", "html_200", "scalar_200")
@@ -559,7 +670,6 @@ _SYNC_204 = (
     "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
 )
 _SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
-_SYNC_SCALAR = "EX-SYNC-c: a 2xx scalar JSON body is data or NoDataError, not AssetFetchError; task providers 4.1b runtime vocabulary"
 _SYNC_EMPTY = (
     "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
 )
@@ -601,21 +711,6 @@ _SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
     **{
         (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
     },
-    **{
-        (f"{rt}_runtime", "scalar_200"): (_FAILED, _SYNC_SCALAR)
-        for rt in (
-            "basketball",
-            "elh",
-            "euro_hockey",
-            "kbl",
-            "khl_webcaster",
-            "nationalleague",
-            "shl",
-            "sihf",
-            "sportality",
-        )
-    },
-    **{(f"{rt}_runtime", "scalar_200"): (NoDataError, _SYNC_SCALAR) for rt in ("esports", "liiga", "wjbl")},
     ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
 }
 

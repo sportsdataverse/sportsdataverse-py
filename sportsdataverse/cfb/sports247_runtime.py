@@ -203,6 +203,5 @@ def _get(
             _jwt = _mint_guest_jwt()
             if _jwt is not None:
                 continue
-        body = _json_text(full, status, text)
-        return body if isinstance(body, (dict, list)) else {}
+        return _json_text(full, status, text)
     return {}  # unreachable: the second attempt always returns or raises

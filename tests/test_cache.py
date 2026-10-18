@@ -17,6 +17,7 @@ import requests
     "url,expected",
     [
         ("https://api-web.nhle.com/v1/scoreboard/now", "LIVE"),
+        ("https://api-web.nhle.com/v1/scoreboard/TOR/now", "LIVE"),  # nhl_scoreboard(team=...) (B-M11)
         ("https://api-web.nhle.com/v1/standings/now", "LIVE"),
         ("https://api-web.nhle.com/v1/gamecenter/2023030417/play-by-play", "IMMUTABLE"),
         ("https://api-web.nhle.com/v1/gamecenter/2023030417/boxscore", "IMMUTABLE"),

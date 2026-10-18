@@ -301,6 +301,9 @@ def _gdap(url: str, params: Mapping[str, Any], **kwargs: Any) -> Any:
             _api_key.cache_clear()  # the key rotated: read the page again, once
             continue
         break
+    if getattr(resp, "status_code", None) == 200 and (getattr(resp, "text", "") or "").strip() == "null":
+        # GDAP's bare ``null`` is its unknown-id answer (module docstring); _json_body refuses JSON scalars.
+        return _check_gdap(url, None, params)
     return _check_gdap(url, _rt._json_body(resp, url), params)
 
 
