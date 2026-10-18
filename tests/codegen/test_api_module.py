@@ -463,6 +463,18 @@ def test_yaml_raises_line_keeps_the_vocabulary_meaning_in_one_row():
     assert by["ValueError"].startswith("The host answered 400 / 422")
 
 
+def test_a_yaml_alias_of_a_vocabulary_error_merges_into_one_row():
+    lines = generate._raises_lines(
+        {"raises": ["sportsdataverse.errors.NoESPNDataError: The MLS host returned 404 (unknown id)."]},
+        vocab_raises=True,
+    )
+    exc = [ln.split(":", 1)[0] for ln in lines]
+    assert exc == ["sportsdataverse.errors.NoESPNDataError", "ValueError", "AssetFetchError"]  # one 404 row
+    assert lines[0].split(": ", 1)[1] == (
+        "The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id)."
+    )
+
+
 def test_raises_rows_merge_per_exception_and_capitalise():
     rows = generate._merge_raises(
         [

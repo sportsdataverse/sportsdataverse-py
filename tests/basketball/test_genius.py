@@ -439,6 +439,30 @@ def test_a_hosted_500_website_error_page_points_at_the_embed_route(answer):
         rt._get(SCHEDULE_URL)
 
 
+@pytest.mark.parametrize(
+    "status,text,transient",
+    [
+        (503, "down", True),
+        (429, "slow down", True),
+        (500, "<html>A website error has occurred</html>", False),  # deterministic: no plain hosted site
+        (403, CLOUDFRONT, False),
+        (403, "<html>forbidden</html>", False),
+    ],
+)
+def test_only_a_transport_failure_or_a_429_5xx_is_marked_transient(answer, status, text, transient):
+    answer(status, text)
+    with pytest.raises(AssetFetchError) as err:
+        rt._get(U_URL)
+    assert getattr(err.value, "transient", False) is transient
+
+
+def test_a_dead_connection_is_marked_transient(answer):
+    answer(ConnectionError("reset"))
+    with pytest.raises(AssetFetchError) as err:
+        rt._get(U_URL)
+    assert err.value.transient is True
+
+
 @pytest.mark.parametrize("text", ["", "   ", "<html>not data</html>", '{"tm": {"1": {}', "[1]"])
 def test_data_json_stubs_and_bad_bodies_are_refused(answer, text):
     answer(200, text)

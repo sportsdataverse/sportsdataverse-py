@@ -546,9 +546,15 @@ def test_genius_shell_naming_no_competition_is_its_own_error(monkeypatch):
     assert "None" not in str(err.value)
 
 
+def _transient(msg):
+    exc = AssetFetchError(msg)
+    exc.transient = True  # what genius_runtime._fetch marks on a transport failure or a 429/5xx
+    return exc
+
+
 def test_genius_scope_check_retries_once_then_says_it_could_not_run(monkeypatch):
     shell = {"match_id": 2902690, "comp_id": 49914, "competition_name": "Stoiximan GBL 2026-2027"}
-    answers = [AssetFetchError("HTTP 503"), shell]
+    answers = [_transient("HTTP 503"), shell]
 
     def flaky(**kw):
         a = answers.pop(0)
@@ -560,9 +566,25 @@ def test_genius_scope_check_retries_once_then_says_it_could_not_run(monkeypatch)
     monkeypatch.setattr(genius_api, "genius_match_competition", flaky)
     assert genius_rt.esake_pbp(2902690) == "pbp"  # one transient failure is retried
     C._CACHE.clear()
-    answers[:] = [AssetFetchError("HTTP 503"), AssetFetchError("HTTP 503")]
+    answers[:] = [_transient("HTTP 503"), _transient("HTTP 503")]
     with pytest.raises(AssetFetchError, match=r"scope check could not run.*failed twice.*not returned unchecked"):
         genius_rt.esake_pbp(2902690)
+
+
+def test_genius_scope_check_does_not_retry_a_deterministic_refusal(monkeypatch):
+    calls = []
+
+    def refuse(**kw):
+        calls.append(kw)
+        raise AssetFetchError("CloudFront refused this egress IP (HTTP 403 'Request blocked')")
+
+    monkeypatch.setattr(genius_api, "genius_pbp", lambda **kw: "pbp")
+    monkeypatch.setattr(genius_api, "genius_match_competition", refuse)
+    with pytest.raises(
+        AssetFetchError, match=r"scope check could not run \(the /u/ESAKE/2902690/ shell request failed:"
+    ) as err:
+        genius_rt.esake_pbp(2902690)
+    assert len(calls) == 1 and "twice" not in str(err.value)
 
 
 def test_the_listing_cache_is_bounded_least_recently_used_first(monkeypatch):

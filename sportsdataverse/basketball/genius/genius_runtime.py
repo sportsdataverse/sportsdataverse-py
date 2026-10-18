@@ -27,7 +27,8 @@ failure, which means the answer is unknown, not empty:
 
 * a non-200 (429 / 5xx after three attempts, honouring ``Retry-After``; an HTTP 500 "A website error has occurred"
   page from an org with no plain hosted site, which names ``genius_schedule_embed``), the CloudFront block, a dead
-  connection;
+  connection. A dead connection and a 429 / 5xx other than that page carry ``transient = True``; every other
+  ``AssetFetchError`` is a definitive refusal;
 * an error envelope or a body of the wrong kind (not JSON, an HTML page where JSON was asked, a page cut off before
   ``</html>``, a truncated ``data.json``);
 * **a body for another scope than the one asked for**: a recent-games window of another competition, a ``/u/``
@@ -111,9 +112,9 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
             num_retries=ATTEMPTS - 1,
         )
     except OSError as exc:  # the transport error can quote the proxy URL: name the class only
-        raise AssetFetchError(
-            f"{where}: fetch failed after retries ({type(exc).__name__}); proxy={PROXY_ENV}"
-        ) from None
+        err = AssetFetchError(f"{where}: fetch failed after retries ({type(exc).__name__}); proxy={PROXY_ENV}")
+        err.transient = True
+        raise err from None
     status = getattr(resp, "status_code", None)
     text = getattr(resp, "text", "") or ""
     if status == 200:
@@ -130,7 +131,11 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
         raise AssetFetchError(
             f"{where} answered HTTP 500 'A website error has occurred': the org has no plain hosted site (try genius_schedule_embed)"
         )
-    _rt._check_status(url, status, text)  # 404 -> NoDataError, 400/422 -> ValueError, else AssetFetchError
+    try:
+        _rt._check_status(url, status, text)  # 404 -> NoDataError, 400/422 -> ValueError, else AssetFetchError
+    except AssetFetchError as exc:
+        exc.transient = status in RETRY_STATUSES or (isinstance(status, int) and status >= 500)
+        raise
     raise AssetFetchError(f"{where} answered HTTP {status}, not 200")
 
 

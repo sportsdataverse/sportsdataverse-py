@@ -372,8 +372,9 @@ def _genius_check(entry: Entry, match_id: int, base_name: str, **kw: Any) -> Non
 
     One request per match (cached per process, so the four game frames share it). The shell exists only under
     the game's own LiveStats ORG, and its competition name must pass the entry's label rule. The check runs after
-    the base frame was fetched; when the shell request fails (a transient error, retried once) or names no
-    competition, the frame is NOT returned unchecked: an ``AssetFetchError`` says the scope check could not run.
+    the base frame was fetched; when the shell request fails (a dead connection or a 429/5xx is retried once, a
+    refusal such as the CloudFront block is not) or names no competition, the frame is NOT returned unchecked: an
+    ``AssetFetchError`` says the scope check could not run.
     """
     from sportsdataverse.basketball.genius import genius as g
 
@@ -392,11 +393,12 @@ def _genius_check(entry: Entry, match_id: int, base_name: str, **kw: Any) -> Non
                 f"(another org's game); {unchecked}"
             ) from None
         except AssetFetchError as exc:
-            if attempt == 2:
+            transient = getattr(exc, "transient", False)  # a dead connection or 429/5xx; a refusal is final
+            if attempt == 2 or not transient:
                 raise AssetFetchError(
                     f"match {match_id}: the {label} scope check could not run (the /u/{org}/{match_id}/ shell "
-                    f"request failed twice: {exc}); the game data was fetched but is not returned unchecked: retry, "
-                    f"or {unchecked}"
+                    f"request failed{' twice' if transient else ''}: {exc}); the game data was fetched but is not "
+                    f"returned unchecked: retry, or {unchecked}"
                 ) from None
     name = rec.get("competition_name") if isinstance(rec, dict) else None
     if not isinstance(name, str) or not name.strip():

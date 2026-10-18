@@ -423,8 +423,12 @@ def _raises_row(line: str) -> dict:
 _SENTENCE_BREAK = re.compile(r"(?<=[.!?])\s+(?=[A-Z`(])")
 
 
+#: Alias class name -> the class it is (``errors.NoESPNDataError is errors.NoDataError``), from ``_VOCAB_RAISES``.
+_RAISES_ALIAS = {alias: names[0] for names, _line in _VOCAB_RAISES for alias in names[1:]}
+
+
 def _merge_raises(rows: list[dict]) -> list[dict]:
-    """One row per exception (keyed on the bare class name), texts joined, repeated sentences dropped.
+    """One row per exception (keyed on the bare class name, an alias on its class), texts joined, repeats dropped.
 
     Each text gets a leading capital; a ``None`` entry (a docstring saying what happens
     instead of raising) is not an exception and is skipped."""
@@ -434,7 +438,12 @@ def _merge_raises(rows: list[dict]) -> list[dict]:
         if not exc or exc == "None":
             continue
         desc = r["description"].strip()
-        parts = merged.setdefault(exc.rsplit(".", 1)[-1], {"exc": exc, "parts": []})["parts"]
+        bare = exc.rsplit(".", 1)[-1]
+        key = _RAISES_ALIAS.get(bare, bare)
+        row = merged.setdefault(key, {"exc": exc, "parts": []})
+        if bare != key:  # an alias (NoESPNDataError) names the class more specifically than the vocabulary line
+            row["exc"] = exc
+        parts = row["parts"]
         for s in _SENTENCE_BREAK.split(desc[:1].upper() + desc[1:]):
             if s and s not in parts:
                 parts.append(s)
