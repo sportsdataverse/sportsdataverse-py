@@ -355,8 +355,8 @@ def _merge(codes: List[str], col: str) -> str:
     return "s"
 
 
-def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, str]:
-    """Ordered ``{column: code}`` for a parser, from every fixture, with the committed dtypes switched off."""
+def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, List[str]]:
+    """Ordered ``{column: [observed codes]}`` for a parser, from every fixture, with the committed dtypes switched off."""
     saved, fiba_dtypes.DTYPES = fiba_dtypes.DTYPES, {}
     try:
         order: List[str] = []
@@ -369,11 +369,22 @@ def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, str]:
                 if col not in seen:
                     order.append(col)
                     seen[col] = []
-                if dtype != pl.Null:
+                if df[col].null_count() < df.height:  # an all-null column is typed by its name: not an observation
                     seen[col].append(_CODE.get(dtype, "s"))
-        return {col: _merge(seen[col], col) for col in order}
+        return {col: seen[col] for col in order}
     finally:
         fiba_dtypes.DTYPES = saved
+
+
+def _family_codes(observed: Dict[str, Dict[str, List[str]]]) -> Dict[str, Dict[str, str]]:
+    """``{parser: {column: code}}`` for one family; a column no fixture of its parser fills takes the codes the
+    family's other parsers observed for it, so one column name has one dtype across the family (the game page's
+    team lines carry no ``BSR``, so ``box_teams.blocks_received`` is always null: Int64 like ``box_players``)."""
+    family: Dict[str, List[str]] = {}
+    for cols in observed.values():
+        for col, codes in cols.items():
+            family.setdefault(col, []).extend(codes)
+    return {p: {c: _merge(codes or family[c], c) for c, codes in cols.items()} for p, cols in observed.items()}
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -656,12 +667,24 @@ def main() -> None:
 
     # dtypes, from every fixture of every parser
     dtypes: Dict[str, Dict[str, str]] = {}
-    for short, cfg in GDAP.items():
-        parser = f"parse_fiba_gdap_{short}"
-        dtypes[parser] = _derive(getattr(gp, parser), "fiba_gdap", cfg["fixtures"])
-    for short, cfg in PAGE.items():
-        parser = f"parse_fiba_gamepage_{short}"
-        dtypes[parser] = _derive(getattr(pp, parser), "fiba_gamepage", cfg["fixtures"])
+    dtypes.update(
+        _family_codes(
+            {
+                f"parse_fiba_gdap_{s}": _derive(getattr(gp, f"parse_fiba_gdap_{s}"), "fiba_gdap", c["fixtures"])
+                for s, c in GDAP.items()
+            }
+        )
+    )
+    dtypes.update(
+        _family_codes(
+            {
+                f"parse_fiba_gamepage_{s}": _derive(
+                    getattr(pp, f"parse_fiba_gamepage_{s}"), "fiba_gamepage", c["fixtures"]
+                )
+                for s, c in PAGE.items()
+            }
+        )
+    )
     body = ",\n".join(
         f'    "{p}": {{\n' + "".join(f'        "{c}": "{t}",\n' for c, t in cols.items()) + "    }"
         for p, cols in sorted(dtypes.items())

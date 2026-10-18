@@ -59,7 +59,7 @@ Id key spaces (one dtype each, cast here at the boundary; the wire mixes strings
 
 Stat cells of the stats tables, box scores and team stats are ``Int64`` when every value is a whole
 number (counts) and ``Float64`` when any value is a decimal or a numeric string, and every ``*_perc``
-rate is ``Float64``: the API mixes ``"27.3"`` and ``0`` in one column, so a count-looking sample
+rate and ``*pg`` per-game average (``ppg``, ``blkpg``, ``plus_minus_pg``) is ``Float64``: the API mixes ``"27.3"`` and ``0`` in one column, so a count-looking sample
 could otherwise type a rate as an integer (the generated wrappers conform every frame to the
 documented dtypes, which come from full bodies). A column holding any other string (``"09:07"``
 minutes, ``"30-76"`` made-attempted) stays ``Utf8``.
@@ -237,7 +237,7 @@ def _series(name: str, values: List[Any], stat: bool) -> pl.Series:
     present = [v for v in values if v is not None]
     if stat and present and all(_as_float(v) is not None for v in present):
         # Whole numbers stay Int64 (counts); a rate, a decimal or a numeric string makes the column Float64.
-        if all(isinstance(v, int) and not isinstance(v, bool) for v in present) and not name.endswith("_perc"):
+        if all(isinstance(v, int) and not isinstance(v, bool) for v in present) and not name.endswith(("_perc", "pg")):
             return pl.Series(name, values, dtype=pl.Int64)
         return pl.Series(name, [_as_float(v) for v in values], dtype=pl.Float64)
     if present and all(isinstance(v, bool) for v in present):
