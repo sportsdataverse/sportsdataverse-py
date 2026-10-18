@@ -1,0 +1,990 @@
+{
+ "categories": [
+  {
+   "descriptions": [
+    "Games Played",
+    "The number of games started by an athlete.",
+    "The average number of minutes per game.",
+    "The average number of points scored per game.",
+    "The average rebounds per game.",
+    "The average assists per game.",
+    "The average steals per game.",
+    "The average blocks per game.",
+    "The average turnovers committed per game.",
+    "The average field goals made per game.-The average field goals attempted per game.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The average three point field goals made per game.-The average three point field goals attempted per game.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The average free throw shots made per game.-The average free throw shots attempted per game.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The average fouls committed per game.",
+    "The average offensive rebounds per game.",
+    "The average defensive rebounds per game."
+   ],
+   "displayName": "Season Averages",
+   "displayNames": [
+    "Games Played",
+    "Games Started",
+    "Minutes Per Game",
+    "Points Per Game",
+    "Rebounds Per Game",
+    "Assists Per Game",
+    "Steals Per Game",
+    "Blocks Per Game",
+    "Turnovers Per Game",
+    "Field Goals Made-Attempted Per Game",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted Per Game",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted Per Game",
+    "Free Throw Percentage",
+    "Fouls Per Game",
+    "Offensive Rebounds Per Game",
+    "Defensive Rebounds Per Game"
+   ],
+   "labels": [
+    "GP",
+    "GS",
+    "MIN",
+    "PTS",
+    "REB",
+    "AST",
+    "STL",
+    "BLK",
+    "TO",
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "PF",
+    "OR",
+    "DR"
+   ],
+   "name": "averages",
+   "names": [
+    "gamesPlayed",
+    "gamesStarted",
+    "avgMinutes",
+    "avgPoints",
+    "avgRebounds",
+    "avgAssists",
+    "avgSteals",
+    "avgBlocks",
+    "avgTurnovers",
+    "avgFieldGoalsMade-avgFieldGoalsAttempted",
+    "fieldGoalPct",
+    "avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "avgFreeThrowsMade-avgFreeThrowsAttempted",
+    "freeThrowPct",
+    "avgFouls",
+    "avgOffensiveRebounds",
+    "avgDefensiveRebounds"
+   ],
+   "sortKey": "averages",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2020-21",
+      "year": 2021
+     },
+     "stats": [
+      "30",
+      "30",
+      "34.0",
+      "26.6",
+      "5.9",
+      "7.1",
+      "1.3",
+      "0.5",
+      "4.8",
+      "8.9-18.8",
+      "47.2",
+      "3.9-9.5",
+      "40.6",
+      "5.0-5.9",
+      "85.8",
+      "2.3",
+      "0.6",
+      "5.3"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2021-22",
+      "year": 2022
+     },
+     "stats": [
+      "32",
+      "32",
+      "35.9",
+      "27.0",
+      "8.0",
+      "8.0",
+      "1.5",
+      "0.6",
+      "4.8",
+      "8.9-19.8",
+      "45.2",
+      "2.8-8.6",
+      "33.2",
+      "6.3-7.1",
+      "88.1",
+      "2.5",
+      "0.4",
+      "7.6"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "38",
+      "38",
+      "34.4",
+      "27.8",
+      "7.1",
+      "8.6",
+      "1.5",
+      "0.5",
+      "4.2",
+      "8.9-18.8",
+      "47.3",
+      "3.7-9.5",
+      "38.9",
+      "6.3-7.5",
+      "83.9",
+      "2.1",
+      "0.4",
+      "6.7"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "39",
+      "39",
+      "34.9",
+      "31.6",
+      "7.4",
+      "8.9",
+      "1.7",
+      "0.5",
+      "4.7",
+      "10.3-22.7",
+      "45.5",
+      "5.2-13.6",
+      "37.8",
+      "5.8-6.8",
+      "86.0",
+      "2.0",
+      "0.4",
+      "6.9"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    }
+   ],
+   "totals": [
+    "139",
+    "139",
+    "34.8",
+    "28.4",
+    "7.1",
+    "8.2",
+    "1.5",
+    "0.5",
+    "4.6",
+    "9.3-20.1",
+    "46.2",
+    "3.9-10.4",
+    "37.7",
+    "5.9-6.8",
+    "85.8",
+    "2.2",
+    "0.5",
+    "6.7"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of points scored.",
+    "The number of times when the offense obtains the possession of the ball after a missed shot.",
+    "The number of times when the defense obtains the possession of the ball after a missed shot by the offense.",
+    "The total number of rebounds for a team or player",
+    "The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was \"assisting\" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist.",
+    "The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player.",
+    "Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player.",
+    "The number of times a player loses possession to the other team.",
+    "The number of times a 2pt field goal was made.-The number of times a 2pt field goal was attempted.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The number of times a 3pt field goal was made.-The number of times a 3pt field goal was attempted.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The number of times a free throw was made.-The number of times a free throw was attempted.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The number of times a player had illegal contact with the opponent."
+   ],
+   "displayName": "Season Totals",
+   "displayNames": [
+    "Points",
+    "Offensive Rebounds",
+    "Defensive Rebounds",
+    "Rebounds",
+    "Assists",
+    "Steals",
+    "Blocks",
+    "Turnovers",
+    "Field Goals Made-Attempted",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted",
+    "Free Throw Percentage",
+    "Fouls"
+   ],
+   "labels": [
+    "PTS",
+    "OR",
+    "DR",
+    "REB",
+    "AST",
+    "STL",
+    "BLK",
+    "TO",
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "PF"
+   ],
+   "name": "totals",
+   "names": [
+    "points",
+    "offensiveRebounds",
+    "defensiveRebounds",
+    "totalRebounds",
+    "assists",
+    "steals",
+    "blocks",
+    "turnovers",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "fieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "freeThrowPct",
+    "fouls"
+   ],
+   "sortKey": "totals",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2020-21",
+      "year": 2021
+     },
+     "stats": [
+      "799",
+      "18",
+      "159",
+      "177",
+      "214",
+      "38",
+      "14",
+      "144",
+      "266-564",
+      "47.2",
+      "116-286",
+      "40.6",
+      "151-176",
+      "85.8",
+      "69"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2021-22",
+      "year": 2022
+     },
+     "stats": [
+      "863",
+      "14",
+      "242",
+      "256",
+      "257",
+      "47",
+      "20",
+      "152",
+      "286-633",
+      "45.2",
+      "91-274",
+      "33.2",
+      "200-227",
+      "88.1",
+      "79"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "1055",
+      "15",
+      "255",
+      "270",
+      "327",
+      "57",
+      "20",
+      "158",
+      "338-715",
+      "47.3",
+      "140-360",
+      "38.9",
+      "239-285",
+      "83.9",
+      "80"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "1234",
+      "17",
+      "270",
+      "287",
+      "346",
+      "68",
+      "20",
+      "185",
+      "403-886",
+      "45.5",
+      "201-532",
+      "37.8",
+      "227-264",
+      "86.0",
+      "78"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    }
+   ],
+   "totals": [
+    "3951",
+    "64",
+    "926",
+    "990",
+    "1144",
+    "210",
+    "74",
+    "639",
+    "1293-2798",
+    "46.2",
+    "548-1452",
+    "37.7",
+    "817-952",
+    "85.8",
+    "306"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The average number of assists a player or team records per turnover",
+    "The number of steals per turnover",
+    "The efficiency with which a team or player scores the basketball.",
+    "The efficiency with which a team or player shoots the basketball.",
+    "The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations).",
+    "The number of times a player reached the foul limit.",
+    "The number of times a player or coach is removed from the game as a result of a serious offense."
+   ],
+   "displayName": "Season Misc Totals",
+   "displayNames": [
+    "Double Double",
+    "Triple Double",
+    "Assist To Turnover Ratio",
+    "Steal To Turnover Ratio",
+    "Scoring Efficiency",
+    "Shooting Efficiency",
+    "Technical Fouls",
+    "Disqualifications",
+    "Ejections"
+   ],
+   "labels": [
+    "DD2",
+    "TD3",
+    "AST/TO",
+    "STL/TO",
+    "SC-EFF",
+    "SH-EFF",
+    "TECH",
+    "DQ",
+    "EJECT"
+   ],
+   "name": "miscellaneous",
+   "names": [
+    "doubleDouble",
+    "tripleDouble",
+    "assistTurnoverRatio",
+    "stealTurnoverRatio",
+    "scoringEfficiency",
+    "shootingEfficiency",
+    "technicalFouls",
+    "disqualifications",
+    "ejections"
+   ],
+   "sortKey": "miscellaneous",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2020-21",
+      "year": 2021
+     },
+     "stats": [
+      "2",
+      "0",
+      "1.5",
+      "0.3",
+      "1.417",
+      "0.57",
+      "0",
+      "3",
+      "0"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2021-22",
+      "year": 2022
+     },
+     "stats": [
+      "15",
+      "4",
+      "1.7",
+      "0.3",
+      "1.363",
+      "0.52",
+      "1",
+      "0",
+      "0"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2022-23",
+      "year": 2023
+     },
+     "stats": [
+      "17",
+      "5",
+      "2.1",
+      "0.4",
+      "1.476",
+      "0.57",
+      "3",
+      "1",
+      "0"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2023-24",
+      "year": 2024
+     },
+     "stats": [
+      "24",
+      "6",
+      "1.9",
+      "0.4",
+      "1.393",
+      "0.57",
+      "1",
+      "0",
+      "0"
+     ],
+     "teamId": "2294",
+     "teamSlug": "iowa-hawkeyes"
+    }
+   ],
+   "totals": [
+    "58",
+    "15",
+    "1.8",
+    "0.3",
+    "1.412",
+    "0.56",
+    "5",
+    "4",
+    "0"
+   ]
+  }
+ ],
+ "filters": [
+  {
+   "displayName": "League",
+   "name": "league",
+   "options": [
+    {
+     "displayValue": "Women's National Basketball Association",
+     "shortDisplayName": "WNBA",
+     "value": "wnba"
+    },
+    {
+     "displayValue": "NCAA Women's Basketball",
+     "shortDisplayName": "NCAAW",
+     "value": "womens-college-basketball"
+    }
+   ],
+   "value": "womens-college-basketball"
+  }
+ ],
+ "glossary": [
+  {
+   "abbreviation": "3P%",
+   "displayName": "3-Point Field Goal Percentage"
+  },
+  {
+   "abbreviation": "3PT",
+   "displayName": "3-Point Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "AST",
+   "displayName": "Assists Per Game"
+  },
+  {
+   "abbreviation": "AST/TO",
+   "displayName": "Assist To Turnover Ratio"
+  },
+  {
+   "abbreviation": "BLK",
+   "displayName": "Blocks Per Game"
+  },
+  {
+   "abbreviation": "DD2",
+   "displayName": "Double Double"
+  },
+  {
+   "abbreviation": "DQ",
+   "displayName": "Disqualifications"
+  },
+  {
+   "abbreviation": "DR",
+   "displayName": "Defensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "EJECT",
+   "displayName": "Ejections"
+  },
+  {
+   "abbreviation": "FG",
+   "displayName": "Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FG%",
+   "displayName": "Field Goal Percentage"
+  },
+  {
+   "abbreviation": "FT",
+   "displayName": "Free Throws Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FT%",
+   "displayName": "Free Throw Percentage"
+  },
+  {
+   "abbreviation": "GP",
+   "displayName": "Games Played"
+  },
+  {
+   "abbreviation": "GS",
+   "displayName": "Games Started"
+  },
+  {
+   "abbreviation": "MIN",
+   "displayName": "Minutes Per Game"
+  },
+  {
+   "abbreviation": "OR",
+   "displayName": "Offensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "PF",
+   "displayName": "Fouls Per Game"
+  },
+  {
+   "abbreviation": "PTS",
+   "displayName": "Points Per Game"
+  },
+  {
+   "abbreviation": "REB",
+   "displayName": "Rebounds Per Game"
+  },
+  {
+   "abbreviation": "SC-EFF",
+   "displayName": "Scoring Efficiency"
+  },
+  {
+   "abbreviation": "SH-EFF",
+   "displayName": "Shooting Efficiency"
+  },
+  {
+   "abbreviation": "STL",
+   "displayName": "Steals Per Game"
+  },
+  {
+   "abbreviation": "STL/TO",
+   "displayName": "Steal To Turnover Ratio"
+  },
+  {
+   "abbreviation": "TD3",
+   "displayName": "Triple Double"
+  },
+  {
+   "abbreviation": "TECH",
+   "displayName": "Technical Fouls"
+  },
+  {
+   "abbreviation": "TO",
+   "displayName": "Turnovers Per Game"
+  }
+ ],
+ "teams": {
+  "iowa-hawkeyes": {
+   "abbreviation": "IOWA",
+   "alternateColor": "fcd116",
+   "athletes": {},
+   "coaches": {},
+   "college": {},
+   "color": "231f20",
+   "displayName": "Iowa Hawkeyes",
+   "franchise": {},
+   "groups": {},
+   "guid": "9bed1254-7827-ba24-ba79-d07a473d1591",
+   "id": "2294",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/womens-college-basketball/team/_/id/2294/iowa-hawkeyes",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://m.espn.com/ncw/clubhouse?teamId=2294",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "mobile",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/womens-college-basketball/team/roster/_/id/2294",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:54~t:2294&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/womens-college-basketball/team/stats/_/id/2294",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:54~t:2294&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/womens-college-basketball/team/schedule/_/id/2294",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:54~t:2294&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/womens-college-basketball/team/photos/_/id/2294",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    }
+   ],
+   "location": "Iowa",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2294.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/9bed1254-7827-ba24-ba79-d07a473d1591/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Hawkeyes",
+   "nickname": "Iowa",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Iowa",
+   "slug": "iowa-hawkeyes",
+   "uid": "s:40~l:54~t:2294",
+   "venue": {
+    "address": {
+     "city": "Iowa City",
+     "state": "IA"
+    },
+    "fullName": "Carver-Hawkeye Arena",
+    "grass": false,
+    "id": "363",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/womens-college-basketball/day/363.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true
+   }
+  }
+ }
+}

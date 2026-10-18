@@ -74,9 +74,17 @@ ESPN endpoint.
 
 ### Returns {#espn_mch_player_stats-returns}
 
-**`return_parsed=True`** (default) — the output of `parse_athlete_stats`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit under keys it does not read (top level: categories, filters, glossary, teams).
+| col_name | type | description |
+|---|---|---|
+| `category` | character | ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names` list, so they differ by sport, and the other categories' columns are null on a row. |
+| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the category's career totals; the split's name on payloads that ship named splits. |
+| `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
+| `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
+| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row. |
+| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the "Career" row. |
+| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career" row. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

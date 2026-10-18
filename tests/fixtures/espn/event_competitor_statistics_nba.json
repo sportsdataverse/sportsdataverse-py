@@ -1,0 +1,1172 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/statistics/0?lang=en&region=us",
+ "competition": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793?lang=en&region=us"
+ },
+ "splits": {
+  "abbreviation": "Total",
+  "categories": [
+   {
+    "abbreviation": "def",
+    "athletes": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6606?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6606/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3448/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3907822/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6581?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6581/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064230?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064230/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064482?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064482/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3032977/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432179?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432179/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/2578239?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/2578239/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432190?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432190/statistics/0?lang=en&region=us"
+      }
+     }
+    ],
+    "displayName": "Defensive",
+    "name": "defensive",
+    "shortDisplayName": "Defensive",
+    "stats": [
+     {
+      "abbreviation": "BLK",
+      "description": "Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player.",
+      "displayName": "Blocks",
+      "displayValue": "7",
+      "name": "blocks",
+      "shortDisplayName": "BLK",
+      "value": 7.0
+     },
+     {
+      "abbreviation": "DR",
+      "description": "The number of times when the defense obtains the possession of the ball after a missed shot by the offense.",
+      "displayName": "Defensive Rebounds",
+      "displayValue": "31",
+      "name": "defensiveRebounds",
+      "shortDisplayName": "DREB",
+      "value": 31.0
+     },
+     {
+      "abbreviation": "STL",
+      "description": "The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player.",
+      "displayName": "Steals",
+      "displayValue": "8",
+      "name": "steals",
+      "shortDisplayName": "STL",
+      "value": 8.0
+     },
+     {
+      "abbreviation": "Points Conceded Off Turnovers",
+      "description": "The amount of points resulting from the possession following a turnover.",
+      "displayName": "Points Conceded Off Turnovers",
+      "displayValue": "6",
+      "name": "turnoverPoints",
+      "shortDisplayName": "Points Conceded Off Turnovers",
+      "value": 6.0
+     },
+     {
+      "abbreviation": "DR",
+      "description": "The average defensive rebounds per game.",
+      "displayName": "Defensive Rebounds Per Game",
+      "displayValue": "31.0",
+      "name": "avgDefensiveRebounds",
+      "shortDisplayName": "DRPG",
+      "value": 31.0
+     },
+     {
+      "abbreviation": "BLK",
+      "description": "The average blocks per game.",
+      "displayName": "Blocks Per Game",
+      "displayValue": "7.0",
+      "name": "avgBlocks",
+      "shortDisplayName": "BPG",
+      "value": 7.0
+     },
+     {
+      "abbreviation": "STL",
+      "description": "The average steals per game.",
+      "displayName": "Steals Per Game",
+      "displayValue": "8.0",
+      "name": "avgSteals",
+      "shortDisplayName": "SPG",
+      "value": 8.0
+     },
+     {
+      "abbreviation": "DR",
+      "description": "The average number of defensive rebounds per 48 minutes.",
+      "displayName": "Defensive Rebounds Per 48",
+      "displayValue": "0.0",
+      "name": "avg48DefensiveRebounds",
+      "shortDisplayName": "DREB/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "BLK",
+      "description": "The average number of blocks per 48 minutes.",
+      "displayName": "Blocks Per 48",
+      "displayValue": "0.0",
+      "name": "avg48Blocks",
+      "shortDisplayName": "BLK/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "STL",
+      "description": "The average number of steals per 48 minutes.",
+      "displayName": "Steals Per 48",
+      "displayValue": "0.0",
+      "name": "avg48Steals",
+      "shortDisplayName": "STL/48",
+      "value": 0.0
+     }
+    ],
+    "summary": ""
+   },
+   {
+    "abbreviation": "gen",
+    "athletes": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6606?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6606/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3448/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3907822/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6581?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6581/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064230?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064230/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064482?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064482/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3032977/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432179?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432179/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/2578239?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/2578239/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432190?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432190/statistics/0?lang=en&region=us"
+      }
+     }
+    ],
+    "displayName": "General",
+    "name": "general",
+    "shortDisplayName": "General",
+    "stats": [
+     {
+      "abbreviation": "LL",
+      "description": "Largest amount of points this team lead by at any one time.",
+      "displayName": "Largest Lead",
+      "displayValue": "15",
+      "name": "largestLead",
+      "shortDisplayName": "Lead",
+      "value": 15.0
+     },
+     {
+      "abbreviation": "DQ",
+      "description": "The number of times a player reached the foul limit.",
+      "displayName": "Disqualifications",
+      "displayValue": "0",
+      "name": "disqualifications",
+      "shortDisplayName": "DQ",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FLAG",
+      "description": "The number of fouls that the officials thought were unnecessary or excessive.",
+      "displayName": "Flagrant Fouls",
+      "displayValue": "0",
+      "name": "flagrantFouls",
+      "shortDisplayName": "FLAG",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "PF",
+      "description": "The number of times a player had illegal contact with the opponent.",
+      "displayName": "Fouls",
+      "displayValue": "18",
+      "name": "fouls",
+      "shortDisplayName": "PF",
+      "value": 18.0
+     },
+     {
+      "abbreviation": "EJECT",
+      "description": "The number of times a player or coach is removed from the game as a result of a serious offense.",
+      "displayName": "Ejections",
+      "displayValue": "1",
+      "name": "ejections",
+      "shortDisplayName": "EJECT",
+      "value": 1.0
+     },
+     {
+      "abbreviation": "TECH",
+      "description": "The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations).",
+      "displayName": "Technical Fouls",
+      "displayValue": "5",
+      "name": "technicalFouls",
+      "shortDisplayName": "TECH",
+      "value": 5.0
+     },
+     {
+      "abbreviation": "REB",
+      "description": "The total number of rebounds (offensive and defensive).",
+      "displayName": "Rebounds",
+      "displayValue": "36",
+      "name": "rebounds",
+      "shortDisplayName": "REB",
+      "value": 36.0
+     },
+     {
+      "abbreviation": "VORP",
+      "description": "Value Over Replacement Player.",
+      "displayName": "Value Over Replacement Player",
+      "displayValue": "0.0",
+      "name": "VORP",
+      "shortDisplayName": "VORP",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "MIN",
+      "description": "The average number of minutes per game.",
+      "displayName": "Minutes Per Game",
+      "displayValue": "0.0",
+      "name": "avgMinutes",
+      "shortDisplayName": "MPG",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "RTG",
+      "description": "Custom formula to rate the performance of a player based on points, assists, steals, blocks, turnovers, rebounds, three pointers, and free throws",
+      "displayName": "Rating",
+      "displayValue": "203.5",
+      "name": "NBARating",
+      "shortDisplayName": "Rating",
+      "value": 203.45
+     },
+     {
+      "abbreviation": "REB",
+      "description": "The average rebounds per game.",
+      "displayName": "Rebounds Per Game",
+      "displayValue": "36.0",
+      "name": "avgRebounds",
+      "shortDisplayName": "RPG",
+      "value": 36.0
+     },
+     {
+      "abbreviation": "PF",
+      "description": "The average fouls committed per game.",
+      "displayName": "Fouls Per Game",
+      "displayValue": "18.0",
+      "name": "avgFouls",
+      "shortDisplayName": "PFPG",
+      "value": 18.0
+     },
+     {
+      "abbreviation": "FLAGPG",
+      "description": "The average number of flagrant fouls per game.",
+      "displayName": "Flagrant Fouls Per Game",
+      "displayValue": "0.0",
+      "name": "avgFlagrantFouls",
+      "shortDisplayName": "FLAGPG",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "TECHPG",
+      "description": "The average number of technical fouls per game.",
+      "displayName": "Technical Fouls Per Game",
+      "displayValue": "5.0",
+      "name": "avgTechnicalFouls",
+      "shortDisplayName": "TECHPG",
+      "value": 5.0
+     },
+     {
+      "abbreviation": "EJCTPG",
+      "description": "The average ejections per game.",
+      "displayName": "Ejections Per Game",
+      "displayValue": "1.0",
+      "name": "avgEjections",
+      "shortDisplayName": "EJCTPG",
+      "value": 1.0
+     },
+     {
+      "abbreviation": "DQPG",
+      "description": "The average number of disqualifications per game.",
+      "displayName": "Disqualifications Per Game",
+      "displayValue": "0.0",
+      "name": "avgDisqualifications",
+      "shortDisplayName": "DQPG",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "AST/TO",
+      "description": "The average number of assists a player or team records per turnover",
+      "displayName": "Assist To Turnover Ratio",
+      "displayValue": "1.9",
+      "name": "assistTurnoverRatio",
+      "shortDisplayName": "AST/TO",
+      "value": 1.9
+     },
+     {
+      "abbreviation": "STL/PF",
+      "description": "The average number of steals a player or team records per foul committed.",
+      "displayName": "Steal To Foul Ratio",
+      "displayValue": "0.4",
+      "name": "stealFoulRatio",
+      "shortDisplayName": "STL/PF",
+      "value": 0.44444445
+     },
+     {
+      "abbreviation": "BLK/PF",
+      "description": "The average number of blocks a player or record per foul committed.",
+      "displayName": "Block To Foul Ratio",
+      "displayValue": "0.4",
+      "name": "blockFoulRatio",
+      "shortDisplayName": "BLK/PF",
+      "value": 0.3888889
+     },
+     {
+      "abbreviation": "TREBPG",
+      "description": "The average number of rebounds for a team per game.",
+      "displayName": "Team Rebounds Per Game",
+      "displayValue": "0.0",
+      "name": "avgTeamRebounds",
+      "shortDisplayName": "TREBPG",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "REB",
+      "description": "The total number of rebounds for a team or player",
+      "displayName": "Rebounds",
+      "displayValue": "36",
+      "name": "totalRebounds",
+      "shortDisplayName": "REB",
+      "value": 36.0
+     },
+     {
+      "abbreviation": "TECH",
+      "description": "The total number of technical fouls for a team or player",
+      "displayName": "Total Technical Fouls",
+      "displayValue": "5",
+      "name": "totalTechnicalFouls",
+      "shortDisplayName": "TECH",
+      "value": 5.0
+     },
+     {
+      "abbreviation": "AST/TO",
+      "description": "The number of assists per turnover for a team",
+      "displayName": "Assist To Turnover Ratio",
+      "displayValue": "0.0",
+      "name": "teamAssistTurnoverRatio",
+      "shortDisplayName": "AST/TO",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "STL/TO",
+      "description": "The number of steals per turnover",
+      "displayName": "Steal To Turnover Ratio",
+      "displayValue": "0.8",
+      "name": "stealTurnoverRatio",
+      "shortDisplayName": "STL/TO",
+      "value": 0.8
+     },
+     {
+      "abbreviation": "REB",
+      "description": "The average number of rebounds per 48 minutes.",
+      "displayName": "Rebounds Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48Rebounds",
+      "shortDisplayName": "REB/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "PF",
+      "description": "The average number of fouls committed per 48 minutes.",
+      "displayName": "Fouls Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48Fouls",
+      "shortDisplayName": "PF/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FLAG/48",
+      "description": "The average number of flagrant fouls committed per 48 minutes.",
+      "displayName": "Flagrant Fouls Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48FlagrantFouls",
+      "shortDisplayName": "FLAG/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "TECH/48",
+      "description": "The average number of technical fouls committed per 48 minutes.",
+      "displayName": "Technical Fouls Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48TechnicalFouls",
+      "shortDisplayName": "TECH/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "EJECT/48",
+      "description": "The average number of ejections per 48 minutes.",
+      "displayName": "Ejections Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48Ejections",
+      "shortDisplayName": "EJECT/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "DQ/48",
+      "description": "The average number of disqualifications per 48 minutes.",
+      "displayName": "Disqualifications Per 48 Minutes",
+      "displayValue": "0.0",
+      "name": "avg48Disqualifications",
+      "shortDisplayName": "DQ/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "GP",
+      "description": "Games Played",
+      "displayName": "Games Played",
+      "displayValue": "1",
+      "name": "gamesPlayed",
+      "shortDisplayName": "GP",
+      "value": 1.0
+     },
+     {
+      "abbreviation": "GS",
+      "description": "The number of games started by an athlete.",
+      "displayName": "Games Started",
+      "displayValue": "0",
+      "name": "gamesStarted",
+      "shortDisplayName": "GS",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "DD2",
+      "description": "The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots",
+      "displayName": "Double Double",
+      "displayValue": "0",
+      "name": "doubleDouble",
+      "shortDisplayName": "DBLDBL",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "TD3",
+      "description": "The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots",
+      "displayName": "Triple Double",
+      "displayValue": "0",
+      "name": "tripleDouble",
+      "shortDisplayName": "TRIDBL",
+      "value": 0.0
+     }
+    ],
+    "summary": ""
+   },
+   {
+    "abbreviation": "off",
+    "athletes": [
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6606?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6606/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3448?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3448/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3907822?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3907822/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/6581?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/6581/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064230?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064230/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3064482?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3064482/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/3032977?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/3032977/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432179?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432179/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/2578239?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/2578239/statistics/0?lang=en&region=us"
+      }
+     },
+     {
+      "athlete": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/athletes/4432190?lang=en&region=us"
+      },
+      "statistics": {
+       "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/15/roster/4432190/statistics/0?lang=en&region=us"
+      }
+     }
+    ],
+    "displayName": "Offensive",
+    "name": "offensive",
+    "shortDisplayName": "Offensive",
+    "stats": [
+     {
+      "abbreviation": "AST",
+      "description": "The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was \"assisting\" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist.",
+      "displayName": "Assists",
+      "displayValue": "19",
+      "name": "assists",
+      "shortDisplayName": "AST",
+      "value": 19.0
+     },
+     {
+      "abbreviation": "FG",
+      "description": "Field Goal makes and attempts.",
+      "displayName": "Field Goals",
+      "displayValue": "41/90",
+      "name": "fieldGoals",
+      "shortDisplayName": "FG",
+      "value": 0.455556
+     },
+     {
+      "abbreviation": "FGA",
+      "description": "The number of times a 2pt field goal was attempted.",
+      "displayName": "Field Goals Attempted",
+      "displayValue": "90",
+      "name": "fieldGoalsAttempted",
+      "shortDisplayName": "FGA",
+      "value": 90.0
+     },
+     {
+      "abbreviation": "FGM",
+      "description": "The number of times a 2pt field goal was made.",
+      "displayName": "Field Goals Made",
+      "displayValue": "41",
+      "name": "fieldGoalsMade",
+      "shortDisplayName": "FGM",
+      "value": 41.0
+     },
+     {
+      "abbreviation": "FG%",
+      "description": "The ratio of field goals made to field goals attempted: FGM / FGA",
+      "displayName": "Field Goal Percentage",
+      "displayValue": "45.6",
+      "name": "fieldGoalPct",
+      "shortDisplayName": "FG%",
+      "value": 45.555999755859375
+     },
+     {
+      "abbreviation": "FT",
+      "description": "Free Throw makes and attempts.",
+      "displayName": "Free Throws",
+      "displayValue": "27/32",
+      "name": "freeThrows",
+      "shortDisplayName": "FT",
+      "value": 0.84375
+     },
+     {
+      "abbreviation": "FT%",
+      "description": "The ratio of free throws made to free throws attempted: FTM / FTA",
+      "displayName": "Free Throw Percentage",
+      "displayValue": "84.4",
+      "name": "freeThrowPct",
+      "shortDisplayName": "FT%",
+      "value": 84.375
+     },
+     {
+      "abbreviation": "FTA",
+      "description": "The number of times a free throw was attempted.",
+      "displayName": "Free Throws Attempted",
+      "displayValue": "32",
+      "name": "freeThrowsAttempted",
+      "shortDisplayName": "FTA",
+      "value": 32.0
+     },
+     {
+      "abbreviation": "FTM",
+      "description": "The number of times a free throw was made.",
+      "displayName": "Free Throws Made",
+      "displayValue": "27",
+      "name": "freeThrowsMade",
+      "shortDisplayName": "FTM",
+      "value": 27.0
+     },
+     {
+      "abbreviation": "OR",
+      "description": "The number of times when the offense obtains the possession of the ball after a missed shot.",
+      "displayName": "Offensive Rebounds",
+      "displayValue": "5",
+      "name": "offensiveRebounds",
+      "shortDisplayName": "OREB",
+      "value": 5.0
+     },
+     {
+      "abbreviation": "PTS",
+      "description": "The number of points scored.",
+      "displayName": "Points",
+      "displayValue": "120",
+      "name": "points",
+      "shortDisplayName": "PTS",
+      "value": 120.0
+     },
+     {
+      "abbreviation": "TO",
+      "description": "The number of times a player loses possession to the other team.",
+      "displayName": "Turnovers",
+      "displayValue": "10",
+      "name": "turnovers",
+      "shortDisplayName": "TO",
+      "value": 10.0
+     },
+     {
+      "abbreviation": "3P%",
+      "description": "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+      "displayName": "3-Point Field Goal Percentage",
+      "displayValue": "29.7",
+      "name": "threePointPct",
+      "shortDisplayName": "3P%",
+      "value": 29.729999542236328
+     },
+     {
+      "abbreviation": "3PA",
+      "description": "The number of times a 3pt field goal was attempted.",
+      "displayName": "3-Point Field Goals Attempted",
+      "displayValue": "37",
+      "name": "threePointFieldGoalsAttempted",
+      "shortDisplayName": "3PA",
+      "value": 37.0
+     },
+     {
+      "abbreviation": "3PM",
+      "description": "The number of times a 3pt field goal was made.",
+      "displayName": "3-Point Field Goals Made",
+      "displayValue": "11",
+      "name": "threePointFieldGoalsMade",
+      "shortDisplayName": "3PM",
+      "value": 11.0
+     },
+     {
+      "abbreviation": "TTO",
+      "description": "The number of turnovers for the team.",
+      "displayName": "Team Turnovers",
+      "displayValue": "0",
+      "name": "teamTurnovers",
+      "shortDisplayName": "TTO",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "ToTO",
+      "description": "The number of turnovers plus team turnovers for the team.",
+      "displayName": "Total Turnovers",
+      "displayValue": "10",
+      "name": "totalTurnovers",
+      "shortDisplayName": "ToTO",
+      "value": 10.0
+     },
+     {
+      "abbreviation": "PIP",
+      "description": "The amount of points scored in the area known as \"the Paint\"(the rectangle between the foul line and the baseline).",
+      "displayName": "Points in the Paint",
+      "displayValue": "48",
+      "name": "pointsInPaint",
+      "shortDisplayName": "PIP",
+      "value": 48.0
+     },
+     {
+      "abbreviation": "BI",
+      "description": "How many points a player costs his team with his shooting compared with the league average on a per-40-minute basis. ((52.8 - TS%) x (FGA + (FTA x 0.44))) / (Min/40) .",
+      "displayName": "Brick Index",
+      "displayValue": "0.00",
+      "name": "brickIndex",
+      "shortDisplayName": "BI",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FBPs",
+      "description": "The number of points scored on fast breaks.",
+      "displayName": "Fast Break Points",
+      "displayValue": "13",
+      "name": "fastBreakPoints",
+      "shortDisplayName": "FBPs",
+      "value": 13.0
+     },
+     {
+      "abbreviation": "FGM",
+      "description": "The average field goals made per game.",
+      "displayName": "Average Field Goals Made",
+      "displayValue": "41.0",
+      "name": "avgFieldGoalsMade",
+      "shortDisplayName": "AFGM",
+      "value": 41.0
+     },
+     {
+      "abbreviation": "FGA",
+      "description": "The average field goals attempted per game.",
+      "displayName": "Average Field Goals Attempted",
+      "displayValue": "90.0",
+      "name": "avgFieldGoalsAttempted",
+      "shortDisplayName": "AFGA",
+      "value": 90.0
+     },
+     {
+      "abbreviation": "3PM",
+      "description": "The average three point field goals made per game.",
+      "displayName": "Average 3-Point Field Goals Made",
+      "displayValue": "11.0",
+      "name": "avgThreePointFieldGoalsMade",
+      "shortDisplayName": "A3PM",
+      "value": 11.0
+     },
+     {
+      "abbreviation": "3PA",
+      "description": "The average three point field goals attempted per game.",
+      "displayName": "Average 3-Point Field Goals Attempted",
+      "displayValue": "37.0",
+      "name": "avgThreePointFieldGoalsAttempted",
+      "shortDisplayName": "A3PA",
+      "value": 37.0
+     },
+     {
+      "abbreviation": "FTM",
+      "description": "The average free throw shots made per game.",
+      "displayName": "Average Free Throws Made",
+      "displayValue": "27.0",
+      "name": "avgFreeThrowsMade",
+      "shortDisplayName": "AFTM",
+      "value": 27.0
+     },
+     {
+      "abbreviation": "FTA",
+      "description": "The average free throw shots attempted per game.",
+      "displayName": "Average Free Throws Attempted",
+      "displayValue": "32.0",
+      "name": "avgFreeThrowsAttempted",
+      "shortDisplayName": "AFTA",
+      "value": 32.0
+     },
+     {
+      "abbreviation": "PTS",
+      "description": "The average number of points scored per game.",
+      "displayName": "Points Per Game",
+      "displayValue": "120.0",
+      "name": "avgPoints",
+      "shortDisplayName": "PPG",
+      "value": 120.0
+     },
+     {
+      "abbreviation": "OR",
+      "description": "The average offensive rebounds per game.",
+      "displayName": "Offensive Rebounds Per Game",
+      "displayValue": "5.0",
+      "name": "avgOffensiveRebounds",
+      "shortDisplayName": "ORPG",
+      "value": 5.0
+     },
+     {
+      "abbreviation": "AST",
+      "description": "The average assists per game.",
+      "displayName": "Assists Per Game",
+      "displayValue": "19.0",
+      "name": "avgAssists",
+      "shortDisplayName": "APG",
+      "value": 19.0
+     },
+     {
+      "abbreviation": "TO",
+      "description": "The average turnovers committed per game.",
+      "displayName": "Turnovers Per Game",
+      "displayValue": "10.0",
+      "name": "avgTurnovers",
+      "shortDisplayName": "TOPG",
+      "value": 10.0
+     },
+     {
+      "abbreviation": "OR%",
+      "description": "The percentage of the number of times they obtain the possession of the ball after a missed shot.",
+      "displayName": "Offensive Rebound Percentage",
+      "displayValue": "0.1",
+      "name": "offensiveReboundPct",
+      "shortDisplayName": "OR%",
+      "value": 0.10204082
+     },
+     {
+      "abbreviation": "EP",
+      "description": "An estimation of the number of possessions for a team or player.",
+      "displayName": "Estimated Possessions",
+      "displayValue": "107.8",
+      "name": "estimatedPossessions",
+      "shortDisplayName": "EP",
+      "value": 107.8
+     },
+     {
+      "abbreviation": "EP",
+      "description": "The average number of estimated possessions per game for a team or player.",
+      "displayName": "Estimated Possessions Per Game",
+      "displayValue": "107.8",
+      "name": "avgEstimatedPossessions",
+      "shortDisplayName": "AEP",
+      "value": 107.8
+     },
+     {
+      "abbreviation": "PPEP",
+      "description": "The number of points per estimated possession for a team or player",
+      "displayName": "Points Per Estimated Possession",
+      "displayValue": "1.1",
+      "name": "pointsPerEstimatedPossessions",
+      "shortDisplayName": "PPEP",
+      "value": 1.1131725
+     },
+     {
+      "abbreviation": "TTO",
+      "description": "The average number of turnovers for a team per game.",
+      "displayName": "Team Turnovers Per Game",
+      "displayValue": "0.0",
+      "name": "avgTeamTurnovers",
+      "shortDisplayName": "ATTO",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "ToTO",
+      "description": "The average number of total turnovers for a team per game.",
+      "displayName": "Total Turnovers Per Game",
+      "displayValue": "10.0",
+      "name": "avgTotalTurnovers",
+      "shortDisplayName": "AToTO",
+      "value": 10.0
+     },
+     {
+      "abbreviation": "3P%",
+      "description": "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+      "displayName": "3-Point Field Goal Percentage",
+      "displayValue": "29.7",
+      "name": "threePointFieldGoalPct",
+      "shortDisplayName": "3P%",
+      "value": 29.729729890823364
+     },
+     {
+      "abbreviation": "2PM",
+      "description": "The number of 2-point field goals made for a team or player.",
+      "displayName": "2-Point Field Goals Made",
+      "displayValue": "30.0",
+      "name": "twoPointFieldGoalsMade",
+      "shortDisplayName": "2PM",
+      "value": 30.0
+     },
+     {
+      "abbreviation": "2PA",
+      "description": "The number of 2-point field goals attempted for a team or player.",
+      "displayName": "2-Point Field Goals Attempted",
+      "displayValue": "53.0",
+      "name": "twoPointFieldGoalsAttempted",
+      "shortDisplayName": "2PA",
+      "value": 53.0
+     },
+     {
+      "abbreviation": "2PM",
+      "description": "The number of 2-point field goals made per game for a team or player.",
+      "displayName": "2-Point Field Goals Made per Game",
+      "displayValue": "30.0",
+      "name": "avgTwoPointFieldGoalsMade",
+      "shortDisplayName": "2PM",
+      "value": 30.0
+     },
+     {
+      "abbreviation": "2PA",
+      "description": "The number of 2-point field goals attempted per game for a team or player.",
+      "displayName": "2-Point Field Goals Attempted per Game",
+      "displayValue": "53.0",
+      "name": "avgTwoPointFieldGoalsAttempted",
+      "shortDisplayName": "2PA",
+      "value": 53.0
+     },
+     {
+      "abbreviation": "2P%",
+      "description": "The percentage of 2-points fields goals made by a team or player.",
+      "displayName": "2-Point Field Goal Percentage",
+      "displayValue": "56.6",
+      "name": "twoPointFieldGoalPct",
+      "shortDisplayName": "2P%",
+      "value": 56.603771448135376
+     },
+     {
+      "abbreviation": "SH-EFF",
+      "description": "The efficiency with which a team or player shoots the basketball.",
+      "displayName": "Shooting Efficiency",
+      "displayValue": "0.52",
+      "name": "shootingEfficiency",
+      "shortDisplayName": "SH-EFF",
+      "value": 0.51666665
+     },
+     {
+      "abbreviation": "SC-EFF",
+      "description": "The efficiency with which a team or player scores the basketball.",
+      "displayName": "Scoring Efficiency",
+      "displayValue": "1.333",
+      "name": "scoringEfficiency",
+      "shortDisplayName": "SC-EFF",
+      "value": 1.3333334
+     },
+     {
+      "abbreviation": "FGM/48",
+      "description": "The average number of fieldgoals made per 48 minutes.",
+      "displayName": "Fieldgoals Made Per 48",
+      "displayValue": "0.0",
+      "name": "avg48FieldGoalsMade",
+      "shortDisplayName": "FGM/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FGA/48",
+      "description": "The average number of fieldgoals attempted per 48 minutes.",
+      "displayName": "Fieldgoals Attempted Per 48",
+      "displayValue": "0.0",
+      "name": "avg48FieldGoalsAttempted",
+      "shortDisplayName": "FGA/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "3PM/48",
+      "description": "The average per number of 3-Pointers made per 48 minutes.",
+      "displayName": "3-Point Fieldgoals Made Per 48",
+      "displayValue": "0.0",
+      "name": "avg48ThreePointFieldGoalsMade",
+      "shortDisplayName": "3PM/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "3PA/48",
+      "description": "The average number of 3-pointers attempted per 48 minutes.",
+      "displayName": "3-Point Fieldgoals Attempted Per 48",
+      "displayValue": "0.0",
+      "name": "avg48ThreePointFieldGoalsAttempted",
+      "shortDisplayName": "3PA/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FTM/48",
+      "description": "The average number of Free Throws made per 48 minutes.",
+      "displayName": "Freethrows Made Per 48",
+      "displayValue": "0.0",
+      "name": "avg48FreeThrowsMade",
+      "shortDisplayName": "FTM/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "FTA/48",
+      "description": "The average number of free throws attempted per 48 minutes.",
+      "displayName": "Freethrows Attempted Per 48",
+      "displayValue": "0.0",
+      "name": "avg48FreeThrowsAttempted",
+      "shortDisplayName": "FTA/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "PTS",
+      "description": "The average number of points scored per 48 minutes.",
+      "displayName": "Points Scored Per 48",
+      "displayValue": "0.0",
+      "name": "avg48Points",
+      "shortDisplayName": "PTS/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "OR",
+      "description": "The average number of offenseive rebounds per 48 minutes.",
+      "displayName": "Offensive Rebounds Per 48",
+      "displayValue": "0.0",
+      "name": "avg48OffensiveRebounds",
+      "shortDisplayName": "OREB/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "AST",
+      "description": "The average number of assists per 48 minutes.",
+      "displayName": "Assists Per 48",
+      "displayValue": "0.0",
+      "name": "avg48Assists",
+      "shortDisplayName": "AST/48",
+      "value": 0.0
+     },
+     {
+      "abbreviation": "TO",
+      "description": "The average number of turnovers per 48 minutes.",
+      "displayName": "Turnovers",
+      "displayValue": "0.0",
+      "name": "avg48Turnovers",
+      "shortDisplayName": "TO/48",
+      "value": 0.0
+     }
+    ],
+    "summary": ""
+   }
+  ],
+  "id": "0",
+  "name": "All Splits",
+  "type": "total"
+ },
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/teams/15?lang=en&region=us"
+ }
+}

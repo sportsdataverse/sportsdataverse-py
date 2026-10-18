@@ -1336,7 +1336,7 @@ def espn_nfl_player_stats_v3(
     Bound to sport='football', league='nfl'.
 
     Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/stats``
-    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/4239/stats
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/3139477/stats
 
     Args:
         athlete_id: athlete_id path parameter.
@@ -1355,7 +1355,7 @@ def espn_nfl_player_stats_v3(
     Example:
         Quick start::
 
-            espn_nfl_player_stats_v3(athlete_id='4239')
+            espn_nfl_player_stats_v3(athlete_id='3139477')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

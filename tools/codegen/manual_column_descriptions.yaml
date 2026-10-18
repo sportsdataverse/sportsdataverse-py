@@ -1364,6 +1364,149 @@ as_of_split:
   pitcher: MLBAM player id of the pitcher.
   player_name: Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default
     mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search.
+athlete_stats:
+  category: ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL
+    "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names`
+    list, so they differ by sport, and the other categories' columns are null on a row.
+  split_name: Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the
+    category's career totals; the split's name on payloads that ship named splits.
+  split_category: Category of a named split; null on the Web v3 per-season rows.
+  split_value: Value of a named split; null on the Web v3 per-season rows.
+  season: Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row.
+  team_id: ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the
+    "Career" row.
+  position: Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career"
+    row.
+  games_played: Games played (GP), as ESPN ships it (a string).
+  games_started: Games started (GS).
+  avg_minutes: Minutes per game (MIN).
+  avg_field_goals_made_avg_field_goals_attempted: Field goals made-attempted per game (FG), one "made-attempted"
+    string (e.g., "3.9-9.0").
+  field_goal_pct: Field goal percentage (FG%), FGM / FGA x 100.
+  avg_three_point_field_goals_made_avg_three_point_field_goals_attempted: Three-point field goals made-attempted per
+    game (3PT), one "made-attempted" string.
+  three_point_field_goal_pct: Three-point field goal percentage (3P%), 3PM / 3PA x 100.
+  avg_free_throws_made_avg_free_throws_attempted: Free throws made-attempted per game (FT), one "made-attempted" string.
+  free_throw_pct: Free throw percentage (FT%), FTM / FTA x 100.
+  avg_offensive_rebounds: Offensive rebounds per game (OR).
+  avg_defensive_rebounds: Defensive rebounds per game (DR).
+  avg_rebounds: Rebounds per game (REB).
+  avg_assists: Assists per game (AST).
+  avg_blocks: Blocks per game (BLK).
+  avg_steals: Steals per game (STL).
+  avg_fouls: Personal fouls per game (PF).
+  avg_turnovers: Turnovers per game (TO).
+  avg_points: Points per game (PTS).
+  field_goals_made_field_goals_attempted: Season field goals made-attempted (FG), one "made-attempted" string.
+  three_point_field_goals_made_three_point_field_goals_attempted: Season three-point field goals made-attempted (3PT),
+    one "made-attempted" string.
+  free_throws_made_free_throws_attempted: Season free throws made-attempted (FT), one "made-attempted" string.
+  offensive_rebounds: Season offensive rebounds (OR).
+  defensive_rebounds: Season defensive rebounds (DR).
+  total_rebounds: Season rebounds (REB).
+  assists: Season assists (AST).
+  blocks: Season blocked shots (BLK).
+  steals: Season steals (STL).
+  fouls: Season personal fouls (PF).
+  turnovers: Season turnovers (TO).
+  points: Season points (PTS).
+  double_double: Games with double figures in two of points, rebounds, assists, steals and blocks (DD2).
+  triple_double: Games with double figures in three of points, rebounds, assists, steals and blocks (TD3).
+  disqualifications: Times the athlete fouled out (DQ).
+  ejections: Times the athlete was ejected (EJECT).
+  technical_fouls: Technical fouls called on the athlete (TECH).
+  flagrant_fouls: Flagrant fouls called on the athlete (FLAG).
+  assist_turnover_ratio: Assists per turnover (AST/TO).
+  steal_turnover_ratio: Steals per turnover (STL/TO).
+  scoring_efficiency: ESPN's scoring efficiency (SC-EFF).
+  shooting_efficiency: ESPN's shooting efficiency (SH-EFF).
+  rating: Player rating (RAT) as ESPN publishes it for college basketball.
+  off_warbr: Offensive wins above replacement (OWAR); ESPN's stat key `offWARBR`, snake-cased.
+  runs_created: Runs created (RC), an estimate of the runs a batter produced.
+  runs_created_per27_outs: Runs created per 27 outs (RC/27).
+  isolated_power: Isolated power (ISOP), slugging percentage minus batting average.
+  secondary_avg: Secondary average (SECA), extra bases from hits plus walks and stolen bases, per at bat.
+  at_bats_per_home_run: At bats per home run (AB/HR).
+  walks_per_plate_appearance: Walks per plate appearance (BB/PA).
+  walk_to_strikeout_ratio: Walks per strikeout (BB/K).
+  ground_balls: Ground-ball outs (GO).
+  fly_balls: Fly-ball outs (FO).
+  ground_to_fly_ratio: Ground outs per fly out (GO/FO).
+  at_bats: At bats (AB), plate appearances minus walks, hit-by-pitches and sacrifices.
+  runs: Runs scored (R).
+  hits: Hits (H), singles through home runs.
+  doubles: Doubles (2B), two-base hits.
+  triples: Triples (3B), three-base hits.
+  home_runs: Home runs (HR).
+  rb_is: Runs batted in (RBI); ESPN's stat key `RBIs`, snake-cased.
+  walks: Walks (BB), bases on balls.
+  hit_by_pitch: Times hit by a pitch (HBP).
+  strikeouts: Strikeouts (SO).
+  stolen_bases: Stolen bases (SB).
+  caught_stealing: Times caught stealing (CS).
+  avg: Batting average (AVG), hits / at bats.
+  on_base_pct: On-base percentage (OBP), (hits + walks + hit-by-pitches) / plate appearances.
+  slug_avg: Slugging percentage (SLG), total bases / at bats.
+  ops: On-base plus slugging (OPS).
+  warbr: Wins above replacement (WAR); ESPN's stat key `WARBR`, snake-cased.
+  plate_appearances: Plate appearances (PA).
+  pitches: Pitches seen (P).
+  pitches_per_plate_appearance: Pitches seen per plate appearance (P/PA).
+  extra_base_hits: Extra-base hits (XBH), doubles plus triples plus home runs.
+  total_bases: Total bases (TB), 1 per single, 2 per double, 3 per triple, 4 per home run.
+  intentional_walks: Intentional walks (IBB).
+  gid_ps: Grounded into double play (GIDP); ESPN's stat key `GIDPs`, snake-cased.
+  sac_hits: Sacrifice bunts (SH).
+  sac_flies: Sacrifice flies (SF).
+  stolen_base_pct: Stolen-base success percentage (SB%).
+  total_tackles: Total tackles (TOT), solo plus assisted.
+  solo_tackles: Unassisted tackles (SOLO).
+  assist_tackles: Assisted tackles (AST).
+  fumbles_forced: Forced fumbles (FF).
+  fumbles_recovered: Fumbles recovered (FR).
+  fumbles_recovered_yards: Return yards after fumble recoveries (YDS).
+  interception_yards: Return yards after interceptions (YDS).
+  avg_interception_yards: Average return yards per interception (AVG).
+  interception_touchdowns: Interceptions returned for a touchdown (TD).
+  long_interception: Longest interception return in yards (LNG).
+  passes_defended: Passes defended (PD).
+  stuffs: Runners stopped at or behind the line of scrimmage (STF).
+  stuff_yards: Yards lost on stuffs (STFYDS).
+  kicks_blocked: Kicks blocked (KB).
+  completions: Pass completions (CMP).
+  passing_attempts: Pass attempts (ATT).
+  completion_pct: Completion percentage (CMP%).
+  passing_yards: Passing yards (YDS).
+  yards_per_pass_attempt: Passing yards per attempt (AVG).
+  passing_touchdowns: Passing touchdowns (TD).
+  interceptions: Passes thrown that were intercepted (INT).
+  long_passing: Longest completed pass in yards (LNG).
+  sacks: Times sacked (SACK) on the passing line; a defender's sacks on the defensive line.
+  qb_rating: NFL passer rating (RTG).
+  adj_qbr: ESPN's adjusted Total QBR (QBR).
+  receptions: Receptions (REC).
+  receiving_targets: Times targeted by a pass (TGTS).
+  receiving_yards: Receiving yards (YDS).
+  yards_per_reception: Receiving yards per reception (AVG).
+  receiving_touchdowns: Receiving touchdowns (TD).
+  long_reception: Longest reception in yards (LNG).
+  receiving_first_downs: First downs gained by reception (FD).
+  receiving_fumbles: Fumbles after a reception (FUM).
+  receiving_fumbles_lost: Fumbles after a reception that the opponent recovered (LST).
+  rushing_attempts: Rushing attempts (CAR).
+  rushing_yards: Rushing yards (YDS).
+  yards_per_rush_attempt: Rushing yards per attempt (AVG).
+  rushing_touchdowns: Rushing touchdowns (TD).
+  long_rushing: Longest run in yards (LNG).
+  rushing_first_downs: First downs gained by rushing (FD).
+  rushing_fumbles: Fumbles on rushing plays (FUM).
+  rushing_fumbles_lost: Fumbles on rushing plays that the opponent recovered (LST).
+  return_touchdowns: Kick and punt return touchdowns (RET).
+  total_touchdowns: Touchdowns of every kind (TD).
+  total_two_point_convs: Successful two-point conversions (2PT).
+  kick_extra_points: Kicked extra points made (PAT).
+  field_goals: Field goals made (FG).
+  total_points: Points scored (PTS).
 away_team_record:
   goals_per_game: Average number of goals the team scored per road game over the recorded period.
 bchl_standings:
@@ -4262,6 +4405,14 @@ espn_wnba_schedule:
   home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
   home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+event_competitor_statistics:
+  split_name: Name of the stat split (Core v2 answers one, "All Splits").
+  category_name: ESPN stat category of the row (e.g., "defensive", "general", "offensive").
+  stat_name: ESPN stat key in camelCase (e.g., "blocks", "defensiveRebounds").
+  stat_abbreviation: Short label of the stat (e.g., "BLK").
+  stat_value: Numeric value of the team's stat in this game.
+  stat_display_value: The value as ESPN displays it (a string, e.g., "7").
+  stat_description: ESPN's one-sentence definition of the stat.
 expansion_draft_picks:
   draft_picks: JSON-serialized list of players selected by this franchise in the NHL expansion draft.
 fantasywidget:
@@ -16672,6 +16823,20 @@ qmjhl_season_id:
   season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+season_draft:
+  $ref: Core v2 URL of this draft resource.
+  display_name: Full name of the draft (e.g., "2024 National Basketball Association Draft").
+  links: JSON-encoded list of ESPN web links for the draft (href, rel, text).
+  number_of_rounds: Number of rounds in the draft.
+  positions: JSON-encoded list of the position resources the draft uses (Core v2 $ref links with abbreviations).
+  short_display_name: Short name of the draft (e.g., "2024 NBA Draft").
+  uid: ESPN universal id of the draft (e.g., "s:40~l:46~e:draft~y:2024").
+  year: Year the draft was held (e.g., 2024), the season in its Core v2 path.
+  needs: JSON-encoded list of the NFL teams' draft needs, one entry per team (its Core v2 team link and the positions it
+    needs, with abbreviations); NFL only.
+  athletes_$ref: Core v2 URL of the draft's athlete (prospect) collection.
+  rounds_$ref: Core v2 URL of the draft's rounds, which hold the picks.
+  status_$ref: Core v2 URL of the draft's status resource.
 sihf_game_goalie_stats:
   game_id: SIHF game id (Int64 join key; the details link of sihf_results, the searchQuery of the game wrappers).
   team_side: 'Side of the game the row belongs to: "home" or "away".'

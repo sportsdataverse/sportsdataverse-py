@@ -1,0 +1,3222 @@
+{
+ "categories": [
+  {
+   "descriptions": [
+    "Games Played",
+    "The number of games started by an athlete.",
+    "The average number of minutes per game.",
+    "The average field goals made per game.-The average field goals attempted per game.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The average three point field goals made per game.-The average three point field goals attempted per game.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The average free throw shots made per game.-The average free throw shots attempted per game.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The average offensive rebounds per game.",
+    "The average defensive rebounds per game.",
+    "The average rebounds per game.",
+    "The average assists per game.",
+    "The average blocks per game.",
+    "The average steals per game.",
+    "The average fouls committed per game.",
+    "The average turnovers committed per game.",
+    "The average number of points scored per game."
+   ],
+   "displayName": "Regular Season Averages",
+   "displayNames": [
+    "Games Played",
+    "Games Started",
+    "Minutes Per Game",
+    "Field Goals Made-Attempted Per Game",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted Per Game",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted Per Game",
+    "Free Throw Percentage",
+    "Offensive Rebounds Per Game",
+    "Defensive Rebounds Per Game",
+    "Rebounds Per Game",
+    "Assists Per Game",
+    "Blocks Per Game",
+    "Steals Per Game",
+    "Fouls Per Game",
+    "Turnovers Per Game",
+    "Points Per Game"
+   ],
+   "labels": [
+    "GP",
+    "GS",
+    "MIN",
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "OR",
+    "DR",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "PF",
+    "TO",
+    "PTS"
+   ],
+   "name": "averages",
+   "names": [
+    "gamesPlayed",
+    "gamesStarted",
+    "avgMinutes",
+    "avgFieldGoalsMade-avgFieldGoalsAttempted",
+    "fieldGoalPct",
+    "avgThreePointFieldGoalsMade-avgThreePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "avgFreeThrowsMade-avgFreeThrowsAttempted",
+    "freeThrowPct",
+    "avgOffensiveRebounds",
+    "avgDefensiveRebounds",
+    "avgRebounds",
+    "avgAssists",
+    "avgBlocks",
+    "avgSteals",
+    "avgFouls",
+    "avgTurnovers",
+    "avgPoints"
+   ],
+   "sortKey": "averages",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2010-11",
+      "year": 2011
+     },
+     "stats": [
+      "78",
+      "14",
+      "23.0",
+      "2.9-6.8",
+      "42.5",
+      "0.2-0.6",
+      "31.8",
+      "1.3-1.6",
+      "80.8",
+      "0.5",
+      "3.4",
+      "3.9",
+      "2.0",
+      "0.2",
+      "0.6",
+      "1.8",
+      "1.0",
+      "7.2"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2011-12",
+      "year": 2012
+     },
+     "stats": [
+      "65",
+      "20",
+      "26.4",
+      "4.0-9.1",
+      "44.6",
+      "0.2-0.8",
+      "22.4",
+      "1.1-1.7",
+      "67.6",
+      "0.4",
+      "5.4",
+      "5.8",
+      "2.8",
+      "0.3",
+      "0.6",
+      "1.8",
+      "1.6",
+      "9.4"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2012-13",
+      "year": 2013
+     },
+     "stats": [
+      "82",
+      "82",
+      "35.3",
+      "5.4-12.8",
+      "41.9",
+      "0.7-1.9",
+      "36.5",
+      "1.9-2.5",
+      "74.0",
+      "0.7",
+      "5.6",
+      "6.3",
+      "4.3",
+      "0.2",
+      "0.9",
+      "2.4",
+      "2.3",
+      "13.3"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "54",
+      "54",
+      "34.9",
+      "6.6-15.4",
+      "42.8",
+      "0.7-2.4",
+      "28.8",
+      "3.5-4.2",
+      "82.9",
+      "0.9",
+      "5.0",
+      "6.0",
+      "3.7",
+      "0.1",
+      "1.0",
+      "2.7",
+      "2.9",
+      "17.4"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "27",
+      "2",
+      "21.1",
+      "2.9-7.0",
+      "41.1",
+      "0.4-0.9",
+      "50.0",
+      "0.9-1.3",
+      "70.6",
+      "0.4",
+      "2.7",
+      "3.2",
+      "2.4",
+      "0.1",
+      "0.4",
+      "1.8",
+      "1.3",
+      "7.1"
+     ],
+     "teamId": "11",
+     "teamSlug": "indiana-pacers"
+    },
+    {
+     "displayName": "2013-14  Totals",
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "81",
+      "56",
+      "30.3",
+      "5.4-12.6",
+      "42.5",
+      "0.6-1.9",
+      "32.1",
+      "2.6-3.2",
+      "81.3",
+      "0.8",
+      "4.3",
+      "5.0",
+      "3.2",
+      "0.1",
+      "0.8",
+      "2.4",
+      "2.3",
+      "14.0"
+     ],
+     "teamSlug": "2013-14 Totals"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2014-15",
+      "year": 2015
+     },
+     "stats": [
+      "82",
+      "57",
+      "27.6",
+      "3.9-9.1",
+      "42.9",
+      "0.4-1.5",
+      "27.7",
+      "1.3-1.7",
+      "75.2",
+      "0.5",
+      "4.6",
+      "5.1",
+      "5.5",
+      "0.2",
+      "1.0",
+      "2.2",
+      "2.4",
+      "9.5"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2015-16",
+      "year": 2016
+     },
+     "stats": [
+      "81",
+      "12",
+      "28.0",
+      "4.2-9.3",
+      "45.6",
+      "0.2-1.0",
+      "24.1",
+      "1.8-2.2",
+      "82.7",
+      "0.6",
+      "4.3",
+      "4.9",
+      "4.4",
+      "0.3",
+      "1.0",
+      "1.7",
+      "2.1",
+      "10.5"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2016-17",
+      "year": 2017
+     },
+     "stats": [
+      "65",
+      "12",
+      "25.5",
+      "3.6-8.5",
+      "42.6",
+      "0.5-1.8",
+      "26.3",
+      "1.3-1.6",
+      "82.5",
+      "0.6",
+      "3.2",
+      "3.8",
+      "3.2",
+      "0.4",
+      "0.8",
+      "1.9",
+      "1.5",
+      "9.0"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2017-18",
+      "year": 2018
+     },
+     "stats": [
+      "79",
+      "40",
+      "25.7",
+      "3.3-7.3",
+      "44.7",
+      "0.5-1.7",
+      "31.8",
+      "1.2-1.4",
+      "85.0",
+      "0.4",
+      "2.7",
+      "3.1",
+      "2.2",
+      "0.4",
+      "0.6",
+      "2.1",
+      "1.3",
+      "8.2"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2018-19",
+      "year": 2019
+     },
+     "stats": [
+      "73",
+      "2",
+      "22.0",
+      "2.8-6.1",
+      "46.0",
+      "0.2-0.7",
+      "21.2",
+      "1.0-1.5",
+      "70.8",
+      "0.5",
+      "4.0",
+      "4.5",
+      "3.9",
+      "0.2",
+      "0.5",
+      "1.5",
+      "1.6",
+      "6.8"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2019-20",
+      "year": 2020
+     },
+     "stats": [
+      "19",
+      "0",
+      "13.2",
+      "1.3-3.5",
+      "37.3",
+      "0.0-0.3",
+      "0.0",
+      "0.6-0.7",
+      "85.7",
+      "0.4",
+      "1.6",
+      "2.0",
+      "2.0",
+      "0.4",
+      "0.5",
+      "1.1",
+      "1.4",
+      "3.3"
+     ],
+     "teamId": "1",
+     "teamSlug": "atlanta-hawks"
+    }
+   ],
+   "totals": [
+    "705",
+    "295",
+    "26.9",
+    "3.9-9.0",
+    "43.4",
+    "0.4-1.3",
+    "29.4",
+    "1.5-1.9",
+    "78.2",
+    "0.6",
+    "4.1",
+    "4.6",
+    "3.5",
+    "0.3",
+    "0.8",
+    "2.0",
+    "1.8",
+    "9.7"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times a 2pt field goal was made.-The number of times a 2pt field goal was attempted.",
+    "The ratio of field goals made to field goals attempted: FGM / FGA",
+    "The number of times a 3pt field goal was made.-The number of times a 3pt field goal was attempted.",
+    "The ratio of 3pt field goals made to 3pt field goals attempted: 3PM / 3PA.",
+    "The number of times a free throw was made.-The number of times a free throw was attempted.",
+    "The ratio of free throws made to free throws attempted: FTM / FTA",
+    "The number of times when the offense obtains the possession of the ball after a missed shot.",
+    "The number of times when the defense obtains the possession of the ball after a missed shot by the offense.",
+    "The total number of rebounds for a team or player",
+    "The number of times a player who passes the ball to a teammate in a way that leads to a score by field goal, meaning that he or she was \"assisting\" in the basket. There is some judgment involved in deciding whether a passer should be credited with an assist.",
+    "Short for blocked shot, number of times when a defensive player legally deflects a field goal attempt from an offensive player.",
+    "The number of times a defensive player forced a turnover by intercepting or deflecting a pass or a dribble of an offensive player.",
+    "The number of times a player had illegal contact with the opponent.",
+    "The number of times a player loses possession to the other team.",
+    "The number of points scored."
+   ],
+   "displayName": "Regular Season Totals",
+   "displayNames": [
+    "Field Goals Made-Attempted",
+    "Field Goal Percentage",
+    "3-Point Field Goals Made-Attempted",
+    "3-Point Field Goal Percentage",
+    "Free Throws Made-Attempted",
+    "Free Throw Percentage",
+    "Offensive Rebounds",
+    "Defensive Rebounds",
+    "Rebounds",
+    "Assists",
+    "Blocks",
+    "Steals",
+    "Fouls",
+    "Turnovers",
+    "Points"
+   ],
+   "labels": [
+    "FG",
+    "FG%",
+    "3PT",
+    "3P%",
+    "FT",
+    "FT%",
+    "OR",
+    "DR",
+    "REB",
+    "AST",
+    "BLK",
+    "STL",
+    "PF",
+    "TO",
+    "PTS"
+   ],
+   "name": "totals",
+   "names": [
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "fieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "threePointFieldGoalPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "freeThrowPct",
+    "offensiveRebounds",
+    "defensiveRebounds",
+    "totalRebounds",
+    "assists",
+    "blocks",
+    "steals",
+    "fouls",
+    "turnovers",
+    "points"
+   ],
+   "sortKey": "totals",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2010-11",
+      "year": 2011
+     },
+     "stats": [
+      "225-529",
+      "42.5",
+      "14-44",
+      "31.8",
+      "101-125",
+      "80.8",
+      "42",
+      "264",
+      "306",
+      "159",
+      "14",
+      "49",
+      "138",
+      "80",
+      "565"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2011-12",
+      "year": 2012
+     },
+     "stats": [
+      "263-590",
+      "44.6",
+      "11-49",
+      "22.4",
+      "73-108",
+      "67.6",
+      "27",
+      "349",
+      "376",
+      "180",
+      "20",
+      "40",
+      "117",
+      "105",
+      "610"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2012-13",
+      "year": 2013
+     },
+     "stats": [
+      "441-1053",
+      "41.9",
+      "58-159",
+      "36.5",
+      "154-208",
+      "74.0",
+      "56",
+      "461",
+      "517",
+      "354",
+      "17",
+      "71",
+      "197",
+      "187",
+      "1094"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "356-831",
+      "42.8",
+      "38-132",
+      "28.8",
+      "189-228",
+      "82.9",
+      "50",
+      "272",
+      "322",
+      "198",
+      "5",
+      "56",
+      "147",
+      "155",
+      "939"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "78-190",
+      "41.1",
+      "12-24",
+      "50.0",
+      "24-34",
+      "70.6",
+      "12",
+      "74",
+      "86",
+      "64",
+      "2",
+      "11",
+      "48",
+      "34",
+      "192"
+     ],
+     "teamId": "11",
+     "teamSlug": "indiana-pacers"
+    },
+    {
+     "displayName": "2013-14  Totals",
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "434-1021",
+      "42.5",
+      "50-156",
+      "32.1",
+      "213-262",
+      "81.3",
+      "62",
+      "346",
+      "408",
+      "262",
+      "7",
+      "67",
+      "195",
+      "189",
+      "1131"
+     ],
+     "teamSlug": "2013-14 Totals"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2014-15",
+      "year": 2015
+     },
+     "stats": [
+      "320-746",
+      "42.9",
+      "33-119",
+      "27.7",
+      "106-141",
+      "75.2",
+      "40",
+      "377",
+      "417",
+      "449",
+      "19",
+      "83",
+      "180",
+      "198",
+      "779"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2015-16",
+      "year": 2016
+     },
+     "stats": [
+      "343-753",
+      "45.6",
+      "20-83",
+      "24.1",
+      "148-179",
+      "82.7",
+      "50",
+      "347",
+      "397",
+      "359",
+      "28",
+      "80",
+      "139",
+      "169",
+      "854"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2016-17",
+      "year": 2017
+     },
+     "stats": [
+      "235-552",
+      "42.6",
+      "31-118",
+      "26.3",
+      "85-103",
+      "82.5",
+      "36",
+      "211",
+      "247",
+      "205",
+      "24",
+      "53",
+      "121",
+      "100",
+      "586"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2017-18",
+      "year": 2018
+     },
+     "stats": [
+      "258-577",
+      "44.7",
+      "42-132",
+      "31.8",
+      "91-107",
+      "85.0",
+      "30",
+      "214",
+      "244",
+      "173",
+      "29",
+      "47",
+      "163",
+      "99",
+      "649"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2018-19",
+      "year": 2019
+     },
+     "stats": [
+      "204-443",
+      "46.0",
+      "11-52",
+      "21.2",
+      "75-106",
+      "70.8",
+      "37",
+      "291",
+      "328",
+      "283",
+      "18",
+      "33",
+      "110",
+      "114",
+      "494"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2019-20",
+      "year": 2020
+     },
+     "stats": [
+      "25-67",
+      "37.3",
+      "0-5",
+      "0.0",
+      "12-14",
+      "85.7",
+      "8",
+      "30",
+      "38",
+      "38",
+      "8",
+      "9",
+      "20",
+      "26",
+      "62"
+     ],
+     "teamId": "1",
+     "teamSlug": "atlanta-hawks"
+    }
+   ],
+   "totals": [
+    "2748-6331",
+    "43.4",
+    "270-917",
+    "29.4",
+    "1058-1353",
+    "78.2",
+    "388",
+    "2890",
+    "3278",
+    "2462",
+    "184",
+    "532",
+    "1380",
+    "1267",
+    "6824"
+   ]
+  },
+  {
+   "descriptions": [
+    "The number of times double digit values were accumulated in 2 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The number of times double digit values were accumulated in 3 of the following categories: points, rebounds, assists, steals, and blocked shots",
+    "The number of times a player reached the foul limit.",
+    "The number of times a player or coach is removed from the game as a result of a serious offense.",
+    "The number of times an player or coach was called for a technical foul (unsportsmanlike conduct or violations).",
+    "The number of fouls that the officials thought were unnecessary or excessive.",
+    "The average number of assists a player or team records per turnover",
+    "The number of steals per turnover",
+    "The efficiency with which a team or player scores the basketball.",
+    "The efficiency with which a team or player shoots the basketball."
+   ],
+   "displayName": "Regular Season Misc Totals",
+   "displayNames": [
+    "Double Double",
+    "Triple Double",
+    "Disqualifications",
+    "Ejections",
+    "Technical Fouls",
+    "Flagrant Fouls",
+    "Assist To Turnover Ratio",
+    "Steal To Turnover Ratio",
+    "Scoring Efficiency",
+    "Shooting Efficiency"
+   ],
+   "labels": [
+    "DD2",
+    "TD3",
+    "DQ",
+    "EJECT",
+    "TECH",
+    "FLAG",
+    "AST/TO",
+    "STL/TO",
+    "SC-EFF",
+    "SH-EFF"
+   ],
+   "name": "miscellaneous",
+   "names": [
+    "doubleDouble",
+    "tripleDouble",
+    "disqualifications",
+    "ejections",
+    "technicalFouls",
+    "flagrantFouls",
+    "assistTurnoverRatio",
+    "stealTurnoverRatio",
+    "scoringEfficiency",
+    "shootingEfficiency"
+   ],
+   "sortKey": "miscellaneous",
+   "statistics": [
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2010-11",
+      "year": 2011
+     },
+     "stats": [
+      "2",
+      "0",
+      "0",
+      "0",
+      "1",
+      "0",
+      "2.0",
+      "0.6",
+      "1.068",
+      "0.44"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2011-12",
+      "year": 2012
+     },
+     "stats": [
+      "5",
+      "0",
+      "1",
+      "0",
+      "3",
+      "0",
+      "1.7",
+      "0.4",
+      "1.034",
+      "0.46"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2012-13",
+      "year": 2013
+     },
+     "stats": [
+      "14",
+      "0",
+      "1",
+      "0",
+      "5",
+      "1",
+      "1.9",
+      "0.4",
+      "1.039",
+      "0.45"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "9",
+      "0",
+      "3",
+      "0",
+      "6",
+      "0",
+      "1.3",
+      "0.4",
+      "1.130",
+      "0.45"
+     ],
+     "teamId": "20",
+     "teamSlug": "philadelphia-76ers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "0",
+      "0",
+      "0",
+      "0",
+      "3",
+      "0",
+      "1.9",
+      "0.3",
+      "1.011",
+      "0.44"
+     ],
+     "teamId": "11",
+     "teamSlug": "indiana-pacers"
+    },
+    {
+     "displayName": "2013-14  Totals",
+     "position": "G",
+     "season": {
+      "displayName": "2013-14",
+      "year": 2014
+     },
+     "stats": [
+      "9",
+      "0",
+      "3",
+      "0",
+      "9",
+      "0",
+      "1.4",
+      "0.4",
+      "1.108",
+      "0.45"
+     ],
+     "teamSlug": "2013-14 Totals"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2014-15",
+      "year": 2015
+     },
+     "stats": [
+      "7",
+      "3",
+      "1",
+      "1",
+      "3",
+      "1",
+      "2.3",
+      "0.4",
+      "1.044",
+      "0.45"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2015-16",
+      "year": 2016
+     },
+     "stats": [
+      "4",
+      "0",
+      "0",
+      "1",
+      "5",
+      "0",
+      "2.1",
+      "0.5",
+      "1.134",
+      "0.47"
+     ],
+     "teamId": "2",
+     "teamSlug": "boston-celtics"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2016-17",
+      "year": 2017
+     },
+     "stats": [
+      "2",
+      "0",
+      "0",
+      "1",
+      "4",
+      "0",
+      "2.1",
+      "0.5",
+      "1.062",
+      "0.45"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2017-18",
+      "year": 2018
+     },
+     "stats": [
+      "0",
+      "0",
+      "1",
+      "0",
+      "4",
+      "1",
+      "1.7",
+      "0.5",
+      "1.125",
+      "0.48"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2018-19",
+      "year": 2019
+     },
+     "stats": [
+      "3",
+      "2",
+      "0",
+      "0",
+      "0",
+      "0",
+      "2.5",
+      "0.3",
+      "1.115",
+      "0.47"
+     ],
+     "teamId": "22",
+     "teamSlug": "portland-trail-blazers"
+    },
+    {
+     "position": "G",
+     "season": {
+      "displayName": "2019-20",
+      "year": 2020
+     },
+     "stats": [
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "0",
+      "1.5",
+      "0.3",
+      "0.925",
+      "0.37"
+     ],
+     "teamId": "1",
+     "teamSlug": "atlanta-hawks"
+    }
+   ],
+   "totals": [
+    "46",
+    "5",
+    "7",
+    "3",
+    "34",
+    "3",
+    "1.9",
+    "0.4",
+    "1.078",
+    "0.46"
+   ]
+  }
+ ],
+ "filters": [
+  {
+   "displayName": "League",
+   "name": "league",
+   "options": [
+    {
+     "displayValue": "NCAA Men's Basketball",
+     "shortDisplayName": "NCAAM",
+     "value": "mens-college-basketball"
+    },
+    {
+     "displayValue": "National Basketball Association",
+     "shortDisplayName": "NBA",
+     "value": "nba"
+    }
+   ],
+   "value": "nba"
+  },
+  {
+   "displayName": "Season",
+   "name": "seasontype",
+   "options": [
+    {
+     "displayValue": "Regular Season",
+     "value": "2"
+    },
+    {
+     "displayValue": "Postseason",
+     "value": "3"
+    }
+   ],
+   "value": "2"
+  }
+ ],
+ "glossary": [
+  {
+   "abbreviation": "3P%",
+   "displayName": "3-Point Field Goal Percentage"
+  },
+  {
+   "abbreviation": "3PT",
+   "displayName": "3-Point Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "AST",
+   "displayName": "Assists Per Game"
+  },
+  {
+   "abbreviation": "AST/TO",
+   "displayName": "Assist To Turnover Ratio"
+  },
+  {
+   "abbreviation": "BLK",
+   "displayName": "Blocks Per Game"
+  },
+  {
+   "abbreviation": "DD2",
+   "displayName": "Double Double"
+  },
+  {
+   "abbreviation": "DQ",
+   "displayName": "Disqualifications"
+  },
+  {
+   "abbreviation": "DR",
+   "displayName": "Defensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "EJECT",
+   "displayName": "Ejections"
+  },
+  {
+   "abbreviation": "FG",
+   "displayName": "Field Goals Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FG%",
+   "displayName": "Field Goal Percentage"
+  },
+  {
+   "abbreviation": "FLAG",
+   "displayName": "Flagrant Fouls"
+  },
+  {
+   "abbreviation": "FT",
+   "displayName": "Free Throws Made-Attempted Per Game"
+  },
+  {
+   "abbreviation": "FT%",
+   "displayName": "Free Throw Percentage"
+  },
+  {
+   "abbreviation": "GP",
+   "displayName": "Games Played"
+  },
+  {
+   "abbreviation": "GS",
+   "displayName": "Games Started"
+  },
+  {
+   "abbreviation": "MIN",
+   "displayName": "Minutes Per Game"
+  },
+  {
+   "abbreviation": "OR",
+   "displayName": "Offensive Rebounds Per Game"
+  },
+  {
+   "abbreviation": "PF",
+   "displayName": "Fouls Per Game"
+  },
+  {
+   "abbreviation": "PTS",
+   "displayName": "Points Per Game"
+  },
+  {
+   "abbreviation": "REB",
+   "displayName": "Rebounds Per Game"
+  },
+  {
+   "abbreviation": "SC-EFF",
+   "displayName": "Scoring Efficiency"
+  },
+  {
+   "abbreviation": "SH-EFF",
+   "displayName": "Shooting Efficiency"
+  },
+  {
+   "abbreviation": "STL",
+   "displayName": "Steals Per Game"
+  },
+  {
+   "abbreviation": "STL/TO",
+   "displayName": "Steal To Turnover Ratio"
+  },
+  {
+   "abbreviation": "TD3",
+   "displayName": "Triple Double"
+  },
+  {
+   "abbreviation": "TECH",
+   "displayName": "Technical Fouls"
+  },
+  {
+   "abbreviation": "TO",
+   "displayName": "Turnovers Per Game"
+  }
+ ],
+ "teams": {
+  "atlanta-hawks": {
+   "abbreviation": "ATL",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "fdb927",
+   "coaches": {},
+   "color": "002B5C",
+   "displayName": "Atlanta Hawks",
+   "franchise": {},
+   "groups": {},
+   "guid": "15096a54-f015-c987-5ec8-55afedf6272f",
+   "id": "1",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nba/team/_/name/atl/atlanta-hawks",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/roster/_/name/atl/atlanta-hawks",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:1&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/stats/_/name/atl/atlanta-hawks",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:1&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/schedule/_/name/atl",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:1&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/photos/_/name/atl",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/atlanta-hawks-tickets--sports-nba-basketball/performer/52?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nba/draft/teams/_/name/atl/atlanta-hawks",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/transactions/_/name/atl",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/injuries/_/name/atl",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/depth/_/name/atl",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:1&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Atlanta",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/atl.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/atl.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/atl.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/atl.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/15096a54-f015-c987-5ec8-55afedf6272f/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Hawks",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Hawks",
+   "slug": "atlanta-hawks",
+   "uid": "s:40~l:46~t:1",
+   "venue": {
+    "address": {
+     "city": "Atlanta",
+     "state": "GA"
+    },
+    "fullName": "State Farm Arena",
+    "grass": false,
+    "id": "1827",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nba/day/1827.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true,
+    "shortName": "State Farm Arena"
+   }
+  },
+  "boston-celtics": {
+   "abbreviation": "BOS",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "ffffff",
+   "coaches": {},
+   "color": "006532",
+   "displayName": "Boston Celtics",
+   "franchise": {},
+   "groups": {},
+   "guid": "2ca761df-5f60-b2e9-22ed-e099c46d889b",
+   "id": "2",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nba/team/_/name/bos/boston-celtics",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/roster/_/name/bos/boston-celtics",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:2&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/stats/_/name/bos/boston-celtics",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:2&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/schedule/_/name/bos",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:2&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/photos/_/name/bos",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/boston-celtics-tickets--sports-nba-basketball/performer/105?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nba/draft/teams/_/name/bos/boston-celtics",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/transactions/_/name/bos",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/injuries/_/name/bos",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/depth/_/name/bos",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:2&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Boston",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/bos.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/bos.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/bos.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/bos.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/2ca761df-5f60-b2e9-22ed-e099c46d889b/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Celtics",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Celtics",
+   "slug": "boston-celtics",
+   "uid": "s:40~l:46~t:2",
+   "venue": {
+    "address": {
+     "city": "Boston",
+     "state": "MA"
+    },
+    "fullName": "TD Garden",
+    "grass": false,
+    "id": "1824",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nba/day/1824.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true,
+    "shortName": "TD Banknorth Garden"
+   }
+  },
+  "indiana-pacers": {
+   "abbreviation": "IND",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "ffd520",
+   "coaches": {},
+   "color": "061642",
+   "displayName": "Indiana Pacers",
+   "franchise": {},
+   "groups": {},
+   "guid": "547fc042-3e02-4795-9637-9ab84322b625",
+   "id": "11",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nba/team/_/name/ind/indiana-pacers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/roster/_/name/ind/indiana-pacers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:11&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/stats/_/name/ind/indiana-pacers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:11&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/schedule/_/name/ind",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:11&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/photos/_/name/ind",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/indiana-pacers-tickets--sports-nba-basketball/performer/369?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nba/draft/teams/_/name/ind/indiana-pacers",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/transactions/_/name/ind",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/injuries/_/name/ind",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/depth/_/name/ind",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:11&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Indiana",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/ind.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/ind.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/ind.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/ind.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/547fc042-3e02-4795-9637-9ab84322b625/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Pacers",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Pacers",
+   "slug": "indiana-pacers",
+   "uid": "s:40~l:46~t:11",
+   "venue": {
+    "address": {
+     "city": "Indianapolis",
+     "state": "IN"
+    },
+    "fullName": "Gainbridge Fieldhouse",
+    "grass": false,
+    "id": "2183",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nba/day/2183.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true,
+    "shortName": "Bankers Life Fieldhouse"
+   }
+  },
+  "philadelphia-76ers": {
+   "abbreviation": "PHI",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "e01234",
+   "coaches": {},
+   "color": "000000",
+   "displayName": "Philadelphia 76ers",
+   "franchise": {},
+   "groups": {},
+   "guid": "ca1685ed-b799-53e4-7924-e58ea6eb8f3a",
+   "id": "20",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nba/team/_/name/phi/philadelphia-76ers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/roster/_/name/phi/philadelphia-76ers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:20&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/stats/_/name/phi/philadelphia-76ers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:20&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/schedule/_/name/phi",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:20&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/photos/_/name/phi",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/philadelphia-76ers-tickets--sports-nba-basketball/performer/668?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nba/draft/teams/_/name/phi/philadelphia-76ers",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/transactions/_/name/phi",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/injuries/_/name/phi",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/depth/_/name/phi",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:20&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Philadelphia",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/phi.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/phi.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/phi.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/phi.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ca1685ed-b799-53e4-7924-e58ea6eb8f3a/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "76ers",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "76ers",
+   "slug": "philadelphia-76ers",
+   "uid": "s:40~l:46~t:20",
+   "venue": {
+    "address": {
+     "city": "Philadelphia",
+     "state": "PA"
+    },
+    "fullName": "Xfinity Mobile Arena",
+    "grass": false,
+    "id": "1845",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nba/day/1845.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true,
+    "shortName": "Wells Fargo Center"
+   }
+  },
+  "portland-trail-blazers": {
+   "abbreviation": "POR",
+   "againstTheSpreadRecords": {},
+   "alternateColor": "000000",
+   "coaches": {},
+   "color": "000000",
+   "displayName": "Portland Trail Blazers",
+   "franchise": {},
+   "groups": {},
+   "guid": "ed294c02-3c44-db14-9e06-1b4e8cff9558",
+   "id": "22",
+   "isActive": true,
+   "isAllStar": false,
+   "links": [
+    {
+     "href": "https://www.espn.com/nba/team/_/name/por/portland-trail-blazers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "clubhouse",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Clubhouse",
+     "text": "Clubhouse"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/roster/_/name/por/portland-trail-blazers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:22&section=roster",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "roster",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Roster",
+     "text": "Roster"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/stats/_/name/por/portland-trail-blazers",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:22&section=stats",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "stats",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Statistics",
+     "text": "Statistics"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/schedule/_/name/por",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:22&section=scores",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "schedule",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Schedule",
+     "text": "Schedule"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/photos/_/name/por",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "photos",
+      "desktop",
+      "team"
+     ],
+     "shortText": "photos",
+     "text": "photos"
+    },
+    {
+     "href": "https://www.vividseats.com/portland-trail-blazers-tickets--sports-nba-basketball/performer/690?wsUser=717",
+     "isExternal": true,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "tickets",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Tickets",
+     "text": "Tickets"
+    },
+    {
+     "href": "https://www.espn.com/nba/draft/teams/_/name/por/portland-trail-blazers",
+     "isExternal": false,
+     "isPremium": true,
+     "language": "en",
+     "rel": [
+      "draftpicks",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Draft Picks",
+     "text": "Draft Picks"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/transactions/_/name/por",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "transactions",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Transactions",
+     "text": "Transactions"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/injuries/_/name/por",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "injuries",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Injuries",
+     "text": "Injuries"
+    },
+    {
+     "href": "https://www.espn.com/nba/team/depth/_/name/por",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "desktop",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    },
+    {
+     "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:46~t:22&section=depthchart",
+     "isExternal": false,
+     "isPremium": false,
+     "language": "en",
+     "rel": [
+      "depthchart",
+      "sportscenter",
+      "app",
+      "team"
+     ],
+     "shortText": "Depth Chart",
+     "text": "Depth Chart"
+    }
+   ],
+   "location": "Portland",
+   "logos": [
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/por.png",
+     "rel": [
+      "full",
+      "default"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/por.png",
+     "rel": [
+      "full",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500/scoreboard/por.png",
+     "rel": [
+      "full",
+      "scoreboard"
+     ],
+     "width": 500
+    },
+    {
+     "height": 500,
+     "href": "https://a.espncdn.com/i/teamlogos/nba/500-dark/scoreboard/por.png",
+     "rel": [
+      "full",
+      "scoreboard",
+      "dark"
+     ],
+     "width": 500
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "primary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_black.png",
+     "rel": [
+      "full",
+      "primary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/primary_logo_white.png",
+     "rel": [
+      "full",
+      "primary_logo_white"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_on_white_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_white_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_on_black_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_black_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_on_primary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_primary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_on_secondary_color.png",
+     "rel": [
+      "full",
+      "secondary_logo_on_secondary_color"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_black.png",
+     "rel": [
+      "full",
+      "secondary_logo_black"
+     ],
+     "width": 4096
+    },
+    {
+     "height": 4096,
+     "href": "https://a.espncdn.com/guid/ed294c02-3c44-db14-9e06-1b4e8cff9558/logos/secondary_logo_white.png",
+     "rel": [
+      "full",
+      "secondary_logo_white"
+     ],
+     "width": 4096
+    }
+   ],
+   "name": "Trail Blazers",
+   "ranks": {},
+   "record": {},
+   "shortDisplayName": "Trail Blazers",
+   "slug": "portland-trail-blazers",
+   "uid": "s:40~l:46~t:22",
+   "venue": {
+    "address": {
+     "city": "Portland",
+     "state": "OR"
+    },
+    "fullName": "Moda Center",
+    "grass": false,
+    "id": "3423",
+    "images": [
+     {
+      "height": 1125,
+      "href": "https://a.espncdn.com/i/venues/nba/day/3423.jpg",
+      "rel": [
+       "full",
+       "day"
+      ],
+      "width": 2000
+     }
+    ],
+    "indoor": true,
+    "shortName": "Moda Center"
+   }
+  }
+ }
+}
