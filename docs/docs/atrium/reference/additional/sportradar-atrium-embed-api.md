@@ -1,10 +1,10 @@
 ---
-title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_seasons"
-sidebar_label: "Sportradar Atrium embed API: lmb_pbp–lnb_seasons"
+title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots"
+sidebar_label: "Sportradar Atrium embed API: lmb_pbp–lnb_shots"
 sidebar_position: 1
-description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_seasons — function reference in sdv-py, the SportsDataverse Python package."
+description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_seasons
+# ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots
 
 ### lmb_pbp {#lmb_pbp}
 
@@ -61,7 +61,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -147,7 +147,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -234,7 +234,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -286,7 +286,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -352,7 +352,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -427,7 +427,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -520,7 +520,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -572,7 +572,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -638,7 +638,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -724,7 +724,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -811,7 +811,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -863,7 +863,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
@@ -872,4 +872,71 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 ```python
 from sportsdataverse.basketball.atrium import lnb_seasons
 lnb_seasons()
+```
+
+### lnb_shots {#lnb_shots}
+
+`lnb_shots(fixture_id: 'str', locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Shot chart of a LNB (France) game.
+
+LNB (France) (men's); season rule: END year (2026 = 2025-26; the site's own year is the START year).
+
+Convenience wrapper: a thin binding of `atrium_shots` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fixture_id` | `str` |  | Fixture UUID (fixture_id in the schedule). |
+| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `fixture_id` | character | Game UUID (fixture); the key of every game frame and of the fixture_detail routes. |
+| `season_id` | character | Season UUID of the game. |
+| `sequence` | integer | 1-based position of the shot among the shots of the game (not the pbp sequence). |
+| `event_id` | character | Event UUID of the shot; the same event in atrium_pbp. |
+| `period_id` | integer | Period number: 1-4 regulation, 11, 12, ... overtimes (not 5). |
+| `clock` | character | Time REMAINING in the period as an ISO 8601 duration (PT10M0S at the start). |
+| `clock_seconds` | integer | Seconds remaining in the period, parsed from clock. |
+| `entity_id` | character | Team UUID the event is credited to. |
+| `side` | character | Side of the game the row belongs to: home or away (from the fixture's isHome flag). |
+| `person_id` | character | Player UUID of the shooter. |
+| `person_name` | character | Name of the shooter. |
+| `bib` | character | Jersey number of the player, as text; null for team events. |
+| `event_type` | character | Event type: 2pt, 3pt, freeThrow, rebound, assist, steal, block, turnover, foul, substitution, timeOut, jumpBall, ... (language-independent). |
+| `event_sub_type` | character | Event detail: jumpShot, layup, offensive, defensive, in, out, 1Of2, personal, ...; null when none. |
+| `description` | character | The event's text in the site's language (e.g. Entre-deux remporte). |
+| `success` | logical | True when the shot was made, false when missed. |
+| `success_label` | character | The made / missed label in the site's language; sent on shot events only. |
+| `x` | numeric | Shot location along the 28 m court length as percent of the court (0-100, origin at a corner); the home team attacks the low-x basket all game; LNBP and NBL1 clamp rim attempts to 5 / 95. |
+| `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified. |
+| `home_score` | integer | Home team's running score after the event. |
+| `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, or a fixture id the site does not serve: an unknown id, or a game of another site (the API answers both with an empty fixture)). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.atrium import lnb_schedule, lnb_shots
+games = lnb_schedule()
+lnb_shots(fixture_id=games['fixture_id'][0])
 ```

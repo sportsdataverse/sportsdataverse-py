@@ -251,7 +251,7 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 |---|---|---|
 | `match_id` | integer | From the block id extfix_<id>. Genius match id: the {matchId} of data.json and /u/; one global sequence across every Genius customer (~0.3 M in 2016, ~2.9 M in Oct 2026) |
 | `link_match_id` | integer | Match id of the block's /match/<id>/summary link; equals match_id (the capture refuses a page where it does not); null when the org hides match pages (FFBB) |
-| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for |
+| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for. A 'To be determined' slot (no team or match link) takes the {compId} the page's other blocks prove |
 | `org` | character | ORG code of the match link (or the team links, as comp_id) |
 | `status` | character | Status from the block class STATUS_*: COMPLETE, SCHEDULED, POSTPONED, ... |
 | `date_time` | character | Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled |
@@ -692,7 +692,7 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 |---|---|---|
 | `match_id` | integer | From the block id extfix_<id>. Genius match id: the {matchId} of data.json and /u/; one global sequence across every Genius customer (~0.3 M in 2016, ~2.9 M in Oct 2026) |
 | `link_match_id` | integer | Match id of the block's /match/<id>/summary link; equals match_id (the capture refuses a page where it does not); null when the org hides match pages (FFBB) |
-| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for |
+| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for. A 'To be determined' slot (no team or match link) takes the {compId} the page's other blocks prove |
 | `org` | character | ORG code of the match link (or the team links, as comp_id) |
 | `status` | character | Status from the block class STATUS_*: COMPLETE, SCHEDULED, POSTPONED, ... |
 | `date_time` | character | Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled |

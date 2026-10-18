@@ -79,8 +79,7 @@ GET /{year}_team_results.csv — men's T-Rank team ratings (adjoe/adjde/barthag,
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `sportsdataverse.errors.NoESPNDataError` | Barttorvik.com returned 404 (no data file for that season). |
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -158,8 +157,7 @@ GET /{year}_fffinal.csv — men's four-factors splits (eFG%/FTR/OR%/TO% offense 
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `sportsdataverse.errors.NoESPNDataError` | Barttorvik.com returned 404 (no data file for that season). |
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -229,8 +227,7 @@ GET /getgamestats.php?year=&json=1 — men's per-team-game efficiency and four-f
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `sportsdataverse.errors.NoESPNDataError` | Barttorvik.com returned 404 (no data file for that season). |
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
 | `requests.exceptions.RequestException` | Connection-level failure after `dl_utils.download` exhausts its retries. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
@@ -336,8 +333,7 @@ GET /getadvstats.php?year=&csv=1 — men's player advanced stats (one row per pl
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `sportsdataverse.errors.NoESPNDataError` | Barttorvik.com returned 404 (no data file for that season). |
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -431,8 +427,7 @@ GET /{year}_super_sked.json — men's season schedule/results with T-Rank projec
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
-| `sportsdataverse.errors.NoESPNDataError` | Barttorvik.com returned 404 (no data file for that season). |
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. Barttorvik.com returned 404 (no data file for that season). |
 | `requests.exceptions.RequestException` | Connection-level failure after `dl_utils.download` exhausts its retries. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |

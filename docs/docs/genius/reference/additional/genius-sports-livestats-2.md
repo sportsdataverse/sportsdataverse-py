@@ -178,7 +178,7 @@ esake_team_box(match_id=int(games['match_id'][0]))
 
 Every competition of the FFBB Genius org, with its END-year season.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_competitions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -228,7 +228,7 @@ lfb_competitions()
 
 Play-by-play of a finished Ligue Feminine de Basket (France, FFBB) game.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -297,7 +297,7 @@ lfb_pbp(match_id=int(games['match_id'][0]))
 
 Player box score of a finished Ligue Feminine de Basket (France, FFBB) game.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_player_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -392,7 +392,7 @@ lfb_player_box(match_id=int(games['match_id'][0]))
 
 Every match of one Ligue Feminine de Basket (France, FFBB) season (hosted WebStats): ids, status, venue, teams and scores.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -417,7 +417,7 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 |---|---|---|
 | `match_id` | integer | From the block id extfix_<id>. Genius match id: the {matchId} of data.json and /u/; one global sequence across every Genius customer (~0.3 M in 2016, ~2.9 M in Oct 2026) |
 | `link_match_id` | integer | Match id of the block's /match/<id>/summary link; equals match_id (the capture refuses a page where it does not); null when the org hides match pages (FFBB) |
-| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for |
+| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for. A 'To be determined' slot (no team or match link) takes the {compId} the page's other blocks prove |
 | `org` | character | ORG code of the match link (or the team links, as comp_id) |
 | `status` | character | Status from the block class STATUS_*: COMPLETE, SCHEDULED, POSTPONED, ... |
 | `date_time` | character | Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled |
@@ -453,7 +453,7 @@ lfb_schedule(season=2026)
 
 Shot chart of a finished Ligue Feminine de Basket (France, FFBB) game.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -510,7 +510,7 @@ lfb_shots(match_id=int(games['match_id'][0]))
 
 Team box score of a finished Ligue Feminine de Basket (France, FFBB) game.
 
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
+Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019.
 
 Convenience wrapper: a thin binding of `genius_team_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
