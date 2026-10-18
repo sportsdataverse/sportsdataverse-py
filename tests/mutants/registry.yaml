@@ -1359,8 +1359,8 @@
   group: codegen-runtime
   finding: C-L52
   file: sportsdataverse/validation/box_reconcile.py
-  snippet: '    return marker + ['
-  mutant: '    return ['
+  snippet: '        *marker,'
+  mutant: '        # the marker dropped'
   test: tests/validation/test_box_reconcile.py -k standing_builder
   expected: kill
   note: a builder crash lowered coverage (106 -> 88 checks) with no trace

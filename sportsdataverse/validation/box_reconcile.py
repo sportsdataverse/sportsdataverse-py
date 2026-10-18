@@ -813,7 +813,8 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
             )
         )
     teams = game_teams(plays)
-    return marker + [
+    return [
+        *marker,
         _team_totals(plays, box, standing),
         _player_sums(plays, box),
         _rates(box),
