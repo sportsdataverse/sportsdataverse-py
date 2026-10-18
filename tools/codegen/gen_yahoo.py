@@ -56,7 +56,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
-from gen_soccer_common import _query_params
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 
