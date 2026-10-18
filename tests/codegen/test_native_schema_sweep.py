@@ -109,6 +109,17 @@ _NO_COMMITTED_CAPTURE = {
     "yahoo_shangrila",
 }
 
+# Main's families merged 10-17 (#826, #859, #862): their captures ARE committed, under tests/fixtures/<stem>/
+# (ibba_segev's under tests/fixtures/ibba/), but in layouts the sweep does not read and with no
+# native_fixture_map.yaml entry, so their schemas are not re-derived here (EX-SYNC-f; task 3.9 maps them).
+_UNMAPPED_CAPTURES = {
+    "aba", "acb", "atrium", "bleague", "cba", "cebl", "del_esports", "easl", "eihl_esports", "elh", "feb",
+    "fiba_gamepage", "fiba_gdap", "genius", "ha", "ibba", "ibba_segev", "icehl_esports", "kbl", "khl_rest",
+    "khl_webcaster", "kzs", "legabasket", "lkl", "magnus", "metal_esports", "nationalleague", "nbl_rosetta",
+    "pleague", "pleague_preciser", "scb", "shl", "sportality", "sportpress", "tbf", "tpbl", "vhl",
+    "vtb_infobasket", "vtb_league", "wjbl",
+}  # fmt: skip
+
 
 def _doc_type(dtype: Any) -> str:
     s = str(dtype)
@@ -144,7 +155,8 @@ def _load(cap: Path) -> Any:
 
 def test_every_native_stem_is_swept_or_has_no_committed_capture():
     stems = {d.name for d in NATIVE.iterdir() if d.is_dir()}
-    assert {s for s, n in _PER_STEM.items() if n == 0} == _NO_COMMITTED_CAPTURE
+    assert {s for s, n in _PER_STEM.items() if n == 0} == _NO_COMMITTED_CAPTURE | _UNMAPPED_CAPTURES
+    assert [s for s in sorted(_UNMAPPED_CAPTURES) if not (FIX / s).is_dir() and s != "ibba_segev"] == []
     assert stems - _NO_COMMITTED_CAPTURE and len(_CASES) > 500
 
 
