@@ -1271,6 +1271,14 @@ class _EndpointView:
         schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
         self.returns_dict = _returns_dict(schema_doc)
+        # The parsed return the signature names follows the docstring: a dict of frames when the
+        # docstring says one (a ``parsed_doc`` or a dict-of-frames schema), else one frame (R858-4).
+        parsed = (
+            "Dict[str, pl.DataFrame], Dict[str, pd.DataFrame]"
+            if (self.parsed_doc_md or self.returns_dict)
+            else "pl.DataFrame, pd.DataFrame"
+        )
+        self.parsed_annotation = f"Union[{parsed}, {self.raw_hint}]"
         self.frames_by = str(schema_doc.get("frames_by") or "")
         self.unverified = str(schema_doc.get("unverified") or "")
         self.returns_prose = _normalize_rst(ep.summary or "")

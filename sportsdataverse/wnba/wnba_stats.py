@@ -4,14 +4,15 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.wnba.wnba_stats_runtime import _get, season_latest_with_data
 from sportsdataverse.wnba.wnba_stats_parsers import parse_wnba_stats_result_sets
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "wnba_stats_alltimeleadersgrids",
@@ -137,7 +138,7 @@ def wnba_stats_alltimeleadersgrids(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/alltimeleadersgrids
 
     Endpoint: ``GET https://stats.wnba.com/stats/alltimeleadersgrids``
@@ -362,7 +363,7 @@ def wnba_stats_boxscoreadvancedv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoreadvancedv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreadvancedv2``
@@ -418,7 +419,7 @@ def wnba_stats_boxscoreadvancedv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoreadvancedv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreadvancedv3``
@@ -469,7 +470,7 @@ def wnba_stats_boxscoredefensivev2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoredefensivev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoredefensivev2``
@@ -515,7 +516,7 @@ def wnba_stats_boxscorefourfactorsv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorefourfactorsv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorefourfactorsv2``
@@ -571,7 +572,7 @@ def wnba_stats_boxscorefourfactorsv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorefourfactorsv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorefourfactorsv3``
@@ -622,7 +623,7 @@ def wnba_stats_boxscorehustlev2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorehustlev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorehustlev2``
@@ -663,7 +664,7 @@ def wnba_stats_boxscorematchupsv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorematchupsv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorematchupsv3``
@@ -709,7 +710,7 @@ def wnba_stats_boxscoremiscv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoremiscv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoremiscv2``
@@ -765,7 +766,7 @@ def wnba_stats_boxscoremiscv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoremiscv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoremiscv3``
@@ -816,7 +817,7 @@ def wnba_stats_boxscoreplayertrackv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoreplayertrackv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreplayertrackv3``
@@ -862,7 +863,7 @@ def wnba_stats_boxscorescoringv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorescoringv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorescoringv2``
@@ -918,7 +919,7 @@ def wnba_stats_boxscorescoringv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscorescoringv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscorescoringv3``
@@ -969,7 +970,7 @@ def wnba_stats_boxscoresummaryv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoresummaryv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoresummaryv2``
@@ -1010,7 +1011,7 @@ def wnba_stats_boxscoresummaryv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoresummaryv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoresummaryv3``
@@ -1056,7 +1057,7 @@ def wnba_stats_boxscoretraditionalv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoretraditionalv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoretraditionalv2``
@@ -1112,7 +1113,7 @@ def wnba_stats_boxscoretraditionalv3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoretraditionalv3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoretraditionalv3``
@@ -1168,7 +1169,7 @@ def wnba_stats_boxscoreusagev2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoreusagev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreusagev2``
@@ -1224,7 +1225,7 @@ def wnba_stats_boxscoreusagev3(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/boxscoreusagev3
 
     Endpoint: ``GET https://stats.wnba.com/stats/boxscoreusagev3``
@@ -1322,7 +1323,7 @@ def wnba_stats_commonplayerinfo(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/commonplayerinfo
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonplayerinfo``
@@ -1413,7 +1414,7 @@ def wnba_stats_commonteamroster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/commonteamroster
 
     Endpoint: ``GET https://stats.wnba.com/stats/commonteamroster``
@@ -1502,7 +1503,7 @@ def wnba_stats_cumestatsplayer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/cumestatsplayer
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsplayer``
@@ -1619,7 +1620,7 @@ def wnba_stats_cumestatsteam(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/cumestatsteam
 
     Endpoint: ``GET https://stats.wnba.com/stats/cumestatsteam``
@@ -1950,7 +1951,7 @@ def wnba_stats_franchisehistory(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/franchisehistory
 
     Endpoint: ``GET https://stats.wnba.com/stats/franchisehistory``
@@ -2133,7 +2134,7 @@ def wnba_stats_gamerotation(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/gamerotation
 
     Endpoint: ``GET https://stats.wnba.com/stats/gamerotation``
@@ -2182,7 +2183,7 @@ def wnba_stats_homepageleaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/homepageleaders
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepageleaders``
@@ -2241,7 +2242,7 @@ def wnba_stats_homepagev2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/homepagev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/homepagev2``
@@ -2294,7 +2295,7 @@ def wnba_stats_hustlestatsboxscore(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/hustlestatsboxscore
 
     Endpoint: ``GET https://stats.wnba.com/stats/hustlestatsboxscore``
@@ -2381,7 +2382,7 @@ def wnba_stats_leaderstiles(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/leaderstiles
 
     Endpoint: ``GET https://stats.wnba.com/stats/leaderstiles``
@@ -4390,7 +4391,7 @@ def wnba_stats_playbyplayv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playbyplayv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/playbyplayv2``
@@ -4524,7 +4525,7 @@ def wnba_stats_playercareerbycollegerollup(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playercareerbycollegerollup
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercareerbycollegerollup``
@@ -4573,7 +4574,7 @@ def wnba_stats_playercareerstats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playercareerstats
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercareerstats``
@@ -4642,7 +4643,7 @@ def wnba_stats_playercompare(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playercompare
 
     Endpoint: ``GET https://stats.wnba.com/stats/playercompare``
@@ -4753,7 +4754,7 @@ def wnba_stats_playerdashboardbyclutch(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbyclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyclutch``
@@ -4860,7 +4861,7 @@ def wnba_stats_playerdashboardbygamesplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbygamesplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygamesplits``
@@ -4967,7 +4968,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbygeneralsplits``
@@ -5074,7 +5075,7 @@ def wnba_stats_playerdashboardbylastngames(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbylastngames
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbylastngames``
@@ -5181,7 +5182,7 @@ def wnba_stats_playerdashboardbyopponent(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbyopponent
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyopponent``
@@ -5288,7 +5289,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyshootingsplits``
@@ -5395,7 +5396,7 @@ def wnba_stats_playerdashboardbyteamperformance(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyteamperformance``
@@ -5502,7 +5503,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerdashboardbyyearoveryear``
@@ -5732,7 +5733,7 @@ def wnba_stats_playerfantasyprofile(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerfantasyprofile
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofile``
@@ -5792,7 +5793,7 @@ def wnba_stats_playerfantasyprofilebargraph(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerfantasyprofilebargraph
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerfantasyprofilebargraph``
@@ -6428,7 +6429,7 @@ def wnba_stats_playerprofilev2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playerprofilev2
 
     Endpoint: ``GET https://stats.wnba.com/stats/playerprofilev2``
@@ -6494,7 +6495,7 @@ def wnba_stats_playervsplayer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/playervsplayer
 
     Endpoint: ``GET https://stats.wnba.com/stats/playervsplayer``
@@ -6665,7 +6666,7 @@ def wnba_stats_scoreboardv2(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/scoreboardv2
 
     Endpoint: ``GET https://stats.wnba.com/stats/scoreboardv2``
@@ -6783,7 +6784,7 @@ def wnba_stats_shotchartdetail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/shotchartdetail
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartdetail``
@@ -6946,7 +6947,7 @@ def wnba_stats_shotchartlineupdetail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/shotchartlineupdetail
 
     Endpoint: ``GET https://stats.wnba.com/stats/shotchartlineupdetail``
@@ -7047,7 +7048,7 @@ def wnba_stats_teamdashboardbyclutch(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbyclutch
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyclutch``
@@ -7154,7 +7155,7 @@ def wnba_stats_teamdashboardbygamesplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbygamesplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygamesplits``
@@ -7261,7 +7262,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbygeneralsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbygeneralsplits``
@@ -7368,7 +7369,7 @@ def wnba_stats_teamdashboardbylastngames(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbylastngames
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbylastngames``
@@ -7475,7 +7476,7 @@ def wnba_stats_teamdashboardbyopponent(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbyopponent
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyopponent``
@@ -7582,7 +7583,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbyshootingsplits
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyshootingsplits``
@@ -7689,7 +7690,7 @@ def wnba_stats_teamdashboardbyteamperformance(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbyteamperformance
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyteamperformance``
@@ -7796,7 +7797,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashboardbyyearoveryear
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashboardbyyearoveryear``
@@ -7905,7 +7906,7 @@ def wnba_stats_teamdashlineups(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdashlineups
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdashlineups``
@@ -7994,7 +7995,7 @@ def wnba_stats_teamdetails(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamdetails
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamdetails``
@@ -8239,7 +8240,7 @@ def wnba_stats_teaminfocommon(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teaminfocommon
 
     Endpoint: ``GET https://stats.wnba.com/stats/teaminfocommon``
@@ -8308,7 +8309,7 @@ def wnba_stats_teamplayerdashboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamplayerdashboard
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayerdashboard``
@@ -8413,7 +8414,7 @@ def wnba_stats_teamplayeronoffdetails(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamplayeronoffdetails
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffdetails``
@@ -8514,7 +8515,7 @@ def wnba_stats_teamplayeronoffsummary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamplayeronoffsummary
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamplayeronoffsummary``
@@ -8617,7 +8618,7 @@ def wnba_stats_teamvsplayer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """GET /stats/teamvsplayer
 
     Endpoint: ``GET https://stats.wnba.com/stats/teamvsplayer``
