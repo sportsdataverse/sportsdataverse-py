@@ -52,7 +52,7 @@ Team totals of a finished game with the team-credited rebounds, turnovers and fo
 | `fouls` | integer | Personal fouls committed (faul). |
 | `fouls_drawn` | integer | Fouls drawn by the team (rivalFoul). |
 | `blocks_received` | integer | Team shots blocked by the opponent. |
-| `efficiency` | numeric | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
+| `efficiency` | integer | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
 | `team_off_rebounds` | integer | Team offensive rebounds not credited to a player (homeTeamStats). |
 | `team_def_rebounds` | integer | Team defensive rebounds not credited to a player. |
 | `team_rebounds` | integer | Team rebounds not credited to a player (offensive + defensive). |

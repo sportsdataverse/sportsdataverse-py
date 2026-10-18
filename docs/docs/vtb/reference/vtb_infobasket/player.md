@@ -36,7 +36,7 @@ Player profile: names, birth date, height, weight, position.
 | `person_height` | integer | Height in centimetres. |
 | `person_weight` | integer | Weight in kilograms. |
 | `person_status` | integer | Person record status (1 active, 0 otherwise); meaning unverified. |
-| `player_position` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `player_position` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
 | `player_hand` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
 | `is_naturalized` | logical | True for naturalised players. |
 | `position_id` | integer | Position id of the player (PosID), with its names in position_name_ru / position_name_en. |

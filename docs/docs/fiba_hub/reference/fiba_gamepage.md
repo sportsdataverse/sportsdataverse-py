@@ -136,7 +136,7 @@ Team box score of one FIBA game, with the game-level figures.
 | `assists` | integer | Assists credited in the game. |
 | `steals` | integer | Steals credited in the game. |
 | `blocks` | integer | Blocked shots (blocks made). |
-| `blocks_received` | character | Own shots blocked by the opponent (blocks received). |
+| `blocks_received` | integer | Own shots blocked by the opponent (blocks received). |
 | `turnovers` | integer | Turnovers (a team row includes the team turnovers team_turnovers). |
 | `fouls` | integer | Personal fouls (a team row includes the team fouls team_fouls). |
 | `fouls_drawn` | integer | Fouls drawn in the game. |

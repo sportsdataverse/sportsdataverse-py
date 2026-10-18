@@ -170,8 +170,8 @@ Season totals of every player of every team of a season.
 | `person_full_name_en` | character | Full name, 'Last First', English. |
 | `person_gender` | integer | Person gender: 1 on every sampled (male) person. |
 | `birth_date` | character | Birth date (ISO 8601 date) of a player: public bio, kept; coaches' and officials' birth data is never output. |
-| `height` | character | Height in centimetres. |
-| `weight` | character | Weight in kilograms. |
+| `height` | integer | Height in centimetres. |
+| `weight` | integer | Weight in kilograms. |
 | `player_position` | integer | Player position code from the host (1 point guard, 2 shooting guard, 3 small forward ... 5 center; see position_id for the named position). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
@@ -370,7 +370,7 @@ Team box score of a finished game, with the head coach's technical fouls.
 | `opponent_foul` | integer | Fouls drawn. The wire's null is 0 here (null counts are filled). |
 | `seconds` | integer | Playing time in seconds. |
 | `played_time` | character | Playing time as 'minutes:seconds' (team rows sum the five players: '200:00' = 40 minutes x 5). |
-| `plus_minus` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `plus_minus` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
 | `team_short_name_ru` | character | The the team's short name in Russian (as the competition names it). |
 | `team_short_name_en` | character | The the team's short name in English (as the competition names it). |
 | `team_name_ru` | character | The the team's name in Russian (as the competition names it). |
@@ -763,8 +763,8 @@ Season totals of every player of a club in one season.
 | `person_full_name_en` | character | Full name, 'Last First', English. |
 | `person_gender` | integer | Person gender: 1 on every sampled (male) person. |
 | `birth_date` | character | Birth date (ISO 8601 date) of a player: public bio, kept; coaches' and officials' birth data is never output. |
-| `height` | character | Height in centimetres. |
-| `weight` | character | Weight in kilograms. |
+| `height` | integer | Height in centimetres. |
+| `weight` | integer | Weight in kilograms. |
 | `player_position` | integer | Player position code from the host (1 point guard, 2 shooting guard, 3 small forward ... 5 center; see position_id for the named position). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

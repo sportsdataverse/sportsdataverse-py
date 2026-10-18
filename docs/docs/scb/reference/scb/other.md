@@ -236,7 +236,7 @@ Season player stat table: totals and per-game values, one row per player and sta
 | `real_player_id` | integer | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
 | `first_name` | character | Player's given name. |
 | `last_name` | character | Player's family name. |
-| `shirt_number` | integer | Jersey number of the player, kept as text so a `00` jersey survives. |
+| `shirt_number` | character | Jersey number of the player, kept as text so a `00` jersey survives. |
 | `position` | character | Position: POINT_GUARD, SHOOTING_GUARD, SMALL_FORWARD, POWER_FORWARD, CENTER. |
 | `team_id` | character | Club id; equal to `seasonTeamId` in every sample. Joins to /teams/{teamId}. |
 | `season_team_id` | character | Season-team id; equal to the club `teamId` in every sample (BBL 2005-2026, DBBL 2024-2026). |

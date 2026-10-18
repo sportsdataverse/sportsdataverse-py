@@ -870,7 +870,7 @@ Schedule and results of one competition (edition): one row per game.
 | `game_date_time_utc` | character | Tip-off in UTC, ISO 8601 without the Z. |
 | `has_time_game_date_time` | logical | False when only the date is known (the time part is then 00:00:00). |
 | `iana_time_zone` | character | IANA time zone of the venue. |
-| `utc_offset` | character | Venue UTC offset at tip-off, hours. |
+| `utc_offset` | integer | Venue UTC offset at tip-off, hours. |
 | `is_postponed` | logical | True when the game was postponed. |
 | `is_played_behind_closed_doors` | logical | True when played without spectators. |
 | `venue_capacity` | integer | Venue capacity (0 = unknown). |

@@ -317,7 +317,7 @@ Match header: teams, scores, venue, officials' names, best performers and status
 | `competition_phase_name` | character | Phase name, Slovenian (see `phases[].name`). |
 | `transferred` | logical | True when the match was carried over from an earlier phase (results transferred). |
 | `season_id` | integer | Opaque KZS season id (27 = 2026/2027); the sdv season is the END year in season. |
-| `season` | character | Season END year (2026/2027 = 2027), from the row's own season name or id, else from the request. |
+| `season` | integer | Season END year (2026/2027 = 2027), from the row's own season name or id, else from the request. |
 | `genius_match_id` | integer | Genius LiveStats match id parsed from fiba_live_stats_url (org KZS); null before 2015/16. |
 | `organiser_team_id` | integer | Team id: one club team in one season (Ilirija 2025-26 = 17551). Joins to /teams/{teamId}, standings `teamId`, box-score `teamId` and the `teamId` query params. The organising (home) team. |
 | `round` | integer | Round (matchday) number within the phase. |

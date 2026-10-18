@@ -274,7 +274,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `game_date_time_utc` | character | Tip-off in UTC, ISO 8601 without the Z. |
 | `has_time_game_date_time` | logical | False when only the date is known (the time part is then 00:00:00). |
 | `iana_time_zone` | character | IANA time zone of the venue. |
-| `utc_offset` | character | Venue UTC offset at tip-off, hours. |
+| `utc_offset` | integer | Venue UTC offset at tip-off, hours. |
 | `is_postponed` | logical | True when the game was postponed. |
 | `is_played_behind_closed_doors` | logical | True when played without spectators. |
 | `venue_capacity` | integer | Venue capacity (0 = unknown). |
@@ -494,7 +494,7 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `assists` | integer | Assists credited in the game. |
 | `steals` | integer | Steals credited in the game. |
 | `blocks` | integer | Blocked shots (blocks made). |
-| `blocks_received` | character | Own shots blocked by the opponent (blocks received). |
+| `blocks_received` | integer | Own shots blocked by the opponent (blocks received). |
 | `turnovers` | integer | Turnovers (a team row includes the team turnovers team_turnovers). |
 | `fouls` | integer | Personal fouls (a team row includes the team fouls team_fouls). |
 | `fouls_drawn` | integer | Fouls drawn in the game. |
