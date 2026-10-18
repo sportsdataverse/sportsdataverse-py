@@ -346,6 +346,37 @@ def cache_get(
     return entry.get("body")
 
 
+def _scrub_body(node: Any, secrets: "list[str]") -> Any:
+    """Copy of ``node`` with credentials removed (the live response is left untouched).
+
+    Credentials are removed two ways, neither of which touches ordinary data: any value
+    that rode in on the request URL is replaced wherever it appears in a string leaf, and
+    every string leaf is passed through ``_redact_secrets`` (echoed ``?apiKey=...`` links).
+    Dict keys and non-string leaves are never rewritten, so a field legitimately named
+    ``key`` or ``token`` keeps its value; a body without a credential comes back equal.
+    """
+    from sportsdataverse.errors import _redact_secrets
+
+    if isinstance(node, str):
+        for sec in secrets:
+            node = node.replace(sec, "REDACTED")
+        return _redact_secrets(node)
+    if isinstance(node, dict):
+        return {k: _scrub_body(v, secrets) for k, v in node.items()}
+    if isinstance(node, list):
+        return [_scrub_body(v, secrets) for v in node]
+    return node
+
+
+def _url_secrets(url: str) -> "list[str]":
+    """The credential values carried by ``url`` (query pairs and key-as-path-segment)."""
+    from sportsdataverse.errors import _PATH_KEY, _SECRET_PAIR
+
+    found = [m.group(3).rstrip(",;)]}") for m in _SECRET_PAIR.finditer(url)]
+    found += [m.group(0)[len(m.group(1)) :] for m in _PATH_KEY.finditer(url)]
+    return [v for v in found if len(v) >= 8]  # a short value would shred ordinary text
+
+
 def cache_set(
     url: str,
     params: Optional[Dict[str, Any]],
@@ -360,11 +391,15 @@ def cache_set(
     if effective_ttl.total_seconds() <= 0:
         return
 
-    key = _cache_key(url, params)
+    key = _cache_key(url, params)  # keyed on the real URL so read-through still hits
+    # Scrub BEFORE storing: the entry sits in memory or on disk and carries the request URL
+    # (API key and all) plus whatever the server echoed back.
+    from sportsdataverse.errors import _redact_secrets
+
     entry = {
         "saved_at": datetime.now(timezone.utc).isoformat(),
-        "url": url,
-        "body": body,
+        "url": _redact_secrets(url),
+        "body": _scrub_body(body, _url_secrets(url)),
     }
     if _MODE == "memory":
         _MEMORY_CACHE[key] = entry
