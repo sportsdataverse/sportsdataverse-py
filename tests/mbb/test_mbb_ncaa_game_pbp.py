@@ -67,6 +67,17 @@ def test_format_guard_escalated_warning_propagates_from_driver(driver: Any) -> N
     assert f.calls == ["123"]
 
 
+@pytest.mark.parametrize("driver", [ncaa_mbb_play_by_play, ncaa_wbb_play_by_play])
+def test_format_guard_unsupported_page_is_not_refetched(driver: Any) -> None:
+    """The guard's verdict is about the page: one fetch, one warning, no empty-result retry (R853-8)."""
+    f = _Fetcher(PAGE_2018)
+    with pytest.warns(UnsupportedPageFormatWarning, match=r"game 123 is a 2018-format") as record:
+        got = driver(["123"], fetcher=f)
+    assert f.calls == ["123"]
+    assert len([w for w in record if issubclass(w.category, UnsupportedPageFormatWarning)]) == 1
+    assert got.height == 0
+
+
 def test_float_contest_id_is_an_integer_string() -> None:
     f = _Fetcher()
     df = ncaa_mbb_game_pbp(6470186.0, fetcher=f)

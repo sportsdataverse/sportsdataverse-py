@@ -1284,3 +1284,12 @@
   test: tests/wbb/test_wbb_ncaa_bigballr_family.py -k missing_season
   expected: kill
   note: A NaN / "" season binds the quarters model instead of inferring the era, and a halves-era page parses to 0 rows (R853-7).
+- id: ncaa-pbp-driver-guarded-page-not-refetched
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "            if df.height == 0 and retry:\n"
+  mutant: "            if df.height == 0:\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k not_refetched
+  expected: kill
+  note: A page the format guard rejected gets the empty-result retry, a second stats.ncaa.org fetch and a second warning (R853-8).
