@@ -1200,3 +1200,12 @@
   test: tests/mbb/test_mbb_ncaa_game_pbp.py -k contest_id
   expected: kill
   note: The multi-game driver passes 6470186.0 through to the fetcher and the game_id column.
+- id: ncaa-pbp-driver-escalated-format-guard
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "    except UnsupportedPageFormatWarning:\n"
+  mutant: "    except ():\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k escalated
+  expected: kill
+  note: Under warnings "error" the driver's broad except swallows the guard, re-fetches, and returns 0 rows (R853-1).

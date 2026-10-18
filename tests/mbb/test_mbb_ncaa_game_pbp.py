@@ -9,12 +9,14 @@ from __future__ import annotations
 
 import warnings
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import pytest
 
 from sportsdataverse.errors import UnsupportedPageFormatWarning
 from sportsdataverse.mbb.mbb_ncaa_game_pbp import PBP_SCHEMA, ncaa_mbb_game_pbp, ncaa_mbb_play_by_play
+from sportsdataverse.wbb.wbb_ncaa_game_pbp import ncaa_wbb_play_by_play
 from tests.mbb._bigballr_oracle import HTML_DIR
 
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
@@ -45,13 +47,24 @@ def test_format_guard_silent_on_supported_page() -> None:
 
 
 class _Fetcher:
-    def __init__(self) -> None:
-        self.html = (HTML_DIR / "pbp_6470186.html").read_text(encoding="utf-8")
+    def __init__(self, page: Path = HTML_DIR / "pbp_6470186.html") -> None:
+        self.html = page.read_text(encoding="utf-8")
         self.calls: "list[object]" = []
 
     def fetch_game_pbp(self, game_id: object) -> str:
         self.calls.append(game_id)
         return self.html
+
+
+@pytest.mark.parametrize("driver", [ncaa_mbb_play_by_play, ncaa_wbb_play_by_play])
+def test_format_guard_escalated_warning_propagates_from_driver(driver: Any) -> None:
+    """A pipeline that escalates the guard gets the exception, not 0 rows after a re-fetch (R853-1)."""
+    f = _Fetcher(PAGE_2018)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        with pytest.raises(UnsupportedPageFormatWarning, match=r"game 123 is a 2018-format"):
+            driver(["123"], fetcher=f)
+    assert f.calls == ["123"]
 
 
 def test_float_contest_id_is_an_integer_string() -> None:

@@ -1156,6 +1156,10 @@ def _fetch_and_parse(
     try:
         html = fetcher.fetch_game_pbp(game_id)
         return parse_ncaa_bb_game_pbp(html, game_id, period_model=_resolve_period_model(period_model, html))
+    except UnsupportedPageFormatWarning:
+        # escalated by the caller (warnings "error" filter): a page we cannot read is
+        # not a failed scrape, so it must neither be swallowed nor re-fetched
+        raise
     except Exception:  # noqa: BLE001 — R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
         return _empty_pbp()
