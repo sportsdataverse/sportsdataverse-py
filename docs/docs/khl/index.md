@@ -9,7 +9,8 @@ description: "sdv-py KHL: endpoint references, dataset loaders and parsers for K
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [KHL (site REST + webcaster API)](#khl-site-rest-webcaster-api) | `khl.api.webcaster.pro`, `www.khl.ru` | 23 | none |
+| [KHL (site REST + webcaster API)](#khl-site-rest-webcaster-api) | `khl.api.webcaster.pro`, `www.khl.ru` | 25 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 2 | — |
 
 ## KHL (site REST + webcaster API) {#khl-site-rest-webcaster-api}
 
@@ -17,6 +18,7 @@ description: "sdv-py KHL: endpoint references, dataset loaders and parsers for K
 |---|---:|
 | [KHL site REST (www.khl.ru/rest)](reference/khl_rest) | 14 |
 | [KHL webcaster mobile API (khl.api.webcaster.pro)](reference/khl_webcaster) | 9 |
+| [Hand-written wrappers](reference/additional) | 2 |
 
 ## Examples
 

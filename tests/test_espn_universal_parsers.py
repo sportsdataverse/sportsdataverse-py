@@ -1256,7 +1256,8 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
 # hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
-# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py).
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
+# hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py, main #860).
 _NO_PARSER = {
     "athlete_statistics_core_nba_1966_2024",
     "athlete_statslog_lbj",
@@ -1265,6 +1266,7 @@ _NO_PARSER = {
     "depthcharts_nfl",
     "depthcharts_nhl",
     "error_404_body",
+    "wbb_calendar_2001",
 }
 _PKG = Path(__file__).parents[1] / "sportsdataverse"
 
@@ -1541,6 +1543,132 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "soccer.uefa_parsers.parse_uefa": {"error_envelope": AssertionError},
     "thesportsdb.thesportsdb_parsers.parse_thesportsdb": {"list": AssertionError},
 }
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) return rows for a
+# hostile body, measured 2026-10-18 on the sync tree (109 cases, every one AssertionError = rows returned).
+_HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {
+    **{
+        q: {"error_envelope": AssertionError}
+        for q in (
+            "basketball.dbl.sportality_parsers.parse_sportality",
+            "basketball.dbl.sportality_parsers.parse_sportality_page",
+            "basketball.easl.easl_parsers.parse_easl_health",
+            "basketball.fiba_hub.fiba_gdap_parsers.parse_fiba_gdap_rounds",
+            "basketball.scb.scb_parsers.parse_scb_season_player",
+            "basketball.scb.scb_parsers.parse_scb_team",
+            "hockey.esports_parsers.parse_esports",
+            "hockey.esports_parsers.parse_esports_game_info",
+            "hockey.ha.ha_parsers.parse_ha",
+            "hockey.ha.ha_parsers.parse_ha_leaders",
+            "hockey.ha.ha_parsers.parse_ha_players",
+            "hockey.ha.ha_parsers.parse_ha_standings",
+            "hockey.ha.ha_parsers.parse_ha_team_stats",
+            "hockey.khl.khl_webcaster_parsers.parse_khl_webcaster",
+            "hockey.liiga.liiga_parsers.parse_liiga",
+            "hockey.liiga.liiga_parsers.parse_liiga_player",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague_player_stats",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague_team_info",
+            "hockey.shl.shl_parsers.parse_shl",
+            "hockey.shl.shl_parsers.parse_shl_page",
+        )
+    },
+    **{
+        q: {"error_envelope": AssertionError, "list": AssertionError}
+        for q in (
+            "hockey.ha.ha_parsers.parse_ha_games",
+            "hockey.ha.ha_parsers.parse_ha_schedule",
+        )
+    },
+    **{
+        q: {"list": AssertionError}
+        for q in (
+            "basketball.cba.cba_parsers.parse_cba_game_team_four",
+            "basketball.cba.cba_parsers.parse_cba_game_team_shots",
+            "basketball.cba.cba_parsers.parse_cba_match_types",
+            "basketball.cba.cba_parsers.parse_cba_schedule_day",
+            "basketball.cba.cba_parsers.parse_cba_schedule_month",
+            "basketball.cba.cba_parsers.parse_cba_seasons",
+            "basketball.cba.cba_parsers.parse_cba_team_basic",
+            "basketball.cba.cba_parsers.parse_cba_team_counts",
+            "basketball.cba.cba_parsers.parse_cba_team_four",
+            "basketball.cba.cba_parsers.parse_cba_team_options",
+            "basketball.cba.cba_parsers.parse_cba_teams",
+            "basketball.cebl.cebl_parsers.parse_cebl_games",
+            "basketball.cebl.cebl_parsers.parse_cebl_news",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_gamelog",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_seasons",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_stats",
+            "basketball.cebl.cebl_parsers.parse_cebl_roster",
+            "basketball.cebl.cebl_parsers.parse_cebl_seasons",
+            "basketball.cebl.cebl_parsers.parse_cebl_standings",
+            "basketball.cebl.cebl_parsers.parse_cebl_team_stats",
+            "basketball.cebl.cebl_parsers.parse_cebl_teams",
+            "basketball.easl.easl_parsers.parse_easl_game",
+            "basketball.easl.easl_parsers.parse_easl_players",
+            "basketball.easl.easl_parsers.parse_easl_schedule",
+            "basketball.easl.easl_parsers.parse_easl_seasons",
+            "basketball.easl.easl_parsers.parse_easl_standings",
+            "basketball.easl.easl_parsers.parse_easl_team_box",
+            "basketball.easl.easl_parsers.parse_easl_team_schedule",
+            "basketball.easl.easl_parsers.parse_easl_teams",
+            "basketball.genius.genius_parsers.parse_genius_competition_games",
+            "basketball.kbl.kbl_parsers.parse_kbl_current_standings",
+            "basketball.kbl.kbl_parsers.parse_kbl_pbp",
+            "basketball.kbl.kbl_parsers.parse_kbl_player_box",
+            "basketball.kbl.kbl_parsers.parse_kbl_player_totals",
+            "basketball.kbl.kbl_parsers.parse_kbl_players",
+            "basketball.kbl.kbl_parsers.parse_kbl_round_mvps",
+            "basketball.kbl.kbl_parsers.parse_kbl_schedule",
+            "basketball.kbl.kbl_parsers.parse_kbl_seasons",
+            "basketball.kbl.kbl_parsers.parse_kbl_standings",
+            "basketball.kbl.kbl_parsers.parse_kbl_team_box",
+            "basketball.kbl.kbl_parsers.parse_kbl_teams",
+            "basketball.kzs.kzs_parsers.parse_kzs_competitions",
+            "basketball.kzs.kzs_parsers.parse_kzs_matches",
+            "basketball.kzs.kzs_parsers.parse_kzs_player_leaderboard",
+            "basketball.kzs.kzs_parsers.parse_kzs_playing_days",
+            "basketball.kzs.kzs_parsers.parse_kzs_roster",
+            "basketball.kzs.kzs_parsers.parse_kzs_seasons",
+            "basketball.kzs.kzs_parsers.parse_kzs_team_leaderboard",
+            "basketball.kzs.kzs_parsers.parse_kzs_teams",
+            "basketball.nbl_au.nbl_rosetta_parsers.parse_nbl_rosetta_next_matches",
+            "basketball.scb.scb_parsers.parse_scb_games",
+            "basketball.scb.scb_parsers.parse_scb_player_statistics",
+            "basketball.scb.scb_parsers.parse_scb_referees",
+            "basketball.scb.scb_parsers.parse_scb_seasons",
+            "basketball.scb.scb_parsers.parse_scb_standings",
+            "basketball.scb.scb_parsers.parse_scb_team_statistics",
+            "basketball.scb.scb_parsers.parse_scb_transfers",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_divisions",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_games",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_games",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_shots",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_roster",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_seasons",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_standings",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_team_shots",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_teams",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_player_parameters",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_team_parameters",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_calendar",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_cross_table",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_playoff",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_seasons",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_standings",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_comps",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_games",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_preview",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_seasons",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_leagues",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_matches",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_seasons",
+            "basketball.wjbl.wjbl_parsers.parse_wjbl_leagues",
+            "basketball.wjbl.wjbl_parsers.parse_wjbl_teams",
+            "hockey.esports_parsers.parse_esports_player_stats",
+            "hockey.esports_parsers.parse_esports_shifts",
+        )
+    },
+}
 # Plan v2.2: task 4.1 owns the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 narrows the
 # nhl/mlb/nba parsers' error handling (A-L60), and 4.1b owns every other provider parser (A-L17).
 _TASK_49 = ("nhl.nhl_edge_parsers.", "nhl.nhl_api_web_parsers.", "mlb.mlb_api_parsers.", "nba.nba_stats_parsers.")
@@ -1562,6 +1690,14 @@ def _hostile_params() -> List[Any]:
         for shape in _HOSTILE:
             exc = _HOSTILE_OPEN.get(qual, {}).get(shape)
             marks = [pytest.mark.xfail(strict=True, raises=exc, reason=_open(qual, shape))] if exc else []
+            if _HOSTILE_SYNC_1018.get(qual, {}).get(shape):
+                marks = [
+                    pytest.mark.xfail(
+                        strict=True,
+                        raises=_HOSTILE_SYNC_1018[qual][shape],
+                        reason=f"EX-SYNC-g: a hostile {shape} body parses to rows; task providers 4.1b",
+                    )
+                ]
             params.append(pytest.param(qual, shape, id=f"{qual}-{shape}", marks=marks))
     return params
 
@@ -1594,6 +1730,8 @@ def test_hostile_sweep_covers_every_public_parser():
     ]
     assert needs_more == [], "a parser needs more than its payload: give the sweep its arguments"
     assert set(_HOSTILE_OPEN) <= set(parsers), sorted(set(_HOSTILE_OPEN) - set(parsers))
+    assert set(_HOSTILE_SYNC_1018) <= set(parsers), sorted(set(_HOSTILE_SYNC_1018) - set(parsers))
+    assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
     unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
 

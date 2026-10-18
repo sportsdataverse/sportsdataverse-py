@@ -74,7 +74,7 @@ def _q(name: str, wire: str, desc: str, *, typ: str = "str", required: bool = Fa
 
 
 def _season() -> Dict[str, Any]:
-    return _q("season", "season", SEASON, typ="int")
+    return _q("season", "season", SEASON, typ="int", wire_transform="wire_season")
 
 
 def _phase() -> Dict[str, Any]:
@@ -504,7 +504,7 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
         "parser": parser.__name__,
         "returns_schema": f"native/ha/{short}",
         # The runtime POSTs every route but these two (docstrings say POST / body field).
-        **({} if path in ("/api/game", "/pages/matcher") else {"method": "post"}),
+        **({} if path in ("/api/game", "/pages/matcher") else {"method": "post", "body": "json"}),
         **copy.deepcopy(fields),  # no shared objects, so the YAML carries no anchors
     }
 

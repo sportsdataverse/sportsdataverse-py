@@ -324,7 +324,7 @@ def test_record_identity_checks():
     with pytest.raises(P._NotParsed, match="season"):
         P._page_record(
             "report", _html(REPORT), {"season": 2026, "stage": "Regular Season", "game_number": 984}
-        )  # type-strict
+        )  # strict types
     with pytest.raises(P._NotParsed, match="player"):
         P._page_record("player", _html("player_34418.html"), {"player_id": 34526})
     shell = P._NotParsed
@@ -424,7 +424,7 @@ class _Site:
 def site(monkeypatch):
     s = _Site()
     monkeypatch.setattr(R, "_transport", s)
-    monkeypatch.setattr(R.time, "sleep", lambda secs: None)
+    monkeypatch.setattr(euro_hockey_runtime.time, "sleep", lambda secs: None)
     monkeypatch.setattr(euro_hockey_runtime, "_polite_wait", lambda url, *a: s.waited.append(url))
     R._tournaments.cache_clear()
     R._games.clear()
@@ -543,7 +543,7 @@ def test_team_shell_is_nodata_and_a_team_page_is_stamped(site):
         (_Resp(200, "   "), AssetFetchError, "empty body"),
         (_Resp(200, "Торос".encode("cp1251")), AssetFetchError, "not valid 'UTF-8'"),
         (_Resp(200, "x", ctype="text/html; charset=nonsense"), AssetFetchError, "not valid"),
-        (_Resp(200, "ok �"), AssetFetchError, "replacement"),
+        (_Resp(200, "ok \ufffd"), AssetFetchError, "replacement"),
         (_Resp(200, "<html></html>", url=f"{HOST}/404.php"), NoDataError, "redirected"),
         (_Resp(200, "<html></html>", url=f"{HOST}/en/"), AssetFetchError, "redirected"),
         (_Resp(200, "<html><body><table></table></body></html>"), AssetFetchError, "not the page asked for"),
@@ -585,7 +585,7 @@ def test_retries_5xx_and_transport_errors_then_gives_up(site):
 @pytest.mark.parametrize("status", [429, 503])
 def test_retry_after_is_honoured_on_429_and_503(site, monkeypatch, status):
     slept: List[float] = []
-    monkeypatch.setattr(R.time, "sleep", slept.append)
+    monkeypatch.setattr(euro_hockey_runtime.time, "sleep", slept.append)
     url = f"{HOST}/en/players/34418/"
     busy = _Resp(status, "busy")
     busy.headers["retry-after"] = "30"
@@ -597,7 +597,7 @@ def test_retry_after_is_honoured_on_429_and_503(site, monkeypatch, status):
     site.pages[url] = [huge, "player_34418.html"]
     slept.clear()
     R._get(url, {})
-    assert slept == [R._MAX_RETRY_AFTER]
+    assert slept == [euro_hockey_runtime._MAX_RETRY_AFTER]
 
 
 def test_bad_arguments_are_refused(site):
