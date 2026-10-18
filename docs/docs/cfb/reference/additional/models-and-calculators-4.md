@@ -576,7 +576,7 @@ Expected win probability of going for it on 4th down (cfb4th `get_go_wp`).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in PBP_COLS`. |
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in `_PBP_COLS`. |
 
 **Returns**
 

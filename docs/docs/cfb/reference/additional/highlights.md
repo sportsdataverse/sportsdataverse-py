@@ -27,7 +27,7 @@ set or `run_cleaning_pipeline()` for a lighter clean.
 | `path_to_json` |  | `'/'` | directory for cfb_pbp_disk() offline loads. |
 | `return_keys` |  | `None` | optional subset of result keys to return. |
 | `odds_override` |  | `None` | optional dict {gameSpread, overUnder, homeFavorite, gameSpreadAvailable} that short-circuits odds resolution (sets odds_source="injected") so offline rebuilds never hit the live core-odds endpoint or fall back to defaults. Validated + coerced here. |
-| `game_roster` |  | `None` | optional pre-fetched game roster (the list of athlete records from `~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`, or the `{"data": [...]}` wrapper). Used by attach_player_ids` to resolve a roster-backed `{type}_player_id` for each extracted `{type}_player_name` on games that lack a structured `participants[]` array (pre-2014). Passing it makes offline rebuilds fetch-free; when omitted the live path fetches the roster on demand only if needed. |
+| `game_roster` |  | `None` | optional pre-fetched game roster (the list of athlete records from `~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`, or the `{"data": [...]}` wrapper). Used by `__attach_player_ids` to resolve a roster-backed `{type}_player_id` for each extracted `{type}_player_name` on games that lack a structured `participants[]` array (pre-2014). Passing it makes offline rebuilds fetch-free; when omitted the live path fetches the roster on demand only if needed. |
 | `participants` |  | `None` |  |
 | `join_participants` |  | `True` | when True (default) the pipeline coalesces ESPN per-play participant names over the regex-extracted names and resolves a roster-backed `{type}_player_id` -- both of which hit the network (the participants/playbyplay endpoints and the game roster). Set False (`CFBPlayProcess(..., join_participants=False)`) to skip those lookups for a ~20x faster, network-free run. EPA / WPA / CPOE are unaffected (the models key on game state, not player identity); the cost is that `{type}_player_id` columns go null and names fall back to regex-from-text instead of clean ESPN displays. |
 
@@ -322,7 +322,7 @@ processed = game.run_processing_pipeline()  # adds EPA, WPA, box score
 Run the lighter cleaning pipeline (no EPA/WPA/QBR/box-score).
 
 Same per-play feature engineering as `run_processing_pipeline`
-through add_spread_time`, but stops short of the modeling steps.
+through `__add_spread_time`, but stops short of the modeling steps.
 Use this when you only need cleaned plays and don't need expected
 points or win probability columns.
 
