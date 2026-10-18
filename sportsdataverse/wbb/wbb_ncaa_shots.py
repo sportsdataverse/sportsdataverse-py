@@ -76,7 +76,8 @@ def ncaa_wbb_shot_locations(
             print(shots.shape)
     """
     ids = [g for g in map(_utf8_id, game_ids) if g is not None]
-    period_model = wbb_period_model(None if season is None else str(season))
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
+    period_model = wbb_period_model(_utf8_id(season))
 
     def _run(f: Any) -> "list[pl.DataFrame]":
         frames: "list[pl.DataFrame]" = []

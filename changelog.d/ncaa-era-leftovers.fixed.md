@@ -5,3 +5,5 @@
   caller escalated to an error; they swallowed it, re-fetched the page and returned 0 rows. (#853)
 - **MBB / WBB:** the stats.ncaa.org pbp / shots / box drivers turn a float contest id into `"6470186"`, never
   `contests/6470186.0/`; box-score failures are logged, not printed; one owner for the WBB period model. (#853)
+- **WBB:** `ncaa_wbb_game_pbp` / `ncaa_wbb_shot_locations` read `season=2015.0` as 2015 (halves); it became
+  `"2015.0"`, bound the quarters model and a halves-era game returned 0 rows. (#853)

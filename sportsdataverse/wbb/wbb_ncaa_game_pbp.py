@@ -38,6 +38,7 @@ from sportsdataverse.mbb.mbb_ncaa_game_pbp import (
     _time_in_seconds,
 )
 from sportsdataverse.scrape.ncaa._rules import WBB_HALVES_MODEL, WBB_QUARTERS_MODEL
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -84,7 +85,8 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
 
 
 def _period_model_for(season: Optional[object]) -> PeriodModel:
-    return infer_wbb_period_model if season is None else wbb_period_model(str(season))
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
+    return infer_wbb_period_model if season is None else wbb_period_model(_utf8_id(season))
 
 
 def ncaa_wbb_game_pbp(
