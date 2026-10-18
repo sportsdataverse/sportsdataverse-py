@@ -111,9 +111,7 @@ def action_name(code: Optional[int], feed: Optional[str] = None) -> Optional[str
 
     Returns:
         The slug, e.g. ``"fg3_made"``, or ``None``.
-
-    Raises:
-        None: unknown input gives ``None``.
+        Unknown input gives ``None``.
 
     Example:
         Quick start::
@@ -139,9 +137,7 @@ def qualifier_name(code: Optional[int]) -> Optional[str]:
 
     Returns:
         The slug (``"layup"``), or ``None``.
-
-    Raises:
-        None: unknown input gives ``None``.
+        Unknown input gives ``None``.
 
     Example:
         Quick start::
@@ -161,9 +157,7 @@ def area_name(code: Optional[int]) -> Optional[str]:
 
     Returns:
         The slug (``"corner_3"``), or ``None``.
-
-    Raises:
-        None: unknown input gives ``None``.
+        Unknown input gives ``None``.
 
     Example:
         Quick start::

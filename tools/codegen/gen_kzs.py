@@ -602,12 +602,8 @@ def _frames(entry: Entry) -> List[pl.DataFrame]:
     return [parser(load_fixture(rel, ctx)) for rel, ctx in fixtures]
 
 
-def _merge_codes(short: str, frames: List[pl.DataFrame]) -> Dict[str, str]:
-    """``{column: dtype code}`` over every fixture of a wrapper, in first-seen order.
-
-    A column takes the dtype of the fixtures that hold a value (``i`` and ``f`` merge to ``f``); one that is null in
-    every fixture is an Int64 for an id and a String otherwise. Anything else stops the run.
-    """
+def _observed(short: str, frames: List[pl.DataFrame]) -> Tuple[List[str], Dict[str, set]]:
+    """The columns of a wrapper in first-seen order, and the dtype codes of the ones some fixture fills."""
     seen: Dict[str, set] = {}
     order: List[str] = []
     for df in frames:
@@ -618,9 +614,24 @@ def _merge_codes(short: str, frames: List[pl.DataFrame]) -> Dict[str, str]:
                 if dtype not in _CODE:
                     raise SystemExit(f"kzs: {short}.{col} has dtype {dtype}")
                 seen.setdefault(col, set()).add(_CODE[dtype])
+    return order, seen
+
+
+def _merge_codes(
+    short: str, frames: List[pl.DataFrame], family_seen: Optional[Dict[str, set]] = None
+) -> Dict[str, str]:
+    """``{column: dtype code}`` over every fixture of a wrapper, in first-seen order.
+
+    A column takes the dtype of the fixtures that hold a value (``i`` and ``f`` merge to ``f``). One that is null in
+    every fixture takes the one dtype the family's other wrappers observed for it, so a column name has one dtype
+    across the family; failing that it is an Int64 for an id and a String otherwise. Anything else stops the run.
+    """
+    order, seen = _observed(short, frames)
     out: Dict[str, str] = {}
     for col in order:
         codes = seen.get(col)
+        if not codes and family_seen and (len(family_seen.get(col, ())) == 1 or family_seen.get(col) == {"i", "f"}):
+            codes = family_seen[col]
         if col in FLOAT_COLS and codes in (None, {"i"}, {"f"}, {"i", "f"}):
             out[col] = "f"
         elif not codes:
@@ -766,7 +777,12 @@ def main() -> None:
     schema_dir = ROOT / "tools/codegen/schemas/native/kzs"
     rewrite_schema_dir(schema_dir)
     P.DTYPES = {}  # parse by the name rules alone, so the last run's kzs_dtypes.py cannot feed back
-    codes = {short: _merge_codes(short, _frames(entry)) for short, entry in ENDPOINTS.items()}
+    frames = {short: _frames(entry) for short, entry in ENDPOINTS.items()}
+    family_seen: Dict[str, set] = {}
+    for short, fr in frames.items():
+        for col, got in _observed(short, fr)[1].items():
+            family_seen.setdefault(col, set()).update(got)
+    codes = {short: _merge_codes(short, frames[short], family_seen) for short in ENDPOINTS}
     snippet: Dict[str, Dict[str, str]] = {}
     bad: List[str] = []
     for short in ENDPOINTS:

@@ -194,8 +194,9 @@ def test_return_as_pandas(short):
 @pytest.mark.parametrize("short", sorted(P.SPECS))
 def test_every_public_parser_documents_args_returns_raises_example(short):
     doc = getattr(P, f"parse_bleague_{short}").__doc__
-    for head in ("Args:", "Returns:", "Raises:", "Example:"):
+    for head in ("Args:", "Returns:", "Example:"):
         assert head in doc, (short, head)
+    assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), short  # a parser raises nothing
     assert ">>>" not in doc
 
 

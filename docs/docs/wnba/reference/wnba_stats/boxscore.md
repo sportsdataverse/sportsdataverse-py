@@ -1,11 +1,11 @@
 ---
-title: "WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscoresummaryv2"
-sidebar_label: "Box scores: boxscoreadvancedv2–boxscoresummaryv2"
+title: "WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscorescoringv3"
+sidebar_label: "Box scores: boxscoreadvancedv2–boxscorescoringv3"
 sidebar_position: 1
-description: "WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscoresummaryv2 — function reference in sdv-py, the SportsDataverse Python package."
+description: "WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscorescoringv3 — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscoresummaryv2
+# WNBA — WNBA Stats API (stats.wnba.com) — Box scores: boxscoreadvancedv2–boxscorescoringv3
 
 ## wnba_stats_boxscoreadvancedv2
 
@@ -100,6 +100,14 @@ GET /stats/boxscoreadvancedv2
 | `pie` | numeric | Player Impact Estimate (0-1). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscoreadvancedv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscoreadvancedv2-example}
 
@@ -213,6 +221,14 @@ GET /stats/boxscoreadvancedv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_boxscoreadvancedv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_boxscoreadvancedv3-example}
 
 ```python
@@ -289,6 +305,14 @@ GET /stats/boxscoredefensivev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_boxscoredefensivev2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_boxscoredefensivev2-example}
 
 ```python
@@ -361,6 +385,14 @@ GET /stats/boxscorefourfactorsv2
 | `opp_oreb_pct` | numeric | Percentage of available offensive rebounds grabbed by the opponent while on the floor. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscorefourfactorsv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscorefourfactorsv2-example}
 
@@ -445,6 +477,14 @@ GET /stats/boxscorefourfactorsv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_boxscorefourfactorsv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_boxscorefourfactorsv3-example}
 
 ```python
@@ -484,6 +524,14 @@ GET /stats/boxscorehustlev2
 | `statistics` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscorehustlev2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscorehustlev2-example}
 
@@ -545,6 +593,14 @@ GET /stats/boxscorematchupsv3
 | `team_slug` | character | URL slug for teamslug used by NBA or WNBA Stats pages. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscorematchupsv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscorematchupsv3-example}
 
@@ -626,6 +682,14 @@ GET /stats/boxscoremiscv2
 | `pfd` | integer | Personal fouls drawn. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscoremiscv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscoremiscv2-example}
 
@@ -717,6 +781,14 @@ GET /stats/boxscoremiscv3
 | `fouls_drawn` | integer | Personal fouls drawn. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscoremiscv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscoremiscv3-example}
 
@@ -819,6 +891,14 @@ GET /stats/boxscoreplayertrackv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_boxscoreplayertrackv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_boxscoreplayertrackv3-example}
 
 ```python
@@ -905,6 +985,14 @@ GET /stats/boxscorescoringv2
 | `pct_uast_fgm` | numeric | Share of all made field goals that were unassisted. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_boxscorescoringv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_boxscorescoringv2-example}
 
@@ -1003,174 +1091,18 @@ GET /stats/boxscorescoringv3
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_boxscorescoringv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_boxscorescoringv3-example}
 
 ```python
 wnba_stats_boxscorescoringv3()
-```
-
-_Last validated n/a._
-
-## wnba_stats_boxscoresummaryv2
-
-GET /stats/boxscoresummaryv2
-
-**Endpoint URL:** `GET https://stats.wnba.com/stats/boxscoresummaryv2`
-
-**Valid URL:** [https://stats.wnba.com/stats/boxscoresummaryv2?GameID=1022200034](https://stats.wnba.com/stats/boxscoresummaryv2?GameID=1022200034)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `GameID` | `game_id` |  |  | `Y` |  |
-
-### Returns {#wnba_stats_boxscoresummaryv2-returns}
-
-**`return_parsed=True`** (default) — A dict of DataFrames keyed by result-set name (`GameSummary`, `OtherStats`, `Officials`, `InactivePlayers`, `GameInfo`, `LineScore`, `LastMeeting`, `SeasonSeries`, `AvailableVideo`) (one table per documented key below); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
-
-**GameSummary**
-
-| col_name | type | description |
-|---|---|---|
-| `game_date_est` | character | Game date est. |
-| `game_sequence` | integer | Game sequence. |
-| `game_id` | character | Unique game identifier. |
-| `game_status_id` | integer | Numeric game status identifier. |
-| `game_status_text` | character | Game status display text (e.g. 'Final', '4:32 - 4th'). |
-| `gamecode` | character | Gamecode. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `season` | character | Season identifier (4-digit year or 'YYYY-YY' string). |
-| `live_period` | integer | Live period. |
-| `live_pc_time` | character | Time / clock value. |
-| `natl_tv_broadcaster_abbreviation` | character | Natl tv broadcaster abbreviation. |
-| `live_period_time_bcast` | character | Live period time bcast. |
-| `wh_status` | integer | Wh status. |
-
-**OtherStats**
-
-| col_name | type | description |
-|---|---|---|
-| `league_id` | character | League identifier ('10' = WNBA). |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `pts_paint` | integer | Points scored in the paint. |
-| `pts_2_nd_chance` | integer |  |
-| `pts_fb` | integer |  |
-| `largest_lead` | integer | Largest lead during the game. |
-| `lead_changes` | integer | Lead changes. |
-| `times_tied` | integer | Times tied. |
-| `team_turnovers` | integer | Team turnovers (turnovers credited to the team rather than a player). |
-| `total_turnovers` | integer | Total turnovers (player + team). |
-| `team_rebounds` | integer | Team rebounds (rebounds credited to the team rather than a player). |
-| `pts_off_to` | integer |  |
-
-**Officials**
-
-| col_name | type | description |
-|---|---|---|
-| `official_id` | integer | Unique official / referee identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `jersey_num` | character | Jersey number worn by the player. |
-
-**InactivePlayers**
-
-| col_name | type | description |
-|---|---|---|
-| `player_id` | integer | Unique player identifier. |
-| `first_name` | character | Player's first name. |
-| `last_name` | character | Player's last name. |
-| `jersey_num` | character | Jersey number worn by the player. |
-| `team_id` | integer | Unique team identifier. |
-| `team_city` | character | Team city or region (e.g. 'Las Vegas'). |
-| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-
-**GameInfo**
-
-| col_name | type | description |
-|---|---|---|
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `attendance` | integer | Reported attendance. |
-| `game_time` | character | Game start time. |
-
-**LineScore**
-
-| col_name | type | description |
-|---|---|---|
-| `game_date_est` | character | Game date est. |
-| `game_sequence` | integer | Game sequence. |
-| `game_id` | character | Unique game identifier. |
-| `team_id` | integer | Unique team identifier. |
-| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
-| `team_city_name` | character | Team city name. |
-| `team_nickname` | character | Team nickname. |
-| `team_wins_losses` | character | Team wins losses. |
-| `pts_qtr1` | integer | Pts qtr1. |
-| `pts_qtr2` | integer | Pts qtr2. |
-| `pts_qtr3` | integer | Pts qtr3. |
-| `pts_qtr4` | integer | Pts qtr4. |
-| `pts_ot1` | integer | Pts ot1. |
-| `pts_ot2` | integer | Scoring or score-margin metric for points ot2 in the requested NBA or WNBA Stats split. |
-| `pts_ot3` | integer | Scoring or score-margin metric for points ot3 in the requested NBA or WNBA Stats split. |
-| `pts_ot4` | integer | Scoring or score-margin metric for points ot4 in the requested NBA or WNBA Stats split. |
-| `pts_ot5` | integer | Scoring or score-margin metric for points ot5 in the requested NBA or WNBA Stats split. |
-| `pts_ot6` | integer | Scoring or score-margin metric for points ot6 in the requested NBA or WNBA Stats split. |
-| `pts_ot7` | integer | Scoring or score-margin metric for points ot7 in the requested NBA or WNBA Stats split. |
-| `pts_ot8` | integer | Scoring or score-margin metric for points ot8 in the requested NBA or WNBA Stats split. |
-| `pts_ot9` | integer | Scoring or score-margin metric for points ot9 in the requested NBA or WNBA Stats split. |
-| `pts_ot10` | integer | Scoring or score-margin metric for points ot10 in the requested NBA or WNBA Stats split. |
-| `pts` | integer | Points scored. |
-
-**LastMeeting**
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `last_game_id` | character |  |
-| `last_game_date_est` | character |  |
-| `last_game_home_team_id` | integer |  |
-| `last_game_home_team_city` | character |  |
-| `last_game_home_team_name` | character |  |
-| `last_game_home_team_abbreviation` | character |  |
-| `last_game_home_team_points` | integer |  |
-| `last_game_visitor_team_id` | integer |  |
-| `last_game_visitor_team_city` | character |  |
-| `last_game_visitor_team_name` | character |  |
-| `last_game_visitor_team_city1` | character |  |
-| `last_game_visitor_team_points` | integer |  |
-
-**SeasonSeries**
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `home_team_id` | integer | Unique identifier for the home team. |
-| `visitor_team_id` | integer | Unique identifier for visitor team. |
-| `game_date_est` | character | Game date est. |
-| `home_team_wins` | integer | Home team's team wins. |
-| `home_team_losses` | integer | Home team's team losses. |
-| `series_leader` | character |  |
-
-**AvailableVideo**
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `video_available_flag` | integer | Video available flag. |
-| `pt_available` | integer | Pt available. |
-| `pt_xyz_available` | integer | Pt xyz available. |
-| `wh_status` | integer | Wh status. |
-| `hustle_status` | integer | Hustle status. |
-| `historical_status` | integer | Historical status. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#wnba_stats_boxscoresummaryv2-example}
-
-```python
-wnba_stats_boxscoresummaryv2()
 ```
 
 _Last validated n/a._

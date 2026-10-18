@@ -25,9 +25,9 @@ host (an org without hosted pages, or an unknown ORG), a recent-games window wit
 with no matches. ``ValueError``: HTTP 400 / 422, a URL that is not a Genius route. ``AssetFetchError``: every other
 failure, which means the answer is unknown, not empty:
 
-* a non-200 (429 / 5xx after three attempts, honouring ``Retry-After``; an HTTP 500 "A website error has occurred"
-  page from an org with no plain hosted site, which names ``genius_schedule_embed``), the CloudFront block, a dead
-  connection;
+* a non-200 (429 / 5xx after three attempts, honouring ``Retry-After``; the HTTP 500 "A website error has occurred"
+  page, an intermittent host-side failure), the CloudFront block, a dead connection. A dead connection and a 429 /
+  5xx carry ``transient = True``; every other ``AssetFetchError`` is a definitive refusal;
 * an error envelope or a body of the wrong kind (not JSON, an HTML page where JSON was asked, a page cut off before
   ``</html>``, a truncated ``data.json``);
 * **a body for another scope than the one asked for**: a recent-games window of another competition, a ``/u/``
@@ -64,8 +64,10 @@ PROXY_ENV = "GENIUS_PROXY"
 LIVE = "fibalivestats.dcd.shared.geniussports.com"
 HOSTED = "hosted.dcd.shared.geniussports.com"
 WIDGET = "widget.wh.geniussports.com"
-#: 403 is NOT retried: the two Genius 403s are definitive answers. Neither is 500: the "website error" page is
-#: deterministic (see the HTTP 500 policy in ``basketball_runtime``).
+#: 403 is NOT retried: the two Genius 403s are definitive answers. Neither is 500: the "website error" page is an
+#: intermittent origin failure that sticks to a URL for minutes (2026-10-18: one ESAKE URL failed four times over
+#: two minutes while the WBBL/SLB/BAL/NZNBL URLs that failed earlier that day answered 200), so an immediate
+#: retry only adds load; the error is marked transient so a caller retries later.
 RETRY_STATUSES = frozenset({408, 429, 502, 503, 504})
 ATTEMPTS = 3
 #: Public site-widget keys (embedded in each league site's page) -> the webcast ORG their games carry.
@@ -96,6 +98,24 @@ def _route(url: str) -> Tuple[str, Tuple[str, ...]]:
 
 
 # ------------------------------------------------------------------------------ transport
+def _body_text(resp: Any) -> str:
+    """The response body as text, read as UTF-8 when the server names no charset.
+
+    ``requests`` decodes a ``text/html`` answer without a ``charset`` as ISO-8859-1, which turns the
+    UTF-8 pages Genius serves (e.g. French and Greek team and competition names) into mojibake. A
+    declared charset is honoured; bytes that are not valid UTF-8 fall back to ``resp.text``.
+    """
+    content = getattr(resp, "content", None)
+    headers = getattr(resp, "headers", None) or {}
+    ctype = next((str(v) for k, v in headers.items() if str(k).lower() == "content-type"), "").lower()
+    if isinstance(content, bytes) and "charset=" not in ctype:
+        try:
+            return content.decode("utf-8")
+        except UnicodeDecodeError:
+            pass
+    return getattr(resp, "text", "") or ""
+
+
 def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
     """The body text of a 200 answer, or the error the answer calls for (see the module docstring)."""
     where = _rt._where(url)
@@ -111,11 +131,11 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
             num_retries=ATTEMPTS - 1,
         )
     except OSError as exc:  # the transport error can quote the proxy URL: name the class only
-        raise AssetFetchError(
-            f"{where}: fetch failed after retries ({type(exc).__name__}); proxy={PROXY_ENV}"
-        ) from None
+        err = AssetFetchError(f"{where}: fetch failed after retries ({type(exc).__name__}); proxy={PROXY_ENV}")
+        err.transient = True
+        raise err from None
     status = getattr(resp, "status_code", None)
-    text = getattr(resp, "text", "") or ""
+    text = _body_text(resp)
     if status == 200:
         return text
     low = text.lower()
@@ -127,10 +147,17 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
             f"{where}: no such object (S3 AccessDenied: a wrong id or ORG, or a game from before data.json)"
         )
     if status == 500 and "website error" in low:
-        raise AssetFetchError(
-            f"{where} answered HTTP 500 'A website error has occurred': the org has no plain hosted site (try genius_schedule_embed)"
+        err = AssetFetchError(
+            f"{where} answered HTTP 500 'A website error has occurred': an intermittent Genius host-side failure "
+            "(it sticks to a URL for minutes; retry later)"
         )
-    _rt._check_status(url, status, text)  # 404 -> NoDataError, 400/422 -> ValueError, else AssetFetchError
+        err.transient = True
+        raise err
+    try:
+        _rt._check_status(url, status, text)  # 404 -> NoDataError, 400/422 -> ValueError, else AssetFetchError
+    except AssetFetchError as exc:
+        exc.transient = status in RETRY_STATUSES or (isinstance(status, int) and status >= 500)
+        raise
     raise AssetFetchError(f"{where} answered HTTP {status}, not 200")
 
 
@@ -234,6 +261,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         rec["_request"] = {"org": org}
     else:  # schedule / embednf
         org, comp_id = ids[0], int(ids[1])
+        # A "To be determined" slot (an unfilled play-off game: FFBB 21849) has no team or match link, so it names
+        # no scope. It takes the one the page's other blocks prove; a page of nothing but such slots is refused.
+        empty = [m for m in rec["matches"] if m.get("comp_id") is None and m.get("org") is None]
+        if len(empty) == len(rec["matches"]):
+            raise AssetFetchError(f"{_rt._where(url)}: no block names a competition, so the page cannot be checked")
+        for m in empty:
+            m["comp_id"], m["org"] = comp_id, org
         for m in rec["matches"]:
             if not _same(m.get("comp_id"), comp_id):
                 raise _wrong(url, "competition", m.get("comp_id"), comp_id)

@@ -340,8 +340,8 @@ def genius_game(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -399,8 +399,8 @@ def genius_team_box(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -458,8 +458,8 @@ def genius_player_box(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -517,8 +517,8 @@ def genius_pbp(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -576,8 +576,8 @@ def genius_shots(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -635,8 +635,8 @@ def genius_competition_games(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -698,8 +698,8 @@ def genius_match_competition(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -759,8 +759,8 @@ def genius_competitions(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -824,8 +824,8 @@ def genius_schedule(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -889,8 +889,8 @@ def genius_schedule_embed(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -950,8 +950,8 @@ def genius_widget_games(
         A polars/pandas DataFrame by default; the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` (the match id asked for), or the sdv-internal-refs capture shape of a page when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
+        NoDataError: The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

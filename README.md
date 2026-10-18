@@ -15,6 +15,7 @@
   - [Examples and tutorials](#examples-and-tutorials)
   - [Using with AI agents](#using-with-ai-agents)
   - [Companion packages](#companion-packages)
+  - [Follow the SportsDataverse (@SportsDataverse) on X and star this repo](#follow-the-sportsdataverse-sportsdataverse-on-x-and-star-this-repo)
 - [**Our Authors**](#our-authors)
   - [**Cheat sheet**](#cheat-sheet)
   - [**Citations**](#citations)
@@ -291,6 +292,19 @@ seeding). The full directory is at [sportsdataverse.org/packages](https://sports
 The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.com/nflverse/nflreadpy);
 the broader [nflverse](https://nflverse.nflverse.com) ecosystem is the
 upstream data source for many of those loaders.
+
+## Follow the SportsDataverse (@SportsDataverse) on X and star this repo
+
+[![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
+
+[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/sportsdataverse-py.svg?color=eee&logo=github&style=for-the-badge&label=Star%20sportsdataverse-py&maxAge=2592000)](https://github.com/sportsdataverse/sportsdataverse-py)
+
+<a href="https://github.com/sportsdataverse/sportsdataverse-py/stargazers">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/star-history/star-history-dark.svg">
+    <img alt="Star history of sportsdataverse/sportsdataverse-py" src="https://raw.githubusercontent.com/sportsdataverse/sportsdataverse-py/star-history/star-history.png" width="600">
+  </picture>
+</a>
 
 # **Our Authors**
 

@@ -339,8 +339,8 @@ def pleague_schedule(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -402,8 +402,8 @@ def pleague_game(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -461,8 +461,8 @@ def pleague_periods(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -520,8 +520,8 @@ def pleague_officials(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -579,8 +579,8 @@ def pleague_box_players(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -640,8 +640,8 @@ def pleague_box_teams(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -701,8 +701,8 @@ def pleague_pbp(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -762,8 +762,8 @@ def pleague_standings(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -823,8 +823,8 @@ def pleague_stat_player(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -882,8 +882,8 @@ def pleague_player(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -941,8 +941,8 @@ def pleague_player_seasons(
         A polars/pandas DataFrame by default; the raw record (``dict``): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus ``_request`` (kind and the season, stage, game or player asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
