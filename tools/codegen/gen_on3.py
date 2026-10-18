@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
 import yaml
+from gen_soccer_common import _query_params
 
 from sportsdataverse.cfb.on3_parsers import parse_on3_rdb
 from sportsdataverse.dl_utils import underscore
@@ -261,20 +262,6 @@ def _emit_path(path: str, is_v2: bool) -> str:
     return _TOKEN.sub(lambda m: "{" + _snake_token(m.group(1)) + "}", rest)
 
 
-def _query_params(op: dict, path_names: set) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        name = underscore(wire)
-        if name in path_names:  # path token wins on a name clash
-            continue
-        jtype = (prm.get("schema") or {}).get("type", "string")
-        out.append({"name": name, "query_key": wire, "type": _PYTYPE.get(jtype, "str")})
-    return out
-
-
 def _endpoint_entry(path: str, op: dict, spec: dict) -> Dict[str, Any]:
     is_v2 = path.startswith("/rdb/v2")
     short = _short_from_path(path)
@@ -291,7 +278,7 @@ def _endpoint_entry(path: str, op: dict, spec: dict) -> Dict[str, Any]:
         entry["host"] = HOST_V2
     if pps:
         entry["path_params"] = pps
-    qps = _query_params(op, path_names)
+    qps = _query_params(op, path_names=path_names, pytypes=_PYTYPE, description=None)
     if qps:
         entry["extra_params"] = qps
     example = {p["name"]: _EXAMPLE[p["name"]] for p in pps if p["name"] in _EXAMPLE}

@@ -56,6 +56,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
+from gen_soccer_common import _query_params
 
 from sportsdataverse.dl_utils import underscore
 
@@ -222,21 +223,6 @@ def _schema_doc(short: str, props: Optional[Dict[str, Any]]) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
-def _query_params(op: dict, skip: Optional[set] = None) -> List[Dict[str, Any]]:
-    skip = skip or set()
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if "$ref" in prm or prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        name = underscore(wire)
-        if wire in _LOCALE_PARAMS or name in skip:
-            continue
-        jtype = (prm.get("schema") or {}).get("type") or "string"
-        out.append({"name": name, "query_key": wire, "type": _PYTYPE.get(jtype, "str")})
-    return out
-
-
 def _summary(op: dict, qname: str, props: Optional[Dict[str, Any]]) -> str:
     """Prefer the spec summary; replace the bare ``shangrila: X`` stub with the
     query name plus the collection(s) the parser will surface."""
@@ -272,7 +258,8 @@ def _shangrila_entries(spec: dict) -> List[Dict[str, Any]]:
             entry["docstring"] = {
                 "parsed_doc": "A dict of polars/pandas DataFrames keyed by the payload's ``data`` collections",
             }
-        qps = _query_params(op)
+        # required="ignore" until the owner rules on A-M23 (57 spec-required params on 19 routes)
+        qps = _query_params(op, pytypes=_PYTYPE, skip=_LOCALE_PARAMS, description=None)
         if qps:
             entry["extra_params"] = qps
         entries.append(entry)
@@ -300,7 +287,7 @@ def _editorial_entries(spec: dict) -> List[Dict[str, Any]]:
         if pps:
             entry["path_params"] = pps
             entry["example_args"] = {"game_id": "ncaaf.g.202509200023"}
-        qps = _query_params(op, skip={p["name"] for p in pps})
+        qps = _query_params(op, pytypes=_PYTYPE, skip=_LOCALE_PARAMS | {p["name"] for p in pps}, description=None)
         if qps:
             entry["extra_params"] = qps
         entries.append(entry)

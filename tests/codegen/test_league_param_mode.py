@@ -96,3 +96,43 @@ def test_nba_module_unaffected_by_soccer_override():
     src = gen._league_module_source(lg, apis, hosts)
     assert "return parse_scoreboard(raw" in src
     assert "parse_soccer_scoreboard" not in src
+
+
+def _real_league_views(prefix: str):
+    endpoints = gen.ENDPOINTS
+    params = spec.load_parameters(endpoints / "parameters.yaml")
+    apis = [spec.load_espn_api(endpoints / f"{a}.yaml", params) for a in gen.ESPN_APIS]
+    cfg = spec.load_leagues(endpoints / "leagues.yaml")
+    lg = next(lg for lg in cfg.leagues if lg.prefix == prefix)
+    return lg, apis, cfg.hosts, gen._espn_league_views(lg, apis, cfg.hosts)
+
+
+def test_headline_soccer_league_documents_the_parser_it_calls():
+    """A-M21: the override lands before the view, so the docstring and the returns table follow it.
+
+    ``epl`` is one of the 12 headline soccer leagues: its prefix has no per-league schema, so before
+    the fix its pages fell back to the generic cross-league tables (``boxscore_player``, ``plays``, ...).
+    """
+    lg, apis, hosts, views = _real_league_views("epl")
+    views = {v.short: v for v in views}
+    for short, parser in gen._SPORT_PARSER_OVERRIDES["soccer"].items():
+        v = views[short]
+        assert v.parser == parser
+        assert f"parse the payload through {parser} ->" in v.docstring, short
+        assert v.schema_league == "soccer"
+    summary = views["summary"]
+    assert summary.return_table == gen._return_table("summary", "soccer")
+    assert "**lineups**" in summary.return_table and "**boxscore_player**" not in summary.return_table
+    src = gen._league_module_source(lg, apis, hosts)
+    assert "parse_scoreboard" not in src
+    assert "return parse_soccer_scoreboard(raw" in src
+
+
+def test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union():
+    """A-M22: a wrapper that returns a frame by default is not annotated ``-> Dict``."""
+    lg, apis, hosts, views = _real_league_views("nba")
+    src = gen._league_module_source(lg, apis, hosts)
+    assert all(v.parser for v in views)
+    assert "-> Dict:" not in src
+    assert src.count(") -> Union[pl.DataFrame, pd.DataFrame, Dict]:") == len(views)
+    assert "    import polars as pl" in src and "    import pandas as pd" in src

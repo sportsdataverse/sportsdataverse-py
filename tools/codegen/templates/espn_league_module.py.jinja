@@ -3,7 +3,7 @@
 """ESPN endpoint wrappers for {{ prefix|upper }} ({{ sport }}/{{ league }}). Generated."""
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import {{ runtime_imports|join(", ") }}
 {% if parser_imports %}
@@ -12,6 +12,10 @@ from sportsdataverse._common_espn_parsers import {{ parser_imports|join(", ") }}
 {% if sport_parser_imports and sport_parser_module %}
 from {{ sport_parser_module }} import {{ sport_parser_imports|join(", ") }}
 {% endif %}
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
 {% for ep in endpoints %}
@@ -47,7 +51,11 @@ def {{ ep.fn_name }}(
     return_as_pandas: bool = False,
 {% endif %}
     **kwargs,
-) -> Dict:
+{% if ep.parser %}
+) -> Union[pl.DataFrame, pd.DataFrame, {{ ep.raw_hint }}]:
+{% else %}
+) -> {{ ep.raw_annotation }}:
+{% endif %}
 {{ ep.docstring }}
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

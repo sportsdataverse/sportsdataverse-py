@@ -88,6 +88,7 @@ class Wrapper:
     schema: Optional[str]
     summary: str
     params: tuple  # spec.Param, path params first
+    schema_league: str | None = None  # returns-schema key when it is not ``league`` (soccer/cricket overrides)
 
 
 _HEADING = re.compile(r"^(?:## ([A-Za-z_][A-Za-z0-9_]*)|### ([A-Za-z_][A-Za-z0-9_]*) \{#([A-Za-z0-9_]+)\})\s*$")
@@ -148,7 +149,13 @@ def codegen_wrappers(commit: str, rows: Rows) -> dict[str, Wrapper]:
             out.setdefault(
                 v.fn_name,
                 Wrapper(
-                    v.fn_name, lg.prefix, "espn", ep.returns_schema, v.summary, (*ep.path_params, *ep.query_params)
+                    v.fn_name,
+                    lg.prefix,
+                    "espn",
+                    ep.returns_schema,
+                    v.summary,
+                    (*ep.path_params, *ep.query_params),
+                    v.schema_league,
                 ),
             )
             found.setdefault((v.api_name, v.short), (v.host_url, []))[1].append(v.fn_name)
@@ -290,7 +297,7 @@ def python_columns(funcs: dict[str, str], wrappers: dict[str, Wrapper], loaders:
     for name, league in funcs.items():
         w = wrappers.get(name)
         if w is not None:
-            doc = G._schema_doc(w.schema, w.league) if w.schema else {}
+            doc = G._schema_doc(w.schema, w.schema_league or w.league) if w.schema else {}
             frames = doc.get("frames") or ([{"section": None, "columns": doc.get("columns") or []}] if doc else [])
             for fr in frames:
                 for c in fr.get("columns") or []:

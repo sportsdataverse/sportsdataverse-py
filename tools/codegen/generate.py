@@ -1152,8 +1152,13 @@ class _EndpointView:
         raw_types: list[str] | None = None,
         doc_extras: dict | None = None,
         getter_module: str = "sportsdataverse._codegen_runtime",
+        schema_league: str | None = None,
         route_getter: tuple[str, str] | None = None,
     ):
+        # ``schema_league`` keys the per-league returns-schema lookup (``_schema_doc``);
+        # a sport-specific parser override documents its sport's schema, not the prefix's.
+        schema_key = schema_league or league.prefix
+        self.schema_league = schema_key
         # A league-specific example (spec.Endpoint.league_example_args) replaces the default.
         if league.prefix in ep.league_example_args:
             ep = dataclasses.replace(ep, example_args=ep.league_example_args[league.prefix])
@@ -1251,7 +1256,7 @@ class _EndpointView:
             league_param=league.league_param,
             doc_extras=doc_extras,
             import_from=_home_module(league.prefix) if league.prefix else "",
-            returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
+            returns_frames=_returns_dict(_schema_doc(ep.returns_schema, schema_key)),
             vocab_raises=route_module in _VOCAB_GETTERS,
             curl_example=self.curl_example,
         )
@@ -1262,8 +1267,8 @@ class _EndpointView:
         self.http_method = ep.method.upper()
         self.valid_url = self.example_url  # empty for a body endpoint (a GET would 405): its docs show the curl request
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
-        self.return_table = _return_table(ep.returns_schema, league.prefix)
-        schema_doc = _schema_doc(ep.returns_schema, league.prefix)
+        self.return_table = _return_table(ep.returns_schema, schema_key)
+        schema_doc = _schema_doc(ep.returns_schema, schema_key)
         self.return_frames = schema_doc.get("kind") == "frames"
         self.returns_dict = _returns_dict(schema_doc)
         self.frames_by = str(schema_doc.get("frames_by") or "")
@@ -1470,6 +1475,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
     renames = _load_espn_renames()
     drops = _load_espn_drops()
     handwritten = _handwritten_espn_names(league.prefix)
+    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
     collected = []  # (ep, ep_host, base, api_name)
     for api in apis:
         host_url = hosts[api.host]
@@ -1501,14 +1507,17 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
             else:
                 fn_name = new
         used.add(fn_name)
-        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring)
+        # The sport parser override is applied BEFORE the view is built: the view renders
+        # the docstring and the returns table from ``ep``, so a later swap left 68 soccer and
+        # cricket wrappers documenting ``parse_scoreboard`` (and the generic tables) while
+        # calling ``parse_soccer_*`` / ``parse_cricket_*`` (A-M21).
+        schema_league = None
+        if ep.short in overrides:
+            ep = dataclasses.replace(ep, parser=overrides[ep.short])
+            schema_league = league.sport
+        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring, schema_league=schema_league)
         view.api_name = api_name
         views.append(view)
-    overrides = _SPORT_PARSER_OVERRIDES.get(league.sport, {})
-    if overrides:
-        for v in views:
-            if v.short in overrides:
-                v.parser = overrides[v.short]
     return views
 
 

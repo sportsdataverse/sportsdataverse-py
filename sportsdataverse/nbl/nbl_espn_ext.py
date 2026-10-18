@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, bool_str
 from sportsdataverse._common_espn_parsers import (
@@ -34,6 +34,10 @@ from sportsdataverse._common_espn_parsers import (
     parse_transactions,
     parse_weekly_powerindex,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "espn_nbl_scoreboard",
@@ -161,7 +165,7 @@ def espn_nbl_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -216,7 +220,7 @@ def espn_nbl_summary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -263,7 +267,7 @@ def espn_nbl_calendar(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -307,7 +311,7 @@ def espn_nbl_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -353,7 +357,7 @@ def espn_nbl_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -397,7 +401,7 @@ def espn_nbl_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -443,7 +447,7 @@ def espn_nbl_conferences(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -486,7 +490,7 @@ def espn_nbl_statistics_league(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -529,7 +533,7 @@ def espn_nbl_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -573,7 +577,7 @@ def espn_nbl_teams_site(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -620,7 +624,7 @@ def espn_nbl_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -666,7 +670,7 @@ def espn_nbl_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -715,7 +719,7 @@ def espn_nbl_team_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -763,7 +767,7 @@ def espn_nbl_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -808,7 +812,7 @@ def espn_nbl_team_depthcharts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -853,7 +857,7 @@ def espn_nbl_team_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -898,7 +902,7 @@ def espn_nbl_team_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -943,7 +947,7 @@ def espn_nbl_team_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -989,7 +993,7 @@ def espn_nbl_team_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1037,7 +1041,7 @@ def espn_nbl_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1082,7 +1086,7 @@ def espn_nbl_player_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1127,7 +1131,7 @@ def espn_nbl_player_bio(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1172,7 +1176,7 @@ def espn_nbl_player_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1219,7 +1223,7 @@ def espn_nbl_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1270,7 +1274,7 @@ def espn_nbl_player_overview(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1316,7 +1320,7 @@ def espn_nbl_player_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1365,7 +1369,7 @@ def espn_nbl_player_gamelog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1414,7 +1418,7 @@ def espn_nbl_player_splits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1467,7 +1471,7 @@ def espn_nbl_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1523,7 +1527,7 @@ def espn_nbl_league_root(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1566,7 +1570,7 @@ def espn_nbl_season_pointer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1610,7 +1614,7 @@ def espn_nbl_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1657,7 +1661,7 @@ def espn_nbl_season_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1702,7 +1706,7 @@ def espn_nbl_season_types(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1748,7 +1752,7 @@ def espn_nbl_season_type(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1796,7 +1800,7 @@ def espn_nbl_season_group(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1844,7 +1848,7 @@ def espn_nbl_season_groups(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1893,7 +1897,7 @@ def espn_nbl_season_group_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1946,7 +1950,7 @@ def espn_nbl_season_group_children(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -1997,7 +2001,7 @@ def espn_nbl_season_type_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2044,7 +2048,7 @@ def espn_nbl_season_type_corrections(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2091,7 +2095,7 @@ def espn_nbl_season_weeks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2139,7 +2143,7 @@ def espn_nbl_season_week(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2189,7 +2193,7 @@ def espn_nbl_season_week_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2242,7 +2246,7 @@ def espn_nbl_season_week_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2294,7 +2298,7 @@ def espn_nbl_season_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2345,7 +2349,7 @@ def espn_nbl_season_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2393,7 +2397,7 @@ def espn_nbl_season_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2444,7 +2448,7 @@ def espn_nbl_season_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2492,7 +2496,7 @@ def espn_nbl_season_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2538,7 +2542,7 @@ def espn_nbl_season_draft_round_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2584,7 +2588,7 @@ def espn_nbl_season_futures(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2629,7 +2633,7 @@ def espn_nbl_season_freeagents(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2675,7 +2679,7 @@ def espn_nbl_season_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2723,7 +2727,7 @@ def espn_nbl_season_powerindex_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2769,7 +2773,7 @@ def espn_nbl_season_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2819,7 +2823,7 @@ def espn_nbl_players_index(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2870,7 +2874,7 @@ def espn_nbl_player_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2916,7 +2920,7 @@ def espn_nbl_player_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -2966,7 +2970,7 @@ def espn_nbl_player_statisticslog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3011,7 +3015,7 @@ def espn_nbl_player_eventlog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3056,7 +3060,7 @@ def espn_nbl_player_contracts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3101,7 +3105,7 @@ def espn_nbl_player_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3146,7 +3150,7 @@ def espn_nbl_player_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3191,7 +3195,7 @@ def espn_nbl_player_records(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3236,7 +3240,7 @@ def espn_nbl_player_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3281,7 +3285,7 @@ def espn_nbl_player_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3327,7 +3331,7 @@ def espn_nbl_player_vs_player(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3374,7 +3378,7 @@ def espn_nbl_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3423,7 +3427,7 @@ def espn_nbl_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3469,7 +3473,7 @@ def espn_nbl_game_competition(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3518,7 +3522,7 @@ def espn_nbl_game_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3568,7 +3572,7 @@ def espn_nbl_game_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3619,7 +3623,7 @@ def espn_nbl_game_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3670,7 +3674,7 @@ def espn_nbl_game_team_linescores(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3721,7 +3725,7 @@ def espn_nbl_game_team_statistics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3772,7 +3776,7 @@ def espn_nbl_game_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3823,7 +3827,7 @@ def espn_nbl_game_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3873,7 +3877,7 @@ def espn_nbl_game_odds(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3925,7 +3929,7 @@ def espn_nbl_game_probabilities(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -3978,7 +3982,7 @@ def espn_nbl_game_plays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4033,7 +4037,7 @@ def espn_nbl_game_play(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4084,7 +4088,7 @@ def espn_nbl_game_play_personnel(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4134,7 +4138,7 @@ def espn_nbl_game_situation(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4183,7 +4187,7 @@ def espn_nbl_game_status(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4234,7 +4238,7 @@ def espn_nbl_game_officials(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4283,7 +4287,7 @@ def espn_nbl_game_broadcasts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4332,7 +4336,7 @@ def espn_nbl_game_predictor(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4381,7 +4385,7 @@ def espn_nbl_game_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4430,7 +4434,7 @@ def espn_nbl_game_propbets(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4479,7 +4483,7 @@ def espn_nbl_game_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4528,7 +4532,7 @@ def espn_nbl_game_scoringplays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4578,7 +4582,7 @@ def espn_nbl_game_official_detail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4628,7 +4632,7 @@ def espn_nbl_teams_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4677,7 +4681,7 @@ def espn_nbl_team_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4722,7 +4726,7 @@ def espn_nbl_venues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4769,7 +4773,7 @@ def espn_nbl_venue(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4814,7 +4818,7 @@ def espn_nbl_franchises(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4861,7 +4865,7 @@ def espn_nbl_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4906,7 +4910,7 @@ def espn_nbl_coach(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4952,7 +4956,7 @@ def espn_nbl_coach_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -4999,7 +5003,7 @@ def espn_nbl_coach_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5045,7 +5049,7 @@ def espn_nbl_positions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5092,7 +5096,7 @@ def espn_nbl_position(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5137,7 +5141,7 @@ def espn_nbl_tournaments(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5184,7 +5188,7 @@ def espn_nbl_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5231,7 +5235,7 @@ def espn_nbl_award(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5275,7 +5279,7 @@ def espn_nbl_standings_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5318,7 +5322,7 @@ def espn_nbl_leaders_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5361,7 +5365,7 @@ def espn_nbl_league_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5404,7 +5408,7 @@ def espn_nbl_talentpicks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.
@@ -5450,7 +5454,7 @@ def espn_nbl_fpi(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nbl'.

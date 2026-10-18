@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Dict, Optional, Union  # noqa: F401
+from typing import TYPE_CHECKING, Dict, Optional, Union  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, bool_str
 from sportsdataverse._common_espn_parsers import (
@@ -34,6 +34,10 @@ from sportsdataverse._common_espn_parsers import (
     parse_transactions,
     parse_weekly_powerindex,
 )
+
+if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
+    import pandas as pd
+    import polars as pl
 
 __all__ = [
     "espn_nbasl_gs_scoreboard",
@@ -161,7 +165,7 @@ def espn_nbasl_gs_scoreboard(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -216,7 +220,7 @@ def espn_nbasl_gs_summary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -263,7 +267,7 @@ def espn_nbasl_gs_calendar(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -307,7 +311,7 @@ def espn_nbasl_gs_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -353,7 +357,7 @@ def espn_nbasl_gs_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -397,7 +401,7 @@ def espn_nbasl_gs_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -443,7 +447,7 @@ def espn_nbasl_gs_conferences(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -486,7 +490,7 @@ def espn_nbasl_gs_statistics_league(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -529,7 +533,7 @@ def espn_nbasl_gs_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -573,7 +577,7 @@ def espn_nbasl_gs_teams_site(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -620,7 +624,7 @@ def espn_nbasl_gs_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -666,7 +670,7 @@ def espn_nbasl_gs_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -715,7 +719,7 @@ def espn_nbasl_gs_team_schedule(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -763,7 +767,7 @@ def espn_nbasl_gs_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -808,7 +812,7 @@ def espn_nbasl_gs_team_depthcharts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -853,7 +857,7 @@ def espn_nbasl_gs_team_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -898,7 +902,7 @@ def espn_nbasl_gs_team_transactions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -943,7 +947,7 @@ def espn_nbasl_gs_team_history(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -989,7 +993,7 @@ def espn_nbasl_gs_team_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1037,7 +1041,7 @@ def espn_nbasl_gs_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1082,7 +1086,7 @@ def espn_nbasl_gs_player_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1127,7 +1131,7 @@ def espn_nbasl_gs_player_bio(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1172,7 +1176,7 @@ def espn_nbasl_gs_player_news(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1219,7 +1223,7 @@ def espn_nbasl_gs_standings(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1270,7 +1274,7 @@ def espn_nbasl_gs_player_overview(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1316,7 +1320,7 @@ def espn_nbasl_gs_player_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1365,7 +1369,7 @@ def espn_nbasl_gs_player_gamelog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1414,7 +1418,7 @@ def espn_nbasl_gs_player_splits(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1467,7 +1471,7 @@ def espn_nbasl_gs_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1523,7 +1527,7 @@ def espn_nbasl_gs_league_root(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1566,7 +1570,7 @@ def espn_nbasl_gs_season_pointer(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1610,7 +1614,7 @@ def espn_nbasl_gs_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1657,7 +1661,7 @@ def espn_nbasl_gs_season_info(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1702,7 +1706,7 @@ def espn_nbasl_gs_season_types(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1748,7 +1752,7 @@ def espn_nbasl_gs_season_type(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1796,7 +1800,7 @@ def espn_nbasl_gs_season_group(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1844,7 +1848,7 @@ def espn_nbasl_gs_season_groups(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1893,7 +1897,7 @@ def espn_nbasl_gs_season_group_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1946,7 +1950,7 @@ def espn_nbasl_gs_season_group_children(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -1997,7 +2001,7 @@ def espn_nbasl_gs_season_type_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2044,7 +2048,7 @@ def espn_nbasl_gs_season_type_corrections(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2091,7 +2095,7 @@ def espn_nbasl_gs_season_weeks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2139,7 +2143,7 @@ def espn_nbasl_gs_season_week(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2189,7 +2193,7 @@ def espn_nbasl_gs_season_week_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2242,7 +2246,7 @@ def espn_nbasl_gs_season_week_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2294,7 +2298,7 @@ def espn_nbasl_gs_season_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2345,7 +2349,7 @@ def espn_nbasl_gs_season_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2393,7 +2397,7 @@ def espn_nbasl_gs_season_players(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2444,7 +2448,7 @@ def espn_nbasl_gs_season_coaches(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2492,7 +2496,7 @@ def espn_nbasl_gs_season_draft(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2538,7 +2542,7 @@ def espn_nbasl_gs_season_draft_round_picks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2584,7 +2588,7 @@ def espn_nbasl_gs_season_futures(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2629,7 +2633,7 @@ def espn_nbasl_gs_season_freeagents(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2675,7 +2679,7 @@ def espn_nbasl_gs_season_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2726,7 +2730,7 @@ def espn_nbasl_gs_season_powerindex_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2772,7 +2776,7 @@ def espn_nbasl_gs_season_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2822,7 +2826,7 @@ def espn_nbasl_gs_players_index(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2873,7 +2877,7 @@ def espn_nbasl_gs_player_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2919,7 +2923,7 @@ def espn_nbasl_gs_player_career_stats(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -2970,7 +2974,7 @@ def espn_nbasl_gs_player_statisticslog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3015,7 +3019,7 @@ def espn_nbasl_gs_player_eventlog(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3060,7 +3064,7 @@ def espn_nbasl_gs_player_contracts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3105,7 +3109,7 @@ def espn_nbasl_gs_player_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3150,7 +3154,7 @@ def espn_nbasl_gs_player_seasons(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3195,7 +3199,7 @@ def espn_nbasl_gs_player_records(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3240,7 +3244,7 @@ def espn_nbasl_gs_player_injuries(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3285,7 +3289,7 @@ def espn_nbasl_gs_player_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3331,7 +3335,7 @@ def espn_nbasl_gs_player_vs_player(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3378,7 +3382,7 @@ def espn_nbasl_gs_games(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3427,7 +3431,7 @@ def espn_nbasl_gs_game(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3473,7 +3477,7 @@ def espn_nbasl_gs_game_competition(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3522,7 +3526,7 @@ def espn_nbasl_gs_game_teams(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3572,7 +3576,7 @@ def espn_nbasl_gs_game_team(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3623,7 +3627,7 @@ def espn_nbasl_gs_game_team_roster(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3674,7 +3678,7 @@ def espn_nbasl_gs_game_team_linescores(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3725,7 +3729,7 @@ def espn_nbasl_gs_game_team_statistics(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3776,7 +3780,7 @@ def espn_nbasl_gs_game_team_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3827,7 +3831,7 @@ def espn_nbasl_gs_game_team_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3877,7 +3881,7 @@ def espn_nbasl_gs_game_odds(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3927,7 +3931,7 @@ def espn_nbasl_gs_game_probabilities(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -3980,7 +3984,7 @@ def espn_nbasl_gs_game_plays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4033,7 +4037,7 @@ def espn_nbasl_gs_game_play(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4084,7 +4088,7 @@ def espn_nbasl_gs_game_play_personnel(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4134,7 +4138,7 @@ def espn_nbasl_gs_game_situation(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4183,7 +4187,7 @@ def espn_nbasl_gs_game_status(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4232,7 +4236,7 @@ def espn_nbasl_gs_game_officials(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4281,7 +4285,7 @@ def espn_nbasl_gs_game_broadcasts(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4330,7 +4334,7 @@ def espn_nbasl_gs_game_predictor(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4379,7 +4383,7 @@ def espn_nbasl_gs_game_powerindex(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4428,7 +4432,7 @@ def espn_nbasl_gs_game_propbets(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4477,7 +4481,7 @@ def espn_nbasl_gs_game_leaders(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4526,7 +4530,7 @@ def espn_nbasl_gs_game_scoringplays(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4576,7 +4580,7 @@ def espn_nbasl_gs_game_official_detail(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4626,7 +4630,7 @@ def espn_nbasl_gs_teams_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4675,7 +4679,7 @@ def espn_nbasl_gs_team_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4720,7 +4724,7 @@ def espn_nbasl_gs_venues(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4767,7 +4771,7 @@ def espn_nbasl_gs_venue(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4812,7 +4816,7 @@ def espn_nbasl_gs_franchises(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4859,7 +4863,7 @@ def espn_nbasl_gs_franchise(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4904,7 +4908,7 @@ def espn_nbasl_gs_coach(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4950,7 +4954,7 @@ def espn_nbasl_gs_coach_record(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -4997,7 +5001,7 @@ def espn_nbasl_gs_coach_season(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5043,7 +5047,7 @@ def espn_nbasl_gs_positions(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5090,7 +5094,7 @@ def espn_nbasl_gs_position(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5135,7 +5139,7 @@ def espn_nbasl_gs_tournaments(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5182,7 +5186,7 @@ def espn_nbasl_gs_awards(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5229,7 +5233,7 @@ def espn_nbasl_gs_award(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5273,7 +5277,7 @@ def espn_nbasl_gs_standings_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5316,7 +5320,7 @@ def espn_nbasl_gs_leaders_core(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5359,7 +5363,7 @@ def espn_nbasl_gs_league_notes(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5402,7 +5406,7 @@ def espn_nbasl_gs_talentpicks(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.
@@ -5448,7 +5452,7 @@ def espn_nbasl_gs_fpi(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Dict:
+) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
     """
 
     Bound to sport='basketball', league='nba-summer-golden-state'.

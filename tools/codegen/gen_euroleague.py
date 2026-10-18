@@ -41,6 +41,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from gen_soccer_common import (
     ROOT,
+    _query_params,
     columns_from_frame,
     load_spec,
     markdown_descriptions,
@@ -524,31 +525,6 @@ def _path_params(op: dict) -> List[Dict[str, Any]]:
     ]
 
 
-def _query_params(op: dict, host: Optional[str]) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        desc = str(prm.get("description") or _QUERY_FALLBACK.get(wire, "")).strip()
-        if prm.get("required"):
-            desc = f"Required. {desc}".strip()
-        entry: Dict[str, Any] = {
-            "name": _QUERY_NAMES.get(wire) or underscore(wire),
-            "query_key": wire,
-            "type": "str",
-            "description": desc,
-        }
-        if host == LIVE_HOST and prm.get("required"):
-            # positional, not Optional: an omitted code answers a silent empty 200
-            entry["required"] = True
-        if wire in _QUERY_DEFAULTS:
-            entry["default"] = _QUERY_DEFAULTS[wire]
-            entry["description"] = f"{desc} Default {_QUERY_DEFAULTS[wire]}."
-        out.append(entry)
-    return out
-
-
 def _docstring(host: Optional[str]) -> Dict[str, Any]:
     """The family docstring block; the live-API routes also name their ``{}`` sentinel."""
     doc: Dict[str, Any] = {
@@ -582,7 +558,18 @@ def _endpoint_entry(spec: dict, path: str, op: dict) -> Dict[str, Any]:
     short = _short(op)
     host = _host(spec, path)
     pps = _path_params(op)
-    qps = _query_params(op, host)
+    # positional, not Optional, on the live host: an omitted code answers a silent empty 200
+    qps = _query_params(
+        op,
+        names=_QUERY_NAMES,
+        description=lambda prm: str(prm.get("description") or _QUERY_FALLBACK.get(prm["name"], "")).strip(),
+        keep_empty_description=True,
+        required="both" if host == LIVE_HOST else "note",
+    )
+    for qp in qps:
+        if qp["query_key"] in _QUERY_DEFAULTS:
+            qp["default"] = _QUERY_DEFAULTS[qp["query_key"]]
+            qp["description"] = f"{qp['description']} Default {qp['default']}."
     names = {p["name"] for p in pps}
     assert not {"league", "sport"} & names, path
     assert {underscore(t) for t in _TOKEN.findall(path)} == names, path
