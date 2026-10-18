@@ -9,7 +9,8 @@
 #
 # Common fields:  key (stable id), prefix (function-name prefix, `<prefix>_schedule`), label,
 #   gender (men | women | both; "women"/"both" entries are the wehoop mirror's to port), season_rule.
-# fiba:   family_id = GDAP competitionMarketingNameId (the competition family; one edition per season).
+# fiba:   family_id = GDAP competitionMarketingNameId (the competition family; one edition per season);
+#   example_season = a season that has an edition, used by the docstring examples.
 # genius: org = Genius ORG code; label_include / label_exclude = case-insensitive regexes over the
 #   competition label of genius_competitions(org) that pick THE competition of a season (an org lists
 #   cups, play-offs and youth leagues beside the headline league).
@@ -20,21 +21,21 @@
 #   LNBP history, NBL, SPB, HKS embed-only). Not yet minted for lack of a verified GDAP family id:
 #   EuroBasket (men), AmeriCup, Asia Cup, EuroCup Women, BCL Americas/Asia.
 fiba:
-  - {key: world_cup, prefix: fiba_wc, label: "FIBA Basketball World Cup", family_id: 201, gender: men,
+  - {key: world_cup, prefix: fiba_wc, example_season: 2023, label: "FIBA Basketball World Cup", family_id: 201, gender: men,
      season_rule: "event year (World Cup 2023 = 2023)"}
-  - {key: womens_world_cup, prefix: fiba_wwc, label: "FIBA Women's Basketball World Cup", family_id: 306, gender: women,
+  - {key: womens_world_cup, prefix: fiba_wwc, example_season: 2022, label: "FIBA Women's Basketball World Cup", family_id: 306, gender: women,
      season_rule: "event year (2022 = 2022)"}
-  - {key: olympics_men, prefix: fiba_oly, label: "Men's Olympic Basketball Tournament", family_id: 320, gender: men,
+  - {key: olympics_men, prefix: fiba_oly, example_season: 2024, label: "Men's Olympic Basketball Tournament", family_id: 320, gender: men,
      season_rule: "event year (Paris 2024 = 2024)"}
-  - {key: olympics_women, prefix: fiba_woly, label: "Women's Olympic Basketball Tournament", family_id: 352, gender: women,
+  - {key: olympics_women, prefix: fiba_woly, example_season: 2024, label: "Women's Olympic Basketball Tournament", family_id: 352, gender: women,
      season_rule: "event year (Paris 2024 = 2024)"}
-  - {key: bcl, prefix: fiba_bcl, label: "Basketball Champions League (FIBA Men's European Club Competitions Tier 1)", family_id: 112,
+  - {key: bcl, prefix: fiba_bcl, example_season: 2025, label: "Basketball Champions League (FIBA Men's European Club Competitions Tier 1)", family_id: 112,
      gender: men, season_rule: "END year (2024-25 = 2025)"}
-  - {key: euroleague_women, prefix: fiba_elw, label: "EuroLeague Women (FIBA Women's European Club Competitions Tier 1)", family_id: 211,
+  - {key: euroleague_women, prefix: fiba_elw, example_season: 2025, label: "EuroLeague Women (FIBA Women's European Club Competitions Tier 1)", family_id: 211,
      gender: women, season_rule: "END year (2024-25 = 2025)"}
-  - {key: afrobasket, prefix: fiba_afrobasket, label: "FIBA AfroBasket", family_id: 179, gender: men,
+  - {key: afrobasket, prefix: fiba_afrobasket, example_season: 2025, label: "FIBA AfroBasket", family_id: 179, gender: men,
      season_rule: "event year (2025 = 2025)"}
-  - {key: womens_eurobasket, prefix: fiba_weurobasket, label: "FIBA Women's EuroBasket", family_id: 297, gender: women,
+  - {key: womens_eurobasket, prefix: fiba_weurobasket, example_season: 2025, label: "FIBA Women's EuroBasket", family_id: 297, gender: women,
      season_rule: "event year (2025 = 2025)"}
 genius:
   - {key: wbbl, prefix: wbbl, label: "Women's British Basketball League", org: WBBL, gender: women,

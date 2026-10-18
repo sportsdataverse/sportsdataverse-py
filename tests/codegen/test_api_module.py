@@ -268,6 +268,27 @@ def test_body_kind_splits_query_and_body_params(tmp_path, monkeypatch, body, kw)
     assert "curl" in rows and "?pageNumber=2" in rows
 
 
+@pytest.mark.parametrize("body, kw", [("form", "data"), ("json", "json")])
+def test_caller_params_override_a_body_field_and_other_keys_stay_in_the_query(tmp_path, monkeypatch, body, kw):
+    _, mod = _render_and_load(tmp_path, _BODY_YAML.format(body=body), f"_gen_override_{body}")
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(params={"season": 2024, "debug": "1", "kind": "x"})  # season=None would otherwise win
+    assert seen[kw] == {"kind": "x", "season": 2024}  # the caller's body values, even over a fixed param
+    assert seen["params"] == {"pageNumber": None, "debug": "1"}  # a non-body key rides the query string
+
+
+def test_fixed_in_query_must_name_a_fixed_param(tmp_path):
+    y = tmp_path / "f.yaml"
+    y.write_text(
+        "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+        "endpoints:\n  - { short: a, path: '/a', method: post, body: json, fixed_params: {k: 1}, fixed_in_query: [kk] }\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="fixed_in_query"):
+        spec.load_flat_api(y, {})
+
+
 def test_body_endpoint_view_has_no_valid_url_but_curl(tmp_path):
     y = tmp_path / "v.yaml"
     y.write_text(

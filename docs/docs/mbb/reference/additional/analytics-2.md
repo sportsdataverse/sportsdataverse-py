@@ -46,7 +46,7 @@ Select and seed a tournament field from a per-team résumé frame.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see conference_auto_bids`); always in the field. |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see `_conference_auto_bids`); always in the field. |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
 | `field_size` | `int` | `68` | Tournament field size (68). |
 

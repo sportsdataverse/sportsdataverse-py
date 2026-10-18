@@ -10,6 +10,9 @@ docstring:
     are run by Russian operators, some clubs by sanctioned state companies. Fetching
     on your own machine is fine; any published data release, hosted mirror or redistribution
     needs owner (sanctions / legal) sign-off first.'
+  - 'The documented curl request is schematic: the runtime primes a session (adds
+    the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]``
+    (the tournament id) and sends the X-Requested-With, Origin and Referer headers.'
   raises:
   - 'sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status
     != success), a 307 again after re-priming the session, or a page for another game

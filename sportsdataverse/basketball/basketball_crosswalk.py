@@ -7,7 +7,7 @@ id dtypes, and returns the distinct id pairs.
 **Key spaces.**
 
 * ``genius_match_id`` (``Int64``): the Genius Sports LiveStats match id, the key of the ``genius``
-  family (``match_id`` of ``genius_game``, ``genius_game_box`` ...). Providers that relay Genius carry
+  family (``match_id`` of ``genius_game``, ``genius_pbp`` ...). Providers that relay Genius carry
   it under their own column name; :func:`genius_game_crosswalk` maps their game key to it.
 * ``genius_team_id`` (``Int64``): the Genius team id. Only the Sportality sites (Basketligaen) carry it
   next to the platform team uuid. The ``genius`` schedule frames' ``home_team_id`` / ``away_team_id``
@@ -22,15 +22,20 @@ id dtypes, and returns the distinct id pairs.
 Example:
     Quick start::
 
-        from sportsdataverse.basketball import bnxt
         from sportsdataverse.basketball.basketball_crosswalk import genius_game_crosswalk
+        from sportsdataverse.basketball.bnxt import sportpress_game_slider
 
-        slider = bnxt.sportpress_game_slider(competition_id=...)
+        slider = sportpress_game_slider(competition_id=24)
         xw = genius_game_crosswalk(slider, source="sportpress")
-        # columns: game_id (Int64, BNXT), genius_match_id (Int64)
+        # columns: game_key (Int64, BNXT game id), genius_match_id (Int64)
 
     See Also:
         * :mod:`sportsdataverse.basketball.genius` -- the Genius LiveStats family the ids point to
+        * `hoopR`_ - SportsDataverse men's basketball (R)
+        * `wehoop`_ - SportsDataverse women's basketball (R)
+
+        .. _hoopR: https://hoopR.sportsdataverse.org
+        .. _wehoop: https://wehoop.sportsdataverse.org
 """
 
 from __future__ import annotations
@@ -90,6 +95,8 @@ def _pairs(df: Any, left: str, right: str, dtypes: Tuple[Any, Any], label: str) 
     """Distinct non-null ``(left, right)`` pairs; dtypes asserted; one-to-one both ways."""
     if not isinstance(df, pl.DataFrame):
         raise TypeError(f"{label}: expected a polars DataFrame, got {type(df).__name__}")
+    if df.height == 0:  # some parser paths return a zero-column frame for "no rows": an empty typed crosswalk
+        return pl.DataFrame(schema={left: dtypes[0], right: dtypes[1]})
     missing = [c for c in (left, right) if c not in df.columns]
     if missing:
         raise ValueError(f"{label}: frame has no column {missing} (columns: {df.columns})")
@@ -127,8 +134,11 @@ def genius_game_crosswalk(df: pl.DataFrame, source: str, *, return_as_pandas: bo
         Quick start::
 
             from sportsdataverse.basketball.basketball_crosswalk import genius_game_crosswalk
-            xw = genius_game_crosswalk(cebl.cebl_games(season=2025), "cebl")
-            games = xw.join(genius.genius_competition_games(...), left_on="genius_match_id", right_on="match_id")
+            from sportsdataverse.basketball.cebl import cebl_games
+            from sportsdataverse.basketball.genius import genius_pbp
+
+            xw = genius_game_crosswalk(cebl_games(season=2025), "cebl")
+            pbp = genius_pbp(match_id=int(xw["genius_match_id"][0]))
     """
     if source not in GENIUS_GAME_SOURCES:
         raise ValueError(f"unknown source {source!r}; choose from {sorted(GENIUS_GAME_SOURCES)}")
@@ -159,6 +169,9 @@ def genius_team_crosswalk(df: pl.DataFrame, source: str, *, return_as_pandas: bo
         Quick start::
 
             from sportsdataverse.basketball.basketball_crosswalk import genius_team_crosswalk
+            from sportsdataverse.basketball.dbl import sportality_standings
+
+            standings = sportality_standings(ssgt_uuid="xs07bd3fmp")
             xw = genius_team_crosswalk(standings, "sportality_standings")
     """
     if source not in GENIUS_TEAM_SOURCES:
@@ -188,7 +201,9 @@ def ibba_segev_game_crosswalk(df: pl.DataFrame, *, return_as_pandas: bool = Fals
         Quick start::
 
             from sportsdataverse.basketball.basketball_crosswalk import ibba_segev_game_crosswalk
-            xw = ibba_segev_game_crosswalk(ibba.ibba_games(season=2026))
+            from sportsdataverse.basketball.ibba import ibba_games
+
+            xw = ibba_segev_game_crosswalk(ibba_games(season=2026))
     """
     out = _pairs(df, "game_id", "segev_game_id", (pl.Int64, pl.Int64), "ibba_segev_game_crosswalk")
     return _out(out, return_as_pandas)
@@ -208,12 +223,15 @@ def pleague_team_crosswalk(*, return_as_pandas: bool = False) -> Any:
         polars.DataFrame | pandas.DataFrame: eight rows, ``team_id`` (``Int64``) and ``team_uuid`` (``Utf8``).
 
     Raises:
-        None.
+        Nothing: the table is a constant, no request is made.
 
     Example:
         Quick start::
 
             from sportsdataverse.basketball.basketball_crosswalk import pleague_team_crosswalk
+            from sportsdataverse.basketball.plg import pleague_preciser_shots
+
+            shots = pleague_preciser_shots(uuid="e6f98675-3e5b-11ed-949e-5d17350689cf")
             shots.join(pleague_team_crosswalk(), on="team_uuid")
     """
     out = pl.DataFrame(_PLG_TEAMS, schema={"team_id": pl.Int64, "team_uuid": pl.Utf8}, orient="row")

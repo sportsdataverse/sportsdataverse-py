@@ -49,6 +49,7 @@ class _Http:
         self.posts = list(posts)
         self.homes = list(homes or [_Resp(text=f'"bitrix_sessid":"{SID}"'), _Resp(text=f'"bitrix_sessid":"{SID2}"')])
         self.calls: List[tuple] = []
+        self.query: Any = None
 
     def get(self, url: str, timeout: Any = None) -> _Resp:
         self.calls.append(("GET", url))
@@ -58,8 +59,15 @@ class _Http:
         return home
 
     def post(
-        self, url: str, data: Any = None, headers: Any = None, allow_redirects: Any = None, timeout: Any = None
+        self,
+        url: str,
+        data: Any = None,
+        headers: Any = None,
+        allow_redirects: Any = None,
+        timeout: Any = None,
+        params: Any = None,
     ) -> _Resp:
+        self.query = params
         self.calls.append(("POST", url, dict(data), dict(headers), allow_redirects))
         post = self.posts.pop(0)
         if isinstance(post, BaseException):
@@ -115,6 +123,15 @@ def test_post_sends_the_form_with_the_session_and_ajax_headers(monkeypatch, _off
     assert [c[0] for c in http.calls] == ["GET", "POST", "POST"]  # primed once, then reused
     assert http.calls[2][3]["Accept-Language"] == "en"
     assert _offline == ["https://www.khl.ru/", f"{REST}/game/header/", f"{REST}/game/header/"]  # >= 1 s apart
+
+
+def test_wrapper_params_go_to_the_query_string_not_the_form(monkeypatch):
+    http = _http(monkeypatch, _Resp(body=_rest("game__header.json")), _Resp(body=_rest("game__header.json")))
+    R._get(f"{REST}/game/header/", {"debug": "1", "unused": None}, data=HEADER)
+    assert http.query == {"debug": "1"}
+    assert "debug" not in http.calls[1][2]
+    R._get(f"{REST}/game/header/", HEADER)  # a direct call: params ARE the form, no query string
+    assert http.query is None and http.calls[2][2]["values[gameid]"] == "898236"
 
 
 def test_season_and_stage_become_the_tournament_id(monkeypatch):

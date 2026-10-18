@@ -33,4 +33,7 @@ from sportsdataverse.basketball.genius.genius_parsers import *  # noqa: F401,F40
 from sportsdataverse.basketball.genius import genius_competitions_runtime as _competitions
 from sportsdataverse.basketball.genius.genius_competitions_runtime import *  # noqa: F401,F403
 
-__all__ = [*_api.__all__, *_parsers.__all__, *_competitions.__all__]
+# Id crosswalks onto the Genius match / team ids (the helpers live in basketball_crosswalk).
+from sportsdataverse.basketball.basketball_crosswalk import genius_game_crosswalk, genius_team_crosswalk
+
+__all__ = [*_api.__all__, *_parsers.__all__, *_competitions.__all__, "genius_game_crosswalk", "genius_team_crosswalk"]

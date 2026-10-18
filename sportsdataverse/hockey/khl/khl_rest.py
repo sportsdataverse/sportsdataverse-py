@@ -501,6 +501,7 @@ def khl_schedule(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -512,6 +513,8 @@ def khl_schedule(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/calendar/list/",
         params=_params,
@@ -567,6 +570,7 @@ def khl_roster(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -575,6 +579,8 @@ def khl_roster(
         "page": "team",
         "values[club_id]": club_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/clubs/team/",
         params=_params,
@@ -634,6 +640,7 @@ def khl_stat_filters(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -645,6 +652,8 @@ def khl_stat_filters(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/filters/statplayers/",
         params=_params,
@@ -706,6 +715,7 @@ def khl_game_header(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -719,6 +729,8 @@ def khl_game_header(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/header/",
         params=_params,
@@ -780,6 +792,7 @@ def khl_game_protocol(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -792,6 +805,8 @@ def khl_game_protocol(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/protocol/",
         params=_params,
@@ -853,6 +868,7 @@ def khl_game_info(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -865,6 +881,8 @@ def khl_game_info(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
@@ -926,6 +944,7 @@ def khl_player_box(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -938,6 +957,8 @@ def khl_player_box(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
@@ -999,6 +1020,7 @@ def khl_pbp(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -1011,6 +1033,8 @@ def khl_pbp(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
@@ -1072,6 +1096,7 @@ def khl_shots(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -1084,6 +1109,8 @@ def khl_shots(
         "stage": stage,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
@@ -1139,6 +1166,7 @@ def khl_player_profile(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1146,6 +1174,8 @@ def khl_player_profile(
     _body = {
         "values[id]": player_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/players/profile/",
         params=_params,
@@ -1203,6 +1233,7 @@ def khl_player_career(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1210,6 +1241,8 @@ def khl_player_career(
     _body = {
         "values[id]": player_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/players/stats/",
         params=_params,
@@ -1267,6 +1300,7 @@ def khl_playoff_bracket(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1277,6 +1311,8 @@ def khl_playoff_bracket(
         "season": season,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/standings/playoff/",
         params=_params,
@@ -1336,6 +1372,7 @@ def khl_standings(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {}
@@ -1345,6 +1382,8 @@ def khl_standings(
         "season": season,
         "values[tournament]": tournament_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/standings/regular/",
         params=_params,
@@ -1412,6 +1451,7 @@ def khl_player_stats(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -1431,6 +1471,8 @@ def khl_player_stats(
         "nav[page]": page,
         "nav[count]": per_page,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/stat/players/",
         params=_params,

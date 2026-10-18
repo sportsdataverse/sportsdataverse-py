@@ -1,10 +1,10 @@
 ---
-title: "GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–lfb_competitions"
-sidebar_label: "Genius Sports LiveStats: bal_competitions–lfb_competitions"
+title: "GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–esake_shots"
+sidebar_label: "Genius Sports LiveStats: bal_competitions–esake_shots"
 sidebar_position: 1
-description: "GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–lfb_competitions — function reference in sdv-py, the SportsDataverse Python package."
+description: "GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–esake_shots — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–lfb_competitions
+# GENIUS — additional Python functions — Genius Sports LiveStats: bal_competitions–esake_shots
 
 ### bal_competitions {#bal_competitions}
 
@@ -17,6 +17,8 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_competitions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -26,7 +28,7 @@ competition registry (`tools/codegen/basketball_competitions.yaml`).
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the chooser page record (`dict`): the sdv-internal-refs capture shape plus `_request` (the org asked for) when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -57,17 +59,19 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -100,8 +104,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import bal_pbp
-bal_pbp(match_id=2902690)
+from sportsdataverse.basketball.genius import bal_schedule, bal_pbp
+games = bal_schedule()
+bal_pbp(match_id=int(games['match_id'][0]))
 ```
 
 ### bal_player_box {#bal_player_box}
@@ -115,17 +120,19 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_player_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -184,8 +191,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import bal_player_box
-bal_player_box(match_id=2902690)
+from sportsdataverse.basketball.genius import bal_schedule, bal_player_box
+games = bal_schedule()
+bal_player_box(match_id=int(games['match_id'][0]))
 ```
 
 ### bal_schedule {#bal_schedule}
@@ -199,6 +207,8 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. The competition is picked from BAL's chooser by the label rule include='.' exclude='^$'; cups and play-offs have their own comp_id.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -211,7 +221,7 @@ competition registry (`tools/codegen/basketball_competitions.yaml`).
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv-internal-refs capture shape of the page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -250,17 +260,19 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -281,8 +293,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import bal_shots
-bal_shots(match_id=2902690)
+from sportsdataverse.basketball.genius import bal_schedule, bal_shots
+games = bal_schedule()
+bal_shots(match_id=int(games['match_id'][0]))
 ```
 
 ### bal_team_box {#bal_team_box}
@@ -296,17 +309,19 @@ Basketball Africa League (men's); season rule: calendar year (BAL 2025 = 2025); 
 Convenience wrapper: a thin binding of `genius_team_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -379,8 +394,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import bal_team_box
-bal_team_box(match_id=2902690)
+from sportsdataverse.basketball.genius import bal_schedule, bal_team_box
+games = bal_schedule()
+bal_team_box(match_id=int(games['match_id'][0]))
 ```
 
 ### esake_competitions {#esake_competitions}
@@ -394,6 +410,8 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_competitions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -403,7 +421,7 @@ competition registry (`tools/codegen/basketball_competitions.yaml`).
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the chooser page record (`dict`): the sdv-internal-refs capture shape plus `_request` (the org asked for) when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -434,17 +452,19 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -477,8 +497,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import esake_pbp
-esake_pbp(match_id=2902690)
+from sportsdataverse.basketball.genius import esake_schedule, esake_pbp
+games = esake_schedule()
+esake_pbp(match_id=int(games['match_id'][0]))
 ```
 
 ### esake_player_box {#esake_player_box}
@@ -492,17 +513,19 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_player_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -561,8 +584,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import esake_player_box
-esake_player_box(match_id=2902690)
+from sportsdataverse.basketball.genius import esake_schedule, esake_player_box
+games = esake_schedule()
+esake_player_box(match_id=int(games['match_id'][0]))
 ```
 
 ### esake_schedule {#esake_schedule}
@@ -576,6 +600,8 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. The competition is picked from ESAKE's chooser by the label rule include='basket league|gbl' exclude='super cup|woman'; cups and play-offs have their own comp_id.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -588,7 +614,7 @@ competition registry (`tools/codegen/basketball_competitions.yaml`).
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv-internal-refs capture shape of the page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -627,17 +653,19 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
 **Returns**
 
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
 
 | col_name | type | description |
 |---|---|---|
@@ -658,144 +686,7 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 **Example**
 
 ```python
-from sportsdataverse.basketball.genius import esake_shots
-esake_shots(match_id=2902690)
-```
-
-### esake_team_box {#esake_team_box}
-
-`esake_team_box(match_id: 'int', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Team box score of a finished Greek Basket League (ESAKE) game.
-
-Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (2022-23 = 2023).
-
-Convenience wrapper: a thin binding of `genius_team_box` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule), e.g. 2902690. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `match_id` | integer | Genius match id of the game. data.json does not carry it: it is the match_id asked for, stamped by the runtime (the global match sequence shared by every Genius customer). |
-| `tno` | integer | Team number within this game: 1 = the team listed first (home on the hosted schedule and widget), 2 = the other, 0 = no team. In-game only: not a team id. |
-| `name` | character | Team name as the org enters it |
-| `name_international` | character | Team name in Latin script |
-| `short_name` | character | Short team name (shortName in the feed), in the competition's own script when the org enters one. |
-| `code` | character | Team code, three letters as entered (may be in the local script, e.g. Greek 'ΑΕΚ') |
-| `code_international` | character | Team code in Latin script |
-| `coach` | character | Head coach display name |
-| `score` | integer | Team points (current or final); a numeric string in the 2014-15 era sample (WBBL 12248), an integer since |
-| `full_score` | integer | Team points including overtime; equal to score in every sample (a numeric string in the 2014-15 era) |
-| `p1_score` | integer | Points scored in period 1 (a numeric string in the 2014-15 era) |
-| `p2_score` | integer | Points scored in period 2 (a numeric string in the 2014-15 era) |
-| `p3_score` | integer | Points scored in period 3 (a numeric string in the 2014-15 era) |
-| `p4_score` | integer | Points scored in period 4 (a numeric string in the 2014-15 era) |
-| `ot_score` | integer | Points the team scored in overtime; null without overtime. Whether several overtimes are summed is unverified. |
-| `fouls` | integer | Team fouls in the current (last) period |
-| `timeouts` | integer | Timeouts counter of the current period (unverified: remaining vs taken); 0 in every sampled (finished) game |
-| `minutes` | character | Minutes as the feed prints them, an 'mm:ss' text (can exceed 59 for a team; '199:60' happens); the text of an integer when the feed sends one. |
-| `seconds_played` | integer | Seconds played parsed from the printed mm:ss text as minutes * 60 + seconds (so '224:60' gives 13500); null when the feed sent an integer, whose unit is unknown. |
-| `field_goals_made` | integer | Team total: field goals made |
-| `field_goals_attempted` | integer | Team total: field goals attempted |
-| `field_goals_percentage` | numeric | Team total: field-goal percentage, 0-100, rounded to an integer by the feed |
-| `three_pointers_made` | integer | Team total: three-pointers made |
-| `three_pointers_attempted` | integer | Team total: three-pointers attempted |
-| `three_pointers_percentage` | numeric | Team total: three-point percentage, 0-100, rounded to an integer |
-| `two_pointers_made` | integer | Team total: two-pointers made |
-| `two_pointers_attempted` | integer | Team total: two-pointers attempted |
-| `two_pointers_percentage` | numeric | Team total: two-point percentage, 0-100, rounded to an integer |
-| `free_throws_made` | integer | Team total: free throws made |
-| `free_throws_attempted` | integer | Team total: free throws attempted |
-| `free_throws_percentage` | numeric | Team total: free-throw percentage, 0-100, rounded to an integer |
-| `rebounds_defensive` | integer | Team total: defensive rebounds |
-| `rebounds_offensive` | integer | Team total: offensive rebounds |
-| `rebounds_total` | integer | Team total: total rebounds |
-| `assists` | integer | Team total: assists |
-| `turnovers` | integer | Team total: turnovers |
-| `steals` | integer | Team total: steals |
-| `blocks` | integer | Team total: blocks made |
-| `blocks_received` | integer | Team total: own shots blocked by an opponent |
-| `fouls_personal` | integer | Team total: personal fouls committed |
-| `fouls_on` | integer | Team total: fouls drawn |
-| `points` | integer | Team total: points |
-| `points_from_turnovers` | integer | Team total: points off turnovers |
-| `points_second_chance` | integer | Team total: second-chance points |
-| `points_fast_break` | integer | Team total: fast-break points |
-| `points_in_the_paint` | integer | Team total: points in the paint |
-| `eff_1` | integer | Genius efficiency formula 1. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_2` | integer | Genius efficiency formula 2. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Team tot_eff_2 is 2 in every 2016+ sample (a constant, not a stat). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_3` | numeric | Genius efficiency formula 3. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_4` | numeric | Genius efficiency formula 4. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_5` | integer | Genius efficiency formula 5. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_6` | integer | Genius efficiency formula 6. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `eff_7` | integer | Genius efficiency formula 7. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site (team total). Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-| `bench_points` | integer | Team total: points scored by non-starters |
-| `biggest_lead` | integer | Team total: biggest lead, points |
-| `biggest_scoring_run` | integer | Team total: biggest unanswered scoring run, points |
-| `lead_changes` | integer | Team total: lead changes in the game (same value on both teams) |
-| `times_scores_level` | integer | Team total: times the score was tied (same value on both teams) |
-| `time_leading` | numeric | Team total: minutes the team led, decimal minutes (33.58 = 33 min 35 s) |
-| `fouls_team` | integer | Team total: team (bench) fouls |
-| `fouls_total` | integer | Team total: all fouls committed (personal + technical + team bench) |
-| `rebounds_team` | integer | Team total: team rebounds (credited to no player) |
-| `rebounds_team_defensive` | integer | Team total: team defensive rebounds |
-| `rebounds_team_offensive` | integer | Team total: team offensive rebounds |
-| `turnovers_team` | integer | Team total: team turnovers (credited to no player, e.g. shot clock) |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.genius import esake_team_box
-esake_team_box(match_id=2902690)
-```
-
-### lfb_competitions {#lfb_competitions}
-
-`lfb_competitions(*, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Every competition of the FFBB Genius org, with its END-year season.
-
-Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius year + 1 (2018-19 = 2019).
-
-Convenience wrapper: a thin binding of `genius_competitions` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `org` | character | ORG code the request used (the hosted ORG, or the LiveStats ORG for the /u/ shell). |
-| `comp_id` | integer | Genius competition id (compId): one per org competition-season; the {compId} of hosted and data/competition paths |
-| `label` | character | Competition label as the org typed it, free text in any language: may or may not carry a season ('BASKET LEAGUE 2019 - 20', '1st division', 'Κύπελλο Ελλάδας' = Greek Cup, 'Μαυροσκούφεια' = Mavroskoufeia youth tournament) |
-| `league_id` | integer | Genius league id of the org (ESAKE = 115; IBBA has two: 187 and 549) |
-| `year` | integer | Genius season year of the competition: the START year of a two-year season (BNXT '2023-2024' = 2023), the year itself for a calendar season. null when the page gives none |
-| `season` | integer | sdv END-year season of the competition (2026 = 2025-26) from the label span, else the Genius year; null when no rule applies. See season_rule. |
-| `season_rule` | character | Which rule produced season: 'label span', 'genius year + 1 (split)', 'genius year (calendar)', 'label year (calendar)' or 'unknown'. |
-| `selected` | logical | True for the competition the hosted chooser pre-selects (the org's default, not always the newest). |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.genius import lfb_competitions
-lfb_competitions()
+from sportsdataverse.basketball.genius import esake_schedule, esake_shots
+games = esake_schedule()
+esake_shots(match_id=int(games['match_id'][0]))
 ```

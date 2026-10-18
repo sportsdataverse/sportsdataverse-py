@@ -77,6 +77,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   fixed_params:
     type: 2
   parser: parse_cba_team_options
@@ -335,6 +336,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   parser: parse_cba_team_counts
   path: /team-count/season
   returns_schema: native/cba/team_counts
@@ -476,6 +478,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -529,6 +532,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -594,6 +598,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -659,6 +664,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'

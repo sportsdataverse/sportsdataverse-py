@@ -71,6 +71,13 @@ def _by_key(platform):
 # ---- registry ------------------------------------------------------------------------------------
 
 
+@pytest.fixture(autouse=True)
+def _fresh_listing_cache():
+    C._CACHE.clear()
+    yield
+    C._CACHE.clear()
+
+
 def test_registry_facts_match_the_refs():
     assert {k: e["family_id"] for k, e in _by_key("fiba").items()} == FIBA_FAMILY_IDS
     assert {k for k, e in _by_key("fiba").items() if e["gender"] == "women"} == FIBA_WOMEN
@@ -81,7 +88,7 @@ def test_registry_facts_match_the_refs():
 def test_every_entry_has_the_documented_fields():
     common = {"key", "prefix", "label", "gender", "season_rule"}
     for platform, extra in (
-        ("fiba", {"family_id"}),
+        ("fiba", {"family_id", "example_season"}),
         ("genius", {"org", "label_include", "label_exclude"}),
         ("atrium", {"website_id"}),
     ):
@@ -206,7 +213,9 @@ def test_every_docstring_documents_args_returns_raises_example_and_names_the_com
         prefix = next(p for p in sorted(labels, key=len, reverse=True) if name.startswith(p + "_"))
         entry = labels[prefix]
         assert entry["label"] in doc and entry["season_rule"] in doc, name
-        assert "from sportsdataverse.basketball" in doc and f"import {name}" in doc, name
+        assert (
+            "from sportsdataverse.basketball" in doc and "import " in doc.split("Example:")[1] and f"{name}(" in doc
+        ), name
         assert ("wehoop mirror" in doc) == (entry["gender"] in {"women", "both"}), name
 
 
@@ -234,7 +243,12 @@ def test_fiba_resolves_the_edition_from_the_season(monkeypatch):
     )
     monkeypatch.setattr(fiba_gdap, "fiba_gdap_schedule", lambda **kw: seen.setdefault("sched", kw) or "df")
     fiba_rt.fiba_wc_schedule(season=2023, return_as_pandas=True, timeout=5)
-    assert seen["ed"] == {"family_id": 201, "season": 2023, "to_season": 2023}
+    assert seen["ed"] == {
+        "family_id": 201,
+        "season": 2023,
+        "to_season": 2023,
+        "timeout": 5,
+    }  # transport kwargs forwarded
     assert seen["sched"] == {"comp": 208182, "return_parsed": True, "return_as_pandas": True, "timeout": 5}
 
 
@@ -244,6 +258,31 @@ def test_fiba_comp_override_skips_the_lookup_and_game_functions_forward(monkeypa
     monkeypatch.setattr(fiba_gamepage, "fiba_gamepage_pbp", lambda **kw: seen.update(kw) or "pbp")
     assert fiba_rt.fiba_wc_pbp(100720, comp=208182) == "pbp"
     assert seen["game_id"] == 100720 and seen["comp"] == 208182
+
+
+def test_fiba_game_function_needs_season_or_comp(monkeypatch):
+    monkeypatch.setattr(fiba_gdap, "fiba_gdap_editions", lambda **kw: pytest.fail("no lookup before the check"))
+    monkeypatch.setattr(fiba_gamepage, "fiba_gamepage_pbp", lambda **kw: pytest.fail("no fetch"))
+    with pytest.raises(ValueError, match="season"):
+        fiba_rt.fiba_wc_pbp(100720)
+
+
+def test_registry_renders_python_literals_for_yaml_booleans_and_nulls(monkeypatch):
+    spec = importlib.util.spec_from_file_location(
+        "gen_basketball_competitions_lit", ROOT / "tools/codegen/gen_basketball_competitions.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    monkeypatch.setattr(mod.yaml, "safe_load", lambda _t: {"genius": [{"org": False, "label_exclude": None, "x": 1}]})
+    ns: dict = {}
+    exec(mod.render(), ns)  # json.dumps would emit false / null -> NameError
+    assert ns["REGISTRY"] == {"genius": [{"org": False, "label_exclude": None, "x": 1}]}
+
+
+def test_every_fiba_example_season_is_a_real_edition_year():
+    years = {"fiba_oly": 2024, "fiba_woly": 2024, "fiba_wwc": 2022, "fiba_wc": 2023}
+    got = {e["prefix"]: e["example_season"] for e in REGISTRY["fiba"]}
+    assert {k: got[k] for k in years} == years
 
 
 def test_fiba_default_season_is_the_newest_started_edition_and_ambiguity_raises(monkeypatch):
@@ -295,6 +334,7 @@ def test_genius_no_match_and_ambiguity(monkeypatch):
     monkeypatch.setattr(genius_api, "genius_competitions", lambda **kw: _genius_frame("wbbl"))
     with pytest.raises(NoDataError):
         genius_rt.wbbl_schedule(season=1999)
+    C._CACHE.clear()
     two = pl.DataFrame({"comp_id": [1, 2], "label": ["Championship A", "Championship B"], "season": [2020, 2020]})
     monkeypatch.setattr(genius_api, "genius_competitions", lambda **kw: two)
     with pytest.raises(ValueError, match="comp_id="):
@@ -313,3 +353,32 @@ def test_atrium_binds_the_site_id(monkeypatch):
     assert seen["atrium_standings"]["website_id"] == 12 and seen["atrium_standings"]["locale"] == "fr-FR"
     assert seen["atrium_seasons"]["website_id"] == 14
     assert seen["atrium_pbp"]["fixture_id"] == "f-uuid" and seen["atrium_pbp"]["website_id"] == 12
+
+
+def test_listings_are_fetched_once_per_family_and_season(monkeypatch):
+    calls = []
+    monkeypatch.setattr(
+        fiba_gdap, "fiba_gdap_editions", lambda **kw: calls.append(kw) or _editions([(208182, 2023, "2023-08-25")])
+    )
+    assert C._fiba_comp(201, 2023, None, "WC") == C._fiba_comp(201, 2023, None, "WC") == 208182
+    assert len(calls) == 1
+    frame = _genius_frame("wbbl")
+    gcalls = []
+    monkeypatch.setattr(genius_api, "genius_competitions", lambda **kw: gcalls.append(kw) or frame)
+    for _ in range(2):
+        C._genius_comp(_by_key("genius")["wbbl"], next(sn for (k, sn) in GENIUS_PICK if k == "wbbl"), None, timeout=7)
+    assert gcalls == [{"org": "WBBL", "timeout": 7}]
+
+
+def test_null_ids_are_dropped_and_an_all_null_listing_is_no_data(monkeypatch):
+    monkeypatch.setattr(
+        fiba_gdap,
+        "fiba_gdap_editions",
+        lambda **kw: pl.DataFrame({"competition_id": [None], "season": [2023], "start": ["2023-08-25"]}),
+    )
+    with pytest.raises(NoDataError):
+        C._fiba_comp(201, 2023, None, "WC")
+    frame = _genius_frame("wbbl").with_columns(comp_id=pl.lit(None, dtype=pl.Int64))
+    monkeypatch.setattr(genius_api, "genius_competitions", lambda **kw: frame)
+    with pytest.raises(NoDataError):
+        C._genius_comp(_by_key("genius")["wbbl"], 2026, None)

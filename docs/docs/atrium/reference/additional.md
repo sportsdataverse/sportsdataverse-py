@@ -27,9 +27,9 @@ not covered by the generated API-endpoint reference above.
 | [lnb_seasons](additional/sportradar-atrium-embed-api.md#lnb_seasons) | Every season and competition id of LNB (France). |
 | [lnb_shots](additional/sportradar-atrium-embed-api.md#lnb_shots) | Shot chart of a LNB (France) game. |
 | [lnb_standings](additional/sportradar-atrium-embed-api.md#lnb_standings) | Standings of a LNB (France) season. |
-| [lnb_team_box](additional/sportradar-atrium-embed-api.md#lnb_team_box) | Team box score of a LNB (France) game. |
-| [lnb_teams](additional/sportradar-atrium-embed-api.md#lnb_teams) | Teams of a LNB (France) season. |
-| [lnbp_pbp](additional/sportradar-atrium-embed-api.md#lnbp_pbp) | Play-by-play of a LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) game. |
+| [lnb_team_box](additional/sportradar-atrium-embed-api-2.md#lnb_team_box) | Team box score of a LNB (France) game. |
+| [lnb_teams](additional/sportradar-atrium-embed-api-2.md#lnb_teams) | Teams of a LNB (France) season. |
+| [lnbp_pbp](additional/sportradar-atrium-embed-api-2.md#lnbp_pbp) | Play-by-play of a LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) game. |
 | [lnbp_player_box](additional/sportradar-atrium-embed-api-2.md#lnbp_player_box) | Player box score of a LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) game. |
 | [lnbp_schedule](additional/sportradar-atrium-embed-api-2.md#lnbp_schedule) | Fixtures (schedule and results) of a LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) season. |
 | [lnbp_seasons](additional/sportradar-atrium-embed-api-2.md#lnbp_seasons) | Every season and competition id of LNBP (Mexico, with COPA VALUE and LNBP FEMENIL). |
@@ -42,10 +42,10 @@ not covered by the generated API-endpoint reference above.
 | [lpb_schedule](additional/sportradar-atrium-embed-api-2.md#lpb_schedule) | Fixtures (schedule and results) of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season. |
 | [lpb_seasons](additional/sportradar-atrium-embed-api-2.md#lpb_seasons) | Every season and competition id of LPB / LPBF Liga Profesional de Baloncesto (Panama). |
 | [lpb_shots](additional/sportradar-atrium-embed-api-2.md#lpb_shots) | Shot chart of a LPB / LPBF Liga Profesional de Baloncesto (Panama) game. |
-| [lpb_standings](additional/sportradar-atrium-embed-api-2.md#lpb_standings) | Standings of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season. |
-| [lpb_team_box](additional/sportradar-atrium-embed-api-2.md#lpb_team_box) | Team box score of a LPB / LPBF Liga Profesional de Baloncesto (Panama) game. |
-| [lpb_teams](additional/sportradar-atrium-embed-api-2.md#lpb_teams) | Teams of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season. |
-| [nbl1_pbp](additional/sportradar-atrium-embed-api-2.md#nbl1_pbp) | Play-by-play of a NBL1 (Australia) game. |
+| [lpb_standings](additional/sportradar-atrium-embed-api-3.md#lpb_standings) | Standings of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season. |
+| [lpb_team_box](additional/sportradar-atrium-embed-api-3.md#lpb_team_box) | Team box score of a LPB / LPBF Liga Profesional de Baloncesto (Panama) game. |
+| [lpb_teams](additional/sportradar-atrium-embed-api-3.md#lpb_teams) | Teams of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season. |
+| [nbl1_pbp](additional/sportradar-atrium-embed-api-3.md#nbl1_pbp) | Play-by-play of a NBL1 (Australia) game. |
 | [nbl1_player_box](additional/sportradar-atrium-embed-api-3.md#nbl1_player_box) | Player box score of a NBL1 (Australia) game. |
 | [nbl1_schedule](additional/sportradar-atrium-embed-api-3.md#nbl1_schedule) | Fixtures (schedule and results) of a NBL1 (Australia) season. |
 | [nbl1_seasons](additional/sportradar-atrium-embed-api-3.md#nbl1_seasons) | Every season and competition id of NBL1 (Australia). |

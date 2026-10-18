@@ -17,6 +17,7 @@ from __future__ import annotations
 import datetime as _dt
 import inspect
 import re
+import time
 from typing import Any, Callable, Dict, Optional, Union
 
 import pandas as pd
@@ -37,6 +38,21 @@ _SEE_ALSO = (
 _FLAGS = "return_parsed: parse into a polars DataFrame (default True); False returns the raw body.\n"
 _PANDAS = "return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.\n"
 _KW = "**kwargs: Forwarded to the underlying HTTP getter.\n"
+
+
+_TTL = 3600.0
+_CACHE: Dict[tuple, Any] = {}
+
+
+def _cached(key: tuple, fetch: Callable[[], Any]) -> Any:
+    """``fetch()`` memoised per process for an hour: every minted call needs the same listing, so don't refetch it."""
+    hit = _CACHE.get(key)
+    if hit is not None and time.monotonic() - hit[0] < _TTL:
+        return hit[1]
+    value = fetch()
+    if getattr(value, "height", 1):  # an empty listing is not worth remembering
+        _CACHE[key] = (time.monotonic(), value)
+    return value
 
 
 def entries(platform: str) -> list[Entry]:
@@ -60,6 +76,12 @@ class _BoundDoc(str):
     base: Callable[..., Any]
 
 
+_GENIUS_RAW = (
+    "the body or page record (``dict`` / ``list``): ``data.json`` as served plus ``_request`` "
+    "(the match id asked for), or the sdv-internal-refs capture shape of a page"
+)
+
+
 def _doc(
     entry: Entry,
     base: Callable[..., Any],
@@ -68,6 +90,7 @@ def _doc(
     example: str,
     raises_extra: str = "",
     notes_extra: str = "",
+    returns_raw: str = "",
 ) -> str:
     """Assemble a minted callable's docstring: Args from ``args``, Returns / Raises / Notes inherited from ``base``."""
     gender = {"men": "men's", "women": "women's", "both": "men's and women's"}[entry["gender"]]
@@ -76,11 +99,24 @@ def _doc(
         _section(base_doc, "Returns")
         or "        A polars/pandas DataFrame, or the raw body when ``return_parsed=False``."
     )
+    if returns_raw:  # a route with no match id: the base text describes the match routes' raw body
+        if _GENIUS_RAW not in returns:
+            raise RuntimeError(f"{base.__name__}: base Returns prose changed; update _GENIUS_RAW")
+        returns = returns.replace(_GENIUS_RAW, returns_raw)
     raises = _section(base_doc, "Raises")
     notes = _section(base_doc, "Notes")
     out = f"{summary}\n\n    {entry['label']} ({gender}); season rule: {entry['season_rule']}.\n\n"
     out += f"    Convenience wrapper: a thin binding of :func:`{base.__name__}` to this competition, minted from the\n"
     out += "    competition registry (``tools/codegen/basketball_competitions.yaml``).\n\n"
+    extra = [ln for ln in notes_extra.splitlines() if ln]
+    if entry["gender"] in ("women", "both"):
+        extra.append("Women's competition data: flagged for the wehoop mirror (Phase C).")
+    # the docs page renders no Notes block, so the terms-of-use and owner flags ride in the description too
+    bullets = re.split(r"(?m)^\s*\* ", notes)  # the first bullet is the terms-of-use flag; the rest is reference detail
+    first = " ".join(bullets[1].split()) if len(bullets) > 1 else " ".join(notes.split())
+    flat = f"{first} {' '.join(extra)}".strip()
+    if flat.strip():
+        out += f"    Read before use: {flat.strip()}\n\n"
     out += "    Args:\n" + _indent(args.rstrip("\n")) + "\n"
     out += "    Returns:\n" + returns + "\n\n"
     out += (
@@ -90,9 +126,6 @@ def _doc(
         + "\n"
     )
     out += "    Example:\n        Quick start::\n\n" + _indent(example.rstrip("\n"), "            ") + _SEE_ALSO + "\n"
-    extra = [ln for ln in notes_extra.splitlines() if ln]
-    if entry["gender"] in ("women", "both"):
-        extra.append("Women's competition data: flagged for the wehoop mirror (Phase C).")
     out += "    Notes:\n" + notes + ("\n" if notes else "") + "".join(f"        * {ln}\n" for ln in extra)
     bound = _BoundDoc(out.rstrip() + "\n")
     bound.base = base
@@ -120,13 +153,16 @@ def _finish(fn: Callable[..., Any], name: str, module: str, doc: str) -> Callabl
 # --------------------------------------------------------------------------------------------------- FIBA
 
 
-def _fiba_comp(family_id: int, season: Optional[int], comp: Optional[int], label: str) -> int:
+def _fiba_comp(family_id: int, season: Optional[int], comp: Optional[int], label: str, **kw: Any) -> int:
     """The GDAP competition id of one edition: ``comp`` as given, else the family's edition of ``season`` (newest started one if None)."""
     from sportsdataverse.basketball.fiba_hub import fiba_gdap as gdap
 
     if comp is not None:
         return int(comp)
-    ed = gdap.fiba_gdap_editions(family_id=family_id, season=season, to_season=season)
+    ed = _cached(
+        ("fiba", family_id, season),
+        lambda: gdap.fiba_gdap_editions(family_id=family_id, season=season, to_season=season, **kw),
+    )
     if season is None and ed.height and "start" in ed.columns:
         started = ed.filter(pl.col("start").cast(pl.Utf8) <= _dt.date.today().isoformat())
         ed = started if started.height else ed
@@ -134,7 +170,9 @@ def _fiba_comp(family_id: int, season: Optional[int], comp: Optional[int], label
         raise NoDataError(f"FIBA lists no {label} edition for season={season}")
     if season is None:
         ed = ed.filter(pl.col("season") == ed["season"].max())
-    ids = sorted({int(i) for i in ed["competition_id"].to_list()})
+    ids = sorted({int(i) for i in ed["competition_id"].drop_nulls().to_list()})
+    if not ids:
+        raise NoDataError(f"FIBA lists no {label} edition id for season={season}")
     if len(ids) > 1:
         raise ValueError(f"{label} season={season} lists several editions {ids}; pass comp= to pick one")
     return ids[0]
@@ -181,7 +219,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             + _FLAGS
             + _PANDAS
             + _KW,
-            f"from sportsdataverse.basketball.fiba_hub import {p}_editions\n{p}_editions(season=2023)\n",
+            f"from sportsdataverse.basketball.fiba_hub import {p}_editions\n{p}_editions(season={entry['example_season']})\n",
         ),
     )
 
@@ -197,7 +235,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             **kwargs: Any,
         ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
             return getattr(gdap, base_name)(
-                comp=_fiba_comp(fam, season, comp, label),
+                comp=_fiba_comp(fam, season, comp, label, **kwargs),
                 return_parsed=return_parsed,
                 return_as_pandas=return_as_pandas,
                 **kwargs,
@@ -212,7 +250,7 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 base,
                 what,
                 season_arg + _FLAGS + _PANDAS + _KW,
-                f"from sportsdataverse.basketball.fiba_hub import {p}_{suffix}\n{p}_{suffix}(season=2023)\n",
+                f"from sportsdataverse.basketball.fiba_hub import {p}_{suffix}\n{p}_{suffix}(season={entry['example_season']})\n",
                 "ValueError: The season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n",
             ),
         )
@@ -233,9 +271,13 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_as_pandas: bool = False,
             **kwargs: Any,
         ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+            if season is None and comp is None:
+                raise ValueError(
+                    f"pass season (the edition's END year) or comp (the GDAP competition id) for a {label} game"
+                )
             return getattr(gp, base_name)(
                 game_id=game_id,
-                comp=_fiba_comp(fam, season, comp, label),
+                comp=_fiba_comp(fam, season, comp, label, **kwargs),
                 return_parsed=return_parsed,
                 return_as_pandas=return_as_pandas,
                 **kwargs,
@@ -249,9 +291,15 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 entry,
                 base,
                 what,
-                "game_id: FIBA game id (game_id in the schedule), e.g. 100720.\n" + season_arg + _FLAGS + _PANDAS + _KW,
-                f"from sportsdataverse.basketball.fiba_hub import {p}_{suffix}\n{p}_{suffix}(game_id=100720, season=2023)\n",
-                "ValueError: The season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n",
+                "game_id: FIBA game id (game_id in the schedule).\n" + season_arg + _FLAGS + _PANDAS + _KW,
+                f"from sportsdataverse.basketball.fiba_hub import {p}_schedule, {p}_{suffix}\n"
+                + (
+                    f"{p}_{suffix}(game_id=100720, season=2023)\n"
+                    if entry["key"] == "world_cup"
+                    else f"games = {p}_schedule(season={entry['example_season']})\n"
+                    f"{p}_{suffix}(game_id=int(games['game_id'][0]), season={entry['example_season']})\n"
+                ),
+                "ValueError: Neither ``season`` nor ``comp`` is given, or the season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n",
             ),
         )
 
@@ -265,16 +313,17 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
 # ------------------------------------------------------------------------------------------------ Genius
 
 
-def _genius_comp(entry: Entry, season: Optional[int], comp_id: Optional[int]) -> int:
+def _genius_comp(entry: Entry, season: Optional[int], comp_id: Optional[int], **kw: Any) -> int:
     """The Genius competition id of ``season``: ``comp_id`` as given, else the org competition whose label matches the entry."""
     from sportsdataverse.basketball.genius import genius as g
 
     if comp_id is not None:
         return int(comp_id)
-    frame = g.genius_competitions(org=entry["org"])
+    frame = _cached(("genius", entry["org"]), lambda: g.genius_competitions(org=entry["org"], **kw))
     label = pl.col("label").fill_null("")
     hit = frame.filter(
-        label.str.contains("(?i)" + entry["label_include"]) & ~label.str.contains("(?i)" + entry["label_exclude"])
+        label.str.contains("(?i)" + entry["label_include"])
+        & (label.str.contains("(?i)" + entry["label_exclude"]) == False)  # noqa: E712
     )
     if season is None:
         hit = hit.filter(pl.col("season") == hit["season"].max()) if hit.height else hit
@@ -282,7 +331,9 @@ def _genius_comp(entry: Entry, season: Optional[int], comp_id: Optional[int]) ->
         hit = hit.filter(pl.col("season") == season)
     if hit.height == 0:
         raise NoDataError(f"Genius lists no {entry['label']} competition for season={season}")
-    ids = sorted({int(i) for i in hit["comp_id"].to_list()})
+    ids = sorted({int(i) for i in hit["comp_id"].drop_nulls().to_list()})
+    if not ids:
+        raise NoDataError(f"Genius lists no {entry['label']} competition id for season={season}")
     if len(ids) > 1:
         raise ValueError(
             f"{entry['label']} season={season} matches several competitions {ids}; pass comp_id= to pick one"
@@ -312,6 +363,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             f"Every competition of the {org} Genius org, with its END-year season.",
             _FLAGS + _PANDAS + _KW,
             f"from sportsdataverse.basketball.genius import {p}_competitions\n{p}_competitions()\n",
+            returns_raw="the chooser page record (``dict``): the sdv-internal-refs capture shape plus ``_request`` (the org asked for)",
         ),
     )
 
@@ -326,7 +378,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
     ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
         return g.genius_schedule(
             org=org,
-            comp_id=_genius_comp(entry, season, comp_id),
+            comp_id=_genius_comp(entry, season, comp_id, **kwargs),
             round_number=round_number,
             return_parsed=return_parsed,
             return_as_pandas=return_as_pandas,
@@ -348,6 +400,7 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             "ValueError: The season matches several competitions (pass ``comp_id``).\nNoDataError: The org lists no matching competition.\n",
             f"The competition is picked from {org}'s chooser by the label rule include={entry['label_include']!r} "
             f"exclude={entry['label_exclude']!r}; cups and play-offs have their own comp_id.\n",
+            returns_raw="the schedule page record (``dict``): the sdv-internal-refs capture shape of the page",
         ),
     )
 
@@ -369,9 +422,15 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 entry,
                 base,
                 what,
-                "match_id: Genius match id (match_id in the schedule), e.g. 2902690.\n" + _FLAGS + _PANDAS + _KW,
-                f"from sportsdataverse.basketball.genius import {p}_{suffix}\n{p}_{suffix}(match_id=2902690)\n",
-                notes_extra="Genius match ids are one global sequence, so the match id alone identifies the game.\n",
+                "match_id: Genius match id (match_id in the schedule) of a game of this competition.\n"
+                + _FLAGS
+                + _PANDAS
+                + _KW,
+                f"from sportsdataverse.basketball.genius import {p}_schedule, {p}_{suffix}\n"
+                f"games = {p}_schedule()\n"
+                f"{p}_{suffix}(match_id=int(games['match_id'][0]))\n",
+                notes_extra="Genius match ids are one global sequence shared by every customer: the id alone identifies the game "
+                "and is NOT checked against this competition, so pass an id from this competition's schedule.\n",
             ),
         )
 
@@ -417,7 +476,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
         ),
     )
 
-    def _sel_fn(base_name: str, suffix: str, what: str, extra_sig: bool = False) -> None:
+    def _sel_fn(base_name: str, suffix: str, what: str) -> None:
         base = getattr(a, base_name)
 
         def fn(
@@ -490,7 +549,9 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 + _FLAGS
                 + _PANDAS
                 + _KW,
-                f"from sportsdataverse.basketball.atrium import {p}_{suffix}\n{p}_{suffix}(fixture_id='<fixture uuid from {p}_schedule>')\n",
+                f"from sportsdataverse.basketball.atrium import {p}_schedule, {p}_{suffix}\n"
+                f"games = {p}_schedule()\n"
+                f"{p}_{suffix}(fixture_id=games['fixture_id'][0])\n",
             ),
         )
 

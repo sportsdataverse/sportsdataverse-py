@@ -173,3 +173,25 @@ def test_pleague_shot_team_uuids_resolve_to_the_game_headers_site_teams():
     assert shots["home_team_uuid"].unique().to_list() == [home] and shots["away_team_uuid"].unique().to_list() == [away]
     joined = shots.join(xw, on="team_uuid", how="left")
     assert joined["team_id"].null_count() == 0  # every shot's team resolves
+
+
+def test_an_empty_or_zero_column_frame_gives_an_empty_typed_crosswalk():
+    for empty in (pl.DataFrame(), pl.DataFrame(schema={"game_id": pl.Int64, "genius_match_id": pl.Int64})):
+        xw = X.genius_game_crosswalk(empty, "cebl")
+        assert xw.height == 0 and xw.schema == {"game_key": pl.Int64, "genius_match_id": pl.Int64}
+    assert X.ibba_segev_game_crosswalk(pl.DataFrame()).schema == {"game_id": pl.Int64, "segev_game_id": pl.Int64}
+    assert X.genius_team_crosswalk(pl.DataFrame(), "sportality_standings").schema == {
+        "team_uuid": pl.Utf8,
+        "genius_team_id": pl.Int64,
+    }
+
+
+def test_the_helpers_are_exported_from_their_homes():
+    from sportsdataverse.basketball import genius, ibba, plg
+
+    assert (
+        genius.genius_game_crosswalk is X.genius_game_crosswalk
+        and genius.genius_team_crosswalk is X.genius_team_crosswalk
+    )
+    assert ibba.ibba_segev_game_crosswalk is X.ibba_segev_game_crosswalk
+    assert plg.pleague_team_crosswalk is X.pleague_team_crosswalk

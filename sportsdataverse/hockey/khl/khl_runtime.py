@@ -238,7 +238,7 @@ def _get(
 
     Args:
         url: the route URL (``https://www.khl.ru/rest/<a>/<b>/``; ``en.khl.ru`` gets its own session).
-        params: extra form fields, merged under ``data`` (the generated wrappers send an empty dict).
+        params: the form fields when ``data`` is omitted, else extra query-string fields (the generated wrappers send an empty dict).
         data: the form fields; ``season`` (END year) + ``stage`` become ``values[tournament]``.
         headers: extra request headers, merged over ``X-Requested-With`` / ``Origin`` / ``Referer``.
         **kwargs: ``timeout`` (seconds, default 60); anything else goes to ``curl_cffi``'s ``post``.
@@ -256,7 +256,12 @@ def _get(
             or a dead connection.
     """
     route = urlsplit(url).path.removeprefix("/rest")
-    form = _form(route, {**(params or {}), **(data or {})})
+    if data is None:  # a direct call: the params ARE the form fields
+        form, query = _form(route, params), {}
+    else:  # the generated wrappers: form in ``data``, caller ``params`` stay on the query string
+        form, query = _form(route, data), {k: v for k, v in (params or {}).items() if v is not None}
+    if query:
+        kwargs["params"] = query
     timeout = kwargs.pop("timeout", TIMEOUT)
     site = _site(url)
     # ponytail: one global lock (sessions, re-primes and retries all serialise); per-site locks if it ever matters

@@ -543,6 +543,8 @@ def ha_pbp(
         "scheduledDateTime": scheduled_date_time,
         "playedDateTime": played_date_time,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/play-by-play",
         params=_params,
@@ -571,7 +573,7 @@ def ha_games(
     """Every game of a season, played or scheduled (is_played): date, display team codes, score, periods, arena, attendance, shots and power play. No game id.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-games-stats``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-games-stats' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-games-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -630,6 +632,8 @@ def ha_games(
         "game_status": game_status,
         "decided_in": decided_in,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-games-stats",
         params=_params,
@@ -653,7 +657,7 @@ def ha_standings(
     """Standings of a season. Wins and losses are REGULATION only; overtime counts include shootouts.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/league-standings-all-time``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/league-standings-all-time' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA", "location": "all"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/league-standings-all-time' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "location": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -696,6 +700,8 @@ def ha_standings(
         "phase": phase,
         "location": location,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/league-standings-all-time",
         params=_params,
@@ -727,7 +733,7 @@ def ha_skater_stats(
     """Skater stats of a season, one category (column set) per call. Names and StatNet team ids, no player ids.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-skaters-stats``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-skaters-stats' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-skaters-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -815,6 +821,8 @@ def ha_skater_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-skaters-stats",
         params=_params,
@@ -844,7 +852,7 @@ def ha_goalie_stats(
     """Goalkeeper stats of a season, one category per call. Names and StatNet team ids, no player ids.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -909,6 +917,8 @@ def ha_goalie_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats",
         params=_params,
@@ -938,7 +948,7 @@ def ha_team_stats(
     """Team stats of a season, one category per call. W / L are totals including overtime and shootout (wins_total / losses_total).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-teams-stats``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-teams-stats' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-teams-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -1016,6 +1026,8 @@ def ha_team_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-teams-stats",
         params=_params,
@@ -1038,7 +1050,7 @@ def ha_teams(
     """Teams of a season with both team keys: StatNet team id <-> display code (from the stats tables' teams list).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats``
-    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": 2026, "phase": "HA"}'``
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -1077,6 +1089,8 @@ def ha_teams(
         "season": season,
         "phase": phase,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats",
         params=_params,
@@ -1144,6 +1158,8 @@ def ha_leaders(
         "team": team,
         "isGoalkeeper": is_goalkeeper,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/player-leaderboard",
         params=_params,
@@ -1208,6 +1224,8 @@ def ha_players(
         "orderBy": order_by,
         "searchQuery": search_query,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-players",
         params=_params,

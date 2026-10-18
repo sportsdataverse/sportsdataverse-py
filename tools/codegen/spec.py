@@ -33,6 +33,9 @@ class Param:
     kw_only: bool = False
     # Travels in the request body (``Endpoint.body`` form / json) instead of the query string.
     in_body: bool = False
+    # Runtime function that maps the public value to the one sent on the wire; used only to render the
+    # curl example of a body endpoint (the wrapper passes the public value, the runtime converts it).
+    wire_transform: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -305,6 +308,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 choices=[str(c) for c in extra.get("choices") or []],
                 kw_only=bool(extra.get("kw_only", False)),
                 in_body=body != "query" and where != "query",
+                wire_transform=extra.get("wire_transform"),
             ),
         )
     pps = []
@@ -348,6 +352,9 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
+    unknown = sorted(set(ep.fixed_in_query) - set(ep.fixed_params))
+    if unknown:
+        raise SpecError(f"{path}: endpoint {ep.short!r} fixed_in_query names {unknown} not in fixed_params")
     if ep.body not in ("query", "form", "json"):
         raise SpecError(f"{path}: endpoint {ep.short!r} body {ep.body!r} is not query, form or json")
     if ep.body != "query" and ep.method != "post":

@@ -85,16 +85,16 @@ fetched (e.g. via `nba_stats_playbyplayv3` / `nba_stats_boxscoretraditionalv3`).
 Pipeline:
 
 1. Build the per-`person_id` roster from `box_v3`
-   (build_roster`) and recover `player2_id`/`player3_id`
+   (`_build_roster`) and recover `player2_id`/`player3_id`
    (assist/block/steal/sub-in/jump) from `pbp_v3` (
-   extract_secondary_players`).
+   `_extract_secondary_players`).
 2. Drop the standalone block/steal rows consolidated into their parent
-   Missed Shot / Turnover (is_dropped_block_steal`) -- the only
+   Missed Shot / Turnover (`_is_dropped_block_steal`) -- the only
    row-count change versus the raw v3 action list.
 3. Derive `event_type`/`event_action_type` from the module's lookup
    tables, split `description` by `location` into home/visitor/
    neutral, forward-fill the running score, and enrich `player2`/
-   `player3` from the roster **by id** (see secondary_fields`
+   `player3` from the roster **by id** (see `_secondary_fields`
    for the deliberate divergence from hoopR's name-based re-resolution).
 
 **Parameters**
@@ -102,7 +102,7 @@ Pipeline:
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp_v3` | `dict` |  | Raw `playbyplayv3` dict (`nba_stats_playbyplayv3` / `wnba_stats_playbyplayv3` payload shape); actions live at `pbp_v3["game"]["actions"]`. |
-| `box_v3` | `dict` |  | Raw `boxscoretraditionalv3` dict, passed through to build_roster`. |
+| `box_v3` | `dict` |  | Raw `boxscoretraditionalv3` dict, passed through to `_build_roster`. |
 | `return_as_pandas` | `bool` | `False` | If `True`, return a `pandas.DataFrame` instead of `polars.DataFrame`. |
 
 **Returns**

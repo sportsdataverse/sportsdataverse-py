@@ -17,6 +17,8 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
@@ -66,7 +68,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_editions
-fiba_afrobasket_editions(season=2023)
+fiba_afrobasket_editions(season=2025)
 ```
 
 ### fiba_afrobasket_pbp {#fiba_afrobasket_pbp}
@@ -80,11 +82,13 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 Convenience wrapper: a thin binding of `fiba_gamepage_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -126,8 +130,9 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_pbp
-fiba_afrobasket_pbp(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_schedule, fiba_afrobasket_pbp
+games = fiba_afrobasket_schedule(season=2025)
+fiba_afrobasket_pbp(game_id=int(games['game_id'][0]), season=2025)
 ```
 
 ### fiba_afrobasket_player_box {#fiba_afrobasket_player_box}
@@ -141,11 +146,13 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -204,8 +211,9 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_player_box
-fiba_afrobasket_player_box(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_schedule, fiba_afrobasket_player_box
+games = fiba_afrobasket_schedule(season=2025)
+fiba_afrobasket_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
 ### fiba_afrobasket_schedule {#fiba_afrobasket_schedule}
@@ -218,6 +226,8 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -325,7 +335,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_schedule
-fiba_afrobasket_schedule(season=2023)
+fiba_afrobasket_schedule(season=2025)
 ```
 
 ### fiba_afrobasket_shots {#fiba_afrobasket_shots}
@@ -339,11 +349,13 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 Convenience wrapper: a thin binding of `fiba_gamepage_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -378,8 +390,9 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_shots
-fiba_afrobasket_shots(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_schedule, fiba_afrobasket_shots
+games = fiba_afrobasket_schedule(season=2025)
+fiba_afrobasket_shots(game_id=int(games['game_id'][0]), season=2025)
 ```
 
 ### fiba_afrobasket_standings {#fiba_afrobasket_standings}
@@ -392,6 +405,8 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_final_standings` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -422,7 +437,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_standings
-fiba_afrobasket_standings(season=2023)
+fiba_afrobasket_standings(season=2025)
 ```
 
 ### fiba_afrobasket_team_box {#fiba_afrobasket_team_box}
@@ -436,11 +451,13 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 Convenience wrapper: a thin binding of `fiba_gamepage_box_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -513,8 +530,9 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_team_box
-fiba_afrobasket_team_box(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_schedule, fiba_afrobasket_team_box
+games = fiba_afrobasket_schedule(season=2025)
+fiba_afrobasket_team_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
 ### fiba_afrobasket_teams {#fiba_afrobasket_teams}
@@ -527,6 +545,8 @@ FIBA AfroBasket (men's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -577,7 +597,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_afrobasket_teams
-fiba_afrobasket_teams(season=2023)
+fiba_afrobasket_teams(season=2025)
 ```
 
 ### fiba_bcl_editions {#fiba_bcl_editions}
@@ -590,6 +610,8 @@ Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men'
 
 Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -640,7 +662,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_bcl_editions
-fiba_bcl_editions(season=2023)
+fiba_bcl_editions(season=2025)
 ```
 
 ### fiba_bcl_pbp {#fiba_bcl_pbp}
@@ -654,11 +676,13 @@ Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men'
 Convenience wrapper: a thin binding of `fiba_gamepage_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -700,8 +724,9 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_bcl_pbp
-fiba_bcl_pbp(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_pbp
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_pbp(game_id=int(games['game_id'][0]), season=2025)
 ```
 
 ### fiba_bcl_player_box {#fiba_bcl_player_box}
@@ -715,11 +740,13 @@ Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men'
 Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule), e.g. 100720. |
+| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
@@ -778,6 +805,7 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_bcl_player_box
-fiba_bcl_player_box(game_id=100720, season=2023)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_player_box
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```

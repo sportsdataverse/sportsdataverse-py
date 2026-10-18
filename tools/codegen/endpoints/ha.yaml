@@ -85,6 +85,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -162,6 +163,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -199,6 +201,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -318,6 +321,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -408,6 +412,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff
@@ -505,6 +510,7 @@ endpoints:
     name: season
     query_key: season
     type: int
+    wire_transform: wire_season
   - choices:
     - HA
     - HAPlayoff

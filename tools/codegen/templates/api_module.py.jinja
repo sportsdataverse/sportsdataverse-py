@@ -101,6 +101,8 @@ def {{ ep.fn_name }}(
 {% endif %}
 {% endfor %}
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
 {% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}

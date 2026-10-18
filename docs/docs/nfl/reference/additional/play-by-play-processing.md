@@ -203,7 +203,7 @@ payload = proc.nfl_pbp_json()
 Run the lighter cleaning pipeline against `self.json`.
 
 Identical to `run_processing_pipeline()` up through the
-add_spread_time` step but stops short of EPA / WPA / QBR /
+`__add_spread_time` step but stops short of EPA / WPA / QBR /
 drive aggregation and the advanced box score. Use this when you
 want clean play structure without the modeled features.
 

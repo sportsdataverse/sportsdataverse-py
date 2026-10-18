@@ -139,6 +139,8 @@ def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
         if p.in_body:
             v = ep.example_args.get(p.python_name, p.default)
             body[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
+            if p.wire_transform and body[p.api] is not None:  # what the runtime really sends
+                body[p.api] = _transform(p.wire_transform, getter_module)(body[p.api])
     return {k: v for k, v in body.items() if v is not None}
 
 
@@ -3915,7 +3917,8 @@ _ARG_LINE_RE = re.compile(
 _RST_LINK_RE = re.compile(r"`([^`<]+?)\s*<([^>]+)>`_+")
 # Bare reST trailing-underscore / role artifacts left after link stripping, e.g.
 # a dangling `` `_ `` or `` ` ``-wrapped fragment with no target.
-_RST_BACKTICK_ARTIFACT_RE = re.compile(r"`_+")
+# Not the opening of a literal that starts with an underscore (``` ``_request`` ```).
+_RST_BACKTICK_ARTIFACT_RE = re.compile(r"(?<!`)`_+(?!\w)")
 # Sphinx cross-reference roles: :func:`X`, :class:`X`, etc. -> `X`
 _RST_ROLE_RE = re.compile(r":(?:func|class|mod|meth|attr|data|ref|obj|exc):`([^`]+)`")
 # reST double-backtick literals: ``X`` -> `X`

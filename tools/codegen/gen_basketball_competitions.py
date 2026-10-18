@@ -9,7 +9,7 @@ Run: ``python tools/codegen/gen_basketball_competitions.py [--check]``
 
 from __future__ import annotations
 
-import json
+import pprint
 import sys
 from pathlib import Path
 from typing import Any, Dict, List
@@ -36,7 +36,7 @@ REGISTRY: Dict[str, List[Dict[str, Any]]] = '''
 
 def render() -> str:
     data: Dict[str, Any] = yaml.safe_load(SOURCE.read_text(encoding="utf-8"))
-    return f"{_HEAD}{json.dumps(data, indent=4, ensure_ascii=False)}\n# fmt: on\n"
+    return f"{_HEAD}{pprint.pformat(data, indent=4, width=110, sort_dicts=False)}\n# fmt: on\n"
 
 
 def main(argv: List[str]) -> int:

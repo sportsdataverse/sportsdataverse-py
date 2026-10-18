@@ -11,6 +11,8 @@ toc_max_heading_level: 2
 
 > **Note:** Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
 
+> **Note:** The documented curl request is schematic: the runtime primes a session (adds the form field `sessid`), maps `season` / `stage` to the form field `values[tournament]` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
+
 ## khl_schedule
 
 Season schedule and results of a tournament, one row per game (All-Star games dropped).

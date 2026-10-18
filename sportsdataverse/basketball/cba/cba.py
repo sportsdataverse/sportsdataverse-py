@@ -1272,6 +1272,8 @@ def cba_player_box(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-match-datas/data-count",
         params=_params,
@@ -1338,6 +1340,8 @@ def cba_period_scores(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo",
         params=_params,
@@ -1404,6 +1408,8 @@ def cba_game_team_shots(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list",
         params=_params,
@@ -1472,6 +1478,8 @@ def cba_player_advanced(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-match-datas/advance-count",
         params=_params,
@@ -1540,6 +1548,8 @@ def cba_player_extras(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-match-datas/schedule-other-data",
         params=_params,
@@ -1606,6 +1616,8 @@ def cba_game_team_four(
     _body = {
         "scheduleId": schedule_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/teams/schedule-four-elements",
         params=_params,
@@ -1927,6 +1939,8 @@ def cba_pbp(
         "scheduleId": schedule_id,
         "quarterNum": quarter_num,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/schedule-eventses/filterPage",
         params=_params,
@@ -2066,6 +2080,8 @@ def cba_team_basic(
         "statisticalDimension": statistical_dimension,
         "selfOrOther": self_or_other,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/teams/basic-data",
         params=_params,
@@ -2135,6 +2151,8 @@ def cba_team_four(
         "targetId": team_id,
         "matchTypeId": match_type_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/teams/four-elements",
         params=_params,
@@ -2211,6 +2229,8 @@ def cba_team_overview(
         "teamId": team_id,
         "matchTypeId": match_type_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list",
         params=_params,
@@ -2287,6 +2307,8 @@ def cba_team_shots(
         "teamId": team_id,
         "matchTypeId": match_type_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list",
         params=_params,
@@ -2314,7 +2336,7 @@ def cba_player_base(
     """Season player box (one page of the season player table).
 
     Endpoint: ``POST https://data-server.cbaleague.com/api/player-base-list``
-    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-base-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2026, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128}'``
+    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-base-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128}'``
 
     Args:
         season: Required. Season END year (2026 = the 2025-26 season). The API takes the START year (2025), so cba_runtime sends season - 1.
@@ -2372,6 +2394,8 @@ def cba_player_base(
         "playerRanger": player_ranger,
         "teamId": team_id,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-base-list",
         params=_params,
@@ -2401,7 +2425,7 @@ def cba_player_offensive(
     """Season player offensive rates (one page).
 
     Endpoint: ``POST https://data-server.cbaleague.com/api/player-offensive-list``
-    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-offensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2026, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
+    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-offensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
 
     Args:
         season: Required. Season END year (2026 = the 2025-26 season). The API takes the START year (2025), so cba_runtime sends season - 1.
@@ -2463,6 +2487,8 @@ def cba_player_offensive(
         "sort": sort,
         "rank": rank,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-offensive-list",
         params=_params,
@@ -2494,7 +2520,7 @@ def cba_player_defensive(
     """Season player defensive rates (one page).
 
     Endpoint: ``POST https://data-server.cbaleague.com/api/player-defensive-list``
-    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-defensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2026, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
+    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-defensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
 
     Args:
         season: Required. Season END year (2026 = the 2025-26 season). The API takes the START year (2025), so cba_runtime sends season - 1.
@@ -2556,6 +2582,8 @@ def cba_player_defensive(
         "sort": sort,
         "rank": rank,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-defensive-list",
         params=_params,
@@ -2587,7 +2615,7 @@ def cba_player_shots(
     """Season player shot-zone profile (one page).
 
     Endpoint: ``POST https://data-server.cbaleague.com/api/player-shoot-list``
-    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-shoot-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2026, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
+    Example request: ``curl -X POST 'https://data-server.cbaleague.com/api/player-shoot-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'``
 
     Args:
         season: Required. Season END year (2026 = the 2025-26 season). The API takes the START year (2025), so cba_runtime sends season - 1.
@@ -2649,6 +2677,8 @@ def cba_player_shots(
         "sort": sort,
         "rank": rank,
     }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://data-server.cbaleague.com/api/player-shoot-list",
         params=_params,
