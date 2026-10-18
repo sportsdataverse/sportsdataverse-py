@@ -46,6 +46,13 @@ def espn_mbb_game_rosters(
         ``position_abbreviation`` and ``position_leaf``. With ``raw=True``, the competitors
         payload (dict).
 
+    Raises:
+        NoDataError: ESPN has no competitors, roster or athlete resource for the game (404), or every
+            rostered athlete's ``$ref`` answered 404. A single 404 athlete is left out with a
+            ``UserWarning`` and the rest of the roster is returned.
+        AssetFetchError: a fetch failed (403, 429, 5xx, a dropped connection); never treated as a
+            missing athlete.
+
     Example:
         Quick start (2024 NCAA M championship game)::
 

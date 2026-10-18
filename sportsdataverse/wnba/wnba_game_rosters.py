@@ -45,6 +45,14 @@ def espn_wnba_game_rosters(
         plus the athlete's ``position_id``, ``position_name``, ``position_display_name``,
         ``position_abbreviation`` and ``position_leaf``. With ``raw=True``, the competitors
         payload (dict).
+
+    Raises:
+        NoDataError: ESPN has no competitors, roster or athlete resource for the game (404), or every
+            rostered athlete's ``$ref`` answered 404. A single 404 athlete is left out with a
+            ``UserWarning`` and the rest of the roster is returned.
+        AssetFetchError: a fetch failed (403, 429, 5xx, a dropped connection); never treated as a
+            missing athlete.
+
     Example:
         Pull both teams' rosters for a single game::
 
