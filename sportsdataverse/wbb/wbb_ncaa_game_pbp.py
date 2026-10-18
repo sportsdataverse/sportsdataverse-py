@@ -4,7 +4,7 @@ Thin shims over :mod:`sportsdataverse.mbb.mbb_ncaa_game_pbp` that bind the
 **right WBB period model for the game's era**:
 
 * ``(2, 1200, 300)`` -- two 20-minute halves, seasons through 2014-15;
-* ``(4, 600, 300)`` -- four 10-minute quarters, 2015-16 onward
+* four 10-minute quarters with 5-minute overtimes, 2015-16 onward
   (``rules/wbb.yaml#wbb-2016-four-quarters`` in sdv-internal-refs).
 
 Feeding the wrong model to the parser does not raise -- it silently yields a
@@ -37,6 +37,8 @@ from sportsdataverse.mbb.mbb_ncaa_game_pbp import (
     _SupportsFetchGamePbp,
     _time_in_seconds,
 )
+from sportsdataverse.scrape.ncaa._rules import WBB_HALVES_MODEL, WBB_QUARTERS_MODEL
+from sportsdataverse.scrape.ncaa.identity import _utf8_id
 from sportsdataverse.scrape.ncaa.parse import wbb_period_model
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -47,11 +49,6 @@ __all__ = [
     "ncaa_wbb_game_pbp",
     "ncaa_wbb_play_by_play",
 ]
-
-#: WBB quarters model (2015-16+): 4 regulation quarters x 600s, 300s overtimes.
-_WBB_PERIOD_MODEL: "tuple[int, int, int]" = (4, 600, 300)
-#: WBB halves model (through 2014-15): 2 regulation halves x 1200s, 300s overtimes.
-_WBB_HALVES_MODEL: "tuple[int, int, int]" = (2, 1200, 300)
 
 
 def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
@@ -68,7 +65,7 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
 
     Returns:
         ``(2, 1200, 300)`` when a first-period clock above 10:00 is present,
-        otherwise ``(4, 600, 300)`` (an unreadable page falls through to the
+        otherwise the quarters model (an unreadable page falls through to the
         modern model, matching :func:`~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
     Example:
@@ -79,16 +76,17 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
     """
     tables = _extract_tables(html)
     if len(tables) < 4:
-        return _WBB_PERIOD_MODEL
+        return WBB_QUARTERS_MODEL
     for row in tables[3][1:]:
         secs = _time_in_seconds((row[0] or "")[:5]) if row else None
         if secs is not None and secs > 600:
-            return _WBB_HALVES_MODEL
-    return _WBB_PERIOD_MODEL
+            return WBB_HALVES_MODEL
+    return WBB_QUARTERS_MODEL
 
 
 def _period_model_for(season: Optional[object]) -> PeriodModel:
-    return infer_wbb_period_model if season is None else wbb_period_model(str(season))
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
+    return infer_wbb_period_model if season is None else wbb_period_model(_utf8_id(season))
 
 
 def ncaa_wbb_game_pbp(
@@ -116,6 +114,10 @@ def ncaa_wbb_game_pbp(
 
     Returns:
         The 35-column play-by-play frame (zero rows when the game is not found).
+
+    Raises:
+        ValueError: ``game_id`` is not an integral contest id (``None``,
+            NaN, ``5722355.5``); a float such as ``5722355.0`` is accepted.
 
     Example:
         Quick start::
@@ -150,7 +152,9 @@ def ncaa_wbb_play_by_play(
     the WBB period model for each game's era bound.
 
     Args:
-        game_ids: NCAA contest ids; ``None``/NaN entries are dropped.
+        game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
+            floats (``5722355.5``) are dropped, an integral float
+            (``5722355.0``) is read as ``"5722355"``.
         season: Season shared by every id, as an ending year or span. When
             omitted each page's era is inferred from its first-period clock, so
             ids from both eras may be mixed.

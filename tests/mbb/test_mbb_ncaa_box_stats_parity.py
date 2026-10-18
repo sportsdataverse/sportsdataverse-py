@@ -191,3 +191,20 @@ def test_empty_html_returns_empty_schema() -> None:
     df = parse_ncaa_bb_box("<html><body>nope</body></html>", "0")
     assert df.height == 0
     assert df.columns == list(ORACLE_TO_SNAKE.values())
+
+
+class _RecordingFetcher(_FixtureFetcher):
+    def __init__(self) -> None:
+        self.calls: "list[object]" = []
+
+    def fetch_game_individual_stats(self, contest_id: object) -> str:
+        self.calls.append(contest_id)
+        return super().fetch_game_individual_stats(contest_id)
+
+
+def test_driver_float_contest_ids_are_integer_strings() -> None:
+    """A float id fetches ``6470186``, never ``6470186.0``; NaN / None are dropped (R853-2)."""
+    fetcher = _RecordingFetcher()
+    got = ncaa_mbb_box_scores([6470186.0, float("nan"), None], fetcher=fetcher)
+    assert fetcher.calls == ["6470186"]
+    assert got["game_id"].unique().to_list() == ["6470186"]

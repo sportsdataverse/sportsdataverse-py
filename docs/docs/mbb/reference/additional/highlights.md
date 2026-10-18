@@ -540,7 +540,7 @@ row-binds the survivors, and logs the removed ids.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`6470186.5`) are dropped, an integral float (`6470186.0`) is read as `"6470186"`. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

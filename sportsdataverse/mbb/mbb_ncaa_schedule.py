@@ -32,11 +32,13 @@ Documented divergences from the R sources:
 from __future__ import annotations
 
 import re
+import warnings
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple, Union
 
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import UnsupportedPageFormatWarning
 from sportsdataverse.mbb.mbb_ncaa_game_pbp import _normalize_v2_name
 from sportsdataverse.mbb.mbb_ncaa_html import parse_html
 from sportsdataverse.mbb.mbb_ncaa_team_ids import _ncaa_bb_team_ids, resolve_ncaa_team_id
@@ -199,11 +201,21 @@ def parse_ncaa_bb_team_schedule(html: str, team_id: int, *, league: str = "mbb")
             self-name lookup and opponent matching. (wbigballR always used
             the men's table -- fixed here; see module docstring.)
 
+    Page format: the current stats.ncaa.org team page bigballR reads, where
+    each game is a ``tr.underline_rows`` row followed by a blank detail row and
+    the table has an ``Attendance`` column. The older layout (one row per game,
+    no ``Attendance``; e.g. the 2016 baseball team page) is NOT read.
+
     Returns:
         One row per game: ``game_date``, ``home``, ``home_score``, ``away``,
         ``away_score``, ``box_id``, ``game_id``, ``is_neutral``, ``detail``,
         ``attendance``. Zero-row frame with the same schema when the page has
-        no schedule table.
+        no schedule table, or is in the older layout (with a warning).
+
+    Warns:
+        UnsupportedPageFormatWarning: The schedule table has game rows but no
+            ``underline_rows`` row: the older one-row-per-game layout, which
+            this parser would otherwise mis-pair (half the games, shifted ids).
 
     Example:
         Parse an on-disk capture::
@@ -220,6 +232,15 @@ def parse_ncaa_bb_team_schedule(html: str, team_id: int, *, league: str = "mbb")
     header = [_cell(th) for th in table.find_all("th")]
     idx = {name: header.index(name) for name in ("Date", "Opponent", "Result", "Attendance") if name in header}
     data_rows = [tr for tr in table.find_all("tr") if tr.find("td") is not None]
+    if data_rows and not any("underline_rows" in (tr.get("class") or []) for tr in data_rows):
+        warnings.warn(
+            f"parse_ncaa_bb_team_schedule: team {team_id} is the older stats.ncaa.org team-page layout "
+            "(one row per game, no 'underline_rows' rows or Attendance column, as served for 2016), "
+            "which this parser does not read; returning the zero-row frame.",
+            UnsupportedPageFormatWarning,
+            stacklevel=2,
+        )
+        return pl.DataFrame(schema=_SCHEDULE_SCHEMA)
     # R :1538 -- the table ships doubled rows; keep the odd (1-based) ones.
     data_rows = data_rows[::2]
 
@@ -246,7 +267,7 @@ def parse_ncaa_bb_team_schedule(html: str, team_id: int, *, league: str = "mbb")
 
     crosswalk = _ncaa_bb_team_ids(league)
     team_set = set(crosswalk.get_column("team").to_list())
-    self_names = crosswalk.filter(pl.col("id") == team_id).get_column("team")
+    self_names = crosswalk.filter(pl.col("id") == int(team_id)).get_column("team")
     team_name: Optional[str] = self_names[0] if len(self_names) > 0 else None
 
     game_ids = _CONTEST_ID_RE.findall(html)

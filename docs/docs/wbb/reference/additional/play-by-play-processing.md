@@ -205,7 +205,7 @@ halves era. The line-score width alone cannot (halves + 2 OT and quarters
 
 **Returns**
 
-`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise `(4, 600, 300)` (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
+`(2, 1200, 300)` when a first-period clock above 10:00 is present, otherwise the quarters model (an unreadable page falls through to the modern model, matching `~sportsdataverse.scrape.ncaa.parse.wbb_period_model`).
 
 **Example**
 
@@ -301,7 +301,7 @@ the WBB period model for each game's era bound.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`5722355.5`) are dropped, an integral float (`5722355.0`) is read as `"5722355"`. |
 | `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

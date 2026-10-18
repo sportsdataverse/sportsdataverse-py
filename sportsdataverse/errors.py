@@ -323,6 +323,25 @@ class AsOfCutWarning(UserWarning):
     """
 
 
+class UnsupportedPageFormatWarning(UserWarning):
+    """Warned when a scraped page is in a layout its parser does not read.
+
+    The stats.ncaa.org basketball parsers read one page layout each (see their
+    docstrings). A page in another layout -- the 2018-format play-by-play page,
+    the 2016-era team page -- would otherwise parse to an empty or mis-paired
+    frame with nothing said, so the parser returns its documented zero-row
+    frame and this warning names the format it saw.
+
+    Example:
+        Make it an error in a pipeline::
+
+            import warnings
+            from sportsdataverse.errors import UnsupportedPageFormatWarning
+
+            warnings.filterwarnings("error", category=UnsupportedPageFormatWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 
