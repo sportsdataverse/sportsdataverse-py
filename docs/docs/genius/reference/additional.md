@@ -6,8 +6,9 @@ sidebar_position: 50
 ---
 # GENIUS — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.genius`
-not covered by the generated API-endpoint reference above.
+Additional functions in `sportsdataverse.basketball.genius` not covered by the generated API-endpoint
+reference above: per-competition functions minted from the competition registry (each
+binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
 
 ## Genius Sports LiveStats
 
@@ -34,7 +35,7 @@ not covered by the generated API-endpoint reference above.
 | [lnbm_competitions](additional/genius-sports-livestats-2.md#lnbm_competitions) | Every competition of the FRB Genius org, with its END-year season. |
 | [lnbm_pbp](additional/genius-sports-livestats-2.md#lnbm_pbp) | Play-by-play of a finished Liga Nationala de Baschet Masculin (Romania) game. |
 | [lnbm_player_box](additional/genius-sports-livestats-2.md#lnbm_player_box) | Player box score of a finished Liga Nationala de Baschet Masculin (Romania) game. |
-| [lnbm_schedule](additional/genius-sports-livestats-2.md#lnbm_schedule) | Every match of one Liga Nationala de Baschet Masculin (Romania) season (hosted WebStats): ids, status, venue, teams and scores. |
+| [lnbm_schedule](additional/genius-sports-livestats-3.md#lnbm_schedule) | Every match of one Liga Nationala de Baschet Masculin (Romania) season (hosted WebStats): ids, status, venue, teams and scores. |
 | [lnbm_shots](additional/genius-sports-livestats-3.md#lnbm_shots) | Shot chart of a finished Liga Nationala de Baschet Masculin (Romania) game. |
 | [lnbm_team_box](additional/genius-sports-livestats-3.md#lnbm_team_box) | Team box score of a finished Liga Nationala de Baschet Masculin (Romania) game. |
 | [lub_competitions](additional/genius-sports-livestats-3.md#lub_competitions) | Every competition of the FUBB Genius org, with its END-year season. |
@@ -45,7 +46,7 @@ not covered by the generated API-endpoint reference above.
 | [lub_team_box](additional/genius-sports-livestats-3.md#lub_team_box) | Team box score of a finished Liga Uruguaya de Basquetbol game. |
 | [nznbl_competitions](additional/genius-sports-livestats-3.md#nznbl_competitions) | Every competition of the NZNBL Genius org, with its END-year season. |
 | [nznbl_pbp](additional/genius-sports-livestats-3.md#nznbl_pbp) | Play-by-play of a finished New Zealand National Basketball League game. |
-| [nznbl_player_box](additional/genius-sports-livestats-3.md#nznbl_player_box) | Player box score of a finished New Zealand National Basketball League game. |
+| [nznbl_player_box](additional/genius-sports-livestats-4.md#nznbl_player_box) | Player box score of a finished New Zealand National Basketball League game. |
 | [nznbl_schedule](additional/genius-sports-livestats-4.md#nznbl_schedule) | Every match of one New Zealand National Basketball League season (hosted WebStats): ids, status, venue, teams and scores. |
 | [nznbl_shots](additional/genius-sports-livestats-4.md#nznbl_shots) | Shot chart of a finished New Zealand National Basketball League game. |
 | [nznbl_team_box](additional/genius-sports-livestats-4.md#nznbl_team_box) | Team box score of a finished New Zealand National Basketball League game. |
@@ -55,8 +56,8 @@ not covered by the generated API-endpoint reference above.
 | [slb_schedule](additional/genius-sports-livestats-4.md#slb_schedule) | Every match of one Super League Basketball (UK) season (hosted WebStats): ids, status, venue, teams and scores. |
 | [slb_shots](additional/genius-sports-livestats-4.md#slb_shots) | Shot chart of a finished Super League Basketball (UK) game. |
 | [slb_team_box](additional/genius-sports-livestats-4.md#slb_team_box) | Team box score of a finished Super League Basketball (UK) game. |
-| [wbbl_competitions](additional/genius-sports-livestats-4.md#wbbl_competitions) | Every competition of the WBBL Genius org, with its END-year season. |
-| [wbbl_pbp](additional/genius-sports-livestats-4.md#wbbl_pbp) | Play-by-play of a finished Women's British Basketball League game. |
+| [wbbl_competitions](additional/genius-sports-livestats-5.md#wbbl_competitions) | Every competition of the WBBL Genius org, with its END-year season. |
+| [wbbl_pbp](additional/genius-sports-livestats-5.md#wbbl_pbp) | Play-by-play of a finished Women's British Basketball League game. |
 | [wbbl_player_box](additional/genius-sports-livestats-5.md#wbbl_player_box) | Player box score of a finished Women's British Basketball League game. |
 | [wbbl_schedule](additional/genius-sports-livestats-5.md#wbbl_schedule) | Every match of one Women's British Basketball League season (hosted WebStats): ids, status, venue, teams and scores. |
 | [wbbl_shots](additional/genius-sports-livestats-5.md#wbbl_shots) | Shot chart of a finished Women's British Basketball League game. |

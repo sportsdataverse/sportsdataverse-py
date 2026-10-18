@@ -1,7 +1,7 @@
 ---
 title: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Team"
 sidebar_label: "Team"
-sidebar_position: 3
+sidebar_position: 4
 description: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -30,6 +30,14 @@ The teams of one season as a select list: team id and the season's display name.
 | `value` | character | teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 'Zhejiang Guangsha' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList and the team and player routes. Not a player or schedule id. Here a string of digits. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_team_options-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_team_options-example}
 
@@ -63,6 +71,14 @@ The current team list: logo, team id, club name and display name.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_teams-example}
 
 ```python
@@ -94,6 +110,14 @@ Team counts of one season, keyed by match type.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_team_counts-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_team_counts-example}
 
 ```python
@@ -110,12 +134,12 @@ A team's per-game averages or totals, one row per season of the team.
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/basic-data' -H 'Content-Type: application/json' -d '{"targetId": 29128, "matchTypeId": 1, "statisticalDimension": 1, "selfOrOther": 1}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `targetId` | `team_id` |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
-| `matchTypeId` | `match_type_id` |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
-| `statisticalDimension` | `statistical_dimension` |  |  | `Y` | How counting columns are formatted: 1 per game (default), 2 season total, 3 and 4 per 100 possessions. |
-| `selfOrOther` | `self_or_other` |  |  | `Y` | Whose statistics: 1 the team's own (default), 2 its opponents'. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `targetId` | `team_id` | body |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
+| `matchTypeId` | `match_type_id` | body |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
+| `statisticalDimension` | `statistical_dimension` | body |  |  | `Y` | How counting columns are formatted: 1 per game (default), 2 season total, 3 and 4 per 100 possessions. |
+| `selfOrOther` | `self_or_other` | body |  |  | `Y` | Whose statistics: 1 the team's own (default), 2 its opponents'. |
 
 ### Returns {#cba_team_basic-returns}
 
@@ -156,6 +180,14 @@ A team's per-game averages or totals, one row per season of the team.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_team_basic-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_team_basic-example}
 
 ```python
@@ -172,10 +204,10 @@ A team's four-factors table, one row per season of the team.
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/four-elements' -H 'Content-Type: application/json' -d '{"targetId": 29128, "matchTypeId": 1}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `targetId` | `team_id` |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
-| `matchTypeId` | `match_type_id` |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `targetId` | `team_id` | body |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
+| `matchTypeId` | `match_type_id` | body |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
 
 ### Returns {#cba_team_four-returns}
 
@@ -258,6 +290,14 @@ A team's four-factors table, one row per season of the team.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_team_four-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_team_four-example}
 
 ```python
@@ -274,12 +314,12 @@ A team's overview table (record, pace, per-100 ratings), one row per season of t
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"teamId": 29128, "matchTypeId": 1}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `teamId` | `team_id` |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
-| `matchTypeId` | `match_type_id` |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
-| `pageNumber` | `page_number` |  |  | `Y` | Page number of the paged list, from 1. |
-| `pageSize` | `page_size` |  |  | `Y` | Rows per page (the site uses 100). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `teamId` | `team_id` | body |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
+| `matchTypeId` | `match_type_id` | body |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
+| `pageNumber` | `page_number` | query |  |  | `Y` | Page number of the paged list, from 1. |
+| `pageSize` | `page_size` | query |  |  | `Y` | Rows per page (the site uses 100). |
 
 ### Returns {#cba_team_overview-returns}
 
@@ -309,6 +349,14 @@ A team's overview table (record, pace, per-100 ratings), one row per season of t
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_team_overview-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_team_overview-example}
 
 ```python
@@ -325,12 +373,12 @@ A team's shot-zone profile, one row per season of the team (zone splits from 201
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"teamId": 29128, "matchTypeId": 1}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `teamId` | `team_id` |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
-| `matchTypeId` | `match_type_id` |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
-| `pageNumber` | `page_number` |  |  | `Y` | Page number of the paged list, from 1. |
-| `pageSize` | `page_size` |  |  | `Y` | Rows per page (the site uses 100). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `teamId` | `team_id` | body |  | `Y` |  | Required. CBA team id (clubs, stable across seasons and renames). |
+| `matchTypeId` | `match_type_id` | body |  |  | `Y` | Match type id: 1 regular season (default), 2 playoffs, 3 preseason, 4 all-star, 9 relegation play-off (cba_match_types). |
+| `pageNumber` | `page_number` | query |  |  | `Y` | Page number of the paged list, from 1. |
+| `pageSize` | `page_size` | query |  |  | `Y` | Rows per page (the site uses 100). |
 
 ### Returns {#cba_team_shots-returns}
 
@@ -390,6 +438,14 @@ A team's shot-zone profile, one row per season of the team (zone splits from 201
 | `team_name` | character | Team name (Chinese) in that season; changes with the sponsor. Names change with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_team_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_team_shots-example}
 

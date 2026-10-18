@@ -485,6 +485,12 @@ Resolve the fitted-constants row for a league.
 
 The `LeagueConstants` row for `league`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | if `league` is not a known key of `LEAGUE_CONSTANTS`. |
+
 **Example**
 
 ```python

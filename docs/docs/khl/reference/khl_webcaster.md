@@ -40,6 +40,14 @@ Season table: every stage (season END year, regular / playoff) with its khl.ru t
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
 
+### Raises {#khl_webcaster_stages-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_webcaster_stages-example}
 
 ```python
@@ -229,6 +237,14 @@ One game: officials, team totals, per-player match stats, goals, penalties (one 
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
 
+### Raises {#khl_webcaster_event-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_webcaster_event-example}
 
 ```python
@@ -319,6 +335,14 @@ Games of a stage, 16 per page (one row per game; khl_id is the khl.ru game id).
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
 
+### Raises {#khl_webcaster_events-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_webcaster_events-example}
 
 ```python
@@ -364,6 +388,14 @@ Stat leaders of a stage: one row per player per category.
 | `stats` | character | Category value(s) |
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
+
+### Raises {#khl_webcaster_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_leaders-example}
 
@@ -427,6 +459,14 @@ Players with stage-scoped stats (one row per player; khl_id is the khl.ru player
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
 
+### Raises {#khl_webcaster_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_webcaster_players-example}
 
 ```python
@@ -465,6 +505,14 @@ Every current player: webcaster id, khl.ru id, jersey and team (one row per play
 | `team` | character | Team (webcaster) |
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
+
+### Raises {#khl_webcaster_players_light-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_players_light-example}
 
@@ -523,6 +571,14 @@ League table of every season (one row per season per team, from the championship
 | `conference_key` | character | Conference key (east / west) |
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
+
+### Raises {#khl_webcaster_tables-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_tables-example}
 
@@ -601,6 +657,14 @@ One team with roster, stats and news feed (one row; lists as JSON text).
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
 
+### Raises {#khl_webcaster_team-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#khl_webcaster_team-example}
 
 ```python
@@ -641,6 +705,14 @@ Teams of a stage (one row per team; khl_id is the khl.ru club id).
 | `conference_key` | character | Conference key (east/west) |
 
 **`return_parsed=False`** — the raw JSON body (betting fields and the caller's IP removed).
+
+### Raises {#khl_webcaster_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_teams-example}
 

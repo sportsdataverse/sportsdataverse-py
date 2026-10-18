@@ -983,6 +983,12 @@ Endpoint: `GET https://api.proxybonanza.com/v1/userpackages/{pkg}.json`
 
 One `http://login:password@ip:port` URL per IP in the package.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | Non-200 response. |
+
 **Example**
 
 ```python
@@ -1155,6 +1161,12 @@ One row per game — see the MBB sibling for the full `SCOREBOARD_SCHEMA` column
 | `home_losses` | integer | Home team's losses. |
 | `away_wins` | integer | Away team's wins. |
 | `away_losses` | integer | Away team's losses. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | The date's season has no WBB `season_divisions` id (includes 2009-10 — see module docstring), *conference* is not a known conference, the date is not `MM/DD/YYYY`, or the fetched page has no games table. |
 
 **Example**
 
@@ -1546,6 +1558,12 @@ One row per player — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse_ncaa_bb
 | `ht_inches` | integer |  |
 | `player_id` | character | Unique player identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
 **Example**
 
 ```python
@@ -1590,6 +1608,12 @@ One row per scheduled game — see `~sportsdataverse.mbb.mbb_ncaa_schedule.parse
 | `is_neutral` | logical |  |
 | `detail` | character | Detail. |
 | `attendance` | integer | Reported attendance. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
 
 **Example**
 

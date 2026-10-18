@@ -1,10 +1,215 @@
 ---
-title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_standings–nbl1_teams"
-sidebar_label: "Sportradar Atrium embed API: lpb_standings–nbl1_teams"
+title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_schedule–nbl1_team"
+sidebar_label: "Sportradar Atrium embed API: lpb_schedule–nbl1_team"
 sidebar_position: 3
-description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_standings–nbl1_teams — function reference in sdv-py, the SportsDataverse Python package."
+description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_schedule–nbl1_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_standings–nbl1_teams
+# ATRIUM — additional Python functions — Sportradar Atrium embed API: lpb_schedule–nbl1_team
+
+### lpb_schedule {#lpb_schedule}
+
+`lpb_schedule(season: 'Optional[int]' = None, season_id: 'Optional[str]' = None, competition_id: 'Optional[str]' = None, locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Fixtures (schedule and results) of a LPB / LPBF Liga Profesional de Baloncesto (Panama) season.
+
+LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season rule: calendar year.
+
+Convenience wrapper: a thin binding of `atrium_fixtures` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | Season END year (see the season rule above). Omit season and season_id for the site's current season. |
+| `season_id` | `Optional[str]` | `None` | Season UUID (season_id in the seasons listing); skips the END-year lookup. |
+| `competition_id` | `Optional[str]` | `None` | Competition UUID (a site carries many: conferences, cups); needed when several share the season. |
+| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `season_id` | character | Season UUID the page is about (the site's default season when none was asked). |
+| `competition_id` | character | Competition UUID of the season. |
+| `competition_name` | character | Competition name in the site's language, e.g. Betclic ELITE or LIGA CALIENTE.MX LNBP. |
+| `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
+| `fixture_id` | character | Game UUID (fixture); the key of every game frame and of the fixture_detail routes. |
+| `fixture_type` | character | Kind of game as sent: REGULAR, PLAYOFF, ... (the set is open). |
+| `name` | character | Fixture name as the site prints it (e.g. Paris - Lyon-Villeurbanne); null on LNBP. |
+| `round` | character | Round of the game as the site words it, e.g. Journee: 30. |
+| `round_code` | character | Round code; null in every body seen. |
+| `pool` | character | Pool the game belongs to; null when the competition has none. |
+| `series` | character | Playoff series the game belongs to as sent (JSON text when an object); null outside a series. |
+| `stage_code` | character | Opaque 30-hex stage code of the game; null in every body seen. |
+| `status` | character | Status code of the game, e.g. CONFIRMED (final), as sent. |
+| `status_label` | character | Status of the game as the site words it in its own language (e.g. Termine, Final). |
+| `start_time_utc` | datetime | Scheduled start, naive datetime in UTC (the API sends no offset). |
+| `start_time_local` | datetime | Scheduled start, naive datetime in the venue's local time (timezone gives the zone; no offset sent). |
+| `timezone` | character | IANA time zone of the venue (e.g. Europe/Paris, Mexico/General) that start_time_local is in. |
+| `times_unconfirmed` | logical | True while the start time is not final. |
+| `venue` | character | Name of the arena where the game is played. |
+| `venue_id` | character | Venue UUID; joins no other route. |
+| `attendance` | integer | Spectators at the game; null when not reported. |
+| `home_entity_id` | character | Team UUID of the home team. |
+| `home_code` | character | Short code of the home team (e.g. PAB). |
+| `home_name` | character | Name of the home team. |
+| `home_score` | integer | Points scored by the home team (the API sends a string; Int64 here). |
+| `home_result_place` | integer | Result place of the home team: 1 for the winner, 2 for the loser. |
+| `home_result_status` | character | Result status of the home team's score, e.g. CONFIRMED. |
+| `home_draw` | logical | True when the game ended level for the home team. |
+| `home_shootout_attempts` | character | Shootout attempts of the home team as sent (an empty string becomes null). |
+| `home_secondary_score` | character | Secondary score of the home team (unused in the samples; shown as text). |
+| `away_entity_id` | character | Team UUID of the away team. |
+| `away_code` | character | Short code of the away team (e.g. PAB). |
+| `away_name` | character | Name of the away team. |
+| `away_score` | integer | Points scored by the away team (the API sends a string; Int64 here). |
+| `away_result_place` | integer | Result place of the away team: 1 for the winner, 2 for the loser. |
+| `away_result_status` | character | Result status of the away team's score, e.g. CONFIRMED. |
+| `away_draw` | logical | True when the game ended level for the away team. |
+| `away_shootout_attempts` | character | Shootout attempts of the away team as sent (an empty string becomes null). |
+| `away_secondary_score` | character | Secondary score of the away team (unused in the samples; shown as text). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.atrium import lpb_schedule
+lpb_schedule(season=2026)
+```
+
+### lpb_seasons {#lpb_seasons}
+
+`lpb_seasons(locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Every season and competition id of LPB / LPBF Liga Profesional de Baloncesto (Panama).
+
+LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season rule: calendar year.
+
+Convenience wrapper: a thin binding of `atrium_seasons` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `season_id` | character | Season UUID; pass it as season_id to any season-scoped wrapper. |
+| `competition_id` | character | Competition UUID; pass it as competition_id to pick one of several seasons of an END year. |
+| `competition_name` | character | Competition name in the site's language; the same name can appear for several years. |
+| `season_name` | character | Season name in the site's language, e.g. Betclic ELITE 2025. |
+| `abbreviation_local` | character | Local abbreviation of the season; null in every body seen. |
+| `year` | integer | The site's own year of the season: the START year on LNB (site 12), the calendar year elsewhere. |
+| `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
+| `is_default_season` | logical | True for the season the body is about (the site's default when none was asked). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.atrium import lpb_seasons
+lpb_seasons()
+```
+
+### lpb_shots {#lpb_shots}
+
+`lpb_shots(fixture_id: 'str', locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Shot chart of a LPB / LPBF Liga Profesional de Baloncesto (Panama) game.
+
+LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season rule: calendar year.
+
+Convenience wrapper: a thin binding of `atrium_shots` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fixture_id` | `str` |  | Fixture UUID (fixture_id in the schedule). |
+| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
+| `fixture_id` | character | Game UUID (fixture); the key of every game frame and of the fixture_detail routes. |
+| `season_id` | character | Season UUID of the game. |
+| `sequence` | integer | 1-based position of the shot among the shots of the game (not the pbp sequence). |
+| `event_id` | character | Event UUID of the shot; the same event in atrium_pbp. |
+| `period_id` | integer | Period number: 1-4 regulation, 11, 12, ... overtimes (not 5). |
+| `clock` | character | Time REMAINING in the period as an ISO 8601 duration (PT10M0S at the start). |
+| `clock_seconds` | integer | Seconds remaining in the period, parsed from clock. |
+| `entity_id` | character | Team UUID the event is credited to. |
+| `side` | character | Side of the game the row belongs to: home or away (from the fixture's isHome flag). |
+| `person_id` | character | Player UUID of the shooter. |
+| `person_name` | character | Name of the shooter. |
+| `bib` | character | Jersey number of the player, as text; null for team events. |
+| `event_type` | character | Event type: 2pt, 3pt, freeThrow, rebound, assist, steal, block, turnover, foul, substitution, timeOut, jumpBall, ... (language-independent). |
+| `event_sub_type` | character | Event detail: jumpShot, layup, offensive, defensive, in, out, 1Of2, personal, ...; null when none. |
+| `description` | character | The event's text in the site's language (e.g. Entre-deux remporte). |
+| `success` | logical | True when the shot was made, false when missed. |
+| `success_label` | character | The made / missed label in the site's language; sent on shot events only. |
+| `x` | numeric | Shot location along the 28 m court length as percent of the court (0-100, origin at a corner); the home team attacks the low-x basket all game; LNBP and NBL1 clamp rim attempts to 5 / 95. |
+| `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified. |
+| `home_score` | integer | Home team's running score after the event. |
+| `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.atrium import lpb_schedule, lpb_shots
+games = lpb_schedule()
+lpb_shots(fixture_id=games['fixture_id'][0])
+```
 
 ### lpb_standings {#lpb_standings}
 
@@ -64,6 +269,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `streak` | integer | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
 | `streak_home` | integer | Length of the current run of home results (sign convention unverified) (team, this table). |
 | `streak_away` | integer | Length of the current run of away results (sign convention unverified) (team, this table). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -150,6 +363,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `total_time_in_lead_seconds` | integer | Time the team led, in whole seconds (team, game total). |
 | `total_turnovers` | integer | Turnovers (team, game total). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -193,6 +414,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `entity_id` | character | Team UUID (entity): one id per club across seasons, shared by every site that shows the team. |
 | `name` | character | Team name in the site's language. |
 | `image_url` | character | URL of the Sportradar-hosted image (400 px). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -251,6 +480,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified; null for non-shots. |
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -329,6 +566,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `free_throws_attempted` | integer | Free throws attempted (player, this game). |
 | `free_throws_percentage` | numeric | Free-throw percentage, 0-100 (player, this game). |
 | `points_fast_break` | integer | Fast-break points (LNBP only) (player, this game). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -409,6 +654,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `away_shootout_attempts` | character | Shootout attempts of the away team as sent (an empty string becomes null). |
 | `away_secondary_score` | character | Secondary score of the away team (unused in the samples; shown as text). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -452,6 +705,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `year` | integer | The site's own year of the season: the START year on LNB (site 12), the calendar year elsewhere. |
 | `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
 | `is_default_season` | logical | True for the season the body is about (the site's default when none was asked). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -510,6 +771,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified. |
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -577,6 +846,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `streak` | integer | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
 | `streak_home` | integer | Length of the current run of home results (sign convention unverified) (team, this table). |
 | `streak_away` | integer | Length of the current run of away results (sign convention unverified) (team, this table). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -663,53 +940,18 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `total_time_in_lead_seconds` | integer | Time the team led, in whole seconds (team, game total). |
 | `total_turnovers` | integer | Turnovers (team, game total). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
 from sportsdataverse.basketball.atrium import nbl1_schedule, nbl1_team_box
 games = nbl1_schedule()
 nbl1_team_box(fixture_id=games['fixture_id'][0])
-```
-
-### nbl1_teams {#nbl1_teams}
-
-`nbl1_teams(season: 'Optional[int]' = None, season_id: 'Optional[str]' = None, competition_id: 'Optional[str]' = None, locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Teams of a NBL1 (Australia) season.
-
-NBL1 (Australia) (men's and women's); season rule: calendar year, Mar-Aug (END year); conferences are competition_ids.
-
-Convenience wrapper: a thin binding of `atrium_teams` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season END year (see the season rule above). Omit season and season_id for the site's current season. |
-| `season_id` | `Optional[str]` | `None` | Season UUID (season_id in the seasons listing); skips the END-year lookup. |
-| `competition_id` | `Optional[str]` | `None` | Competition UUID (a site carries many: conferences, cups); needed when several share the season. |
-| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
-| `season_id` | character | Season UUID of the team list. |
-| `entity_id` | character | Team UUID (entity): one id per club across seasons, shared by every site that shows the team. |
-| `name` | character | Team name in the site's language. |
-| `image_url` | character | URL of the Sportradar-hosted image (400 px). |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.atrium import nbl1_teams
-nbl1_teams(season=2026)
 ```

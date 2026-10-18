@@ -1,10 +1,53 @@
 ---
-title: "MBB — additional Python functions — Analytics: pos_class–weighted_avg"
-sidebar_label: "Analytics: pos_class–weighted_avg"
+title: "MBB — additional Python functions — Analytics: order_lineup–weighted_avg"
+sidebar_label: "Analytics: order_lineup–weighted_avg"
 sidebar_position: 13
-description: "MBB — additional Python functions — Analytics: pos_class–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Analytics: order_lineup–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Analytics: pos_class–weighted_avg
+# MBB — additional Python functions — Analytics: order_lineup–weighted_avg
+
+### order_lineup {#order_lineup}
+
+`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
+
+Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
+
+Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
+Greedily fits each player (in input order) to their best-scoring slot via
+`_fit_player` (dominated by `pos_class_to_score` on the
+player's `posClass`, tie-broken by their raw `posConfidences`),
+evicting and recursively re-fitting any player displaced along the way,
+then applies `apply_relative_positional_overrides` (keyed on
+`team_season`) as a final hand-tuned correction pass.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
+| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
+| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
+
+**Returns**
+
+A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
+
+**Example**
+
+```python
+::
+
+from sportsdataverse.mbb.mbb_positions import order_lineup
+players_by_id = {
+    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
+    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
+}
+order_lineup(
+    [{"code": "AnCowan", "id": "Cowan, Anthony"},
+     {"code": "ErAyala", "id": "Ayala, Eric"}],
+    players_by_id, "",
+)
+```
 
 ### pos_class_to_score {#pos_class_to_score}
 
@@ -92,6 +135,12 @@ left at `0` to avoid widespread changes.
 
 The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
+
 **Example**
 
 ```python
@@ -126,6 +175,12 @@ Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
 One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
 
 No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
 
 **Example**
 
@@ -230,6 +285,12 @@ weight.
 **Returns**
 
 None. `mutable_acc` is mutated in place.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
 
 **Example**
 

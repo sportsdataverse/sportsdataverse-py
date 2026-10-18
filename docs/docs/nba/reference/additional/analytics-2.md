@@ -1,10 +1,80 @@
 ---
-title: "NBA — additional Python functions — Analytics: nba_shot–zone_value"
-sidebar_label: "Analytics: nba_shot–zone_value"
+title: "NBA — additional Python functions — Analytics: nba_referee–zone_value"
+sidebar_label: "Analytics: nba_referee–zone_value"
 sidebar_position: 13
-description: "NBA — additional Python functions — Analytics: nba_shot–zone_value — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Analytics: nba_referee–zone_value — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Analytics: nba_shot–zone_value
+# NBA — additional Python functions — Analytics: nba_referee–zone_value
+
+### nba_referee_assignments {#nba_referee_assignments}
+
+`nba_referee_assignments(date: 'str | _dt.date', *, league: 'str' = 'nba', raw: 'bool' = False, return_as_pandas: 'bool' = False, proxy: 'dict | None' = None) -> 'dict[str, Any]'`
+
+Fetch and parse NBA referee assignments for a given date from official.nba.com.
+
+Retrieves one league's referee crew assignments and replay-center officials for a
+date: NBA, G-League or WNBA, picked by `league` (`raw=True` returns all three
+leagues' blocks). The `crew_position` column (1–4) represents the feed's slot
+order; slot 1 is inferred to be the crew chief. The `season` column converts
+from the feed's format to an END year: START+1 for NBA/G-League
+(two-calendar-year seasons) and START unchanged for WNBA.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `date` | `str \| date` |  | The date to fetch assignments for (str in "YYYY-MM-DD" format or datetime.date). |
+| `league` | `str` | `'nba'` | The league to extract ("nba", "gl", or "wnba"). Defaults to "nba". |
+| `raw` | `bool` | `False` | If True, return the raw JSON payload (dict) with all three leagues instead of parsed DataFrames. |
+| `return_as_pandas` | `bool` | `False` | If True, return pandas DataFrames instead of polars. |
+| `proxy` | `dict \| None` | `None` | Optional proxy dict passed through to the HTTP layer. |
+
+**Returns**
+
+If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dict with keys `"officials"` and `"replay_center"` mapping to DataFrames as documented in `parse_nba_referee_assignments`.
+
+| col_name | type | description |
+|---|---|---|
+| `officials.league` | character | League the assignment belongs to: nba, gl (G League), or wnba. |
+| `officials.game_id` | character | 10-digit game id (zero-padded) for the assigned game. |
+| `officials.game_date` | date | Game date parsed from the feed's MM/DD/YYYY format. |
+| `officials.season` | integer | Season end year, converted from the feed's <season-type digit><start year> code: start year + 1 for NBA/G League's two-calendar-year seasons, start year unchanged for WNBA's single-year seasons. |
+| `officials.season_type` | character | Season type decoded from the feed's season code first digit: preseason, regular, all-star, playoffs, play-in, or nba-cup-final. |
+| `officials.game_code` | character | League game code in YYYYMMDD/AWYHOM format, matching the away and home team abbreviations. |
+| `officials.home_team_id` | integer | 10-digit team id of the home team. |
+| `officials.home_team_abbr` | character | Three-letter abbreviation of the home team. |
+| `officials.away_team_id` | integer | 10-digit team id of the away team. |
+| `officials.away_team_abbr` | character | Three-letter abbreviation of the away team. |
+| `officials.crew_position` | integer | Feed's official slot order (1-4); slot 1 is inferred to be the crew chief since the API does not label roles. |
+| `officials.official_id` | integer | Numeric official id from the feed (source field official{n}_code); expected to match stats.nba.com's OFFICIAL_ID. |
+| `officials.official_name` | character | Official's display name for this crew slot. |
+| `officials.jersey_num` | character | Official's jersey number as a string, from the feed's official{n}_JNum field. |
+| `replay_center.league` | character | League the replay-center staffing belongs to: nba, gl, or wnba. |
+| `replay_center.game_date` | date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
+| `replay_center.official_id` | integer | Numeric replay-center official id from the feed. |
+| `replay_center.official_name` | character | Replay-center official's display name for that date. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If league is not "nba", "gl", or "wnba", or date is not a valid "YYYY-MM-DD" date (checked before any request). |
+| `NoDataError` | official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without games is not this: it comes back as a 200 with empty `rows` (see the Note). |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), the 200 body is not a JSON object, or the league's `Table`/`Table1` rows are missing or malformed (a `Table` row without a 10-digit `game_id`, or a `Table1` row without a `replaycenter_official` name, included). With `raw=True` all three leagues are checked, since the whole payload is returned. |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_officiating import nba_referee_assignments
+result = nba_referee_assignments("2026-06-13")
+officials = result["officials"]
+print(f"Found {officials.height} official slots")
+
+# Fetch WNBA assignments for the same date
+
+result = nba_referee_assignments("2026-06-13", league="wnba")
+wnba_officials = result["officials"]
+```
 
 ### nba_shot_value {#nba_shot_value}
 
@@ -401,6 +471,12 @@ One row per pick with `round` (1 or 2), `pick`, `team`, `player`, `height`, `wei
 | `school` | character | Player school / pre-draft team. |
 | `class` | character | College class / draft eligibility note. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the page cannot be fetched or carries no pick table; the call still returns an empty frame. |
+
 **Example**
 
 ```python
@@ -477,6 +553,12 @@ One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input return
 | `diff_halfcourt_pts_per_100` | double |  |
 | `on_transition_pts_added_per_100` | double |  |
 | `off_transition_pts_added_per_100` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | when the `off_player_*` columns are missing. |
 
 **Example**
 
@@ -849,6 +931,12 @@ cross-checkpoint-window leaks; do not prune one without the other.
 
 `RatingsFit` with per-player offense/defense ratings (per-100-possession scale, same sign convention as `nba_rapm`: positive `d_ratings` means good defense). Empty dicts when no possessions fall on or before `asof` or when `possessions` is empty.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `possessions` (non-empty) does not carry a `game_date` column — this is a caller-contract violation, not a normal empty case, so it raises rather than silently returning empty ratings. |
+
 **Example**
 
 ```python
@@ -900,6 +988,12 @@ One row per injured player with `player_id`, `player`, `first_name`, `last_name`
 | `return_date` | character | Projected return (`NA` unless a subscriber). |
 | `url` | character | RotoWire player page URL. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the endpoint cannot be fetched or does not answer with a JSON array; the call still returns an empty frame. |
+
 **Example**
 
 ```python
@@ -941,6 +1035,12 @@ shot_value`, and `actual_points = shot_made_flag * shot_value`.
 The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, actual_points:Float64`. Empty input returns the augmented schema with zero rows.
 
 No returns table is published for this function: no capture: its input is stats.nba.com shot-chart detail (shot zones and types), which answers HTTP 403 to the datacenter IP the docs are built on and is not in the raw store.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A zone join key has a different dtype on the two frames. |
 
 **Example**
 
@@ -1096,6 +1196,12 @@ One row per team. Columns follow Spotrac's table -- `rank`, `team`, `record`, `p
 | `cap_space_all` | double | Cap space / over-the-cap amount (USD). |
 | `season` | integer | Season year. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `UserWarning` | Emitted (not raised) when the page cannot be fetched or carries no table; the call still returns an empty frame. |
+
 **Example**
 
 ```python
@@ -1134,6 +1240,12 @@ not carry who is on the floor).
 **Returns**
 
 `{possession_number: starters_on_floor}`, each value in `0..10`. An **empty** *starters* map yields all-zero counts, which would make CTG's `<= 2` clause vacuously true and flag every margin-qualifying possession. The counts are reported honestly rather than guessed — do not pass an empty map and then read the result as CTG-exact.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | when the `off_player_*` / `def_player_*` columns are absent. |
 
 **Example**
 

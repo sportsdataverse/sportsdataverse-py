@@ -28,6 +28,15 @@ toc_max_heading_level: 2
 | [nhl_records_coach_franchise](nhl_records/coach.md#nhl_records_coach_franchise) | Coach records scoped to individual franchise stints. |
 | [nhl_records_coach_stanley_cup](nhl_records/coach.md#nhl_records_coach_stanley_cup) | Coach Stanley Cup Final win streak and consecutive-cup records. |
 
+## Draft
+
+| Function | Summary |
+|---|---|
+| [nhl_records_draft](nhl_records/draft.md#nhl_records_draft) | Retrieve NHL Entry Draft picks. |
+| [nhl_records_draft_by_team](nhl_records/draft.md#nhl_records_draft_by_team) | All draft picks made by a single team. |
+| [nhl_records_draft_prospect](nhl_records/draft.md#nhl_records_draft_prospect) | Draft prospect records. |
+| [nhl_records_draft_lottery_odds](nhl_records/draft.md#nhl_records_draft_lottery_odds) | Draft lottery odds (current year or filtered by season). |
+
 ## Franchise
 
 | Function | Summary |
@@ -65,10 +74,6 @@ toc_max_heading_level: 2
 | [nhl_records_skater_career_stats](nhl_records/other.md#nhl_records_skater_career_stats) | Skater career statistics (all-time, regular season). |
 | [nhl_records_skater_career_leaders](nhl_records/other.md#nhl_records_skater_career_leaders) | All-time skater career leaderboards. |
 | [nhl_records_consecutive_100pt_seasons](nhl_records/other.md#nhl_records_consecutive_100pt_seasons) | Skaters with the most consecutive 100-point seasons. |
-| [nhl_records_draft](nhl_records/other.md#nhl_records_draft) | Retrieve NHL Entry Draft picks. |
-| [nhl_records_draft_by_team](nhl_records/other.md#nhl_records_draft_by_team) | All draft picks made by a single team. |
-| [nhl_records_draft_prospect](nhl_records/other.md#nhl_records_draft_prospect) | Draft prospect records. |
-| [nhl_records_draft_lottery_odds](nhl_records/other.md#nhl_records_draft_lottery_odds) | Draft lottery odds (current year or filtered by season). |
 | [nhl_records_expansion_draft_picks](nhl_records/other.md#nhl_records_expansion_draft_picks) | Expansion draft picks (e.g. Vegas 2017, Seattle 2021). |
 | [nhl_records_attendance](nhl_records/other.md#nhl_records_attendance) | NHL arena attendance records. |
 | [nhl_records_hof_players](nhl_records/other.md#nhl_records_hof_players) | Hockey Hall of Fame player inductees. |

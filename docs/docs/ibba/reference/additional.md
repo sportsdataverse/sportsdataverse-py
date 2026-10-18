@@ -33,6 +33,13 @@ polars.DataFrame | pandas.DataFrame: `game_id` (IBBA) and `segev_game_id` (the `
 | `game_id` | integer | IBBA game id (the game_id of the ibba_games frame). |
 | `segev_game_id` | integer | Segev game id of the same game (the game_id every ibba_segev_* wrapper takes). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | a missing column, or a key that maps to two ids. |
+| `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
+
 **Example**
 
 ```python

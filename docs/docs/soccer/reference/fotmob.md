@@ -32,6 +32,14 @@ Every league FotMob covers, grouped as popular / international / by country.
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_all_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_all_leagues-example}
 
 ```python
@@ -61,6 +69,14 @@ Matches with audio commentary available, with their languages.
 | `langs` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_audio_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_audio_matches-example}
 
@@ -136,6 +152,14 @@ League page: details, tabs, current table, fixtures, stats, transfers (one wide 
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_leagues-example}
 
 ```python
@@ -207,6 +231,14 @@ Match page: general info, header, lineups, events, stats (one wide row).
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_match_details-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_match_details-example}
 
 ```python
@@ -244,6 +276,14 @@ All matches on a date, one row per league with that league's matches nested.
 | `local_rank` | integer |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_matches-example}
 
@@ -344,6 +384,14 @@ Player page: bio, primary team, career history, recent matches, stats (one wide 
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_player_data-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_player_data-example}
 
 ```python
@@ -376,6 +424,14 @@ Search suggestions for a term, one row per result group (players, teams, leagues
 | `title_value` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_search_suggest-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_search_suggest-example}
 
@@ -417,6 +473,14 @@ A data.fotmob.com league table file: legend, filters and the all/home/away/xg ta
 | `table_xg` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_table-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_table-example}
 
@@ -516,6 +580,14 @@ Team page: details, squad, table, fixtures, stats, transfers, history (one wide 
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_teams-example}
 
 ```python
@@ -554,6 +626,14 @@ News timeline for a league or team, one row per story.
 | `page_url` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_tlnews-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_tlnews-example}
 
@@ -610,6 +690,14 @@ Top transfers across FotMob, one row per transfer.
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
 
+### Raises {#fotmob_top_transfers-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fotmob_top_transfers-example}
 
 ```python
@@ -643,6 +731,14 @@ Team-of-the-week rounds for a league season, one row per round.
 | `is_completed` | logical |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_totw_rounds-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_totw_rounds-example}
 
@@ -679,6 +775,14 @@ Trending news stories (host-root route), one row per story.
 | `page_url` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_trending_news-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_trending_news-example}
 
@@ -729,6 +833,14 @@ TV listings for a country, one row per broadcast with the match id in `id`.
 | `program_teams` | character |  |
 
 **`return_parsed=False`** — the decoded JSON body (a page object, a one-list envelope, an id-keyed map or a list; `{}` or `null` for an unknown id).
+
+### Raises {#fotmob_tvlistings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fotmob_tvlistings-example}
 

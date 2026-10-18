@@ -1,7 +1,7 @@
 ---
 title: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Other"
 sidebar_label: "Other"
-sidebar_position: 4
+sidebar_position: 5
 description: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -29,6 +29,14 @@ Every season of the CBA data site, newest first (the upcoming season is the defa
 | `value` | character | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. String of digits ('2025'); the value every season parameter takes. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_seasons-example}
 
@@ -61,6 +69,14 @@ The match types (regular season, playoffs, preseason, all-star, relegation play-
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_match_types-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_match_types-example}
 
 ```python
@@ -92,6 +108,14 @@ Game count per day of one calendar month.
 | `schedule_time` | character | The day as 'YYYY-MM-DD 00:00:00' (China local time, no zone); one row per calendar day of the month. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_schedule_month-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_schedule_month-example}
 
@@ -149,6 +173,14 @@ The games of one day: ids, teams, status, score, round and the data flags.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_schedule_day-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_schedule_day-example}
 
 ```python
@@ -165,9 +197,9 @@ Points each side scored in each period of a finished game (up to seven periods).
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
 
 ### Returns {#cba_period_scores-returns}
 
@@ -181,6 +213,14 @@ Points each side scored in each period of a finished game (up to seven periods).
 | `points` | integer | Points the side scored IN this period (not cumulative); overtime periods included. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_period_scores-example}
 
@@ -230,6 +270,14 @@ The best player of each side in the game report.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_best_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_best_player-example}
 
 ```python
@@ -268,6 +316,14 @@ Single-category leaders of each side in the game report.
 | `type` | integer | Side flag: 0 on home rows, 2 on visiting rows (differs from advance-count, where the visiting side is 1). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_best_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_best_stats-example}
 
@@ -336,6 +392,14 @@ Registered rosters of both sides with player bio fields (the season registration
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_rosters-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_rosters-example}
 
 ```python
@@ -367,6 +431,14 @@ Whether the game report page exists for the game.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_report_status-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_report_status-example}
 
 ```python
@@ -383,10 +455,10 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-eventses/filterPage?startNum=0' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
-| `quarterNum` | `quarter_num` |  |  | `Y` | Optional period number. Omitted = every period (the API serves one period per request; the runtime fetches them all and checks the set). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| `quarterNum` | `quarter_num` | body |  |  | `Y` | Optional period number. Omitted = every period (the API serves one period per request; the runtime fetches them all and checks the set). |
 
 ### Returns {#cba_pbp-returns}
 
@@ -415,6 +487,14 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 | `visitor_score` | integer | Visiting team points after the play (same caveat as homeScore). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host answered 404, or the game has no play-by-play (2009-10). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_pbp-example}
 

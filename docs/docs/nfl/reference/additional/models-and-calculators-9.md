@@ -653,6 +653,12 @@ concurrent-validity oracle in the tests — never as an input.
 | `proj_fantasy_points_per_game` | double | Projected fantasy points per game (proj_fantasy_points / projected games). |
 | `position_rank` | integer | Dense rank of proj_fantasy_points within the position group (best = 1). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `scoring` is a string other than `"ppr"` / `"half"` / `"standard"`. |
+
 **Example**
 
 ```python

@@ -48,6 +48,13 @@ Player-level on-ice Corsi and Fenwick for a single CCHL game.
 
 One row per player on ice for a shot attempt: `player_id` (String), `corsi_for` / `corsi_against` / `corsi_for_pct`, `fenwick_for` / `fenwick_against` / `fenwick_for_pct`, `corsi_includes_missed` (Boolean), `toi_seconds` (Int64) and `corsi_for_per60` (Float64, null without time on ice). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### cchl_game_shifts {#cchl_game_shifts}
 
 `cchl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -65,6 +72,13 @@ Parsed shift stints for a single CCHL game.
 
 One row per shift: `game_id` and `player_id` (Int64), `first_name`, `last_name`, `jersey_number`, `home` (Int64, 1 = home), `period`, `start_time` / `end_time` / `length` (clock strings), `start_s` / `end_s` (Int64 seconds) and the `goal_on_shift` / `penalty_on_shift` flags. A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### cchl_game_summary {#cchl_game_summary}
 
 `cchl_game_summary(game_id: 'int') -> 'dict'`
@@ -80,6 +94,13 @@ CCHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 **Returns**
 
 `game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`. When the league denies the summary view, the event frames are empty and `game` is a `game_id` stub row.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### cchl_leaders {#cchl_leaders}
 
@@ -117,6 +138,13 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### cchl_pbp {#cchl_pbp}
 
 `cchl_pbp(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -133,6 +161,13 @@ CCHL play-by-play — one row per event, fully enriched.
 **Returns**
 
 One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_id`, `event`, `team_id`, `period_of_game`, `time_of_period`, rink `x_coord` / `y_coord` (Float64, raw 600×300 coordinates), the primary / second / third player and goalie ids and names, the plus / minus skaters on a goal, game metadata from the game summary, and derived `shot_distance` / `shot_angle` / `scoring_chance` and the `on_ice_home` / `on_ice_away` skaters from the shift feed. Player ids are Float64 here. Some leagues (USHL, MJHL) publish only goals, penalties and goalie changes, with no coordinates. A pandas DataFrame when `return_as_pandas` is True.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### cchl_player_stats {#cchl_player_stats}
 
@@ -151,6 +186,13 @@ CCHL player season stats across all seasons.
 
 One row per season (and team) the player played: `season_id`, `season_name`, `playoff`, `team_id` / `team_name` / `team_code`, `games_played`, `goals`, `assists`, `points`, `plus_minus`, `penalty_minutes`, power-play / short-handed / shootout splits, `shots`, `faceoff_wins` / `faceoff_attempts`, `ice_time` and `stat_type` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### cchl_player_toi {#cchl_player_toi}
 
 `cchl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -167,6 +209,13 @@ Per-player time-on-ice totals for a single CCHL game.
 **Returns**
 
 One row per player: `player_id` (Int64), `first_name`, `last_name`, `toi_seconds` (Int64), `num_shifts` and `avg_shift_s` (Float64). A pandas DataFrame when `return_as_pandas` is True.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### cchl_schedule {#cchl_schedule}
 
@@ -200,6 +249,15 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 | `venue` | character | Venue where the game was played. |
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+| `NoDataError` | With no season given, the seasons feed lists no regular season. |
+| `ValueError` | No season matches `season`. |
 
 ### cchl_standings {#cchl_standings}
 
@@ -238,6 +296,13 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team name. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### cchl_team_roster {#cchl_team_roster}
 
 `cchl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -256,6 +321,13 @@ CCHL team roster for a given team + season.
 **Returns**
 
 One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### cchl_teams {#cchl_teams}
 
@@ -284,6 +356,13 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | `team_label` | character | Short city label. |
 | `division` | character | Division identifier. |
 | `team_logo` | character | URL to the team logo image. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ## Dates and seasons
 
@@ -315,6 +394,13 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 | `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
 | `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### most_recent_cchl_season {#most_recent_cchl_season}
 
 `most_recent_cchl_season() -> 'int'`
@@ -324,3 +410,10 @@ Newest CCHL regular season as an end-year integer: the highest `season_yr` of a 
 **Returns**
 
 The newest regular season's END year (2026 = the 2025-26 season).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The seasons feed lists no regular season. |
+| `AssetFetchError` | The seasons feed failed. |

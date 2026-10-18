@@ -1,11 +1,11 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–kickoff"
-sidebar_label: "Facet: receiving–kickoff"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–field"
+sidebar_label: "Facet: receiving–field"
 sidebar_position: 6
-description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–kickoff — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–field — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–kickoff
+# NFL — PFF Developer API (api.pff.com, API key) — Facet: receiving–field
 
 ## pff_api_facet_receiving_scheme
 
@@ -108,6 +108,15 @@ League-wide receiving-by-scheme leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_receiving_scheme-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_receiving_scheme-example}
 
 ```python
@@ -193,6 +202,15 @@ League-wide receiving summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_receiving_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_receiving_summary-example}
 
 ```python
@@ -237,6 +255,15 @@ League-wide rushing-by-direction leaderboard
 | `total_attempts` | numeric | Total rushing attempts across all run directions. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_rushing_direction-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_rushing_direction-example}
 
@@ -323,6 +350,15 @@ League-wide rushing summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_rushing_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_rushing_summary-example}
 
 ```python
@@ -400,6 +436,15 @@ League-wide coverage leaderboard
 | `touchdowns` | numeric | Touchdowns allowed into the player's coverage. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_defense_coverage-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_defense_coverage-example}
 
@@ -503,6 +548,15 @@ League-wide coverage-by-scheme leaderboard
 | `zone_catch_rate` | numeric | Completion percentage allowed on targets into the player's coverage when in zone coverage. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_defense_coverage_scheme-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_defense_coverage_scheme-example}
 
@@ -625,6 +679,15 @@ League-wide coverage matchup leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_defense_coverage_matchup-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_defense_coverage_matchup-example}
 
 ```python
@@ -697,6 +760,15 @@ League-wide pass-rush leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_defense_pass_rush-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_defense_pass_rush-example}
 
 ```python
@@ -758,6 +830,15 @@ League-wide run-defense leaderboard
 | `team_name` | character | Team abbreviation the player is credited to for the range. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_defense_run-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_defense_run-example}
 
@@ -852,6 +933,15 @@ League-wide defense summary leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_defense_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_defense_summary-example}
 
 ```python
@@ -920,71 +1010,19 @@ League-wide field-goal kicking leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_field_goal_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_field_goal_summary-example}
 
 ```python
 pff_api_facet_field_goal_summary(league='nfl', season='2022')
-```
-
-_Last validated n/a._
-
-## pff_api_facet_kickoff_summary
-
-League-wide kickoff leaderboard
-
-**Endpoint URL:** `GET https://api.pff.com/v1/facet/kickoff/summary`
-
-**Valid URL:** [https://api.pff.com/v1/facet/kickoff/summary?league=nfl&season=2022](https://api.pff.com/v1/facet/kickoff/summary?league=nfl&season=2022)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `league` | `league` |  |  | `Y` | League slug for the leaderboard commands — exactly nfl, ncaa, hs, aaf and ufl are recognised; anything else is rejected. |
-| `season` | `season` |  |  | `Y` | Season for the leaderboard commands. |
-| `week` | `week` |  |  | `Y` | Week filter. |
-| `franchise_id` | `franchise_id` |  |  | `Y` | Franchise (team) id. |
-| `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
-| `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
-
-### Returns {#pff_api_facet_kickoff_summary-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `attempts` | numeric | Kickoffs by the player. |
-| `attempts_with_hangtime` | numeric | Kickoffs with a PFF-recorded hangtime. |
-| `average_distance` | numeric | Average kickoff distance in yards. |
-| `average_hangtime` | numeric | Average kickoff hangtime in seconds. |
-| `average_starting_field_position` | numeric | Average opponent starting field position following the player's kickoffs. |
-| `average_yards_per_return` | numeric | Average return yards allowed per kickoff returned. |
-| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
-| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
-| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
-| `fair_catches` | numeric | Kickoffs fair-caught by the return team. |
-| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
-| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
-| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
-| `kicked_yards` | numeric | Total kickoff yards. |
-| `kicks_returned` | numeric | Kickoffs returned by the opponent. |
-| `onside_kicks` | numeric | Onside kicks attempted. |
-| `penalties` | numeric | Penalties charged to the player over the covered span. |
-| `percent_returned` | numeric | Percentage of the player's kickoffs that were returned. |
-| `player` | character | Player's display name as PFF lists it. |
-| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
-| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
-| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
-| `return_yards` | numeric | Return yards gained by the return team on the player's kickoffs. |
-| `team` | character | Team abbreviation the player is credited to for the range. |
-| `team_name` | character | Team abbreviation the player is credited to for the range. |
-| `total_hangtime` | numeric | Total kickoff hangtime in seconds. |
-| `touchbacks` | numeric | Kickoffs resulting in touchbacks. |
-
-**`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
-
-### Example {#pff_api_facet_kickoff_summary-example}
-
-```python
-pff_api_facet_kickoff_summary(league='nfl', season='2022')
 ```
 
 _Last validated n/a._

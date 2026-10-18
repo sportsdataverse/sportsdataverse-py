@@ -173,6 +173,12 @@ Polars (or pandas) DataFrame with the full v2 schema (game/event identifiers, ev
 | `score_away` | character | Score away. |
 | `action_id` | integer | Unique action identifier within a game (V3 PBP). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | Malformed or empty input returns a zero-row frame with the documented schema instead of raising. |
+
 **Example**
 
 ```python

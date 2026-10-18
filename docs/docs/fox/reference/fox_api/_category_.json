@@ -1,0 +1,6 @@
+{
+  "label": "Fox Sports API (api.foxsports.com)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "fox/reference/fox_api"}
+}

@@ -79,6 +79,14 @@ Team rows of the box score (team-credited stats and team totals) per period cate
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_team_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_team_box-example}
 
 ```python
@@ -148,6 +156,14 @@ Team summary per period category in long form: shooting, rebounds, paint, fast-b
 | `ties` | integer | Times the score was tied in the period category (TieCount); the same on both side rows. |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_team_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_team_summary-example}
 

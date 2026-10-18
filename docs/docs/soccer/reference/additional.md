@@ -61,6 +61,12 @@ Fit the grid on SPADL actions by value iteration.
 
 This model, fitted in place.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | If the grid has not converged within `max_iter` iterations. |
+
 **Example**
 
 ```python
@@ -107,6 +113,12 @@ Rate each action: end-cell minus start-cell value for successful passes, dribble
 **Returns**
 
 A `Float64` series named `xt_value`; null for actions xT does not value.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotFittedError` | If the grid is all zeros. |
 
 **Example**
 
@@ -200,6 +212,12 @@ A polars DataFrame (pandas with `return_as_pandas=True`), one row per event. Coo
 | `is_counter_attack` | logical |  |
 | `card_type` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AttributeError` | `dataset` has no `to_df` (it is not a kloppy dataset). |
+
 **Example**
 
 ```python
@@ -240,6 +258,13 @@ anything built on it. This is the input `soccer_spadl` expects;
 **Returns**
 
 A kloppy `EventDataset`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
+| `ValueError` | `provider` is not a supported open-data key. |
 
 **Example**
 
@@ -304,6 +329,13 @@ A polars DataFrame (pandas with `return_as_pandas=True`), one row per event; see
 | `is_counter_attack` | logical |  |
 | `card_type` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
+| `ValueError` | `provider` is not a supported open-data key. |
+
 **Example**
 
 ```python
@@ -361,6 +393,13 @@ One row per on-ball action with the SPADL columns (`type_name`, `result_name`, `
 | `result_id` | integer |  |
 | `result_name` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | kloppy is missing (`pip install "sportsdataverse[soccer]"`). |
+| `ValueError` | neither the dataset nor `game_id` names the game; or the dataset's provider has no usable coordinate system (unknown / `OTHER`) or its pitch dimensions are not fixed. |
+
 **Example**
 
 ```python
@@ -411,6 +450,12 @@ Append `xt_value` (Expected Threat added by each successful pass, dribble or cro
 | `result_id` | integer |  |
 | `result_name` | character |  |
 | `xt_value` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotFittedError` | If `model` is an unfitted grid. |
 
 **Example**
 

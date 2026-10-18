@@ -1,10 +1,10 @@
 ---
-title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_player"
-sidebar_label: "FIBA digital API and game pages: afrobasket_editions–bcl_player"
+title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_pbp"
+sidebar_label: "FIBA digital API and game pages: afrobasket_editions–bcl_pbp"
 sidebar_position: 1
-description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_pbp — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_player
+# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: afrobasket_editions–bcl_pbp
 
 ### fiba_afrobasket_editions {#fiba_afrobasket_editions}
 
@@ -63,6 +63,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `competition_marketing_name_competition_marketing_name_id` | integer | Competition family id (201 = World Cup, 112 = BCL tier 1, 211 = EuroLeague Women); the <histId> of /en/history/ pages. |
 | `competition_marketing_name_marketing_name` | character | Competition family name; slugified it is the <histSlug> of /en/history/ pages. |
 | `competition_marketing_name_code` | character | Family code; null in every sample. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
 
 **Example**
 
@@ -126,6 +134,16 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `shot_x` | integer | Shot x, integer pixels on a half-court image across the court width (observed 0-278, basket near x = 139). Present only on shots; free throws are 0. Which sideline is x = 0 and the scale are UNVERIFIED. |
 | `shot_y` | integer | Shot y, integer pixels from the baseline (y = 0) towards midcourt (observed 0-224, basket near y = 25); both teams' shots are drawn on one basket. Free throws are 0. Scale UNVERIFIED. |
 | `has_location` | logical | True when shot_x / shot_y locate the shot (two- and three-pointers); False for free throws (always 0, 0); null on other actions. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
 
 **Example**
 
@@ -207,6 +225,16 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `efficiency` | integer | Efficiency (FIBA EFF: points + rebounds + assists + steals + blocks - missed field goals - missed free throws - turnovers). |
 | `plus_minus` | integer | Plus/minus: the team's point differential while the player was on the court. |
 | `cb` | logical | Boolean flag, false on every sampled player; meaning unverified. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
 
 **Example**
 
@@ -331,6 +359,16 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `team_a_from` | character | How team A qualified for this slot ('Winner of Game 87', '1st of group C'); null in group play. |
 | `team_b_from` | character | How team B qualified for this slot ('Winner of Game 88', '2nd of group A'); null in group play. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | The season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
+
 **Example**
 
 ```python
@@ -387,6 +425,16 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `shot_y` | integer | Shot y, integer pixels from the baseline (y = 0) towards midcourt (observed 0-224, basket near y = 25); both teams' shots are drawn on one basket. Free throws are 0. Scale UNVERIFIED. |
 | `has_location` | logical | True when shot_x / shot_y locate the shot (two- and three-pointers); False for free throws (always 0, 0); null on other actions. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
+
 **Example**
 
 ```python
@@ -432,6 +480,16 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `team_status_code` | character | Team entry status; always null in the samples, values unverified. |
 | `team_status_name` | character | Team entry status label; always null in the samples, values unverified. |
 | `team_organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | The season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
 
 **Example**
 
@@ -527,6 +585,16 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `duration` | character | Game duration as an 'h:mm' string (game-level; repeats on both team rows). |
 | `attendance` | integer | Attendance (game-level; repeats on both team rows). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
+
 **Example**
 
 ```python
@@ -593,6 +661,16 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `status_name` | character | Team entry status label (Approved). |
 | `organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | The season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
+
 **Example**
 
 ```python
@@ -658,6 +736,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `competition_marketing_name_marketing_name` | character | Competition family name; slugified it is the <histSlug> of /en/history/ pages. |
 | `competition_marketing_name_code` | character | Family code; null in every sample. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+
 **Example**
 
 ```python
@@ -721,91 +807,20 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 | `shot_y` | integer | Shot y, integer pixels from the baseline (y = 0) towards midcourt (observed 0-224, basket near y = 25); both teams' shots are drawn on one basket. Free throws are 0. Scale UNVERIFIED. |
 | `has_location` | logical | True when shot_x / shot_y locate the shot (two- and three-pointers); False for free throws (always 0, 0); null on other actions. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
+| `NoDataError` | FIBA lists no edition for the season. |
+
 **Example**
 
 ```python
 from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_pbp
 games = fiba_bcl_schedule(season=2025)
 fiba_bcl_pbp(game_id=int(games['game_id'][0]), season=2025)
-```
-
-### fiba_bcl_player_box {#fiba_bcl_player_box}
-
-`fiba_bcl_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Player box score of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) game.
-
-Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
-
-Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`, `gameDetails`, `playersTeamA`, `playersTeamB`) cut out of the RSC flight payload with its tokens resolved when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | integer | FIBA game id (Int64), global across competitions: gdapGameId, the <gameId> of a game-page URL. |
-| `competition_id` | integer | FIBA competition id (Int64) of the game's edition; the comp argument. |
-| `team_side` | character | A or B: whether the row is the schedule's team A or team B (null when the page does not say). |
-| `organisation_id` | integer | Stable federation or club id (Int64) of the team, the same in every competition (64 = Germany); the page's T_<id> and the play-by-play oId. NOT the per-competition team_id. |
-| `player_id` | integer | FIBA person id (Int64), global across competitions and roles: the page's P_<id>, play-by-play pId, roster personId and fiba_gdap_roster.player_id. |
-| `first_name` | character | Given name(s) as registered with FIBA. |
-| `last_name` | character | Last name as registered with FIBA. |
-| `jersey` | character | Jersey number as a string. |
-| `position` | character | Playing position code from the lineup card (PG, SG, SF, PF, C). |
-| `is_captain` | logical | True for the team captain. |
-| `is_starter` | logical | True for the starting five. |
-| `has_played` | logical | True when the player got on the court. |
-| `minutes` | character | Minutes played as an 'm:ss' string ('0:0' = did not play). |
-| `seconds_played` | integer | Seconds played, derived from minutes. |
-| `points` | integer | Points scored in the game. |
-| `fg_made` | integer | Field goals made (2 + 3 points). |
-| `fg_attempted` | integer | Field goals attempted (2 + 3 points). |
-| `fg_pct` | numeric | Field-goal percentage, 0-100. |
-| `fg2_made` | integer | Two-point field goals made. |
-| `fg2_attempted` | integer | Two-point field goals attempted. |
-| `fg2_pct` | numeric | Two-point field-goal percentage, 0-100. |
-| `fg3_made` | integer | Three-point field goals made. |
-| `fg3_attempted` | integer | Three-point field goals attempted. |
-| `fg3_pct` | numeric | Three-point field-goal percentage, 0-100. |
-| `ft_made` | integer | Free throws made. |
-| `ft_attempted` | integer | Free throws attempted. |
-| `ft_pct` | numeric | Free-throw percentage, 0-100. |
-| `reb_offensive` | integer | Offensive rebounds. |
-| `reb_defensive` | integer | Defensive rebounds. |
-| `reb_total` | integer | Total rebounds (a team row includes the team rebounds team_reb_total). |
-| `assists` | integer | Assists credited in the game. |
-| `steals` | integer | Steals credited in the game. |
-| `blocks` | integer | Blocked shots (blocks made). |
-| `blocks_received` | integer | Own shots blocked by the opponent (blocks received). |
-| `turnovers` | integer | Turnovers (a team row includes the team turnovers team_turnovers). |
-| `fouls` | integer | Personal fouls (a team row includes the team fouls team_fouls). |
-| `fouls_drawn` | integer | Fouls drawn in the game. |
-| `paint_fg_made` | integer | Field goals made in the paint (team points_in_paint = 2 x paint_fg_made on every sampled game). |
-| `paint_fg_attempted` | integer | Field goals attempted in the paint. |
-| `paint_fg_pct` | numeric | Field-goal percentage in the paint, 0-100. |
-| `efficiency` | integer | Efficiency (FIBA EFF: points + rebounds + assists + steals + blocks - missed field goals - missed free throws - turnovers). |
-| `plus_minus` | integer | Plus/minus: the team's point differential while the player was on the court. |
-| `cb` | logical | Boolean flag, false on every sampled player; meaning unverified. |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_player_box
-games = fiba_bcl_schedule(season=2025)
-fiba_bcl_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```

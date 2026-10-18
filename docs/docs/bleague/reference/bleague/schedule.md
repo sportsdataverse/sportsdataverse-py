@@ -49,6 +49,14 @@ Games of one day of one competition and division: schedule keys, clubs, scores, 
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_schedule-example}
 
 ```python
@@ -86,6 +94,14 @@ Clubs of the season and division from the schedule page's club filter, with thei
 | `name` | character | Club short name in Japanese as the schedule page prints it (北海道 = Hokkaido). |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_schedule_clubs-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_schedule_clubs-example}
 
@@ -125,6 +141,14 @@ Competitions the schedule page offers for the season and division.
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_schedule_events-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_schedule_events-example}
 
 ```python
@@ -161,6 +185,14 @@ Game days of the requested month for the competition.
 | `date` | character | Local date of a game day in the requested month (a date strip entry). |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_schedule_days-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | a non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_schedule_days-example}
 

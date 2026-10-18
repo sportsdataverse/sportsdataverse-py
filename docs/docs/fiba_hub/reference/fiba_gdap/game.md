@@ -38,6 +38,14 @@ Officials nominated to one game (referees, table officials, commissioner).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#fiba_gdap_game_officials-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+
 ### Example {#fiba_gdap_game_officials-example}
 
 ```python
@@ -73,6 +81,14 @@ Period scores of one game.
 | `team_b_from` | character | How team B qualified for this slot ('Winner of Game 88', '2nd of group A'); null in group play. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#fiba_gdap_game_periods-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
 
 ### Example {#fiba_gdap_game_periods-example}
 
@@ -187,6 +203,14 @@ Games of EVERY FIBA competition in a local-time window (how competitions and gam
 | `team_b_from` | character | How team B qualified for this slot ('Winner of Game 88', '2nd of group A'); null in group play. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#fiba_gdap_games_between-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a game the competition does not list, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
 
 ### Example {#fiba_gdap_games_between-example}
 

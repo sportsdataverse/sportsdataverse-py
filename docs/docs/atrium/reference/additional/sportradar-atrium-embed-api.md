@@ -1,10 +1,10 @@
 ---
-title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings"
-sidebar_label: "Sportradar Atrium embed API: lmb_pbp–lnb_standings"
+title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots"
+sidebar_label: "Sportradar Atrium embed API: lmb_pbp–lnb_shots"
 sidebar_position: 1
-description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings — function reference in sdv-py, the SportsDataverse Python package."
+description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings
+# ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_shots
 
 ### lmb_pbp {#lmb_pbp}
 
@@ -56,6 +56,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified; null for non-shots. |
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -134,6 +142,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `free_throws_attempted` | integer | Free throws attempted (player, this game). |
 | `free_throws_percentage` | numeric | Free-throw percentage, 0-100 (player, this game). |
 | `points_fast_break` | integer | Fast-break points (LNBP only) (player, this game). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -214,6 +230,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `away_shootout_attempts` | character | Shootout attempts of the away team as sent (an empty string becomes null). |
 | `away_secondary_score` | character | Secondary score of the away team (unused in the samples; shown as text). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -257,6 +281,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `year` | integer | The site's own year of the season: the START year on LNB (site 12), the calendar year elsewhere. |
 | `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
 | `is_default_season` | logical | True for the season the body is about (the site's default when none was asked). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -315,6 +347,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified. |
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -382,6 +422,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `streak` | integer | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
 | `streak_home` | integer | Length of the current run of home results (sign convention unverified) (team, this table). |
 | `streak_away` | integer | Length of the current run of away results (sign convention unverified) (team, this table). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -468,6 +516,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `total_time_in_lead_seconds` | integer | Time the team led, in whole seconds (team, game total). |
 | `total_turnovers` | integer | Turnovers (team, game total). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -511,6 +567,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `entity_id` | character | Team UUID (entity): one id per club across seasons, shared by every site that shows the team. |
 | `name` | character | Team name in the site's language. |
 | `image_url` | character | URL of the Sportradar-hosted image (400 px). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -569,6 +633,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `y` | numeric | Shot location across the 15 m width as percent of the court (0-100); which sideline is 0 is unverified; null for non-shots. |
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -647,6 +719,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `free_throws_attempted` | integer | Free throws attempted (player, this game). |
 | `free_throws_percentage` | numeric | Free-throw percentage, 0-100 (player, this game). |
 | `points_fast_break` | integer | Fast-break points (LNBP only) (player, this game). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -727,6 +807,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `away_shootout_attempts` | character | Shootout attempts of the away team as sent (an empty string becomes null). |
 | `away_secondary_score` | character | Secondary score of the away team (unused in the samples; shown as text). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -770,6 +858,14 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `year` | integer | The site's own year of the season: the START year on LNB (site 12), the calendar year elsewhere. |
 | `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
 | `is_default_season` | logical | True for the season the body is about (the site's default when none was asked). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
 
@@ -829,76 +925,18 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `home_score` | integer | Home team's running score after the event. |
 | `away_score` | integer | Away team's running score after the event. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404). |
+| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
 from sportsdataverse.basketball.atrium import lnb_schedule, lnb_shots
 games = lnb_schedule()
 lnb_shots(fixture_id=games['fixture_id'][0])
-```
-
-### lnb_standings {#lnb_standings}
-
-`lnb_standings(season: 'Optional[int]' = None, season_id: 'Optional[str]' = None, competition_id: 'Optional[str]' = None, locale: 'Optional[str]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Standings of a LNB (France) season.
-
-LNB (France) (men's); season rule: END year (2026 = 2025-26; the site's own year is the START year).
-
-Convenience wrapper: a thin binding of `atrium_standings` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season END year (see the season rule above). Omit season and season_id for the site's current season. |
-| `season_id` | `Optional[str]` | `None` | Season UUID (season_id in the seasons listing); skips the END-year lookup. |
-| `competition_id` | `Optional[str]` | `None` | Competition UUID (a site carries many: conferences, cups); needed when several share the season. |
-| `locale` | `Optional[str]` | `None` | Label locale, e.g. en-EN; omitted = the site's own language. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `website_id` | integer | Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador, 22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self. |
-| `season_id` | character | Season UUID of the table. |
-| `season_end_year` | integer | Season END year (the sdv key): the site's year + 1 on LNB (site 12), the calendar year on the other registered sites; null when the site is unregistered, lists no seasons or the body has no season list. |
-| `group` | character | Label of the table when the standings hold several groups; null for a single table. |
-| `position` | integer | League table position (1 = first). |
-| `entity_id` | character | Team UUID of the row. |
-| `team_name` | character | Team name as the site prints it. |
-| `is_current_team` | logical | True for the team the page was opened for (team context); false on a plain standings request. |
-| `logo_url` | character | URL of the team logo image. |
-| `wins` | integer | Games won; -1 for two teams in the 2025-26 LNB table (an administrative ranking, unverified), kept as sent (team, this table). |
-| `losses` | integer | Games lost (team, this table). |
-| `played` | integer | Games played (LNBP and the compact standings) (team, this table). |
-| `standing_points` | integer | League table points (LNBP) (team, this table). |
-| `win_percentage` | numeric | Share of games won as a 0-1 fraction (not 0-100) (team, this table). |
-| `scored_for` | integer | Points scored over the season (team, this table). |
-| `scored_against` | integer | Points conceded over the season (team, this table). |
-| `point_difference` | integer | Point differential over the season (team, this table). |
-| `result_string_home` | character | Home results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
-| `scored_for_home` | integer | Points scored in home games (team, this table). |
-| `scored_against_home` | integer | Points conceded in home games (team, this table). |
-| `point_difference_home` | integer | Point differential in home games (team, this table). |
-| `result_string_away` | character | Away results as a string of result letters in the site's language, one per game (order and letters per locale; unverified) (team, this table). |
-| `scored_for_away` | integer | Points scored in away games (team, this table). |
-| `scored_against_away` | integer | Points conceded in away games (team, this table). |
-| `point_difference_away` | integer | Point differential in away games (team, this table). |
-| `streak` | integer | Length of the current run of results (the win / loss sign convention is unverified) (team, this table). |
-| `streak_home` | integer | Length of the current run of home results (sign convention unverified) (team, this table). |
-| `streak_away` | integer | Length of the current run of away results (sign convention unverified) (team, this table). |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.atrium import lnb_standings
-lnb_standings(season=2026)
 ```
