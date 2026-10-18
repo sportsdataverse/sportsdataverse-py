@@ -1633,3 +1633,76 @@
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 282782655"
   expected: kill
   note: '"rush over right end for a loss of 5 yards, ... penalty declined" (rush_forms/ fixture): 30 corpus rows / 25 games'
+
+# --- cfb 3.4 follow-ups (R837-2 / R837-3 / R828-5): total provenance + module logger ------------------
+# Killers: tests/cfb/test_cfb_pbp_offline.py on 400869817 (a real pickcenter with a spread and no total)
+# and 401301042 (a real pickcenter with both); the logger row runs a subprocess on 401301042.
+- id: cfb-ou-available-pickcenter
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnderAvailable = overUnder is not None'
+  mutant: 'overUnderAvailable = True'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: 400869817's defaulted 55.5 would read as a market total (gameSpreadAvailable alone passes it)
+
+- id: cfb-ou-available-core-api
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, ou_raw is not None)'
+  mutant: 'return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, gameSpreadAvailable)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "core_odds_api_spread_without_a_total"
+  expected: kill
+  note: an ESPN BET item with a spread and no total would flag its default total as a market one
+
+- id: cfb-ou-available-play-column
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnderAvailable=pl.lit(init["overUnderAvailable"], dtype=pl.Boolean)'
+  mutant: 'overUnderAvailable=pl.lit(True, dtype=pl.Boolean)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: the play column is the per-game record a REPROCESS gate reads; 400869817's plays would claim a market total
+
+- id: cfb-ou-available-injected-warns
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_warn_default_total(self.gameId, self.odds_source, self.overUnder)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: an odds_override rebuild of 400869817 relabelled its default total "injected", unwarned
+
+- id: cfb-ou-available-override-reads-the-key
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
+  mutant: 'odds_override["gameSpreadAvailable"]'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: the persisted overUnderAvailable False would be dropped on the rebuild
+
+- id: cfb-ou-available-override-legacy-default
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
+  mutant: 'odds_override.get("overUnderAvailable", True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "legacy_default_odds_override"
+  expected: kill
+  note: a legacy four-key default-odds override (no spread, 55.5) would claim a market total
+
+- id: cfb-pbp-root-logger
+  group: cfb-total-provenance
+  finding: R828-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'logger.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")'
+  mutant: 'logging.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "root_logger_alone"
+  expected: kill
+  note: one root-module call runs logging.basicConfig() and installs a stderr handler on the host's root logger

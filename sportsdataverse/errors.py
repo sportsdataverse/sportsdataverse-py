@@ -304,7 +304,7 @@ class EraCoverageWarning(UserWarning):
 
 
 class DefaultOddsWarning(UserWarning):
-    """Warned when a CFB game is processed with no pregame spread (``gameSpreadAvailable`` False).
+    """Warned when a CFB game is processed with no pregame spread, or a market spread with no total.
 
     ``CFBPlayProcess`` needs a spread and a total as EPA / WP inputs. When neither the summary's
     ``pickcenter`` nor ESPN's odds endpoint has one -- or an ``odds_override`` says the spread is
@@ -312,6 +312,11 @@ class DefaultOddsWarning(UserWarning):
     EPA / WP value of that game rests on a number no market set. The ``gameSpreadAvailable`` play
     column records it per game; this warning makes it visible at processing time. A producer that
     must not publish such a game turns it into an error.
+
+    It also fires when the spread is a market line but the total is not (``gameSpreadAvailable``
+    True, ``overUnderAvailable`` False): the default total feeds the fourth-down decision surface's
+    implied team totals. The ``overUnderAvailable`` play column records that case per game, and an
+    ``odds_override`` rebuild that carries ``overUnderAvailable=False`` warns again.
 
     Example:
         Strict mode for a producer::

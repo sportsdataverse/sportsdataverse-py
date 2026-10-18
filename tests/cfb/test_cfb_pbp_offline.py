@@ -1,6 +1,9 @@
 import copy
 import gzip
 import json
+import os
+import subprocess
+import sys
 import warnings
 from collections import Counter
 from pathlib import Path
@@ -112,7 +115,13 @@ def test_default_odds_warning_not_on_core_odds_api_spread(monkeypatch):
         warnings.simplefilter("error", DefaultOddsWarning)
         init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
     assert proc.odds_source == "core_odds_api"
-    assert init == {"gameSpread": -6.5, "overUnder": 51.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert init == {
+        "gameSpread": -6.5,
+        "overUnder": 51.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
+    }
 
 
 _DEFAULT_TOTAL_WARNING = r"CFB game {}: no pregame total is available \(odds_source='{}'\)"
@@ -135,6 +144,7 @@ def test_pickcenter_without_a_total_defaults_it_and_warns():
         odds = _pickcenter_odds(400869817)
     assert odds["overUnder"] == 55.5
     assert odds["gameSpreadAvailable"] is True
+    assert odds["overUnderAvailable"] is False
 
 
 def test_pickcenter_all_null_total_does_not_raise():
@@ -143,6 +153,7 @@ def test_pickcenter_all_null_total_does_not_raise():
         odds = _pickcenter_odds(401301042, lambda provider: provider.update(overUnder=None))
     assert odds["overUnder"] == 55.5
     assert odds["gameSpreadAvailable"] is True
+    assert odds["overUnderAvailable"] is False
 
 
 def test_pickcenter_all_null_spread_takes_the_default_path():
@@ -150,7 +161,13 @@ def test_pickcenter_all_null_spread_takes_the_default_path():
     spread, so it takes the empty-pickcenter path (offline: the defaults, warned)."""
     with pytest.warns(DefaultOddsWarning, match=r"CFB game 401301042: no pregame spread is available"):
         odds = _pickcenter_odds(401301042, lambda provider: provider.update(spread=None))
-    assert odds == {"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False}
+    assert odds == {
+        "gameSpread": 2.5,
+        "overUnder": 55.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": False,
+        "overUnderAvailable": False,
+    }
 
 
 def test_core_odds_api_spread_without_a_total_warns(monkeypatch):
@@ -160,7 +177,100 @@ def test_core_odds_api_spread_without_a_total_warns(monkeypatch):
     proc = CFBPlayProcess(gameId=401628455, join_participants=False)
     with pytest.warns(DefaultOddsWarning, match=_DEFAULT_TOTAL_WARNING.format(401628455, "core_odds_api")):
         init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
-    assert init == {"gameSpread": -6.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert init == {
+        "gameSpread": -6.5,
+        "overUnder": 55.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": False,
+    }
+
+
+def _processed(game_id: int, odds_override=None, match=None) -> CFBPlayProcess:
+    """Run a committed capture's full pipeline offline; ``match`` asserts the DefaultOddsWarning text."""
+    summary = json.loads((FIX / f"summary_{game_id}.json").read_text(encoding="utf-8"))
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False, odds_override=odds_override)
+    proc.espn_cfb_pbp(summary=summary)
+    if match is None:
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DefaultOddsWarning)
+            proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    else:
+        with pytest.warns(DefaultOddsWarning, match=match):
+            proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    return proc
+
+
+def test_a_defaulted_total_is_flagged_and_survives_the_rebuild():
+    """R837-2 / R837-3: 400869817's pickcenter has a spread and no total, so its 55.5 total is a default.
+
+    ``overUnderAvailable`` False records it in the payload and on every play (``gameSpreadAvailable``
+    stays True, so a gate on that column alone passed the game). Fed back as ``odds_override`` the
+    rebuild is ``odds_source="injected"``, keeps the flag and warns again: before, it relabelled the
+    default as an injected market total, unwarned. The fourth-down recommendation is kept (owner ruling
+    R837-3); the column is how a consumer tells the total apart.
+    """
+    proc = _processed(400869817, match=_DEFAULT_TOTAL_WARNING.format(400869817, "summary_pickcenter"))
+    assert proc.json["overUnderAvailable"] is False
+    assert proc.json["gameSpreadAvailable"] is True
+    assert proc.plays_frame["overUnderAvailable"].unique().to_list() == [False]
+    persisted = json.loads(json.dumps({k: proc.json[k] for k in (*_ODDS_KEYS, "overUnderAvailable")}))
+    again = _processed(400869817, persisted, match=_DEFAULT_TOTAL_WARNING.format(400869817, "injected"))
+    assert again.json["odds_source"] == "injected"
+    assert again.json["overUnderAvailable"] is False
+    assert again.plays_frame["overUnderAvailable"].unique().to_list() == [False]
+    assert again.plays_frame["EPA"].equals(proc.plays_frame["EPA"])
+
+
+def test_a_market_total_is_flagged_available_and_a_legacy_override_keeps_it():
+    """401301042's pickcenter carries a total: ``overUnderAvailable`` True, no warning. A payload
+    persisted before the key existed (the four legacy keys) rebuilds the same: the flag defaults to
+    ``gameSpreadAvailable``, which every adapter sets only when it also has a total."""
+    proc = _processed(401301042)
+    assert proc.json["overUnderAvailable"] is True
+    assert proc.plays_frame["overUnderAvailable"].unique().to_list() == [True]
+    legacy = json.loads(json.dumps({k: proc.json[k] for k in _ODDS_KEYS}))
+    again = _processed(401301042, legacy)
+    assert again.json["overUnderAvailable"] is True
+    assert again.plays_frame["overUnderAvailable"].dtype == pl.Boolean
+
+
+def test_a_legacy_default_odds_override_is_no_market_total():
+    """A legacy four-key override with ``gameSpreadAvailable`` False is the default pair: no market total."""
+    proc = CFBPlayProcess(
+        gameId=401628455,
+        odds_override={"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False},
+    )
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("injected")):
+        init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert init["overUnderAvailable"] is False
+
+
+def test_processing_leaves_the_root_logger_alone():
+    """R828-5: ``cfb_pbp`` logged through the root module (``logging.debug``), which runs
+    ``logging.basicConfig()`` on an unconfigured root: processing a game installed a stderr handler on
+    the host's root logger. It logs through its own ``sdv.cfb_pbp`` logger now. A subprocess, because
+    pytest's own capture handlers sit on the root logger here."""
+    script = "\n".join(
+        [
+            "import json, logging, sys",
+            "from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess",
+            "before = list(logging.getLogger().handlers)",
+            "summary = json.loads(open(sys.argv[1], encoding='utf-8').read())",
+            "CFBPlayProcess(gameId=401301042, join_participants=False).espn_cfb_pbp(summary=summary)",
+            "print('ROOT_HANDLERS', len(before), len(logging.getLogger().handlers))",
+        ]
+    )
+    env = {**os.environ, "PYTHONPATH": str(Path(__file__).resolve().parents[2])}
+    out = subprocess.run(
+        [sys.executable, "-c", script, str(FIX / "summary_401301042.json")],
+        capture_output=True,
+        text=True,
+        env=env,
+        check=True,
+        timeout=300,
+    )
+    assert "ROOT_HANDLERS 0 0" in out.stdout, out.stdout + out.stderr
 
 
 def _process_capture(game_id: int, edit=None) -> CFBPlayProcess:

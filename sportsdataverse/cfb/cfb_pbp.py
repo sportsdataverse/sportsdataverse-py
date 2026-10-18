@@ -464,10 +464,15 @@ _DEFAULT_TOTAL = 55.5
 
 
 def _warn_default_total(game_id, odds_source, total) -> None:
-    """Warn that a game with a market spread has no market total (R828-3): the total is a default."""
+    """Warn that a game with a market spread has no market total (R828-3): the total is a default.
+
+    The ``overUnderAvailable`` play column records it per game (R837-2). The fourth-down surface keeps
+    its recommendation on the default total (owner ruling R837-3); the column lets a consumer drop it.
+    """
     warnings.warn(
         f"CFB game {game_id}: no pregame total is available (odds_source={odds_source!r}); the overUnder "
-        f"column and the fourth-down decision surface (team implied totals) use {total}, which no market set. "
+        f"column (overUnderAvailable=False) and the fourth-down decision surface (team implied totals) use "
+        f"{total}, which no market set. "
         "Make it an error with warnings.simplefilter('error', DefaultOddsWarning).",
         _DefaultOddsWarning,
         stacklevel=3,
@@ -2472,6 +2477,11 @@ class CFBPlayProcess(object):
                 gameSpreadAvailable} that short-circuits odds resolution (sets
                 odds_source="injected") so offline rebuilds never hit the live
                 core-odds endpoint or fall back to defaults. Validated + coerced here.
+                An optional ``overUnderAvailable`` key says whether ``overUnder`` is a
+                market total; it defaults to ``gameSpreadAvailable`` (every adapter
+                that marks a spread available also has a total), so a payload persisted
+                before the key existed rebuilds as it did. A rebuild of a game whose
+                total was defaulted passes ``overUnderAvailable=False`` and warns.
             game_roster: optional pre-fetched game roster (the list of athlete
                 records from :func:`~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`,
                 or the ``{"data": [...]}`` wrapper). Used by ``__attach_player_ids``
@@ -2493,6 +2503,8 @@ class CFBPlayProcess(object):
         Attributes:
             odds_source: provenance of the resolved spread —
                 "summary_pickcenter" | "core_odds_api" | "default" | "injected".
+            overUnderAvailable: False when ``overUnder`` is the 55.5 default rather than a
+                market total (also a payload key and a play column, R837-2).
         """
         if odds_override is not None:
             if not isinstance(odds_override, dict):
@@ -2508,6 +2520,9 @@ class CFBPlayProcess(object):
                 "overUnder": float(odds_override["overUnder"]),
                 "homeFavorite": bool(odds_override["homeFavorite"]),
                 "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
+                "overUnderAvailable": bool(
+                    odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])
+                ),
             }
         self.gameId = int(gameId)
         # self.logger = logger
@@ -2605,7 +2620,7 @@ class CFBPlayProcess(object):
         #     "videos",
         # ]
         if self.raw == True:
-            logging.debug(f"{self.gameId}: raw cfb_pbp data requested, returning keys: {summary.keys()}")
+            logger.debug(f"{self.gameId}: raw cfb_pbp data requested, returning keys: {summary.keys()}")
             # reorder keys in raw format, appending empty keys which are defined later to the end
             pbp_json = {}
             for k in incoming_keys_expected:
@@ -2615,7 +2630,7 @@ class CFBPlayProcess(object):
                     pbp_json[k] = {} if k in dict_keys_expected else []
             return pbp_json
 
-        logging.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")
+        logger.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")
         for k in incoming_keys_expected:
             if k in summary.keys():
                 pbp_txt[k] = summary[k]
@@ -2718,7 +2733,7 @@ class CFBPlayProcess(object):
         # previous before current, whatever the feed's key order: a same-id repeat
         # keeps its LAST copy, which must be the fresher drives.current one
         for key in sorted(pbp_txt.get("drives").keys(), key=lambda k: k == "current"):
-            logging.debug(f"{self.gameId}: drives key - {key}")
+            logger.debug(f"{self.gameId}: drives key - {key}")
             prev_drives = pd.json_normalize(
                 data=pbp_txt.get("drives").get(f"{key}"),
                 record_path="plays",
@@ -2764,7 +2779,7 @@ class CFBPlayProcess(object):
             init["awayTeamId"]: {"1": [], "2": []},
         }
 
-        logging.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
+        logger.debug(f"{self.gameId}: plays_df length - {len(pbp_txt['plays'])}")
         if len(pbp_txt["plays"]) == 0:
             return pbp_txt
         # Repair the feed's pre-stripped entities once, at the boundary -- never in the 2025+
@@ -2778,12 +2793,12 @@ class CFBPlayProcess(object):
         if (len(pbp_txt["plays"]) < 50) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(f"{self.gameId}: appear to be too few plays ({len(pbp_txt['plays'])}) for a completed game")
+            logger.debug(f"{self.gameId}: appear to be too few plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
         if (len(pbp_txt["plays"]) > 500) and (
             pbp_txt.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
+            logger.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
         # Sparse old games can omit nested per-play objects entirely: pd.json_normalize
         # only emits a `start.*`/`end.*`/`period.*`/`clock.*`/`type.*` column when at least
@@ -2862,6 +2877,7 @@ class CFBPlayProcess(object):
                 homeFavorite=pl.lit(bool(np.asarray(init["homeFavorite"]).item())),
                 gameSpreadAvailable=pl.lit(init["gameSpreadAvailable"]),
                 overUnder=pl.lit(float(np.asarray(init["overUnder"]).item())),
+                overUnderAvailable=pl.lit(init["overUnderAvailable"], dtype=pl.Boolean),
             )
             .with_columns(
                 homeTeamSpread=pl.when(pl.col("homeFavorite") == True)
@@ -3938,11 +3954,11 @@ class CFBPlayProcess(object):
     def __helper__espn_cfb_odds_information__(self):
         """Fetch pre-game spread/total from ESPN's modern core odds endpoint.
 
-        Returns ``(gameSpread, overUnder, homeFavorite, gameSpreadAvailable)``.
+        Returns ``(gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable)``.
         ESPN emptied the legacy ``pickcenter`` array on the summary endpoint
         for 2024+ college games; this helper restores the data path for those
         games via the ``sports.core.api.espn.com`` v2 odds collection. Falls
-        back to defaults ``(2.5, 55.5, True, False)`` when the endpoint
+        back to defaults ``(2.5, 55.5, True, False, False)`` when the endpoint
         returns no items, errors out, or the JSON cannot be decoded —
         preserving the legacy caller-visible behavior on those failure
         paths.
@@ -3961,11 +3977,11 @@ class CFBPlayProcess(object):
                 self.gameId,
                 e,
             )
-            return (2.5, 55.5, True, False)
+            return (2.5, _DEFAULT_TOTAL, True, False, False)
 
         items = odds.get("items", []) if isinstance(odds, dict) else []
         if not items:
-            return (2.5, 55.5, True, False)
+            return (2.5, _DEFAULT_TOTAL, True, False, False)
 
         # Prefer ESPN BET (their canonical book) when present; the upstream
         # 0.36-live helper assumed items[0] was ESPN BET, but the items array
@@ -3992,7 +4008,7 @@ class CFBPlayProcess(object):
         if gameSpreadAvailable and ou_raw is None:
             _warn_default_total(self.gameId, "core_odds_api", overUnder)
         homeFavorite = bool(home_fav_raw) if home_fav_raw is not None else True
-        return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable)
+        return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, ou_raw is not None)
 
     def __helper_cfb_pickcenter(self, pbp_txt):
         # Spread definition
@@ -4002,15 +4018,20 @@ class CFBPlayProcess(object):
             self.overUnder = o["overUnder"]
             self.homeFavorite = o["homeFavorite"]
             self.gameSpreadAvailable = o["gameSpreadAvailable"]
+            self.overUnderAvailable = o["overUnderAvailable"]
             self.odds_source = "injected"
             if not self.gameSpreadAvailable:
                 # a rebuild of a default-odds game is still a default-odds game (R828-2)
                 _warn_default_odds(self.gameId, self.odds_source, self.gameSpread, self.overUnder)
+            elif not self.overUnderAvailable:
+                # and a rebuild of a defaulted total is still a defaulted total (R837-2)
+                _warn_default_total(self.gameId, self.odds_source, self.overUnder)
             return {
                 "gameSpread": self.gameSpread,
                 "overUnder": self.overUnder,
                 "homeFavorite": self.homeFavorite,
                 "gameSpreadAvailable": self.gameSpreadAvailable,
+                "overUnderAvailable": self.overUnderAvailable,
             }
         offline = getattr(self, "_offline", False)
         n_pick = len(pbp_txt.get("pickcenter", []))
@@ -4036,6 +4057,7 @@ class CFBPlayProcess(object):
             homeFavorite = _first("homeTeamOdds.favorite", True)
             gameSpread = _first("spread", 2.5)
             overUnder = _first("overUnder", None)
+            overUnderAvailable = overUnder is not None
             if overUnder is None:
                 overUnder = _DEFAULT_TOTAL
                 _warn_default_total(self.gameId, "summary_pickcenter", overUnder)
@@ -4052,13 +4074,14 @@ class CFBPlayProcess(object):
             # games on ESPN's summary endpoint). Try the modern core odds
             # endpoint before silently falling through to defaults — which
             # would otherwise corrupt every WPA/EP downstream calculation
-            # because every play would inherit `(2.5, 55.0, True)`.
+            # because every play would inherit `(2.5, 55.5, True)`.
             (
                 gameSpread,
                 overUnder,
                 homeFavorite,
                 gameSpreadAvailable,
-            ) = (2.5, 55.5, True, False) if offline else self.__helper__espn_cfb_odds_information__()
+                overUnderAvailable,
+            ) = (2.5, _DEFAULT_TOTAL, True, False, False) if offline else self.__helper__espn_cfb_odds_information__()
             self.odds_source = "core_odds_api" if gameSpreadAvailable else "default"
             if not gameSpreadAvailable:
                 _warn_default_odds(self.gameId, self.odds_source, gameSpread, overUnder)
@@ -4066,11 +4089,13 @@ class CFBPlayProcess(object):
         self.overUnder = overUnder
         self.homeFavorite = homeFavorite
         self.gameSpreadAvailable = gameSpreadAvailable
+        self.overUnderAvailable = overUnderAvailable
         return {
             "gameSpread": gameSpread,
             "overUnder": overUnder,
             "homeFavorite": homeFavorite,
             "gameSpreadAvailable": gameSpreadAvailable,
+            "overUnderAvailable": overUnderAvailable,
         }
 
     def __helper_cfb_game_data(self, pbp_txt, init):
@@ -4088,6 +4113,7 @@ class CFBPlayProcess(object):
             -1 * abs(init["gameSpread"]),
         )
         pbp_txt["overUnder"] = init["overUnder"]
+        pbp_txt["overUnderAvailable"] = init["overUnderAvailable"]
         pbp_txt["odds_source"] = self.odds_source
         # Home and Away identification variables
         # A missing or null name part is "", never str(None) == "None" (adapter-built headers).
@@ -10094,7 +10120,7 @@ class CFBPlayProcess(object):
                 )
             )
         except Exception as exc:  # noqa: BLE001
-            logging.debug(f"{self.gameId}: usage box failed -- {exc}")
+            logger.debug(f"{self.gameId}: usage box failed -- {exc}")
             box.update({k: [] for k in _USAGE_SECTIONS})
         return box
 
@@ -10210,14 +10236,14 @@ class CFBPlayProcess(object):
 
             # Graceful fallback conditions
             if parts is None or parts.height == 0 or "id" not in play_df.columns:
-                logging.debug(
+                logger.debug(
                     f"{self.gameId}: __join_participants skipped -- "
                     f"parts={None if parts is None else parts.height} rows, id_in_df={'id' in play_df.columns}",
                 )
                 return play_df
             return _coalesce_participants(play_df, parts)
         except Exception as exc:
-            logging.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
+            logger.debug(f"{self.gameId}: __join_participants fallback -- {exc}")
             return original_play_df
 
     #: (name_col, id_col, team_col) for every extractable player type. ``team_col``
@@ -10380,7 +10406,7 @@ class CFBPlayProcess(object):
 
                 roster = espn_cfb_game_rosters(self.gameId)
             except Exception as exc:  # pragma: no cover - network dependent
-                logging.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
+                logger.debug(f"{self.gameId}: __attach_player_ids roster fetch failed -- {exc}")
                 roster = None
         # Roster first, box score second. Both feed the same set-valued lookups
         # below, so order only affects which source seeds a name -- and since the
@@ -10694,6 +10720,7 @@ class CFBPlayProcess(object):
                 "gameSpread": pbp_txt["gameSpread"],
                 "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                "overUnderAvailable": pbp_txt["overUnderAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
                 "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10771,6 +10798,7 @@ class CFBPlayProcess(object):
                     "gameSpread": pbp_txt["gameSpread"],
                     "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                    "overUnderAvailable": pbp_txt["overUnderAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
                     "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -10972,6 +11000,7 @@ class CFBPlayProcess(object):
                 "gameSpread": pbp_txt["gameSpread"],
                 "homeFavorite": pbp_txt["homeFavorite"],
                 "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                "overUnderAvailable": pbp_txt["overUnderAvailable"],
                 "overUnder": pbp_txt["overUnder"],
                 "odds_source": pbp_txt.get("odds_source"),
                 "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -11028,6 +11057,7 @@ class CFBPlayProcess(object):
                     "gameSpread": pbp_txt["gameSpread"],
                     "homeFavorite": pbp_txt["homeFavorite"],
                     "gameSpreadAvailable": pbp_txt["gameSpreadAvailable"],
+                    "overUnderAvailable": pbp_txt["overUnderAvailable"],
                     "overUnder": pbp_txt["overUnder"],
                     "odds_source": pbp_txt.get("odds_source"),
                     "pickcenter": np.array(pbp_txt["pickcenter"]).tolist(),
@@ -11062,21 +11092,21 @@ class CFBPlayProcess(object):
                     game.run_processing_pipeline()
         """
         if len(self.json["plays"]) == 0:
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too no plays available ({len(self.json['plays'])}). run_processing_pipeline did not run",
             )
             return True
         if (len(self.json["plays"]) < 50) and (
             self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too few plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run",
             )
             return True
         if (len(self.json["plays"]) > 500) and (
             self.json.get("header").get("competitions")[0].get("status").get("type").get("completed") == True
         ):
-            logging.debug(
+            logger.debug(
                 f"{self.gameId}: appear to be too many plays ({len(self.json['plays'])}) for a completed game. run_processing_pipeline did not run",
             )
             return True
