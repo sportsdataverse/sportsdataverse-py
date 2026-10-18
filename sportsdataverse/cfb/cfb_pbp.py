@@ -6034,22 +6034,28 @@ class CFBPlayProcess(object):
             .then(0)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)for no gain")))
             .then(0)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for a loss of")))
-            .then(-1 * _gain_text.str.extract(r"(?i)run for a loss of (\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for a loss of")))
-            .then(-1 * _gain_text.str.extract(r"(?i)rush for a loss of (\d+)").cast(pl.Int32))
+            # "a" is optional: 2005 writes "rush for loss of 1 yard to the Wyom32" (EX-1.2-a).
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for (?:a )?loss of")))
+            .then(-1 * _gain_text.str.extract(r"(?i)run for (?:a )?loss of (\d+)").cast(pl.Int32))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for (?:a )?loss of")))
+            .then(-1 * _gain_text.str.extract(r"(?i)rush for (?:a )?loss of (\d+)").cast(pl.Int32))
             # ESPN "for N yds loss" (0.36-live port) -- ahead of "rush for", which reads it as a gain.
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(_FOR_N_YARDS_LOSS_RE)))
             .then(-1 * _rush_loss_yards)
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)run for")))
+            # The five guards below (run for / rush for / Yd Run / Yd Rush / Yard Rush) name the number
+            # their reader extracts, so a text the reader cannot parse falls through instead of stopping
+            # on a null (EX-1.2-a): "1 Yd Run (X Run for Two-Point Conversion)" is not a "run for N", and
+            # "Joseph Banyard rush ..." is not a "N Yard Rush". The "rushed" and kneel branches are not
+            # guarded that way, and the guards read cleaned_text while the readers stop at the turnover.
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)run for -?\d")))
             .then(_gain_text.str.extract(r"(?i)run for (-?\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)rush for")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)rush for -?\d")))
             .then(_gain_text.str.extract(r"(?i)rush for (-?\d+)").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Run")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yd Run")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Run").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yd Rush")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yd Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yd Rush").cast(pl.Int32))
-            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains("(?i)Yard Rush")))
+            .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ Yard Rush")))
             .then(_gain_text.str.extract(r"(?i)(\d+) Yard Rush").cast(pl.Int32))
             # ESPN "N yds gain" phrasing (0.36-live port)
             .when((pl.col("rush") == True).and_(pl.col("cleaned_text").str.contains(r"(?i)\d+ y\w*ds gain")))
@@ -6059,7 +6065,8 @@ class CFBPlayProcess(object):
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
                 .and_(pl.col("cleaned_text").str.contains("(?i)touchdown") == False),
             )
-            .then(_gain_text.str.extract(r"(?i)for (-?\d+) yards").cast(pl.Int32))
+            # "yards?": 2004-05 writes "rushed up the middle for 1 yard." (EX-1.2-a)
+            .then(_gain_text.str.extract(r"(?i)for (-?\d+) yards?\b").cast(pl.Int32))
             .when(
                 (pl.col("rush") == True)
                 .and_(pl.col("cleaned_text").str.contains("(?i)rushed"))
@@ -6089,6 +6096,20 @@ class CFBPlayProcess(object):
                 .and_(pl.col("penalty_detail").is_null())
             )
             .then(pl.col("statYardage").cast(pl.Int32))
+            # A fumbled or flagged rush whose verb and yardage are split by direction words ("rush
+            # over left tackle for 3 yards, ... SMU penalty 15 yard personal foul", "rush over right
+            # guard for 11 yards, fumbled, ... recovered by Cal"): the text states the carry, read
+            # up to the turnover. After the statYardage stand-in, so only these rows move.
+            .when(
+                (pl.col("rush") == True).and_(
+                    _gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of \d")
+                )
+            )
+            .then(-1 * _gain_text.str.extract(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of (\d+)").cast(pl.Int32))
+            .when(
+                (pl.col("rush") == True).and_(_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for -?\d+ yards?\b"))
+            )
+            .then(_gain_text.str.extract(r"(?i)\b(?:rush|run)\b[^,]*? for (-?\d+) yards?\b").cast(pl.Int32))
             .otherwise(None),
             # Receiving yardage reads cleaned_text so the "complete to" guard fires
             # on modern "complete short middle to ..." phrasing (raw `text` left it

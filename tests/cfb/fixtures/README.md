@@ -142,6 +142,9 @@ docstrings of the tests that read them: `cbs_cfb/` (`tests/cfb/cbs_pbp/test_to_e
 from `cfbfastR-cfb-raw` at `98deb3f091`) for the supp-002 candidate count
 (`tests/cfb/test_cfb_supp002_degenerate_end.py`); they are not `summary_*` files, so the whole-game
 oracle does not pick them up.
+`rush_forms/282782655_trimmed.json.gz` (Tulane @ Army, 2008) is one more trimmed capture, from
+`cfbfastR-cfb-raw/cfb/json/raw/282782655.json` at `9c61a436cc`, for the directional rush-loss reader
+(`test_stated_rush_yardage_is_read`, EX-1.2-a, play 282782655087); it is not a `summary_*` file either.
 
 ## Captures
 
