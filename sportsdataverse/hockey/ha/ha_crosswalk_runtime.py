@@ -51,8 +51,8 @@ def ha_player_crosswalk(
         ``athlete_uuid``, ``full_name`` and ``date_of_birth`` from the SHL.
 
     Raises:
-        ValueError: neither ``season`` nor ``shl_crosswalk`` was given, or a frame has no
-            ``player_statnet_id`` column.
+        ValueError: neither ``season`` nor ``shl_crosswalk`` was given, a frame has no
+            ``player_statnet_id`` column, or an id is not an integer.
         sportsdataverse.errors.NoDataError: the SHL has no such season (from the SHL lookup).
         sportsdataverse.errors.AssetFetchError: the SHL fetch failed.
 
@@ -63,8 +63,9 @@ def ha_player_crosswalk(
             ha_player_crosswalk(ha_leaders(), season=2026)
 
     See Also:
-        * :func:`sportsdataverse.hockey.shl.shl_player_crosswalk` - the route this works on.
-        * :func:`sportsdataverse.hockey.ha.ha_players` - the route this works on.
+        * :func:`sportsdataverse.hockey.shl.shl_player_crosswalk` - the SHL frame this joins to (pass it as
+          ``shl_crosswalk``).
+        * :func:`sportsdataverse.hockey.ha.ha_players` - an HA frame carrying ``player_statnet_id``.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -77,12 +78,16 @@ def ha_player_crosswalk(
         ids = players["player_statnet_id"]
     else:
         ids = pl.Series("player_statnet_id", list(players))
-    ids = ids.cast(pl.Int64).drop_nulls().unique(maintain_order=True)
+    cast = ids.cast(pl.Int64, strict=False)
+    if cast.null_count() > ids.null_count():
+        raise ValueError("ha_player_crosswalk: player_statnet_id holds a non-integer id")
+    ids = cast.drop_nulls().unique(maintain_order=True)
     if shl_crosswalk is None:
         if season is None:
             raise ValueError("ha_player_crosswalk: give season (the SHL season to look in) or shl_crosswalk")
         shl_crosswalk = shl_player_crosswalk(season, game_type)
-    shl = shl_crosswalk.unique("player_id").select(
+    # deterministic: the first row per id in the SHL frame's own order (a traded player can repeat)
+    shl = shl_crosswalk.unique("player_id", keep="first", maintain_order=True).select(
         pl.col("player_id").alias("player_statnet_id"), pl.col("player_id").alias("shl_player_id"), *_KEEP
     )
     if shl.schema["player_statnet_id"] != ids.dtype:  # join keys must agree: both Int64
