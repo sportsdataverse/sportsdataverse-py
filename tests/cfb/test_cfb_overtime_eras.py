@@ -127,3 +127,70 @@ def test_2021_on_a_third_overtime_attempt_after_the_second_overtime_touchdown() 
     td = _before(plays, r)
     assert td["text"].startswith("Austin Jones 11 Yd Run") and td["period"] == 6
     assert r["two_pt_recommendation"] is None
+
+
+def _linescores(game_id: int) -> dict[str, list[int]]:
+    """ESPN's header linescores per side: four quarters, then one entry per overtime."""
+    with gzip.open(FIX / f"summary_{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        competitors = json.load(fh)["header"]["competitions"][0]["competitors"]
+    return {c["homeAway"]: [int(x["displayValue"]) for x in c["linescores"]] for c in competitors}
+
+
+def _shootout_attempts_expected(game_id: int, from_overtime: int) -> int:
+    """Two attempts per shootout overtime, the count read off the linescore."""
+    n_ot = len(_linescores(game_id)["home"]) - 4
+    return 2 * (n_ot - from_overtime + 1)
+
+
+def test_2019_20_the_untyped_shootout_attempts_are_attempts() -> None:
+    """401112489, six overtimes under the 2019 rule (shootout from the fifth): four attempts by the
+    linescore. ESPN types one ("Quincy Patterson Run for Two-Point Conversion") and records the
+    other three only as untyped rows, "Quincy Patterson II Two-Point Pass Attempt Failed", "Michael
+    Carter Two-Point Rush Attempt Failed", "Sam Howell Two-Point Rush Attempt Failed". As "Unknown"
+    they were scored as scrimmage snaps (EPA +0.65, wp_after 0.0); they are missed attempts."""
+    plays = _plays(401112489)
+    assert _shootout_attempts_expected(401112489, from_overtime=5) == 4
+    attempts = plays.filter((pl.col("period") >= 5) & pl.col("text").str.contains("(?i)two-point"))
+    assert attempts.height == 4
+    missed = attempts.filter(pl.col("text").str.contains("Attempt Failed"))
+    assert missed["type.text"].to_list() == ["Two-Point Conversion Missed"] * 3
+    assert missed["EPA"].to_list() == pytest.approx([-0.92] * 3)
+    assert attempts["two_pt_recommendation"].null_count() == 4
+
+
+def test_a_shootout_attempt_on_impossible_espn_scores_has_no_win_probability() -> None:
+    """401628439: the linescore has the shootout open 40-40 (after two overtimes) and end 44-42, but
+    ESPN's scores put Georgia eight ahead on every attempt (50-42), which a shootout cannot reach: a
+    period opens tied and one attempt moves the margin by 2. Valued from those scores every attempt
+    read 0.0 or 1.0. Not re-derived: wp_before and wp_after are null, except the last attempt's
+    wp_after, the game's result."""
+    ls = _linescores(401628439)
+    assert sum(ls["home"][:6]) == sum(ls["away"][:6]) == 40  # tied entering the shootout
+    assert (sum(ls["home"]), sum(ls["away"])) == (44, 42)
+    plays = _plays(401628439)
+    attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
+    assert attempts.height == _shootout_attempts_expected(401628439, from_overtime=3) == 12
+    assert (attempts["pos_score_diff_start"].abs() > 2).all()  # ESPN's defect is in the capture
+    for col in ("wp_before", "wp_before_naive"):
+        assert attempts[col].null_count() == 12
+    for col in ("wp_after", "wp_after_naive"):
+        assert attempts[col].null_count() == 11
+        assert attempts[col][-1] == 1.0  # Georgia's winning attempt ends the game
+
+
+def test_a_shootout_attempt_left_unknown_does_not_borrow_a_later_board() -> None:
+    """401866418, Jacksonville State @ Ohio 2026, four overtimes: tied 27-27 entering the third, the
+    shootout (linescore), four attempts. ESPN's first "End of OT." marker carries 17-34, which
+    reaches the third-overtime attempts as a 7-point margin, and Ohio's winning attempt starts from
+    it too. Those three are left unknown in full: before the guard wp_after was borrowed from a
+    later row past the null boards (0.1 and 0.9). The fourth attempt, at a real margin of 2, keeps
+    its value: Jacksonville State's miss ends the game (0.0)."""
+    ls = _linescores(401866418)
+    assert sum(ls["home"][:6]) == sum(ls["away"][:6]) == 27
+    plays = _plays(401866418)
+    attempts = plays.filter((pl.col("period") >= 5) & pl.col("type.text").is_in(_TWO_POINT))
+    assert attempts.height == _shootout_attempts_expected(401866418, from_overtime=3) == 4
+    assert attempts["pos_score_diff_start"].abs().to_list() == [7, 7, 7, 2]
+    for col in ("wp_before", "wp_after", "wp_before_naive", "wp_after_naive"):
+        assert attempts[col].is_null().to_list() == [True, True, True, False], col
+    assert attempts["wp_after"][-1] == 0.0
