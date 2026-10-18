@@ -19,3 +19,4 @@
   sample) is documented as unobserved and typed Int64. (#864)
 - **Lega Basket:** the play-by-play `side` is documented as what it is, the basket the court zone is measured from
   (0 = x 0, 1 = x 100), not the home/visitor team (that is `team_side`). (#864)
+- **Genius:** HTML pages served without a declared charset are read as UTF-8, so accented competition and team names (French, Greek) no longer come out garbled (`requests` assumed ISO-8859-1). (#864)

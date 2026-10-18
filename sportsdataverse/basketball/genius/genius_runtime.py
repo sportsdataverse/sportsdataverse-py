@@ -97,6 +97,24 @@ def _route(url: str) -> Tuple[str, Tuple[str, ...]]:
 
 
 # ------------------------------------------------------------------------------ transport
+def _body_text(resp: Any) -> str:
+    """The response body as text, read as UTF-8 when the server names no charset.
+
+    ``requests`` decodes a ``text/html`` answer without a ``charset`` as ISO-8859-1, which turns the
+    UTF-8 pages Genius serves (e.g. French and Greek team and competition names) into mojibake. A
+    declared charset is honoured; bytes that are not valid UTF-8 fall back to ``resp.text``.
+    """
+    content = getattr(resp, "content", None)
+    headers = getattr(resp, "headers", None) or {}
+    ctype = next((str(v) for k, v in headers.items() if str(k).lower() == "content-type"), "").lower()
+    if isinstance(content, bytes) and "charset=" not in ctype:
+        try:
+            return content.decode("utf-8")
+        except UnicodeDecodeError:
+            pass
+    return getattr(resp, "text", "") or ""
+
+
 def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
     """The body text of a 200 answer, or the error the answer calls for (see the module docstring)."""
     where = _rt._where(url)
@@ -116,7 +134,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
         err.transient = True
         raise err from None
     status = getattr(resp, "status_code", None)
-    text = getattr(resp, "text", "") or ""
+    text = _body_text(resp)
     if status == 200:
         return text
     low = text.lower()

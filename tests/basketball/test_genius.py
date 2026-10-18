@@ -674,3 +674,23 @@ def test_wrappers_build_the_documented_urls(monkeypatch):
         WIDGET_URL,
     ]
     assert seen[4][1] == {"roundNumber": -1} and seen[5][1] == {"roundNumber": 3}
+
+
+class _BytesResp(_Resp):
+    def __init__(self, content: bytes, headers: Dict[str, str]):
+        super().__init__(200, content.decode("latin-1"), headers)
+        self.content = content
+
+
+def test_body_text_reads_utf8_when_no_charset_is_declared():
+    page = "LIGUE FÉMININE · Παναθηναϊκός".encode("utf-8")
+    resp = _BytesResp(page, {"Content-Type": "text/html"})
+    assert rt._body_text(resp) == "LIGUE FÉMININE · Παναθηναϊκός"
+
+
+def test_body_text_honours_a_declared_charset_and_bad_utf8():
+    declared = _BytesResp("caf\xe9".encode("latin-1"), {"content-type": "text/html; charset=ISO-8859-1"})
+    assert rt._body_text(declared) == "café"
+    not_utf8 = _BytesResp(b"caf\xe9", {"Content-Type": "text/html"})
+    assert rt._body_text(not_utf8) == "café"
+    assert rt._body_text(_Resp(200, "plain")) == "plain"
