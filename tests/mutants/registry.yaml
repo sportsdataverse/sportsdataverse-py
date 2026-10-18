@@ -1110,3 +1110,23 @@
   mutant: '    if "statistics" in cat and isinstance(totals, list):'
   test: tests/test_espn_universal_parsers.py -k empty_totals_add_no_career
   expected: kill
+
+- id: download-reuses-stale-retry-after
+  group: codegen-runtime
+  finding: A-N11
+  file: sportsdataverse/dl_utils.py
+  snippet: |2-
+            response = None
+            try:
+  mutant: '        try:'
+  test: tests/test_dl_utils.py -k does_not_reuse_the_previous_retry_after
+  expected: kill
+
+- id: statcast-html-allowance-substring
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/mlb/mlb_statcast_runtime.py
+  snippet: 'html=urlsplit(url).path.rstrip("/") in _HTML_PAGES'
+  mutant: 'html=any(page in url for page in _HTML_PAGES)'
+  test: tests/codegen/test_runtime_errors.py -k path_not_a_substring
+  expected: kill

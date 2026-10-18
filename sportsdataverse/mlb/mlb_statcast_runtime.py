@@ -23,6 +23,7 @@ against this module.
 from __future__ import annotations
 
 from typing import Any, Dict, Optional, Union
+from urllib.parse import urlsplit
 
 from sportsdataverse._codegen_runtime import _as_season_list, _csv, bool_str  # noqa: F401  (re-export for generated imports)
 from sportsdataverse._codegen_runtime import _check_response, _json_body, _text_body, _transport_errors
@@ -65,4 +66,5 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
     if "json" in ctype:
         # A JSON-labelled body that will not decode is a failed fetch, never text to parse.
         return _json_body(resp, url)
-    return _text_body(resp, url, html=any(page in url for page in _HTML_PAGES))
+    # The path itself, not a substring: a query or a longer path naming a page must not allow HTML.
+    return _text_body(resp, url, html=urlsplit(url).path.rstrip("/") in _HTML_PAGES)

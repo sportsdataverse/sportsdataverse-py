@@ -467,3 +467,28 @@ def test_retry_after_waits_share_one_budget_and_long_waits_log(monkeypatch, capl
     # four honoured 120 s waits (8 minutes) before; now the second would cross the budget
     assert sleeps == [120.0] and sum(sleeps) <= d._MAX_TOTAL_RETRY_WAIT and len(calls) == 2
     assert "waiting 120s before retrying" in caplog.text
+
+
+def test_a_connection_error_does_not_reuse_the_previous_retry_after(monkeypatch):
+    """After a 429 with Retry-After: 120, a connection error backs off normally (it re-read the stale
+    header, proposed 120 s again, crossed the wait budget and gave up with retries left)."""
+    import sportsdataverse.cache as _cache
+
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    sleeps = []
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+    answers = [
+        types.SimpleNamespace(status_code=429, url="u", reason="x", headers={"Retry-After": "120"}, json=lambda: {}),
+        requests.exceptions.ConnectionError("reset"),
+        types.SimpleNamespace(status_code=200, url="u", reason="OK", headers={}, json=lambda: {}),
+    ]
+
+    def fake_get(self, url, **kwargs):
+        out = answers.pop(0)
+        if isinstance(out, Exception):
+            raise out
+        return out
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+    assert download("https://site.api.espn.com/x", num_retries=15).status_code == 200
+    assert sleeps[0] == 120.0 and len(sleeps) == 2 and sleeps[1] <= 4.0 and answers == []

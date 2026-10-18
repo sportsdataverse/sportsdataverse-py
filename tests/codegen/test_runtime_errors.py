@@ -136,6 +136,24 @@ def test_statcast_html_leaderboards_still_return_their_page(monkeypatch):
 
 
 @pytest.mark.parametrize(
+    "url",
+    [
+        "https://baseballsavant.mlb.com/leaderboard/expected_statistics?next=/leaderboard/fielding-run-value",
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value-extra",
+    ],
+)
+def test_statcast_html_allowance_is_the_path_not_a_substring(monkeypatch, url):
+    # A query or a longer path that merely names an HTML leaderboard is still a CSV endpoint.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    _serve(
+        monkeypatch, 200, (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8"), "text/html"
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get(url)
+
+
+@pytest.mark.parametrize(
     ("fixture", "ctype", "call"),
     [
         ("cbs_napi_404.json", "application/json", lambda: _get("https://api.cbssports.com/napi/resource/nope")),

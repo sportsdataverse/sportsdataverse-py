@@ -422,6 +422,9 @@ def download(
     waited = 0.0
     permanent_403 = urlsplit(str(url)).hostname in _PERMANENT_403_HOSTS
     for attempt in range(attempts):
+        # A connection error must not reuse the previous attempt's response: its Retry-After would
+        # be honoured again and spend the wait budget on a stale answer.
+        response = None
         try:
             response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
             response = no_espn_data(response)
