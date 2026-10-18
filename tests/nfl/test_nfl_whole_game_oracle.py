@@ -170,21 +170,13 @@ def test_final_play_epa_is_minus_ep_start(game_id, boundary):
         assert last["EPA"] is not None and abs(last["EPA"] + last["EP_start"]) < 1e-9, (last["id"], last["EPA"])
 
 
-@pytest.mark.parametrize(
-    "game_id",
-    _cases(
-        {
-            261022011: (
-                "R832-10: ESPN labels the Q2 kickoff at 0:08 period 3 between two period-2 rows, so the half "
-                "'changes' on the field goal, the kickoff and the rush at 0:12-0:07 (base fired on the same 3)"
-            )
-        }
-    ),
-)
+@pytest.mark.parametrize("game_id", CAPTURES)
 def test_end_of_half_rows_two_per_game_three_with_overtime(game_id):
     # R832-5: end_of_half fires on the first half's last play, regulation's last play when the game
     # goes to overtime, and the game's last play, never on a clock-stoppage row (C-NF-12: 400791590's
-    # first half ends on a Timeout row, which must not take it from the play before it).
+    # first half ends on a Timeout row, which must not take it from the play before it). 261022011
+    # flipped with task 2.19 (R832-10): ESPN files its Q2 kickoff at 0:08 as period 3 between two
+    # period-2 rows, which _repair_espn_period puts back in period 2.
     f = run(game_id).plays
     _require(f["status_type_completed"].all(), "the capture is not a completed game")
     stops = f.filter(pl.col("type.text").is_in(clock_stoppage_vec) & _t("end_of_half"))
@@ -1059,7 +1051,11 @@ def test_real_concat_equals_per_game_runs_nflverse_wpa():
 # the captures 25 kickoff_tb rows were not 0 at the season spot, every one with ESPN's end clock moving
 # (R831-3, routed to task 2.19): 22 are 2006-07 bare "KickOff" rows nflverse has as returns (R831-2,
 # task 2.19), which now keep their next snap's spot; 3 are real touchbacks in the CSV below, of which
-# 400791590/1855 (no next snap to read) now takes its start's clock and is 0.
+# 400791590/1855 (no next snap to read) now takes its start's clock and is 0. Owner ruling (2026-10-17,
+# R856-2): every touchback kickoff's EP_end is scored at its START clock, so ESPN's moving end clock no
+# longer moves its EPA; WPA keeps ESPN's end clock, because ESPN's start clock is wrong on some
+# touchbacks too (400791567/36 starts at 3:47 of Q1). Unflagging the bare "KickOff" rows (R831-2) stays a
+# follow-up: it moves a half-ending kickoff with no next snap off its season spot (260917021/2190).
 _TB_ERAS = {
     "pre-2016": (331103020, 400791508),
     "2016-23": (401547449,),

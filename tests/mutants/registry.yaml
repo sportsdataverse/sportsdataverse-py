@@ -1648,3 +1648,154 @@
   note: >-
     A recovery the replay REVERSED is not the kicking team's ball: 301114003/3734 read it and scored
     EPA -1.289 against nflverse 0.399 (the one sample kickoff the kicking-team branch made worse).
+
+# --- Task 2.19: ESPN's out-of-place period labels (R832-10) and the type.text scoring overlay ---------
+- id: nfl-period-repair-applied
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            .pipe(_repair_espn_period)'
+  mutant: '            .pipe(lambda df: df)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "261022011"
+  expected: kill
+  note: >-
+    Without the repair 261022011's Q2 kickoff at 0:08 stays period 3 (nflverse qtr 2) and end_of_half
+    fires on three rows.
+
+- id: nfl-period-repair-lowers-only
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (period > period.shift(1))'
+  mutant: '        & (period != period.shift(1))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "260910005-2819"
+  expected: kill
+  note: >-
+    ESPN mislabels a play with a LATER period. Raising a sandwiched row is wrong 50 of 51 times on nfl-raw:
+    260910005/2819 (ESPN 3, nflverse 3) between two rows ESPN files as 4 would become 4.
+
+- id: nfl-period-repair-clock-runs-down
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (pl.col("_secs").shift(1) >= pl.col("_secs"))'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "281005009"
+  expected: kill
+  note: >-
+    A Q3 opening kickoff at 15:00 whose id sorts between two Q2 timeouts is an out-of-order id, not a
+    mislabel: without the clock check 281005009/1872 is lowered to period 2 (nflverse qtr 3). The check
+    also blocks 10 real mislabels on nfl-raw 2002-13 (2 wrong vs 10 right without it); kept so no row
+    moves away from nflverse.
+
+- id: nfl-period-repair-end-row-guard
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & ~admin.shift(-1)'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "270930001"
+  expected: kill
+  note: >-
+    270930001/1000 (a Q2 punt at 14:37) is followed in id order by Q1's late "End Period" row; without the
+    guard it is lowered to period 1 (nflverse qtr 2).
+
+- id: nfl-period-repair-season-floor
+  group: nfl-era-play-order
+  finding: R832-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        (pl.col("season") < ESPN_PERIOD_REPAIR_BEFORE)'
+  mutant: '        pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "401030749"
+  expected: kill
+  note: >-
+    From 2014 the pattern is an out-of-order id with ESPN's period right: 401030749/906 (2018) would be
+    lowered to period 1 (nflverse qtr 2).
+
+- id: nfl-epa-kicker-recovery-touchdown
+  group: nfl-era-play-order
+  finding: R831-6
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood'
+  mutant: '    def_score = pl.col("type.text").is_in(defense_score_vec) & td_stood'
+  test: tests/nfl/test_nfl_era_play_order.py -k "kicker-td"
+  expected: kill
+  note: >-
+    A kicking-team recovery returned for a TD is typed "Kickoff Return Touchdown"; without the clause it
+    scores the receiver's +6.92: 301107009/1557 EPA +6.302 against nflverse -7.672.
+
+- id: nfl-epa-offense-overlay-needs-td-to-stand
+  group: nfl-era-play-order
+  finding: EX-2.20-a
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood'
+  mutant: '    off_score = pl.col("type.text").is_in(offense_score_vec)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "short-kick or onside"
+  expected: kill
+  note: >-
+    The 2024 short-of-landing-zone and onside kicks ESPN types "Kickoff Return Touchdown" (td_play false,
+    task 2.20) score the receiver's touchdown again: EPA 5.134 / 5.748 against nflverse 0.926 / 1.419.
+
+- id: nfl-touchback-kickoff-ep-end-start-clock
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            half_sec_col="_ep_end_secs",'
+  mutant: '            half_sec_col="end.TimeSecsRem",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271223008"
+  expected: kill
+  note: >-
+    Owner ruling (2026-10-17): a touchback kickoff's EP_end is scored at its start clock. At ESPN's end
+    clock 271223008/1912 (start 0:23, end 1:08 from a misfiled timeout row) scores EPA +0.516 against
+    nflverse 0.000.
+
+- id: nfl-epa-defence-overlay-needs-td-to-stand
+  group: nfl-era-play-order
+  finding: R856-1
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood'
+  mutant: '    def_score = pl.col("type.text").is_in(defense_score_vec) | kicker_td'
+  test: tests/nfl/test_nfl_era_play_order.py -k "punt-td-nullified"
+  expected: kill
+  note: >-
+    A defence-typed score whose touchdown did not stand takes no scoring overlay: 281109021/3307, a punt
+    return touchdown nullified by holding (td_play false), would score the receiver's -6.92 again (EPA -5.833
+    against nflverse -1.690).
+
+- id: nfl-touchback-kickoff-start-clock-needs-a-touchback
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))'
+  mutant: '                        | pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271209010"
+  expected: kill
+  note: >-
+    The start clock is for touchbacks only. kickoff_tb alone also flags the 2006-08 bare "KickOff" rows
+    nflverse has as returns (R831-2): 271209010/3234 would score EPA 0.400 (nflverse 0.242, 0.354 at ESPN's
+    end clock); on the 644 sample games 1,865 such rows, sum |EPA - nflverse| 111.9 -> 120.3.
+
+- id: nfl-touchback-kickoff-text-evidence
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        pl.col("text").str.contains("(?i)touchback")'
+  mutant: '                        pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    A text touchback whose ESPN end clock is 0 has its end clamped to the 99, so only the text marks it:
+    without the check 400791544/2058 and 401127996/1913 keep the 0:00 end clock and the 99 (EPA -0.355 /
+    -0.335 against the owner model's 0).
+
+- id: nfl-touchback-kickoff-clamped-end-at-the-spot
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            yardline_col="_ep_end_y2e",'
+  mutant: '            yardline_col="end.yardsToEndzone",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
+    ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).

@@ -88,6 +88,7 @@ from sportsdataverse.nfl.ep_wp import (
 )
 from sportsdataverse.nfl.model_vars import (
     ESPN_FULL_KICK_TEXT_FROM,
+    ESPN_PERIOD_REPAIR_BEFORE,
     SPREAD_TIME_DECAY_EXPONENT,
     touchback_yardline_expr,
     defense_score_vec,
@@ -543,6 +544,38 @@ def _nfl_penalty_first_down() -> pl.Expr:
 def _end_of_game_row() -> pl.Expr:
     """ESPN's "End of the game." admin row by its text: the 2002-05 feeds ship it untyped (C-M2)."""
     return pl.col("text").str.contains(r"(?i)^\s*end of (the )?game").fill_null(False)
+
+
+def _repair_espn_period(plays: pl.DataFrame) -> pl.DataFrame:
+    """Sort one game's ESPN plays by id and undo ESPN's out-of-place ``period.number`` (R832-10).
+
+    Before ``ESPN_PERIOD_REPAIR_BEFORE`` ESPN sometimes files a play under a later period than the
+    plays on both sides of it while the clock keeps running down across all three (261022011's Q2
+    kickoff at 0:08 as period 3, so the half "ended" three times). Such a row takes its neighbours'
+    period. Only a later period is lowered, and never just before an "End ..." admin row: raising
+    a period, or lowering one ahead of a late quarter-end row, is what an out-of-order play id looks
+    like, and there ESPN's period is right (measured on nfl-raw against nflverse ``qtr``;
+    see the constant). ``clock.minutes`` / ``clock.seconds`` are the split clock strings.
+    """
+    secs = pl.col("clock.minutes").cast(pl.Int32, strict=False) * 60 + pl.col("clock.seconds").cast(
+        pl.Int32, strict=False
+    )
+    period = pl.col("period.number")
+    admin = pl.col("type.text").str.to_lowercase().str.starts_with("end ").fill_null(False)
+    out_of_place = (
+        (pl.col("season") < ESPN_PERIOD_REPAIR_BEFORE)
+        & (period.shift(1) == period.shift(-1))
+        & (period > period.shift(1))
+        & (pl.col("_secs").shift(1) >= pl.col("_secs"))
+        & (pl.col("_secs") >= pl.col("_secs").shift(-1))
+        & ~admin.shift(-1)
+    ).fill_null(False)
+    return (
+        plays.sort(pl.col("id").cast(pl.Int64), maintain_order=True)
+        .with_columns(_secs=secs)
+        .with_columns(pl.when(out_of_place).then(period.shift(1)).otherwise(period).alias("period.number"))
+        .drop("_secs")
+    )
 
 
 def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
@@ -1083,6 +1116,7 @@ class NFLPlayProcess(object):
             )
             .with_columns(pl.col("clock.mm").struct.rename_fields(["clock.minutes", "clock.seconds"]))
             .unnest("clock.mm")
+            .pipe(_repair_espn_period)
             .with_columns(
                 pl.col("clock.minutes").cast(pl.Int32),
                 pl.col("clock.seconds").cast(pl.Int32),
@@ -5248,12 +5282,44 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .drop("_kick_spot")
+            # A touchback runs no clock, so a touchback kickoff's EP_end is scored at its START clock,
+            # whatever ESPN's end clock says (owner ruling 2026-10-17, R856-2: 271223008/1912 takes
+            # its 1:08 end clock from a misordered timeout row). EPA only: end.TimeSecsRem, which the
+            # WP end view reads, keeps ESPN's clock. A touchback is a kickoff_tb row whose text says so
+            # or whose receiver next snaps at the season's touchback spot: kickoff_tb also flags the
+            # 2006-08 bare "KickOff" rows, most of them returns in nflverse (R831-2), and their return
+            # does run the clock (on the 644 sample games the flag alone moved 1,865 such rows,
+            # sum |EPA - nflverse| 111.9 -> 120.3). The next-snap half cannot tell a bare "KickOff" whose
+            # return or penalty ends exactly at the spot from a touchback (260917021/4272, in overtime):
+            # such a row takes the start clock too, a clock-only effect of at most ~0.005 EPA (R856-17).
+            .with_columns(
+                _ep_end_tb=(
+                    (pl.col("kickoff_tb") == True)
+                    & (
+                        pl.col("text").str.contains("(?i)touchback")
+                        | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))
+                    )
+                ).fill_null(False)
+            )
+            .with_columns(
+                _ep_end_secs=pl.when(pl.col("_ep_end_tb"))
+                .then(pl.col("start.TimeSecsRem"))
+                .otherwise(pl.col("end.TimeSecsRem")),
+                # A touchback whose ESPN end clock is 0 took the period-end clamp above (end at the 99),
+                # so at the start clock it would be scored as the receiver's ball on his own 1. It ends at
+                # the season's touchback spot, 1st & 10 (R856-15: 400791544/2058, 401127996/1913). Every
+                # other touchback keeps its end spot: the spot itself, a penalty enforced from it, or the
+                # 2024+ landing-zone touchback at the 20 its next snap places (R831-1). EP view only.
+                _ep_end_y2e=pl.when(pl.col("_ep_end_tb") & (pl.col("end.TimeSecsRem") <= 0) & (pl.col("period") < 5))
+                .then(touchback_yardline_expr(pl.col("season")))
+                .otherwise(pl.col("end.yardsToEndzone")),
+            )
         )
 
         X_ep_end = _espn_ep_features(
             play_df,
-            half_sec_col="end.TimeSecsRem",
-            yardline_col="end.yardsToEndzone",
+            half_sec_col="_ep_end_secs",
+            yardline_col="_ep_end_y2e",
             home_col="end.is_home",
             ydstogo_col="end.distance",
             down1_col="down_1_end",
@@ -5265,6 +5331,7 @@ class NFLPlayProcess(object):
         )
         _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
+        play_df = play_df.drop("_ep_end_tb", "_ep_end_secs", "_ep_end_y2e")
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
         # What the play would have been worth had the foul not been enforced:
