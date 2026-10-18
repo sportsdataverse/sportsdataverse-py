@@ -5289,7 +5289,9 @@ class NFLPlayProcess(object):
             # or whose receiver next snaps at the season's touchback spot: kickoff_tb also flags the
             # 2006-08 bare "KickOff" rows, most of them returns in nflverse (R831-2), and their return
             # does run the clock (on the 644 sample games the flag alone moved 1,865 such rows,
-            # sum |EPA - nflverse| 111.9 -> 120.3).
+            # sum |EPA - nflverse| 111.9 -> 120.3). The next-snap half cannot tell a bare "KickOff" whose
+            # return or penalty ends exactly at the spot from a touchback (260917021/4272, in overtime):
+            # such a row takes the start clock too, a clock-only effect of at most ~0.005 EPA (R856-17).
             .with_columns(
                 _ep_end_tb=(
                     (pl.col("kickoff_tb") == True)
