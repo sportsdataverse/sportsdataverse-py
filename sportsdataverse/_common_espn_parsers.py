@@ -135,12 +135,16 @@ def _empty_frame(return_as_pandas: bool = False):
 def _broadcast_names(comp: dict) -> str:
     """Every network name of a competition, feed order, deduped, ", "-joined ("ESPNU, ESPN+").
 
-    A broadcast entry without ``names`` contributes its ``market``; no broadcasts gives ``""``.
+    A broadcast entry without ``names`` contributes its ``market``; ``names`` sent as one string counts as
+    one name; anything that is not a string (a ``market`` object) is skipped. No broadcasts gives ``""``.
     """
     out: list = []
     for b in comp.get("broadcasts") or []:
-        for n in b.get("names") or [b.get("market")]:
-            if n and n not in out:
+        if not isinstance(b, dict):
+            continue
+        names = b.get("names")
+        for n in [names] if isinstance(names, str) else (names or [b.get("market")]):
+            if isinstance(n, str) and n and n not in out:
                 out.append(n)
     return ", ".join(out)
 

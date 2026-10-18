@@ -75,3 +75,13 @@ def test_no_broadcasts_is_an_empty_string_and_the_column_stays_text() -> None:
     assert _scoreboard_event_parsing(ev)["broadcast"] == ""
     nba = json.loads((ESPN / "scoreboard_nba.json").read_text("utf-8"))
     assert str(parse_scoreboard(nba).schema["broadcast"]) == "String"
+
+
+def test_a_string_names_counts_once_and_a_non_string_market_is_skipped() -> None:
+    def one(broadcasts: Any) -> str:
+        return _scoreboard_event_parsing({"id": "1", "competitions": [{"competitors": [], "broadcasts": broadcasts}]})[
+            "broadcast"
+        ]
+
+    assert one([{"names": "ESPN"}, {"names": ["ESPN", "ABC"]}]) == "ESPN, ABC"
+    assert one([{"market": {"id": "1", "type": "National"}}, {"names": ["TNT"]}, "junk"]) == "TNT"

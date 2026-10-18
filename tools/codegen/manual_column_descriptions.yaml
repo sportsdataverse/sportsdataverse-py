@@ -58474,6 +58474,8 @@ scoreboard:
   away_score: Away team's score. For cricket, the innings string.
   away_team: Away team display name.
   away_team_id: Away team ESPN id.
+  broadcast: Every network name of the competition in feed order, deduped and ", "-joined (an entry with no names gives
+    its market); "" when the game lists no broadcast.
   date: Match start timestamp (ISO 8601, UTC).
   event_id: ESPN event id for the match.
   home_score: Home team's score. For cricket, the innings string (e.g. '161/5 (18/20 ov, target 156)').
