@@ -1252,8 +1252,8 @@
   group: ncaa-era
   finding: B-L26
   file: sportsdataverse/wbb/wbb_ncaa_game_pbp.py
-  snippet: "else wbb_period_model(_utf8_id(season))"
-  mutant: "else wbb_period_model(str(season))"
+  snippet: "    sid = _utf8_id(season)\n"
+  mutant: "    sid = None if season is None else str(season)\n"
   test: tests/wbb/test_wbb_ncaa_bigballr_family.py -k float_season
   expected: kill
   note: season=2015.0 becomes "2015.0", binds quarters and a halves-era page parses to 0 rows (R853-5).
@@ -1275,3 +1275,12 @@
   test: tests/mbb/test_mbb_shots_period.py -k float_season
   expected: kill
   note: season=2015.0 becomes "2015.0", binds the quarters model and labels a halves-era shot quarter 3 (R853-6).
+- id: ncaa-wbb-pbp-missing-season-infers
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/wbb/wbb_ncaa_game_pbp.py
+  snippet: "infer_wbb_period_model if sid is None else"
+  mutant: "infer_wbb_period_model if season is None else"
+  test: tests/wbb/test_wbb_ncaa_bigballr_family.py -k missing_season
+  expected: kill
+  note: A NaN / "" season binds the quarters model instead of inferring the era, and a halves-era page parses to 0 rows (R853-7).
