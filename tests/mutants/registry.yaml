@@ -1293,3 +1293,12 @@
   test: tests/mbb/test_mbb_ncaa_game_pbp.py -k not_refetched
   expected: kill
   note: A page the format guard rejected gets the empty-result retry, a second stats.ncaa.org fetch and a second warning (R853-8).
+- id: ncaa-pbp-driver-failed-scrape-retried
+  group: ncaa-era
+  finding: B-GB-27
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: "        return _empty_pbp(), True\n"
+  mutant: "        return _empty_pbp(), False\n"
+  test: tests/mbb/test_mbb_ncaa_game_pbp.py -k retried_once
+  expected: kill
+  note: A fetch that raises is dropped after one try instead of getting R's tryCatch -> NULL retry (:1870-1878) (R887-1).
