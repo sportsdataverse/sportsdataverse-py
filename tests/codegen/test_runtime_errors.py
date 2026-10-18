@@ -551,6 +551,75 @@ _KNOWN: Dict[Tuple[str, str], str] = {
 }
 
 
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
+# vocabulary here, measured 2026-10-18 on the sync tree: ``{(runtime, case): what the case fails with}``
+# (``pytest.fail.Exception`` = DID NOT RAISE). Strict, so each case fails the day its family is fixed.
+_FAILED = pytest.fail.Exception
+_SYNC_204 = (
+    "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
+)
+_SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
+_SYNC_SCALAR = "EX-SYNC-c: a 2xx scalar JSON body is data or NoDataError, not AssetFetchError; task providers 4.1b runtime vocabulary"
+_SYNC_EMPTY = (
+    "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
+)
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
+    **{
+        (f"{rt}_runtime", "204"): (AssetFetchError, _SYNC_204)
+        for rt in (
+            "aba",
+            "atrium",
+            "bleague",
+            "bnxt",
+            "cba",
+            "cebl",
+            "easl",
+            "feb",
+            "genius",
+            "ha",
+            "ibba",
+            "ibba_segev",
+            "khl",
+            "kzs",
+            "lkl",
+            "magnus",
+            "nbl_rosetta",
+            "pleague",
+            "pleague_preciser",
+            "scb",
+            "tbf",
+            "tpbl",
+            "vhl",
+            "vtb_infobasket",
+            "vtb_league",
+        )
+    },
+    **{
+        (f"{rt}_runtime", "204"): (NoDataError, _SYNC_204)
+        for rt in ("acb", "esports", "fiba", "kbl", "khl_webcaster", "liiga", "shl", "sportality", "wjbl")
+    },
+    **{
+        (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
+    },
+    **{
+        (f"{rt}_runtime", "scalar_200"): (_FAILED, _SYNC_SCALAR)
+        for rt in (
+            "basketball",
+            "elh",
+            "euro_hockey",
+            "kbl",
+            "khl_webcaster",
+            "nationalleague",
+            "shl",
+            "sihf",
+            "sportality",
+        )
+    },
+    **{(f"{rt}_runtime", "scalar_200"): (NoDataError, _SYNC_SCALAR) for rt in ("esports", "liiga", "wjbl")},
+    ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
+}
+
+
 def _raises(stem: str, case: str) -> Any:
     """What an open case fails with today: a getter that returns where it should raise fails
     ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
@@ -573,6 +642,10 @@ def _matrix_params() -> List[Any]:
             marks = (
                 [pytest.mark.xfail(strict=True, raises=_raises(stem, case), reason=_KNOWN[stem, case])]
                 if (stem, case) in _KNOWN
+                else [
+                    pytest.mark.xfail(strict=True, raises=_SYNC_1018[stem, case][0], reason=_SYNC_1018[stem, case][1])
+                ]
+                if (stem, case) in _SYNC_1018
                 else []
             )
             out.append(pytest.param(mod, case, id=f"{stem}-{case}", marks=marks))
