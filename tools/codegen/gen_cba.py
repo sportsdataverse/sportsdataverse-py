@@ -89,7 +89,7 @@ def _paged() -> List[Dict[str, Any]]:
 def _player_list(extra: List[Dict[str, Any]]) -> Dict[str, Any]:
     return {
         "extra_params": [
-            _req("season", "season", SEASON),
+            _p("season", "season", SEASON, required=True, wire_transform="wire_season"),
             _p("match_type_id", "matchTypeId", MATCH_TYPE, default=1),
             _p(
                 "count_ranger",
@@ -165,7 +165,7 @@ ENDPOINTS: Dict[str, Entry] = {
         "GET /api/com-code-tables/getTeam",
         "The teams of one season as a select list: team id and the season's display name.",
         {
-            "extra_params": [_req("season", "season", SEASON)],
+            "extra_params": [_p("season", "season", SEASON, required=True, wire_transform="wire_season")],
             "fixed_params": {"type": 2},
             "example_args": {"season": 2026},
         },
@@ -356,7 +356,10 @@ ENDPOINTS: Dict[str, Entry] = {
         ("[].",),
         "GET /api/team-count/season",
         "Team counts of one season, keyed by match type.",
-        {"extra_params": [_req("season", "season", SEASON)], "example_args": {"season": 2026}},
+        {
+            "extra_params": [_p("season", "season", SEASON, required=True, wire_transform="wire_season")],
+            "example_args": {"season": 2026},
+        },
     ),
     "team_basic": (
         "/api/teams/basic-data",
@@ -758,6 +761,11 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     }
     if method == "post":
         doc["method"] = "post"
+        doc["body"] = "json"  # paging keys stay in the query string, every other field is the JSON body
+        doc["fixed_in_query"] = [k for k in doc.get("fixed_params", {}) if k in ("pageNumber", "pageSize", "startNum")]
+        for p in doc.get("extra_params", []):
+            if p["query_key"] in ("pageNumber", "pageSize", "startNum"):
+                p["in"] = "query"
     return doc
 
 

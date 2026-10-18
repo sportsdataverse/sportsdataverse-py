@@ -677,7 +677,7 @@ one). Fires only when all three guard conditions hold
 The fix (`:279-283`) removes the good event's sub-outs from the bad
 event's on-floor `players` (value-equality `not in` -- the Scala's
 `filterNot(good.players_out.toSet)`) and appends them to the bad
-event's `players_out` (order-preserving distinct` -- the Scala's
+event's `players_out` (order-preserving `_distinct` -- the Scala's
 `(bad.players_out ++ good.players_out).distinct`). The fix is **accepted
 only if** the result then passes `validate_lineup` (`:284-294`):
 on success the fixed event is returned as the sole `fixed` lineup and
@@ -1614,7 +1614,7 @@ it for the algorithm and column contract.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
-| `include_transition` | `bool` | `False` | Append the trans`/half` split surface. |
+| `include_transition` | `bool` | `False` | Append the `_trans`/`_half` split surface. |
 | `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

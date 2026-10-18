@@ -258,6 +258,15 @@ def parse_shl(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Seq
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl
             parse_shl({"uuid": "087a-087aTQv9u", "names": {"code": "FHC"}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_athlete_seasons` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_post_game_team_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_sites` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_ssgt_provider` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows: List[Any] = []
     if isinstance(raw, str) and re.fullmatch(r"[a-z_]{1,40}", raw.strip()):
@@ -291,6 +300,15 @@ def parse_shl_page(raw: Any, *, return_as_pandas: bool = False, columns: Optiona
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_page
             parse_shl_page({"uuid": "087a-087aTQv9u", "contact": [{"type": "facebook"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_athlete_details` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_athlete_profile` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_game_header` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_game_overview` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = [_flatten(raw)] if isinstance(raw, dict) and raw else []
     return _finish(_frame(rows), columns, return_as_pandas)
@@ -319,6 +337,15 @@ def parse_shl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_schedule
             parse_shl_schedule({"date": "2026-10-10", "games": [{"uuid": "f0qxq2l2lo"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_last_game_day` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_next_game_day` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_team_played_games` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     games: List[Any] = []
     if isinstance(raw, dict):
@@ -385,6 +412,12 @@ def parse_shl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_pbp
             parse_shl_pbp([{"type": "shot", "player": {"playerId": "3622"}, "locationX": 12}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_pbp` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = []
     for ev in raw if isinstance(raw, list) else []:
@@ -431,6 +464,13 @@ def parse_shl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_player_box
             parse_shl_player_box({"stats": {"homeTeamValue": [{"G": 1, "info": {"playerId": 7}}]}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_boxscore` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_player_box` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows: List[Dict[str, Any]] = []
     stats: set = set()
@@ -480,6 +520,12 @@ def parse_shl_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_team_stats
             parse_shl_team_stats({"home": {"teamId": "FHC", "statistics": [
                 {"period": 0, "parsedTotalStatistics": [{"key": "G", "value": 2}]}]}})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_team_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows: List[Dict[str, Any]] = []
     stat_keys: List[str] = []
@@ -523,6 +569,12 @@ def parse_shl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_standings
             parse_shl_standings({"season": 2025, "leagueStandings": [{"id": "SAIK", "rank": 1, "T": 12}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _dict(raw)
     start = body.get("season")
@@ -582,6 +634,14 @@ def parse_shl_stats_info(raw: Any, *, return_as_pandas: bool = False, columns: O
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_stats_info
             parse_shl_stats_info([{"stats": [{"GP": 52, "TPPG": "1.29", "info": {"uuid": "u1"}}],
                                    "players": {"2427": {"uuid": "u1"}}}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_athlete_career` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_athlete_game_log` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.shl.shl_stats_info` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _body(raw)
     if not isinstance(body, dict):
@@ -627,6 +687,11 @@ def parse_shl_player_crosswalk(
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_player_crosswalk
             parse_shl_player_crosswalk([{"players": {"2427": {"uuid": "qQ9-349c7WDv6"}}}])
+
+    See Also:
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _body(raw)
     players = body.get("players") if isinstance(body, dict) else None
@@ -661,6 +726,12 @@ def parse_shl_layout(raw: Any, *, return_as_pandas: bool = False, columns: Optio
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_layout
             parse_shl_layout([{"seasonSeriesGameTypeTeams": [{"ssgtUuid": "iuzqg7dqk9",
                 "season": {"code": "2025"}, "gameType": {"code": "regular"}}]}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_layout_info` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _body(raw)
     ssgts = body.get("seasonSeriesGameTypeTeams") if isinstance(body, dict) else None
@@ -710,6 +781,12 @@ def parse_shl_filter(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_filter
             parse_shl_filter({"season": [{"uuid": "xs4m9qupsi", "code": "2025"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_season_filter` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _dict(raw)
     rows = []
@@ -750,6 +827,12 @@ def parse_shl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_roster
             parse_shl_roster([{"positionCode": "GK", "players": [{"uuid": "qd1-1JVKWgydZ"}]}])
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_roster` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows = []
     for group in raw if isinstance(raw, list) else []:
@@ -795,6 +878,12 @@ def parse_shl_h2h(raw: Any, *, return_as_pandas: bool = False, columns: Optional
 
             from sportsdataverse.hockey.shl.shl_parsers import parse_shl_h2h
             parse_shl_h2h({"effectiveSsgtUuid": "qa98unlbd6", "players": [{"uuid": "qQ9-9d31rLEXi"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_player_h2h` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     body = _dict(raw)
     rows = [

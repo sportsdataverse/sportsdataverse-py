@@ -42,10 +42,10 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
-| [on3_industry_player_rankings](additional/on3-recruit-database.md#on3_industry_player_rankings) | On3 Industry Comparison player rankings (**deprecated** next/data` scrape). |
-| [on3_industry_team_rankings](additional/on3-recruit-database.md#on3_industry_team_rankings) | On3 Industry Comparison team rankings (**deprecated** next/data` scrape). |
-| [on3_player_rankings](additional/on3-recruit-database.md#on3_player_rankings) | On3 player rankings for a class year (**deprecated** next/data` scrape). |
-| [on3_team_rankings](additional/on3-recruit-database.md#on3_team_rankings) | On3 team recruiting-class rankings (**deprecated** next/data` scrape). |
+| [on3_industry_player_rankings](additional/on3-recruit-database.md#on3_industry_player_rankings) | On3 Industry Comparison player rankings (**deprecated** `_next/data` scrape). |
+| [on3_industry_team_rankings](additional/on3-recruit-database.md#on3_industry_team_rankings) | On3 Industry Comparison team rankings (**deprecated** `_next/data` scrape). |
+| [on3_player_rankings](additional/on3-recruit-database.md#on3_player_rankings) | On3 player rankings for a class year (**deprecated** `_next/data` scrape). |
+| [on3_team_rankings](additional/on3-recruit-database.md#on3_team_rankings) | On3 team recruiting-class rankings (**deprecated** `_next/data` scrape). |
 
 ## Yahoo Sports Shangrila
 

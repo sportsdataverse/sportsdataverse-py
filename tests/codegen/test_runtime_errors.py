@@ -440,9 +440,19 @@ def test_the_two_errors_stay_distinct():
 # --------------------------------------------------------------------------------------
 
 _PKG = Path(__file__).resolve().parents[2] / "sportsdataverse"
-_RUNTIMES = sorted(
+# ``*_runtime.py`` modules that define no ``_get``: main's per-competition factories and id crosswalks (#862).
+# test_non_getter_runtimes_have_no_getter fails the day one of them grows a ``_get``.
+_NOT_GETTERS = {
+    "atrium_competitions_runtime",
+    "fiba_competitions_runtime",
+    "genius_competitions_runtime",
+    "ha_crosswalk_runtime",
+    "khl_crosswalk_runtime",
+}
+_ALL_RUNTIMES = sorted(
     p.relative_to(_PKG.parent).with_suffix("").as_posix().replace("/", ".") for p in _PKG.rglob("*_runtime.py")
 )
+_RUNTIMES = [m for m in _ALL_RUNTIMES if m.rsplit(".", 1)[1] not in _NOT_GETTERS]
 _JSON_CT = "application/json"
 _CASES = {  # case -> (status, body, content type, the vocabulary's answer)
     "400": (400, '{"message": "bad request"}', _JSON_CT, ValueError),
@@ -456,7 +466,39 @@ _CASES = {  # case -> (status, body, content type, the vocabulary's answer)
     "scalar_200": (200, "42", _JSON_CT, AssetFetchError),
 }
 # Only the arguments a getter cannot run without; everything else is called as ``_get(url)``.
-_URL = {"nba_stats_runtime": "https://stats.nba.com/stats/x", "wnba_stats_runtime": "https://stats.wnba.com/stats/x"}
+_URL = {
+    "nba_stats_runtime": "https://stats.nba.com/stats/x",
+    "wnba_stats_runtime": "https://stats.wnba.com/stats/x",
+    # Route-checked getters (main 10-17/10-18 families): each refuses a path its family does not wrap with
+    # ValueError before any fetch, so it is called with one route (the endpoint YAML's path filled from its
+    # ``example_args``) that reaches the transport.
+    "aba_runtime": "https://www.aba-liga.com/match/6/2026/Overview",
+    "acb_runtime": "https://api2.acb.com/api/matchdata/MatchHeader/match-header",
+    "atrium_runtime": "https://embed-api.eui.connect.sportradar.com/v1/embed/14/fixtures",
+    "bleague_runtime": "https://b-league.s3.amazonaws.com/web_json/contexts/504734",
+    "bnxt_runtime": "https://bnxt.sportpress.info/api/v1/server-config",
+    "cba_runtime": "https://data-server.cbaleague.com/api/com-code-tables/getSeason",
+    "cebl_runtime": "https://api.data.cebl.ca/seasons/",
+    "easl_runtime": "https://easl.joshricha.com/api/v1/health",
+    "feb_runtime": "https://intrafeb.feb.es/LiveStats.API/api/v1/TeamStats/2535725",
+    "fiba_runtime": "https://www.fiba.basketball/en/games/100720",
+    "genius_runtime": "https://fibalivestats.dcd.shared.geniussports.com/data/2902690/data.json",
+    "ha_runtime": "https://hockeyallsvenskan.se/pages/matcher",
+    "ibba_runtime": "https://basket.co.il/ws/ws.asmx/Configuration",
+    "ibba_segev_runtime": "https://stats.segevstats.com/realtimestat_heb/api/",
+    "kbl_runtime": "https://api.kbl.or.kr/season/list",
+    "kzs_runtime": "https://api.kzs.si/api/v1/public/seasons/",
+    "lkl_runtime": "https://lkl.lt/api/livestream/boxscore/11446",
+    "nbl_rosetta_runtime": "https://prod.rosetta.nbl.com.au/get/nbl/seasons",
+    "pleague_preciser_runtime": "https://api.preciser.io/v1/chart-data/id/e6f98675-3e5b-11ed-949e-5d17350689cf",
+    "pleague_runtime": "https://pleagueofficial.com/schedule/2025",
+    "tbf_runtime": "https://miniappapi.tbf.org.tr/webapi-service/api/Season/get-seasons",
+    "tpbl_runtime": "https://api.tpbl.basketball/api/seasons",
+    "vhl_runtime": "https://www.vhlru.ru/en/calendar/2026/0/",
+    "vtb_infobasket_runtime": "https://org.infobasket.su/Comp/GetSeasonsForTag",
+    "vtb_league_runtime": "https://api.vtb-league.com/v2/leagues",
+    "wjbl_runtime": "https://api.wjbl.01core.app/api/leagues",
+}
 _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "kenpom_runtime": lambda: {"session": requests.Session()},  # a session skips the subscription login
     "nfl_api_runtime": lambda: {"headers": {}},  # no token mint
@@ -464,6 +506,11 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "pff_runtime": lambda: {"cookies": {"_premium_key": "PK"}},
     "pff_api_runtime": lambda: {"api_key": "k"},
     "sports247_runtime": lambda: {"auth": False},  # no guest-JWT mint
+    # the route's required query parameters (each getter refuses the call without them before any fetch)
+    "acb_runtime": lambda: {"params": {"matchId": 105401}},
+    "fiba_runtime": lambda: {"params": {"comp": 208182}},
+    "ibba_runtime": lambda: {"params": {"cYear": 2026}},
+    "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
 _SCALAR = "B-GB-16: a 2xx scalar JSON body is returned as data; task 4.1 (_json_body: dict or list only)"
@@ -504,6 +551,75 @@ _KNOWN: Dict[Tuple[str, str], str] = {
 }
 
 
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
+# vocabulary here, measured 2026-10-18 on the sync tree: ``{(runtime, case): what the case fails with}``
+# (``pytest.fail.Exception`` = DID NOT RAISE). Strict, so each case fails the day its family is fixed.
+_FAILED = pytest.fail.Exception
+_SYNC_204 = (
+    "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
+)
+_SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
+_SYNC_SCALAR = "EX-SYNC-c: a 2xx scalar JSON body is data or NoDataError, not AssetFetchError; task providers 4.1b runtime vocabulary"
+_SYNC_EMPTY = (
+    "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
+)
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
+    **{
+        (f"{rt}_runtime", "204"): (AssetFetchError, _SYNC_204)
+        for rt in (
+            "aba",
+            "atrium",
+            "bleague",
+            "bnxt",
+            "cba",
+            "cebl",
+            "easl",
+            "feb",
+            "genius",
+            "ha",
+            "ibba",
+            "ibba_segev",
+            "khl",
+            "kzs",
+            "lkl",
+            "magnus",
+            "nbl_rosetta",
+            "pleague",
+            "pleague_preciser",
+            "scb",
+            "tbf",
+            "tpbl",
+            "vhl",
+            "vtb_infobasket",
+            "vtb_league",
+        )
+    },
+    **{
+        (f"{rt}_runtime", "204"): (NoDataError, _SYNC_204)
+        for rt in ("acb", "esports", "fiba", "kbl", "khl_webcaster", "liiga", "shl", "sportality", "wjbl")
+    },
+    **{
+        (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
+    },
+    **{
+        (f"{rt}_runtime", "scalar_200"): (_FAILED, _SYNC_SCALAR)
+        for rt in (
+            "basketball",
+            "elh",
+            "euro_hockey",
+            "kbl",
+            "khl_webcaster",
+            "nationalleague",
+            "shl",
+            "sihf",
+            "sportality",
+        )
+    },
+    **{(f"{rt}_runtime", "scalar_200"): (NoDataError, _SYNC_SCALAR) for rt in ("esports", "liiga", "wjbl")},
+    ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
+}
+
+
 def _raises(stem: str, case: str) -> Any:
     """What an open case fails with today: a getter that returns where it should raise fails
     ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
@@ -526,6 +642,10 @@ def _matrix_params() -> List[Any]:
             marks = (
                 [pytest.mark.xfail(strict=True, raises=_raises(stem, case), reason=_KNOWN[stem, case])]
                 if (stem, case) in _KNOWN
+                else [
+                    pytest.mark.xfail(strict=True, raises=_SYNC_1018[stem, case][0], reason=_SYNC_1018[stem, case][1])
+                ]
+                if (stem, case) in _SYNC_1018
                 else []
             )
             out.append(pytest.param(mod, case, id=f"{stem}-{case}", marks=marks))
@@ -594,6 +714,14 @@ def test_every_getter_module_is_a_discovered_runtime():
     assert named and named <= set(_RUNTIMES), sorted(named - set(_RUNTIMES))
 
 
+def test_non_getter_runtimes_have_no_getter():
+    import importlib
+
+    skipped = [m for m in _ALL_RUNTIMES if m.rsplit(".", 1)[1] in _NOT_GETTERS]
+    assert len(skipped) == len(_NOT_GETTERS)
+    assert [m for m in skipped if hasattr(importlib.import_module(m), "_get")] == []
+
+
 @pytest.mark.parametrize(("mod", "case"), _matrix_params())
 def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
     import importlib
@@ -611,15 +739,27 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
     if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
         kwargs["num_retries"] = 0
     url = _URL.get(stem, "https://example.test/x")
+
+    def call() -> Any:
+        try:
+            return get(url, **kwargs)
+        except TypeError as exc:
+            # ``num_retries`` only speeds the matrix up; the contract is the vocabulary. A getter whose
+            # ``**kwargs`` guard refuses every keyword (aba, acb, cba, ... vhl) raises TypeError naming it
+            # before any fetch, so it is called without it.
+            if "num_retries" not in kwargs or "num_retries" not in str(exc):
+                raise
+            return get(url, **{k: v for k, v in kwargs.items() if k != "num_retries"})
+
     with warnings.catch_warnings():
         # nba_stats warns on a 204; tests/nba/test_nba_stats_runtime.py asserts that warning.
         warnings.filterwarnings("ignore", category=EmptyResponseWarning)
         if stem in _HTML_IS_DATA and case in ("html_200", "scalar_200"):
-            assert get(url, **kwargs) == body
+            assert call() == body
         elif want == "nothing":
-            assert get(url, **kwargs) in ({}, [], "")
+            assert call() in ({}, [], "")
         else:
             with pytest.raises(want):
-                get(url, **kwargs)
+                call()
     assert calls, f"{mod}._get never reached the transport"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
