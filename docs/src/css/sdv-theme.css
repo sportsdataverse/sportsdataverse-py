@@ -274,6 +274,16 @@ html[data-theme='light'] .navbar__title {
   }
 }
 
+/*
+ * Category-index cards: Docusaurus's DocCard puts Infima's `text--truncate` (one line, ellipsis) on the card
+ * title and description, so every description ended in "…" at every width. Let both wrap in full.
+ */
+a.card .text--truncate {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
 /* ---- footer: the same navy, a hairline where it meets a navy page ---- */
 .footer--dark {
   --ifm-footer-background-color: var(--sdv-navy);
