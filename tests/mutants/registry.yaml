@@ -942,7 +942,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: '    if not isinstance(body, (dict, list)):'
   mutant: '    if False:'
-  test: tests/codegen/test_runtime_errors.py -k scalar_body
+  test: tests/test_runtime_body_vocabulary.py -k scalar_body
   expected: kill
   note: returning the parsed scalar (the original) is data reaching a parser
 
@@ -952,7 +952,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: '    code = _error_envelope_code(body)'
   mutant: '    code = None'
-  test: tests/codegen/test_runtime_errors.py -k error_envelope
+  test: tests/test_runtime_body_vocabulary.py -k error_envelope
   expected: kill
 
 - id: text-body-accepts-html-page
@@ -1230,7 +1230,7 @@
         if isinstance(body, str) and _string_route(url):
             return body
   mutant: '    pass'
-  test: tests/codegen/test_runtime_errors.py -k bare_iso_string
+  test: tests/test_runtime_body_vocabulary.py -k bare_iso_string
   expected: kill
   note: R880-1, OpenLigaDB's /getlastchangedate answers a bare ISO string by design
 
@@ -1250,7 +1250,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: 'text.lstrip("\ufeff \t\r\n").startswith("<")'
   mutant: 'text.startswith("<")'
-  test: tests/codegen/test_runtime_errors.py -k whitespace_or_a_bom
+  test: tests/test_runtime_body_vocabulary.py -k whitespace_or_a_bom
   expected: kill
   note: R880-3
 
@@ -1260,7 +1260,7 @@
   file: sportsdataverse/dl_utils.py
   snippet: '                    if _is_data_body(url, body):'
   mutant: '                    if True:'
-  test: tests/codegen/test_runtime_errors.py -k never_cached
+  test: tests/test_runtime_body_vocabulary.py -k never_cached
   expected: kill
   note: R880-4, a cached 2xx error envelope or scalar re-raised for the whole TTL
 
@@ -1270,9 +1270,30 @@
   file: sportsdataverse/errors.py
   snippet: 'and 400 <= code <= 599:'
   mutant: 'and code >= 400:'
-  test: tests/codegen/test_runtime_errors.py -k business_code
+  test: tests/test_runtime_body_vocabulary.py -k business_code
   expected: kill
   note: R880-5
+
+# --- review-880 round 3 (R880-6) -----------------------------------------------------------------------
+- id: string-route-path-only
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/errors.py
+  snippet: 'return f"{parts.netloc}{parts.path}".startswith(_STRING_ROUTES)'
+  mutant: 'return parts.path.startswith("/getlastchangedate/")'
+  test: tests/test_runtime_body_vocabulary.py -k route_only
+  expected: kill
+  note: R880-6a, the string allowance is OpenLigaDB's host and path, not that path on any host
+
+- id: data-body-accepts-any-string
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/errors.py
+  snippet: '        return _string_route(url)'
+  mutant: '        return True'
+  test: tests/test_runtime_body_vocabulary.py -k never_cached
+  expected: kill
+  note: R880-6b, a JSON string from any other route is refused and must not be cached
 
 # --- Task 4.7: secrets never cached or logged (A-M8, A-L64, A-L65, A-L71) -------------------------
 - id: redact-userinfo-password
