@@ -26,6 +26,7 @@ from __future__ import annotations
 from sportsdataverse.hockey.ha import ha as _api
 from sportsdataverse.hockey.ha import ha_parsers as _parsers
 from sportsdataverse.hockey.ha.ha import *  # noqa: F401,F403
+from sportsdataverse.hockey.ha.ha_crosswalk_runtime import ha_player_crosswalk
 from sportsdataverse.hockey.ha.ha_parsers import *  # noqa: F401,F403
 
-__all__ = [*_api.__all__, *_parsers.__all__]
+__all__ = [*_api.__all__, *_parsers.__all__, "ha_player_crosswalk"]

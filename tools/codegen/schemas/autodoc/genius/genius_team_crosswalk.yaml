@@ -1,0 +1,10 @@
+schema: genius_team_crosswalk
+kind: dataframe
+hand_authored: true
+columns:
+- name: team_uuid
+  type: character
+  description: ''
+- name: genius_team_id
+  type: integer
+  description: ''

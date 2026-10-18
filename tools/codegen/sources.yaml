@@ -962,6 +962,7 @@ categories:
     modules:
       - sportsdataverse._common_crosswalk_basketball
       - sportsdataverse._crosswalk_basketball_sources
+      - sportsdataverse.basketball.basketball_crosswalk
       - sportsdataverse.cfb.cfb_crosswalk
       - sportsdataverse.mbb.mbb_crosswalk
       - sportsdataverse.mbb.mbb_ncaa_espn_crosswalk
