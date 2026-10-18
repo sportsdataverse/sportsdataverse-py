@@ -1,0 +1,51 @@
+{
+  "tracks": [
+    {
+      "tcode": "06",
+      "tname": "KT",
+      "tracks": [
+        4,
+        6,
+        3
+      ],
+      "tlogo": "kt"
+    },
+    {
+      "tcode": "10",
+      "tname": "현대모비스",
+      "tracks": [
+        7,
+        5,
+        4
+      ],
+      "tlogo": "hd"
+    },
+    {
+      "tcode": "16",
+      "tname": "DB",
+      "tracks": [
+        1,
+        4,
+        6
+      ],
+      "tlogo": "db"
+    }
+  ],
+  "rounds": [
+    {
+      "fromDate": "20241019",
+      "toDate": "20241110",
+      "gameRound": 1
+    },
+    {
+      "fromDate": "20241111",
+      "toDate": "20241217",
+      "gameRound": 2
+    },
+    {
+      "fromDate": "20241218",
+      "toDate": "20250111",
+      "gameRound": 3
+    }
+  ]
+}

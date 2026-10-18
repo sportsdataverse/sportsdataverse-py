@@ -1,0 +1,23 @@
+[
+  {
+    "away_team": {
+      "color": "#000000",
+      "english_name": "Dreamers",
+      "id": "e869743f-3d88-11ed-925e-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e869743f-3d88-11ed-925e-7f44ba46b0b1.png",
+      "name": "夢想家"
+    },
+    "game_id": "131657f4-e8d5-11ed-b647-3f2f4ff04266",
+    "home_team": {
+      "color": "#ffe600",
+      "english_name": "Kings",
+      "id": "e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e86b0ecc-3d88-11ed-bed5-7f44ba46b0b1.png",
+      "name": "國王"
+    },
+    "injury_report": {
+      "away": null,
+      "home": null
+    }
+  }
+]

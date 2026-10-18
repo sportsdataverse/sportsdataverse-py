@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_slug
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: contact_info
+  type: character
+- description: ''
+  name: externals
+  type: character
+- description: ''
+  name: country_code
+  type: character
+- description: ''
+  name: country_name
+  type: character
+- description: ''
+  name: current_venue_capacity
+  type: integer
+- description: ''
+  name: general_info
+  type: character
+- description: ''
+  name: url
+  type: character
+- description: ''
+  name: locality
+  type: character
+- description: ''
+  name: logo
+  type: character
+- description: ''
+  name: short_name
+  type: character
+- description: ''
+  name: teamtournamentstats
+  type: character
+kind: dataframe
+schema: liiga_teams

@@ -1,0 +1,289 @@
+{
+  "comparison": {
+    "shooting": [
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "29/54",
+          "percentage": "53.7%",
+          "graph_length": "53.7",
+          "winning": true
+        },
+        "away": {
+          "value": "21/49",
+          "percentage": "42.9%",
+          "graph_length": "42.9",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "6/21",
+          "percentage": "28.6%",
+          "graph_length": "28.6",
+          "winning": false
+        },
+        "away": {
+          "value": "7/24",
+          "percentage": "29.2%",
+          "graph_length": "29.2",
+          "winning": true
+        }
+      },
+      {
+        "label": "Baudų metimai",
+        "home": {
+          "value": "12/21",
+          "percentage": "57.1%",
+          "graph_length": "57.1",
+          "winning": false
+        },
+        "away": {
+          "value": "22/31",
+          "percentage": "71.0%",
+          "graph_length": "71.0",
+          "winning": true
+        }
+      }
+    ],
+    "main": [
+      {
+        "label": "Atkovoti kamuoliai",
+        "home": {
+          "value": 51,
+          "graph_length": 57.3,
+          "winning": true
+        },
+        "away": {
+          "value": 38,
+          "graph_length": 42.7,
+          "winning": false
+        }
+      },
+      {
+        "label": "Rezultatyvūs perdavimai",
+        "home": {
+          "value": 12,
+          "graph_length": 37.5,
+          "winning": false
+        },
+        "away": {
+          "value": 20,
+          "graph_length": 62.5,
+          "winning": true
+        }
+      },
+      {
+        "label": "Perimti kamuoliai",
+        "home": {
+          "value": 5,
+          "graph_length": 31.25,
+          "winning": false
+        },
+        "away": {
+          "value": 11,
+          "graph_length": 68.75,
+          "winning": true
+        }
+      }
+    ],
+    "all": [
+      {
+        "label": "Metimai iš žaidimo",
+        "home": {
+          "value": "35/75",
+          "percentage": "46.7%",
+          "graph_length": "46.7",
+          "winning": true
+        },
+        "away": {
+          "value": "28/73",
+          "percentage": "38.4%",
+          "graph_length": "38.4",
+          "winning": false
+        }
+      },
+      {
+        "label": "Dvitaškiai metimai",
+        "home": {
+          "value": "29/54",
+          "percentage": "53.7%",
+          "graph_length": "53.7",
+          "winning": true
+        },
+        "away": {
+          "value": "21/49",
+          "percentage": "42.9%",
+          "graph_length": "42.9",
+          "winning": false
+        }
+      },
+      {
+        "label": "Tritaškiai metimai",
+        "home": {
+          "value": "6/21",
+          "percentage": "28.6%",
+          "graph_length": "28.6",
+          "winning": false
+        },
+        "away": {
+          "value": "7/24",
+          "percentage": "29.2%",
+          "graph_length": "29.2",
+          "winning": true
+        }
+      }
+    ],
+    "biggest_leads": {
+      "home": 5,
+      "away": 8
+    },
+    "leads_stats": [
+      {
+        "label": "Rezultato pasikeitimai",
+        "value": 19
+      },
+      {
+        "label": "Rezultato lyginimas",
+        "value": 15
+      },
+      {
+        "label": "Ilgiausia atkarpa",
+        "value": 8
+      }
+    ]
+  },
+  "leads": {
+    "1": [
+      {
+        "diff": 0,
+        "clock": "10:00:00",
+        "score_1": "0",
+        "score_2": "0",
+        "column_height": 0
+      },
+      {
+        "diff": 0,
+        "clock": "09:08:00",
+        "score_1": "2",
+        "score_2": "2",
+        "column_height": 0
+      },
+      {
+        "diff": 0,
+        "clock": "08:10:00",
+        "score_1": "4",
+        "score_2": "4",
+        "column_height": 0
+      }
+    ],
+    "2": [
+      {
+        "diff": 3,
+        "clock": "10:00:00",
+        "score_1": "23",
+        "score_2": "20",
+        "column_height": 10
+      },
+      {
+        "diff": 3,
+        "clock": "09:05:00",
+        "score_1": "25",
+        "score_2": "22",
+        "column_height": 10
+      },
+      {
+        "diff": -2,
+        "clock": "08:00:00",
+        "score_1": "25",
+        "score_2": "27",
+        "column_height": 6.666666666666667
+      }
+    ],
+    "3": [
+      {
+        "diff": -2,
+        "clock": "10:00:00",
+        "score_1": "40",
+        "score_2": "42",
+        "column_height": 6.666666666666667
+      },
+      {
+        "diff": 0,
+        "clock": "09:01:00",
+        "score_1": "42",
+        "score_2": "42",
+        "column_height": 0
+      },
+      {
+        "diff": 1,
+        "clock": "08:14:00",
+        "score_1": "43",
+        "score_2": "42",
+        "column_height": 3.3333333333333335
+      }
+    ],
+    "4": [
+      {
+        "diff": -6,
+        "clock": "10:00:00",
+        "score_1": "53",
+        "score_2": "59",
+        "column_height": 20
+      },
+      {
+        "diff": -5,
+        "clock": "09:00:00",
+        "score_1": "56",
+        "score_2": "61",
+        "column_height": 16.666666666666664
+      },
+      {
+        "diff": -4,
+        "clock": "08:03:00",
+        "score_1": "59",
+        "score_2": "63",
+        "column_height": 13.333333333333334
+      }
+    ],
+    "5": [
+      {
+        "diff": 0,
+        "clock": "05:00:00",
+        "score_1": "77",
+        "score_2": "77",
+        "column_height": 0
+      },
+      {
+        "diff": 2,
+        "clock": "04:05:00",
+        "score_1": "79",
+        "score_2": "77",
+        "column_height": 6.666666666666667
+      },
+      {
+        "diff": -1,
+        "clock": "03:00:00",
+        "score_1": "79",
+        "score_2": "80",
+        "column_height": 3.3333333333333335
+      }
+    ]
+  },
+  "maxDiff": 15,
+  "steps": [
+    {
+      "value": 15,
+      "label": 15
+    },
+    {
+      "value": 10,
+      "label": 10
+    },
+    {
+      "value": 5,
+      "label": 5
+    }
+  ]
+}

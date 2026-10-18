@@ -1,0 +1,10 @@
+[
+ "/BoxScore/{gameId}",
+ "/KeyFacts/{gameId}",
+ "/Ranking/{gameId}",
+ "/ShotChart/{gameId}",
+ "/TeamStats/{gameId}",
+ "/calendario.aspx",
+ "/overview",
+ "/resultados.aspx"
+]

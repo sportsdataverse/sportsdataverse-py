@@ -1,0 +1,66 @@
+{
+  "homePlayers": [
+    {
+      "playerId": 393433,
+      "number": "9",
+      "cnAlias": "易建联",
+      "upTime": 2313,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 2,
+      "fieldGoalsAtRimMade": 10
+    },
+    {
+      "playerId": 100002140,
+      "number": "44",
+      "cnAlias": "尼克尔森",
+      "upTime": 2238,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 4,
+      "fieldGoalsAtRimMade": 20
+    },
+    {
+      "playerId": 690960,
+      "number": "11",
+      "cnAlias": "周鹏",
+      "upTime": 2111,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 6
+    }
+  ],
+  "visitingPlayers": [
+    {
+      "playerId": 907725,
+      "number": "12",
+      "cnAlias": "孟达",
+      "upTime": 2190,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 2
+    },
+    {
+      "playerId": 473976,
+      "number": "15",
+      "cnAlias": "哈达迪",
+      "upTime": 2169,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 2,
+      "fieldGoalsAtRimMade": 10
+    },
+    {
+      "playerId": 960548,
+      "number": "13",
+      "cnAlias": "左朕年",
+      "upTime": 1538,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 4
+    }
+  ]
+}

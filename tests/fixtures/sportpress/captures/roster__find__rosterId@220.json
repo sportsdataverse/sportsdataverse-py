@@ -1,0 +1,111 @@
+{
+  "data": {
+    "id": 220,
+    "competition_team_id": 3,
+    "jersey": "9",
+    "weight": null,
+    "height": 178,
+    "active": true,
+    "player_position": {
+      "id": 2,
+      "name": "shooting_guard"
+    },
+    "player": {
+      "id": 219,
+      "birthdate": "2000-12-27",
+      "facebook": null,
+      "twitter": null,
+      "instagram": null,
+      "first_name": "Niels",
+      "last_name": "Van Den Eynde",
+      "description": null,
+      "nationality_code": "BEL",
+      "profile_image": {
+        "name": "Van Den Eynde",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/B/2/B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/B/2/small-B2Lj5gloVt35wqgiHA41AwxB11788806715.png",
+          "medium": "https://bnxt.sportpress.info/storage/B/2/medium-B2Lj5gloVt35wqgiHA41AwxB11788806715.png"
+        }
+      },
+      "created_at": "2022-08-10"
+    },
+    "competition_team": {
+      "id": 3,
+      "competition_id": 1,
+      "uu_team_id": 3,
+      "name": "Telenet Giants Antwerp",
+      "short_name": "ANT",
+      "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+      "club": {
+        "id": 1,
+        "name": "Belgium"
+      },
+      "team_logo": {
+        "name": "Telenet Giants Antwerp",
+        "description": null,
+        "alt": null,
+        "keywords": null,
+        "public_url": "https://bnxt.sportpress.info/storage/w/k/wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+        "thumbnails": {
+          "small": "https://bnxt.sportpress.info/storage/w/k/small-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png",
+          "medium": "https://bnxt.sportpress.info/storage/w/k/medium-wkCBLx0MZx9Z9V4wKcmhdN7pU1663600620.png"
+        }
+      },
+      "team_image": null,
+      "competition": {
+        "id": 1,
+        "season": 2022,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2021-2022",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2022-08-10"
+      },
+      "staffs": [],
+      "statistics": [],
+      "created_at": "2022-08-10"
+    },
+    "tagged_images": [],
+    "created_at": "2022-08-10",
+    "lastGameStatistics": {
+      "starter": true,
+      "minute": 18,
+      "foul": 1,
+      "defensive_foul": 4,
+      "dunk_made": 0,
+      "dunk_all": 0,
+      "dunk_percent": 0,
+      "two_point_made": 1,
+      "two_point_all": 2,
+      "two_point_percent": 50,
+      "three_point_made": 1,
+      "three_point_all": 2,
+      "three_point_percent": 50,
+      "throw_made": 2,
+      "throw_all": 4,
+      "throw_percent": 50,
+      "free_throw_made": 2,
+      "free_throw_all": 2,
+      "free_throw_percent": 100,
+      "offensive_rebound": 0,
+      "defensive_rebound": 1,
+      "total_rebound": 1,
+      "block": 0,
+      "block_against": 0,
+      "turnover": 2,
+      "steal": 0,
+      "assist": 5,
+      "points": 7,
+      "value": 13,
+      "jersey": 9
+    }
+  }
+}

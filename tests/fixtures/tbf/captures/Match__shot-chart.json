@@ -1,0 +1,61 @@
+{
+  "data": {
+    "matchId": "346279",
+    "shotInfos": [
+      {
+        "x": 10,
+        "y": 59,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": true,
+        "playerId": 2814314,
+        "playerName": "Terrell Carter II",
+        "jerseyNumber": "5",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "x": 32,
+        "y": 26,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": false,
+        "playerId": 2511112,
+        "playerName": "Yiğitcan Saybir",
+        "jerseyNumber": "3",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "x": 9,
+        "y": 55,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": true,
+        "playerId": 2511112,
+        "playerName": "Yiğitcan Saybir",
+        "jerseyNumber": "3",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

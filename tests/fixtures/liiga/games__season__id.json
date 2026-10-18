@@ -1,0 +1,664 @@
+{
+  "game": {
+    "id": 1,
+    "season": 2026,
+    "start": "2025-09-09T15:30:00Z",
+    "homeTeam": {
+      "teamId": "55786244:hpk",
+      "teamPlaceholder": null,
+      "teamName": "HPK",
+      "goals": 2,
+      "timeOut": 3818,
+      "goalEvents": [
+        {
+          "scorerPlayerId": 33254027,
+          "scorerPlayer": {
+            "playerId": 33254027,
+            "firstName": "Vili",
+            "lastName": "Alitalo"
+          },
+          "logTime": "2025-09-09T15:48:40Z",
+          "winningGoal": false,
+          "gameTime": 519,
+          "period": 1,
+          "eventId": 72,
+          "goalTypes": [],
+          "assistantPlayerIds": [
+            23029644,
+            33296946
+          ],
+          "assistantPlayers": [
+            {
+              "playerId": 23029644,
+              "firstName": "Teemu",
+              "lastName": "Rautiainen"
+            },
+            {
+              "playerId": 33296946,
+              "firstName": "Sami",
+              "lastName": "Päivärinta"
+            }
+          ],
+          "plusPlayerIds": "7 8 12 19 63",
+          "minusPlayerIds": "4 7 10 86 91",
+          "homeTeamScore": 1,
+          "awayTeamScore": 0,
+          "assistsSoFarInSeason": {
+            "23029644": 1,
+            "33296946": 1
+          },
+          "goalsSoFarInSeason": 1,
+          "videoClipUrl": null,
+          "videoClipPlaylistUrl": null,
+          "videoThumbnailUrl": null
+        },
+        {
+          "scorerPlayerId": 30417647,
+          "scorerPlayer": {
+            "playerId": 30417647,
+            "firstName": "Olli",
+            "lastName": "Korhonen"
+          },
+          "logTime": "2025-09-09T17:34:56Z",
+          "winningGoal": false,
+          "gameTime": 2939,
+          "period": 3,
+          "eventId": 386,
+          "goalTypes": [],
+          "assistantPlayerIds": [
+            31585390,
+            22709389
+          ],
+          "assistantPlayers": [
+            {
+              "playerId": 31585390,
+              "firstName": "Miska",
+              "lastName": "Kukkonen"
+            },
+            {
+              "playerId": 22709389,
+              "firstName": "Petteri",
+              "lastName": "Nikkilä"
+            }
+          ],
+          "plusPlayerIds": "15 43 50 74 93",
+          "minusPlayerIds": "4 7 21 82 84",
+          "homeTeamScore": 2,
+          "awayTeamScore": 1,
+          "assistsSoFarInSeason": {
+            "22709389": 1,
+            "31585390": 1
+          },
+          "goalsSoFarInSeason": 1,
+          "videoClipUrl": null,
+          "videoClipPlaylistUrl": null,
+          "videoThumbnailUrl": null
+        }
+      ],
+      "penaltyEvents": [
+        {
+          "playerId": 60954495,
+          "suffererPlayerId": 60954495,
+          "eventId": 100,
+          "logTime": "2025-09-09T15:58:16Z",
+          "gameTime": 758,
+          "period": 1,
+          "penaltyBegintime": 758,
+          "penaltyEndtime": 832,
+          "penaltyFaultName": "Kiinnipitäminen",
+          "penaltyFaultType": "KII",
+          "penaltyInfo": "",
+          "penaltyMinutes": 2
+        },
+        {
+          "playerId": 30851669,
+          "suffererPlayerId": 30851669,
+          "eventId": 125,
+          "logTime": "2025-09-09T16:00:56Z",
+          "gameTime": 909,
+          "period": 1,
+          "penaltyBegintime": 909,
+          "penaltyEndtime": 1029,
+          "penaltyFaultName": "Huitominen",
+          "penaltyFaultType": "HUI",
+          "penaltyInfo": "",
+          "penaltyMinutes": 2
+        },
+        {
+          "playerId": 40115108,
+          "suffererPlayerId": 40115108,
+          "eventId": 130,
+          "logTime": "2025-09-09T16:02:16Z",
+          "gameTime": 933,
+          "period": 1,
+          "penaltyBegintime": 933,
+          "penaltyEndtime": 1053,
+          "penaltyFaultName": "Väkivaltaisuus",
+          "penaltyFaultType": "VKV",
+          "penaltyInfo": "",
+          "penaltyMinutes": 2
+        }
+      ],
+      "goalKeeperEvents": [],
+      "goalKeeperChanges": [],
+      "powerplayInstances": 4,
+      "powerplayGoals": 0,
+      "shortHandedInstances": 5,
+      "shortHandedGoals": 0,
+      "expectedGoals": 2.23,
+      "ranking": null,
+      "gameStartDateTime": "2025-09-09T18:30:00+03:00",
+      "logos": {
+        "darkBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F6020edd6d9bc45b68a50bd191b826deb",
+        "lightBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2F6020edd6d9bc45b68a50bd191b826deb",
+        "darkBgOriginal": null,
+        "lightBgOriginal": null
+      }
+    },
+    "awayTeam": {
+      "teamId": "651304385:tps",
+      "teamPlaceholder": null,
+      "teamName": "TPS",
+      "goals": 3,
+      "timeOut": null,
+      "goalEvents": [
+        {
+          "scorerPlayerId": 31569277,
+          "scorerPlayer": {
+            "playerId": 31569277,
+            "firstName": "Joel",
+            "lastName": "Määttä"
+          },
+          "logTime": "2025-09-09T15:59:44Z",
+          "winningGoal": false,
+          "gameTime": 832,
+          "period": 1,
+          "eventId": 112,
+          "goalTypes": [
+            "YV"
+          ],
+          "assistantPlayerIds": [
+            32219869,
+            31886905
+          ],
+          "assistantPlayers": [
+            {
+              "playerId": 32219869,
+              "firstName": "Ruben",
+              "lastName": "Rafkin"
+            },
+            {
+              "playerId": 31886905,
+              "firstName": "Sisu",
+              "lastName": "Yliniemi"
+            }
+          ],
+          "plusPlayerIds": null,
+          "minusPlayerIds": null,
+          "homeTeamScore": 1,
+          "awayTeamScore": 1,
+          "assistsSoFarInSeason": {
+            "31886905": 1,
+            "32219869": 1
+          },
+          "goalsSoFarInSeason": 1,
+          "videoClipUrl": null,
+          "videoClipPlaylistUrl": null,
+          "videoThumbnailUrl": null
+        },
+        {
+          "scorerPlayerId": 27023853,
+          "scorerPlayer": {
+            "playerId": 27023853,
+            "firstName": "Aleksi",
+            "lastName": "Saarela"
+          },
+          "logTime": "2025-09-09T17:49:04Z",
+          "winningGoal": false,
+          "gameTime": 3198,
+          "period": 3,
+          "eventId": 421,
+          "goalTypes": [],
+          "assistantPlayerIds": [
+            60757491,
+            30969140
+          ],
+          "assistantPlayers": [
+            {
+              "playerId": 60757491,
+              "firstName": "Oliver",
+              "lastName": "Lauridsen"
+            },
+            {
+              "playerId": 30969140,
+              "firstName": "Leevi",
+              "lastName": "Teissala"
+            }
+          ],
+          "plusPlayerIds": "7 19 66 87 98",
+          "minusPlayerIds": "3 6 19 44 93",
+          "homeTeamScore": 2,
+          "awayTeamScore": 2,
+          "assistsSoFarInSeason": {
+            "30969140": 1,
+            "60757491": 1
+          },
+          "goalsSoFarInSeason": 1,
+          "videoClipUrl": null,
+          "videoClipPlaylistUrl": null,
+          "videoThumbnailUrl": null
+        },
+        {
+          "scorerPlayerId": 31569277,
+          "scorerPlayer": {
+            "playerId": 31569277,
+            "firstName": "Joel",
+            "lastName": "Määttä"
+          },
+          "logTime": "2025-09-09T18:12:08Z",
+          "winningGoal": true,
+          "gameTime": 3900,
+          "period": 5,
+          "eventId": 516,
+          "goalTypes": [
+            "VL"
+          ],
+          "assistantPlayerIds": [],
+          "assistantPlayers": [],
+          "plusPlayerIds": null,
+          "minusPlayerIds": null,
+          "homeTeamScore": 2,
+          "awayTeamScore": 2,
+          "assistsSoFarInSeason": {},
+          "goalsSoFarInSeason": 0,
+          "videoClipUrl": null,
+          "videoClipPlaylistUrl": null,
+          "videoThumbnailUrl": null
+        }
+      ],
+      "penaltyEvents": [
+        {
+          "playerId": 25541395,
+          "suffererPlayerId": 25541395,
+          "eventId": 13,
+          "logTime": "2025-09-09T15:35:44Z",
+          "gameTime": 64,
+          "period": 1,
+          "penaltyBegintime": 64,
+          "penaltyEndtime": 184,
+          "penaltyFaultName": "Estäminen",
+          "penaltyFaultType": "EST",
+          "penaltyInfo": "",
+          "penaltyMinutes": 2
+        },
+        {
+          "playerId": 30969140,
+          "suffererPlayerId": 30969140,
+          "eventId": 163,
+          "logTime": "2025-09-09T16:10:32Z",
+          "gameTime": 1162,
+          "period": 1,
+          "penaltyBegintime": 1162,
+          "penaltyEndtime": 1282,
+          "penaltyFaultName": "Väkivaltaisuus",
+          "penaltyFaultType": "VKV",
+          "penaltyInfo": "K",
+          "penaltyMinutes": 2
+        },
+        {
+          "playerId": 40048503,
+          "suffererPlayerId": 40048503,
+          "eventId": 340,
+          "logTime": "2025-09-09T17:24:48Z",
+          "gameTime": 2558,
+          "period": 3,
+          "penaltyBegintime": 2558,
+          "penaltyEndtime": 2678,
+          "penaltyFaultName": "Kiinnipitäminen",
+          "penaltyFaultType": "KII",
+          "penaltyInfo": "",
+          "penaltyMinutes": 2
+        }
+      ],
+      "goalKeeperEvents": [],
+      "goalKeeperChanges": [],
+      "powerplayInstances": 5,
+      "powerplayGoals": 1,
+      "shortHandedInstances": 4,
+      "shortHandedGoals": 0,
+      "expectedGoals": 4.02,
+      "ranking": null,
+      "gameStartDateTime": "2025-09-09T18:30:00+03:00",
+      "logos": {
+        "darkBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2Fe07109c96edf4561b8b5021e7fc44526",
+        "lightBg": "https://cdn.builder.io/api/v1/image/assets%2Ff11503eeae084753968caac3899a5d78%2Fe07109c96edf4561b8b5021e7fc44526",
+        "darkBgOriginal": null,
+        "lightBgOriginal": null
+      }
+    },
+    "winningShotCompetitionEvents": [
+      {
+        "shootingPlayerId": 34320235,
+        "blockingPlayerId": 30117507,
+        "shotNumber": 1,
+        "shootingTeamId": "55786244:hpk",
+        "blockingTeamId": "651304385:tps",
+        "goalScored": true,
+        "winningGoal": false
+      },
+      {
+        "shootingPlayerId": 60900264,
+        "blockingPlayerId": 40107053,
+        "shotNumber": 2,
+        "shootingTeamId": "651304385:tps",
+        "blockingTeamId": "55786244:hpk",
+        "goalScored": true,
+        "winningGoal": false
+      },
+      {
+        "shootingPlayerId": 30851669,
+        "blockingPlayerId": 30117507,
+        "shotNumber": 3,
+        "shootingTeamId": "55786244:hpk",
+        "blockingTeamId": "651304385:tps",
+        "goalScored": false,
+        "winningGoal": false
+      }
+    ],
+    "periods": [
+      {
+        "index": 1,
+        "homeTeamGoals": 1,
+        "awayTeamGoals": 1,
+        "category": "NORMAL",
+        "startTime": 0,
+        "endTime": 1200
+      },
+      {
+        "index": 2,
+        "homeTeamGoals": 0,
+        "awayTeamGoals": 0,
+        "category": "NORMAL",
+        "startTime": 1200,
+        "endTime": 2400
+      },
+      {
+        "index": 3,
+        "homeTeamGoals": 1,
+        "awayTeamGoals": 1,
+        "category": "NORMAL",
+        "startTime": 2400,
+        "endTime": 3600
+      }
+    ],
+    "finishedType": "ENDED_DURING_WINNING_SHOT_COMPETITION",
+    "started": true,
+    "ended": true,
+    "gameTime": 3900,
+    "spectators": 2810,
+    "iceRink": {
+      "id": 31,
+      "name": "Hämeenlinnan jäähalli I",
+      "latitude": 60.9943,
+      "longitude": 24.4348,
+      "streetAddress": "Poltinahontie 11",
+      "zip": "13130",
+      "city": "HÄMEENLINNA"
+    },
+    "currentPeriod": 5,
+    "referees": [
+      {
+        "firstName": "JONI",
+        "jersey": 0,
+        "lastName": "PEKKALA",
+        "officialID": 22832036,
+        "roleAbbrv": "LT",
+        "roleName": "Linjatuomari",
+        "secondaryID": 0,
+        "tagA": "",
+        "tagB": "",
+        "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/referee/22832036.png"
+      },
+      {
+        "firstName": "SAMULI",
+        "jersey": 0,
+        "lastName": "NISKANEN",
+        "officialID": 22717449,
+        "roleAbbrv": "LT",
+        "roleName": "Linjatuomari",
+        "secondaryID": 0,
+        "tagA": "",
+        "tagB": "",
+        "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/referee/22717449.png"
+      },
+      {
+        "firstName": "KRISTIAN",
+        "jersey": 0,
+        "lastName": "VIKMAN",
+        "officialID": 25379033,
+        "roleAbbrv": "PT",
+        "roleName": "Päätuomari",
+        "secondaryID": 0,
+        "tagA": "",
+        "tagB": "",
+        "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/referee/25379033.png"
+      }
+    ],
+    "stale": false,
+    "serie": "RUNKOSARJA",
+    "gameWeek": 1
+  },
+  "awards": [
+    {
+      "id": 124,
+      "awardCategory": 1,
+      "awardIssuer": "Kalle Tie",
+      "awardName": "Alumni 2 tähteä",
+      "awardPoint": 2,
+      "playerId": 30417647,
+      "teamId": "55786244:hpk"
+    },
+    {
+      "id": 123,
+      "awardCategory": 1,
+      "awardIssuer": "Hannu Savolainen",
+      "awardName": "Alumni 1 tähti",
+      "awardPoint": 3,
+      "playerId": 31569277,
+      "teamId": "651304385:tps"
+    },
+    {
+      "id": 125,
+      "awardCategory": 1,
+      "awardIssuer": "Hannu Savolainen",
+      "awardName": "Alumni 3 tähteä",
+      "awardPoint": 1,
+      "playerId": 40107053,
+      "teamId": "55786244:hpk"
+    }
+  ],
+  "homeTeamPlayers": [
+    {
+      "id": 21870028,
+      "teamId": "55786244:hpk",
+      "teamName": "HPK",
+      "line": 1,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Hämeenlinna",
+      "dateOfBirth": "1996-03-21",
+      "nationality": "FIN",
+      "firstName": "Harri",
+      "lastName": "Kainulainen",
+      "role": "RIGHT_WING",
+      "roleCode": "OL",
+      "handedness": "RIGHT",
+      "height": 188,
+      "weight": 85,
+      "captain": false,
+      "rookie": false,
+      "alternateCaptain": true,
+      "jersey": 64,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/55786244%3Ahpk/21870028.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    },
+    {
+      "id": 22709389,
+      "teamId": "55786244:hpk",
+      "teamName": "HPK",
+      "line": 2,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Hämeenlinna",
+      "dateOfBirth": "1992-07-27",
+      "nationality": "FIN",
+      "firstName": "Petteri",
+      "lastName": "Nikkilä",
+      "role": "LEFT_DEFENSEMAN",
+      "roleCode": "VP",
+      "handedness": "LEFT",
+      "height": 179,
+      "weight": 84,
+      "captain": true,
+      "rookie": false,
+      "alternateCaptain": false,
+      "jersey": 74,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/55786244%3Ahpk/22709389.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    },
+    {
+      "id": 23029644,
+      "teamId": "55786244:hpk",
+      "teamName": "HPK",
+      "line": 3,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Nurmijärvi",
+      "dateOfBirth": "1992-03-13",
+      "nationality": "FIN",
+      "firstName": "Teemu",
+      "lastName": "Rautiainen",
+      "role": "LEFT_WING",
+      "roleCode": "VL",
+      "handedness": "LEFT",
+      "height": 169,
+      "weight": 75,
+      "captain": false,
+      "rookie": false,
+      "alternateCaptain": false,
+      "jersey": 19,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/55786244%3Ahpk/23029644.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    }
+  ],
+  "awayTeamPlayers": [
+    {
+      "id": 25541395,
+      "teamId": "651304385:tps",
+      "teamName": "TPS",
+      "line": 2,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Espoo",
+      "dateOfBirth": "1986-01-05",
+      "nationality": "FIN",
+      "firstName": "Veli-Matti",
+      "lastName": "Savinainen",
+      "role": "LEFT_WING",
+      "roleCode": "VL",
+      "handedness": "LEFT",
+      "height": 182,
+      "weight": 86,
+      "captain": false,
+      "rookie": false,
+      "alternateCaptain": false,
+      "jersey": 19,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/651304385%3Atps/25541395.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    },
+    {
+      "id": 27023853,
+      "teamId": "651304385:tps",
+      "teamName": "TPS",
+      "line": 2,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Helsinki",
+      "dateOfBirth": "1997-01-07",
+      "nationality": "FIN",
+      "firstName": "Aleksi",
+      "lastName": "Saarela",
+      "role": "CENTER",
+      "roleCode": "KH",
+      "handedness": "LEFT",
+      "height": 180,
+      "weight": 85,
+      "captain": false,
+      "rookie": false,
+      "alternateCaptain": false,
+      "jersey": 87,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/651304385%3Atps/27023853.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    },
+    {
+      "id": 29948541,
+      "teamId": "651304385:tps",
+      "teamName": "TPS",
+      "line": 1,
+      "countryOfBirth": "FIN",
+      "placeOfBirth": "Äänekoski",
+      "dateOfBirth": "1998-03-01",
+      "nationality": "FIN",
+      "firstName": "Tarmo",
+      "lastName": "Reunanen",
+      "role": "LEFT_DEFENSEMAN",
+      "roleCode": "VP",
+      "handedness": "LEFT",
+      "height": 182,
+      "weight": 89,
+      "captain": true,
+      "rookie": false,
+      "alternateCaptain": false,
+      "jersey": 66,
+      "pictureUrl": "https://liiga-backend-prod.s3.eu-north-1.amazonaws.com/2026/651304385%3Atps/29948541.png",
+      "injured": false,
+      "suspended": false,
+      "removed": false,
+      "awards": null,
+      "sponsors": null,
+      "extra_description": null,
+      "extra_strengths": null,
+      "extra_rookie_picture": false
+    }
+  ]
+}

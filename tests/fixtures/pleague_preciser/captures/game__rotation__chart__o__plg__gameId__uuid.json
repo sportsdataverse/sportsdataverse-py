@@ -1,0 +1,194 @@
+[
+  {
+    "awayTeam": [
+      {
+        "jerseyNumber": 31,
+        "name": "阿提諾",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 583,
+            "endTime": "2:17",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1098,
+            "endTime": "5:42",
+            "startQuarter": "Q2",
+            "startSeconds": 721,
+            "startTime": "11:59"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1136,
+            "startTime": "5:04"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 35,
+        "name": "辛巴",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 460,
+            "endTime": "4:20",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 583,
+            "startTime": "2:17"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1136,
+            "endTime": "5:04",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 36,
+        "name": "林宜輝",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 460,
+            "endTime": "4:20",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1098,
+            "startTime": "5:42"
+          },
+          {
+            "endQuarter": "Q3",
+            "endSeconds": 1825,
+            "endTime": "5:35",
+            "startQuarter": "Q3",
+            "startSeconds": 1440,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      }
+    ],
+    "homeTeam": [
+      {
+        "jerseyNumber": 5,
+        "name": "強森",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 505,
+            "endTime": "3:35",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 583,
+            "startTime": "2:17"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 11,
+        "name": "瓊斯",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 583,
+            "endTime": "2:17",
+            "startQuarter": "Q1",
+            "startSeconds": 0,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1136,
+            "endTime": "5:04",
+            "startQuarter": "Q2",
+            "startSeconds": 721,
+            "startTime": "11:59"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1440,
+            "endTime": "0:00",
+            "startQuarter": "Q2",
+            "startSeconds": 1334,
+            "startTime": "1:46"
+          }
+        ],
+        "started": true
+      },
+      {
+        "jerseyNumber": 14,
+        "name": "蔡文誠",
+        "periods": [
+          {
+            "endQuarter": "Q1",
+            "endSeconds": 720,
+            "endTime": "0:00",
+            "startQuarter": "Q1",
+            "startSeconds": 505,
+            "startTime": "3:35"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 721,
+            "endTime": "11:59",
+            "startQuarter": "Q2",
+            "startSeconds": 720,
+            "startTime": "12:00"
+          },
+          {
+            "endQuarter": "Q2",
+            "endSeconds": 1334,
+            "endTime": "1:46",
+            "startQuarter": "Q2",
+            "startSeconds": 1136,
+            "startTime": "5:04"
+          }
+        ],
+        "started": false
+      }
+    ]
+  }
+]

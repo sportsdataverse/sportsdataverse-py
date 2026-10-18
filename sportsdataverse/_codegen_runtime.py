@@ -7,6 +7,8 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 from __future__ import annotations
 
 import json
+import logging
+import time
 from contextlib import contextmanager
 from typing import Any, Callable, Iterator, List, Optional
 from urllib.parse import urlsplit
@@ -16,6 +18,8 @@ import polars as pl
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import AssetFetchError, NoDataError, _redact_secrets
 from sportsdataverse.errors import SeasonNotFoundError  # noqa: F401  (re-export for generated loaders)
+
+logger = logging.getLogger(__name__)
 
 # Release / raw-data hosts for the generated dataset loaders.
 _SDV_RELEASES = "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/"
@@ -177,16 +181,44 @@ def _json_body(resp: Any, url: str) -> Any:
     return _json_text(url, getattr(resp, "status_code", 200), getattr(resp, "text", "") or "")
 
 
+#: Re-fetches of a 2xx JSON body that arrived cut off (see :func:`_download_json`).
+_TRUNCATED_JSON_RETRIES = 2
+_TRUNCATED_JSON_DELAY = 1.0
+
+
+def _truncated_json(resp: Any) -> bool:
+    """A 2xx body that opens like JSON (``{`` / ``[``); called only once it failed to decode."""
+    status = getattr(resp, "status_code", 200)
+    text = (getattr(resp, "text", "") or "").lstrip()
+    return isinstance(status, int) and 200 <= status < 300 and text[:1] in ("{", "[")
+
+
 def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> Any:
     """``transport(url=url, **kwargs)`` decoded under the error vocabulary (see :func:`_get`).
 
     The hand-written scrapers pass their own module-level ``download`` as
     ``transport``, so a test that monkeypatches ``<module>.download`` still
     intercepts the request.
+
+    A 2xx body that starts as JSON but does not parse was cut off in transit, so it
+    is fetched again, up to :data:`_TRUNCATED_JSON_RETRIES` times, before it raises
+    :class:`~sportsdataverse.errors.AssetFetchError`. Yahoo's CFB scoreboard did this
+    on about 1 week in 35 (2026-10-12); the crosswalk skipped the week and dropped
+    its Yahoo matches. An HTML or empty 2xx body is a real answer and raises at once.
     """
-    with _transport_errors(url):
-        resp = transport(url=url, **kwargs)
-    return _json_body(resp, url)
+    for attempt in range(_TRUNCATED_JSON_RETRIES + 1):
+        with _transport_errors(url):
+            resp = transport(url=url, **kwargs)
+        try:
+            return _json_body(resp, url)
+        except AssetFetchError:
+            if attempt == _TRUNCATED_JSON_RETRIES or not _truncated_json(resp):
+                raise
+        logger.warning(
+            "%s answered a truncated JSON body; re-fetching [%d/%d]", _where(url), attempt + 1, _TRUNCATED_JSON_RETRIES
+        )
+        time.sleep(_TRUNCATED_JSON_DELAY * (attempt + 1))
+    raise AssertionError("unreachable")  # pragma: no cover
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:

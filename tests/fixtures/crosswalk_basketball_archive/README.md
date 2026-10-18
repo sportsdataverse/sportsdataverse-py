@@ -19,3 +19,5 @@ Real, trimmed inputs for `tests/test_crosswalk_basketball_archive.py`, copied 20
 | `espn/{nba,wnba}_schedule_2015.parquet` | `hoopR-nba-data` / `wehoop-wnba-data` `schedules/parquet/*_schedule_2015.parquet`, filtered to those games and the columns the builder reads |
 | `espn/{nba,wnba}_game_rosters_2015.parquet` | `*/game_rosters/parquet/game_rosters_2015.parquet`, filtered the same way |
 | `fox_nba_scores_segment_20150614.json`, `fox_nba_scores_segment_20150616.json` | `api.foxsports.com/bifrost/v1/nba/league/scores-segment/{date}` (the same two Finals games), captured 2026-10-11; image, sort and favorite keys dropped |
+| `yahoo_wnba_league_teams.json` | Yahoo shangrila `leagueTeams?league=wnba`, captured 2026-10-11 (today's 15 teams); logo, color, alias, division, conference and standings keys dropped |
+| `yahoo_wnba_game_ids_20151014.json` | Yahoo shangrila `leagueGameIdsByDate?leagues=wnba&startRange=2015-10-14&endRange=2015-10-14&season=2015` (2015 WNBA Finals game 5), captured 2026-10-11, unmodified |

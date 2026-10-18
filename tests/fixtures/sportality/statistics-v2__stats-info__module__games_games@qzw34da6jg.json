@@ -1,0 +1,378 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "DateTime",
+        "type": "string",
+        "highlighted": true,
+        "group": ""
+      },
+      {
+        "name": "homeTeam",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "awayTeam",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "DateTime",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "DateTime": "2026-04-23 19:00:00",
+        "homeTeam": "Holbæk-Stenhus",
+        "awayTeam": "Værløse Blue Hawks",
+        "GameScore": {
+          "homeScore": "83",
+          "awayScore": "89",
+          "decidedIn": ""
+        },
+        "Venue": "Holbæk Sportsby",
+        "Attendance": 243,
+        "HomeTeam": 153747,
+        "GuestTeam": 114932,
+        "info": {
+          "gameId": 2815383,
+          "homeTeamId": 153747,
+          "awayTeamId": 114932
+        }
+      },
+      {
+        "DateTime": "2026-04-23 19:00:00",
+        "homeTeam": "BMS Herlev",
+        "awayTeam": "BK Amager",
+        "GameScore": {
+          "homeScore": "75",
+          "awayScore": "61",
+          "decidedIn": ""
+        },
+        "Venue": "Sportsworld Arena, Skovlunde",
+        "Attendance": 505,
+        "HomeTeam": 140898,
+        "GuestTeam": 67370,
+        "info": {
+          "gameId": 2814828,
+          "homeTeamId": 140898,
+          "awayTeamId": 67370
+        }
+      },
+      {
+        "DateTime": "2026-04-21 18:30:00",
+        "homeTeam": "Bears Academy",
+        "awayTeam": "BK Vejen",
+        "GameScore": {
+          "homeScore": "91",
+          "awayScore": "80",
+          "decidedIn": ""
+        },
+        "Venue": "Sparekassen Danmark Basketball Center",
+        "Attendance": 116,
+        "HomeTeam": 130088,
+        "GuestTeam": 187013,
+        "info": {
+          "gameId": 2815042,
+          "homeTeamId": 130088,
+          "awayTeamId": 187013
+        }
+      }
+    ],
+    "provider": "genius-basketball",
+    "teams": {
+      "22248": {
+        "type": "homeTeam",
+        "id": 22248,
+        "teamCode": "BAK",
+        "siteDisplayName": "Bakken Bears",
+        "name": "Bakken Bears",
+        "uuid": "ktcu9aaala",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-09-14T19:12:01.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "bak1_bak",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+        "teamNames": {
+          "code": "BAK",
+          "short": "Bakken Bears",
+          "long": "Bakken Bears",
+          "full": "Bakken Bears",
+          "codeSite": "BAK",
+          "shortSite": "Bakken Bears",
+          "fullSite": "Bakken Bears",
+          "longSite": "Bakken Bears"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1954",
+          "facebook": "https://www.facebook.com/bakkenbears",
+          "instagram": "https://www.instagram.com/bakkenbears_official"
+        },
+        "teamExtIds": [
+          {
+            "id": 872,
+            "extId": "22248",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 872,
+            "extId": "22248",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "22249": {
+        "type": "awayTeam",
+        "id": 22249,
+        "teamCode": "HIC",
+        "siteDisplayName": "Horsens IC",
+        "name": "Horsens IC",
+        "uuid": "hip2m60a45",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-08-18T06:44:27.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "hic1_hic",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+        "teamNames": {
+          "code": "HIC",
+          "short": "Horsens IC",
+          "long": "Horsens IC",
+          "full": "Horsens IC",
+          "codeSite": "HIC",
+          "shortSite": "Horsens IC",
+          "fullSite": "Horsens IC",
+          "longSite": "Horsens IC"
+        },
+        "clubName": {},
+        "teamInfo": {},
+        "teamExtIds": [
+          {
+            "id": 865,
+            "extId": "22249",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 865,
+            "extId": "22249",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg",
+        "socialMedia": [],
+        "displayName": ""
+      },
+      "22250": {
+        "type": "homeTeam",
+        "id": 22250,
+        "teamCode": "RAN",
+        "siteDisplayName": "Randers Cimbria",
+        "name": "Randers Cimbria",
+        "uuid": "gvvuxe9ysw",
+        "createdAt": "2026-06-17T11:18:29.000Z",
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": null,
+        "lastModified": "2026-08-18T06:45:44.000Z",
+        "nationality": "DK",
+        "ownerInstanceId": "ran1_ran",
+        "ownersite": null,
+        "series": [],
+        "sport": [],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+        "teamNames": {
+          "code": "RAN",
+          "short": "Randers Cimbria",
+          "long": "Randers Cimbria",
+          "full": "Randers Cimbria",
+          "codeSite": "RAN",
+          "shortSite": "Randers Cimbria",
+          "fullSite": "Randers Cimbria",
+          "longSite": "Randers Cimbria"
+        },
+        "clubName": {},
+        "teamInfo": {},
+        "teamExtIds": [
+          {
+            "id": 864,
+            "extId": "22250",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 864,
+            "extId": "22250",
+            "locked": false,
+            "extIdType": {
+              "uuid": "552a-c2beuydsj",
+              "code": "genius-basketball",
+              "createdAt": null,
+              "createdBy": "dbl1_dbl",
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "Genius Sports Basketball"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/ran1_ran.svg",
+        "socialMedia": [],
+        "displayName": ""
+      }
+    },
+    "games": {
+      "2683730": {
+        "type": "game",
+        "id": 2683730,
+        "uuid": "xoxwnckubm",
+        "startDateTime": "2026-02-19T18:00:00.000Z",
+        "homeTeamName": "Horsens IC",
+        "homeTeamResult": 79,
+        "awayTeamName": "Bakken Bears",
+        "awayTeamResult": 88,
+        "played": true,
+        "overtime": false,
+        "penaltyShots": null,
+        "extIds": [
+          {
+            "id": 26515,
+            "extId": "2683730",
+            "locked": false
+          }
+        ],
+        "seasonSeriesGameTypeUuid": "qzw34da6jg",
+        "homeTeamUuid": "hip2m60a45",
+        "awayTeamUuid": "ktcu9aaala",
+        "venueUuid": "d3mxpsbamb"
+      },
+      "2683731": {
+        "type": "game",
+        "id": 2683731,
+        "uuid": "htbn93xak7",
+        "startDateTime": "2026-02-19T18:00:00.000Z",
+        "homeTeamName": "BK Vejen",
+        "homeTeamResult": 99,
+        "awayTeamName": "Bears Academy",
+        "awayTeamResult": 94,
+        "played": true,
+        "overtime": false,
+        "penaltyShots": null,
+        "extIds": [
+          {
+            "id": 26516,
+            "extId": "2683731",
+            "locked": false
+          }
+        ],
+        "seasonSeriesGameTypeUuid": "qzw34da6jg",
+        "homeTeamUuid": "wv1lcxg0u2",
+        "awayTeamUuid": "swr1d65lew",
+        "venueUuid": "eqsvyz3mo5"
+      },
+      "2683732": {
+        "type": "game",
+        "id": 2683732,
+        "uuid": "ss8mfj4we3",
+        "startDateTime": "2026-02-19T18:15:00.000Z",
+        "homeTeamName": "Team FOG Næstved",
+        "homeTeamResult": 113,
+        "awayTeamName": "Holbæk-Stenhus",
+        "awayTeamResult": 93,
+        "played": true,
+        "overtime": false,
+        "penaltyShots": null,
+        "extIds": [
+          {
+            "id": 26517,
+            "extId": "2683732",
+            "locked": false
+          }
+        ],
+        "seasonSeriesGameTypeUuid": "qzw34da6jg",
+        "homeTeamUuid": "iutrlqp3ef",
+        "awayTeamUuid": "rfo82vr830",
+        "venueUuid": "id1w09p40r"
+      }
+    },
+    "seasonSeriesGameTypes": {},
+    "type": "game",
+    "totalCount": 192
+  }
+]

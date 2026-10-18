@@ -1,0 +1,173 @@
+[
+  {
+    "id": 4873,
+    "name": "Matt Spencer",
+    "firstname": "Matt",
+    "surname": "Spencer",
+    "birthdate": "1997-03-24",
+    "active": true,
+    "position": "DE",
+    "stick": "right",
+    "weight": 92,
+    "height": 188,
+    "jersey": 24,
+    "birthCountry": "Canada",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 1,
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "assists": {
+        "home": 0,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 1,
+      "negative": 1,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 20.0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 6,
+      "shotsOnGoal": {
+        "home": 5,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 1,
+      "blockedShotsByPlayer": 2,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 1359,
+      "timeoniceEQ": 1359,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0
+    }
+  },
+  {
+    "id": 4892,
+    "name": "Steven Seigo",
+    "firstname": "Steven",
+    "surname": "Seigo",
+    "birthdate": "1990-08-01",
+    "active": true,
+    "position": "DE",
+    "stick": "right",
+    "weight": 85,
+    "height": 182,
+    "jersey": 49,
+    "birthCountry": "Canada",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 1,
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "assists": {
+        "home": 0,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 1,
+      "negative": 4,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 25.0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 8,
+      "shotsOnGoal": {
+        "home": 4,
+        "away": 0
+      },
+      "shotsMissed": 1,
+      "shotsBlocked": 3,
+      "blockedShotsByPlayer": 1,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 1255,
+      "timeoniceEQ": 1255,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0
+    }
+  },
+  {
+    "id": 5075,
+    "name": "Brady Risk",
+    "firstname": "Brady",
+    "surname": "Risk",
+    "birthdate": "1999-03-16",
+    "active": true,
+    "position": "FW",
+    "stick": "right",
+    "weight": 0,
+    "height": 0,
+    "jersey": 9,
+    "birthCountry": "Canada",
+    "nationality": "Canada",
+    "nationalityShort": "CAN",
+    "statistics": {
+      "teamShortcut": "GLA",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 1,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 1,
+      "negative": 1,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 0.0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 7,
+      "shotsOnGoal": {
+        "home": 5,
+        "away": 0
+      },
+      "shotsMissed": 1,
+      "shotsBlocked": 1,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 987,
+      "timeoniceEQ": 987,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0
+    }
+  }
+]

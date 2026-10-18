@@ -1,0 +1,20 @@
+[
+ "/competitions/",
+ "/competitions/{competitionId}",
+ "/competitions/{competitionId}/playerStats",
+ "/competitions/{competitionId}/rounds",
+ "/competitions/{competitionId}/teamStats",
+ "/matches/",
+ "/matches/standings",
+ "/matches/{competitionId}/playingDays",
+ "/matches/{matchId}",
+ "/matches/{matchId}/playByPlay",
+ "/matches/{matchId}/stats",
+ "/players/{playerId}",
+ "/players/{playerId}/stats",
+ "/seasons/",
+ "/teamPlayers/",
+ "/teams/",
+ "/teams/{teamId}",
+ "/teams/{teamId}/general"
+]
