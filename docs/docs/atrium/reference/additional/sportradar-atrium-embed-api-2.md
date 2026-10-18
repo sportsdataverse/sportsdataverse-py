@@ -17,7 +17,7 @@ LNB (France) (men's); season rule: END year (2026 = 2025-26; the site's own year
 Convenience wrapper: a thin binding of `atrium_team_box_score` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental.
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads).
 
 **Parameters**
 
@@ -146,7 +146,7 @@ LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) (men's and women's); season rule
 Convenience wrapper: a thin binding of `atrium_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -205,7 +205,7 @@ LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) (men's and women's); season rule
 Convenience wrapper: a thin binding of `atrium_box_score` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -405,7 +405,7 @@ LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) (men's and women's); season rule
 Convenience wrapper: a thin binding of `atrium_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -530,7 +530,7 @@ LNBP (Mexico, with COPA VALUE and LNBP FEMENIL) (men's and women's); season rule
 Convenience wrapper: a thin binding of `atrium_team_box_score` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -659,7 +659,7 @@ LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season r
 Convenience wrapper: a thin binding of `atrium_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -718,7 +718,7 @@ LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season r
 Convenience wrapper: a thin binding of `atrium_box_score` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -918,7 +918,7 @@ LPB / LPBF Liga Profesional de Baloncesto (Panama) (men's and women's); season r
 Convenience wrapper: a thin binding of `atrium_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Unofficial: this is the public endpoint the Sportradar Atrium / Synergy `Connect` widget calls from every visitor's browser (keyless; the host has no robots.txt). The data is Sportradar's and the leagues'. The wrappers read it on the caller's behalf, one request at least 1 s after the last, and never republish it as release assets. Keep crawls small and incremental. The game is checked against this site: its seasonId must be in the site's season list (one request per site, cached for an hour, the same list the season lookup reads). Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 

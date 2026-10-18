@@ -1,18 +1,18 @@
 ---
-title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: weurobasket_schedule–woly_shots"
-sidebar_label: "FIBA digital API and game pages: weurobasket_schedule–woly_shots"
+title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: ecw_schedule–elw_shots"
+sidebar_label: "FIBA digital API and game pages: ecw_schedule–elw_shots"
 sidebar_position: 5
-description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: weurobasket_schedule–woly_shots — function reference in sdv-py, the SportsDataverse Python package."
+description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: ecw_schedule–elw_shots — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: weurobasket_schedule–woly_shots
+# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: ecw_schedule–elw_shots
 
-### fiba_weurobasket_schedule {#fiba_weurobasket_schedule}
+### fiba_ecw_schedule {#fiba_ecw_schedule}
 
-`fiba_weurobasket_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_ecw_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Schedule and results of one FIBA Women's EuroBasket edition, one row per game.
+Schedule and results of one EuroCup Women (FIBA Women's European Club Competitions Tier 2) edition, one row per game.
 
-FIBA Women's EuroBasket (women's); season rule: event year (2025 = 2025).
+EuroCup Women (FIBA Women's European Club Competitions Tier 2) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -24,7 +24,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -124,17 +124,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_weurobasket_schedule
-fiba_weurobasket_schedule(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_ecw_schedule
+fiba_ecw_schedule(season=2025)
 ```
 
-### fiba_weurobasket_shots {#fiba_weurobasket_shots}
+### fiba_ecw_shots {#fiba_ecw_shots}
 
-`fiba_weurobasket_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_ecw_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Shot chart of one FIBA Women's EuroBasket game.
+Shot chart of one EuroCup Women (FIBA Women's European Club Competitions Tier 2) game.
 
-FIBA Women's EuroBasket (women's); season rule: event year (2025 = 2025).
+EuroCup Women (FIBA Women's European Club Competitions Tier 2) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -147,7 +147,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -180,18 +180,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_weurobasket_schedule, fiba_weurobasket_shots
-games = fiba_weurobasket_schedule(season=2025)
-fiba_weurobasket_shots(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_ecw_schedule, fiba_ecw_shots
+games = fiba_ecw_schedule(season=2025)
+fiba_ecw_shots(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_weurobasket_standings {#fiba_weurobasket_standings}
+### fiba_ecw_standings {#fiba_ecw_standings}
 
-`fiba_weurobasket_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_ecw_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Final standings of one FIBA Women's EuroBasket edition.
+Final standings of one EuroCup Women (FIBA Women's European Club Competitions Tier 2) edition.
 
-FIBA Women's EuroBasket (women's); season rule: event year (2025 = 2025).
+EuroCup Women (FIBA Women's European Club Competitions Tier 2) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_final_standings` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -203,7 +203,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -226,17 +226,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_weurobasket_standings
-fiba_weurobasket_standings(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_ecw_standings
+fiba_ecw_standings(season=2025)
 ```
 
-### fiba_weurobasket_team_box {#fiba_weurobasket_team_box}
+### fiba_ecw_team_box {#fiba_ecw_team_box}
 
-`fiba_weurobasket_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_ecw_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Team box score of one FIBA Women's EuroBasket game.
+Team box score of one EuroCup Women (FIBA Women's European Club Competitions Tier 2) game.
 
-FIBA Women's EuroBasket (women's); season rule: event year (2025 = 2025).
+EuroCup Women (FIBA Women's European Club Competitions Tier 2) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -249,7 +249,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -320,18 +320,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_weurobasket_schedule, fiba_weurobasket_team_box
-games = fiba_weurobasket_schedule(season=2025)
-fiba_weurobasket_team_box(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_ecw_schedule, fiba_ecw_team_box
+games = fiba_ecw_schedule(season=2025)
+fiba_ecw_team_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_weurobasket_teams {#fiba_weurobasket_teams}
+### fiba_ecw_teams {#fiba_ecw_teams}
 
-`fiba_weurobasket_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_ecw_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Teams of one FIBA Women's EuroBasket edition.
+Teams of one EuroCup Women (FIBA Women's European Club Competitions Tier 2) edition.
 
-FIBA Women's EuroBasket (women's); season rule: event year (2025 = 2025).
+EuroCup Women (FIBA Women's European Club Competitions Tier 2) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -343,7 +343,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -386,17 +386,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_weurobasket_teams
-fiba_weurobasket_teams(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_ecw_teams
+fiba_ecw_teams(season=2025)
 ```
 
-### fiba_woly_editions {#fiba_woly_editions}
+### fiba_elw_editions {#fiba_elw_editions}
 
-`fiba_woly_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_elw_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Every edition of Women's Olympic Basketball Tournament.
+Every edition of EuroLeague Women (FIBA Women's European Club Competitions Tier 1).
 
-Women's Olympic Basketball Tournament (women's); season rule: event year (Paris 2024 = 2024).
+EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -451,17 +451,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_woly_editions
-fiba_woly_editions(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_elw_editions
+fiba_elw_editions(season=2025)
 ```
 
-### fiba_woly_pbp {#fiba_woly_pbp}
+### fiba_elw_pbp {#fiba_elw_pbp}
 
-`fiba_woly_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_elw_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Play-by-play of one Women's Olympic Basketball Tournament game.
+Play-by-play of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) game.
 
-Women's Olympic Basketball Tournament (women's); season rule: event year (Paris 2024 = 2024).
+EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -474,7 +474,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -514,18 +514,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_woly_schedule, fiba_woly_pbp
-games = fiba_woly_schedule(season=2024)
-fiba_woly_pbp(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_elw_schedule, fiba_elw_pbp
+games = fiba_elw_schedule(season=2025)
+fiba_elw_pbp(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_woly_player_box {#fiba_woly_player_box}
+### fiba_elw_player_box {#fiba_elw_player_box}
 
-`fiba_woly_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_elw_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Player box score of one Women's Olympic Basketball Tournament game.
+Player box score of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) game.
 
-Women's Olympic Basketball Tournament (women's); season rule: event year (Paris 2024 = 2024).
+EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -538,7 +538,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -595,18 +595,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_woly_schedule, fiba_woly_player_box
-games = fiba_woly_schedule(season=2024)
-fiba_woly_player_box(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_elw_schedule, fiba_elw_player_box
+games = fiba_elw_schedule(season=2025)
+fiba_elw_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_woly_schedule {#fiba_woly_schedule}
+### fiba_elw_schedule {#fiba_elw_schedule}
 
-`fiba_woly_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_elw_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Schedule and results of one Women's Olympic Basketball Tournament edition, one row per game.
+Schedule and results of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) edition, one row per game.
 
-Women's Olympic Basketball Tournament (women's); season rule: event year (Paris 2024 = 2024).
+EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -618,7 +618,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -718,17 +718,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_woly_schedule
-fiba_woly_schedule(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_elw_schedule
+fiba_elw_schedule(season=2025)
 ```
 
-### fiba_woly_shots {#fiba_woly_shots}
+### fiba_elw_shots {#fiba_elw_shots}
 
-`fiba_woly_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_elw_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Shot chart of one Women's Olympic Basketball Tournament game.
+Shot chart of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) game.
 
-Women's Olympic Basketball Tournament (women's); season rule: event year (Paris 2024 = 2024).
+EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -741,7 +741,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -774,7 +774,7 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_woly_schedule, fiba_woly_shots
-games = fiba_woly_schedule(season=2024)
-fiba_woly_shots(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_elw_schedule, fiba_elw_shots
+games = fiba_elw_schedule(season=2025)
+fiba_elw_shots(game_id=int(games['game_id'][0]), season=2025)
 ```

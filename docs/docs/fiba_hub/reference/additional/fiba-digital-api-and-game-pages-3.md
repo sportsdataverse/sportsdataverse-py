@@ -1,68 +1,23 @@
 ---
-title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: elw_standings–oly_teams"
-sidebar_label: "FIBA digital API and game pages: elw_standings–oly_teams"
+title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: asiacup_team–bcla_editions"
+sidebar_label: "FIBA digital API and game pages: asiacup_team–bcla_editions"
 sidebar_position: 3
-description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: elw_standings–oly_teams — function reference in sdv-py, the SportsDataverse Python package."
+description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: asiacup_team–bcla_editions — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: elw_standings–oly_teams
+# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: asiacup_team–bcla_editions
 
-### fiba_elw_standings {#fiba_elw_standings}
+### fiba_asiacup_team_box {#fiba_asiacup_team_box}
 
-`fiba_elw_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_asiacup_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Final standings of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) edition.
+Team box score of one FIBA Asia Cup game.
 
-EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
-
-Convenience wrapper: a thin binding of `fiba_gdap_final_standings` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | FIBA competition id (Int64) the final ranking belongs to; the comp argument. |
-| `final_rank` | integer | Final rank in the competition. |
-| `team_team_id` | integer | Competition team id: one per team per competition (Germany = 279569 at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId. |
-| `team_team_code` | character | Team abbreviation (FIBA country code or club abbreviation). |
-| `team_short_name` | character | Short team name: the country code for a national team, the club's short name for a club. |
-| `team_profile` | character | Team profile; null in this route. |
-| `team_status_code` | character | Team entry status; always null in the samples, values unverified. |
-| `team_status_name` | character | Team entry status label; always null in the samples, values unverified. |
-| `team_organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.fiba_hub import fiba_elw_standings
-fiba_elw_standings(season=2025)
-```
-
-### fiba_elw_team_box {#fiba_elw_team_box}
-
-`fiba_elw_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Team box score of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) game.
-
-EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
+FIBA Asia Cup (men's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -70,7 +25,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -141,30 +96,30 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_elw_schedule, fiba_elw_team_box
-games = fiba_elw_schedule(season=2025)
-fiba_elw_team_box(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_asiacup_schedule, fiba_asiacup_team_box
+games = fiba_asiacup_schedule(season=2025)
+fiba_asiacup_team_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_elw_teams {#fiba_elw_teams}
+### fiba_asiacup_teams {#fiba_asiacup_teams}
 
-`fiba_elw_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_asiacup_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Teams of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) edition.
+Teams of one FIBA Asia Cup edition.
 
-EuroLeague Women (FIBA Women's European Club Competitions Tier 1) (women's); season rule: END year (2024-25 = 2025).
+FIBA Asia Cup (men's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -207,17 +162,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_elw_teams
-fiba_elw_teams(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_asiacup_teams
+fiba_asiacup_teams(season=2025)
 ```
 
-### fiba_oly_editions {#fiba_oly_editions}
+### fiba_bcl_editions {#fiba_bcl_editions}
 
-`fiba_oly_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Every edition of Men's Olympic Basketball Tournament.
+Every edition of Basketball Champions League (FIBA Men's European Club Competitions Tier 1).
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -272,17 +227,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_editions
-fiba_oly_editions(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_editions
+fiba_bcl_editions(season=2025)
 ```
 
-### fiba_oly_pbp {#fiba_oly_pbp}
+### fiba_bcl_pbp {#fiba_bcl_pbp}
 
-`fiba_oly_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Play-by-play of one Men's Olympic Basketball Tournament game.
+Play-by-play of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) game.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -295,7 +250,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -335,18 +290,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_pbp
-games = fiba_oly_schedule(season=2024)
-fiba_oly_pbp(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_pbp
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_pbp(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_oly_player_box {#fiba_oly_player_box}
+### fiba_bcl_player_box {#fiba_bcl_player_box}
 
-`fiba_oly_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Player box score of one Men's Olympic Basketball Tournament game.
+Player box score of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) game.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -359,7 +314,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -416,18 +371,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_player_box
-games = fiba_oly_schedule(season=2024)
-fiba_oly_player_box(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_player_box
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_oly_schedule {#fiba_oly_schedule}
+### fiba_bcl_schedule {#fiba_bcl_schedule}
 
-`fiba_oly_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Schedule and results of one Men's Olympic Basketball Tournament edition, one row per game.
+Schedule and results of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) edition, one row per game.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -439,7 +394,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -539,17 +494,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule
-fiba_oly_schedule(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule
+fiba_bcl_schedule(season=2025)
 ```
 
-### fiba_oly_shots {#fiba_oly_shots}
+### fiba_bcl_shots {#fiba_bcl_shots}
 
-`fiba_oly_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Shot chart of one Men's Olympic Basketball Tournament game.
+Shot chart of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) game.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -562,7 +517,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -595,18 +550,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_shots
-games = fiba_oly_schedule(season=2024)
-fiba_oly_shots(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_shots
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_shots(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_oly_standings {#fiba_oly_standings}
+### fiba_bcl_standings {#fiba_bcl_standings}
 
-`fiba_oly_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Final standings of one Men's Olympic Basketball Tournament edition.
+Final standings of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) edition.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_final_standings` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -618,7 +573,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -641,17 +596,17 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_standings
-fiba_oly_standings(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_standings
+fiba_bcl_standings(season=2025)
 ```
 
-### fiba_oly_team_box {#fiba_oly_team_box}
+### fiba_bcl_team_box {#fiba_bcl_team_box}
 
-`fiba_oly_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Team box score of one Men's Olympic Basketball Tournament game.
+Team box score of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) game.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -664,7 +619,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -735,18 +690,18 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_team_box
-games = fiba_oly_schedule(season=2024)
-fiba_oly_team_box(game_id=int(games['game_id'][0]), season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_schedule, fiba_bcl_team_box
+games = fiba_bcl_schedule(season=2025)
+fiba_bcl_team_box(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_oly_teams {#fiba_oly_teams}
+### fiba_bcl_teams {#fiba_bcl_teams}
 
-`fiba_oly_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_bcl_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Teams of one Men's Olympic Basketball Tournament edition.
+Teams of one Basketball Champions League (FIBA Men's European Club Competitions Tier 1) edition.
 
-Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
+Basketball Champions League (FIBA Men's European Club Competitions Tier 1) (men's); season rule: END year (2024-25 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -758,7 +713,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
-| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. |
+| `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
 
@@ -801,6 +756,71 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_oly_teams
-fiba_oly_teams(season=2024)
+from sportsdataverse.basketball.fiba_hub import fiba_bcl_teams
+fiba_bcl_teams(season=2025)
+```
+
+### fiba_bcla_editions {#fiba_bcla_editions}
+
+`fiba_bcla_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Every edition of Basketball Champions League Americas.
+
+Basketball Champions League Americas (men's); season rule: END year (2024-25 = 2025).
+
+Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Optional[int]` | `None` | First season (inclusive); omitted = all editions. |
+| `to_season` | `Optional[int]` | `None` | Last season, inclusive. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `hosts` | character | Host countries with their cities. Stored as a JSON string. |
+| `competition_id` | integer | FIBA competition id (GDAP key space): one per edition (2023 World Cup = 208182, BCL 2024-25 = 208850); gdapCompetitionId. |
+| `competition_code` | character | Competition code (WMM men's World Cup, WOLYM, BCL, ELW...). |
+| `season` | integer | Season key, three rules: the END year for club competitions (BCL 2024-25 = 2025) and the event year for national-team events (World Cup 2023 = 2023), both equal to the sdv season key; qualifiers carry the TARGET tournament year, not the year played (World Cup 2027 qualifiers played in 2025 = 2027, EuroBasket 2029 pre-qualifiers = 2029), whose sdv mapping is an open Phase B decision. |
+| `official_name` | character | Edition title (FIBA Basketball World Cup; Paris 2024 Men's Olympic Basketball Tournament). |
+| `start` | character | First day, YYYY-MM-DD. |
+| `end` | character | Last day, YYYY-MM-DD. |
+| `status` | character | Competition status: In Progress, Completed, Closed. |
+| `age_category` | character | Age category (Senior, Under 16...). |
+| `gender` | character | Men or Women: the gender of the competition. |
+| `fiba_zone` | character | FIBA zone the competition belongs to (World, Europe, Americas...). |
+| `zone_information_zone_id` | integer | FIBA zone id (1 = World, 23 = Europe; zone table key space). |
+| `zone_information_zone_official_name` | character | Official name of the competition's FIBA zone (FIBA Europe, FIBA Americas, World). |
+| `zone_information_zone_code` | character | Zone code (W, E, AF, AM, AS, OC). |
+| `zone_information_top_zone_id` | integer | Parent zone id; null for top zones. |
+| `zone_information_top_zone_official_name` | character | Parent zone name; always null in the samples, values unverified. |
+| `zone_information_top_zone_code` | character | Parent zone code; always null in the samples, values unverified. |
+| `competition_type` | character | National Teams or Clubs. |
+| `competition_category_is_league` | logical | True for league-format club competitions. |
+| `competition_category_age_type` | character | Age type code: S senior, U16. |
+| `competition_category_code` | character | Category code (WC World Cup, OLY Olympic Tournament, CCC-1 continental club tier 1). |
+| `competition_category_name` | character | Name of the competition's category (FIBA Basketball World Cup, Olympic Basketball Tournament...). |
+| `official_flag_item_code` | character | Official-status code: O = official. |
+| `official_flag_item_name` | character | Official-status label. |
+| `official` | character | Official-status label. |
+| `discipline` | character | Discipline (Basketball; 3x3 is a separate platform). |
+| `competition_marketing_name_competition_marketing_name_id` | integer | Competition family id (201 = World Cup, 112 = BCL tier 1, 211 = EuroLeague Women); the <histId> of /en/history/ pages. |
+| `competition_marketing_name_marketing_name` | character | Competition family name; slugified it is the <histSlug> of /en/history/ pages. |
+| `competition_marketing_name_code` | character | Family code; null in every sample. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.fiba_hub import fiba_bcla_editions
+fiba_bcla_editions(season=2025)
 ```
