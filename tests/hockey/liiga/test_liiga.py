@@ -126,7 +126,7 @@ def test_all_null_column_takes_the_schema_dtype():
 
 
 @pytest.mark.parametrize("parser", ALL_PARSERS, ids=lambda f: f.__name__)
-@pytest.mark.parametrize("payload", [{}, [], None, "x", 3, {"_request": {"season": 2026}}])
+@pytest.mark.parametrize("payload", [{}, [], None, "x", 3, {"_request": {"season": 2026}}, {"data": None}])
 def test_empty_or_malformed_payload_is_a_zero_row_frame(parser, payload):
     df = parser(payload)
     assert isinstance(df, pl.DataFrame) and df.height == 0

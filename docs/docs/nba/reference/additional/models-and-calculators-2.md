@@ -68,7 +68,7 @@ expected value (`luck_adjusted_response`); 2-pt makes stay realized.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via prepare`) requires it unconditionally. |
+| `possessions` | `DataFrame` |  | Possession+lineup frame with team-level `fg2m` and the ten lineup columns; join keys `game_id` + `possession_number` + `offense_team_id` (the last is required by `luck_adjusted_response`'s defense-shooter leak filter). Must also carry a `points` column even though the LA response (`la_points`) supersedes it for fitting -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally via `_prepare`) requires it unconditionally. |
 | `shooting` | `DataFrame` |  | Per-(possession, shooter) frame from `build_possession_shooting`. |
 | `player_rates` | `Optional[dict[int, tuple[float, float]]]` | `None` | Optional `{player_id: (p3, pft)}` override; `None` → shrink from `shooting`. |
 | `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule (`cv=` `ORACLE_RAPM_CV` always; there is no plain-schedule mode). |
@@ -794,7 +794,7 @@ producing independent offense and defense coefficient vectors.
 |---|---|---|---|
 | `box_features` | `DataFrame` |  | Per-player per-100 features. Must contain `player_id` and every column in *feature_names*. |
 | `rapm_target` | `DataFrame` |  | Per-player RAPM target frame with columns `player_id`, `o_rapm`, and `d_rapm`. Only the rows whose `player_id` appears in *box_features* are used (inner join). |
-| `feature_names` | `Optional[List[str]]` | `None` | Ordered list of feature columns to regress on. Defaults to `SPM_FEATURES` (= STATS` from `nba_box_logs`). |
+| `feature_names` | `Optional[List[str]]` | `None` | Ordered list of feature columns to regress on. Defaults to `SPM_FEATURES` (= `_STATS` from `nba_box_logs`). |
 | `alpha` | `float` | `100.0` | Ridge regularization strength (`sklearn.linear_model.Ridge`). Lower values approach OLS; higher values shrink toward zero. |
 
 **Returns**
@@ -873,8 +873,8 @@ Oracle 6: time-ordered "predict tomorrow" retrodiction.
 
 For each checkpoint date D: fit on games with `game_date <= D`, predict
 games with `D < game_date <= D + horizon_days`, aggregate to
-per-(game, team) margins -- reusing fit_on` / design_with_ids`
-/ `predict_points` / team_game_margins` (the same machinery
+per-(game, team) margins -- reusing `_fit_on` / `_design_with_ids`
+/ `predict_points` / `_team_game_margins` (the same machinery
 `retrodiction` uses). `carry_forward_rmse` reapplies the PREVIOUS
 checkpoint's fit (no refit) to the current window. `random_fold_rmse` is
 `retrodiction`'s pooled game-margin RMSE on the same possessions.

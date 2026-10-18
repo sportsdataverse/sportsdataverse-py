@@ -352,6 +352,13 @@ def parse_ha(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequ
 
             from sportsdataverse.hockey.ha import parse_ha
             parse_ha({"results": [{"player": "Scott Pooley", "team": "AIK", "GP": 51}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_skater_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.ha.ha_goalie_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _table(raw, _GENERIC, columns, return_as_pandas)
 
@@ -376,6 +383,12 @@ def parse_ha_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             from sportsdataverse.hockey.ha import parse_ha_team_stats
             parse_ha_team_stats({"data": [{"team_code": "IFB", "W": 41, "L": 11, "OTW": 3, "SOW": 4}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_team_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _table(raw, {"w": "wins_total", "l": "losses_total"}, columns, return_as_pandas)
 
@@ -397,6 +410,12 @@ def parse_ha_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optiona
 
             from sportsdataverse.hockey.ha import parse_ha_teams
             parse_ha_teams({"teams": [{"statNetId": "MIK", "teamCode": "MORA", "name": "Mora IK"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_teams` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     req = _request(raw)
     teams = _list(raw.get("teams")) if isinstance(raw, dict) else []
@@ -427,6 +446,12 @@ def parse_ha_standings(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
             from sportsdataverse.hockey.ha import parse_ha_standings
             parse_ha_standings({"standings": [{"teamCode": "MODO", "statNetClubLabel": "MoDo", "wins": "24"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     names = {
         "team_code": "team_code_mixed",
@@ -490,6 +515,12 @@ def parse_ha_games(raw: Any, *, return_as_pandas: bool = False, columns: Optiona
             from sportsdataverse.hockey.ha import parse_ha_games
             df = parse_ha_games({"results": [{"Date": "2027-03-05", "HomeTeam": "BIK", "decided_in": ""}]})
             df["is_played"]
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_games` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     req = _request(raw)
     rows = (_stamp(_games_row(g), req) for g in _rows(raw))
@@ -531,6 +562,13 @@ def parse_ha_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
             from sportsdataverse.hockey.ha import parse_ha_schedule
             parse_ha_schedule({"data": [{"id": 6566, "slug": "20260918-aik-modo", "season": "season_2026"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.ha.ha_game` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _finish(_frame(_cms_game_row(g) for g in _rows(raw)), columns, return_as_pandas)
 
@@ -561,6 +599,12 @@ def parse_ha_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional[
 
             from sportsdataverse.hockey.ha import parse_ha_pbp
             parse_ha_pbp({"game_events": [{"Period": "1", "Events": [{"type": "Shot", "time": "44"}]}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_pbp` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     req = _request(raw)
     rows = []
@@ -595,6 +639,12 @@ def parse_ha_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             from sportsdataverse.hockey.ha import parse_ha_leaders
             parse_ha_leaders({"players": [{"rank": 1, "playerStatNetId": "4204", "teamID": "LIF", "metric": "TP"}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_leaders` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _table(raw, {"player": "player_name", "team_id": "team_statnet_id"}, columns, return_as_pandas)
 
@@ -619,6 +669,12 @@ def parse_ha_players(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             from sportsdataverse.hockey.ha import parse_ha_players
             parse_ha_players({"players": [{"id": 2690, "slug": "christopher-bengtsson", "team": {"id": 81}}]})
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_players` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     names = {
         "id": "player_cms_id",

@@ -1198,12 +1198,12 @@ def shl_athlete_game_log(
     """Player game log of one season.
 
     Endpoint: ``GET https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog``
-    Example URL: https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2026
+    Example URL: https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2025
 
     Args:
         athlete_uuid: Required. Athlete uuid.
         master_site_instance_id: Site instance (shl1_shl). No effect in the drop-one probe.
-        season: Season END year (2026 = 2025/26); the runtime sends the START year this route takes. None = the player's default (shorter) log.
+        season: Season END year (2026 = 2025/26); the wrapper sends the START year this route takes (season - 1). None = the player's default (shorter) log.
         return_parsed: parse the payload through parse_shl_stats_info -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -1233,7 +1233,7 @@ def shl_athlete_game_log(
     _params = {
         "playerUuid": athlete_uuid,
         "masterSiteInstanceId": master_site_instance_id,
-        "season": season,
+        "season": None if season is None else int(season) - 1,
     }
     _params.update(_caller_params)
     raw = _get(

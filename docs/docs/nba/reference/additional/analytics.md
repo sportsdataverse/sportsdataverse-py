@@ -317,13 +317,13 @@ game's own team pace), then summed — the result is fully deterministic.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `player_logs` | `DataFrame` |  | Per-player-per-game box lines (`game_id`, `team_id`, `player_id`, `min`, and the counting stats in STATS`). |
+| `player_logs` | `DataFrame` |  | Per-player-per-game box lines (`game_id`, `team_id`, `player_id`, `min`, and the counting stats in `_STATS`). |
 | `team_logs` | `DataFrame` |  | Per-team-per-game lines (`game_id`, `team_id`, `min`, `fga`, `oreb`, `tov`, `fta`) for the possession estimate. |
 | `game_ids` | `Optional[List[str]]` | `None` | Optional subset of `game_id` to include (default: all). |
 
 **Returns**
 
-One row per player: `player_id`, the STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
+One row per player: `player_id`, the `_STATS` per-100 rates, `min` (total), `gp` (games). Empty frame with that schema on empty input.
 
 | col_name | type | description |
 |---|---|---|
@@ -408,7 +408,7 @@ Companion to `build_possessions`: instead of one team-level row per
 possession, emits one row per distinct shooter (`player_id`) per
 possession, with their own `fg2a/fg2m/fg3a/fg3m/fta/ftm` counts. Shares
 the same possession-group traversal as `build_possessions` via
-assemble` — the two frames are always built from a single
+`_assemble` — the two frames are always built from a single
 consistent pass over the play-by-play. Consumed by WP2's luck-adjusted
 shooting response.
 

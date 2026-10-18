@@ -65,8 +65,8 @@ Everything else is the package error vocabulary from the shared getter: 404 (the
 ``gameoverview`` ``{"error": "GameNotFound"}``) -> ``NoDataError``, 400
 (``MissingSearchQuery``) -> ``ValueError``, any other non-2xx, an empty or non-JSON 200 or a
 dead connection -> ``AssetFetchError``. Every request, each retry included, goes through
-:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, so every attempt waits at least one
-second after the last one to the host (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait`).
+:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, so every attempt starts at least one
+second after the host's last answer finished (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite`).
 """
 
 from __future__ import annotations

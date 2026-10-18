@@ -197,7 +197,7 @@ Parse a Ryan Davis published RAPM CSV (single-season or multi-year window).
 Serves BOTH real files -- `rapm_ryan_davis.csv` (`season` like
 `"2009-10"`) and `rapm_multi_ryan_davis.csv` (`season` like
 `"2011-16"`, a multi-year decay window) -- since they share an
-identical header. Only the combined (not per-side Off`/Def`)
+identical header. Only the combined (not per-side `__Off`/`__Def`)
 rating columns are kept, matching the model zoo's combined-rating
 convention (`nba_rapm`'s `rapm` column, not separate offense/defense).
 
