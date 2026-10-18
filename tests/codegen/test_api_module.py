@@ -318,3 +318,166 @@ def test_body_and_format_spec_errors(tmp_path, extra, match):
     )
     with pytest.raises(spec.SpecError, match=match):
         spec.load_flat_api(y, {})
+
+
+# --- declarative transforms and per-route getters ----------------------------------------------
+
+_FAKE_RUNTIME = """
+calls = []
+
+
+def _get(url, params=None, **kw):
+    calls.append(("_get", url, params))
+    return {}
+
+
+def _other(url, params=None, **kw):
+    calls.append(("_other", url, params))
+    return {}
+
+
+def join(value, other):
+    return f"{value}-{other}"
+
+
+def _build_query(qs):
+    return {**qs, "rewritten": 1}
+"""
+
+
+def _fake_runtime(tmp_path, monkeypatch, name):
+    (tmp_path / f"{name}.py").write_text(_FAKE_RUNTIME, encoding="utf-8")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    return __import__(name)
+
+
+def test_declarative_transforms_render_and_replay(tmp_path, monkeypatch):
+    rt = _fake_runtime(tmp_path, monkeypatch, "_fake_rt_transforms")
+    src, mod = _render_and_load(
+        tmp_path,
+        "api: t\nhost: 'https://t.test'\nname_pattern: 't_{short}'\nmodule: t\n"
+        "getter_module: _fake_rt_transforms\nruntime_imports: [_get, join]\n"
+        "endpoints:\n"
+        "  - short: games\n    summary: 'Games.'\n    path: '/games/{season}'\n"
+        "    example_args: { season: 2026, kind: reg, code: 7 }\n"
+        "    path_params:\n"
+        "      - { name: season, type: int, required: true, transform: { offset: -1 } }\n"
+        "    extra_params:\n"
+        "      - { name: kind, query_key: kind, type: str }\n"
+        "      - { name: code, query_key: code, type: str, transform: { fn: join, with: [kind] } }\n"
+        "      - { name: back, query_key: back, type: int, transform: { offset: 2 } }\n",
+        "_gen_transforms",
+    )
+    assert "join(code, kind)" in src and "int(season) - 1" in src and "int(back) + 2" in src
+    mod.t_games(season=2026, kind="reg", code=7)
+    assert rt.calls == [("_get", "https://t.test/games/2025", {"kind": "reg", "code": "7-reg", "back": None})]
+    # the documented example is what the wrapper requests: season 2026 -> 2025 in the path, the code joined
+    url = generate._example_url(
+        "https://t.test",
+        spec.load_flat_api(tmp_path / "_gen_transforms.yaml", {}).endpoints[0],
+        "",
+        "",
+        "_fake_rt_transforms",
+    )
+    assert url == "https://t.test/games/2025?kind=reg&code=7-reg&rewritten=1"
+    mod.t_games(season=2026)  # a None optional is passed through the offset untouched
+    assert rt.calls[-1][2]["back"] is None
+
+
+@pytest.mark.parametrize(
+    ("transform", "match"),
+    [
+        ("{ offset: x }", "transform must be"),
+        ("{ offset: true }", "transform must be"),
+        ("{ fn: a, wat: 1 }", "transform must be"),
+        ("{ fn: a, with: [nope] }", "unknown param"),
+        ("7", "transform must be"),
+    ],
+)
+def test_bad_transform_is_a_spec_error(tmp_path, transform, match):
+    y = tmp_path / "x.yaml"
+    y.write_text(
+        "api: x\nhost: 'https://x.test'\nname_pattern: 'x_{short}'\nmodule: x\n"
+        f"endpoints:\n  - short: a\n    path: '/a'\n    extra_params: [ {{ name: q, transform: {transform} }} ]\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match=match):
+        spec.load_flat_api(y, {})
+
+
+def test_per_route_getter(tmp_path, monkeypatch):
+    rt = _fake_runtime(tmp_path, monkeypatch, "_fake_rt_getter")
+    src, mod = _render_and_load(
+        tmp_path,
+        "api: g\nhost: 'https://g.test'\nname_pattern: 'g_{short}'\nmodule: g\n"
+        "getter_module: _fake_rt_getter\nruntime_imports: [_get]\n"
+        "endpoints:\n"
+        "  - { short: plain, summary: 'Plain.', path: '/plain' }\n"
+        "  - { short: named, summary: 'Named.', path: '/named', getter: _other }\n"
+        "  - { short: dotted, summary: 'Dotted.', path: '/dotted', getter: '_fake_rt_getter:_other' }\n",
+        "_gen_getter",
+    )
+    assert "from _fake_rt_getter import _get, _other\n" in src
+    mod.g_plain()
+    mod.g_named()
+    mod.g_dotted()
+    assert [c[0] for c in rt.calls] == ["_get", "_other", "_other"]
+    assert "from _fake_rt_getter import _other as _other__fake_rt_getter" in src  # dotted: its own alias
+
+
+def test_per_route_getter_only_family_import_is_dropped_when_unused(tmp_path, monkeypatch):
+    _fake_runtime(tmp_path, monkeypatch, "_fake_rt_alldotted")
+    src, _ = _render_and_load(
+        tmp_path,
+        "api: h\nhost: 'https://h.test'\nname_pattern: 'h_{short}'\nmodule: h\n"
+        "getter_module: _fake_rt_alldotted\nruntime_imports: [_get]\n"
+        "endpoints:\n  - { short: only, summary: 'Only.', path: '/only', getter: '_fake_rt_alldotted:_other' }\n",
+        "_gen_alldotted",
+    )
+    header = src.split("def h_only")[0]
+    assert "import _get" not in header  # no family-getter import when every route brings its own
+    assert "from _fake_rt_alldotted import _other as _other__fake_rt_alldotted" in header
+
+
+def test_espn_endpoints_reject_a_getter(tmp_path):
+    y = tmp_path / "espn_x.yaml"
+    y.write_text(
+        "api: espn_x\nhost: site\nname_pattern: 'espn_{prefix}_{short}'\n"
+        "endpoints:\n  - { short: a, path: '/a', getter: g }\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="getter"):
+        spec.load_espn_api(y, {})
+
+
+def test_no_r_fallback_is_a_family_flag(tmp_path, monkeypatch):
+    for stem, flag in (("flagged", "no_r_fallback: true\n"), ("plain", ""), ("shared", "no_r_fallback: true\n")):
+        (tmp_path / f"{stem}.yaml").write_text(
+            f"api: {stem}\nhost: 'https://{stem}.test'\nname_pattern: '{stem}_{{short}}'\nmodule: {stem}\n{flag}endpoints:\n"
+            f"  - {{ short: a, path: '/a', returns_schema: 'native/{stem}/only_{stem}' }}\n"
+            "  - { short: b, path: '/b', returns_schema: 'native/x/both' }\n",
+            encoding="utf-8",
+        )
+    monkeypatch.setattr(generate, "ENDPOINTS", tmp_path)
+    monkeypatch.setattr(generate, "FLAT_APIS", [("flagged", "f"), ("plain", "p"), ("shared", "s")])
+    generate._no_r_fallback_schemas.cache_clear()
+    try:
+        got = generate._no_r_fallback_schemas()
+    finally:
+        generate._no_r_fallback_schemas.cache_clear()
+    # only_flagged / only_shared: every family returning them is flagged. ``both`` is also returned by the
+    # unflagged family, so the bare-name lookup stays ambiguous and keeps its R fallback.
+    assert got == {"only_flagged", "only_shared"}
+    assert spec.load_flat_api(tmp_path / "flagged.yaml", {}).no_r_fallback is True
+    assert spec.load_flat_api(tmp_path / "plain.yaml", {}).no_r_fallback is False
+
+
+def test_the_aggregate_families_declare_the_flag():
+    params = spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    flagged = {
+        stem
+        for stem, _ in generate.FLAT_APIS
+        if (generate.ENDPOINTS / f"{stem}.yaml").exists()
+        and spec.load_flat_api(generate.ENDPOINTS / f"{stem}.yaml", params).no_r_fallback
+    }
+    assert flagged == {"nflpro", "nfl_api", "pff", "pff_api", "on3"}
