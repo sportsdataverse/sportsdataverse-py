@@ -1,0 +1,62 @@
+{
+  "data": [
+    {
+      "fotograf": "https://tbf.org.tr/res/8c37f5b5-a985-473c-aebb-4988bbd1bd27_AhmetArdaAydn.webp",
+      "adiSoyadi": "Ahmet Arda Aydın",
+      "tabiyet": "TÜRKİYE",
+      "tabiyetKısa": "TUR",
+      "takimAdi": "BAHÇEŞEHİR KOLEJİ",
+      "takimLogo": "https://tbf.org.tr/res/6614b87e-2c79-4249-9aca-b879a9e0a182_baheehir.png",
+      "takimHexRenkKod1": "#c9c8cb",
+      "takimHexRenkKod2": "#230c79",
+      "dogumTarihi": "2007-07-31T00:00:00",
+      "kisiID": 467246,
+      "takimID": 55636,
+      "formaNo": "23",
+      "prefix": "bsl",
+      "isFavorite": false,
+      "seasonId": 172
+    },
+    {
+      "fotograf": "https://tbf.org.tr/res/7e4a3544-0862-42f6-8cc2-32a06244cd39_AhmetDuveriolu.webp",
+      "adiSoyadi": "Ahmet Duverioğlu",
+      "tabiyet": "TÜRKİYE",
+      "tabiyetKısa": "TUR",
+      "takimAdi": "SAFİPORT EROKSPOR",
+      "takimLogo": "https://tbf.org.tr/res/366fb012-1258-4adf-bde3-940490cb6b11_erokspor.png",
+      "takimHexRenkKod1": "#c9c9c9",
+      "takimHexRenkKod2": "#4a7147",
+      "dogumTarihi": "1993-03-04T00:00:00",
+      "kisiID": 342786,
+      "takimID": 184811,
+      "formaNo": "44",
+      "prefix": "bsl",
+      "isFavorite": false,
+      "seasonId": 172
+    },
+    {
+      "fotograf": "https://tbf.org.tr/res/54d7b784-bdc2-408d-bd20-ba84b65c698b_AkwasiAbeyieYeboah.webp",
+      "adiSoyadi": "Akwasi Yeboah",
+      "tabiyet": "BÜYÜK BRİTANYA VE KUZEY İRLANDA BİRLEŞİK KRALLIĞI",
+      "tabiyetKısa": "GB",
+      "takimAdi": "TRABZONSPOR",
+      "takimLogo": "https://tbf.org.tr/res/c1b89960-baa4-43a4-a5fb-891bcaae0b09_TRABZONSPORanalogo.png",
+      "takimHexRenkKod1": "#0296f2",
+      "takimHexRenkKod2": "#670921",
+      "dogumTarihi": "1997-06-15T00:00:00",
+      "kisiID": 512899,
+      "takimID": 47153,
+      "formaNo": "15",
+      "prefix": "bsl",
+      "isFavorite": false,
+      "seasonId": 172
+    }
+  ],
+  "count": 293,
+  "pageNumber": 1,
+  "pageCount": 1,
+  "hasPreviousPage": false,
+  "hasNextPage": false,
+  "isSuccess": true,
+  "problemDetails": null
+}

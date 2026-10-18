@@ -1,0 +1,13 @@
+[
+ "/divisions/{division_id}/games/standings",
+ "/divisions/{division_id}/players/{player_id}/shooting-spots",
+ "/divisions/{division_id}/teams/{team_id}/players",
+ "/divisions/{division_id}/teams/{team_id}/shooting-spots",
+ "/events/{event_id}/divisions",
+ "/events/{event_id}/teams",
+ "/games/{game_id}",
+ "/games/{game_id}/stats",
+ "/players/{player_id}/games/stats",
+ "/seasons",
+ "/seasons/{season_id}/games"
+]

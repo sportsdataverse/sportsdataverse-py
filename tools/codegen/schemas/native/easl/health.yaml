@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: status
+  type: character
+- description: ''
+  name: message
+  type: character
+- description: ''
+  name: timestamp
+  type: character
+kind: dataframe
+schema: easl_health

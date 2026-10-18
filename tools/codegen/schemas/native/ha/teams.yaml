@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_statnet_id
+  type: character
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: logos_icon
+  type: character
+- description: ''
+  name: logos_large
+  type: character
+- description: ''
+  name: logos_small
+  type: character
+- description: ''
+  name: logos_medium
+  type: character
+- description: ''
+  name: logos_xlarge
+  type: character
+kind: dataframe
+schema: ha_teams

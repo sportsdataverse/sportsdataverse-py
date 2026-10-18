@@ -1,0 +1,73 @@
+{
+  "league_id": 45,
+  "league_title": "25-26 Wリーグ",
+  "season_id": 169,
+  "season_full_name": "25-26 Wリーグ レギュラーシーズン プレミア",
+  "season_team_id": 1343,
+  "team_id": 13,
+  "comment": "【キャプテン】<br>#23 山本 麻衣<br>【サブキャプテン】<br>#14 平下 愛佳<br> 【新人選手】<br>#13 オコンクウォ スーザン アマカ / #24 シュック カイリー アネット",
+  "coach_id": 175,
+  "coach_name": "大神 雄子",
+  "coach_picture": "/static/images/coach/TOY_HC_oga_cr.jpg",
+  "players": [
+    {
+      "player_id": 14380,
+      "player_name": "古木 梨子",
+      "player_number": "1",
+      "captain_flg": 0,
+      "sub_captain_flg": 0,
+      "transfer_flg": 0,
+      "position": "",
+      "rookie": 0,
+      "early_entry": 0,
+      "picture": "/static/images/player/2026/TOY_02_furuki_cr.jpg",
+      "foreign_national_flg": 0,
+      "naturalized_flg": 0
+    },
+    {
+      "player_id": 14381,
+      "player_name": "小野寺 佑奈",
+      "player_number": "3",
+      "captain_flg": 0,
+      "sub_captain_flg": 0,
+      "transfer_flg": 0,
+      "position": "",
+      "rookie": 0,
+      "early_entry": 0,
+      "picture": "/static/images/player/2026/TOY_03_onodera_cr.jpg",
+      "foreign_national_flg": 0,
+      "naturalized_flg": 0
+    },
+    {
+      "player_id": 9850,
+      "player_name": "横山 智那美",
+      "player_number": "7",
+      "captain_flg": 0,
+      "sub_captain_flg": 0,
+      "transfer_flg": 0,
+      "position": "",
+      "rookie": 0,
+      "early_entry": 0,
+      "picture": "/static/images/player/2026/TOY_07_yokoyama_cr.jpg",
+      "foreign_national_flg": 0,
+      "naturalized_flg": 0
+    }
+  ],
+  "staffs": [
+    {
+      "staff_name": "清野 英二",
+      "position": "ゼネラルマネージャー",
+      "url": ""
+    },
+    {
+      "staff_name": "田邊 広子",
+      "position": "総括",
+      "url": ""
+    },
+    {
+      "staff_name": "イヴァン トリノス",
+      "position": "アソシエイトヘッドコーチ",
+      "url": ""
+    }
+  ]
+}

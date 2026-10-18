@@ -1,0 +1,6 @@
+{
+  "label": "FIBA digital API (GDAP, digital-api.fiba.basketball)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "fiba_hub/reference/fiba_gdap"}
+}

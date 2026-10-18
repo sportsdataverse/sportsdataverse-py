@@ -1,0 +1,6 @@
+{
+  "label": "EASL sync server (easl.joshricha.com, third-party over Sportradar DataCore)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "easl/reference/easl"}
+}

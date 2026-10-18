@@ -1,0 +1,6 @@
+{
+  "label": "SIHF statistics API (data.sihf.ch; National League, Swiss League and every SIHF league)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "sihf/reference/sihf_api_web"}
+}

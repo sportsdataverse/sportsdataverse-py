@@ -1,0 +1,39 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition_name
+  type: character
+- description: ''
+  name: uu_team_id
+  type: integer
+- description: ''
+  name: competition_team_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_short_name
+  type: character
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: club_name
+  type: character
+- description: ''
+  name: average_score_for
+  type: numeric
+- description: ''
+  name: average_score_against
+  type: numeric
+- description: ''
+  name: field_goal_percent
+  type: numeric
+kind: dataframe
+schema: sportpress_team_find

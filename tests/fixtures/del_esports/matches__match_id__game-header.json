@@ -1,0 +1,85 @@
+{
+  "actualTimeName": "Ende",
+  "actualTimeAlias": "K",
+  "stadium": "Helios Arena",
+  "numberOfViewers": 4292,
+  "referees": {
+    "headReferee1": {
+      "id": 282,
+      "name": "Martin Frano"
+    },
+    "headReferee2": {
+      "id": 122,
+      "name": "Lukas Kohlmüller"
+    },
+    "lineReferee1": {
+      "id": 140,
+      "name": "David Tschirner"
+    },
+    "lineReferee2": {
+      "id": 302,
+      "name": "Jonas Reinold"
+    }
+  },
+  "teamInfo": {
+    "home": {
+      "id": 15,
+      "name": "Schwenninger Wild Wings",
+      "shortcut": "SWW"
+    },
+    "visitor": {
+      "id": 12,
+      "name": "EHC Red Bull München",
+      "shortcut": "RBM"
+    }
+  },
+  "trainers": {
+    "visitorHeadCoach": {
+      "id": 1112,
+      "name": "Oliver David"
+    },
+    "homeHeadCoach": {
+      "id": 125,
+      "name": "Steve Walker"
+    }
+  },
+  "teamBilance": {
+    "homeWin": 22,
+    "visitorWin": 22
+  },
+  "results": {
+    "extra_time": false,
+    "shooting": false,
+    "contumacy": false,
+    "score": {
+      "final": {
+        "score_home": 3,
+        "score_guest": 4
+      },
+      "first_period": {
+        "score_home": 1,
+        "score_guest": 0
+      },
+      "second_period": {
+        "score_home": 0,
+        "score_guest": 3
+      },
+      "third_period": {
+        "score_home": 2,
+        "score_guest": 1
+      }
+    }
+  },
+  "bestPlayers": {
+    "home": {
+      "id": 3560,
+      "name": "Eric Martinsson"
+    },
+    "visitor": {
+      "id": 4154,
+      "name": "Antoine Bibeau"
+    }
+  },
+  "overtimeCount": null,
+  "lastEventTime": 3600
+}

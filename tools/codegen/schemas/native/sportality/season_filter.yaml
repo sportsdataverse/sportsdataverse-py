@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: kind
+  type: character
+- description: ''
+  name: code
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: uuid
+  type: character
+- description: ''
+  name: deleted
+  type: logical
+kind: dataframe
+schema: sportality_season_filter

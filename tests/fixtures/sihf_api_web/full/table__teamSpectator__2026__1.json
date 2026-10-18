@@ -1,0 +1,469 @@
+{
+ "title": "Team Stats",
+ "description": "Team Stats - Attendance",
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "spectatorsQuotient",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:10:26.3188228+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    },
+    {
+     "name": "2018/19",
+     "alias": "2019"
+    },
+    {
+     "name": "2017/18",
+     "alias": "2018"
+    },
+    {
+     "name": "2016/17",
+     "alias": "2017"
+    },
+    {
+     "name": "2015/16",
+     "alias": "2016"
+    },
+    {
+     "name": "2014/15",
+     "alias": "2015"
+    },
+    {
+     "name": "2013/14",
+     "alias": "2014"
+    },
+    {
+     "name": "2012/13",
+     "alias": "2013"
+    },
+    {
+     "name": "2011/12",
+     "alias": "2012"
+    },
+    {
+     "name": "2010/11",
+     "alias": "2011"
+    },
+    {
+     "name": "2009/10",
+     "alias": "2010"
+    },
+    {
+     "name": "2008/09",
+     "alias": "2009"
+    },
+    {
+     "name": "1046/47",
+     "alias": "1047"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Goals",
+   "rowIdentifierKey": "goalsFor",
+   "isOrderDescending": true,
+   "alias": "teamGoal"
+  },
+  {
+   "name": "Goals Pos/Nation",
+   "rowIdentifierKey": "goalsForFw",
+   "isOrderDescending": true,
+   "alias": "teamGoalPosNation"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogSog",
+   "isOrderDescending": true,
+   "alias": "teamShotDetail"
+  },
+  {
+   "name": "PP",
+   "rowIdentifierKey": "ppPercent",
+   "isOrderDescending": true,
+   "alias": "teamPp"
+  },
+  {
+   "name": "PK",
+   "rowIdentifierKey": "pkPercent",
+   "isOrderDescending": true,
+   "alias": "teamPk"
+  },
+  {
+   "name": "Penalties",
+   "rowIdentifierKey": "pimTotal",
+   "isOrderDescending": true,
+   "alias": "teamFoul"
+  },
+  {
+   "name": "Shootouts",
+   "rowIdentifierKey": "penShotsPercent",
+   "isOrderDescending": true,
+   "alias": "teamShootout"
+  },
+  {
+   "name": "Faceoffs Summary",
+   "rowIdentifierKey": "faceoffsPercent",
+   "isOrderDescending": true,
+   "alias": "teamFaceoff"
+  },
+  {
+   "name": "Faceoffs/Zone",
+   "rowIdentifierKey": "faceoffsOffensive",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZone"
+  },
+  {
+   "name": "Faceoffs/Spiel",
+   "rowIdentifierKey": "faceoffsOffensivePerGame",
+   "isOrderDescending": true,
+   "alias": "teamFaceoffZoneGame"
+  },
+  {
+   "name": "Attendance",
+   "rowIdentifierKey": "spectatorsQuotient",
+   "isOrderDescending": true,
+   "alias": "teamSpectator"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "total",
+   "rows": [
+    15
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "Heimspiele",
+   "description": "Anzahl Heimspiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "homeGames"
+  },
+  {
+   "name": "Zuschauer",
+   "description": "Total Zuschauer",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "spectators"
+  },
+  {
+   "name": "Ø-Kapazität",
+   "description": "Durchschnittliche Stadionkapazität",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "stadiumCapacityQuotient"
+  },
+  {
+   "name": "Zuschauer / Spiel",
+   "description": "Zuschauer / Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "spectatorsQuotient"
+  },
+  {
+   "name": "Ø-Auslastung in %",
+   "description": "Durchschnittliche Stadionauslastung in %",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "stadiumCapacityPercent"
+  }
+ ],
+ "data": [
+  [
+   "14",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "28",
+   "118’472",
+   "5’276",
+   "4’231",
+   "80.20"
+  ],
+  [
+   "13",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "133’955",
+   "7’453",
+   "5’152",
+   "69.13"
+  ],
+  [
+   "12",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "36",
+   "189’044",
+   "6’100",
+   "5’251",
+   "86.09"
+  ],
+  [
+   "11",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "170’559",
+   "6’733",
+   "5’685",
+   "84.44"
+  ],
+  [
+   "10",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "148’641",
+   "6’000",
+   "5’717",
+   "95.28"
+  ],
+  [
+   "9",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "46",
+   "274’861",
+   "6’547",
+   "5’975",
+   "91.27"
+  ],
+  [
+   "8",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "28",
+   "172’494",
+   "6’556",
+   "6’160",
+   "93.97"
+  ],
+  [
+   "7",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "28",
+   "180’755",
+   "6’775",
+   "6’456",
+   "95.28"
+  ],
+  [
+   "6",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "38",
+   "248’520",
+   "7’135",
+   "6’540",
+   "91.66"
+  ],
+  [
+   "5",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "32",
+   "231’987",
+   "7’450",
+   "7’250",
+   "97.31"
+  ],
+  [
+   "4",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "46",
+   "430’376",
+   "9’356",
+   "9’356",
+   "100.00"
+  ],
+  [
+   "3",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "32",
+   "302’068",
+   "9’600",
+   "9’440",
+   "98.33"
+  ],
+  [
+   "2",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "34",
+   "393’113",
+   "12’000",
+   "11’562",
+   "96.35"
+  ],
+  [
+   "1",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "30",
+   "463’536",
+   "17’031",
+   "15’451",
+   "90.72"
+  ],
+  [
+   "",
+   {
+    "id": 100000,
+    "name": "Total",
+    "acronym": "Total",
+    "signed": false,
+    "type": "team"
+   },
+   "460",
+   "3’458’381",
+   "8’173",
+   "7’518",
+   "91.99"
+  ]
+ ],
+ "alias": "teamSpectator"
+}

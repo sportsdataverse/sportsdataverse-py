@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_label
+  type: character
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: start_date
+  type: character
+- description: ''
+  name: end_date
+  type: character
+- description: ''
+  name: international
+  type: logical
+kind: dataframe
+schema: tbf_seasons

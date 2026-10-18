@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: game_code
+  type: character
+- description: ''
+  name: glkey
+  type: character
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: game_number
+  type: integer
+- description: ''
+  name: rank
+  type: integer
+kind: dataframe
+schema: kbl_team_tracks

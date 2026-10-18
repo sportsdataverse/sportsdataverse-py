@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: surname
+  type: character
+- description: ''
+  name: photo
+  type: character
+- description: ''
+  name: birthdate
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_shortcut
+  type: character
+- description: ''
+  name: goals
+  type: integer
+- description: ''
+  name: assists
+  type: integer
+- description: ''
+  name: points
+  type: integer
+- description: ''
+  name: shots
+  type: integer
+- description: ''
+  name: penalty_minutes
+  type: integer
+kind: dataframe
+schema: icehl_top_scorers

@@ -1,0 +1,167 @@
+{
+  "season_id": 35,
+  "season_label": "2026-2027 m. sezonas",
+  "season_end_year": 2027,
+  "seasons": [
+    {
+      "season_id": 35,
+      "label": "2026-2027 m. sezonas"
+    },
+    {
+      "season_id": 34,
+      "label": "2025-2026 m. sezonas"
+    },
+    {
+      "season_id": 33,
+      "label": "2024-2025 m. sezonas"
+    }
+  ],
+  "full": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 5,
+      "won": 5,
+      "lost": 0,
+      "win_pct": 100.0,
+      "streak": 5,
+      "points_for_avg": 93.8,
+      "points_against_avg": 74.4,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 2,
+      "team_slug": "gargzdai",
+      "team_name": "Gargždai",
+      "played": 5,
+      "won": 4,
+      "lost": 1,
+      "win_pct": 80.0,
+      "streak": 4,
+      "points_for_avg": 92.2,
+      "points_against_avg": 87.8,
+      "last5": [
+        "L",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "siauliai",
+      "team_name": "Šiauliai",
+      "played": 5,
+      "won": 3,
+      "lost": 2,
+      "win_pct": 60.0,
+      "streak": 2,
+      "points_for_avg": 81.8,
+      "points_against_avg": 80.4,
+      "last5": [
+        "L",
+        "W",
+        "L"
+      ]
+    }
+  ],
+  "home": [
+    {
+      "position": 2,
+      "team_slug": "gargzdai",
+      "team_name": "Gargždai",
+      "played": 3,
+      "won": 2,
+      "lost": 1,
+      "points_for_avg": 84.7,
+      "points_against_avg": 85.0,
+      "last5": [
+        "L",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 5,
+      "team_slug": "neptunas",
+      "team_name": "Neptūnas",
+      "played": 3,
+      "won": 2,
+      "lost": 1,
+      "points_for_avg": 85.7,
+      "points_against_avg": 79.7,
+      "last5": [
+        "L",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 6,
+      "team_slug": "lietkabelis",
+      "team_name": "Lietkabelis",
+      "played": 3,
+      "won": 2,
+      "lost": 1,
+      "points_for_avg": 78.0,
+      "points_against_avg": 77.3,
+      "last5": [
+        "W",
+        "W",
+        "L"
+      ]
+    }
+  ],
+  "away": [
+    {
+      "position": 1,
+      "team_slug": "zalgiris",
+      "team_name": "Žalgiris",
+      "played": 3,
+      "won": 3,
+      "lost": 0,
+      "points_for_avg": 90.3,
+      "points_against_avg": 74.0,
+      "last5": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "position": 3,
+      "team_slug": "siauliai",
+      "team_name": "Šiauliai",
+      "played": 3,
+      "won": 1,
+      "lost": 2,
+      "points_for_avg": 80.0,
+      "points_against_avg": 84.7,
+      "last5": [
+        "L",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "position": 7,
+      "team_slug": "juventus",
+      "team_name": "Juventus",
+      "played": 3,
+      "won": 0,
+      "lost": 3,
+      "points_for_avg": 79.0,
+      "points_against_avg": 88.7,
+      "last5": [
+        "L",
+        "L",
+        "L"
+      ]
+    }
+  ],
+  "final": []
+}

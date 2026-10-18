@@ -1,0 +1,45 @@
+{
+  "uuid": "qQ9-349c7WDv6",
+  "fullName": "Lars Johansson",
+  "firstName": "Lars",
+  "lastName": "Johansson",
+  "birthDate": "1987-07-11",
+  "nationality": "SE",
+  "gender": "male",
+  "age": {
+    "value": 39,
+    "format": "years"
+  },
+  "weight": {
+    "value": 90,
+    "format": "kg"
+  },
+  "height": {
+    "value": 185,
+    "format": "cm"
+  },
+  "jerseyNumber": 1,
+  "position": "Målvakt",
+  "positionCode": "GK",
+  "shoots": "Left",
+  "team": {
+    "uuid": "087a-087aTQv9u",
+    "instanceId": "fhc1_fhc",
+    "name": "Frölunda HC",
+    "code": "FHC",
+    "media": "https://sportality.cdn.s8y.se/team-logos/fhc1_fhc.svg"
+  },
+  "seasonStats": [],
+  "careerStats": [],
+  "isInSquad": true,
+  "media": {
+    "url": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+    "alt": "",
+    "srcset": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=160&s=f73742925cee22690f5ad2005d4ff444 160w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=320&s=6785f8624a22de036e2aa5aba941a0a9 320w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=480&s=e2ac42711d40d298a43668c31523c461 480w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=640&s=95f231a1e79edb32974bf37d3a98c01d 640w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=960&s=a3cb3c62d936b9afac727cf81c85120f 960w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1280&s=7dd410a58cc0026f883159483f3b04f6 1280w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1600&s=a5f17c5dd1e136243d47ea9a18c3d25a 1600w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=1920&s=2c4ea042cf3c5e48717936b692d6ca34 1920w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2560&s=6dcb84895cf6da13bc7c48c6f35d69fa 2560w,\nhttps://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&w=2880&s=62541abfe864ee0626ff1e7750a296f8 2880w",
+    "urlImgOriginalProportion": "https://s8y-cdn-sp-photos.imgix.net/https%3A%2F%2Frmss-hockeyse-cdn-prd.fra1.digitaloceanspaces.com%2Fsports%2Fplayer%2Fportrait%2F620f514c-fc00-4f2b-b546-6c7b00e999f2Lars%20Johansson.png?ixlib=js-3.8.0&s=bcc9f85e5c952631c7e7897fb37b4381",
+    "urlPlaceholderImage": "",
+    "videourl": "",
+    "photographer": "",
+    "focalPoint": {}
+  }
+}

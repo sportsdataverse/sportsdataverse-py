@@ -1,0 +1,182 @@
+[
+  {
+    "id": 124,
+    "name": "Nikolaj Krag Christensen",
+    "firstname": "Nikolaj",
+    "surname": "Krag Christensen",
+    "birthdate": "1998-08-12",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 92,
+    "height": 188,
+    "jersey": 11,
+    "birthCountry": "",
+    "nationality": "Denmark",
+    "nationalityShort": "DEN",
+    "statistics": {
+      "teamShortcut": "ROD",
+      "games": 1,
+      "goals": {
+        "home": 1,
+        "away": 0
+      },
+      "assists": {
+        "home": 0,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 2,
+      "positive": 0,
+      "negative": 0,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 0,
+      "penaltyMinutesPerGame": 2.0,
+      "ppGoals": 1,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 0,
+      "shotsOnGoal": {
+        "home": 0,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 0,
+      "timeoniceEQ": 0,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0,
+      "xG": 0.0,
+      "top5": false,
+      "rank": 1
+    }
+  },
+  {
+    "id": 405,
+    "name": "Jerkko Rämö",
+    "firstname": "Jerkko",
+    "surname": "Rämö",
+    "birthdate": "2000-05-09",
+    "active": true,
+    "position": "DE",
+    "stick": "left",
+    "weight": 80,
+    "height": 180,
+    "jersey": 44,
+    "birthCountry": "",
+    "nationality": "Finland",
+    "nationalityShort": "FIN",
+    "statistics": {
+      "teamShortcut": "ROD",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 1,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 0,
+      "negative": 0,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 0,
+      "shotsOnGoal": {
+        "home": 0,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 0,
+      "timeoniceEQ": 0,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0,
+      "xG": 0.0,
+      "top5": false,
+      "rank": 2
+    }
+  },
+  {
+    "id": 220,
+    "name": "Miku Ronkainen",
+    "firstname": "Miku",
+    "surname": "Ronkainen",
+    "birthdate": "1997-08-21",
+    "active": true,
+    "position": "FW",
+    "stick": "left",
+    "weight": 74,
+    "height": 178,
+    "jersey": 94,
+    "birthCountry": "",
+    "nationality": "Finland",
+    "nationalityShort": "FIN",
+    "statistics": {
+      "teamShortcut": "ROD",
+      "games": 1,
+      "goals": {
+        "home": 0,
+        "away": 0
+      },
+      "assists": {
+        "home": 1,
+        "away": 0
+      },
+      "points": {
+        "home": 1,
+        "away": 0
+      },
+      "penaltyMinutes": 0,
+      "positive": 0,
+      "negative": 0,
+      "pointsPerGame": 1.0,
+      "shotEfficiency": 0,
+      "penaltyMinutesPerGame": 0.0,
+      "ppGoals": 0,
+      "shGoals": 0,
+      "gwGoals": 0,
+      "shotsAttempts": 0,
+      "shotsOnGoal": {
+        "home": 0,
+        "away": 0
+      },
+      "shotsMissed": 0,
+      "shotsBlocked": 0,
+      "blockedShotsByPlayer": 0,
+      "faceoffsWin": 0,
+      "faceoffsLosses": 0,
+      "faceoffsCount": 0,
+      "timeonice": 0,
+      "timeoniceEQ": 0,
+      "timeonicePP": 0,
+      "timeoniceSH": 0,
+      "hits": 0,
+      "xG": 0.0,
+      "top5": false,
+      "rank": 3
+    }
+  }
+]

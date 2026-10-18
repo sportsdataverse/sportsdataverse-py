@@ -1,0 +1,345 @@
+api: vhl
+docstring:
+  example_import: true
+  notes:
+  - 'Owner flag (sdv-internal-refs/vhl/README.md): the VHL is run by Russian league
+    operators, and several clubs are owned or sponsored by sanctioned state companies.
+    Fetching on your own machine is fine; a published data release or a hosted mirror
+    needs the owner''s sanctions / legal sign-off first.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season
+    without that stage, a game not in the season''s calendar, an unknown game, player
+    or team page).'
+  - 'sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it
+    is not the page asked for (another season, game or player; a missing table or
+    header drift).'
+  raw_doc: 'the page''s parsed record (``dict``): the sdv-internal-refs capture shape,
+    plus ``_request`` (season, stage, tn and the ids asked for)'
+  see_also:
+  - name: VHL
+    note: the league site whose pages these wrappers read
+    url: https://www.vhlru.ru/en/
+  - name: fastRhockey
+    note: SportsDataverse hockey package (R)
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_schedule
+  path: /en/calendar/{season}/0/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/schedule
+  short: schedule
+  summary: 'Schedule and results of one season stage: every game with its club ids,
+    score and decision.'
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Game id (game_id in vhl_schedule; the report's and the
+      broadcast's idgame), e.g. 899223.
+    name: game_id
+    query_key: idgame
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_game_info
+  path: /en/report/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/game_info
+  short: game_info
+  summary: 'Game header of a report: date, attendance, score by period, teams, coaches
+    and officials.'
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Game id (game_id in vhl_schedule; the report's and the
+      broadcast's idgame), e.g. 899223.
+    name: game_id
+    query_key: idgame
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_goals
+  path: /en/report/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/goals
+  short: goals
+  summary: Goals of a game with scorer, assists, strength and the jerseys on ice for
+    both teams.
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Game id (game_id in vhl_schedule; the report's and the
+      broadcast's idgame), e.g. 899223.
+    name: game_id
+    query_key: idgame
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_penalties
+  path: /en/report/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/penalties
+  short: penalties
+  summary: 'Penalties of a game: team, time, player, minutes and infraction.'
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Game id (game_id in vhl_schedule; the report's and the
+      broadcast's idgame), e.g. 899223.
+    name: game_id
+    query_key: idgame
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_player_box
+  path: /en/report/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/player_box
+  short: player_box
+  summary: 'Skater box score of a game: scoring, shots, faceoffs, time on ice, hits
+    and blocks.'
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Game id (game_id in vhl_schedule; the report's and the
+      broadcast's idgame), e.g. 899223.
+    name: game_id
+    query_key: idgame
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_goalie_box
+  path: /en/report/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/goalie_box
+  short: goalie_box
+  summary: 'Goalie box score of a game: shots against, saves, save percentage and
+    time on ice.'
+- example_args:
+    game_id: 899223
+    season: 2026
+  extra_params:
+  - description: Required. Season END year of the game; with ``stage`` it locates
+      the game in the calendar, whose game number the broadcast page must carry (the
+      page names no game id).
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  host: https://online.vhlru.ru
+  parser: parse_vhl_pbp
+  path: /online/{game_id}.html
+  path_params:
+  - description: Game id (game_id in vhl_schedule; the report's and the broadcast's
+      idgame), e.g. 899223.
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/vhl/pbp
+  short: pbp
+  summary: 'Text broadcast of a game (online.vhlru.ru, Russian text): goals, penalties,
+    shootout attempts, goalie changes and comments. No shot coordinates.'
+- example_args:
+    season: 2026
+  parser: parse_vhl_standings
+  path: /en/standings/league/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/standings
+  short: standings
+  summary: League standings of one regular season (/standings/league/; /standings/regular/
+    ignores the season).
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_skater_stats
+  path: /en/stats/players/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/skater_stats
+  short: skater_stats
+  summary: Season stats of every defenseman and forward of one season stage.
+- example_args:
+    season: 2026
+  extra_params:
+  - choices:
+    - regular
+    - playoff
+    default: regular
+    description: 'Season stage: regular (default) or playoff.'
+    name: stage
+    query_key: stage
+    type: str
+  parser: parse_vhl_goalie_stats
+  path: /en/stats/players/{season}/
+  path_params:
+  - description: Season END year (2026 = 2025/26; the calendar covers 2010/11 on).
+      The runtime maps it, with ``stage``, to the site's tournament id (tn) in this
+      path segment.
+    name: season
+    required: true
+    type: int
+  returns_schema: native/vhl/goalie_stats
+  short: goalie_stats
+  summary: Season stats of every goalie of one season stage.
+- example_args:
+    player_id: 34526
+  parser: parse_vhl_player
+  path: /en/players/{player_id}/
+  path_params:
+  - description: Player id (player_id in any VHL frame), e.g. 34526.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/vhl/player
+  short: player
+  summary: 'Player card: position, height, weight, birth date, age, country and photo.'
+- example_args:
+    player_id: 34526
+  parser: parse_vhl_player_career
+  path: /en/players/{player_id}/
+  path_params:
+  - description: Player id (player_id in any VHL frame), e.g. 34526.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/vhl/player_career
+  short: player_career
+  summary: Player career by season stage and team (skater and goalie columns in one
+    frame).
+- example_args:
+    team_page_id: 390
+  parser: parse_vhl_roster
+  path: /en/teams/{team_page_id}/
+  path_params:
+  - description: Team page id (home_team_page_id / away_team_page_id in vhl_game_info),
+      e.g. 390. Neither a club id nor a team-season id.
+    name: team_page_id
+    required: true
+    type: int
+  returns_schema: native/vhl/roster
+  short: roster
+  summary: CURRENT roster of a team page (player names in Cyrillic even on /en/).
+getter_module: sportsdataverse.hockey.vhl.vhl_runtime
+host: https://www.vhlru.ru
+module: vhl
+name_pattern: vhl_{short}
+parser_columns: true
+parser_module: hockey.vhl.vhl_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: vhl_

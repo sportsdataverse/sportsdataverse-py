@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: identification_number
+  type: integer
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: year_of_birth
+  type: integer
+- description: ''
+  name: nationality_id
+  type: integer
+- description: ''
+  name: nationality_alpha2_code
+  type: character
+- description: ''
+  name: nationality_alpha3_code
+  type: character
+- description: ''
+  name: nationality_name
+  type: character
+- description: ''
+  name: nationality_eng_name
+  type: character
+- description: ''
+  name: homegrown
+  type: logical
+- description: ''
+  name: photo_uuid
+  type: character
+- description: ''
+  name: positions
+  type: character
+kind: dataframe
+schema: kzs_player

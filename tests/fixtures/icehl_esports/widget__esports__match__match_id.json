@@ -1,0 +1,1205 @@
+{
+  "statusId": 1,
+  "statusMsg": "Ok",
+  "data": {
+    "gameData": {
+      "id": 8161,
+      "divisionId": 56,
+      "divisionLongname": "ICEHL 2026/27",
+      "divisionShortname": "ICEHL 2026/27",
+      "scheduledDate": {
+        "formattedShort": "18.09.26",
+        "formattedLong": "18.September. 2026",
+        "timestamp": 1789682400000,
+        "value": "2026-09-18",
+        "diffToNow": 0
+      },
+      "scheduledTime": "18:30",
+      "startTime": "18:30",
+      "endTime": "20:18",
+      "isOvertime": 0,
+      "isShootOut": 0,
+      "homeTeamId": 4,
+      "homeTeamLongname": "FTC-Telekom",
+      "homeTeamShortname": "FTC",
+      "homeTeamFlavourname": "FTC-Telekom",
+      "homeTeamScore": 3,
+      "awayTeamId": 10,
+      "awayTeamLongname": "Olimpija Ljubljana",
+      "awayTeamShortname": "OLL",
+      "awayTeamFlavourname": "Olimpija Ljubljana",
+      "awayTeamScore": 5,
+      "gameStatus": 4,
+      "gameExtendedStatus": 0,
+      "gameExtendedStatusInfoText": "",
+      "gameName": "2",
+      "gameDay": "1",
+      "gameRound": 0,
+      "location": {
+        "longname": "Tüskecsarnok",
+        "shortname": "Tüskecsarnok",
+        "coordinates": {
+          "lat": 0,
+          "lng": 0
+        }
+      },
+      "attendance": 1268,
+      "liveTime": 3600,
+      "liveTimeFormatted": "END-GAME",
+      "liveTimePeriod": 4,
+      "liveTimeString": "END-GAME",
+      "liveTimeGamePhase": "END OF GAME",
+      "periodStats": [
+        {
+          "period": "1",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 1,
+          "awayScore": 2,
+          "homeShotsOnGoal": 9,
+          "awayShotsOnGoal": 10
+        },
+        {
+          "period": "2",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 1,
+          "awayScore": 2,
+          "homeShotsOnGoal": 10,
+          "awayShotsOnGoal": 10
+        },
+        {
+          "period": "3",
+          "startTime": "",
+          "endTime": "",
+          "homeScore": 1,
+          "awayScore": 1,
+          "homeShotsOnGoal": 12,
+          "awayShotsOnGoal": 6
+        }
+      ],
+      "gameOfficials": {
+        "ref1": {
+          "lastname": "Peter",
+          "firstname": "Gergely"
+        },
+        "ref2": {
+          "lastname": "Smetana",
+          "firstname": "Ladislav"
+        },
+        "linesman1": {
+          "lastname": "Muzsik",
+          "firstname": "Norbert"
+        },
+        "linesman2": {
+          "lastname": "Sábián",
+          "firstname": "Balázs"
+        }
+      },
+      "teamOfficials": {
+        "headcoachhome": {
+          "lastname": "Timo Saarikoski",
+          "firstname": ""
+        },
+        "headcoachaway": {
+          "lastname": "Ben Cooper",
+          "firstname": ""
+        }
+      },
+      "liveTimePeriodBar": null,
+      "youTubeLink": null,
+      "numberOfPeriods": 3,
+      "lengthOfPeriod": 1200,
+      "numberOfOvertimes": 2,
+      "lengthOfOvertime": 1200,
+      "shootoutShots": 0,
+      "images": {
+        "homeTeamLogo": null,
+        "awayTeamLogo": null
+      },
+      "streams": [],
+      "homeTeamLogoUrl": null,
+      "awayTeamLogoUrl": null
+    },
+    "homeGoals": [
+      {
+        "guid": "8161-43765",
+        "gameTime": 534,
+        "gameTimeFormatted": "8:54",
+        "gameTimePeriod": 1,
+        "scoredBy": {
+          "id": 4112,
+          "playerLastname": "Tammela",
+          "playerFirstname": "Jussi",
+          "playerMiddlename": "",
+          "playerJerseyNr": 92
+        },
+        "assistBy": {
+          "id": 4701,
+          "playerLastname": "Silye",
+          "playerFirstname": "David",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "assist2By": {
+          "id": 4700,
+          "playerLastname": "Savoie",
+          "playerFirstname": "Carter",
+          "playerMiddlename": "",
+          "playerJerseyNr": 8
+        },
+        "newScore": "1:1",
+        "goalNr": 2,
+        "gameStrength": "PP1",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4112,
+            "playerLastname": "Tammela",
+            "playerFirstname": "Jussi",
+            "playerMiddlename": "",
+            "playerJerseyNr": 92
+          },
+          {
+            "id": 4701,
+            "playerLastname": "Silye",
+            "playerFirstname": "David",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 2984,
+            "playerLastname": "Bericic",
+            "playerFirstname": "Miha",
+            "playerMiddlename": "",
+            "playerJerseyNr": 10
+          },
+          {
+            "id": 386,
+            "playerLastname": "Sodja",
+            "playerFirstname": "Jaka",
+            "playerMiddlename": "",
+            "playerJerseyNr": 23
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "8161-43774",
+        "gameTime": 1997,
+        "gameTimeFormatted": "33:17",
+        "gameTimePeriod": 2,
+        "scoredBy": {
+          "id": 4121,
+          "playerLastname": "Laskawy",
+          "playerFirstname": "Ferenc",
+          "playerMiddlename": "",
+          "playerJerseyNr": 93
+        },
+        "assistBy": {
+          "id": 4701,
+          "playerLastname": "Silye",
+          "playerFirstname": "David",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "assist2By": null,
+        "newScore": "2:4",
+        "goalNr": 6,
+        "gameStrength": "EQ",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4121,
+            "playerLastname": "Laskawy",
+            "playerFirstname": "Ferenc",
+            "playerMiddlename": "",
+            "playerJerseyNr": 93
+          },
+          {
+            "id": 4701,
+            "playerLastname": "Silye",
+            "playerFirstname": "David",
+            "playerMiddlename": "",
+            "playerJerseyNr": 62
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 3531,
+            "playerLastname": "Quince",
+            "playerFirstname": "Marly",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          },
+          {
+            "id": 2225,
+            "playerLastname": "Simšič",
+            "playerFirstname": "Nik",
+            "playerMiddlename": "",
+            "playerJerseyNr": 12
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "8161-43781",
+        "gameTime": 2710,
+        "gameTimeFormatted": "45:10",
+        "gameTimePeriod": 3,
+        "scoredBy": {
+          "id": 4109,
+          "playerLastname": "Kestila",
+          "playerFirstname": "Aku",
+          "playerMiddlename": "",
+          "playerJerseyNr": 25
+        },
+        "assistBy": {
+          "id": 4700,
+          "playerLastname": "Savoie",
+          "playerFirstname": "Carter",
+          "playerMiddlename": "",
+          "playerJerseyNr": 8
+        },
+        "assist2By": {
+          "id": 4119,
+          "playerLastname": "Bengtsson",
+          "playerFirstname": "Rasmus",
+          "playerMiddlename": "",
+          "playerJerseyNr": 13
+        },
+        "newScore": "3:4",
+        "goalNr": 7,
+        "gameStrength": "PP1",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4109,
+            "playerLastname": "Kestila",
+            "playerFirstname": "Aku",
+            "playerMiddlename": "",
+            "playerJerseyNr": 25
+          },
+          {
+            "id": 4700,
+            "playerLastname": "Savoie",
+            "playerFirstname": "Carter",
+            "playerMiddlename": "",
+            "playerJerseyNr": 8
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 4944,
+            "playerLastname": "McNeill",
+            "playerFirstname": "Colin Reid",
+            "playerMiddlename": "",
+            "playerJerseyNr": 4
+          },
+          {
+            "id": 525,
+            "playerLastname": "Pance",
+            "playerFirstname": "Ziga",
+            "playerMiddlename": "",
+            "playerJerseyNr": 13
+          }
+        ],
+        "youTubeLink": null
+      }
+    ],
+    "homePenalties": [
+      {
+        "guid": "8161-78488",
+        "gameTime": 893,
+        "gameTimeFormatted": "14:53",
+        "gameTimePeriod": 1,
+        "startTime": 893,
+        "startTimeFormatted": "14:53",
+        "startTimePeriod": 1,
+        "endTime": 1013,
+        "endTimeFormatted": "16:53",
+        "endTimePeriod": 1,
+        "offender": {
+          "id": 4701,
+          "playerLastname": "Silye",
+          "playerFirstname": "David",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "servedBy": null,
+        "offence": "CROSS",
+        "offenceReason": "Cross-checking",
+        "penaltyLength": 120
+      },
+      {
+        "guid": "8161-78497",
+        "gameTime": 1851,
+        "gameTimeFormatted": "30:51",
+        "gameTimePeriod": 2,
+        "startTime": 1851,
+        "startTimeFormatted": "30:51",
+        "startTimePeriod": 2,
+        "endTime": 1965,
+        "endTimeFormatted": "32:45",
+        "endTimePeriod": 2,
+        "offender": {
+          "id": 4701,
+          "playerLastname": "Silye",
+          "playerFirstname": "David",
+          "playerMiddlename": "",
+          "playerJerseyNr": 62
+        },
+        "servedBy": null,
+        "offence": "HOOK",
+        "offenceReason": "Hooking",
+        "penaltyLength": 120
+      },
+      {
+        "guid": "8161-78514",
+        "gameTime": 3223,
+        "gameTimeFormatted": "53:43",
+        "gameTimePeriod": 3,
+        "startTime": 3223,
+        "startTimeFormatted": "53:43",
+        "startTimePeriod": 3,
+        "endTime": 3250,
+        "endTimeFormatted": "54:10",
+        "endTimePeriod": 3,
+        "offender": {
+          "id": 4700,
+          "playerLastname": "Savoie",
+          "playerFirstname": "Carter",
+          "playerMiddlename": "",
+          "playerJerseyNr": 8
+        },
+        "servedBy": null,
+        "offence": "SLASH",
+        "offenceReason": "Slashing",
+        "penaltyLength": 120
+      }
+    ],
+    "homeFieldPlayers": [
+      {
+        "id": 4111,
+        "playerLastname": "Jesper",
+        "playerFirstname": "Lindgren",
+        "playerMiddlename": "",
+        "playerJerseyNr": 7,
+        "playerBirthdate": {
+          "formattedShort": "19.05.97",
+          "formattedLong": "19.May. 1997",
+          "timestamp": 863992800000,
+          "value": "1997-05-19",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": -1,
+        "points": 0,
+        "position": "RD",
+        "lineupLine": 2,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 3,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 1205,
+        "shifts": 0,
+        "nation": "SWE",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 4700,
+        "playerLastname": "Carter",
+        "playerFirstname": "Savoie",
+        "playerMiddlename": "",
+        "playerJerseyNr": 8,
+        "playerBirthdate": {
+          "formattedShort": "23.01.02",
+          "formattedLong": "23.January. 2002",
+          "timestamp": 1011740400000,
+          "value": "2002-01-23",
+          "diffToNow": 0
+        },
+        "assists": 2,
+        "goals": 0,
+        "penaltyMinutes": 4,
+        "plusMinus": 1,
+        "points": 2,
+        "position": "LF",
+        "lineupLine": 1,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 2,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 1191,
+        "shifts": 0,
+        "nation": "CAN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 4108,
+        "playerLastname": "Topi",
+        "playerFirstname": "Rönni",
+        "playerMiddlename": "",
+        "playerJerseyNr": 11,
+        "playerBirthdate": {
+          "formattedShort": "05.05.04",
+          "formattedLong": "05.May. 2004",
+          "timestamp": 1083708000000,
+          "value": "2004-05-05",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": -2,
+        "points": 0,
+        "position": "C",
+        "lineupLine": 2,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 7,
+        "faceoffsTotal": 15,
+        "isStartingPlayer": false,
+        "timeOnIce": 1082,
+        "shifts": 0,
+        "nation": "FIN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "homeGoalKeepers": [
+      {
+        "id": 1094,
+        "playerLastname": "Bence",
+        "playerFirstname": "Balizs",
+        "playerMiddlename": "",
+        "playerJerseyNr": 1,
+        "playerBirthdate": {
+          "formattedShort": "30.05.90",
+          "formattedLong": "30.May. 1990",
+          "timestamp": 644018400000,
+          "value": "1990-05-30",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": -2,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 5.13,
+        "playingTime": 3511,
+        "goalsAgainst": 5,
+        "shotsAgainst": 26,
+        "savePercentage": 80.77,
+        "saves": 21,
+        "isStartingPlayer": 1,
+        "nation": "HUN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 4101,
+        "playerLastname": "Kristóf",
+        "playerFirstname": "Nagy",
+        "playerMiddlename": "",
+        "playerJerseyNr": 30,
+        "playerBirthdate": {
+          "formattedShort": "30.11.99",
+          "formattedLong": "30.November. 1999",
+          "timestamp": 943916400000,
+          "value": "1999-11-30",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0.0,
+        "playingTime": 0,
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "savePercentage": 0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "HUN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "homeTeamStats": {
+      "faceoffsWon": 35,
+      "faceoffsTotal": 62,
+      "shotsOnGoal": 31,
+      "shotsBlocked": 4,
+      "penaltyMinutes": 10,
+      "powerplayGoals": 2,
+      "powerplayOpportunities": 6,
+      "penaltykillSuccesses": 2,
+      "penaltykillSituations": 6,
+      "timeValues": {
+        "leading": 0,
+        "tied": 499,
+        "trailing": 3101,
+        "timeGameStrengthEven": 2697,
+        "timeGameStrengthPlusOne": 521,
+        "timeGameStrengthPlusTwo": 0,
+        "timeGameStrengthMinusOne": 382,
+        "timeGameStrengthMinusTwo": 0,
+        "timeOnPowerplay": 521,
+        "timeWhileShorthanded": 382
+      }
+    },
+    "awayGoals": [
+      {
+        "guid": "8161-43764",
+        "gameTime": 434,
+        "gameTimeFormatted": "7:14",
+        "gameTimePeriod": 1,
+        "scoredBy": {
+          "id": 2938,
+          "playerLastname": "Kirichenko",
+          "playerFirstname": "Clayton",
+          "playerMiddlename": "",
+          "playerJerseyNr": 60
+        },
+        "assistBy": {
+          "id": 4795,
+          "playerLastname": "Lawrence",
+          "playerFirstname": "Joshua Darren",
+          "playerMiddlename": "",
+          "playerJerseyNr": 92
+        },
+        "assist2By": {
+          "id": 3531,
+          "playerLastname": "Quince",
+          "playerFirstname": "Marly",
+          "playerMiddlename": "",
+          "playerJerseyNr": 11
+        },
+        "newScore": "0:1",
+        "goalNr": 1,
+        "gameStrength": "EQ",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4108,
+            "playerLastname": "Rönni",
+            "playerFirstname": "Topi",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          },
+          {
+            "id": 4113,
+            "playerLastname": "Hadobás",
+            "playerFirstname": "Zétény",
+            "playerMiddlename": "",
+            "playerJerseyNr": 23
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 2938,
+            "playerLastname": "Kirichenko",
+            "playerFirstname": "Clayton",
+            "playerMiddlename": "",
+            "playerJerseyNr": 60
+          },
+          {
+            "id": 4795,
+            "playerLastname": "Lawrence",
+            "playerFirstname": "Joshua Darren",
+            "playerMiddlename": "",
+            "playerJerseyNr": 92
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "8161-43766",
+        "gameTime": 599,
+        "gameTimeFormatted": "9:59",
+        "gameTimePeriod": 1,
+        "scoredBy": {
+          "id": 4795,
+          "playerLastname": "Lawrence",
+          "playerFirstname": "Joshua Darren",
+          "playerMiddlename": "",
+          "playerJerseyNr": 92
+        },
+        "assistBy": {
+          "id": 3531,
+          "playerLastname": "Quince",
+          "playerFirstname": "Marly",
+          "playerMiddlename": "",
+          "playerJerseyNr": 11
+        },
+        "assist2By": {
+          "id": 2698,
+          "playerLastname": "Gregorc",
+          "playerFirstname": "Blaz",
+          "playerMiddlename": "",
+          "playerJerseyNr": 15
+        },
+        "newScore": "1:2",
+        "goalNr": 3,
+        "gameStrength": "EQ",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4113,
+            "playerLastname": "Hadobás",
+            "playerFirstname": "Zétény",
+            "playerMiddlename": "",
+            "playerJerseyNr": 23
+          },
+          {
+            "id": 4703,
+            "playerLastname": "Dobos",
+            "playerFirstname": "Bendegúz",
+            "playerMiddlename": "",
+            "playerJerseyNr": 41
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 4795,
+            "playerLastname": "Lawrence",
+            "playerFirstname": "Joshua Darren",
+            "playerMiddlename": "",
+            "playerJerseyNr": 92
+          },
+          {
+            "id": 3531,
+            "playerLastname": "Quince",
+            "playerFirstname": "Marly",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          }
+        ],
+        "youTubeLink": null
+      },
+      {
+        "guid": "8161-43770",
+        "gameTime": 1756,
+        "gameTimeFormatted": "29:16",
+        "gameTimePeriod": 2,
+        "scoredBy": {
+          "id": 3531,
+          "playerLastname": "Quince",
+          "playerFirstname": "Marly",
+          "playerMiddlename": "",
+          "playerJerseyNr": 11
+        },
+        "assistBy": {
+          "id": 3270,
+          "playerLastname": "Mahkovec",
+          "playerFirstname": "Marcel",
+          "playerMiddlename": "",
+          "playerJerseyNr": 8
+        },
+        "assist2By": {
+          "id": 4944,
+          "playerLastname": "McNeill",
+          "playerFirstname": "Colin Reid",
+          "playerMiddlename": "",
+          "playerJerseyNr": 4
+        },
+        "newScore": "1:3",
+        "goalNr": 4,
+        "gameStrength": "EQ",
+        "isEmptyNet": false,
+        "isPenaltyShot": false,
+        "isAwardedGoal": false,
+        "isGameWinningGoal": false,
+        "isGameTieingGoal": false,
+        "homePlayersOnIce": [
+          {
+            "id": 1094,
+            "playerLastname": "Balizs",
+            "playerFirstname": "Bence",
+            "playerMiddlename": "",
+            "playerJerseyNr": 1
+          },
+          {
+            "id": 4111,
+            "playerLastname": "Lindgren",
+            "playerFirstname": "Jesper",
+            "playerMiddlename": "",
+            "playerJerseyNr": 7
+          },
+          {
+            "id": 4108,
+            "playerLastname": "Rönni",
+            "playerFirstname": "Topi",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          }
+        ],
+        "awayPlayersOnIce": [
+          {
+            "id": 3268,
+            "playerLastname": "Horák",
+            "playerFirstname": "Lukáš",
+            "playerMiddlename": "",
+            "playerJerseyNr": 61
+          },
+          {
+            "id": 3531,
+            "playerLastname": "Quince",
+            "playerFirstname": "Marly",
+            "playerMiddlename": "",
+            "playerJerseyNr": 11
+          },
+          {
+            "id": 3270,
+            "playerLastname": "Mahkovec",
+            "playerFirstname": "Marcel",
+            "playerMiddlename": "",
+            "playerJerseyNr": 8
+          }
+        ],
+        "youTubeLink": null
+      }
+    ],
+    "awayPenalties": [
+      {
+        "guid": "8161-78486",
+        "gameTime": 460,
+        "gameTimeFormatted": "7:40",
+        "gameTimePeriod": 1,
+        "startTime": 460,
+        "startTimeFormatted": "7:40",
+        "startTimePeriod": 1,
+        "endTime": 534,
+        "endTimeFormatted": "8:54",
+        "endTimePeriod": 1,
+        "offender": {
+          "id": 3531,
+          "playerLastname": "Quince",
+          "playerFirstname": "Marly",
+          "playerMiddlename": "",
+          "playerJerseyNr": 11
+        },
+        "servedBy": null,
+        "offence": "TRIP",
+        "offenceReason": "Tripping",
+        "penaltyLength": 120
+      },
+      {
+        "guid": "8161-78487",
+        "gameTime": 835,
+        "gameTimeFormatted": "13:55",
+        "gameTimePeriod": 1,
+        "startTime": 835,
+        "startTimeFormatted": "13:55",
+        "startTimePeriod": 1,
+        "endTime": 955,
+        "endTimeFormatted": "15:55",
+        "endTimePeriod": 1,
+        "offender": {
+          "id": 525,
+          "playerLastname": "Pance",
+          "playerFirstname": "Ziga",
+          "playerMiddlename": "",
+          "playerJerseyNr": 13
+        },
+        "servedBy": null,
+        "offence": "SLASH",
+        "offenceReason": "Slashing",
+        "penaltyLength": 120
+      },
+      {
+        "guid": "8161-78501",
+        "gameTime": 2111,
+        "gameTimeFormatted": "35:11",
+        "gameTimePeriod": 2,
+        "startTime": 2111,
+        "startTimeFormatted": "35:11",
+        "startTimePeriod": 2,
+        "endTime": 2231,
+        "endTimeFormatted": "37:11",
+        "endTimePeriod": 2,
+        "offender": {
+          "id": 3534,
+          "playerLastname": "Boychuk",
+          "playerFirstname": "Zach",
+          "playerMiddlename": "",
+          "playerJerseyNr": 89
+        },
+        "servedBy": null,
+        "offence": "INTRF",
+        "offenceReason": "Interference",
+        "penaltyLength": 120
+      }
+    ],
+    "awayFieldPlayers": [
+      {
+        "id": 4944,
+        "playerLastname": "Colin Reid",
+        "playerFirstname": "McNeill",
+        "playerMiddlename": "",
+        "playerJerseyNr": 4,
+        "playerBirthdate": {
+          "formattedShort": "29.04.92",
+          "formattedLong": "29.April. 1992",
+          "timestamp": 704498400000,
+          "value": "1992-04-29",
+          "diffToNow": 0
+        },
+        "assists": 1,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 2,
+        "points": 1,
+        "position": "LD",
+        "lineupLine": 1,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 1,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 0,
+        "isStartingPlayer": false,
+        "timeOnIce": 1225,
+        "shifts": 0,
+        "nation": "CAN",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 3270,
+        "playerLastname": "Marcel",
+        "playerFirstname": "Mahkovec",
+        "playerMiddlename": "",
+        "playerJerseyNr": 8,
+        "playerBirthdate": {
+          "formattedShort": "17.12.03",
+          "formattedLong": "17.December. 2003",
+          "timestamp": 1071615600000,
+          "value": "2003-12-17",
+          "diffToNow": 0
+        },
+        "assists": 2,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 1,
+        "points": 2,
+        "position": "RF",
+        "lineupLine": 1,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 0,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 1,
+        "isStartingPlayer": false,
+        "timeOnIce": 837,
+        "shifts": 0,
+        "nation": "SLO",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 1078,
+        "playerLastname": "Jan",
+        "playerFirstname": "Urbas",
+        "playerMiddlename": "",
+        "playerJerseyNr": 9,
+        "playerBirthdate": {
+          "formattedShort": "26.01.89",
+          "formattedLong": "26.January. 1989",
+          "timestamp": 601772400000,
+          "value": "1989-01-26",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 1,
+        "penaltyMinutes": 0,
+        "plusMinus": 1,
+        "points": 1,
+        "position": "LF",
+        "lineupLine": 1,
+        "shotsBlocked": 0,
+        "shotsOnGoal": 3,
+        "shotsTaken": 0,
+        "faceoffsWon": 0,
+        "faceoffsTotal": 1,
+        "isStartingPlayer": false,
+        "timeOnIce": 816,
+        "shifts": 0,
+        "nation": "SLO",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "awayGoalKeepers": [
+      {
+        "id": 3268,
+        "playerLastname": "Lukáš",
+        "playerFirstname": "Horák",
+        "playerMiddlename": "",
+        "playerJerseyNr": 61,
+        "playerBirthdate": {
+          "formattedShort": "05.10.93",
+          "formattedLong": "05.October. 1993",
+          "timestamp": 749775600000,
+          "value": "1993-10-05",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 2,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 3.0,
+        "playingTime": 3600,
+        "goalsAgainst": 3,
+        "shotsAgainst": 31,
+        "savePercentage": 90.32,
+        "saves": 28,
+        "isStartingPlayer": 1,
+        "nation": "SLO",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      },
+      {
+        "id": 749,
+        "playerLastname": "Zan",
+        "playerFirstname": "Us",
+        "playerMiddlename": "",
+        "playerJerseyNr": 33,
+        "playerBirthdate": {
+          "formattedShort": "10.06.96",
+          "formattedLong": "10.June. 1996",
+          "timestamp": 834357600000,
+          "value": "1996-06-10",
+          "diffToNow": 0
+        },
+        "assists": 0,
+        "goals": 0,
+        "penaltyMinutes": 0,
+        "plusMinus": 0,
+        "points": 0,
+        "position": "G",
+        "goalsAgainstAverage": 0.0,
+        "playingTime": 0,
+        "goalsAgainst": 0,
+        "shotsAgainst": 0,
+        "savePercentage": 0,
+        "saves": 0,
+        "isStartingPlayer": 1,
+        "nation": "SLO",
+        "countsAsResidentialPlayer": false,
+        "countsAsResidentialPlayerEU": false
+      }
+    ],
+    "awayTeamStats": {
+      "faceoffsWon": 27,
+      "faceoffsTotal": 62,
+      "shotsOnGoal": 26,
+      "shotsBlocked": 6,
+      "penaltyMinutes": 12,
+      "powerplayGoals": 2,
+      "powerplayOpportunities": 6,
+      "penaltykillSuccesses": 2,
+      "penaltykillSituations": 6,
+      "timeValues": {
+        "leading": 3101,
+        "tied": 499,
+        "trailing": 0,
+        "timeGameStrengthEven": 2697,
+        "timeGameStrengthPlusOne": 382,
+        "timeGameStrengthPlusTwo": 0,
+        "timeGameStrengthMinusOne": 521,
+        "timeGameStrengthMinusTwo": 0,
+        "timeOnPowerplay": 382,
+        "timeWhileShorthanded": 521
+      }
+    },
+    "homeGoalKeeperChanges": [
+      {
+        "gametime": 0,
+        "gameTimeFormatted": "0:00",
+        "gameTimePeriod": 1,
+        "player": {
+          "id": 1094,
+          "playerLastname": "Balizs",
+          "playerFirstname": "Bence",
+          "playerMiddlename": "",
+          "playerJerseyNr": 1
+        },
+        "action": "on"
+      },
+      {
+        "gametime": 3447,
+        "gameTimeFormatted": "57:27",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 1094,
+          "playerLastname": "Balizs",
+          "playerFirstname": "Bence",
+          "playerMiddlename": "",
+          "playerJerseyNr": 1
+        },
+        "action": "off"
+      },
+      {
+        "gametime": 3536,
+        "gameTimeFormatted": "58:56",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 1094,
+          "playerLastname": "Balizs",
+          "playerFirstname": "Bence",
+          "playerMiddlename": "",
+          "playerJerseyNr": 1
+        },
+        "action": "on"
+      }
+    ],
+    "awayGoalKeeperChanges": [
+      {
+        "gametime": 0,
+        "gameTimeFormatted": "0:00",
+        "gameTimePeriod": 1,
+        "player": {
+          "id": 3268,
+          "playerLastname": "Horák",
+          "playerFirstname": "Lukáš",
+          "playerMiddlename": "",
+          "playerJerseyNr": 61
+        },
+        "action": "on"
+      },
+      {
+        "gametime": 3600,
+        "gameTimeFormatted": "60:00",
+        "gameTimePeriod": 3,
+        "player": {
+          "id": 3268,
+          "playerLastname": "Horák",
+          "playerFirstname": "Lukáš",
+          "playerMiddlename": "",
+          "playerJerseyNr": 61
+        },
+        "action": "off"
+      }
+    ],
+    "gameActions": [],
+    "faceoffsHeadToHead": [],
+    "faceoffsIndividual": [],
+    "gameSituations": [],
+    "shootouts": []
+  },
+  "calcTime": 0,
+  "lastUpdate": {
+    "formattedShort": "25.09.26 11:09",
+    "formattedLong": "25.September. 2026 11:09",
+    "timestamp": 1790327399000,
+    "value": "2026-09-25 11:09"
+  },
+  "servedByServer": "icehl.hokejovyzapis.cz"
+}

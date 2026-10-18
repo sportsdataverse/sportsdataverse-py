@@ -1,0 +1,1630 @@
+vtb_infobasket_best_player_parameters:
+  name: Leader-category name, English (double spaces as sent).
+  param: Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams.
+vtb_infobasket_best_players:
+  game_count: Games the value is averaged over.
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  is_same: True when the row ties the previous one.
+  param_group: Category group; 0 in the samples.
+  param_id: Leader-category id (the `param` of the parameter lists).
+  param_label: Leader category label in the requested language (lang).
+  param_name: Leader category name (ParamName), e.g. 'Points'.
+  param_short_name: Leader category short label, e.g. 'Points in a game'.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  pre_res: The value as displayed, a string (e.g. '1070' for 10.70 without separator;
+    format unverified).
+  rank: Rank in the leader list.
+  res: The leader's value (a per-game average for 'in a game' categories).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+vtb_infobasket_best_team_parameters:
+  name: Leader-category name, English (double spaces as sent).
+  param: Leader-category id; pass it as `param` to /Widget/BestPlayers or /Widget/BestTeams.
+vtb_infobasket_best_teams:
+  game_count: Games the value is averaged over.
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  is_same: True when the row ties the previous one.
+  param_group: Category group; 0 in the samples.
+  param_id: Leader-category id (the `param` of the parameter lists).
+  param_label: Leader category label in the requested language (lang).
+  param_name: Leader category name (ParamName), e.g. 'Points'.
+  param_short_name: Leader category short label, e.g. 'Points in a game'.
+  pre_res: The value as displayed, a string (e.g. '1070' for 10.70 without separator;
+    format unverified).
+  rank: Rank in the leader list.
+  res: The leader's value (a per-game average for 'in a game' categories).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+vtb_infobasket_box_score:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  birth_date: 'Birth date (ISO 8601 date) of a player: public bio, kept; coaches''
+    and officials'' birth data is never output.'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  country_code_ioc: 'Nationality code: ISO 3166 alpha-2 in most rows (''RU'', ''US''),
+    IOC alpha-3 in some (''BLR'').'
+  country_name_en: Nationality code (same as CountryCodeIOC), not a name.
+  country_name_ru: Nationality code (same as CountryCodeIOC), not a name.
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  display_number: Shirt number as displayed ('0' and '00' differ).
+  first_name_en: First name in English.
+  first_name_ru: First name in Russian.
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  height: Height in centimetres.
+  is_captain: 1 for the team captain, else 0.
+  is_home: True for team 1, the team listed first (team A, the home side in the calendar);
+    the body has no explicit home flag (unverified).
+  is_start: True for a starter.
+  last_name_en: Last name in English.
+  last_name_ru: Last name in Russian.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_name_en: Name 'Last First' in English.
+  person_name_ru: Name 'Last First' in Russian.
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  player_number: Shirt number as an integer (-1 when none).
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  pos_id: 'Position code: players 1 point guard, 2 shooting guard, 3 small forward,
+    4 power forward, 5 centre; coaches 1000 head coach, 1001 assistant; officials
+    101-103 referees, 104 commissioner, 111-123 table officials (exact roles unverified).'
+  rank_en: Sporting title, English; empty or null in the samples.
+  rank_ru: Sporting title, Russian; empty or null in the samples.
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_mark: '''+'' for a starter, else empty.'
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  team_number: 'Side of the player''s team: 1 team A (home), 2 team B (away).'
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+  weight: Weight in kilograms.
+vtb_infobasket_calendar:
+  arena_en: Arena name, English.
+  arena_id: Infobasket arena id; equals the v2 API `venueId` (11687 = SK Basket-Hall,
+    Krasnodar).
+  arena_ru: Arena, Russian ('СК' = sports complex).
+  comp_id: 'Season-level Infobasket CompID of the season (50714 = 2025-26): the id
+    every season-keyed route takes.'
+  comp_name_en: Stage name (e.g. 'Regular Season'), English.
+  comp_name_ru: Stage name, Russian ('Регулярный чемпионат' = 'Regular Season', 'Группа
+    А' = 'Group A').
+  comp_team_name_aen: Team name as registered in the competition of team A (home),
+    English.
+  comp_team_name_aru: Team name as registered in the competition of team A (home),
+    Russian.
+  comp_team_name_ben: Team name as registered in the competition of team B (away),
+    English.
+  comp_team_name_bru: Team name as registered in the competition of team B (away),
+    Russian.
+  game_attendance: Spectators at the game (null when not recorded).
+  game_date: Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY.
+  game_date_time: Tip-off instant as an ISO 8601 string in Moscow time with its +03:00
+    offset (the wire sends a .NET /Date(ms)/ value).
+  game_date_time_moscow: Tip-off instant as an ISO 8601 string in Moscow time with
+    its +03:00 offset (the wire's second .NET date; equal to game_date_time in every
+    sample).
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}.
+  game_number: Game number within the competition, e.g. 'RS-002' (RS = regular season);
+    playoff games use the series code.
+  game_status: 'Game status in the calendar code set: 0 planned, 1 completed, 2 live.'
+  game_time: Tip-off local time, 'HH:MM'.
+  game_time_msk: Tip-off time in Moscow time ('HH:MM' on calendar rows, 'HH.MM' in
+    GetOnline).
+  gender: 'Competition gender: 0 on every VTB sample (men). Other values unverified.'
+  has_time: True when a tip-off time is set.
+  league_name_en: League name, English.
+  league_name_ru: League name, Russian ('Единая лига ВТБ' / 'Чемпионат Единой лиги
+    ВТБ' = 'VTB United League' / 'VTB United League Championship').
+  league_short_name_en: League short name, English.
+  league_short_name_ru: League short name, Russian ('ВТБ' = 'VTB').
+  region_en: City or region of the game's venue in English.
+  region_ru: City or region of the game's venue in Russian.
+  region_team_name_aen: Team's city or region of team A (home), English.
+  region_team_name_aru: Team's city or region of team A (home), Russian.
+  region_team_name_ben: Team's city or region of team B (away), English.
+  region_team_name_bru: Team's city or region of team B (away), Russian.
+  score_a: Final score of team A (home).
+  score_b: Final score of team B (away).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  short_team_name_aen: Team short name of team A (home), English.
+  short_team_name_aru: Team short name of team A (home), Russian.
+  short_team_name_ben: Team short name of team B (away), English.
+  short_team_name_bru: Team short name of team B (away), Russian.
+  team_a_id: 'Team A (home) TeamID. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team_b_id: 'Team B (away) TeamID. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team_name_aen: Team name with city in brackets of team A (home), English.
+  team_name_aru: Team name with city in brackets of team A (home), Russian.
+  team_name_ben: Team name with city in brackets of team B (away), English.
+  team_name_bru: Team name with city in brackets of team B (away), Russian.
+  tv_en: TV channels, in English.
+  tv_ru: TV channels, in Russian.
+vtb_infobasket_coach:
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_height: Height in centimetres.
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches). The scope check compares it with the request.'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  person_status: Person record status (1 active, 0 otherwise); meaning unverified.
+  person_weight: Weight in kilograms.
+vtb_infobasket_comp_issue:
+  comp_abc_name_en: Stage abbreviation ('1/4-1' = quarter-final 1), English.
+  comp_abc_name_ru: Stage abbreviation ('1/4-1' = quarter-final 1), Russian.
+  comp_gender: 'Competition gender: 0 on every sample (men).'
+  comp_id: Stage CompID (the id vtb_infobasket_standings, _cross_table and _playoff
+    take).
+  comp_round: Playoff round as the number of series in it (4 = quarter-finals, 2 =
+    semi-finals, 1 = final); 0 outside the playoff.
+  comp_short_name_en: Stage name, English.
+  comp_short_name_ru: Stage name, Russian.
+  comp_sort: Sort order among sibling stages.
+  comp_state: 'Stage state code: 0 or 2 seen (2 on finished stages, but some finished
+    stages show 0); unverified.'
+  comp_type: 'Stage type code: 0 season, regular season or group; 10 playoff container;
+    5 and 7 playoff series; -5 seen in season lists. Meanings inferred from the stage
+    names, unverified.'
+  is_public: True when the site shows the stage.
+  level: 'Depth in the stage tree: 1 = a stage of the season, 2 = a series or group
+    below it.'
+  note_en: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  note_ru: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  parent_comp_id: CompID of the parent stage (0 at the top).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  season_comp_id: 'Season-level Infobasket CompID of the season (50714 = 2025-26):
+    the id every season-keyed route takes.'
+vtb_infobasket_cross_table:
+  comp_id: 'Stage CompID the request asked for (50720 = the 2025-26 regular season):
+    a stage below the season, not an END year.'
+  game_date: 'Day and month of the game as the host sends them (''04.04.''): there
+    is no year in this route.'
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}.
+  game_status: 'Game status in the game-record code set: 21 on every completed game
+    sampled (not the calendar''s 0/1/2).'
+  home_team: 'Which side was at home: 1 the row team, 2 the opponent.'
+  plus_minus: Point difference from the row team's side.
+  score: Final score 'row team:opponent'. Every game appears twice, once from each
+    side.
+  score1: Points of team 1, parsed from the 'a:b' score string.
+  score2: Points of team 2, parsed from the 'a:b' score string.
+  team1_id: 'TeamID of the row team. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team1_place: Standings place of the row team.
+  team2_id: 'TeamID of the opponent. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team2_place: Standings place of the opponent.
+  win_team: 'Which side won: 1 the row team, 2 the opponent.'
+vtb_infobasket_game:
+  arena_id: Infobasket arena id; equals the v2 API `venueId` (11687 = SK Basket-Hall,
+    Krasnodar).
+  attendance: Spectators at the game (null when not recorded).
+  comp_id: 'Stage CompID of the game (50720 = the 2025-26 regular season): a stage
+    below the season.'
+  comp_name_en: Stage name (e.g. 'Regular Season'), English.
+  comp_name_ru: Stage name, Russian ('Регулярный чемпионат' = 'Regular Season').
+  field_goal_value: Points for a made 2-point shot (2).
+  free_throw_value: Points for a made free throw (1).
+  from_date: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  game_date: Game date (ISO), local.
+  game_date_time: Tip-off as an ISO 8601 string in Moscow time (+03:00), from Online.GameTime.
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  game_number: Game number within the competition, e.g. 'RS-002' (RS = regular season);
+    playoff games use the series code.
+  game_status: 'Game status: 0 planned, 1 completed, 2 live (the site''s widget code).
+    Samples are completed games.'
+  game_time: Tip-off time of day as 'HH.MM' (a dot, local time).
+  game_time_msk: Tip-off time of day as 'HH.MM' in Moscow time.
+  gender: Competition gender code from the host (1 male, 0 unspecified).
+  has_time: True when a tip-off time is set.
+  has_video: True when a video embed is attached.
+  intervals_minutes: Break lengths in minutes after each period, comma separated ('2,15,2,2').
+  is3x3: True for a 3x3 competition (False in every sample).
+  is_online: True while the game is live; False for a completed game.
+  league_name_en: League name, English.
+  league_name_ru: League name, Russian ('Единая лига ВТБ' = 'VTB United League').
+  league_short_name_en: League short name, English.
+  league_short_name_ru: League short name, Russian.
+  left_team_number: Team number drawn on the left in the widget (1 in every sample).
+  long_shot_value: Points for a made 3-point shot (3).
+  max_period: Last period played (4 = regulation; 5+ = overtime).
+  period_count: Regulation periods (4).
+  period_extra_seconds: Overtime length in seconds (300 = 5 minutes).
+  period_minutes: Period lengths in minutes, comma separated ('10,10,10,10').
+  personal_fouls: Personal fouls that disqualify a player (5).
+  players_on_court: Players per team on the court (5).
+  region_id: Infobasket region (city) id of the venue.
+  score_a: Final points of team A (listed first).
+  score_b: Final points of team B.
+  season_comp_id: Season-level CompID of the game (the body calls it LeagueID).
+  team_a_id: Infobasket TeamID of team A, the team listed first (the home side in
+    the calendar).
+  team_a_name_en: The team A (the home side in the calendar)'s name in English (as
+    the competition names it).
+  team_a_name_ru: The team A (the home side in the calendar)'s name in Russian (as
+    the competition names it).
+  team_a_region_name_en: The team A (the home side in the calendar)'s region or city
+    in English (as the competition names it).
+  team_a_region_name_ru: The team A (the home side in the calendar)'s region or city
+    in Russian (as the competition names it).
+  team_a_short_name_en: The team A (the home side in the calendar)'s short name in
+    English (as the competition names it).
+  team_a_short_name_ru: The team A (the home side in the calendar)'s short name in
+    Russian (as the competition names it).
+  team_b_id: Infobasket TeamID of team B, the team listed second (the away side).
+  team_b_name_en: The team B (the away side)'s name in English (as the competition
+    names it).
+  team_b_name_ru: The team B (the away side)'s name in Russian (as the competition
+    names it).
+  team_b_region_name_en: The team B (the away side)'s region or city in English (as
+    the competition names it).
+  team_b_region_name_ru: The team B (the away side)'s region or city in Russian (as
+    the competition names it).
+  team_b_short_name_en: The team B (the away side)'s short name in English (as the
+    competition names it).
+  team_b_short_name_ru: The team B (the away side)'s short name in Russian (as the
+    competition names it).
+  team_fouls: Team-foul setting per period, comma separated (4 or 5 seen; exact meaning
+    unverified).
+  tv_en: TV channels, in English.
+  tv_ru: TV channels, in Russian ('Матч ТВ' = Match TV).
+  venue_en: Venue, 'City, Arena', in English.
+  venue_ru: Venue, 'City, Arena', in Russian.
+vtb_infobasket_game_page:
+  arena_full_name_en: Arena full name in English.
+  arena_full_name_ru: Arena full name in Russian.
+  arena_name_en: Arena name in English.
+  arena_name_ru: Arena name in Russian.
+  comp_id: Always 0 on this thin header; use vtb_infobasket_game for the stage.
+  comp_name_en: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  comp_name_ru: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  game_arena: Arena id of the game. Infobasket arena id; equals the v2 API `venueId`
+    (11687 = SK Basket-Hall, Krasnodar).
+  game_attendance: Spectators at the game (null when not recorded).
+  game_date: Game date as an ISO 8601 string in Moscow time (+03:00), midnight.
+  game_date_time: Tip-off as an ISO 8601 string in Moscow time (+03:00).
+  game_forfeit: 1 when the game was forfeited, else 0.
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}. The scope check compares it with the request.
+  game_number: Game number within the competition, e.g. 'RS-002' (RS = regular season);
+    playoff games use the series code.
+  game_region: Region (city) id of the game.
+  game_rules: Rules code (1 in the samples; unverified).
+  game_stats_status: Stats status of the game; 0 in the samples.
+  game_status: 'Game status: 0 planned, 1 completed, 2 live (the site''s widget code).
+    Samples are completed games.'
+  game_time: Tip-off as an ISO 8601 string in Moscow time (+03:00).
+  game_time_moscow_string: Tip-off time in Moscow time, 'HH:MM'.
+  gender: 'Competition gender: 0 on every VTB sample (men). Other values unverified.'
+  league_id: Season-level competition id of the game (50714 = VTB 2025-26); 0 in GamePage.
+  league_name_en: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  league_name_ru: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  league_short_name_en: 'Unobserved: null in every sample, so its type and meaning
+    are unconfirmed.'
+  league_short_name_ru: 'Unobserved: null in every sample, so its type and meaning
+    are unconfirmed.'
+  region_name_en: City or region in English.
+  region_name_ru: City or region in Russian.
+vtb_infobasket_game_staff:
+  country_code_ioc: Country code as the host sends it (ISO alpha-2 in most rows, IOC
+    alpha-3 in some).
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches). 0 on team and placeholder rows.'
+  person_name_en: Name in English, as 'Last First'.
+  person_name_ru: Name in Russian, as 'Last First'.
+  pos_id: Position code of the coach or official (coach 1000 head / 1001 assistant;
+    referees 101-103, commissioner 104, table officials 111-123).
+  role: 'English role of the person: head coach, assistant coach, referee, commissioner,
+    table official (from start_type and pos_id).'
+  start_id: Line-up slot id within this game; not a person id.
+  start_type: 'Line-up row type: 3 coach, 4 official.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  team_number: 'Side: 1 team A (home), 2 team B (away), 0 neither (officials, the
+    placeholder row).'
+vtb_infobasket_pbp:
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  parent_play_id: 'play_id of the parent play (a made shot''s children: shot type,
+    assist, possession change).'
+  person_id: Infobasket PersonID of the player of the line-up slot; null for a play
+    with no player.
+  play_flag: Play flag; 0 in every sample (meaning unverified).
+  play_id: Play id within the game (the row-0 header play included); parent_play_id
+    points at another play_id.
+  play_period: 'Period: 1-4 quarters, 5+ overtimes.'
+  play_second: Time ELAPSED in the period, in tenths of a second (6000 = 600 s = end
+    of a 10-minute quarter). Game clock = period length - PlaySecond/10.
+  play_sort_order: Order among plays sharing the same play_second.
+  play_type: English label of play_type_id from the site widget's table (null for
+    a code the table lacks).
+  play_type_id: Play type code (see play_type; the full table is in vtb-returns.md).
+  play_x: Shot x in decimetres across the court, -75..75, origin at the basket centre
+    (orientation from the renderer, unverified).
+  play_y: Shot y in decimetres from the basket toward midcourt (about -16 baseline,
+    124 midcourt).
+  play_zone: 'Court zone code of a shot: 1-3 count as paint in the site''s widget,
+    3-pointers sit in zones 7-12; the full map is unverified.'
+  start_id: Line-up slot id within this game's line-up (0 = the placeholder row);
+    not a person id.
+  team_id: Infobasket TeamID of the team the play belongs to; null for a play with
+    no player.
+  team_number: Side (1 or 2) of the line-up slot the play belongs to; null for a play
+    with no player.
+  video_from: Video clip start, Unix epoch seconds; 0 when none.
+  video_to: Video clip end, Unix epoch seconds; 0 when none.
+vtb_infobasket_player:
+  birth_date: 'Birth date (ISO 8601 date) of a player: public bio, kept; coaches''
+    and officials'' birth data is never output.'
+  is_naturalized: True for naturalised players.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_height: Height in centimetres.
+  person_id: 'Infobasket PersonID: one person across clubs and seasons; players, coaches
+    and officials share the space.'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  person_status: Person record status (1 active, 0 otherwise); meaning unverified.
+  person_weight: Weight in kilograms.
+  player_hand: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  player_position: 'Unobserved: null in every sample, so its type and meaning are
+    unconfirmed.'
+  position_id: Position id of the player (PosID), with its names in position_name_ru
+    / position_name_en.
+  position_name_en: Position name in English.
+  position_name_ru: Position name in Russian.
+vtb_infobasket_player_career_stats:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals.
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  has_more_seasons: True when the host holds more seasons than listed (False in every
+    sample).
+  in_game_count: Games actually played (on the court).
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches). The scope check compares it with the request.'
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_count: Games the person started.
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_player_game_log:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  blocks: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  display_number: Shirt number as displayed ('0' and '00' differ).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_date: Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY.
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}.
+  game_number: Game number within the competition, e.g. 'RS-002' (RS = regular season);
+    playoff games use the series code.
+  game_status: 'Game status in the game-record code set: 21 completed.'
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  is_start: True for a starter.
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_id: 0 on every game row (the player is the body's PersonID).
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  player_number: Shirt number as an integer (-1 when none).
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  score_a: Final points of team A (listed first).
+  score_b: Final points of team B (listed second).
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_mark: '''+'' for a starter, else empty.'
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_a_id: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  team_a_name_en: The team A (the home side in the calendar)'s name in English (as
+    the competition names it).
+  team_a_name_ru: The team A (the home side in the calendar)'s name in Russian (as
+    the competition names it).
+  team_a_region_name_en: The team A (the home side in the calendar)'s region or city
+    in English (as the competition names it).
+  team_a_region_name_ru: The team A (the home side in the calendar)'s region or city
+    in Russian (as the competition names it).
+  team_a_short_name_en: The team A (the home side in the calendar)'s short name in
+    English (as the competition names it).
+  team_a_short_name_ru: The team A (the home side in the calendar)'s short name in
+    Russian (as the competition names it).
+  team_b_id: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  team_b_name_en: The team B (the away side)'s name in English (as the competition
+    names it).
+  team_b_name_ru: The team B (the away side)'s name in Russian (as the competition
+    names it).
+  team_b_region_name_en: The team B (the away side)'s region or city in English (as
+    the competition names it).
+  team_b_region_name_ru: The team B (the away side)'s region or city in Russian (as
+    the competition names it).
+  team_b_short_name_en: The team B (the away side)'s short name in English (as the
+    competition names it).
+  team_b_short_name_ru: The team B (the away side)'s short name in Russian (as the
+    competition names it).
+  team_id: Infobasket TeamID the player played for in that game.
+  team_number: Side (1 or 2) the player's team had in the game.
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_player_season_stats:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals.
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  in_game_count: Games actually played (on the court).
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  season: Season END year (2026 = 2025-26). The wire sends it as Season.CompID, a
+    third meaning of CompID.
+  season_name_en: Season name in English ('Season 2025/2026').
+  season_name_ru: Season name in Russian ('Сезон 2025/2026').
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_count: Games the person started.
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_playoff:
+  comp_id: 'Stage CompID the request asked for (50720 = the 2025-26 regular season):
+    a stage below the season, not an END year.'
+  is_current_round: True for the round in progress.
+  is_final: True for a final (decided) result.
+  round: Round as the number of series in it (4 = quarter-finals, 2 = semi-finals,
+    1 = final).
+  round_name_en: Round name, English.
+  round_name_ru: Round name, Russian.
+  score1: Series wins of side 1.
+  score2: Series wins of side 2.
+  sort: Series order within the round.
+  team1_id: Infobasket TeamID of team 1.
+  team1_name_en: The team 1 of the series's name in English (as the competition names
+    it).
+  team1_name_ru: The team 1 of the series's name in Russian (as the competition names
+    it).
+  team1_region_name_en: The team 1 of the series's region or city in English (as the
+    competition names it).
+  team1_region_name_ru: The team 1 of the series's region or city in Russian (as the
+    competition names it).
+  team1_short_name_en: The team 1 of the series's short name in English (as the competition
+    names it).
+  team1_short_name_ru: The team 1 of the series's short name in Russian (as the competition
+    names it).
+  team2_id: Infobasket TeamID of team 2.
+  team2_name_en: The team 2 of the series's name in English (as the competition names
+    it).
+  team2_name_ru: The team 2 of the series's name in Russian (as the competition names
+    it).
+  team2_region_name_en: The team 2 of the series's region or city in English (as the
+    competition names it).
+  team2_region_name_ru: The team 2 of the series's region or city in Russian (as the
+    competition names it).
+  team2_short_name_en: The team 2 of the series's short name in English (as the competition
+    names it).
+  team2_short_name_ru: The team 2 of the series's short name in Russian (as the competition
+    names it).
+  tree: Bracket tree number (1 = the main bracket).
+  winner: 'Series winner: 1 side 1, 2 side 2.'
+vtb_infobasket_playoff_games:
+  comp_id: 'Stage CompID the request asked for (50720 = the 2025-26 regular season):
+    a stage below the season, not an END year.'
+  game_date: Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY.
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}.
+  game_status: 'Game status in the game-record code set: 21 on every completed game
+    sampled (not the calendar''s 0/1/2).'
+  home_team: Home side of that game (1 or 2).
+  plus_minus: Point difference from side 1's view.
+  round: Round as the number of series in it (4 = quarter-finals, 2 = semi-finals,
+    1 = final).
+  score: Final score 'side1:side2'.
+  score1: Series wins of side 1.
+  score2: Series wins of side 2.
+  sort: Series order within the round.
+  team1_id: TeamID of side 1.
+  team1_place: Seed of side 1.
+  team2_id: TeamID of side 2.
+  team2_place: Seed of side 2.
+  tree: Bracket tree number (1 = the main bracket).
+  win_team: Winning side of that game (1 or 2).
+vtb_infobasket_roster:
+  active_status: Roster status text ('Accepted'), empty otherwise.
+  birth_date: 'Birth date (ISO 8601 date) of a player: public bio, kept; coaches''
+    and officials'' birth data is never output.'
+  country_code: Nationality, ISO 3166 alpha-2.
+  country_code_ioc: 'Nationality code: ISO 3166 alpha-2 in most rows (''RU'', ''US''),
+    IOC alpha-3 in some (''BLR'').'
+  country_name: Nationality, English country name.
+  display_number: Shirt number as displayed ('0' and '00' differ).
+  height: Height in centimetres.
+  is_active: True while the person is on the current roster.
+  is_captain: 1 for the team captain, else 0.
+  nationality_code: Nationality, ISO 3166 alpha-2.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  player_number: Shirt number as an integer (-1 when none).
+  pos_id: 'Position code: players 1 point guard, 2 shooting guard, 3 small forward,
+    4 power forward, 5 centre; coaches 1000 head coach, 1001 assistant; officials
+    101-103 referees, 104 commissioner, 111-123 table officials (exact roles unverified).'
+  position: 'Playing position: a record (PlayerPage) or its English name (TeamRoster).'
+  rank: Rank in the leader list.
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  weight: Weight in kilograms.
+vtb_infobasket_roster_coaches:
+  active_status: Roster status text ('Accepted'), empty otherwise.
+  coach_number: Coach order on the team sheet (1 = head coach).
+  country_code_ioc: 'Nationality code: ISO 3166 alpha-2 in most rows (''RU'', ''US''),
+    IOC alpha-3 in some (''BLR'').'
+  country_name: Nationality, English country name.
+  display_number: Shirt number as displayed ('0' and '00' differ).
+  is_active: True while the person is on the current roster.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  post: Coaching post ('Head Coach', 'Assistant Coach').
+  post_id: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  rank: Rank in the leader list.
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+vtb_infobasket_seasons:
+  comp_id: Season-level CompID of that season (50714 = VTB 2025-26). Pass it as `comps`
+    to /Comp/GetCalendar/.
+  db: Infobasket database the competition lives in ('org').
+  name_en: Season name in English.
+  name_ru: Season name in Russian ('Сезон 2025/2026' = 'Season 2025/2026').
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  tag: Competition tag of the request (vtb is the VTB United League; vtbyouth, wbc,
+    wpremier and rfb also answer).
+vtb_infobasket_standings:
+  avg_goal_minus: Average points conceded per game.
+  avg_goal_plus: Average points scored per game.
+  comp_id: 'Stage CompID the request asked for (50720 = the 2025-26 regular season):
+    a stage below the season, not an END year.'
+  comp_team_id: 'Infobasket competition-team id: one team''s registration in one competition
+    stage (a different key space from TeamID).'
+  games: Games played in the stage (top-level copy of standing_game).
+  lost: Games lost in the stage (top-level copy of standing_lose).
+  place: Current place in the standings.
+  standing_draw: Draws; null in basketball.
+  standing_forfeit: Games lost by forfeit in the stage.
+  standing_game: Games played in the stage.
+  standing_goal_difference: Point difference (scored minus conceded).
+  standing_goal_minus: Points conceded in the stage.
+  standing_goal_plus: Points scored in the stage.
+  standing_is_play: True while the team is still playing in the stage.
+  standing_lose: Games lost in the stage.
+  standing_penalty: Points deducted.
+  standing_points: League points (2 per win, 1 per loss).
+  standing_win: Games won in the stage.
+  start_place: Place before the latest round (unverified).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  victory_percent: Win percentage as a number (83 = 83%).
+  won: Games won in the stage (top-level copy of standing_win).
+vtb_infobasket_team:
+  team_abc_name_en: Club abbreviation, English.
+  team_abc_name_ru: Club abbreviation, Russian (the full name in the sample).
+  team_country: Country id of the club (1 = Russia, unverified).
+  team_gender: 'Team gender code: 0 on every sample (men).'
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`. The scope check compares it with the request.'
+  team_logo: Logo flag; 0 in the samples.
+  team_name_en: Club name, English.
+  team_name_ru: Club name, Russian.
+  team_record_id: 'Id of the club-record name (CurrentTeamName.TeamID, 2259 for team
+    2650): a different key space from team_id.'
+  team_region: Infobasket region id of the club's city.
+  team_short_name_en: Club short name, English.
+  team_short_name_ru: Club short name, Russian.
+  team_status: Club record status (1 active).
+  team_type: 'Team type code: 1 on the club record.'
+  team_uniform1: First uniform colour code.
+  team_uniform2: Second uniform colour code.
+vtb_infobasket_team_box_score:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  coach_foul: Fouls charged to the coach (C + B + D).
+  coach_foul_b: Technical fouls on the head coach for bench conduct (scoresheet 'B').
+  coach_foul_c: Technical fouls on the head coach for his own conduct (scoresheet
+    'C').
+  coach_foul_d: Disqualifying fouls on the coach (scoresheet 'D').
+  coach_name_en: Head coach's name in English, as 'Last First'.
+  coach_name_ru: Head coach's name in Russian, as 'Last First'.
+  coach_person_id: 'Infobasket person id (PersonID): one person (player, coach or
+    official) across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players)
+    and /Widget/CoachPage/{personId} (coaches).'
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed by the team.
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  is_home: True for team 1, the team listed first (team A, the home side in the calendar);
+    the body has no explicit home flag (unverified).
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  score: Final points of the team.
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_def_rebound: Team defensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`. The scope check compares both sides with the request.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_number: 'Side: 1 team A (home), 2 team B (away).'
+  team_off_rebound: Team offensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_rebound: Team rebounds (not credited to a player). The wire's null is 0 here
+    (null counts are filled).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  team_steal: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  team_turnover: Team turnovers (not credited to a player, e.g. shot-clock violations).
+    The wire's null is 0 here (null counts are filled).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_team_coach_stats:
+  active_status: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  display_number: Coach order (1 head coach).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  foul_b: Technical fouls on the head coach for bench conduct (scoresheet 'B').
+  foul_c: Technical fouls on the head coach for his own conduct (scoresheet 'C').
+  foul_d: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  is_active: True while the person is on the current roster.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  player_number: Coach order (1 head coach).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+vtb_infobasket_team_comps:
+  comp_id: Competition id (the season or a stage of it).
+  comp_name_en: Stage name (e.g. 'Regular Season'), English.
+  comp_name_ru: Competition name, Russian ('Единая лига ВТБ' = 'VTB United League').
+  comp_sort: Sort order among sibling stages.
+  comp_type: 'Stage type code: 0 season, regular season or group; 10 playoff container;
+    5 and 7 playoff series; -5 seen in season lists. Meanings inferred from the stage
+    names, unverified.'
+  level: Depth of the competition in the tree (1 = season level).
+  parent_comp_id: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+vtb_infobasket_team_games:
+  arena_en: Arena name, English.
+  arena_id: Infobasket arena id; equals the v2 API `venueId` (11687 = SK Basket-Hall,
+    Krasnodar).
+  arena_ru: Arena, Russian ('СК' = sports complex).
+  comp_id: 'Season-level Infobasket CompID of the season (50714 = 2025-26): the id
+    every season-keyed route takes.'
+  comp_name_en: Stage name (e.g. 'Regular Season'), English.
+  comp_name_ru: Stage name, Russian ('Регулярный чемпионат' = 'Regular Season', 'Группа
+    А' = 'Group A').
+  comp_team_name_aen: Team name as registered in the competition of team A (home),
+    English.
+  comp_team_name_aru: Team name as registered in the competition of team A (home),
+    Russian.
+  comp_team_name_ben: Team name as registered in the competition of team B (away),
+    English.
+  comp_team_name_bru: Team name as registered in the competition of team B (away),
+    Russian.
+  game_attendance: Spectators at the game (null when not recorded).
+  game_date: Game date as an ISO 8601 date (YYYY-MM-DD); the wire sends DD.MM.YYYY.
+  game_date_time: Tip-off instant as an ISO 8601 string in Moscow time with its +03:00
+    offset (the wire sends a .NET /Date(ms)/ value).
+  game_date_time_moscow: Tip-off instant as an ISO 8601 string in Moscow time with
+    its +03:00 offset (the wire's second .NET date; equal to game_date_time in every
+    sample).
+  game_id: Infobasket game id (GameID); equals the v2 API `matchId`. Joins to /Widget/GetOnline/{gameId}
+    and /Widget/GamePage/{gameId}.
+  game_number: Game number within the competition, e.g. 'RS-002' (RS = regular season);
+    playoff games use the series code.
+  game_status: 'Game status: 0 planned, 1 completed, 2 live (the site''s widget code).
+    Samples are completed games.'
+  game_time: Tip-off local time, 'HH:MM'.
+  game_time_msk: Tip-off time in Moscow time ('HH:MM' on calendar rows, 'HH.MM' in
+    GetOnline).
+  gender: 'Competition gender: 0 on every VTB sample (men). Other values unverified.'
+  has_time: True when a tip-off time is set.
+  league_name_en: League name, English.
+  league_name_ru: League name, Russian ('Единая лига ВТБ' / 'Чемпионат Единой лиги
+    ВТБ' = 'VTB United League' / 'VTB United League Championship').
+  league_short_name_en: League short name, English.
+  league_short_name_ru: League short name, Russian ('ВТБ' = 'VTB').
+  region_en: City or region of the game's venue in English.
+  region_ru: City or region of the game's venue in Russian.
+  region_team_name_aen: Team's city or region of team A (home), English.
+  region_team_name_aru: Team's city or region of team A (home), Russian.
+  region_team_name_ben: Team's city or region of team B (away), English.
+  region_team_name_bru: Team's city or region of team B (away), Russian.
+  score_a: Final score of team A (home).
+  score_b: Final score of team B (away).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  short_team_name_aen: Team short name of team A (home), English.
+  short_team_name_aru: Team short name of team A (home), Russian.
+  short_team_name_ben: Team short name of team B (away), English.
+  short_team_name_bru: Team short name of team B (away), Russian.
+  team_a_id: 'Team A (home) TeamID. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team_b_id: 'Team B (away) TeamID. Infobasket team id (TeamID): one club''s entry
+    in a competition family (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId}
+    and equals the v2 API `teamId`.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  team_name_aen: Team name with city in brackets of team A (home), English.
+  team_name_aru: Team name with city in brackets of team A (home), Russian.
+  team_name_ben: Team name with city in brackets of team B (away), English.
+  team_name_bru: Team name with city in brackets of team B (away), Russian.
+  tv_en: TV channels, in English.
+  tv_ru: TV channels, in Russian.
+vtb_infobasket_team_player_stats:
+  active_status: Roster status text ('Accepted'), empty otherwise.
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_kpi: 'Per-game average of: efficiency index (kpi, the platform''s ''кпи'');
+    formula unverified; parsed to a number (the wire sends a comma-decimal string,
+    null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  birth_date: 'Birth date (ISO 8601 date) of a player: public bio, kept; coaches''
+    and officials'' birth data is never output.'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  display_number: Shirt number as displayed ('0', '7'); a coach's is the coach order
+    (1 = head coach).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  height: Height in centimetres.
+  in_game_count: Games actually played (on the court).
+  is_active: True while the person is on the current roster.
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  player_number: Shirt number as an integer (0 when the player has none or wears 00).
+  player_position: Player position code from the host (1 point guard, 2 shooting guard,
+    3 small forward ... 5 center; see position_id for the named position).
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_count: Games the person started.
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+  weight: Weight in kilograms.
+vtb_infobasket_team_preview:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_team_def_rebound: 'Per-game average of: team defensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_off_rebound: 'Per-game average of: team offensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_rebound: 'Per-game average of: team rebounds (not credited to a player);
+    parsed to a number (the wire sends a comma-decimal string, null when there were
+    no attempts).'
+  avg_team_steal: 'Per-game average of: team steals (not credited to a player); parsed
+    to a number (the wire sends a comma-decimal string, null when there were no attempts).'
+  avg_team_turnover: 'Per-game average of: team turnovers (not credited to a player,
+    e.g. shot-clock violations); parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  game_id: Infobasket GameID of the game (the v2 matches' match_id); global across
+    seasons.
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_def_rebound: Team defensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_off_rebound: Team offensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_rebound: Team rebounds (not credited to a player). The wire's null is 0 here
+    (null counts are filled).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  team_steal: Team steals (not credited to a player). The wire's null is 0 here (null
+    counts are filled).
+  team_turnover: Team turnovers (not credited to a player, e.g. shot-clock violations).
+    The wire's null is 0 here (null counts are filled).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_team_season_stats:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_team_def_rebound: 'Per-game average of: team defensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_off_rebound: 'Per-game average of: team offensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_rebound: 'Per-game average of: team rebounds (not credited to a player);
+    parsed to a number (the wire sends a comma-decimal string, null when there were
+    no attempts).'
+  avg_team_steal: 'Per-game average of: team steals (not credited to a player); parsed
+    to a number (the wire sends a comma-decimal string, null when there were no attempts).'
+  avg_team_turnover: 'Per-game average of: team turnovers (not credited to a player,
+    e.g. shot-clock violations); parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_def_rebound: Team defensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`. The scope check compares it with the request.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_off_rebound: Team offensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_rebound: Team rebounds (not credited to a player). The wire's null is 0 here
+    (null counts are filled).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  team_steal: Team steals (not credited to a player). The wire's null is 0 here (null
+    counts are filled).
+  team_turnover: Team turnovers (not credited to a player, e.g. shot-clock violations).
+    The wire's null is 0 here (null counts are filled).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_team_seasons:
+  comp_id: Competition id of the season in the club's rfb tag (56293 for 2027), not
+    the VTB tag's season CompID.
+  season: Season END year of the club's season entry (2027 = 2026/2027).
+  season_name: Season name in Russian ('Сезон 2026/2027' = 'Season 2026/2027').
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+vtb_infobasket_team_stats:
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_team_def_rebound: 'Per-game average of: team defensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_off_rebound: 'Per-game average of: team offensive rebounds (not credited
+    to a player); parsed to a number (the wire sends a comma-decimal string, null
+    when there were no attempts).'
+  avg_team_rebound: 'Per-game average of: team rebounds (not credited to a player);
+    parsed to a number (the wire sends a comma-decimal string, null when there were
+    no attempts).'
+  avg_team_steal: 'Per-game average of: team steals (not credited to a player); parsed
+    to a number (the wire sends a comma-decimal string, null when there were no attempts).'
+  avg_team_turnover: 'Per-game average of: team turnovers (not credited to a player,
+    e.g. shot-clock violations); parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_def_rebound: Team defensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_id: 'Infobasket team id (TeamID): one club''s entry in a competition family
+    (Lokomotiv Kuban = 2650). Joins to /Widget/Team*/{teamId} and equals the v2 API
+    `teamId`.'
+  team_name_en: The the team's name in English (as the competition names it).
+  team_name_ru: The the team's name in Russian (as the competition names it).
+  team_off_rebound: Team offensive rebounds (not credited to a player). The wire's
+    null is 0 here (null counts are filled).
+  team_rebound: Team rebounds (not credited to a player). The wire's null is 0 here
+    (null counts are filled).
+  team_region_name_en: The the team's region or city in English (as the competition
+    names it).
+  team_region_name_ru: The the team's region or city in Russian (as the competition
+    names it).
+  team_short_name_en: The the team's short name in English (as the competition names
+    it).
+  team_short_name_ru: The the team's short name in Russian (as the competition names
+    it).
+  team_steal: Team steals (not credited to a player). The wire's null is 0 here (null
+    counts are filled).
+  team_turnover: Team turnovers (not credited to a player, e.g. shot-clock violations).
+    The wire's null is 0 here (null counts are filled).
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+vtb_infobasket_team_stats_coaches:
+  active_status: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  display_number: Coach order (1 head coach).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  foul_b: Technical fouls on the head coach for bench conduct (scoresheet 'B').
+  foul_c: Technical fouls on the head coach for his own conduct (scoresheet 'C').
+  foul_d: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  is_active: True while the person is on the current roster.
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  player_number: Coach order (1 head coach).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+vtb_infobasket_team_stats_players:
+  active_status: Roster status text ('Accepted'), empty otherwise.
+  assist: Assists. The wire's null is 0 here (null counts are filled).
+  avg_assist: 'Per-game average of: assists; parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).'
+  avg_blocks: 'Per-game average of: blocked shots; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  avg_def_rebound: 'Per-game average of: defensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_foul: 'Per-game average of: personal fouls committed; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_kpi: 'Per-game average of: efficiency index (kpi, the platform''s ''кпи'');
+    formula unverified; parsed to a number (the wire sends a comma-decimal string,
+    null when there were no attempts).'
+  avg_off_rebound: 'Per-game average of: offensive rebounds; parsed to a number (the
+    wire sends a comma-decimal string, null when there were no attempts).'
+  avg_opponent_foul: 'Per-game average of: fouls drawn; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_played_time: Average playing time per game as 'minutes:seconds'.
+  avg_plus_minus: 'Per-game average of: plus-minus: point differential while on the
+    court; parsed to a number (the wire sends a comma-decimal string, null when there
+    were no attempts).'
+  avg_points: 'Per-game average of: points; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_rebound: 'Per-game average of: total rebounds; parsed to a number (the wire
+    sends a comma-decimal string, null when there were no attempts).'
+  avg_steal: 'Per-game average of: steals; parsed to a number (the wire sends a comma-decimal
+    string, null when there were no attempts).'
+  avg_turnover: 'Per-game average of: turnovers; parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).'
+  birth_date: 'Birth date (ISO 8601 date) of a player: public bio, kept; coaches''
+    and officials'' birth data is never output.'
+  blocks: Blocked shots. The wire's null is 0 here (null counts are filled).
+  def_rebound: Defensive rebounds. The wire's null is 0 here (null counts are filled).
+  display_number: Shirt number as displayed ('0', '7'); a coach's is the coach order
+    (1 = head coach).
+  foul: Personal fouls committed. The wire's null is 0 here (null counts are filled).
+  game_count: Games in the totals (the whole competition, all stages, for the season-level
+    CompID).
+  goal1: Free throws made. The wire's null is 0 here (null counts are filled).
+  goal2: 2-point field goals made. The wire's null is 0 here (null counts are filled).
+  goal23: Field goals (2 + 3 points) made. The wire's null is 0 here (null counts
+    are filled).
+  goal3: 3-point field goals made. The wire's null is 0 here (null counts are filled).
+  height: Height in centimetres.
+  in_game_count: Games actually played (on the court).
+  is_active: True while the person is on the current roster.
+  kpi: Efficiency index (KPI, the platform's 'КПИ'); formula unverified.
+  off_rebound: Offensive rebounds. The wire's null is 0 here (null counts are filled).
+  opponent_foul: Fouls drawn. The wire's null is 0 here (null counts are filled).
+  person_first_name_en: First name, English.
+  person_first_name_ru: First name, Russian.
+  person_full_name_en: Full name, 'Last First', English.
+  person_full_name_ru: Full name, 'Last First', Russian.
+  person_gender: 'Person gender: 1 on every sampled (male) person.'
+  person_id: 'Infobasket person id (PersonID): one person (player, coach or official)
+    across clubs and seasons. Joins to /Widget/PlayerPage/{personId} (players) and
+    /Widget/CoachPage/{personId} (coaches).'
+  person_last_name_en: Last name, English.
+  person_last_name_ru: Last name, Russian.
+  played_time: 'Playing time as ''minutes:seconds'' (team rows sum the five players:
+    ''200:00'' = 40 minutes x 5).'
+  player_number: Shirt number as an integer (0 when the player has none or wears 00).
+  player_position: Player position code from the host (1 point guard, 2 shooting guard,
+    3 small forward ... 5 center; see position_id for the named position).
+  plus_minus: 'Plus-minus: point differential while on the court. Null where the host
+    sends none.'
+  points: Points. The wire's null is 0 here (null counts are filled).
+  rebound: Total rebounds. The wire's null is 0 here (null counts are filled).
+  season: 'Season END year (2026 = 2025-26): the season the request asked for, stamped
+    by the runtime.'
+  seconds: Playing time in seconds.
+  shot1: Free throws attempted. The wire's null is 0 here (null counts are filled).
+  shot1_percent: Free-throw percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2: 2-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot23: Field goals (2 + 3 points) attempted. The wire's null is 0 here (null counts
+    are filled).
+  shot23_percent: Field-goal percentage (0-100); parsed to a number (the wire sends
+    a comma-decimal string, null when there were no attempts).
+  shot2_percent: 2-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  shot3: 3-point field goals attempted. The wire's null is 0 here (null counts are
+    filled).
+  shot3_percent: 3-point percentage (0-100); parsed to a number (the wire sends a
+    comma-decimal string, null when there were no attempts).
+  start_count: Games the person started.
+  steal: Steals. The wire's null is 0 here (null counts are filled).
+  team_id: Infobasket TeamID (2650 = Lokomotiv Kuban); the v2 teamId. Not a club-record
+    id and not a registration id.
+  turnover: Turnovers. The wire's null is 0 here (null counts are filled).
+  weight: Weight in kilograms.
+vtb_league_leagues:
+  league: 'League slug used in the paths: ''vtb'' (VTB United League), ''vtbyouth''
+    (youth league), ''wbc'' (WINLINE Basket Cup).'
+  league_abbrev_en: The league abbreviation in English.
+  league_abbrev_ru: The league abbreviation in Russian.
+  league_id: v2 league id (1 vtb, 2 vtbyouth, 3 wbc). Not an Infobasket id.
+  league_name_en: The league name in English.
+  league_name_ru: The league name in Russian.
+vtb_league_matches:
+  attendance: Spectators (null when not recorded).
+  away_ot: Points of the away team in all overtimes together (null without overtime).
+  away_q1: Points of the away team in period 1.
+  away_q2: Points of the away team in period 2.
+  away_q3: Points of the away team in period 3.
+  away_q4: Points of the away team in period 4.
+  away_region_name_en: Region or city of the away team in English.
+  away_region_name_ru: Region or city of the away team in Russian.
+  away_score: Final points of the away team (an integer; 0 for a cancelled match).
+  away_team_code_en: The away team's short code in English.
+  away_team_code_ru: The away team's short code in Russian.
+  away_team_id: Infobasket TeamID of the away team.
+  away_team_name_en: The away team's name in English.
+  away_team_name_ru: The away team's name in Russian.
+  competition: 'Competition slug: ''vtb'' (league games), ''vtb-supercup'', ''vtb-allstars'',
+    ''wbc''.'
+  duration: Game duration; 0 in every sample (unverified).
+  extra_periods_used: True when the game went to overtime.
+  home_ot: Points of the home team in all overtimes together (null without overtime).
+  home_q1: Points of the home team in period 1.
+  home_q2: Points of the home team in period 2.
+  home_q3: Points of the home team in period 3.
+  home_q4: Points of the home team in period 4.
+  home_region_name_en: Region or city of the home team in English.
+  home_region_name_ru: Region or city of the home team in Russian.
+  home_score: Final points of the home team (an integer; 0 for a cancelled match).
+  home_team_code_en: The home team's short code in English.
+  home_team_code_ru: The home team's short code in Russian.
+  home_team_id: Infobasket TeamID of the home team.
+  home_team_name_en: The home team's name in English.
+  home_team_name_ru: The home team's name in Russian.
+  hosting_team_id: Home team id (Infobasket TeamID).
+  is_time_set: True when the tip-off time is fixed.
+  league: League slug, echoed.
+  match_id: Match id; equals the Infobasket GameID (/Widget/GetOnline/{gameId}).
+  match_number: Game number ('1/2-2' = semi-final 2; regular-season numbers otherwise).
+  match_status: 'Status: SCHEDULED, IN_PROGRESS, COMPLETE, POSTPONED, CANCELLED, UNKNOWN
+    (the site filters on the first four).'
+  match_time: Tip-off in venue local time, ISO 8601 with offset.
+  match_time_msk: Tip-off in Moscow time (UTC+3), ISO 8601.
+  match_time_utc: Tip-off in UTC, ISO 8601.
+  match_type: 'Game type: REGULAR, FINALS (any playoff or cup knockout game), ALLSTARS.'
+  necessary_label_en: The site label of the match in English.
+  necessary_label_ru: The site label of the match in Russian.
+  periods: Periods played (4 in regulation).
+  phase_id: v2 phase id of the stage (not an Infobasket CompID).
+  phase_name_en: The stage name in English.
+  phase_name_ru: The stage name in Russian.
+  points_by_quarters: 'Points per period as [home, away] pairs; null before the game.
+    The home team (isHomeCompetitor true) is listed first in `competitors` on every
+    probed row (vtb seasons 2025 and 2026, wbc 2026: 620 of 620), and the first value
+    of each pair summed to that team''s score on every finished one.'
+  season: Season END year, echoed.
+  subtitle_en: The site subtitle of the match in English.
+  subtitle_ru: The site subtitle of the match in Russian.
+  time_actual: 'Unobserved: null in every sample, so its type and meaning are unconfirmed.'
+  time_end_actual: 'Unobserved: null in every sample, so its type and meaning are
+    unconfirmed.'
+  venue_id: Venue id; equals the Infobasket arena id (ArenaId).
+  venue_name_en: The venue name in English.
+  venue_name_ru: The venue name in Russian.
+  venue_region_name_en: The venue city in English.
+  venue_region_name_ru: The venue city in Russian.
+vtb_league_seasons:
+  is_current: True for the current season.
+  league: League slug, echoed.
+  season: Season END year (2026 = 2025-26); the sdv season key and the `{season}`
+    path param.
+  season_abbrev: Season abbreviation ('25/26').
+  season_name: Season name ('Season 2025/2026').
