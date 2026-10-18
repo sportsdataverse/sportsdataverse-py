@@ -159,7 +159,8 @@ def _load(cap: Path) -> Any:
 def test_every_native_stem_is_swept_or_has_no_committed_capture():
     stems = {d.name for d in NATIVE.iterdir() if d.is_dir()}
     assert {s for s, n in _PER_STEM.items() if n == 0} == _NO_COMMITTED_CAPTURE | _UNMAPPED_CAPTURES
-    assert [s for s in sorted(_UNMAPPED_CAPTURES) if not (FIX / s).is_dir() and s != "ibba_segev"] == []
+    assert [s for s in sorted(_UNMAPPED_CAPTURES - {"ibba_segev"}) if not (FIX / s).is_dir()] == []
+    assert any((FIX / "ibba" / "captures" / "segev").glob("*.json"))  # ibba_segev's captures live under ibba/
     assert stems - _NO_COMMITTED_CAPTURE and len(_CASES) > 500
 
 
