@@ -3,6 +3,7 @@ host: https://api.nfl.com
 name_pattern: nfl_{short}
 module: nfl_api
 parser_module: nfl.nfl_api_parsers
+no_r_fallback: true
 qualifier: api
 # api.nfl.com requires a bearer token: import the auth-aware getter (mints/threads
 # a WEB_DESKTOP token) instead of the shared no-auth runtime, and give every

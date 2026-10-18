@@ -459,7 +459,9 @@ endpoints:
     - skaters
     - all
     description: 'Position group: goalies, defenses, forwards, skaters or all. None
-      = the site''s default.'
+      = the site''s default. goalies fetches every page and returns one list sorted
+      by games played, then wins (both descending), then name; page is ignored for
+      it. A partial list raises AssetFetchError.'
     name: position
     query_key: values[amplua_full]
     type: str
@@ -469,7 +471,8 @@ endpoints:
     query_key: values[clubs_full]
     type: str
   - default: 1
-    description: 1-based page. Loop until a page comes back shorter than per_page.
+    description: 1-based page (skaters); ignored for goalies. Loop until a page comes
+      back shorter than per_page.
     name: page
     query_key: nav[page]
     type: int
@@ -485,7 +488,8 @@ endpoints:
   path: /stat/players/
   returns_schema: native/khl_rest/player_stats
   short: player_stats
-  summary: League player stats of a tournament, one page (one row per player).
+  summary: 'League player stats of a tournament, one page (goalies: every page) (one
+    row per player).'
 getter_module: sportsdataverse.hockey.khl.khl_runtime
 host: https://www.khl.ru/rest
 module: khl_rest
