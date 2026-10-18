@@ -366,7 +366,6 @@ def test_atrium_binds_the_site_id(monkeypatch):
         monkeypatch.setattr(atrium_api, base, lambda _b=base, **kw: seen.setdefault(_b, kw) and "df")
     game = pl.DataFrame({"season_id": ["s-uuid"]})
     monkeypatch.setattr(atrium_api, "atrium_pbp", lambda **kw: seen.setdefault("atrium_pbp", kw) is not None and game)
-    monkeypatch.setattr(atrium_wire, "_fetch_seasons", lambda site, **kw: [{"season_id": "s-uuid"}])
     atrium_rt.nbl1_schedule(season=2026, competition_id="c-uuid")
     atrium_rt.lnb_standings(season_id="s-uuid", locale="fr-FR")
     atrium_rt.lnbp_seasons()
@@ -529,12 +528,16 @@ def test_atrium_game_of_the_site_passes(atrium_wire_answers):
     answers["fixture_detail"] = _atrium_body("12__fixture_detail__pbp.json")
     assert atrium_rt.lnb_pbp("5423072b-6715-11f0-bd8b-9ffadebc148f").height > 0
     assert atrium_rt.lnb_pbp("5423072b-6715-11f0-bd8b-9ffadebc148f", return_parsed=False)["data"]["sub"] == "pbp"
-    assert calls == ["fixture_detail", "fixtures", "fixture_detail"]  # the season list is cached
+    assert calls == ["fixture_detail", "fixture_detail"]  # a game needs no season-list request
 
 
 @pytest.mark.parametrize("return_parsed", [True, False])
-def test_atrium_game_of_another_site_is_refused(atrium_wire_answers, return_parsed):
+def test_atrium_game_of_another_site_raises_through_the_runtime(atrium_wire_answers, return_parsed):
     answers, _ = atrium_wire_answers
-    answers["fixture_detail"] = _atrium_body("14__fixture_detail__pbp.json", site=12)
-    with pytest.raises(AssetFetchError, match=r"season cc7d79f3-43ee-11f1-b893-293ce3dbc120 is not a LNB \(France\)"):
+    answers["fixture_detail"] = _atrium_body("14__fixture_detail__pbp.json")  # an LNBP body for an LNB request
+    with pytest.raises(AssetFetchError, match="asked for /12/fixture_detail, the body is /14/fixture_detail"):
         atrium_rt.lnb_pbp("0dc631bd-c34c-11f1-8d16-4d5a21afb79d", return_parsed=return_parsed)
+    # the live answer to a fixture the site does not serve
+    answers["fixture_detail"] = _atrium_body("refusals/14__fixture_detail__pbp__other_site.json", site=12)
+    with pytest.raises(NoDataError, match="site 12 has no fixture"):
+        atrium_rt.lnb_pbp("5423072b-6715-11f0-bd8b-9ffadebc148f", return_parsed=return_parsed)

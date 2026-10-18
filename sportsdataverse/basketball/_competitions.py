@@ -493,25 +493,6 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
 # ------------------------------------------------------------------------------------------------ Atrium
 
 
-def _atrium_check(site: int, label: str, res: Any, **kw: Any) -> None:
-    """Refuse a game of another site: its ``seasonId`` (in the body and every game frame) must be one of the site's.
-
-    Atrium seasonIds are never shared across sites (sdv-internal-refs atrium-embed/README.md), and a cache sits in
-    front of the API, so the game routes' ``links.self`` echo alone does not prove the site.
-    """
-    from sportsdataverse.basketball.atrium import atrium_runtime
-
-    if isinstance(res, dict):
-        raw = [(res.get("data") or {}).get("seasonId")]
-    else:
-        raw = list(res["season_id"]) if "season_id" in res.columns else []
-    got = {s for s in raw if isinstance(s, str)}
-    listed = {r.get("season_id") for r in atrium_runtime._fetch_seasons(site, **kw)}
-    stray = sorted(got - listed)
-    if listed and stray:
-        raise AssetFetchError(f"Atrium site {site}: season {stray[0]} is not a {label} season (a game of another site)")
-
-
 def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
     """Mint the ``<prefix>_*`` callables of one Atrium site entry (``website_id``)."""
     from sportsdataverse.basketball.atrium import atrium as a
@@ -596,7 +577,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_as_pandas: bool = False,
             **kwargs: Any,
         ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-            res = getattr(a, base_name)(
+            return getattr(a, base_name)(
                 website_id=site,
                 fixture_id=fixture_id,
                 locale=locale,
@@ -604,8 +585,6 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 return_as_pandas=return_as_pandas,
                 **kwargs,
             )
-            _atrium_check(site, label, res, **kwargs)
-            return res
 
         out[f"{p}_{suffix}"] = _finish(
             fn,
@@ -622,9 +601,6 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 f"from sportsdataverse.basketball.atrium import {p}_schedule, {p}_{suffix}\n"
                 f"games = {p}_schedule()\n"
                 f"{p}_{suffix}(fixture_id=games['fixture_id'][0])\n",
-                "AssetFetchError: The game's season is not one of this site's seasons (a fixture of another site).\n",
-                notes_extra="The game is checked against this site: its seasonId must be in the site's season list "
-                "(one request per site, cached for an hour, the same list the season lookup reads).\n",
             ),
         )
 
