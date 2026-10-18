@@ -34,6 +34,11 @@ that client. Measured live (2026-10-12, ``sdv-internal-refs/khl``):
   names another game or tournament than the one requested, a player page of another player, or a
   schedule whose rows are not (90 %+) of the requested tournament (the All-Star games ride along
   under their own tournament id, so 100 % is not required).
+* **Goalies.** ``/stat/players/`` with ``position=goalies`` fetches every page (``nav.max`` of the
+  first) and returns them as one list sorted by games played, then wins (both descending), then name:
+  the site orders goalies by goals-against average ascending and ignores sort fields. A partial list
+  (a missing page, a row count that does not fit the page count, a player on two pages, more than
+  :data:`MAX_PAGES` pages) raises :class:`~sportsdataverse.errors.AssetFetchError`.
 * **Redactions.** ``fonbet`` (the betting-widget flag of ``game/text``) and ``bets`` are removed.
 
 Status and decoding go through the shared vocabulary (404 -> ``NoDataError``, 400/422 ->
@@ -64,6 +69,9 @@ RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
 ATTEMPTS = 3
 _MAX_RETRY_AFTER = 120.0
 TOURNAMENT = "values[tournament]"
+POSITION = "values[amplua_full]"
+#: Runaway-paging guard for the all-pages goalie list (khl.ru has about 7 pages of 20).
+MAX_PAGES = 30
 #: Routes that answer an error envelope without a tournament.
 NEEDS_TOURNAMENT = frozenset({"/game/header/", "/game/text/", "/game/protocol/", "/standings/playoff/"})
 #: Where each route keeps its rows: an empty container there is "no data".
@@ -264,6 +272,15 @@ def _get(
     if query:
         kwargs["params"] = query
     timeout = kwargs.pop("timeout", TIMEOUT)
+    if route == "/stat/players/" and form.get(POSITION) == "goalies":
+        return _all_goalies(url, form, headers, timeout, kwargs)
+    return _post(url, route, form, headers, timeout, kwargs)
+
+
+def _post(
+    url: str, route: str, form: Dict[str, str], headers: Optional[Dict[str, str]], timeout: Any, kwargs: Dict[str, Any]
+) -> Any:
+    """One checked POST of ``form`` to ``url`` within the primed session (see :func:`_get`)."""
     site = _site(url)
     # ponytail: one global lock (sessions, re-primes and retries all serialise); per-site locks if it ever matters
     with _lock:
@@ -299,3 +316,72 @@ def _get(
             session = _sessions[site] = [http, _prime(http, site, timeout)]
     _check(url, route, raw, form)
     return _wc._strip(raw)
+
+
+def _goalie_key(row: Any) -> Tuple[float, float, str, str]:
+    """Sort key: games played desc, wins desc, then name and player link (deterministic)."""
+
+    def num(v: Any) -> float:
+        try:
+            return float(v)
+        except (TypeError, ValueError):
+            return 0.0
+
+    cols = row.get("cols") if isinstance(row, dict) else None
+    cols = cols if isinstance(cols, dict) else {}
+    cells = row.get("first") if isinstance(row, dict) else None
+    who = next((c for c in cells or [] if isinstance(c, dict) and c.get("link")), {})
+    return (-num(cols.get("gp")), -num(cols.get("w")), str(who.get("val") or ""), str(who.get("link") or ""))
+
+
+def _all_goalies(
+    url: str, form: Dict[str, str], headers: Optional[Dict[str, str]], timeout: Any, kwargs: Dict[str, Any]
+) -> Any:
+    """Every page of ``position=goalies``, merged into page 1's envelope, sorted by gp desc, w desc, name.
+
+    khl.ru orders goalies by goals-against average ascending and ignores every sort field, so page 1 is
+    the goalies without a game. The page count is the body's ``nav.max``; paging stops there or on an
+    empty page (without a ``nav.max``, on a short page). Never a partial result: more than
+    :data:`MAX_PAGES` pages, a row count that does not fill ``nav.max`` pages (a page missing), or a
+    player on two pages raises ``AssetFetchError``.
+    """
+    where = _rt._where(url)
+    route = "/stat/players/"
+    per_page = int(form.get("nav[count]") or 20)
+    first: Any = None
+    rows: List[Any] = []
+    total: Optional[int] = None
+    for page in range(1, MAX_PAGES + 2):
+        if page > MAX_PAGES:
+            raise AssetFetchError(f"{where}: still paging goalies after {MAX_PAGES} pages")
+        try:
+            raw = _post(url, route, {**form, "nav[page]": str(page)}, headers, timeout, dict(kwargs))
+        except NoDataError:
+            if page == 1:
+                raise
+            break  # an empty page past the end
+        group = _dig(raw, ("data", "list", 0))
+        got = group.get("list") or [] if isinstance(group, dict) else []
+        nav = group.get("nav") if isinstance(group, dict) else None
+        if total is None and isinstance(nav, dict):
+            try:
+                total = int(nav["max"])
+            except (KeyError, TypeError, ValueError):
+                total = None
+            if total is not None and total > MAX_PAGES:
+                raise AssetFetchError(f"{where}: {total} goalie pages, more than the {MAX_PAGES}-page guard")
+        first = first if first is not None else raw
+        rows.extend(got)
+        if (total is not None and page >= total) or (total is None and len(got) < per_page):
+            break
+    if total is not None and not (total - 1) * per_page < len(rows) <= total * per_page:
+        raise AssetFetchError(
+            f"{where}: {len(rows)} goalies do not fill {total} pages of {per_page}; refusing a partial list"
+        )
+    links = [_goalie_key(r)[3] for r in rows]
+    if len(set(links)) != len(links):
+        raise AssetFetchError(f"{where}: a goalie is on two pages (the list shifted while paging)")
+    merged = _dig(first, ("data", "list", 0))
+    merged["list"] = sorted(rows, key=_goalie_key)
+    merged["sort"] = {"gp": "desc", "w": "desc", "name": "asc"}
+    return first

@@ -212,7 +212,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
         (
             "player_stats",
             "parse_khl_player_stats",
-            "League player stats of a tournament, one page (one row per player).",
+            "League player stats of a tournament, one page (goalies: every page) (one row per player).",
             [
                 *SEASON_PARAMS,
                 {
@@ -222,8 +222,9 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "choices": ["goalies", "defenses", "forwards", "skaters", "all"],
                     "description": (
                         "Position group: goalies, defenses, forwards, skaters or all. None = the site's default. "
-                        "The site orders goalies by goals-against average ascending, so goalies=page 1 lists "
-                        "goalies without a game first; page on (or filter by club) to reach the starters."
+                        "goalies fetches every page and returns one list sorted by games played, then wins "
+                        "(both descending), then name; page is ignored for it. A partial list raises "
+                        "AssetFetchError."
                     ),
                 },
                 {
@@ -237,7 +238,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "query_key": "nav[page]",
                     "type": "int",
                     "default": 1,
-                    "description": "1-based page. Loop until a page comes back shorter than per_page.",
+                    "description": "1-based page (skaters); ignored for goalies. Loop until a page comes back shorter than per_page.",
                 },
                 {
                     "name": "per_page",

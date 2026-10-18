@@ -10,12 +10,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
 
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.hockey import euro_hockey_runtime
+from sportsdataverse.hockey.khl import khl_rest as K
+from sportsdataverse.hockey.khl import khl_rest_parsers as P
 from sportsdataverse.hockey.khl import khl_runtime as R
 from sportsdataverse.hockey.khl import khl_webcaster_runtime as W
 
@@ -441,3 +443,91 @@ def test_the_proxy_is_used_and_never_reported(monkeypatch):
     assert seen["proxy"] == {"http": secret, "https": secret} and seen["logger"] is W._QUIET
     assert seen["session"] is euro_hockey_runtime.SESSION
     assert "s3cret" not in str(info.value) and info.value.__cause__ is None and info.value.__suppress_context__
+
+
+# --- goalies: every page, sorted by games played ---------------------------------------------
+
+
+def _goalie_page(page: int, last: int, gps: List[Tuple[int, int, str]], nav: bool = True) -> _Resp:
+    """A ``position=goalies`` page built from the committed fixture: one row per ``(gp, w, name)``."""
+    body = _rest("stat__players_goalies.json")
+    group = body["data"]["list"][0]
+    template = group["list"][0]
+    rows = []
+    for gp, w, name in gps:
+        row = json.loads(json.dumps(template))
+        row["first"][1].update(val=name, link=f"/players/{int.from_bytes(name.encode(), 'big')}/")
+        row["cols"].update(gp=gp, w=w)
+        rows.append(row)
+    group["list"] = rows
+    if nav:
+        group["nav"] = {"active": page, "start": 1, "end": last, "max": last}
+    else:
+        group.pop("nav", None)
+    return _Resp(body=body)
+
+
+GOALIES = {"values[tournament]": 1369, "values[amplua_full]": "goalies", "nav[count]": 3}
+
+
+def test_goalies_fetch_every_page_and_sort_by_games_played_then_wins_then_name(monkeypatch):
+    http = _http(
+        monkeypatch,
+        _goalie_page(1, 3, [(0, 0, "Bee"), (0, 0, "Abe"), (12, 5, "Cid")]),
+        _goalie_page(2, 3, [(30, 18, "Dan"), (30, 20, "Eli"), (12, 5, "Ace")]),
+        _goalie_page(3, 3, [(45, 25, "Fox")]),
+    )
+    raw = R._get(f"{REST}/stat/players/", GOALIES)
+    assert [c[2]["nav[page]"] for c in http.calls if c[0] == "POST"] == ["1", "2", "3"]
+    df = P.parse_khl_player_stats(raw)
+    assert df["player_name"].to_list() == ["Fox", "Eli", "Dan", "Ace", "Cid", "Abe", "Bee"]
+    assert df["gp"].to_list() == [45, 30, 30, 12, 12, 0, 0]
+
+
+def test_goalies_through_the_wrapper_and_skaters_stay_one_page(monkeypatch):
+    http = _http(
+        monkeypatch,
+        _goalie_page(1, 2, [(0, 0, "Abe"), (1, 0, "Bee"), (2, 1, "Cid")]),
+        _goalie_page(2, 2, [(40, 22, "Dan")]),
+        _Resp(body=_rest("stat__players.json")),
+    )
+    df = K.khl_player_stats(tournament_id=1369, position="goalies", per_page=3)
+    assert df["gp"].to_list() == [40, 2, 1, 0] and df["group"].unique().to_list() == ["goalies"]
+    K.khl_player_stats(tournament_id=1369, position="forwards", page=2)
+    posts = [c[2] for c in http.calls if c[0] == "POST"]
+    assert len(posts) == 3 and posts[2]["nav[page]"] == "2"  # skaters: the one page asked for
+
+
+def test_a_missing_goalie_page_never_returns_a_partial_list(monkeypatch):
+    empty = _rest("stat__players_goalies.json")
+    empty["data"]["list"][0]["list"] = []
+    _http(
+        monkeypatch,
+        _goalie_page(1, 3, [(0, 0, "Abe"), (1, 0, "Bee"), (2, 1, "Cid")]),
+        _goalie_page(2, 3, [(3, 1, "Dan"), (4, 2, "Eli"), (5, 3, "Fox")]),
+        _Resp(body=empty),  # page 3 of 3 comes back empty
+    )
+    with pytest.raises(AssetFetchError, match="do not fill 3 pages"):
+        R._get(f"{REST}/stat/players/", GOALIES)
+
+
+def test_goalie_paging_is_bounded_and_refuses_a_shifted_list(monkeypatch):
+    _http(monkeypatch, _goalie_page(1, 999, [(0, 0, "Abe"), (1, 0, "Bee"), (2, 1, "Cid")]))
+    with pytest.raises(AssetFetchError, match="page guard"):
+        R._get(f"{REST}/stat/players/", GOALIES)
+
+    monkeypatch.setattr(R, "MAX_PAGES", 2)
+    monkeypatch.setattr(R, "_sessions", {})
+    full = [(1, 0, "A"), (2, 0, "B"), (3, 0, "C")]
+    _http(monkeypatch, *(_goalie_page(i, 0, [(g, w, f"{n}{i}") for g, w, n in full], nav=False) for i in (1, 2, 3)))
+    with pytest.raises(AssetFetchError, match="still paging goalies after 2 pages"):
+        R._get(f"{REST}/stat/players/", GOALIES)
+
+    monkeypatch.setattr(R, "_sessions", {})
+    _http(
+        monkeypatch,
+        _goalie_page(1, 2, [(0, 0, "Abe"), (1, 0, "Bee"), (2, 1, "Cid")]),
+        _goalie_page(2, 2, [(2, 1, "Cid")]),  # Cid moved onto page 2 too
+    )
+    with pytest.raises(AssetFetchError, match="on two pages"):
+        R._get(f"{REST}/stat/players/", GOALIES)

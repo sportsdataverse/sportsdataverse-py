@@ -1124,7 +1124,7 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
 
 
 def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
-    """``/stat/players/`` -> one row per player of the requested page.
+    """``/stat/players/`` -> one row per player of the requested page (goalies: of every page, merged by the runtime).
 
     Rows give the player only as a name cell linking ``/players/<id>/``; ``player_id`` is parsed from
     that link. ``group`` is the position group of the list (``forwards``, ``goalies``, ...); every stat
