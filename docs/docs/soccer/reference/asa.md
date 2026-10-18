@@ -47,6 +47,14 @@ Games/fixtures with final scores, venue/official/manager FKs.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_games-example}
 
 ```python
@@ -101,6 +109,14 @@ Per-game expected-goals + expected points for both sides.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_games_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_games_xgoals-example}
 
 ```python
@@ -141,6 +157,14 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 | `minutes_played` | integer | Minutes played in the filtered window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_goalkeepers_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_goalkeepers_goals_added-example}
 
@@ -190,6 +214,14 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_goalkeepers_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_goalkeepers_xgoals-example}
 
 ```python
@@ -221,6 +253,14 @@ Managers/head coaches.
 | `nationality` | character | Player nationality (country name). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_managers-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_managers-example}
 
@@ -261,6 +301,14 @@ Players in the league (identity + biometrics + positions).
 | `secondary_general_position` | character | Secondary general position code (nullable). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_players-example}
 
@@ -303,6 +351,14 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 | `minutes_played` | integer | Minutes played in the filtered window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_players_goals_added-example}
 
@@ -348,6 +404,14 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 | `mlspa_release` | character | MLSPA salary-release label/date the row is sourced from. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_players_salaries-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_players_salaries-example}
 
@@ -405,6 +469,14 @@ Per-player expected-goals + attacking production.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_players_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_players_xgoals-example}
 
 ```python
@@ -456,6 +528,14 @@ Per-player expected-passing (completion over expected, distance, share of team t
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_players_xpass-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_players_xpass-example}
 
 ```python
@@ -488,6 +568,14 @@ Match referees.
 | `nationality` | character | Player nationality (country name). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_referees-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_referees-example}
 
@@ -533,6 +621,14 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#asa_stadia-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#asa_stadia-example}
 
 ```python
@@ -565,6 +661,14 @@ Teams in the league (full table, no filter params).
 | `team_abbreviation` | character | Short (2-4 char) club abbreviation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_teams-example}
 
@@ -605,6 +709,14 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 | `minutes` | integer | Team minutes in the window. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_goals_added-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_teams_goals_added-example}
 
@@ -656,6 +768,14 @@ Per-team expected-goals for/against + expected points.
 | `xpoints` | numeric | Expected league points. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_xgoals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_teams_xgoals-example}
 
@@ -710,6 +830,14 @@ Per-team expected-passing (completion over expected, vertical distance).
 | `avg_vertical_distance_difference` | numeric | For minus against (vertical distance). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#asa_teams_xpass-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The ASA API returned 404 (route not published for that league). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#asa_teams_xpass-example}
 

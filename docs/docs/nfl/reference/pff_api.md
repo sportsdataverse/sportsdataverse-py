@@ -36,8 +36,8 @@ toc_max_heading_level: 2
 | [pff_api_facet_defense_pass_rush](pff_api/facet-6.md#pff_api_facet_defense_pass_rush) | League-wide pass-rush leaderboard |
 | [pff_api_facet_defense_run](pff_api/facet-6.md#pff_api_facet_defense_run) | League-wide run-defense leaderboard |
 | [pff_api_facet_defense_summary](pff_api/facet-6.md#pff_api_facet_defense_summary) | League-wide defense summary leaderboard |
-| [pff_api_facet_field_goal_summary](pff_api/facet-6.md#pff_api_facet_field_goal_summary) | League-wide field-goal kicking leaderboard |
-| [pff_api_facet_kickoff_summary](pff_api/facet-6.md#pff_api_facet_kickoff_summary) | League-wide kickoff leaderboard |
+| [pff_api_facet_field_goal_summary](pff_api/facet-7.md#pff_api_facet_field_goal_summary) | League-wide field-goal kicking leaderboard |
+| [pff_api_facet_kickoff_summary](pff_api/facet-7.md#pff_api_facet_kickoff_summary) | League-wide kickoff leaderboard |
 | [pff_api_facet_punting_summary](pff_api/facet-7.md#pff_api_facet_punting_summary) | League-wide punting leaderboard |
 | [pff_api_facet_return_summary](pff_api/facet-7.md#pff_api_facet_return_summary) | League-wide return leaderboard |
 | [pff_api_facet_special_summary](pff_api/facet-7.md#pff_api_facet_special_summary) | League-wide special-teams leaderboard |

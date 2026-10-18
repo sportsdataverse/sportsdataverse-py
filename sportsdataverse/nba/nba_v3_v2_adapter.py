@@ -738,10 +738,8 @@ def nba_v3_to_v2_pbp(
         columns for players 1-3, and the v3 passthrough columns). Empty or
         malformed input returns a zero-row frame with the same schema
         (never raises).
-
-    Raises:
-        None: Malformed or empty input returns a zero-row frame with the
-            documented schema instead of raising.
+        Malformed or empty input returns a zero-row frame with the documented schema instead of
+        raising.
 
     Example:
         Quick start::

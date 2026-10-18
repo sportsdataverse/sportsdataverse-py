@@ -132,6 +132,12 @@ Read a saved ESPN WNBA play-by-play payload from disk.
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wnba_pbp`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |
+
 ### wnba_play_context {#wnba_play_context}
 
 `wnba_play_context(game_id: 'str', *, transition_seconds: 'float' = 6.0, transition_variant: 'str' = 'hoop_math', return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
@@ -173,6 +179,12 @@ Two caveats worth stating plainly:
 The possession frame (`POSSESSIONS_SCHEMA`) plus `~sportsdataverse.nba.nba_play_context.PLAY_CONTEXT_POSSESSIONS_SCHEMA`. Empty or malformed payloads return a zero-row frame — never raises on payload content.
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When *transition_variant* is not one of `~sportsdataverse.nba.nba_play_context_constants.TRANSITION_VARIANTS` (propagated from `~sportsdataverse.nba.nba_play_context.add_transition`). |
 
 **Example**
 

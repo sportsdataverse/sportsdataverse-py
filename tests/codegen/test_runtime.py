@@ -24,6 +24,22 @@ def test_get_strips_none_params_and_returns_json():
     assert dl.call_args.kwargs["params"] == {"a": 1}
 
 
+@pytest.mark.parametrize("kind", ["data", "json"])
+def test_get_sends_a_body_through_download_and_strips_none_fields(kind):
+    class FakeResp:
+        def json(self):
+            return {"ok": True}
+
+    with patch("sportsdataverse._codegen_runtime.download", return_value=FakeResp()) as dl:
+        out = _get("https://example.test/x", params={"page": 1, "q": None}, **{kind: {"a": 1, "b": None}})
+    assert out == {"ok": True}
+    assert dl.call_args.kwargs["params"] == {"page": 1}
+    sent = "json_body" if kind == "json" else kind  # download names its JSON body json_body (no json-module shadow)
+    assert dl.call_args.kwargs[sent] == {"a": 1}
+    assert ("json_body" if kind == "data" else "data") not in dl.call_args.kwargs  # a GET call stays byte-identical
+    assert "json" not in dl.call_args.kwargs
+
+
 def test_get_raises_on_download_none():
     # No response is a failed fetch, never an empty payload (was ``{}``).
     with patch("sportsdataverse._codegen_runtime.download", return_value=None):

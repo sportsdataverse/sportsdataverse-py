@@ -1,10 +1,55 @@
 ---
-title: "NBA — additional Python functions — Models and calculators: nba_in–win_prob"
-sidebar_label: "Models and calculators: nba_in–win_prob"
+title: "NBA — additional Python functions — Models and calculators: nba_four–win_prob"
+sidebar_label: "Models and calculators: nba_four–win_prob"
 sidebar_position: 11
-description: "NBA — additional Python functions — Models and calculators: nba_in–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "NBA — additional Python functions — Models and calculators: nba_four–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NBA — additional Python functions — Models and calculators: nba_in–win_prob
+# NBA — additional Python functions — Models and calculators: nba_four–win_prob
+
+### nba_four_factor_rapm {#nba_four_factor_rapm}
+
+`nba_four_factor_rapm(possessions: 'pl.DataFrame', *, alphas: 'Optional[np.ndarray]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design.
+
+Each factor is regressed on the identical offense/defense design matrix,
+differing only in the per-possession response (`_FACTOR_RESPONSES`).
+Output mirrors the oracle's `RA_*__Off/__Def` layout. **DECISION 5/6/7**
+govern the response definitions.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `possessions` | `DataFrame` |  | Possession+lineup frame carrying team-level `fg2m, fg3m, ftm, oreb, tov` and the ten lineup columns. Must also carry a `points` column -- `~sportsdataverse.nba.nba_rapm.build_rapm_design` (invoked internally) requires it unconditionally even though none of the four factor responses use it. `offense_team_id` is NOT required here (unlike `nba_la_rapm`): none of the four factor responses need the offense-only shooter join. |
+| `alphas` | `Optional[ndarray]` | `None` | Optional RidgeCV alpha grid override, shared by all four factor fits. `None` (default) auto-selects `oracle_rapm_alphas` evaluated at the possession count -- the operative WP2 oracle schedule. |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+Frame with `FOUR_FACTOR_SCHEMA` — `{factor}__off` / `{factor}__def` columns per factor, plus possession counts. Empty input → zero-row frame.
+
+| col_name | type | description |
+|---|---|---|
+| `player_id` | integer | Unique player identifier. |
+| `efg__off` | double |  |
+| `efg__def` | double |  |
+| `ftr__off` | double |  |
+| `ftr__def` | double |  |
+| `orbd__off` | double |  |
+| `orbd__def` | double |  |
+| `tov__off` | double |  |
+| `tov__def` | double |  |
+| `off_poss` | integer |  |
+| `def_poss` | integer |  |
+
+**Example**
+
+```python
+from sportsdataverse.nba.nba_rapm_variants import nba_four_factor_rapm
+ff = nba_four_factor_rapm(season_poss)
+print(ff.sort("efg__off", descending=True).head())
+```
 
 ### nba_in_game_win_prob {#nba_in_game_win_prob}
 
@@ -44,6 +89,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `pregame_logit` | double |  |
 | `home_has_ball` | integer |  |
 | `home_win_prob` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If the bundled artifact is an xgboost `.ubj` and `xgboost` is not installed. |
 
 **Example**
 
@@ -181,6 +232,12 @@ math column-wise.
 One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
 
 No returns table is published for this function: no capture: it raises a join-key dtype mismatch on a real schedule (the schedule's home_team_id is Int32, nba_team_ratings' team_id is String).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a join-key dtype mismatches `ratings['team_id']`, or if `ratings` has duplicate `team_id` rows (e.g. multiple seasons passed at once). |
 
 **Example**
 
@@ -366,6 +423,12 @@ Frame with `WAR_SCHEMA` columns (`player_id`, `war`). Empty (that schema) when e
 | `player_id` | integer | Unique player identifier. |
 | `war` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If both inputs are non-empty but share no `player_id` (a probable id-source or dtype mismatch, not a normal empty case). |
+
 **Example**
 
 ```python
@@ -414,6 +477,12 @@ The frame with `wp_regime` (`"reg"` / `"ot"`) and the adjusted seconds column.
 |---|---|---|
 | `wp_regime` | character | "reg" for regulation plays; "ot" for plays after the last regulation period (period 3 on in a halves game, 5 on in a quarters game), scored on the overtime period clock as a five-minute endgame. |
 | `start_game_seconds_remaining` | double | Seconds remaining the model sees: the game clock in regulation, the overtime period clock (the quarter clock, or the period clock in men's college frames) on overtime plays. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If `period_number` or `start_game_seconds_remaining` is missing, or neither period clock column is present. |
 
 **Example**
 
@@ -468,6 +537,13 @@ One row per `(game_id, athlete_id)` with `team_id, ts_pct, usg_pct`.
 | `team_id` | integer | ESPN team id, the join key to the team box score. |
 | `ts_pct` | double | True-shooting percentage, PTS / (2 x (FGA + 0.44 x FTA)); null for a player with no shots, no minutes or a DNP. |
 | `usg_pct` | double | Usage rate, 100 x (FGA + 0.44 x FTA + TOV) x (team minutes / 5) / (MIN x team (FGA + 0.44 x FTA + total turnovers)); null for no minutes, a DNP, or a team whose turnovers were not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `team_box` does not hold exactly two different teams of one `game_id` (a duplicated team row would double the player rows), or the league is unknown, or `league` contradicts `league_id`. |
+| `polars.exceptions.ColumnNotFoundError` | If a required box-score column is missing. |
 
 **Example**
 
@@ -649,6 +725,13 @@ The input plus `pregame_home_prob`, `prior_source` (`"spread"`, `"neutral"` or `
 | `home_win_prob` | double | Home win probability before the play from the bundled in-game model (score margin, time left, the prior, possession). |
 | `wp_delta` | double | Change in home win probability from the previous play; the first play's delta is measured from the pregame prior. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing (`home_team_spread`, `game_spread_available`, `period_number`, `start_game_seconds_remaining`, `home_score`, `away_score`, `team_id`, `home_team_id`, or neither period clock column). |
+| `ValueError` | If the league is unknown, `league` contradicts `league_id`, or `pbp` holds more than one `game_id`. |
+
 **Example**
 
 ```python
@@ -698,6 +781,12 @@ The input plus `x_legacy` and `y_legacy` (Float64).
 |---|---|---|
 | `x_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, x across the court; null for free throws, unlocated shots and non-shooting plays. |
 | `y_legacy` | double | Shot location in tenths of a foot with the hoop at the origin, y toward half court; null for free throws, unlocated shots and non-shooting plays. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | If a required column is missing (`shooting_play`, `type_text`, `coordinate_x_raw`, `coordinate_y_raw`). |
 
 **Example**
 
@@ -759,6 +848,13 @@ One row per `(game_id, team_id)` with `efg_pct, tov_pct, orb_pct, ft_rate, posse
 | `total_turnovers` | integer | The team turnover count every rate above uses, player plus team turnovers; ESPN's doubled pre-2013 NBA total is repaired to the player count; college: the box turnovers (team_turnovers in WBB 2009-2012), null when not recorded (WBB before 2009, or a WBB game whose two teams together show fewer than 5 turnovers). |
 | `game_minutes` | integer | Minutes played in the game: regulation (48 NBA, 40 WNBA and college) plus five per overtime. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `team_box` does not hold exactly two rows, or the rows are not two different `team_id` values of one `game_id`, or the league is unknown, or `league` contradicts `league_id`. |
+| `polars.exceptions.ColumnNotFoundError` | If a required box-score column is missing. |
+
 **Example**
 
 ```python
@@ -801,6 +897,12 @@ producing independent offense and defense coefficient vectors.
 
 `SpmCoefficients` with offense and defense coefficient vectors, intercepts, and the ordered `feature_names`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *feature_names* lists a column absent from *box_features* or *rapm_target* is missing required columns. |
+
 **Example**
 
 ```python
@@ -842,6 +944,12 @@ frames. Any oracle not selected is left `None`.
 **Returns**
 
 A `ValidationReport` whose fields are populated for every selected oracle and `None` for every skipped oracle.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `"external"` is in `oracles` but `external_ratings` or `external_oracle` is `None`. |
 
 **Example**
 

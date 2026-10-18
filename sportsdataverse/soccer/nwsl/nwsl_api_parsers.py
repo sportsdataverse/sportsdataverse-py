@@ -100,9 +100,6 @@ def parse_nwsl_sdp(
         payload is ``None``, empty or malformed -- which includes the real
         ``{"stages": null}`` body a pure-league season returns.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -146,9 +143,6 @@ def parse_nwsl_standings(
         ``points``, ``matches_played``, ``win``, ``draw``, ``lose``,
         ``goals_for``, ``goals_against``, ``goal_difference``, ``movement``,
         ``form``). A zero-row frame when the payload is empty or malformed.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -210,9 +204,6 @@ def parse_nwsl_stats(
         ``stats_unit`` and ``stats_unit_abbreviation``. ``stats_value`` is
         ``Utf8`` because the API mixes integers, strings and arrays in it.
         A zero-row frame when the payload is empty or malformed.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -281,8 +272,7 @@ def parse_nwsl_lineups(
         * ``"staff"`` -- coaching staff with ``side``, ``team_id``, ``staff_id``
           and ``role_label``.
 
-    Raises:
-        None: malformed payloads yield zero-row frames rather than an exception.
+        Malformed payloads yield zero-row frames rather than an exception.
 
     Example:
         Quick start::

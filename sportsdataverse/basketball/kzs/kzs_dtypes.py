@@ -108,7 +108,7 @@ DTYPES: Dict[str, Dict[str, str]] = {
         "competition_phase_name": "s",
         "transferred": "b",
         "season_id": "i",
-        "season": "s",
+        "season": "i",
         "genius_match_id": "i",
         "organiser_team_id": "i",
         "round": "i",

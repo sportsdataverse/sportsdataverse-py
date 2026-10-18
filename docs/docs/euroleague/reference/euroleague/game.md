@@ -68,6 +68,14 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
 
+### Raises {#euroleague_game_boxscore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#euroleague_game_boxscore-example}
 
 ```python
@@ -142,6 +150,14 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
 
+### Raises {#euroleague_game_header-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#euroleague_game_header-example}
 
 ```python
@@ -191,6 +207,14 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
 
+### Raises {#euroleague_game_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#euroleague_game_pbp-example}
 
 ```python
@@ -238,6 +262,14 @@ Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COO
 | `utc` | character | UTC timestamp of the event (yyyymmddHHMMSS). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (`{}` when the live API answers its empty-body "no such game" sentinel, which the parser turns into a zero-row frame).
+
+### Raises {#euroleague_game_points-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#euroleague_game_points-example}
 
@@ -314,6 +346,14 @@ Game report: date, round, phase, both clubs with score and last-5 form.
 | `road_standings_score` | integer | Away side: score of the side as counted for the standings. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#euroleague_game_report-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#euroleague_game_report-example}
 
@@ -447,6 +487,14 @@ Box score of one game.
 | `road_total_plus_minus` | numeric | Away side: totals: plus/minus. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#euroleague_game_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#euroleague_game_stats-example}
 

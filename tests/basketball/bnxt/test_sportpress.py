@@ -296,8 +296,9 @@ def test_every_public_parser_has_a_documented_example_and_helpers_are_private():
     assert len(P.__all__) == 28
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        for part in ("Args:", "Returns:", "Raises:", "Example:", "Quick start::"):
+        for part in ("Args:", "Returns:", "Example:", "Quick start::"):
             assert part in doc, (name, part)
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc
     assert bnxt_pkg.__all__ and set(P.__all__) <= set(bnxt_pkg.__all__)
     assert not [n for n in dir(P) if n.startswith("parse_") and n not in P.__all__]

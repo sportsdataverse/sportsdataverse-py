@@ -47,6 +47,12 @@ A polars DataFrame by default (pandas when `return_as_pandas=True`) with one row
 | `stat_variation` | character |  |
 | `value` | character | Metric value. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -179,6 +185,12 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 | `return_yards_per_punt` | character |  |
 | `season` | integer | Season (4-digit year). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -226,6 +238,12 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 | `longest_rush` | character |  |
 | `season` | integer | Season (4-digit year). |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `category` is not one of `LEGACY_PLAYER_CATEGORIES`. |
 
 **Example**
 
@@ -359,6 +377,12 @@ A polars DataFrame (default) with one row per game, a pandas DataFrame when `ret
 | `away_seed` | character |  |
 | `home_seed` | character |  |
 | `week` | integer | Game week of the season. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -494,6 +518,12 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 | `offensive_penalties` | character |  |
 | `season` | integer | Season (4-digit year). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -543,6 +573,12 @@ A wide polars DataFrame (default), a pandas DataFrame when `return_as_pandas=Tru
 | `rushing_fumbles_lost` | character |  |
 | `season` | integer | Season (4-digit year). |
 | `category` | character | CFBD stats category name (e.g. passing, rushing, defensive). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `category` is not one of `LEGACY_TEAM_CATEGORIES`. |
 
 **Example**
 
@@ -594,6 +630,12 @@ A polars DataFrame (default) with one row per team -- columns `team_id`, `abbrev
 | `division` | character | Division in the conference for the team. |
 | `division_id` | character |  |
 | `seatgeek_id` | character | SeatGeek performer or event identifier used to build the ticket-purchase link. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 

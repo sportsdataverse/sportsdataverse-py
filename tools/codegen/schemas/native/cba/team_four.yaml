@@ -142,10 +142,10 @@ columns:
   type: numeric
 - description: ''
   name: rhythm
-  type: character
+  type: numeric
 - description: ''
   name: rhythm_num
-  type: character
+  type: numeric
 - description: ''
   name: rhythm_rank
   type: numeric
@@ -160,7 +160,7 @@ columns:
   type: integer
 - description: ''
   name: season
-  type: character
+  type: integer
 - description: ''
   name: self_rebounds_defensive
   type: integer

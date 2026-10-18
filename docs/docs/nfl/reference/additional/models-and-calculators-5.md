@@ -602,6 +602,12 @@ The input frame with the WPA derivation applied: `wp_before` rewritten by the ki
 | `fg_return_player_id` | character | ESPN athlete id of the player who returned the blocked or missed field goal. |
 | `xp_kicker_player_id` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If any column in `_WPA_REQUIRED_COLUMNS` is absent. |
+
 **Example**
 
 ```python
