@@ -42,6 +42,9 @@ def espn_wnba_game_rosters(
         'team_display_name', 'team_short_display_name', 'team_color',
         'team_alternate_color', 'is_active', 'is_all_star',
         'logo_href', 'logo_dark_href', 'game_id'
+        plus the athlete's ``position_id``, ``position_name``, ``position_display_name``,
+        ``position_abbreviation`` and ``position_leaf``. With ``raw=True``, the competitors
+        payload (dict).
     Example:
         Pull both teams' rosters for a single game::
 
@@ -163,9 +166,6 @@ def helper_wnba_game_rosters(payload: dict, *, season: int, game_id: int | str) 
     Returns:
         pl.DataFrame: One row per rostered athlete; empty (zero-column) frame
         for degenerate payloads -- season builders skip empty frames.
-        plus the athlete's ``position_id``, ``position_name``, ``position_display_name``,
-        ``position_abbreviation`` and ``position_leaf``. With ``raw=True``, the competitors
-        payload (dict).
 
     Example:
         Quick start::
