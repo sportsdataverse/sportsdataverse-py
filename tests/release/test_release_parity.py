@@ -311,6 +311,37 @@ def test_upload_retries_on_failure(monkeypatch, tmp_path):
     assert len(attempts) == 5
 
 
+@pytest.mark.parametrize(
+    ("stderr", "calls"),
+    [
+        ("HTTP 404: Not Found (https://api.github.com/repos/x/y/releases/tags/t)", 1),
+        ("release not found", 1),
+        ("HTTP 401: Bad credentials (https://api.github.com/graphql)", 1),
+        ("HTTP 502: Bad Gateway (https://uploads.github.com/repos/x/y/releases/1/assets)", 4),
+        ("HTTP 403: API rate limit exceeded for user ID 1.", 4),
+    ],
+    ids=["404", "no-release", "401", "502", "rate-limit-403"],
+)
+def test_upload_retries_only_transient_gh_errors(monkeypatch, tmp_path, stderr, calls):
+    """C-L56: a permanent gh failure raises at once (the original slept ~645 s on a 404)."""
+    attempts: list[int] = []
+    sleeps: list[float] = []
+
+    def failing_invoke(args, **kwargs):
+        attempts.append(1)
+        raise RuntimeError(f"The GitHub CLI errored (exit 1) for 'gh {' '.join(args)}': {stderr}")
+
+    monkeypatch.setattr(release, "_invoke_gh", failing_invoke)
+    monkeypatch.setattr(release.time, "sleep", sleeps.append)
+    monkeypatch.setenv("SPORTSDATAVERSE.UPLOAD.MAX_TIMES", "4")
+
+    data_file = tmp_path / "d.csv"
+    data_file.write_text("a\n1\n")
+    with pytest.raises(RuntimeError, match="GitHub CLI errored"):
+        release.sportsdataverse_upload([data_file], tag="t")
+    assert len(attempts) == calls and len(sleeps) == calls - 1
+
+
 def test_upload_insist_off_raises_immediately(monkeypatch, tmp_path):
     attempts: list[int] = []
 

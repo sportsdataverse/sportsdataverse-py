@@ -3,9 +3,9 @@
 The wheel does not ship three of the boosters the default enrichment uses: `xyac_model.ubj` (xYAC) and the
 nfl4th `fd_model.ubj` / `wp_model.ubj` (fourth-down step); they download on first use. Offline with an
 empty cache, the owner's ruling is WARN (one warning per missing artifact) plus a strict mode that RAISES
-(task 4.6: `strict=True` / `SDV_PY_MODELS_STRICT=1`, which the producer cron turns on). Today xYAC warns once;
-the fourth-down step emits nothing and returns all-null `go_wp` / `fg_wp` / `punt_wp` (the audit measured
-0/163 on 2012_01_ATL_KC). Those two rows are strict xfails until 4.6.
+(task 4.6: `strict=True` / `SDV_PY_MODELS_STRICT=1`, which the producer cron turns on). Before 4.6 xYAC warned
+once but the fourth-down step emitted nothing and returned all-null `go_wp` / `fg_wp` / `punt_wp` (the audit
+measured 0/163 on 2012_01_ATL_KC), and there was no strict mode.
 
 Input: one real nflverse game (`tests/nfl/fixtures/nflverse/2022_01_BUF_LA_full.parquet`, every column of
 the nflverse-data `play_by_play_2022` release rows for that game; README there). The model cache is an
@@ -21,7 +21,7 @@ import polars as pl
 import pytest
 
 import sportsdataverse.dl_utils as dl_utils
-from sportsdataverse.nfl import ep_wp
+from sportsdataverse.nfl import ep_wp, nfl_fourth_down
 from sportsdataverse.nfl.config import get_config
 
 GAME = Path(__file__).resolve().parent / "fixtures" / "nflverse" / "2022_01_BUF_LA_full.parquet"
@@ -55,6 +55,8 @@ def offline(monkeypatch, tmp_path):
     monkeypatch.setattr(get_config(), "cache_dir", tmp_path)
     monkeypatch.setattr(dl_utils, "download", _no_network)
     monkeypatch.setattr(get_config(), "verbose", False)
+    monkeypatch.setattr(nfl_fourth_down, "_WARNED_MISSING", set())
+    monkeypatch.delenv("SDV_PY_MODELS_STRICT", raising=False)
     ep_wp._load_model.cache_clear()
     yield calls
     ep_wp._load_model.cache_clear()
@@ -88,29 +90,41 @@ def test_offline_xyac_warns_once_and_no_model_is_reached(offline):
     print("OFFLINE_XYAC_WARNS_ONCE_OK", len(offline), "download attempts refused")
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="C-M15 -> task 4.6: the fourth-down step returns all-null go/fg/punt_wp with no warning",
-)
 @pytest.mark.parametrize("artifact", ["fd_model.ubj", "wp_model.ubj"])
 def test_offline_fourth_down_warns_once_per_missing_model(offline, artifact):
     _, messages = _enrich_recording(_game())
     assert len(_naming(messages, artifact)) == 1, f"{artifact}: {messages}"
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="C-M15 -> task 4.6: no strict mode; SDV_PY_MODELS_STRICT=1 still degrades to nulls",
-)
-def test_offline_strict_mode_raises(offline, monkeypatch):
-    monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
+@pytest.mark.parametrize("how", ["env", "kwarg"])
+def test_offline_strict_mode_raises(offline, monkeypatch, how):
+    if how == "env":
+        monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
     try:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            ep_wp.enrich_nfl_pbp(_game())
+            ep_wp.enrich_nfl_pbp(_game(), **({"strict": True} if how == "kwarg" else {}))
     except Exception as exc:  # noqa: BLE001 - any raise naming the missing model satisfies the contract
         assert any(a in str(exc) for a in DOWNLOADED), exc
         return
     raise AssertionError("strict mode returned a frame with a missing model")
+
+
+@pytest.mark.parametrize("artifact", ["fd_model.ubj", "wp_model.ubj"])
+def test_offline_strict_fourth_down_names_its_model(offline, monkeypatch, artifact):
+    """With xYAC present, strict mode still refuses the fourth-down step, naming the nfl4th model."""
+    monkeypatch.setattr(ep_wp, "calculate_xyac", lambda raw, models_dir=None: raw)
+    calls_before = list(offline)
+    with pytest.raises(FileNotFoundError, match="fd_model.ubj"):
+        ep_wp.enrich_nfl_pbp(_game(), strict=True)
+    assert any(u.endswith("fd_model.ubj") for u in offline[len(calls_before) :])
+    # the ESPN path and direct get_4th_down_probs callers read the env flag through _try_load
+    monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
+    with pytest.raises(FileNotFoundError, match=artifact):
+        nfl_fourth_down._try_load(artifact)
+
+
+def test_offline_strict_xyac_names_its_model(offline):
+    """Strict mode refuses the xYAC step on its own (the fourth-down step off)."""
+    with pytest.raises(FileNotFoundError, match="xyac_model.ubj"):
+        ep_wp.enrich_nfl_pbp(_game(), strict=True, add_fourth_down=False)

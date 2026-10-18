@@ -12,8 +12,10 @@ from __future__ import annotations
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 import sportsdataverse.nfl.nfl_players as players_mod
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.nfl import build_nfl_players, nfl_players_crosswalk
 from tests.conftest import skip_if_no_live
 
@@ -189,8 +191,54 @@ def test_nfl_players_crosswalk_survives_ff_failure(monkeypatch):
 
     monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_players", lambda *a, **k: players)
     monkeypatch.setattr("sportsdataverse.nfl.nfl_loaders.load_nfl_ff_playerids", boom)
-    xwalk = nfl_players_crosswalk()
+    with pytest.warns(UserWarning, match="db_playerids load failed.*dynastyprocess down"):
+        xwalk = nfl_players_crosswalk()
     assert xwalk.height == 5 and xwalk["yahoo_id"].null_count() == 5
+
+
+class _Resp:
+    def __init__(self, status_code: int):
+        self.status_code = status_code
+        self.content = b""
+
+
+@pytest.fixture
+def release_answers(monkeypatch):
+    """Run the real ``load_nfl_players`` -> ``_fetch_release_parquet`` path with the cache off.
+
+    Arrow's direct read fails (as it does on any non-200), and the classification request
+    ``download(url)`` answers with the status the test sets.
+    """
+    from sportsdataverse import _codegen_runtime as rt
+    from sportsdataverse.nfl.config import get_config
+
+    def arrow_fails(*a, **k):
+        raise OSError("arrow could not open the asset")
+
+    answer: dict[str, object] = {}
+
+    def fake_download(url, *a, **k):
+        if isinstance(answer["status"], Exception):
+            raise answer["status"]
+        return _Resp(answer["status"])
+
+    monkeypatch.setattr(get_config(), "cache_mode", "off")
+    monkeypatch.setattr(rt.pl, "read_parquet", arrow_fails)
+    monkeypatch.setattr(rt, "download", fake_download)
+    return answer
+
+
+def test_nfl_players_crosswalk_raises_asset_fetch_error_on_403(release_answers):
+    """C-M17: the original caught Exception and returned (0, 12), so a join nulled every id."""
+    release_answers["status"] = 403
+    with pytest.raises(AssetFetchError, match="403"):
+        nfl_players_crosswalk()
+
+
+def test_nfl_players_crosswalk_absent_asset_is_zero_rows(release_answers):
+    release_answers["status"] = NoDataError("players.parquet answered HTTP 404")
+    xwalk = nfl_players_crosswalk()
+    assert xwalk.height == 0 and {"gsis_id", "espn_id", "yahoo_id", "cbs_id"} <= set(xwalk.columns)
 
 
 def test_nfl_players_crosswalk_slices_and_dedups(monkeypatch):

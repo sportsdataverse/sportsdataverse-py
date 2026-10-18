@@ -279,9 +279,12 @@ def _build_parser() -> argparse.ArgumentParser:
 def main(argv: Optional[list[str]] = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+    from sportsdataverse.errors import SportsDataverseError
+
     try:
         return args.func(args)
-    except (ValueError, KeyError, RuntimeError) as e:
+    except (ValueError, KeyError, RuntimeError, SportsDataverseError) as e:
+        # SportsDataverseError covers NoDataError (nothing there) and AssetFetchError (the fetch failed)
         print(f"sdv: {e}", file=sys.stderr)
         return 2
 

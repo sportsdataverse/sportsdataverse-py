@@ -327,3 +327,73 @@ def test_live_load_nfl_combine_cache_hit_is_fast():
     # cold fetch. Use a generous floor so flakes on tiny machines don't fire.
     assert warm_elapsed < cold_elapsed
     assert warm_elapsed < 0.5
+
+
+# ---------------------------------------------------------------------------
+# Task 4.6: copies on hit, owned-only clear, mode validation, guarded unlink
+# ---------------------------------------------------------------------------
+
+
+def test_memory_loader_copy_on_hit(fake_loader):
+    """C-M23: the memory cache handed out the stored frame, so one caller's edit reached the next."""
+    fn, counter = fake_loader
+    first = fn(seasons=[2024])
+    first.insert_column(0, pl.Series("junk", [0, 0, 0]))
+    second = fn(seasons=[2024])
+    assert counter["calls"] == 1
+    assert second.columns == ["x", "season"]
+    second.insert_column(0, pl.Series("junk", [0, 0, 0]))
+    assert fn(seasons=[2024]).columns == ["x", "season"]
+
+
+def test_memory_cache_get_put_copy_on_hit():
+    """``cache_get`` / ``cache_put`` (the nfl_build per-game cache) copy too."""
+    frame = pl.DataFrame({"x": [1, 2]})
+    cache_mod.cache_put("k", frame)
+    frame.insert_column(0, pl.Series("junk", [0, 0]))
+    hit = cache_mod.cache_get("k")
+    hit.insert_column(0, pl.Series("junk", [0, 0]))
+    assert cache_mod.cache_get("k").columns == ["x"]
+
+
+def test_clear_cache_removes_only_key_named_entries(tmp_path, fake_loader):
+    """C-M24: clear_cache emptied any cache_dir (a user directory lost thesis.docx and sub/data.csv)."""
+    fn, _ = fake_loader
+    update_config(cache_mode="filesystem", cache_dir=tmp_path)
+    fn(seasons=[2025])
+    cache_mod.cache_put("nfl_build__" + "a" * 64, pl.DataFrame({"x": [1]}))
+    foreign = [tmp_path / "thesis.docx", tmp_path / "sub" / "data.csv", tmp_path / "mine.parquet"]
+    foreign.append(tmp_path / "models" / "xyac_model.ubj")
+    for path in foreign:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("keep")
+    assert len(list(tmp_path.glob("*.parquet"))) == 3
+
+    clear_cache()
+
+    assert [p.name for p in tmp_path.glob("*.parquet")] == ["mine.parquet"]
+    assert all(p.read_text() == "keep" for p in foreign)
+
+
+def test_update_config_invalid_mode_raises():
+    """C-L42: ``cache_mode="disk"`` was accepted and switched caching off silently."""
+    before = get_config().cache_mode
+    with pytest.raises(ValueError, match="Unknown cache_mode 'disk'"):
+        update_config(cache_mode="disk")
+    assert get_config().cache_mode == before
+
+
+def test_corrupt_parquet_with_a_locked_file_still_returns_data(tmp_path, fake_loader, monkeypatch):
+    """C-L43: the corrupt-entry unlink was unguarded, so a Windows lock escaped as PermissionError."""
+    fn, counter = fake_loader
+    update_config(cache_mode="filesystem", cache_dir=tmp_path)
+    fn(seasons=[2025])
+    (entry,) = tmp_path.glob("*.parquet")
+    entry.write_bytes(b"not a parquet")
+
+    def locked(self, missing_ok=False):
+        raise PermissionError(f"[WinError 32] being used by another process: {self}")
+
+    monkeypatch.setattr(Path, "unlink", locked)
+    out = fn(seasons=[2025])
+    assert counter["calls"] == 2 and out.height == 3

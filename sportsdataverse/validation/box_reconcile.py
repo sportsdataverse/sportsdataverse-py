@@ -789,14 +789,31 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
     del league  # every checked column is league-identical; see the module docstring
     if not isinstance(plays, pl.DataFrame) or plays.height == 0 or not box:
         return []
+    from sportsdataverse.validation.findings import Severity
+    from sportsdataverse.validation.pbp_invariants import RuleResult
+
+    marker: list[Any] = []
     try:
         from sportsdataverse.football.usage_box import _standing_scrimmage
 
         standing = _standing_scrimmage(plays)
-    except Exception:  # noqa: BLE001 -- the builder's own guard; a slim frame is not a finding
+    except Exception as exc:  # noqa: BLE001 -- the builder's own guard; reported below, never silent
+        # The team-total and drive rules skip without the standing-scrimmage frame, so the
+        # report says why its coverage dropped instead of reading as fewer checks (C-L52).
         standing = None
+        marker.append(
+            RuleResult(
+                "box.standing_scrimmage_built",
+                12,
+                "usage_box's standing-scrimmage filter builds on the plays frame",
+                1,
+                1,
+                [{"error": f"{type(exc).__name__}: {exc}"}],
+                Severity.WARN,
+            )
+        )
     teams = game_teams(plays)
-    return [
+    return marker + [
         _team_totals(plays, box, standing),
         _player_sums(plays, box),
         _rates(box),

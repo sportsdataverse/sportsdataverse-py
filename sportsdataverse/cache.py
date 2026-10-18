@@ -61,12 +61,12 @@ Invalidation
 
 from __future__ import annotations
 
+import copy
 import fnmatch
 import hashlib
 import json
 import os
 import re
-import shutil
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
@@ -236,6 +236,10 @@ def _resolve_ttl(
     return ttl
 
 
+#: Stem of every filesystem entry (:func:`_cache_key`); ``clear_cache`` deletes nothing else.
+_ENTRY_STEM = re.compile(r"[0-9a-f]{32}")
+
+
 def _cache_dir() -> Path:
     """Resolve the filesystem cache directory.
 
@@ -343,7 +347,8 @@ def cache_get(
     age = datetime.now(timezone.utc) - saved
     if age > effective_ttl:
         return None
-    return entry.get("body")
+    # A memory hit is the stored object: copy it, or one caller's edit reaches every later hit (A-M20).
+    return copy.deepcopy(entry.get("body")) if _MODE == "memory" else entry.get("body")
 
 
 def _scrub_body(node: Any, secrets: "list[str]") -> Any:
@@ -470,14 +475,12 @@ def _drop_matching(glob: str) -> int:
         cache_dir = _cache_dir()
         if not cache_dir.exists():
             return 0
-        if glob == "*":
-            # Nuke fast path — remove the whole directory tree.
-            count = sum(1 for _ in cache_dir.glob("*.json"))
-            shutil.rmtree(cache_dir, ignore_errors=True)
-            return count
+        # Only the files this cache wrote (``<32-hex key>.json``): ``cache_dir`` defaults to
+        # ~/.cache/sportsdataverse, which also holds the NFL cache and its downloaded models,
+        # and an SDV_PY_CACHE_DIR may hold anything. The old "*" path rmtree'd it all (C-M24).
         count = 0
         for path in cache_dir.glob("*.json"):
-            if fnmatch.fnmatch(path.stem, glob):
+            if _ENTRY_STEM.fullmatch(path.stem) and fnmatch.fnmatch(path.stem, glob):
                 path.unlink()
                 count += 1
         return count

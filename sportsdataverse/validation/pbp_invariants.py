@@ -458,6 +458,10 @@ def header_final_score(summary: dict[str, Any] | None) -> tuple[int | None, int 
     return home, away
 
 
+#: Points one play can add to one team.
+_SCORE_DELTAS = [0.0, 1.0, 2.0, 3.0, 6.0, 7.0, 8.0]
+
+
 def _score(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult | None]:
     if not _has(df, *_SCORE):
         return []
@@ -508,8 +512,10 @@ def _score(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
             3,
             "a single play adds 1, 2, 3, 6, 7 or 8 points to one team",
             c("__delta") != 0,
-            ~c("__dh").is_in([0, 1, 2, 3, 6, 7, 8])
-            | ~c("__da").is_in([0, 1, 2, 3, 6, 7, 8])
+            # Float64 compare: a pandas hop or float parquet makes the scores Float64, and polars 2.0
+            # refuses an Int list against a Float column (C-M9); a fractional delta still fails the rule.
+            ~c("__dh").cast(pl.Float64).is_in(_SCORE_DELTAS)
+            | ~c("__da").cast(pl.Float64).is_in(_SCORE_DELTAS)
             | ((c("__dh") != 0) & (c("__da") != 0)),
             _SCORE + ("__dh", "__da", "scoringPlay"),
         ),

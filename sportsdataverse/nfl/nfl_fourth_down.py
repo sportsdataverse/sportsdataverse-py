@@ -65,6 +65,7 @@ model (``fg_model.ubj``) and punt distribution are all bundled under
 
 from __future__ import annotations
 
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional, Union
@@ -75,6 +76,7 @@ import polars as pl
 
 from sportsdataverse.nfl.ep_wp import (
     _load_model,
+    _models_strict,
     calculate_expected_points,
     calculate_win_probability,
 )
@@ -260,16 +262,35 @@ def _load_punt_data() -> Optional[pl.DataFrame]:
     return pl.read_parquet(path)
 
 
+#: Artifacts :func:`_try_load` has already warned about in this process (one warning each).
+_WARNED_MISSING: set[str] = set()
+
+
 def _try_load(name: str) -> Optional["Booster"]:
     """Resolve a download-on-demand booster, returning ``None`` when unobtainable.
 
     On first call this may download + cache the model (via ``ep_wp._load_model``);
     subsequent calls hit the lru-cache.  Used by the ``get_*`` functions at call
     time — NOT at import time (see :data:`FD_MODEL_AVAILABLE`).
+
+    A model that cannot be obtained nulls every column it feeds, so it is never
+    silent (C-M15): the first miss per artifact warns with a ``RuntimeWarning``
+    naming it, and ``SDV_PY_MODELS_STRICT=1`` raises the ``FileNotFoundError``
+    instead (what a producer that must not publish nulls turns on).
     """
     try:
         return _load_model(name)
-    except Exception:  # pragma: no cover - network/offline dependent
+    except FileNotFoundError as exc:
+        if _models_strict():
+            raise
+        if name not in _WARNED_MISSING:
+            _WARNED_MISSING.add(name)
+            warnings.warn(
+                f"nfl4th model {name} is unavailable, so the fourth-down decision columns it feeds are null: "
+                f"{exc} Set SDV_PY_MODELS_STRICT=1 to raise instead.",
+                RuntimeWarning,
+                stacklevel=2,
+            )
         return None
 
 

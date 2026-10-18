@@ -102,7 +102,7 @@ frames without carrying the full ~40-column master.
 
 **Returns**
 
-A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails). A failed / empty players load yields a zero-row frame carrying the same column set (never a raise).
+A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_name` / `position`, with `yahoo_id` / `cbs_id` null where DynastyProcess has no unambiguous match (or its load fails, with a `UserWarning`). An absent (404) or empty players asset yields a zero-row frame carrying the same column set.
 
 | col_name | type | description |
 |---|---|---|

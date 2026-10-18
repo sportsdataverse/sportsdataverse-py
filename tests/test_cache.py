@@ -409,3 +409,35 @@ def test_cache_hit_equals_live_body_for_credential_like_text(reset_cache):
     body = {"note": "key: 1234 token=abc", "title": "password=reset day"}
     cache.cache_set("https://x.example/text", None, body)
     assert cache.cache_get("https://x.example/text") == body  # only URL-like strings are pattern-redacted
+
+
+def test_memory_cache_copy_on_hit(reset_cache):
+    """A-M20: a memory hit returned the stored dict, so one caller's edit reached every later hit."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    cache.cache_set("https://x.example/a", None, {"teams": [{"id": 1}]})
+    hit = cache.cache_get("https://x.example/a")
+    hit["teams"].append({"id": "junk"})
+    hit["junk"] = True
+    assert cache.cache_get("https://x.example/a") == {"teams": [{"id": 1}]}
+
+
+def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monkeypatch, tmp_path):
+    """C-M24: the bare clear_cache() rmtree'd cache_dir: ~/.cache/sportsdataverse holds the NFL cache
+    and its downloaded models, and an SDV_PY_CACHE_DIR may hold anything."""
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    foreign = [tmp_path / "notes.json", tmp_path / "nfl" / "models" / "xyac_model.ubj", tmp_path / "thesis.docx"]
+    for path in foreign:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("keep")
+
+    assert cache.clear_cache() == 3
+
+    assert [p.name for p in tmp_path.glob("*.json")] == ["notes.json"]
+    assert all(p.read_text() == "keep" for p in foreign)
