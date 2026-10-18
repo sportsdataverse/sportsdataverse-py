@@ -86,7 +86,9 @@ _EPA = {
     ("td_flag_residuals/summary_401671715.json.gz", 401671715, 4728): (1.419, 0.40),
     # R856-1: a defence-typed score that did not stand. D.Hixon's 73-yard "Punt Return Touchdown" was nullified by
     # holding (td_play false); without td_stood on def_score the punting offence took the receiver's -6.92: EPA
-    # -5.833. The rest (0.321 vs -1.690) is the punt end state, not the overlay.
+    # -5.833. The rest (0.321 vs -1.690) is the punt end state, not the overlay: the 2.02 ceiling is almost all
+    # that error. Tighten it to the overlay's own error when the punt end-state fix (EX-2.19-a) lands; never
+    # loosen it before then.
     (_era(281109021), 281109021, 3307): (-1.690, 2.02),
 }
 
