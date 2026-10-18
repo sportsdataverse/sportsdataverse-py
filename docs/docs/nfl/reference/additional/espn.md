@@ -641,7 +641,7 @@ espn_nfl_teams - look up NFL teams
 
 **Returns**
 
-Polars dataframe containing teams for the requested league. This function caches by default, so if you want to refresh the data, use the command sportsdataverse.nfl.espn_nfl_teams.clear_cache().
+Polars dataframe of the NFL teams, one row per team, with the columns in the returns table. A payload without teams returns a zero-row frame with those columns. The result is not cached: every call fetches (through the package's opt-in TTL response cache, `sportsdataverse.cache`, when it is on).
 
 | col_name | type | description |
 |---|---|---|
@@ -672,10 +672,9 @@ teams.shape
 teams_pd = espn_nfl_teams(return_as_pandas=True)
 teams_pd[["team_abbreviation", "team_display_name"]].head()
 
-# Force a refresh after upstream ESPN updates
+# Pipeline next step (build a team_id to abbreviation map)
 
-espn_nfl_teams.cache_clear()  # underlying lru_cache
-teams = espn_nfl_teams()
+abbr_map = dict(zip(teams["team_id"], teams["team_abbreviation"]))
 ```
 
 ### scoreboard_event_parsing {#scoreboard_event_parsing}

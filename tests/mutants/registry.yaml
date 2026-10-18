@@ -1196,3 +1196,64 @@
   test: tests/test_espn_game_rosters_family.py -k failed_fetch
   expected: kill
   note: 'R878-3: a 403/429/5xx or dropped connection must raise AssetFetchError, never become a dropped athlete'
+
+# --- B-M23 / B-L1 / B-L11: the 8 espn_<lg>_teams (task 2.11) ----------------------------------------
+- id: teams-lru-cache-unhashable-kwargs
+  group: espn-teams
+  finding: B-M23
+  file: sportsdataverse/nba/nba_teams.py
+  snippet: "@_espn_teams.cache_clear_shim\ndef espn_nba_teams("
+  mutant: "@__import__(\"functools\").lru_cache(maxsize=None)\ndef espn_nba_teams("
+  test: tests/test_espn_teams_family.py -k "kwargs and nba"
+  expected: kill
+  note: 'restoring @lru_cache(maxsize=None) raises TypeError: unhashable type on headers={...} (ledger MUTATION line)'
+
+- id: teams-lru-cache-shared-frame
+  group: espn-teams
+  finding: B-M23
+  file: sportsdataverse/cfb/cfb_teams.py
+  snippet: "@_espn_teams.cache_clear_shim\ndef espn_cfb_teams("
+  mutant: "@__import__(\"functools\").lru_cache(maxsize=None)\ndef espn_cfb_teams("
+  test: tests/test_espn_teams_family.py -k "copy_on_return and cfb"
+  expected: kill
+  note: 'the lru_cache handed every caller the same frame object and never refetched'
+
+- id: teams-no-teams-schemad-empty
+  group: espn-teams
+  finding: B-L1
+  file: sportsdataverse/_espn_teams.py
+  snippet: 'if not teams:'
+  mutant: 'if False:'
+  test: tests/test_espn_teams_family.py -k no_teams_is_schemad_empty
+  expected: kill
+  note: 'a payload without teams flattened to a zero-column frame'
+
+- id: teams-sports-path-guarded
+  group: espn-teams
+  finding: B-L1
+  file: sportsdataverse/_espn_teams.py
+  snippet: 'league = _first(_first(payload.get("sports") if isinstance(payload, dict) else None).get("leagues"))'
+  mutant: 'league = payload.get("sports")[0].get("leagues")[0]'
+  test: tests/test_espn_teams_family.py -k no_teams_is_schemad_empty
+  expected: kill
+  note: 'the unguarded sports[0].leagues[0] raised TypeError / IndexError on {} or {"sports": []}'
+
+- id: teams-failed-fetch-raises
+  group: espn-teams
+  finding: B-M23
+  file: sportsdataverse/_espn_teams.py
+  snippet: 'payload = _download_json(download, url, params=params, **kwargs)'
+  mutant: "try:\n        payload = _download_json(download, url, params=params, **kwargs)\n    except Exception:\n        payload = {}"
+  test: tests/test_espn_teams_family.py -k failed_fetch
+  expected: kill
+  note: 'a 403/429/5xx or dropped connection must raise AssetFetchError, never become a zero-row teams frame'
+
+- id: teams-cache-clear-shim
+  group: espn-teams
+  finding: B-L11
+  file: sportsdataverse/_espn_teams.py
+  snippet: 'fn.__dict__["cache_clear"] = cache_clear'
+  mutant: 'pass'
+  test: tests/test_espn_teams_family.py -k cache_clear_shim
+  expected: kill
+  note: 'cache_clear() stays one deprecation cycle (removed in 0.2.0) and warns; the old docstrings named a clear_cache() that never existed'
