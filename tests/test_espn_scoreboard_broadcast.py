@@ -42,7 +42,7 @@ def test_captures_cover_several_sports() -> None:
 @pytest.mark.parametrize("path", CAPTURES, ids=lambda p: str(p.relative_to(ESPN)))
 def test_only_multi_network_rows_change(path: Path) -> None:
     for ev in json.loads(path.read_text("utf-8"))["events"]:
-        if not ev.get("competitions"):  # ESPN's real `{}` placeholder event (scoreboard_cfb_2014_placeholder): no feed
+        if ev == {}:  # ESPN's real `{}` placeholder event (scoreboard_cfb_2014_placeholder): no feed
             continue
         comp = ev["competitions"][0]
         got = _scoreboard_event_parsing(ev)["broadcast"]
