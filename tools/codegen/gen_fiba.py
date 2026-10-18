@@ -315,12 +315,23 @@ NOTES = [
     "2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, "
     "every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.",
 ]
+#: GDAP routes (schedule, teams, rosters, statistics...): no game page is involved.
 RAISES = [
-    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for "
-    "an unknown id, a game the competition does not list, or a game page with no box score).",
+    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for "
+    "an unknown id).",
     "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error "
     "envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, "
-    "federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).",
+    "federation, family or season).",
+    "ValueError: HTTP 400 / 422, or a malformed id, season or date.",
+]
+#: Game-page routes: the GDAP lookups that build the page URL plus the page itself.
+PAGE_RAISES = [
+    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for "
+    "an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).",
+    "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error "
+    "envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, "
+    "federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a "
+    "wrong game page, a live game).",
     "ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.",
 ]
 SEE_ALSO = [
@@ -342,9 +353,14 @@ def _load(stem: str, name: str) -> Any:
     return json.loads((FIXTURES / stem / name).read_text(encoding="utf-8"))
 
 
+#: Columns Float64 whatever the fixtures hold: ``utc_offset`` is whole hours in every sample, but a venue in a
+#: half-hour zone (India +5.5, Adelaide +9.5) sends a fraction, which an Int64 column would refuse.
+FLOAT_COLUMNS = frozenset({"utc_offset"})
+
+
 def _merge(codes: List[str], col: str) -> str:
     seen = set(codes)
-    if fiba_frames._RATE.search(col) and seen <= {"i", "f"}:
+    if (fiba_frames._RATE.search(col) or col in FLOAT_COLUMNS) and seen <= {"i", "f"}:
         return "f"
     if not seen:
         return fiba_frames._code_for(col)
@@ -574,7 +590,7 @@ PAGE_RAW = (
 PAGE_DOC: Dict[str, Any] = {
     "example_import": True,
     "raw_doc": PAGE_RAW,
-    "raises": RAISES,
+    "raises": PAGE_RAISES,
     "see_also": SEE_ALSO,
     "notes": NOTES
     + [

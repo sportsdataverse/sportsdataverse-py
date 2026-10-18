@@ -7,12 +7,12 @@ sidebar_position: {{ sidebar_position }}
 # {{ title }}
 
 {% if minted %}
-Additional functions in `{{ module }}` not covered by the generated API-endpoint
-reference above: per-competition functions minted from the competition registry (each
-binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
+Additional functions in `{{ module }}` that are not generated API-endpoint wrappers (those
+have their own reference pages): per-competition functions minted from the competition registry
+(each binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
 {% else %}
-Hand-written wrappers, loaders, and helpers in `{{ module }}`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `{{ module }}` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 {% endif %}
 
 {% for group in groups %}

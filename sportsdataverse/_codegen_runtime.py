@@ -234,7 +234,7 @@ def _get(url: str, params: Optional[dict] = None, data: Any = None, json: Any = 
             retries, or a 2xx whose body is empty (not 204/205) or not JSON.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    for kind, body in (("data", data), ("json", json)):
+    for kind, body in (("data", data), ("json_body", json)):  # download names its JSON body json_body
         if body is not None:
             kwargs[kind] = {k: v for k, v in body.items() if v is not None} if isinstance(body, dict) else body
     return _download_json(download, url, params=clean, **kwargs)

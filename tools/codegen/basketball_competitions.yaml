@@ -16,6 +16,14 @@
 #   competition label of genius_competitions(org) that pick THE competition of a season (an org lists
 #   cups, play-offs and youth leagues beside the headline league). The minted game functions apply the same
 #   rule to the competition name of the game's /u/ shell, so a game of another org or competition is refused.
+#   Verified live on 2026-10-17 (9 Genius requests through a residential proxy): the WBBL and SLB choosers pick
+#   'Championship 2025-26' for season 2026 (comp 41751 / 41897), and the /u/ shells of WBBL match 2767806 and
+#   SLB match 2702542 name that same competition ('Championship 2025-26', same comp_id), which "Championship"
+#   accepts. FFBB: /u/FFBB/2875354/ names 'LIGUE FEMININE 2' (comp 49551, 2026-27), which the anchored
+#   ^ligue feminine( de basket)?$ rightly refuses; the chooser labels it accepts ('LIGUE FEMININE' 2017-18 comp
+#   18540, 'LIGUE FEMININE DE BASKET' 2018-19 comp 21849) are the refs leagues.json chooser rows. The FFBB hosted
+#   schedule of comp 21849 did not answer as that competition (scope refusal), so no LFB-proper /u/ page was read
+#   within the budget: the positive LFB case rests on the chooser labels.
 # atrium: website_id = the embed site config id (one site carries many competitions).
 #
 # Left out on purpose (already have a dedicated home, so a second prefix would only duplicate it):

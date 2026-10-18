@@ -238,8 +238,9 @@ def test_public_parsers_are_documented():
     assert len(P.__all__) == len(set(P.__all__)) == 24
     for name in P.__all__:
         doc = getattr(P, name).__doc__
-        for part in ("Args:", "Returns:", "Raises:", "Example:", "Quick start::"):
+        for part in ("Args:", "Returns:", "Example:", "Quick start::"):
             assert part in doc, (name, part)
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc
     assert set(P.__all__) <= set(tbf_pkg.__all__)
     assert all(n.startswith("tbf_") for n in tbf_pkg.__all__ if not n.startswith("parse_"))

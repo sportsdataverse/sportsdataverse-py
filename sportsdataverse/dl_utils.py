@@ -248,7 +248,7 @@ def download(
     cache_ttl=None,
     retry_statuses=_RETRYABLE_STATUS,
     data=None,
-    json=None,
+    json_body=None,
 ):
     """Download a URL with retries and ESPN-aware error handling.
 
@@ -286,9 +286,13 @@ def download(
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
             403 is a real forbidden rather than ESPN-under-load.
-        data: Form body. When ``data`` or ``json`` is given the request is a
-            ``POST`` (same retries and error handling) and is never cached.
-        json: JSON body (see ``data``).
+        data: Form body. When ``data`` or ``json_body`` is given the request is
+            a ``POST`` and is never cached. A POST is retried exactly like a GET
+            (same budget, statuses and backoff), which assumes the endpoint is an
+            idempotent READ API that takes its query as a body; do not send a
+            write through this gateway.
+        json_body: JSON body (see ``data``); sent as ``requests``' ``json=``.
+            Named ``json_body`` so it never shadows the :mod:`json` module here.
 
     Raises:
         NoDataError: When the host answers 404, or ESPN answers 200 with a
@@ -377,7 +381,7 @@ def download(
     )
 
     # A POST body is not part of the cache key, so a body request is never cached.
-    body = {k: v for k, v in (("data", data), ("json", json)) if v is not None}
+    body = {k: v for k, v in (("data", data), ("json", json_body)) if v is not None}
     use_cache = get_cache_mode() != "off" and not body
     if use_cache:
         # Build a hashable params dict (drop None values + ignore the

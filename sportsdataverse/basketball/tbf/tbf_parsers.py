@@ -891,9 +891,7 @@ def parse_tbf_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         One row per season, newest first. ``season`` is the END year of the label (2026-2027 -> 2027); ``international`` marks the odd ``UA-`` seasons. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -915,9 +913,7 @@ def parse_tbf_leagues(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         One row per league: BSL, TBL, KBSL, TKBL, TB2L and the youth leagues with their ``activity_id``. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -941,9 +937,7 @@ def parse_tbf_league_seasons(
 
     Returns:
         One row per season of the league, newest first. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -965,9 +959,7 @@ def parse_tbf_weeks(raw: Any, *, return_as_pandas: bool = False, columns: Option
 
     Returns:
         One row per week in play order; ``week`` is the value the schedule and standings take. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -989,9 +981,7 @@ def parse_tbf_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
     Returns:
         One row per team and group. Tie-break detail rows (``tiedRows``) are not included. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1013,9 +1003,7 @@ def parse_tbf_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
     Returns:
         One row per game. Scores are null before the game; ``status_id`` 1 = played, 4 = not played, 19 = no date yet. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1039,9 +1027,7 @@ def parse_tbf_daily_matches(
 
     Returns:
         One row per game with its ``group_name`` (the competition group the app shows). An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1065,9 +1051,7 @@ def parse_tbf_game_header(
 
     Returns:
         One row. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1091,9 +1075,7 @@ def parse_tbf_game_players(
 
     Returns:
         One row per rostered player. The header carries no usable player id; join on name + shirt number + side. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1115,9 +1097,7 @@ def parse_tbf_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per player who is on the sheet; ``is_starter`` marks the starting five (none flagged in 2006-07). An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1139,9 +1119,7 @@ def parse_tbf_team_box(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
     Returns:
         Two rows: home, then away. Minutes are the players' summed seconds. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1163,9 +1141,7 @@ def parse_tbf_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
 
     Returns:
         One row per event. Games before 2025-26 raise NoDataError. The feed has no player id. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1187,9 +1163,7 @@ def parse_tbf_shots(raw: Any, *, return_as_pandas: bool = False, columns: Option
 
     Returns:
         One row per attempt. ``x`` and ``y`` are percentages of a horizontal full court. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1213,9 +1187,7 @@ def parse_tbf_period_scores(
 
     Returns:
         One row per side and period (home first). An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1237,9 +1209,7 @@ def parse_tbf_highlights(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per statistic with the home and away value. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1263,9 +1233,7 @@ def parse_tbf_game_leaders(
 
     Returns:
         One row per leader, best first within a category. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1287,9 +1255,7 @@ def parse_tbf_players(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         One row per registered player. Birth dates are not returned. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1313,9 +1279,7 @@ def parse_tbf_player_career(
 
     Returns:
         One row per career season and competition. Totals and averages rows are not included. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1337,9 +1301,7 @@ def parse_tbf_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         Up to 20 rows per ``kind`` (``total`` and ``average``), best first. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1361,9 +1323,7 @@ def parse_tbf_teams(raw: Any, *, return_as_pandas: bool = False, columns: Option
 
     Returns:
         One row per team registration. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1387,9 +1347,7 @@ def parse_tbf_team_player_stats(
 
     Returns:
         One row per player. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1411,9 +1369,7 @@ def parse_tbf_team_games(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per game of the team (scheduled games included). An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1437,9 +1393,7 @@ def parse_tbf_team_roster(
 
     Returns:
         One row per rostered person. Birth dates are not returned. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1461,9 +1415,7 @@ def parse_tbf_team_staff(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per staff member. An empty or unrecognised body gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::

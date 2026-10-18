@@ -323,9 +323,7 @@ def parse_sportality(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per record; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse the provider route's bare word::
@@ -361,9 +359,7 @@ def parse_sportality_page(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row; zero rows when the body is not a non-empty dict.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse a team page::
@@ -392,9 +388,7 @@ def parse_sportality_athlete(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row; zero rows when the body has no athlete.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one athlete::
@@ -441,9 +435,7 @@ def parse_sportality_schedule(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per game; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one match day::
@@ -511,9 +503,7 @@ def parse_sportality_pbp(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per event; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one shot::
@@ -566,9 +556,7 @@ def parse_sportality_player_box(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player and summary row; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one player row::
@@ -632,9 +620,7 @@ def parse_sportality_team_stats(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per side and period; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one side::
@@ -682,9 +668,7 @@ def parse_sportality_standings(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per team; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one row::
@@ -766,9 +750,7 @@ def parse_sportality_stats_info(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per table row; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one row::
@@ -830,9 +812,7 @@ def parse_sportality_player_crosswalk(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse a map::
@@ -868,9 +848,7 @@ def parse_sportality_layout(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per ssgt; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one ssgt::
@@ -924,9 +902,7 @@ def parse_sportality_filter(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per entry; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one season::
@@ -971,9 +947,7 @@ def parse_sportality_roster(
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one group::
@@ -1020,9 +994,7 @@ def parse_sportality_h2h(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player; zero rows when unusable.
-
-    Raises:
-        None: a payload that cannot be parsed gives a zero-row frame, never an exception.
+        A payload that cannot be parsed gives a zero-row frame, never an exception.
 
     Example:
         Parse one player::

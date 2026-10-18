@@ -596,25 +596,16 @@ TEXT_DIGITS = frozenset({"number", "player_no", "value", "key", "cvalue"})
 _INT_TEXT = re.compile(r"^(season|(home|visiting)_team_(win|lose))$")
 
 
-def _numeric_text(dtypes: Dict[str, Dict[str, str]], parsers: Any) -> Tuple[Dict[str, Dict[str, str]], set]:
+def _numeric_text(dtypes: Dict[str, Dict[str, str]], parsers: Any) -> Dict[str, Dict[str, str]]:
     """Retype the String columns whose every fixture value is display text of a number (``'21.6'``, ``'39.4%'``).
 
     A decimal string becomes ``f``. A percent string becomes ``p`` (Float64, divided by 100: a FRACTION 0-1, like the
-    ``*_sort`` companions and the player_box percentages), unless the family already holds that column as a 0-100
-    number (``turnovers_rate`` on team_four), when it is ``f`` (0-100, the ``%`` dropped). ``TEXT_DIGITS`` stay text.
-    Returns the retyped map and the ``(short, column)`` pairs that were percent strings.
+    ``*_sort`` companions and the player_box percentages). The scale is decided per ROUTE from what that route sends:
+    a percent string is always a fraction, even where another route of the family sends the same name as a plain 0-100
+    number (``turnovers_rate``: '13.5%' -> 0.135 on player_offensive, 13.5 stays 13.5 on team_four, as each route's
+    description says). ``TEXT_DIGITS`` stay text.
     """
     out = copy.deepcopy(dtypes)
-    percent: set = set()
-    hundred = set()
-    for short, cols in dtypes.items():
-        rows = parsers._rows(short, fixture(short))
-        for col, code in cols.items():
-            vals = [
-                r.get(col) for r in rows if isinstance(r.get(col), (int, float)) and not isinstance(r.get(col), bool)
-            ]
-            if code == "f" and vals and max(abs(v) for v in vals) > 1.5:
-                hundred.add(col)
     for short, cols in dtypes.items():
         rows = parsers._rows(short, fixture(short))
         for col, code in cols.items():
@@ -625,11 +616,10 @@ def _numeric_text(dtypes: Dict[str, Dict[str, str]], parsers: Any) -> Tuple[Dict
             if not all(_NUMERIC_TEXT.match(v.strip()) for v in text):
                 continue
             if any(v.strip().endswith("%") for v in text):
-                out[short][col] = "f" if col in hundred else "p"
-                percent.add((short, col))
+                out[short][col] = "p"
             else:
                 out[short][col] = "i" if _INT_TEXT.match(col) else "f"
-    return out, percent
+    return out
 
 
 def _write_dtypes(dtypes: Dict[str, Dict[str, str]]) -> None:
@@ -753,20 +743,44 @@ _STRING_CLAIM = re.compile(
 )
 
 
-def _as_number(text: str, code: str, *, percent: bool, sort: bool) -> str:
-    """A refs description of a display-text column, restated for the parsed number."""
-    text = _STRING_CLAIM.sub("", text).strip().rstrip(".")
+def _as_number(text: str, code: str, *, sort: bool, filled: bool = False) -> str:
+    """A refs description of a display-text column, restated for the parsed number.
+
+    ``filled``: the column is null in every sample of this route and takes the family's dtype (``_family_fill``), so
+    nothing is said about what the API sends.
+    """
+    text = _STRING_CLAIM.sub("", text).strip().rstrip(".").replace("( form", "(a numeric form")
+    if filled:
+        kind = {"i": "Int64", "p": "Float64", "f": "Float64"}.get(code, "the family's dtype")
+        return f"{text}. Typed {kind} like the family's other routes."
     if code == "p":
         same = "; the _sort column holds the same fraction" if sort else ""
         return f"{text}. A FRACTION 0-1 (the API sends a percent string such as '39.4%'{same})."
     if code == "i":
         return f"{text}. An integer (the API sends it as digit text)."
-    if percent:
-        return f"{text}. 0-100 like the family's numeric column of this name (the API sends '15.3%'; the % is dropped)."
-    return f"{text}. A number (the API sends it as display text, such as '21.6')."
+    return f"{text}. A number (the API sends it as display text)."
+
+
+#: Route-specific texts where the refs row describes another route of the family (``(short, column)`` -> text).
+ROUTE_LOCAL: Dict[Tuple[str, str], str] = {
+    **{
+        (short, "minutes"): "Minutes played in the season (whole-season total, integer; cba_player_base gives the "
+        "per-game average)."
+        for short in ("player_offensive", "player_defensive", "player_shots")
+    },
+    **{
+        (short, "seconds"): "Seconds played in the season (whole-season total, integer; cba_player_base gives the "
+        "per-game average)."
+        for short in ("player_offensive", "player_defensive", "player_shots")
+    },
+    ("rosters", "team_cba_id"): "teamId again as an integer (29128); meaning unverified beyond equalling team_id in "
+    "the sample.",
+}
 
 
 def _describe(short: str, col: str, md_rows: Dict[str, Dict[str, str]], tables: Dict[str, List[List[str]]]) -> str:
+    if (short, col) in ROUTE_LOCAL:
+        return ROUTE_LOCAL[(short, col)]
     text = LOCAL.get(col, "") if col in LOCAL and col != "points" else ""
     if short == "period_scores" and col in ("period", "points", "side"):
         text = LOCAL[col]
@@ -871,9 +885,10 @@ def main() -> None:
     # the parsers read the module global; set it rather than write + reload: one write only, since a same-size rewrite
     # within one second ('s' -> 'p') leaves the earlier bytecode in use
     P.DTYPES = dtypes
-    retyped, percent_text = _numeric_text(dtypes, P)
-    retyped = _family_fill(retyped, unobserved)
+    numeric = _numeric_text(dtypes, P)
+    retyped = _family_fill(numeric, unobserved)
     converted = {(s, c): k for s, cols in retyped.items() for c, k in cols.items() if dtypes[s][c] != k}
+    filled = {(s, c) for (s, c) in converted if numeric[s][c] == dtypes[s][c]}
     _write_dtypes(retyped)
     P.DTYPES = retyped
 
@@ -933,8 +948,8 @@ def main() -> None:
                 text = _as_number(
                     text,
                     converted[(short, col["name"])],
-                    percent=(short, col["name"]) in percent_text,
                     sort=f"{col['name']}_sort" in retyped[short],
+                    filled=(short, col["name"]) in filled,
                 )
             if len(text) < 15 or text.lower() == col["name"].lower() or _BANNED.match(text):
                 bad.append(f"{SCHEMA_PREFIX}{short}.{col['name']}: {text!r}")

@@ -626,7 +626,7 @@ DTYPES: Dict[str, Dict[str, str]] = {
         "team_cn_alias": "s",
         "team_id": "i",
         "turnovers": "i",
-        "turnovers_rate": "f",
+        "turnovers_rate": "p",
         "turnovers_rate_rank": "f",
         "turnovers_rate_sort": "f",
     },

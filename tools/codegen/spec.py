@@ -85,8 +85,10 @@ class Endpoint:
     body: str = "query"
     # ``fixed_params`` keys that stay in the query string of a body endpoint (CBA ``startNum``).
     fixed_in_query: List[str] = field(default_factory=list)
-    # A body endpoint's runtime callable (a name in the family's ``getter_module``) the wrapper passes
-    # its flat body dict through before sending, e.g. to nest fields into the JSON the API expects.
+    # A body endpoint's runtime callable the wrapper passes its flat body dict through before sending,
+    # e.g. to nest fields into the JSON the API expects. Resolved from the family's ``getter_module``,
+    # else ``sportsdataverse._codegen_runtime`` (the generated import follows). Only top-level None
+    # values are stripped from its output: the builder owns None handling inside what it nests.
     body_builder: Optional[str] = None
 
     @property

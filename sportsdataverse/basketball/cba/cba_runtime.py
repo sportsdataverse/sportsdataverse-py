@@ -11,7 +11,8 @@ Three things make this host unusual (sdv-internal-refs ``cba/``, live-verified 2
 * **The host blocks datacenter IPs at TCP.** Set ``CBA_PROXY`` (a residential proxy URL; owner ruling: Decodo, small
   requests only). The value is read by :func:`basketball_runtime.proxy_from_env`, never logged and never put in an
   error. Without it the request goes direct and fails FAST from a datacenter: a 5 s connect timeout
-  (:data:`FAST_CONNECT_TIMEOUT`) and no retry of a refused or timed-out connection, so the ``AssetFetchError`` naming
+  (:data:`FAST_CONNECT_TIMEOUT`) and no retry of a refused or timed-out CONNECT (a read timeout or a connection reset
+  mid-response is still retried), so the ``AssetFetchError`` naming
   ``CBA_PROXY`` comes in seconds, not after three 60 s connect timeouts. On a network where direct access works (a
   residential IP), set ``CBA_DIRECT=1`` (:data:`DIRECT_ENV`): direct requests then get the full timeout and retries.
 * **Several game routes answer team-season tables, not game data** (``schedule-shoot-list``,
@@ -46,6 +47,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlsplit
 
 import requests
+from urllib3.exceptions import NewConnectionError
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.basketball.basketball_runtime import SESSION, proxy_from_env
@@ -157,6 +159,29 @@ def _retry_after(resp: Any) -> float:
         return 0.0
 
 
+def _dropped_at_connect(exc: BaseException) -> bool:
+    """True when ``exc`` failed while OPENING the connection: a connect timeout, or a refused / unreachable connect.
+
+    That is how the host turns away a datacenter IP. A connection that opened and then broke mid-response (a reset,
+    ``RemoteDisconnected``) or a read timeout is an ordinary transient failure and is retried.
+    """
+    if isinstance(exc, requests.ConnectTimeout):
+        return True
+    seen: set = set()
+    todo: List[Optional[BaseException]] = [exc]
+    while todo:
+        err = todo.pop()
+        if err is None or id(err) in seen:
+            continue
+        seen.add(id(err))
+        if isinstance(err, (ConnectionRefusedError, NewConnectionError)):
+            return True
+        reason = getattr(err, "reason", None)
+        todo += [err.__cause__, err.__context__, reason if isinstance(reason, BaseException) else None]
+        todo += [a for a in getattr(err, "args", ()) if isinstance(a, BaseException)]
+    return False
+
+
 # ----------------------------------------------------------------------------- transport
 def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) -> Any:
     """One request through the throttled session (every attempt waits its turn); returns the decrypted JSON."""
@@ -173,7 +198,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
                 method, url, params=query or None, json=body, headers=HEADERS, timeout=timeout, proxies=proxies,
             )  # fmt: skip
         except requests.RequestException as exc:  # the message can carry the proxy URL: class name only
-            dropped = fast and isinstance(exc, requests.ConnectionError)  # ConnectTimeout included: never retried
+            dropped = fast and _dropped_at_connect(exc)  # turned away at connect: never retried without a proxy
             if attempt == ATTEMPTS - 1 or dropped:
                 hint = (
                     f" (set {PROXY_ENV}: the host blocks datacenter IPs; {DIRECT_ENV}=1 if direct access works here)"

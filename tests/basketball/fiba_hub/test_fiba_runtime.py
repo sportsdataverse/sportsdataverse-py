@@ -97,11 +97,11 @@ def net(monkeypatch):
     monkeypatch.setattr(rt._rt, "download", n.download)
     rt._api_key.cache_clear()
     rt._codes.clear()
-    rt._competition_slug.cache_clear()
+    rt._competition_family.cache_clear()
     yield n
     rt._api_key.cache_clear()
     rt._codes.clear()
-    rt._competition_slug.cache_clear()
+    rt._competition_family.cache_clear()
 
 
 def _call(params: Dict[str, Any] | None = None, url: str = URL) -> Any:
@@ -574,6 +574,15 @@ def test_a_game_of_another_competition_is_a_wrong_scope_asset_fetch_error(net, m
 def test_a_scheduled_game_without_its_teams_is_no_data(net):
     _wire_gdap(net)
     net.answers["getgdapgamesbycompetitionid"] = [{**SCHEDULE[0], "teamB": {"code": None}}]
+    net.answers["getgdapgamebyid"] = lambda params: pytest.fail("a listed game needs no lookup")
+    with pytest.raises(NoDataError, match="without its two team codes"):
+        rt._get(PAGE_URL, {"comp": 208182})
+
+
+@pytest.mark.parametrize("side", ["teamA", "teamB"])
+def test_a_scheduled_game_with_a_null_team_object_is_no_data_not_an_attribute_error(net, side):
+    _wire_gdap(net)
+    net.answers["getgdapgamesbycompetitionid"] = [{**SCHEDULE[0], side: None}]  # "teamA": null before the draw
     net.answers["getgdapgamebyid"] = lambda params: pytest.fail("a listed game needs no lookup")
     with pytest.raises(NoDataError, match="without its two team codes"):
         rt._get(PAGE_URL, {"comp": 208182})

@@ -165,8 +165,7 @@ cba_game_team_four:
     number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
     possessions (offensive rating).'
   rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数).'
-  rhythm_num: Pace; same value as rhythm. A number (the API sends it as display text,
-    such as '21.6').
+  rhythm_num: Pace; same value as rhythm. A number (the API sends it as display text).
   rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
     per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
     每48分钟回合数).'
@@ -198,13 +197,12 @@ cba_game_team_four:
   wine_average: League-average wins (field name sic); 0.0 in every sample.
 cba_game_team_shots:
   bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
-    points allowed per 100 possessions). A number (the API sends it as display text,
-    such as ''21.6'').'
+    points allowed per 100 possessions). Typed Float64 like the family''s other routes.'
   bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
-    per 100 possessions). A number (the API sends it as display text, such as ''21.6'').'
+    per 100 possessions). Typed Float64 like the family''s other routes.'
   bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
-    百回合净胜分 net points per 100 possessions). A number (the API sends it as display
-    text, such as ''21.6'').'
+    百回合净胜分 net points per 100 possessions). Typed Float64 like the family''s other
+    routes.'
   guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
     at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
     against this team (守, defence; the ''guard'' prefix is inferred from the site''s
@@ -629,20 +627,20 @@ cba_player_advanced:
 cba_player_base:
   age: Age in years in that season.
   assists: Assists per game when countRanger is 1. A number (the API sends it as display
-    text, such as '21.6').
+    text).
   birth_date: Date of birth 'YYYY-MM-DD' (a public player bio field; midnight-suffixed
     'YYYY-MM-DD 00:00:00' on player-base-list).
   blocked: Blocks per game when countRanger is 1. A number (the API sends it as display
-    text, such as '21.6').
+    text).
   cn_alias: Player name (Chinese). Names change with the sponsor, the id does not;
     teamId -> English glossary in cba_glossary.yaml.
   field_goals: Field goals made per game when countRanger is 1. A number (the API
-    sends it as display text, such as '21.6').
+    sends it as display text).
   field_goals_at_rim_attempted: At-the-rim (inside the restricted area) field goals
     attempted in the season (total), a float.
   field_goals_at_rim_made: At-the-rim field goals made in the season (total), a float.
   field_goals_attempted: Field goals attempted per game when countRanger is 1. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   field_goals_mid_range_attempted: Mid-range (two-point shots outside the restricted
     area) field goals attempted in the season (total), a float.
   field_goals_mid_range_made: Mid-range field goals made in the season (total), a
@@ -651,18 +649,18 @@ cba_player_base:
     string such as '39.4%'; the _sort column holds the same fraction).
   field_goals_percentage_sort: Field-goal percentage as a FRACTION 0-1 for sorting.
   fouls: Personal fouls per game when countRanger is 1. A number (the API sends it
-    as display text, such as '21.6').
+    as display text).
   fouls_defensive: Defensive personal fouls in the season (total), a float.
   free_throws: Free throws made per game when countRanger is 1. A number (the API
-    sends it as display text, such as '21.6').
+    sends it as display text).
   free_throws_attempted: Free throws attempted per game when countRanger is 1. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   free_throws_percentage: Free-throw percentage. A FRACTION 0-1 (the API sends a percent
     string such as '39.4%'; the _sort column holds the same fraction).
   free_throws_percentage_sort: Free-throw percentage as a FRACTION 0-1 for sorting.
   game_start_num: Games started (首发).
   minutes: 'Minutes: per game; a whole-season total integer on the offensive/defensive/shot
-    lists (827). A number (the API sends it as display text, such as ''21.6'').'
+    lists (827). A number (the API sends it as display text).'
   nationality: 'Nationality (Chinese country name; see the nationality code table
     for every value seen and its English name). Chinese country names seen: 中国 = China;
     美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
@@ -676,7 +674,7 @@ cba_player_base:
   player_times2: 'Unobserved: null in every sample.'
   points: Points per game when countRanger is 1 (the request value); other countRanger
     values change the unit (2 total, 3 per 36 minutes, 4 per 100 possessions). A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
     / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
     / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
@@ -691,20 +689,20 @@ cba_player_base:
     typed as float.
   rank_sort: 'Unobserved: null in every sample.'
   rebounds: Total rebounds per game when countRanger is 1. A number (the API sends
-    it as display text, such as '21.6').
+    it as display text).
   rebounds_defensive: Defensive rebounds per game when countRanger is 1. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   rebounds_offensive: Offensive rebounds per game when countRanger is 1. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
     across seasons and match types; the {scheduleId} of every game route). Stamped
     by the runtime from the request; null on a body parsed without it.'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
   seconds: 'Seconds: per-game average; a whole-season total integer elsewhere. A number
-    (the API sends it as display text, such as ''21.6'').'
+    (the API sends it as display text).'
   steals: Steals per game when countRanger is 1. A number (the API sends it as display
-    text, such as '21.6').
+    text).
   team_cn_alias: Team short name (Chinese) in that season. Names change with the sponsor,
     the id does not; teamId -> English glossary in cba_glossary.yaml.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
@@ -713,14 +711,14 @@ cba_player_base:
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
   three_point_attempted: Three-pointers attempted per game when countRanger is 1.
-    A number (the API sends it as display text, such as '21.6').
+    A number (the API sends it as display text).
   three_point_goals: Three-pointers made per game when countRanger is 1. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   three_point_percentage: Three-point percentage. A FRACTION 0-1 (the API sends a
     percent string such as '39.4%'; the _sort column holds the same fraction).
   three_point_percentage_sort: Three-point percentage as a FRACTION 0-1 for sorting.
   turnovers: Turnovers per game when countRanger is 1. A number (the API sends it
-    as display text, such as '21.6').
+    as display text).
 cba_player_box:
   assists: Assists in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
     row).
@@ -806,8 +804,8 @@ cba_player_defensive:
     犯规率 foul rate: defensive fouls per 100 possessions (site definition: 每百回合防守犯规数).'
   is_color: Highlight flag, 1 or 2 (unverified meaning; the site uses it to colour
     the row).
-  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
-    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  minutes: Minutes played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   nationality: 'Nationality (Chinese country name; see the nationality code table
     for every value seen and its English name). Chinese country names seen: 中国 = China;
     美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
@@ -855,8 +853,8 @@ cba_player_defensive:
     the table. Metric: 进攻篮板率 offensive-rebound rate (site definition, as reboundsOffensivePercentage).'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
-  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
-    total integer elsewhere.'
+  seconds: Seconds played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   steals_rate: 抢断率 steal rate (site definition, as stealsPercentage). A FRACTION 0-1
     (the API sends a percent string such as '39.4%'; the _sort column holds the same
     fraction).
@@ -929,8 +927,8 @@ cba_player_offensive:
     = 控球后卫/得分后卫.'
   free_throws: Free throws made in the season (total, integer).
   is_color: Highlight flag, 1 or 2 (unverified meaning).
-  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
-    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  minutes: Minutes played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   nationality: 'Nationality (Chinese country name; see the nationality code table
     for every value seen and its English name). Chinese country names seen: 中国 = China;
     美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
@@ -980,8 +978,8 @@ cba_player_offensive:
     while on the court (site definition).'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
-  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
-    total integer elsewhere.'
+  seconds: Seconds played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   team_cn_alias: Team short name (Chinese) in that season.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
     clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
@@ -991,8 +989,8 @@ cba_player_offensive:
   turnovers: Turnovers in the season (total, integer).
   turnovers_rate: '失误率 turnover rate: for a player, the share of his possession-ending
     plays that are turnovers; for a team, the share of the team''s possessions ending
-    in a turnover (site definitions). 0-100 like the family''s numeric column of this
-    name (the API sends ''15.3%''; the % is dropped).'
+    in a turnover (site definitions). A FRACTION 0-1 (the API sends a percent string
+    such as ''39.4%''; the _sort column holds the same fraction).'
   turnovers_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1007,8 +1005,7 @@ cba_player_offensive:
 cba_player_shots:
   age: Age in years in that season.
   at_rim_made_rate: '篮下频率 at-rim frequency: restricted-area attempts per 100 possessions
-    (site definition: 每百回合合理冲撞区内的出手数). A number (the API sends it as display text,
-    such as ''21.6'').'
+    (site definition: 每百回合合理冲撞区内的出手数). A number (the API sends it as display text).'
   at_rim_made_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1026,7 +1023,7 @@ cba_player_shots:
     小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
     = 控球后卫/得分后卫.'
   free_rate: '罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site
-    definition). A number (the API sends it as display text, such as ''21.6'').'
+    definition). A number (the API sends it as display text).'
   free_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1093,7 +1090,7 @@ cba_player_shots:
     the row).
   middle_rate: '中距离频率 mid-range frequency: two-point attempts outside the restricted
     area per 100 possessions (site definition). A number (the API sends it as display
-    text, such as ''21.6'').'
+    text).'
   middle_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1103,8 +1100,8 @@ cba_player_shots:
     same metric (a fraction 0-1 for percentages), used by the site to sort the table.
     Metric: 中距离频率 mid-range frequency: two-point attempts outside the restricted area
     per 100 possessions (site definition).'
-  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
-    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  minutes: Minutes played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   nationality: 'Nationality (Chinese country name; see the nationality code table
     for every value seen and its English name). Chinese country names seen: 中国 = China;
     美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
@@ -1132,8 +1129,8 @@ cba_player_shots:
     itself).'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
-  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
-    total integer elsewhere.'
+  seconds: Seconds played in the season (whole-season total, integer; cba_player_base
+    gives the per-game average).
   team_cn_alias: Team short name (Chinese) in that season.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
     clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
@@ -1141,7 +1138,7 @@ cba_player_shots:
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
   three_rate: '三分频率 three-point frequency: three-point attempts per 100 possessions
-    (site definition). A number (the API sends it as display text, such as ''21.6'').'
+    (site definition). A number (the API sends it as display text).'
   three_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1217,8 +1214,8 @@ cba_rosters:
   season_year: 'Unobserved: null in every sample.'
   side: 'Side of the game the row belongs to: home (the API''s host / home block)
     or away (guest / visiting block).'
-  team_cba_id: teamId as a string ('29128'); meaning unverified beyond equalling teamId
-    in the sample.
+  team_cba_id: teamId again as an integer (29128); meaning unverified beyond equalling
+    team_id in the sample.
   team_cn_alias: Team short name (Chinese) in that season.
   team_cn_name: Team full legal name (Chinese), e.g. 浙江广厦雄狮俱乐部浙商证券篮球队 'Zhejiang Guangsha
     Lions Club Zheshang Securities basketball team'.
@@ -1265,13 +1262,13 @@ cba_schedule_day:
     across seasons and match types; the {scheduleId} of every game route). Stamped
     by the runtime from the request; null on a body parsed without it.'
   schedule_num: 'Unobserved: null in every sample on this route (the game count is
-    filled on schedules/month). An integer (the API sends it as digit text).'
+    filled on schedules/month). Typed Int64 like the family''s other routes.'
   schedule_time: Tip-off as 'YYYY-MM-DD HH:MM:SS' (China local time, no zone).
   schedule_type_name: Round label (Chinese), e.g. 常规赛第1轮 = regular season, round 1.
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
   seconds: 'Unobserved: null in every sample (the clock seconds of a live game, by
-    its name). A number (the API sends it as display text, such as ''21.6'').'
+    its name). Typed Float64 like the family''s other routes.'
   status: 'Game status: 4 = finished (every sampled game). 1 = not started and 2 =
     in progress are inferred from the site''s polling logic; 3 is unobserved. See
     the code table.'
@@ -1304,36 +1301,36 @@ cba_seasons:
     every season parameter takes.
 cba_team_basic:
   assists: Assists, formatted by statisticalDimension. A number (the API sends it
-    as display text, such as '21.6').
+    as display text).
   blocked: Blocks, formatted by statisticalDimension. A number (the API sends it as
-    display text, such as '21.6').
+    display text).
   cba_rank: 'Unobserved: null in every sample (a league-rank slot).'
   field_goals: Field goals made, formatted by statisticalDimension. A number (the
-    API sends it as display text, such as '21.6').
+    API sends it as display text).
   field_goals_attempted: Field goals attempted, formatted by statisticalDimension.
-    A number (the API sends it as display text, such as '21.6').
+    A number (the API sends it as display text).
   field_goals_percentage_rate: Field-goal percentage. A FRACTION 0-1 (the API sends
     a percent string such as '39.4%').
   fouls: Personal fouls, formatted by statisticalDimension. A number (the API sends
-    it as display text, such as '21.6').
+    it as display text).
   free_throws: Free throws made, formatted by statisticalDimension. A number (the
-    API sends it as display text, such as '21.6').
+    API sends it as display text).
   free_throws_attempted: Free throws attempted, formatted by statisticalDimension.
-    A number (the API sends it as display text, such as '21.6').
+    A number (the API sends it as display text).
   free_throws_percentage_rate: Free-throw percentage. A FRACTION 0-1 (the API sends
     a percent string such as '39.4%').
   losses_number: Losses (负场). (as the API names it)
   points: 'Points, formatted by statisticalDimension (1 per-game average, 2 season
     total, 3 and 4 per 100 possessions: both give the same values, 120.1 = boutPoints).
-    A number (the API sends it as display text, such as ''21.6'').'
+    A number (the API sends it as display text).'
   real_player_times: Games counted for the averages (实际场数 by its name); equals scheduleNumber
     in the sample except in short seasons (unverified).
   rebounds: Total rebounds, formatted by statisticalDimension. A number (the API sends
-    it as display text, such as '21.6').
+    it as display text).
   rebounds_defensive: Defensive rebounds, formatted by statisticalDimension. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   rebounds_offensive: Offensive rebounds, formatted by statisticalDimension. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   round: Possessions in the season (回合数) as a float (4074.09); identical for statisticalDimension
     1-4.
   schedule_number: Games played in that season and match type (场数).
@@ -1342,7 +1339,7 @@ cba_team_basic:
   season: Season label 'YYYY-YYYY' as a string ('2024-2025' = start year - end year;
     the sdv END year is the second one); scheduleSeason is the numeric START year.
   steals: Steals, formatted by statisticalDimension. A number (the API sends it as
-    display text, such as '21.6').
+    display text).
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
     clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
     club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
@@ -1352,15 +1349,15 @@ cba_team_basic:
     team 29128 has 9 different names across 20 seasons). Names change with the sponsor,
     the id does not; teamId -> English glossary in cba_glossary.yaml.
   three_point_attempted: Three-pointers attempted, formatted by statisticalDimension.
-    A number (the API sends it as display text, such as '21.6').
+    A number (the API sends it as display text).
   three_point_goals: Three-pointers made, formatted by statisticalDimension. A number
-    (the API sends it as display text, such as '21.6').
+    (the API sends it as display text).
   three_point_percentage_rate: Three-point percentage. A FRACTION 0-1 (the API sends
     a percent string such as '39.4%').
   time: Team minutes per game (statisticalDimension 1) or in total (2). A number (the
-    API sends it as display text, such as '21.6').
+    API sends it as display text).
   turnovers: Turnovers, formatted by statisticalDimension. A number (the API sends
-    it as display text, such as '21.6').
+    it as display text).
   win_number: Wins (胜场). (as the API names it)
   win_rate: Win rate (胜率). A FRACTION 0-1 (the API sends a percent string such as
     '39.4%').
@@ -1478,9 +1475,9 @@ cba_team_four:
     number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
     possessions (offensive rating).'
   rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数). A number
-    (the API sends it as display text, such as ''21.6'').'
-  rhythm_num: 'Unobserved: null in every sample ( form of the pace; the schedule-four-elements
-    route fills it). A number (the API sends it as display text, such as ''21.6'').'
+    (the API sends it as display text).'
+  rhythm_num: 'Unobserved: null in every sample (a numeric form of the pace; the schedule-four-elements
+    route fills it). Typed Float64 like the family''s other routes.'
   rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
     per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
     每48分钟回合数).'
@@ -1554,9 +1551,9 @@ cba_team_overview:
   loss_num: Losses in that season, a float.
   player_times: Games played, a float (42.0).
   rhythm: '节奏 pace: possessions per 48 minutes (''75.7''; site definition: 每48分钟回合数).
-    A number (the API sends it as display text, such as ''21.6'').'
-  rhythm_rank: 'Unobserved: null in every sample (a rank slot for pace). A number
-    (the API sends it as display text, such as ''21.6'').'
+    A number (the API sends it as display text).'
+  rhythm_rank: 'Unobserved: null in every sample (a rank slot for pace). Typed Float64
+    like the family''s other routes.'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary. One row per season of the team.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
@@ -1571,13 +1568,12 @@ cba_team_overview:
   win_rate: Win rate. A FRACTION 0-1 (the API sends a percent string such as '39.4%').
 cba_team_shots:
   bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
-    points allowed per 100 possessions). A number (the API sends it as display text,
-    such as ''21.6'').'
+    points allowed per 100 possessions). Typed Float64 like the family''s other routes.'
   bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
-    per 100 possessions). A number (the API sends it as display text, such as ''21.6'').'
+    per 100 possessions). Typed Float64 like the family''s other routes.'
   bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
-    百回合净胜分 net points per 100 possessions). A number (the API sends it as display
-    text, such as ''21.6'').'
+    百回合净胜分 net points per 100 possessions). Typed Float64 like the family''s other
+    routes.'
   guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
     at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
     against this team (守, defence; the ''guard'' prefix is inferred from the site''s

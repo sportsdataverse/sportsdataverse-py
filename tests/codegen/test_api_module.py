@@ -348,8 +348,12 @@ def test_reference_block_marks_where_a_body_endpoint_param_travels_and_lists_rai
     assert "| API Parameter | Python | Pattern | Required | Nullable | Description |" in plain  # no body: unchanged
     assert "| In |" not in plain
     assert "### Raises {#b_rows-raises}" in rows
-    assert "| `ValueError` | bad \\| input |" in rows  # the YAML line, pipe-escaped
-    assert rows.count("| `ValueError` |") == 1  # the vocabulary line it already names is not repeated
+    # one row: the vocabulary meaning, then the YAML qualifier (capitalised, pipe-escaped)
+    assert (
+        "| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. Bad \\| input |"
+        in rows
+    )
+    assert rows.count("| `ValueError` |") == 1
     assert "| `NoDataError` |" in rows and "| `AssetFetchError` |" in rows
     assert rows.index("### Raises") < rows.index("### Example")
 
@@ -398,3 +402,101 @@ def test_body_builder_needs_a_body_kind(tmp_path):
     )
     with pytest.raises(spec.SpecError, match="body_builder"):
         spec.load_flat_api(y, {})
+
+
+def test_body_builder_only_in_the_shared_runtime_is_imported_from_there(tmp_path, monkeypatch):
+    from sportsdataverse import _codegen_runtime
+
+    (tmp_path / "_bb_rt_bare.py").write_text(
+        "from sportsdataverse._codegen_runtime import _get  # noqa: F401\n", encoding="utf-8"
+    )
+    monkeypatch.syspath_prepend(str(tmp_path))
+    monkeypatch.setattr(_codegen_runtime, "_bb_shared_nest", lambda body: {"filter": body}, raising=False)
+    yaml_text = (
+        _BODY_YAML.format(body="json")
+        .split("  - short: plain")[0]
+        .replace("    body: json\n", "    body: json\n    body_builder: _bb_shared_nest\n")
+        + "getter_module: _bb_rt_bare\n"
+    )
+    src, mod = _render_and_load(tmp_path, yaml_text, "_gen_builder_shared")  # imports cleanly
+    assert "from _bb_rt_bare import _get\n" in src
+    assert "from sportsdataverse._codegen_runtime import _bb_shared_nest\n" in src
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(season=2026)
+    assert seen["json"] == {"filter": {"kind": "all", "season": 2026}}
+
+
+def test_unknown_body_builder_fails_at_generate_time(tmp_path, monkeypatch):
+    (tmp_path / "_bb_rt_none.py").write_text(
+        "from sportsdataverse._codegen_runtime import _get  # noqa: F401\n", encoding="utf-8"
+    )
+    monkeypatch.syspath_prepend(str(tmp_path))
+    y = tmp_path / "bbx.yaml"
+    y.write_text(
+        _BODY_YAML.format(body="json")
+        .split("  - short: plain")[0]
+        .replace("    body: json\n", "    body: json\n    body_builder: no_such_builder\n")
+        + "getter_module: _bb_rt_none\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="'no_such_builder' is in neither _bb_rt_none nor"):
+        generate.render_flat_module(spec.load_flat_api(y, {}))
+
+
+def test_yaml_raises_line_keeps_the_vocabulary_meaning_in_one_row():
+    lines = generate._raises_lines(
+        {
+            "raises": [
+                "AssetFetchError: also raised for an error body.",
+                "sportsdataverse.errors.NoDataError: no season.",
+            ]
+        },
+        vocab_raises=True,
+    )
+    exc = [ln.split(":", 1)[0] for ln in lines]
+    assert exc == ["AssetFetchError", "NoDataError", "ValueError"]  # YAML order, one row each
+    by = {ln.split(":", 1)[0].rsplit(".", 1)[-1]: ln.split(": ", 1)[1] for ln in lines}
+    assert by["AssetFetchError"].startswith("The fetch failed")  # the standard meaning first
+    assert by["AssetFetchError"].endswith("not empty. Also raised for an error body.")  # then the qualifier
+    assert by["NoDataError"] == "The host answered 404 -- the requested resource does not exist. No season."
+    assert by["ValueError"].startswith("The host answered 400 / 422")
+
+
+def test_raises_rows_merge_per_exception_and_capitalise():
+    rows = generate._merge_raises(
+        [
+            {"exc": "sportsdataverse.errors.NoDataError", "description": "FIBA has nothing for the request."},
+            {"exc": "ValueError", "description": "HTTP 400 / 422"},
+            {"exc": "ValueError", "description": "neither `season` nor `comp` is given."},
+            {"exc": "NoDataError", "description": "FIBA has nothing for the request. FIBA lists no edition."},
+            {"exc": "AssetFetchError", "description": "the fetch failed, e.g. 401 after retries."},
+        ]
+    )
+    assert [r["exc"] for r in rows] == ["sportsdataverse.errors.NoDataError", "ValueError", "AssetFetchError"]
+    by = {r["exc"]: r["description"] for r in rows}
+    assert by["sportsdataverse.errors.NoDataError"] == "FIBA has nothing for the request. FIBA lists no edition."
+    assert by["ValueError"] == "HTTP 400 / 422. Neither `season` nor `comp` is given."
+    assert by["AssetFetchError"] == "The fetch failed, e.g. 401 after retries."  # "e.g." is not a sentence break
+
+
+def test_no_rendered_raises_table_names_none():
+    assert (
+        generate._merge_raises([{"exc": "None", "description": "a malformed payload yields a zero-row frame."}]) == []
+    )
+
+    def parse(payload):
+        """Parse a payload.
+
+        Args:
+            payload: the body.
+
+        Returns:
+            A frame.
+
+        Raises:
+            ValueError: the body is HTML.
+            None: a malformed payload yields a zero-row frame.
+        """
+
+    assert [r["exc"] for r in generate._doc_view(parse)["raises"]] == ["ValueError"]

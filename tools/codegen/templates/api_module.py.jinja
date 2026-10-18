@@ -6,6 +6,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
+{% if shared_imports %}
+from sportsdataverse._codegen_runtime import {{ shared_imports|join(", ") }}
+{% endif %}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
 

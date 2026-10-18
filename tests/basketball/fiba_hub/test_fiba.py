@@ -130,7 +130,8 @@ def test_every_public_parser_has_an_example_block():
     for mod in (gp, pp):
         for name in mod.__all__:
             doc = getattr(mod, name).__doc__ or ""
-            assert all(h in doc for h in ("Args:", "Returns:", "Raises:", "Example:")), name
+            assert all(h in doc for h in ("Args:", "Returns:", "Example:")), name
+            assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
 
 
 # --- dtypes come from the FULL bodies -----------------------------------------------------------------------------------
@@ -431,7 +432,7 @@ def test_period_scores_add_up_to_the_final_score(page):
 
 def test_team_box_keeps_the_ids_across_pbp_box_and_schedule():
     box, pbp = pp.parse_fiba_gamepage_box_teams(OVR), pp.parse_fiba_gamepage_pbp(OVR)
-    sched = gp.parse_fiba_gdap_schedule(_load(GDAP_FX, "gdap__getgdapgamesbycompetitionid__wc2023.json"))
+    sched = gp.parse_fiba_gdap_schedule(_load(GDAP_FX, "gdap__getgdapgamesbycompetitionid__paris2024-men.json"))
     assert box.schema["organisation_id"] == pbp.schema["organisation_id"] == sched.schema["team_a_organisation_id"]
 
 
@@ -460,7 +461,7 @@ class _Recorder:
 def test_wrappers_build_the_gdap_urls_and_coerce_ids(monkeypatch):
     from sportsdataverse.basketball.fiba_hub import fiba_gdap as mod
 
-    rec = _Recorder(monkeypatch, mod, _load(GDAP_FX, "gdap__getgdapgamesbycompetitionid__wc2023.json"))
+    rec = _Recorder(monkeypatch, mod, _load(GDAP_FX, "gdap__getgdapgamesbycompetitionid__paris2024-men.json"))
     df = mod.fiba_gdap_schedule(comp="208182")
     url, params, _ = rec.calls[0]
     assert url == "https://digital-api.fiba.basketball/hapi/getgdapgamesbycompetitionid"
@@ -496,3 +497,15 @@ def test_gamepage_wrappers_route_through_the_pseudo_path_with_comp(monkeypatch):
     assert url == "https://www.fiba.basketball/en/games/100720" and params == {"comp": 208182}
     assert df.height == _pbp_actions(OVR)
     assert mod.fiba_gamepage_box_teams(game_id=100720, comp=208182, return_parsed=False) is OVR
+
+
+def test_utc_offset_is_float64_on_every_gdap_table():
+    # whole hours in every sample, but a half-hour zone (India +5.5, Adelaide +9.5) is a fraction
+    from sportsdataverse.basketball.fiba_hub import fiba_dtypes
+
+    tables = {p for p, cols in fiba_dtypes.DTYPES.items() if "utc_offset" in cols}
+    assert tables and {p: fiba_dtypes.DTYPES[p]["utc_offset"] for p in tables} == {p: "f" for p in tables}
+    rows = _load(GDAP_FX / "full", "getgdapgamesbycompetitionid__paris2024-men.json")
+    rows[0]["utcOffset"] = 5.5
+    df = gp.parse_fiba_gdap_schedule(rows)
+    assert df.schema["utc_offset"] == pl.Float64 and df["utc_offset"][0] == 5.5

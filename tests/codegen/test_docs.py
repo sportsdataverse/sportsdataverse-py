@@ -249,8 +249,8 @@ def test_doc_view_lists_the_docstring_raises():
         """
 
     assert generate._doc_view(f)["raises"] == [
-        {"exc": "ValueError", "description": "a bad | value, wrapped."},
-        {"exc": "NoDataError", "description": "nothing there."},
+        {"exc": "ValueError", "description": "A bad | value, wrapped."},  # each row starts with a capital
+        {"exc": "NoDataError", "description": "Nothing there."},
     ]
 
 
@@ -297,7 +297,8 @@ def test_autodoc_intro_names_minted_functions_only_where_there_are_some():
             title="T", module="m", sidebar_position=50, groups=[], minted=minted
         )
 
-    assert "Hand-written wrappers, loaders, and helpers in `m`\nnot covered" in page(False)
+    assert "Hand-written wrappers, loaders, and helpers in `m` that are not\ngenerated" in page(False)
+    assert "above" not in page(False) and "above" not in page(True)  # a standalone page: nothing is above it
     assert "Hand-written wrappers" not in page(True)
     assert "per-competition functions minted from the competition registry" in page(True)
     assert "Hand-written wrappers, loaders, and helpers in `" in generate.render_autodoc_page("mbb", "")

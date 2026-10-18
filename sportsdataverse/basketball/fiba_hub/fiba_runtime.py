@@ -389,14 +389,20 @@ def _slugify(name: str) -> str:
 
 
 @functools.lru_cache(maxsize=256)
-def _competition_slug(comp: int) -> str:
-    """``<histId>-<histSlug>`` of the competition's family (its marketing name)."""
+def _competition_family(comp: int) -> Optional[Tuple[int, str]]:
+    """``(family id, marketing name)`` of a competition from getGdapCompetitionById, or ``None`` when GDAP gives none."""
     body = _gdap(f"{GDAP_URL}/getGdapCompetitionById", {"gdapCompetitionId": comp})
     name = _dig(body, ("competitionMarketingName", "marketingName"))
     fam = _dig(body, ("competitionMarketingName", "competitionMarketingNameId"))
-    if not isinstance(name, str) or type(fam) is not int:
+    return (fam, name) if isinstance(name, str) and type(fam) is int else None
+
+
+def _competition_slug(comp: int) -> str:
+    """``<histId>-<histSlug>`` of the competition's family (its marketing name)."""
+    family = _competition_family(comp)
+    if family is None:
         raise AssetFetchError(f"competition {comp}: GDAP gives no marketing name, so the game page URL cannot be built")
-    return f"{fam}-{_slugify(name)}"
+    return f"{family[0]}-{_slugify(family[1])}"
 
 
 #: competition -> its scheduled games -> ``(teamA code, teamB code)``, or ``None`` while the teams are not drawn.
@@ -414,7 +420,7 @@ def _team_codes(comp: int, game_id: int) -> Tuple[str, str]:
             rows = _gdap(f"{GDAP_URL}/getgdapgamesbycompetitionid", {"gdapCompetitionId": comp})
             _codes[comp] = {
                 r["gameId"]: (str(a).upper(), str(b).upper())
-                if (a := r.get("teamA", {}).get("code")) and (b := r.get("teamB", {}).get("code"))
+                if (a := (r.get("teamA") or {}).get("code")) and (b := (r.get("teamB") or {}).get("code"))
                 else None
                 for r in rows
                 if type(r.get("gameId")) is int

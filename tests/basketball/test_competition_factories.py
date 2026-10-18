@@ -482,9 +482,9 @@ def gdap_competition(monkeypatch):
     body = json.loads((ROOT / "tests/fixtures/fiba_gdap/gdap__getGdapCompetitionById__wc2023.json").read_text("utf-8"))
     calls = []
     monkeypatch.setattr(fiba_wire, "_gdap", lambda url, params, **kw: calls.append(params) or body)
-    fiba_wire._competition_slug.cache_clear()
+    fiba_wire._competition_family.cache_clear()
     yield calls
-    fiba_wire._competition_slug.cache_clear()
+    fiba_wire._competition_family.cache_clear()
 
 
 def test_fiba_comp_override_must_be_an_edition_of_the_family(monkeypatch, gdap_competition):
@@ -497,6 +497,71 @@ def test_fiba_comp_override_must_be_an_edition_of_the_family(monkeypatch, gdap_c
     with pytest.raises(AssetFetchError, match="family 201"):
         fiba_rt.fiba_bcl_schedule(comp=208182)
     assert len(pages) == 1 and gdap_competition == [{"gdapCompetitionId": 208182}]  # one cached lookup
+
+
+@pytest.mark.parametrize(
+    "call, said",
+    [
+        (lambda: fiba_rt.fiba_wc_schedule(comp=208182), "call the fiba_gdap_\\* wrapper with comp=208182"),
+        (lambda: fiba_rt.fiba_wc_pbp(100720, comp=208182), "game page URL cannot be built either"),
+    ],
+)
+def test_fiba_comp_without_a_gdap_family_names_the_real_reason_per_caller(monkeypatch, call, said):
+    body = json.loads((ROOT / "tests/fixtures/fiba_gdap/gdap__getGdapCompetitionById__wc2023.json").read_text("utf-8"))
+    body.pop("competitionMarketingName", None)
+    monkeypatch.setattr(fiba_wire, "_gdap", lambda url, params, **kw: body)
+    monkeypatch.setattr(fiba_gamepage, "fiba_gamepage_pbp", lambda **kw: pytest.fail("no page"))
+    monkeypatch.setattr(fiba_gdap, "fiba_gdap_schedule", lambda **kw: pytest.fail("no schedule"))
+    fiba_wire._competition_family.cache_clear()
+    try:
+        with pytest.raises(AssetFetchError, match=f"208182: GDAP gives it no competition family.*{said}"):
+            call()
+    finally:
+        fiba_wire._competition_family.cache_clear()
+
+
+def test_fiba_game_functions_document_season_as_required_unless_comp():
+    game, sched = fiba_rt.fiba_wc_pbp.__doc__, fiba_rt.fiba_wc_schedule.__doc__
+    assert "Required unless ``comp`` is given" in game and "Omitted = the newest edition" not in game
+    assert "Omitted = the newest edition that has started" in sched
+    with pytest.raises(ValueError, match=r"event year \(World Cup 2023 = 2023\)"):
+        fiba_rt.fiba_wc_pbp(100720)
+
+
+def test_genius_shell_naming_no_competition_is_its_own_error(monkeypatch):
+    monkeypatch.setattr(genius_api, "genius_pbp", lambda **kw: "pbp")
+    monkeypatch.setattr(genius_api, "genius_match_competition", lambda **kw: {"match_id": 1, "competition_name": None})
+    with pytest.raises(AssetFetchError, match=r"names no competition.*genius_pbp\(match_id=") as err:
+        genius_rt.esake_pbp(1)
+    assert "None" not in str(err.value)
+
+
+def test_genius_scope_check_retries_once_then_says_it_could_not_run(monkeypatch):
+    shell = {"match_id": 2902690, "comp_id": 49914, "competition_name": "Stoiximan GBL 2026-2027"}
+    answers = [AssetFetchError("HTTP 503"), shell]
+
+    def flaky(**kw):
+        a = answers.pop(0)
+        if isinstance(a, Exception):
+            raise a
+        return a
+
+    monkeypatch.setattr(genius_api, "genius_pbp", lambda **kw: "pbp")
+    monkeypatch.setattr(genius_api, "genius_match_competition", flaky)
+    assert genius_rt.esake_pbp(2902690) == "pbp"  # one transient failure is retried
+    C._CACHE.clear()
+    answers[:] = [AssetFetchError("HTTP 503"), AssetFetchError("HTTP 503")]
+    with pytest.raises(AssetFetchError, match=r"scope check could not run.*failed twice.*not returned unchecked"):
+        genius_rt.esake_pbp(2902690)
+
+
+def test_the_listing_cache_is_bounded_least_recently_used_first(monkeypatch):
+    monkeypatch.setattr(C, "_CACHE_MAX", 3)
+    for k in range(3):
+        C._cached(("k", k), lambda k=k: k)
+    assert C._cached(("k", 0), lambda: pytest.fail("cached")) == 0  # a hit refreshes its place
+    C._cached(("k", 3), lambda: 3)
+    assert list(C._CACHE) == [("k", 2), ("k", 0), ("k", 3)]  # ("k", 1) was the least recently used
 
 
 def _atrium_body(name, site=None):

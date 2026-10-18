@@ -275,7 +275,8 @@ def test_columns_argument_is_accepted_and_the_pinned_schema_wins(game):
 def test_every_public_parser_has_an_example_block():
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        assert all(h in doc for h in ("Args:", "Returns:", "Raises:", "Example:")), name
+        assert all(h in doc for h in ("Args:", "Returns:", "Example:")), name
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc, name
 
 

@@ -16,7 +16,7 @@ import yaml
 SCHEMAS = Path(__file__).parents[2] / "tools" / "codegen" / "schemas" / "native"
 FIXED = [
     ("fiba_gamepage", "blocks_received", "integer"),
-    ("fiba_gdap", "utc_offset", "integer"),
+    ("fiba_gdap", "utc_offset", "numeric"),  # half-hour zones (India +5.5)
     ("vtb_infobasket", "plus_minus", "integer"),
     ("vtb_infobasket", "player_position", "integer"),
     ("vtb_infobasket", "height", "integer"),
