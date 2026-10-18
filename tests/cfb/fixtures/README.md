@@ -100,6 +100,16 @@ cuts, both trimmed from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json` (committed the
 - **401524025** (Arizona @ USC, 2023, three overtimes): "Caleb Williams Run for Two-Point Conversion"
   (period 7) follows the second-overtime touchdown; from 2021 the third overtime is a shootout.
 
+Task 3.4 (g) adds two, trimmed the same way from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`:
+
+- **401866418** (Jacksonville State @ Ohio, 2026, four overtimes; `89812aa7b4`): ESPN's period-6
+  "End of OT." marker carries 17-34 (the first one, period 5, carries 31-31), which reaches the
+  shootout attempts as a 7-point margin (the linescore has 27-27); those attempts have a null win
+  probability.
+- **401677180** (Pittsburgh @ Toledo, 2024, six overtimes; `af9c0c24cb`): ESPN's scores run Toledo 2
+  ahead from the third overtime (42-44 where the linescore has 42-42), so the fifth overtime's first
+  attempt starts on -2; a shootout period that does not open tied has a null win probability.
+
 Other overtime captures: 252600087, 262522509, 322802005, 332570254, 400547980, 400869264,
 400869817, 401112081, 401301042, 401628439 (eight overtimes), 401752854, 401754543, 401754554,
 401754585, 401761665, 401762461, 401762856, 401858224.
@@ -238,6 +248,7 @@ oracle does not pick them up.
 | 401644749 | 2024 | Western Michigan Broncos @ Buffalo Bulls | 4 | full summary | `summary_401644749.json` | `825258e81b` 2026-08-29 |
 | 401645333 | 2024 | Charlotte 49ers @ Rice Owls | 4 | raw allowlist | `summary_401645333.json` | `14e1c8c10f` 2026-09-17 #526 |
 | 401677179 | 2024 | Indiana Hoosiers @ Notre Dame Fighting Irish | 4 | full summary | `summary_401677179.json` | `fd65da22d9` 2026-06-30 #148 |
+| 401677180 | 2024 | Pittsburgh Panthers @ Toledo Rockets | 10 | trimmed | `summary_401677180_trimmed.json.gz` | task 3.4 (g), 2026-10-18, from `cfbfastR-cfb-raw` `af9c0c24cb` |
 | 401752671 | 2025 | LSU Tigers @ Clemson Tigers | 4 | trimmed | `summary_401752671_trimmed.json.gz` | `01d3c1ad62` 2026-09-30 #636 |
 | 401752684 | 2025 | South Florida Bulls @ Florida Gators | 4 | trimmed | `summary_401752684_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
 | 401752744 | 2025 | Oklahoma Sooners @ South Carolina Gamecocks | 4 | trimmed | `summary_401752744_trimmed.json.gz` | `29c209708f` 2026-09-27 #595 |
@@ -278,3 +289,4 @@ oracle does not pick them up.
 | 401858426 | 2026 | Northern Illinois Huskies @ Iowa Hawkeyes | 4 | raw allowlist | `summary_401858426.json` | `7c30c24442` 2026-09-17 #506 |
 | 401858435 | 2026 | Indiana State Sycamores @ Purdue Boilermakers | 4 | raw allowlist | `summary_401858435.json` | `5538e69b03` 2026-09-17 #503 |
 | 401858439 | 2026 | Howard Bison @ Indiana Hoosiers | 4 | raw allowlist | `summary_401858439.json` | `5538e69b03` 2026-09-17 #503 |
+| 401866418 | 2026 | Jacksonville State Gamecocks @ Ohio Bobcats | 8 | trimmed | `summary_401866418_trimmed.json.gz` | task 3.4 (g), 2026-10-18, from `cfbfastR-cfb-raw` `89812aa7b4` |

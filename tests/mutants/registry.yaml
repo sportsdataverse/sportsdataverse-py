@@ -205,6 +205,104 @@
   expected: kill
   note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
 
+# --- R792-7 (task 3.4 g): shootout attempts ESPN leaves untyped, and attempts on impossible scores ----
+# Killers: tests/cfb/test_cfb_overtime_eras.py on 401112489 (three "Two-Point ... Attempt Failed"
+# rows typed Unknown), 401628439 (50-42 on all twelve attempts) and 401866418 (ESPN's 17-34 "End of
+# OT." marker reaching three attempts).
+- id: cfb-ot-untyped-attempt-not-retyped
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '& pl.col("text").str.contains(r"(?i)two-point (?:pass|rush) attempt failed").fill_null(False)'
+  mutant: '& pl.lit(False)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: the pre-fix state; 401112489's three untyped missed attempts stay Unknown scrimmage snaps
+
+- id: cfb-ot-shootout-untied-period-kept
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'impossible = f["untied"].to_numpy()'
+  mutant: 'impossible = np.zeros(f.height, dtype=bool)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "impossible_espn_scores"
+  expected: kill
+  note: the pre-fix state; 401628439's attempts read 0.0 or 1.0 from ESPN's 50-42
+
+- id: cfb-ot-shootout-untied-whole-game
+  group: cfb-ot-shootout-attempts
+  finding: R890-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    .any()
+                .over("period.number"),
+  mutant: |-
+    .any()
+                .over(pl.lit(1)),
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: one untied period nulls the whole game; 401112489's sixth-overtime attempt (period 10, opens tied) loses its value
+
+- id: cfb-ot-shootout-untied-only-beyond-2
+  group: cfb-ot-shootout-attempts
+  finding: R890-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 2))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "does_not_open_tied"
+  expected: kill
+  note: a margin-beyond-2 guard (the first version of this fix); 401677180's fifth overtime opens on -2 and keeps 0.12
+
+- id: cfb-ot-shootout-untied-margin-3-kept
+  group: cfb-ot-shootout-attempts
+  finding: R890-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 3))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: a margin of 3 passes; 401112489's three retyped attempts at 37-34 (41-41 by the linescore) keep a value
+
+- id: cfb-ot-shootout-unknown-as-nan
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'pl.lit(wp_before_raw).fill_nan(None).alias(wb),'
+  mutant: 'pl.lit(wp_before_raw).alias(wb),'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "impossible_espn_scores"
+  expected: kill
+  note: the unknown board published as NaN, not null
+
+- id: cfb-ot-shootout-unknown-borrows-board
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.when(pl.lit(wp_after_raw).is_nan())'
+  mutant: '.when(pl.lit(False))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "borrow"
+  expected: kill
+  note: 401866418's third-overtime attempts take wp_after 0.1 / 0.9 from a later row past the null boards
+
+- id: cfb-ot-shootout-unknown-in-progress-fallback
+  group: cfb-ot-shootout-attempts
+  finding: R890-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown'
+  mutant: '.and_(pl.lit(True)),'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "in_progress"
+  expected: kill
+  note: a game in progress; the last-row fallback writes 1 - the restated end state onto 401866418's unknown last attempt (possession changes on it)
+
+- id: validation-final-wp-reads-one-sided-last-row
+  group: cfb-ot-shootout-attempts
+  finding: R890-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: 'after = df.get_column("home_wp_after").drop_nulls()'
+  mutant: 'after = nn.get_column("home_wp_after")'
+  test: tests/contracts/test_pbp_invariants.py -k "test_ep_wp"
+  expected: kill
+  note: the both-not-null filter drops a last row with wp_after only and reads the row before (401309856, 0.354)
+
 # --- C-M19: the summary_pickcenter odds are Python scalars, so they round trip as odds_override ----
 # Killer (3.4(b1)): tests/cfb/test_cfb_pbp.py, the offline type + ESPN-value + JSON round trip on
 # 401301042 (the whole-game frame round trip in test_cfb_whole_game_oracle.py kills both as well).

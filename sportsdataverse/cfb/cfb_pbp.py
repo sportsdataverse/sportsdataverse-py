@@ -823,15 +823,33 @@ def _ot_shootout_state_wp(play_df, naive: bool):
             second=pl.col("mask") & (pl.col("mask").cast(pl.Int32).cum_sum().over("period.number") >= 2),
             first_team=pl.col("team").filter(pl.col("mask")).first().over("period.number"),
         )
-        .with_columns(flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False))
+        .with_columns(
+            flip=(pl.col("second") & (pl.col("team") == pl.col("first_team"))).fill_null(False),
+            # the period's first attempt does not start tied, so no score in that period is the game's
+            untied=(pl.col("mask") & (pl.col("second") == False) & (pl.col("m0") != 0))
+            .fill_null(False)
+            .any()
+            .over("period.number"),
+        )
     )
     flip, second = f["flip"].to_numpy(), f["second"].to_numpy()
     sign = np.where(flip, -1.0, 1.0)
     tie = _tie_value(None, n=f.height) if naive else _tie_value(f["spread"].to_numpy())
     tie = np.where(flip, 1.0 - tie, tie)
-    before = _ot_shootout_attempt_wp(sign * f["m0"].to_numpy(), tie, second)
-    after = _ot_shootout_wp(sign * f["m1"].to_numpy(), tie, second)
-    return f["mask"].to_numpy(), np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
+    m0, m1 = f["m0"].to_numpy(), f["m1"].to_numpy()
+    before = _ot_shootout_attempt_wp(sign * m0, tie, second)
+    after = _ot_shootout_wp(sign * m1, tie, second)
+    before, after = np.where(flip, 1.0 - before, before), np.where(flip, 1.0 - after, after)
+    # A shootout period opens tied, so when its first attempt does not, no score in that period
+    # is the game's: 401628439 carries 50-42 on all twelve attempts (the linescore has 40-40
+    # entering the shootout, 44-42 final), 401112489 37-34 on three (41-41), and 401677180's
+    # scores run Toledo 2 ahead from the third overtime (ESPN 42-44 where the linescore has
+    # 42-42), so its fifth opens on -2 and read 0.12. Over the 2019-26 shootout games this
+    # catches every attempt whose own margin is beyond 2 as well. The value is left null (NaN
+    # here, null in the column), not pinned to 0/1 from that score and not re-derived from the
+    # linescore.
+    impossible = f["untied"].to_numpy()
+    return f["mask"].to_numpy(), np.where(impossible, np.nan, before), np.where(impossible, np.nan, after)
 
 
 def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw, suffix="", wp_after_flip_raw=None):
@@ -959,12 +977,13 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
 
     return (
         play_df.with_columns(
-            pl.lit(wp_before_raw).alias(wb),
+            # NaN = a value deliberately left unknown (_ot_shootout_state_wp's impossible scores)
+            pl.lit(wp_before_raw).fill_nan(None).alias(wb),
             pl.lit(wp_touchback_raw).alias(wt),
-            pl.lit(wp_after_raw).alias(wa),
+            pl.lit(wp_after_raw).fill_nan(None).alias(wa),
             # kept aside: the model's own end-state WP, for the one row that has no
             # next play to borrow from (B14 below)
-            pl.lit(wp_after_raw).alias(f"_wa_raw{suffix}"),
+            pl.lit(wp_after_raw).fill_nan(None).alias(f"_wa_raw{suffix}"),
             pl.lit(wp_after_flip_raw if wp_after_flip_raw is not None else wp_after_raw).alias(f"_wa_flip{suffix}"),
         )
         .with_columns(
@@ -1032,6 +1051,9 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 .and_(end_team_score_diff < 0),
             )
             .then(0.0)
+            # left unknown on purpose: not borrowed from a later row past the null boards
+            .when(pl.lit(wp_after_raw).is_nan())
+            .then(None)
             .when(try_to_kickoff)
             .then(kick_board)
             .when(
@@ -1129,7 +1151,8 @@ def _apply_wp_derivation(play_df, wp_before_raw, wp_touchback_raw, wp_after_raw,
                 .is_null()
                 .and_(pl.col(lwb).is_null())
                 .and_(pl.col("status_type_completed") != True)
-                .and_(pl.col(f"_wa_flip{suffix}").is_not_null()),
+                .and_(pl.col(f"_wa_flip{suffix}").is_not_null())
+                .and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown
             )
             .then(
                 pl.when(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
@@ -3728,7 +3751,8 @@ class CFBPlayProcess(object):
                 # as a scrimmage snap. Typed as the try, it moves back behind its touchdown
                 # (_place_tries_filed_after_the_kickoff) and realises nothing there, the
                 # touchdown having realised it. The only such row 2004-26; the untyped
-                # overtime copies of shootout attempts (401426542, 401112489) are left alone.
+                # overtime copies of shootout attempts (401426542's parenthesised rows) are
+                # left alone.
                 .when(
                     (pl.col("type.text") == "Unknown")
                     & (pl.col("period.number") <= 4)
@@ -3743,6 +3767,17 @@ class CFBPlayProcess(object):
                     .then(pl.lit("Two-Point Conversion Missed"))
                     .otherwise(pl.lit("Two-Point Conversion Good"))
                 )
+                # An untyped overtime row that IS a shootout attempt, not a copy of one:
+                # 401112489 (2019, six overtimes) records three of its four attempts only as
+                # "Sam Howell Two-Point Rush Attempt Failed" / "... Pass Attempt Failed".
+                # As "Unknown" they were scored as scrimmage snaps (wp_after 0.0). The only
+                # three such rows 2004-26.
+                .when(
+                    (pl.col("type.text") == "Unknown")
+                    & (pl.col("period.number") >= 5)
+                    & pl.col("text").str.contains(r"(?i)two-point (?:pass|rush) attempt failed").fill_null(False)
+                )
+                .then(pl.lit("Two-Point Conversion Missed"))
                 .otherwise(pl.col("type.text"))
                 .alias("type.text"),
             )
