@@ -1774,3 +1774,28 @@
     The start clock is for touchbacks only. kickoff_tb alone also flags the 2006-08 bare "KickOff" rows
     nflverse has as returns (R831-2): 271209010/3234 would score EPA 0.400 (nflverse 0.242, 0.354 at ESPN's
     end clock); on the 644 sample games 1,865 such rows, sum |EPA - nflverse| 111.9 -> 120.3.
+
+- id: nfl-touchback-kickoff-text-evidence
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                        pl.col("text").str.contains("(?i)touchback")'
+  mutant: '                        pl.lit(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    A text touchback whose ESPN end clock is 0 has its end clamped to the 99, so only the text marks it:
+    without the check 400791544/2058 and 401127996/1913 keep the 0:00 end clock and the 99 (EPA -0.355 /
+    -0.335 against the owner model's 0).
+
+- id: nfl-touchback-kickoff-clamped-end-at-the-spot
+  group: nfl-era-play-order
+  finding: R856-15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            yardline_col="_ep_end_y2e",'
+  mutant: '            yardline_col="end.yardsToEndzone",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "zero_end_clock"
+  expected: kill
+  note: >-
+    At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
+    ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).

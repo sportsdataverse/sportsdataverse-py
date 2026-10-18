@@ -105,6 +105,12 @@ def test_scoring_overlay_reads_the_corrected_flags(path, game_id, play_id):
 # end clock from a timeout row filed after it in id order, so EP_end (0.590) and EP_start (0.075) were
 # scored 45 s apart: EPA +0.516. At the start clock the touchback is worth 0. WPA keeps ESPN's end clock.
 _TOUCHBACK_KICKOFFS = {(271223008, 1912): 0.0}
+# R856-15: text touchbacks whose ESPN end clock is 0. The period-end clamp has put their end at the 99 (the
+# public end.yardsToEndzone, which WP reads, stays there); the EP_end view scores them at the season's touchback
+# spot, 1st & 10, at the start clock. Only the text says touchback here (the end yard line is 99, not the
+# spot). Before: 400791544/2058 (2015, MIA kicks at 0:27 of Q2) EPA -0.431, 401127996/1913 (2019, DET at 0:14
+# of Q2) -0.316, each scored as the receiver's ball on his own 1 at the start clock.
+_CLAMPED_TEXT_TOUCHBACKS = {(400791544, 2058): 0.0, (401127996, 1913): 0.0}
 
 
 @pytest.mark.parametrize(("game_id", "play_id"), list(_TOUCHBACK_KICKOFFS))
@@ -128,3 +134,11 @@ def test_flagged_bare_kickoff_return_keeps_the_end_clock(game_id, play_id):
     row = _row(f"summary_{game_id}_trimmed.json.gz", game_id, play_id)
     assert row["kickoff_tb"] is True and row["text"] == "KickOff"
     assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EPA"], row["end.yardsToEndzone"])
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_CLAMPED_TEXT_TOUCHBACKS))
+def test_text_touchback_with_a_zero_end_clock_ends_at_the_spot(game_id, play_id):
+    row = _row(_era(game_id), game_id, play_id)
+    assert row["kickoff_tb"] is True and "Touchback" in row["text"]
+    assert (row["end.TimeSecsRem"], row["end.yardsToEndzone"]) == (0, 99)  # the public end state is untouched
+    assert abs(row["EPA"] - _CLAMPED_TEXT_TOUCHBACKS[(game_id, play_id)]) < 1e-3, (row["EP_start"], row["EP_end"])

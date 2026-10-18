@@ -6,4 +6,4 @@
   stand takes no touchdown value (2024 short and onside kicks: 5.13 / 5.75 -> 0.67 / 1.02, nflverse 0.93 / 1.42). (#856)
 - **NFL:** a touchback kickoff (its text says touchback, or the receiver next snaps at the touchback spot) scores
   `EP_end` at its start clock, so ESPN's end clock no longer moves its EPA (2007 KC kickoff at 0:23 with a 1:08 end
-  clock: +0.52 -> 0, nflverse 0); WPA is unchanged. (#856)
+  clock: +0.52 -> 0, nflverse 0), at the touchback spot when ESPN's end clock is 0; WPA is unchanged. (#856)

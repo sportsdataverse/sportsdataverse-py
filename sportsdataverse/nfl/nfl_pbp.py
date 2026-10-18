@@ -5291,22 +5291,33 @@ class NFLPlayProcess(object):
             # does run the clock (on the 644 sample games the flag alone moved 1,865 such rows,
             # sum |EPA - nflverse| 111.9 -> 120.3).
             .with_columns(
-                _ep_end_secs=pl.when(
+                _ep_end_tb=(
                     (pl.col("kickoff_tb") == True)
                     & (
                         pl.col("text").str.contains("(?i)touchback")
                         | (pl.col("end.yardsToEndzone") == touchback_yardline_expr(pl.col("season")))
-                    ).fill_null(False)
-                )
+                    )
+                ).fill_null(False)
+            )
+            .with_columns(
+                _ep_end_secs=pl.when(pl.col("_ep_end_tb"))
                 .then(pl.col("start.TimeSecsRem"))
-                .otherwise(pl.col("end.TimeSecsRem"))
+                .otherwise(pl.col("end.TimeSecsRem")),
+                # A touchback whose ESPN end clock is 0 took the period-end clamp above (end at the 99),
+                # so at the start clock it would be scored as the receiver's ball on his own 1. It ends at
+                # the season's touchback spot, 1st & 10 (R856-15: 400791544/2058, 401127996/1913). Every
+                # other touchback keeps its end spot: the spot itself, a penalty enforced from it, or the
+                # 2024+ landing-zone touchback at the 20 its next snap places (R831-1). EP view only.
+                _ep_end_y2e=pl.when(pl.col("_ep_end_tb") & (pl.col("end.TimeSecsRem") <= 0) & (pl.col("period") < 5))
+                .then(touchback_yardline_expr(pl.col("season")))
+                .otherwise(pl.col("end.yardsToEndzone")),
             )
         )
 
         X_ep_end = _espn_ep_features(
             play_df,
             half_sec_col="_ep_end_secs",
-            yardline_col="end.yardsToEndzone",
+            yardline_col="_ep_end_y2e",
             home_col="end.is_home",
             ydstogo_col="end.distance",
             down1_col="down_1_end",
@@ -5318,7 +5329,7 @@ class NFLPlayProcess(object):
         )
         _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
-        play_df = play_df.drop("_ep_end_secs")
+        play_df = play_df.drop("_ep_end_tb", "_ep_end_secs", "_ep_end_y2e")
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
         # What the play would have been worth had the foul not been enforced:
