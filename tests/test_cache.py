@@ -525,3 +525,92 @@ def test_no_cache_authenticated_runtimes_spell_it_cache_ttl_0(monkeypatch, reset
     download("https://api.example.com/y", cache_ttl=3600)  # seconds work too
     download("https://api.example.com/y", cache_ttl=3600)
     assert len(calls) == 3
+
+
+# --- review-897: what is decoded, what the scrub touches ------------------------------------------
+
+
+def _counting_get(monkeypatch, content: bytes, ctype: str):
+    """Stub ``requests.Session.get`` with a 200 answer whose ``.json()`` calls are counted."""
+    decodes = []
+
+    class _Resp(requests.Response):
+        def json(self, **kwargs):
+            decodes.append(1)
+            return super().json(**kwargs)
+
+    def fake_get(self, url, params=None, headers=None, **kwargs):
+        resp = _Resp()
+        resp.status_code = 200
+        resp._content = content
+        resp.headers["Content-Type"] = ctype
+        resp.url = url
+        return resp
+
+    monkeypatch.setattr("requests.Session.get", fake_get)
+    return decodes
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [{"cache_ttl": 0}, {"headers": {"Authorization": f"Bearer {_FAKE_SECRET}"}}],
+    ids=["cache_ttl_0", "credentialed"],
+)
+def test_no_cache_authenticated_body_is_not_decoded_for_the_cache(kwargs, monkeypatch, reset_cache):
+    """R897-2: a body that cannot be stored is decoded once (the ESPN envelope probe), not twice."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    decodes = _counting_get(monkeypatch, b'{"ok": 1}', "application/json")
+    download("https://api.example.com/x", **kwargs)
+    assert len(decodes) == 1 and not cache._MEMORY_CACHE
+
+
+def test_binary_body_is_never_decoded(monkeypatch, reset_cache):
+    """R897-2: a multi-MB release asset is not JSON-decoded by the envelope probe or the cache."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    decodes = _counting_get(monkeypatch, b"PAR1" + b"\x00" * 4096, "application/octet-stream")
+    resp = download("https://github.com/x/releases/download/t/a.parquet")
+    assert resp.content.startswith(b"PAR1")
+    assert decodes == [] and not cache._MEMORY_CACHE
+
+
+def test_cacheable_json_is_still_decoded_and_cached(monkeypatch, reset_cache):
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    _counting_get(monkeypatch, b'{"ok": 1}', "text/plain; charset=utf-8")  # JSON served as text stays cached
+    download("https://api.example.com/plain")
+    assert list(cache._MEMORY_CACHE.values())[0]["body"] == {"ok": 1}
+
+
+def test_cache_hit_keeps_signed_media_urls(reset_cache):
+    """R897-4: a signed S3 / CloudFront URL in the body is data, not the request's credential."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    body = {
+        "headshot": "https://bucket.s3.amazonaws.com/a.png?X-Amz-Algorithm=AWS4-HMAC-SHA256"
+        "&X-Amz-Credential=FAKEAKIA%2F20261018&X-Amz-Signature=fakesig0123456789abcdef",
+        "video": "https://d111.cloudfront.net/v.mp4?Expires=1760000000&Signature=FAKEsig~abc&Key-Pair-Id=FAKEKP",
+    }
+    cache.cache_set("https://api.example.com/media", None, body)
+    assert cache.cache_get("https://api.example.com/media") == body
+
+
+def test_redact_prefixed_credential_params_from_the_filesystem_entry(tmp_cache_dir, reset_cache):
+    """R897-5: ``api_token=`` / ``user_key=`` params echoed in the body never reach disk."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("filesystem")
+    tok, key = "FAKE-api-token-0001", "FAKE-user-key-00002"
+    params = {"api_token": tok, "user_key": key, "season": 2025}
+    body = {"request": {"api_token": tok, "user_key": key}, "note": f"called with {tok} and {key}"}
+    cache.cache_set("https://api.example.com/feed", params, body)
+    on_disk = "".join(p.read_text(encoding="utf-8") for p in tmp_cache_dir.glob("*.json"))
+    assert on_disk and tok not in on_disk and key not in on_disk

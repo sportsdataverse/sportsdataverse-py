@@ -20,8 +20,8 @@ if TYPE_CHECKING:
 # lookahead (every name's first letter) only makes the scan cheaper.
 _SECRET_PAIR = _re.compile(
     r"(?=[ACIJKPRSTacijkprst])(?:(?<![A-Za-z0-9])|(?<=%[0-9A-Fa-f]{2}))"
-    r"((password|passwd|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
-    r"|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth)"
+    r"((password|passwd|pass|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
+    r"|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth|cookie)"
     r"[\"']?\s*(?:[:=]|%3[AD])\s*[\"']?)"
     # A quoted value runs to its closing quote (it may hold spaces); an unquoted one
     # stops at the first separator.
@@ -37,10 +37,12 @@ _SECRET_PAIR = _re.compile(
 _PATH_KEY = _re.compile(r"(/api/v[12]/json/)[^/\s?#\"']+")
 
 # A password in a URL's userinfo (``http://user:pw@proxy:8080``, the proxy shape ``download``
-# documents and ``mbb_ncaa_fetch`` builds) and a bearer token quoted from a header
-# (``Authorization: Bearer <jwt>``, whose unquoted value ``_SECRET_PAIR`` stops at the space).
+# documents and ``mbb_ncaa_fetch`` builds), a bearer / basic credential quoted from a header
+# (``Authorization: Bearer <jwt>``, whose unquoted value ``_SECRET_PAIR`` stops at the space), and
+# an unquoted ``Cookie:`` header line, every cookie on it.
 _USERINFO = _re.compile(r"(://[^\s/?#@:\"']*:)[^\s/?#@\"']+@")
-_BEARER = _re.compile(r"(?<![A-Za-z0-9])(bearer\s+)[A-Za-z0-9._~+/=-]{8,}", _re.IGNORECASE)
+_BEARER = _re.compile(r"(?<![A-Za-z0-9])((?:bearer|basic)\s+)[A-Za-z0-9._~+/=-]{8,}", _re.IGNORECASE)
+_COOKIE_LINE = _re.compile(r"(?<![A-Za-z0-9])(cookie\s*:\s*)[^\r\n\"']+", _re.IGNORECASE)
 
 
 def _redact_pair(match: _re.Match[str]) -> str:
@@ -64,15 +66,17 @@ def _redact_secrets(text: str) -> str:
     Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``appkey`` / ``access_key`` /
     ``subscription-key`` / ``key`` / ``token`` / ``access_token`` / ``password`` /
     ``secret`` / ``client_secret`` / ``sig`` / ``signature`` / ``auth`` /
-    ``Authorization`` (and the other names sportsdataverse-js redacts),
-    case-insensitively, as ``name=value``, as ``name%3Dvalue``, and as
+    ``Authorization`` / ``pass`` / ``cookie`` (and the other names sportsdataverse-js
+    redacts), case-insensitively, as ``name=value``, as ``name%3Dvalue``, and as
     ``'name': 'value'``; a key as a TheSportsDB path segment; the password of a
-    ``user:pw@host`` URL; and a ``Bearer <token>``. Everything else -- host, path,
+    ``user:pw@host`` URL; a ``Bearer`` / ``Basic`` credential; and a whole
+    ``Cookie:`` header line. Everything else -- host, path,
     status, the other params -- is left as it was, so the line still says which
     request failed.
     """
     # Bearer first: ``Authorization: Bearer <jwt>`` as a pair would redact only the word "Bearer".
     text = _BEARER.sub(r"\1REDACTED", text)
+    text = _COOKIE_LINE.sub(r"\1REDACTED", text)
     text = _SECRET_PAIR.sub(_redact_pair, text)
     text = _USERINFO.sub(r"\1REDACTED@", text)
     return _PATH_KEY.sub(r"\1REDACTED", text)
@@ -351,6 +355,33 @@ def _is_data_body(url: str, body: Any) -> bool:
     return isinstance(body, (dict, list)) and _error_envelope_code(body) is None
 
 
+# Content-Type prefixes of a body that is never JSON. ponytail: a deny-list, not "JSON only" --
+# plenty of hosts serve JSON as text/plain, text/html or text/javascript; add a type here when a
+# binary download turns up under another name.
+_BINARY_TYPES = (
+    "application/octet-stream",
+    "application/zip",
+    "application/gzip",
+    "application/x-gzip",
+    "application/pdf",
+    "application/vnd.apache.parquet",
+    "application/x-parquet",
+    "image/",
+    "audio/",
+    "video/",
+    "font/",
+)
+
+
+def _may_be_json(response: Any) -> bool:
+    """False only when the response's Content-Type names a binary body, which is never decoded."""
+    try:
+        ctype = response.headers.get("Content-Type") or ""
+    except AttributeError:
+        return True
+    return not (isinstance(ctype, str) and ctype.strip().lower().startswith(_BINARY_TYPES))
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 
@@ -391,7 +422,9 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
     # paginated payloads) return JSON arrays at the top level, where
     # ``.get("code")`` would raise AttributeError. Only probe for the
     # ESPN envelope when the body is a dict; non-dict bodies pass
-    # through unchanged.
+    # through unchanged. A binary body (a release asset) is never decoded.
+    if not _may_be_json(response):
+        return response
     try:
         body = response.json()
     except ValueError:

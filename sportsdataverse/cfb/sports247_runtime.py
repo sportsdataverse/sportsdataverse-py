@@ -208,8 +208,7 @@ def _get(
             status, text = _transport(full, clean, hdrs, proxy_url)
         # 401/403 == the guest token expired (or was never minted). Re-mint once;
         # a second refusal (or a failed mint) is a failed fetch, raised below.
-        if auth and status in (401, 403) and attempt == 0:
-            if _guest_jwt(token, refresh=True) is not None:
-                continue
+        if auth and status in (401, 403) and attempt == 0 and _guest_jwt(token, refresh=True) is not None:
+            continue
         return _json_text(full, status, text)
     return {}  # unreachable: the second attempt always returns or raises

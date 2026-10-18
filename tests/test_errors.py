@@ -32,6 +32,11 @@ from sportsdataverse.errors import AssetFetchError, _redact_secrets
         ("Authorization: Bearer fake.jwt.tok", "Authorization: REDACTED REDACTED"),
         ('{"Authorization": "Bearer fake.jwt.tok"}', '{"Authorization": "REDACTED"}'),
         ("sent bearer fake.jwt.tok", "sent bearer REDACTED"),
+        # R897-3: Basic auth, an unquoted Cookie header line (every cookie on it), pass=
+        ("Authorization: Basic ZmFrZTpmYWtlcHc=", "Authorization: REDACTED REDACTED"),
+        ("Cookie: session=FAKEsess1; csrftoken=FAKEcsrf2", "Cookie: REDACTED"),
+        ("{'Cookie': 'session=FAKEsess1; other=FAKE2'}", "{'Cookie': 'REDACTED'}"),
+        ("?user=me&pass=FAKEpass1", "?user=me&pass=REDACTED"),
     ],
 )
 def test_redact_secrets_covers_userinfo_and_the_other_credential_names(text, expected):
@@ -47,6 +52,7 @@ def test_redact_secrets_covers_userinfo_and_the_other_credential_names(text, exp
         "mailto:a@b.example",
         "https://x.example/@handle",
         "the flag bearer and the ball bearers",  # a short word after "bearer" is not a token
+        "basic stats; passport=US&bypass=1&passes=12",
     ],
 )
 def test_redact_secrets_leaves_lookalikes_alone(text):
@@ -65,6 +71,8 @@ _ADVERSARIAL = {  # ~100 KB each
     "bearers": "bearer " * 15_000,
     "auth_pairs": "auth=" * 20_000,
     "sig_names": "sig" * 34_000,
+    "cookie_lines": "cookie: a\n" * 10_000,
+    "basics": "basic " * 16_000,
 }
 
 
@@ -72,7 +80,9 @@ _ADVERSARIAL = {  # ~100 KB each
 def test_redact_secrets_new_shapes_stay_linear(shape):
     start = time.perf_counter()
     _redact_secrets(_ADVERSARIAL[shape])
-    assert time.perf_counter() - start < 0.05
+    # A quadratic scan of ~100 KB takes many seconds; 0.5 s leaves a slow CI runner ~30x headroom
+    # over the ~15 ms these take locally, so the bound cannot flake yet still catches a blow-up.
+    assert time.perf_counter() - start < 0.5
 
 
 def test_redact_exception_drops_every_credential_header():

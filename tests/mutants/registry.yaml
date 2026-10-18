@@ -1310,7 +1310,7 @@
   group: codegen-runtime
   finding: A-L65
   file: sportsdataverse/errors.py
-  snippet: '|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth)'
+  snippet: '|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth|cookie)'
   mutant: '|api[_-]?key|key|jwt)'
   test: tests/test_errors.py -k other_credential_names
   expected: kill
@@ -1340,8 +1340,8 @@
   group: codegen-runtime
   finding: A-M8
   file: sportsdataverse/dl_utils.py
-  snippet: '        cache_ttl = 0'
-  mutant: '        pass'
+  snippet: '        and not credentialed'
+  mutant: '        and True'
   test: tests/test_cache.py -k no_cache_authenticated_request
   expected: kill
   note: the cache key holds no credential, so a second credential was served the first one's body
@@ -1415,3 +1415,74 @@
   test: tests/test_on3_rdb.py -k concurrent_build_id
   expected: kill
   note: A-N12, every thread that found no buildId scraped a page for one
+
+# --- Task 4.7 review-897 (R897-2..5) --------------------------------------------------------------
+- id: download-decodes-only-a-cacheable-body
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: 'if cacheable and status is not None and 200 <= status < 300 and _may_be_json(response):'
+  mutant: 'if get_cache_mode() != "off" and status is not None and 200 <= status < 300 and _may_be_json(response):'
+  test: tests/test_cache.py -k not_decoded_for_the_cache
+  expected: kill
+  note: R897-2, every 2xx body was JSON-decoded for the cache even when it could not be stored
+
+- id: binary-body-never-decoded
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/errors.py
+  snippet: 'return not (isinstance(ctype, str) and ctype.strip().lower().startswith(_BINARY_TYPES))'
+  mutant: 'return True'
+  test: tests/test_cache.py -k binary_body_is_never_decoded
+  expected: kill
+  note: R897-2, a multi-MB release asset was decoded by the envelope probe and the cache (~420 ms per 5 MB)
+
+- id: redact-basic-auth
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: '((?:bearer|basic)\s+)'
+  mutant: '(bearer\s+)'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, an Authorization Basic credential was not redacted
+
+- id: redact-cookie-header-line
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _COOKIE_LINE.sub(r"\1REDACTED", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, an unquoted Cookie header line kept every cookie after the first
+
+- id: redact-pass-param
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'password|passwd|pass|pwd|'
+  mutant: 'password|passwd|pwd|'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, a pass= param was not redacted
+
+- id: scrub-body-never-pattern-matches
+  group: codegen-runtime
+  finding: A-N1
+  file: sportsdataverse/cache.py
+  snippet: '    if isinstance(node, str):'
+  mutant: "    if isinstance(node, str) and node.startswith(\"http\"):\n        return __import__(\"sportsdataverse.errors\").errors._redact_secrets(node)\n    if isinstance(node, str):"
+  test: tests/test_cache.py -k signed_media_urls
+  expected: kill
+  note: R897-4, a signed media URL (X-Amz-Signature=, Signature=) came back REDACTED on a cache hit
+
+- id: request-secrets-prefixed-param-names
+  group: codegen-runtime
+  finding: A-N1
+  file: sportsdataverse/cache.py
+  snippet: 'if m is not None and m.end() == len(probe):'
+  mutant: 'if m is not None and m.start() == 1 and m.end() == len(probe):'
+  test: tests/test_cache.py -k prefixed_credential
+  expected: kill
+  note: R897-5, api_token= / user_key= values echoed in the body reached the filesystem entry
