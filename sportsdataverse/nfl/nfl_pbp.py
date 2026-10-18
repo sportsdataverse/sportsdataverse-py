@@ -5282,11 +5282,20 @@ class NFLPlayProcess(object):
                 .alias("end.yardsToEndzone"),
             )
             .drop("_kick_spot")
+            # A touchback runs no clock, so a touchback kickoff's EP_end is scored at its START clock,
+            # whatever ESPN's end clock says (owner ruling 2026-10-17, R856-2: 271223008/1912 takes
+            # its 1:08 end clock from a misordered timeout row). EPA only: end.TimeSecsRem, which the
+            # WP end view reads, keeps ESPN's clock.
+            .with_columns(
+                _ep_end_secs=pl.when(pl.col("kickoff_tb") == True)
+                .then(pl.col("start.TimeSecsRem"))
+                .otherwise(pl.col("end.TimeSecsRem"))
+            )
         )
 
         X_ep_end = _espn_ep_features(
             play_df,
-            half_sec_col="end.TimeSecsRem",
+            half_sec_col="_ep_end_secs",
             yardline_col="end.yardsToEndzone",
             home_col="end.is_home",
             ydstogo_col="end.distance",
@@ -5299,6 +5308,7 @@ class NFLPlayProcess(object):
         )
         _probs_end = _ep_model.predict(DMatrix(X_ep_end, feature_names=EP_FEATURES)).reshape(-1, 7)
         EP_end = np.clip(_probs_end @ _EP_POINT_VALUES, -10.0, 10.0)
+        play_df = play_df.drop("_ep_end_secs")
 
         # --- Accepted-penalty counterfactual (parity with the CFB processor) ---
         # What the play would have been worth had the foul not been enforced:

@@ -1051,10 +1051,11 @@ def test_real_concat_equals_per_game_runs_nflverse_wpa():
 # the captures 25 kickoff_tb rows were not 0 at the season spot, every one with ESPN's end clock moving
 # (R831-3, routed to task 2.19): 22 are 2006-07 bare "KickOff" rows nflverse has as returns (R831-2,
 # task 2.19), which now keep their next snap's spot; 3 are real touchbacks in the CSV below, of which
-# 400791590/1855 (no next snap to read) now takes its start's clock and is 0. Task 2.19 measured both and
-# split them to a follow-up: ESPN's start clock is wrong on some touchbacks too (400791567/36 starts at
-# 3:47 of Q1, so WPA moved away from nflverse), and unflagging the bare "KickOff" rows moves a half-ending
-# kickoff with no next snap off its season spot (260917021/2190, WPA further).
+# 400791590/1855 (no next snap to read) now takes its start's clock and is 0. Owner ruling (2026-10-17,
+# R856-2): every touchback kickoff's EP_end is scored at its START clock, so ESPN's moving end clock no
+# longer moves its EPA; WPA keeps ESPN's end clock, because ESPN's start clock is wrong on some
+# touchbacks too (400791567/36 starts at 3:47 of Q1). Unflagging the bare "KickOff" rows (R831-2) stays a
+# follow-up: it moves a half-ending kickoff with no next snap off its season spot (260917021/2190).
 _TB_ERAS = {
     "pre-2016": (331103020, 400791508),
     "2016-23": (401547449,),

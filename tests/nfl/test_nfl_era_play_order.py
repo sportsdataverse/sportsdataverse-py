@@ -88,3 +88,18 @@ def test_scoring_overlay_reads_the_corrected_flags(path, game_id, play_id):
     nflverse_epa, ceiling = _EPA[(path, game_id, play_id)]
     row = _row(path, game_id, play_id)
     assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EPA"], row["td_play"], row["type.text"])
+
+
+# Owner ruling (2026-10-17, R856-2): a touchback runs no clock, so a touchback kickoff's EP_end is scored at
+# its START clock. 271223008/1912 (2007, KC kicks at 0:23 of Q2, nflverse touchback, epa 0) took its 1:08
+# end clock from a timeout row filed after it in id order, so EP_end (0.590) and EP_start (0.075) were
+# scored 45 s apart: EPA +0.516. At the start clock the touchback is worth 0. WPA keeps ESPN's end clock.
+_TOUCHBACK_KICKOFFS = {(271223008, 1912): 0.0}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_TOUCHBACK_KICKOFFS))
+def test_touchback_kickoff_ep_end_at_the_start_clock(game_id, play_id):
+    row = _row(_era(game_id), game_id, play_id)
+    assert row["kickoff_tb"] is True
+    assert row["end.TimeSecsRem"] != row["start.TimeSecsRem"]  # ESPN's end clock still moves (WP reads it)
+    assert abs(row["EPA"] - _TOUCHBACK_KICKOFFS[(game_id, play_id)]) < 1e-3, (row["EP_start"], row["EP_end"])

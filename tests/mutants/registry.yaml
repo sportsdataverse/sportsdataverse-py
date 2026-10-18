@@ -1735,3 +1735,16 @@
   note: >-
     The 2024 short-of-landing-zone and onside kicks ESPN types "Kickoff Return Touchdown" (td_play false,
     task 2.20) score the receiver's touchdown again: EPA 5.134 / 5.748 against nflverse 0.926 / 1.419.
+
+- id: nfl-touchback-kickoff-ep-end-start-clock
+  group: nfl-era-play-order
+  finding: R856-2
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '            half_sec_col="_ep_end_secs",'
+  mutant: '            half_sec_col="end.TimeSecsRem",'
+  test: tests/nfl/test_nfl_era_play_order.py -k "271223008"
+  expected: kill
+  note: >-
+    Owner ruling (2026-10-17): a touchback kickoff's EP_end is scored at its start clock. At ESPN's end
+    clock 271223008/1912 (start 0:23, end 1:08 from a misfiled timeout row) scores EPA +0.516 against
+    nflverse 0.000.
