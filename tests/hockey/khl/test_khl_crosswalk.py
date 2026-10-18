@@ -9,6 +9,7 @@ import pandas as pd
 import polars as pl
 import pytest
 
+from sportsdataverse.errors import NoDataError
 from sportsdataverse.hockey.khl import khl_club_crosswalk, khl_club_crosswalk_from_frames
 from sportsdataverse.hockey.khl import khl_crosswalk_runtime as X
 from sportsdataverse.hockey.khl import khl_rest, khl_rest_parsers as P
@@ -70,6 +71,18 @@ def test_season_crosswalk_fetches_only_the_covering_headers(monkeypatch: pytest.
 
     monkeypatch.setattr(khl_rest, "khl_schedule", lambda *a, **k: schedule)
     monkeypatch.setattr(khl_rest, "khl_game_header", fake_header)
-    xw = khl_club_crosswalk(season=2026)
+    # every header is the same game, so all but its two clubs stay unmapped: that raises, never a short frame
+    with pytest.raises(NoDataError, match="no team-season id for club"):
+        khl_club_crosswalk(season=2026)
     assert [g for g, _ in asked] == X._cover(schedule) and {t for _, t in asked} == {1369}
-    assert xw.rows() == [(1369, 7, 14934), (1369, 71, 14929)]
+    # one real schedule row re-pointed at the header game's two clubs: both get mapped, no raise
+    pair = schedule.head(1).with_columns(home_club_id=pl.lit(7, pl.Int64), away_club_id=pl.lit(71, pl.Int64))
+    monkeypatch.setattr(khl_rest, "khl_schedule", lambda *a, **k: pair)
+    assert khl_club_crosswalk(season=2026).rows() == [(1369, 7, 14934), (1369, 71, 14929)]
+
+
+def test_season_crosswalk_without_a_schedule_raises(monkeypatch: pytest.MonkeyPatch) -> None:
+    empty = P.parse_khl_schedule(_load("calendar__list.json")).head(0)
+    monkeypatch.setattr(khl_rest, "khl_schedule", lambda *a, **k: empty)
+    with pytest.raises(NoDataError, match="no schedule rows"):
+        khl_club_crosswalk(season=2026)

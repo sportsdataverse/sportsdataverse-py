@@ -14,6 +14,8 @@ from typing import Any, Dict, List, Optional, Set, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import NoDataError
+
 __all__ = ["khl_club_crosswalk", "khl_club_crosswalk_from_frames"]
 
 Frame = Union[pl.DataFrame, pd.DataFrame]
@@ -49,8 +51,9 @@ def khl_club_crosswalk_from_frames(*frames: Any, return_as_pandas: bool = False)
             khl_club_crosswalk_from_frames(khl_game_header(898236, season=2026))
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
-        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_game_header` - a frame that carries both ids.
+        * :func:`sportsdataverse.hockey.khl.khl_player_career` - also carries both ids.
+        * :func:`sportsdataverse.hockey.khl.khl_club_crosswalk` - fetches the frames for a whole tournament.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -77,8 +80,7 @@ def _cover(schedule: pl.DataFrame) -> List[int]:
     """Game ids that together touch every club (played games first, then the rest)."""
     seen: Set[int] = set()
     picks: List[int] = []
-    played = pl.col("home_score").is_not_null()
-    for df in (schedule.filter(played), schedule.filter(~played)):
+    for df in (schedule.filter(pl.col("home_score").is_not_null()), schedule.filter(pl.col("home_score").is_null())):
         for gid, home, away in df.select("game_id", "home_club_id", "away_club_id").iter_rows():
             if ({home, away} - {None}) - seen:
                 seen.update((home, away))
@@ -112,7 +114,7 @@ def khl_club_crosswalk(
 
     Raises:
         sportsdataverse.errors.AssetFetchError: khl.ru answered an error, or a wrong page.
-        sportsdataverse.errors.NoDataError: no schedule rows.
+        sportsdataverse.errors.NoDataError: no schedule rows, or a club the headers give no team-season id.
         ValueError: two sources disagree on an id pair.
 
     Example:
@@ -123,8 +125,9 @@ def khl_club_crosswalk(
             xw.filter(xw["club_id"] == 7)
 
     See Also:
-        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
-        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - picks the covering games.
+        * :func:`sportsdataverse.hockey.khl.khl_game_header` - where the id pairs are read.
+        * :func:`sportsdataverse.hockey.khl.khl_club_crosswalk_from_frames` - the same map from frames you hold.
         * `fastRhockey`_ - SportsDataverse hockey package (R).
 
     .. _fastRhockey: https://fastRhockey.sportsdataverse.org
@@ -132,7 +135,16 @@ def khl_club_crosswalk(
     from sportsdataverse.hockey.khl.khl_rest import khl_game_header, khl_schedule
 
     schedule = khl_schedule(season, stage, tournament_id=tournament_id, **kwargs)
-    tid = tournament_id if tournament_id is not None else schedule["tournament_id"].mode().item(0)
-    games = _cover(schedule.filter(pl.col("tournament_id") == tid))
-    headers = [khl_game_header(g, tournament_id=tid, **kwargs) for g in games]
-    return khl_club_crosswalk_from_frames(*headers, return_as_pandas=return_as_pandas)
+    if schedule.height == 0:
+        raise NoDataError(f"khl crosswalk: no schedule rows (season={season}, stage={stage}, tnId={tournament_id})")
+    tid = tournament_id if tournament_id is not None else schedule["tournament_id"].mode().sort().item(0)
+    schedule = schedule.filter(pl.col("tournament_id") == tid)
+    headers = [khl_game_header(g, tournament_id=tid, **kwargs) for g in _cover(schedule)]
+    out = khl_club_crosswalk_from_frames(*headers)
+    clubs = set(schedule["home_club_id"].drop_nulls()) | set(schedule["away_club_id"].drop_nulls())
+    missing = sorted(clubs - set(out["club_id"]))
+    if missing:
+        raise NoDataError(
+            f"khl crosswalk: tournament {tid}: no team-season id for club(s) {missing} in the game headers"
+        )
+    return out.to_pandas() if return_as_pandas else out
