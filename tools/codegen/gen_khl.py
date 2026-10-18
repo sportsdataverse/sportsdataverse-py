@@ -45,6 +45,11 @@ from sportsdataverse.hockey.khl import khl_rest_parsers as rest
 from sportsdataverse.hockey.khl import khl_webcaster_parsers as wc
 
 FIXTURES = ROOT / "tests" / "fixtures"
+REST_WIRE = (
+    "The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), "
+    "maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the "
+    "X-Requested-With, Origin and Referer headers."
+)
 SANCTIONS = (
     "Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian "
     "operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any "
@@ -629,13 +634,13 @@ def write_spec_routes(family: str, spec: dict) -> None:
     path.write_text(json.dumps(sorted(spec["paths"]), indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
-def _docstring(raw_doc: str, raises: List[str], headers_doc: str = "") -> Dict[str, Any]:
+def _docstring(raw_doc: str, raises: List[str], headers_doc: str = "", extra_notes: tuple = ()) -> Dict[str, Any]:
     doc: Dict[str, Any] = {
         "example_import": True,
         "raw_doc": raw_doc,
         "raises": raises,
         "see_also": SEE_ALSO,
-        "notes": [SANCTIONS],
+        "notes": [SANCTIONS, *extra_notes],
     }
     if headers_doc:
         doc["headers_doc"] = headers_doc
@@ -668,7 +673,8 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
                 "path": path,
                 "parser": parser,
                 "returns_schema": f"native/khl_rest/{short}",
-                "method": "post",  # khl_runtime._get POSTs params as the form
+                "method": "post",
+                "body": "form",  # khl_runtime._get POSTs ``data=`` as the form
                 "example_args": example,
             }
             if params:
@@ -705,6 +711,7 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
             ],
             "extra request headers merged over the defaults (X-Requested-With, Origin, Referer); the session "
             "cookie jar and sessid are kept in-process, so nothing needs reusing across calls.",
+            extra_notes=(REST_WIRE,),
         ),
         "endpoints": endpoints,
     }

@@ -467,7 +467,7 @@ def khl_schedule(
     """Season schedule and results of a tournament, one row per game (All-Star games dropped).
 
     Endpoint: ``POST https://www.khl.ru/rest/calendar/list/``
-    Example URL: https://www.khl.ru/rest/calendar/list/?season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/calendar/list/' -d 'season=2026&stage=regular'``
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -501,19 +501,24 @@ def khl_schedule(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/calendar/list/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -533,7 +538,7 @@ def khl_roster(
     """Club roster (current season only): one row per player.
 
     Endpoint: ``POST https://www.khl.ru/rest/clubs/team/``
-    Example URL: https://www.khl.ru/rest/clubs/team/?page=team&values%5Bclub_id%5D=7
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/clubs/team/' -d 'page=team&values%5Bclub_id%5D=7'``
 
     Args:
         club_id: Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not a team-season id.
@@ -565,16 +570,21 @@ def khl_roster(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "page": "team",
         "values[club_id]": club_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/clubs/team/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -596,7 +606,7 @@ def khl_stat_filters(
     """Stats filter options: seasons, tournaments, position groups and clubs (one row per option).
 
     Endpoint: ``POST https://www.khl.ru/rest/filters/statplayers/``
-    Example URL: https://www.khl.ru/rest/filters/statplayers/?season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/filters/statplayers/' -d 'season=2026&stage=regular'``
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -630,19 +640,24 @@ def khl_stat_filters(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/filters/statplayers/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -665,7 +680,7 @@ def khl_game_header(
     """Game header: status, teams, score, arena (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/header/``
-    Example URL: https://www.khl.ru/rest/game/header/?page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/header/' -d 'page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -700,21 +715,26 @@ def khl_game_header(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "page": "resume",
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/header/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -737,7 +757,7 @@ def khl_game_protocol(
     """Game protocol: one row per goal with scorer, assistants, strength and the jerseys on the ice.
 
     Endpoint: ``POST https://www.khl.ru/rest/game/protocol/``
-    Example URL: https://www.khl.ru/rest/game/protocol/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/protocol/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -772,20 +792,25 @@ def khl_game_protocol(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/protocol/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -808,7 +833,7 @@ def khl_game_info(
     """Game info: teams, score, arena, officials, starting goalies (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -843,20 +868,25 @@ def khl_game_info(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -879,7 +909,7 @@ def khl_player_box(
     """Skater box score by period: one row per period, side and jersey, with the player id.
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -914,20 +944,25 @@ def khl_player_box(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -950,7 +985,7 @@ def khl_pbp(
     """Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and goals (2008-09 on).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -985,20 +1020,25 @@ def khl_pbp(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1021,7 +1061,7 @@ def khl_shots(
     """Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 on).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/game/text/' -d 'values%5Bgameid%5D=898236&season=2026&stage=regular'``
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -1056,20 +1096,25 @@ def khl_shots(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1089,7 +1134,7 @@ def khl_player_profile(
     """Player profile: bio, contract, club (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/players/profile/``
-    Example URL: https://www.khl.ru/rest/players/profile/?values%5Bid%5D=41928
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/players/profile/' -d 'values%5Bid%5D=41928'``
 
     Args:
         player_id: Required. khl.ru player id (the box score / roster player_id).
@@ -1121,15 +1166,20 @@ def khl_player_profile(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[id]": player_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/players/profile/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1151,7 +1201,7 @@ def khl_player_career(
     """Player career: one row per season tournament.
 
     Endpoint: ``POST https://www.khl.ru/rest/players/stats/``
-    Example URL: https://www.khl.ru/rest/players/stats/?values%5Bid%5D=41928
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/players/stats/' -d 'values%5Bid%5D=41928'``
 
     Args:
         player_id: Required. khl.ru player id (the box score / roster player_id).
@@ -1183,15 +1233,20 @@ def khl_player_career(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[id]": player_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/players/stats/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1212,7 +1267,7 @@ def khl_playoff_bracket(
     """Playoff bracket: one row per team per series.
 
     Endpoint: ``POST https://www.khl.ru/rest/standings/playoff/``
-    Example URL: https://www.khl.ru/rest/standings/playoff/?stage=playoff&values%5Btype%5D=playoff&season=2026
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/standings/playoff/' -d 'stage=playoff&values%5Btype%5D=playoff&season=2026'``
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). Required unless tournament_id is given.
@@ -1245,18 +1300,23 @@ def khl_playoff_bracket(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "stage": "playoff",
         "values[type]": "playoff",
         "season": season,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/standings/playoff/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1279,7 +1339,7 @@ def khl_standings(
     """Regular-season standings: one row per team per table (league, conferences, divisions).
 
     Endpoint: ``POST https://www.khl.ru/rest/standings/regular/``
-    Example URL: https://www.khl.ru/rest/standings/regular/?values%5Btype%5D=regular&season=2026
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/standings/regular/' -d 'values%5Btype%5D=regular&season=2026'``
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -1312,17 +1372,22 @@ def khl_standings(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "values[type]": "regular",
         "season": season,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/standings/regular/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )
@@ -1348,7 +1413,7 @@ def khl_player_stats(
     """League player stats of a tournament, one page (one row per player).
 
     Endpoint: ``POST https://www.khl.ru/rest/stat/players/``
-    Example URL: https://www.khl.ru/rest/stat/players/?season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20
+    Example request: ``curl -X POST 'https://www.khl.ru/rest/stat/players/' -d 'season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20'``
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -1386,6 +1451,7 @@ def khl_player_stats(
 
     Notes:
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
+        * The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the X-Requested-With, Origin and Referer headers.
     """
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
@@ -1394,7 +1460,9 @@ def khl_player_stats(
             f"position must be one of ('goalies', 'defenses', 'forwards', 'skaters', 'all'); got {position!r}"
         )
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _params = {}
+    _params.update(_caller_params)
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
@@ -1403,10 +1471,12 @@ def khl_player_stats(
         "nav[page]": page,
         "nav[count]": per_page,
     }
-    _params.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://www.khl.ru/rest/stat/players/",
         params=_params,
+        data=_body,
         headers=headers,
         **kwargs,
     )

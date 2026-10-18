@@ -62,7 +62,7 @@ import re
 import time
 from datetime import date
 from typing import Any, Callable, Dict, List, Mapping, Optional, Tuple
-from urllib.parse import urlsplit
+from urllib.parse import urlencode, urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.dl_utils import _MAX_RETRY_AFTER, _SHARED_SESSION, _parse_retry_after
@@ -200,6 +200,11 @@ def body_season(season: Optional[int], today: Optional[date] = None) -> Tuple[in
     if end < FIRST_SEASON:
         raise NoDataError(f"HockeyAllsvenskan stats start in 2005/06 (season {FIRST_SEASON}); got season {end}")
     return end, str(end - 1)
+
+
+def wire_season(season: Optional[int]) -> str:
+    """The site's START-year ``season`` body key for the public END year (``2026`` -> ``"2025"``)."""
+    return body_season(season)[1]
 
 
 # --- the HTML schedule page ---------------------------------------------------------------------
@@ -441,13 +446,14 @@ def _guard(url: str, fn: Callable[[], None]) -> None:
         raise type(exc)(f"{_rt._where(url)}: {exc}") from None
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """Fetch one HockeyAllsvenskan route (GET page / GET JSON / POST JSON by path), checked and stamped.
 
     Args:
         url: fully-built request URL.
-        params: the wrapper's parameters: the query string of ``/api/game``, the JSON body
-            fields of a POST route (``None`` keeps the route default), unused by ``/pages/matcher``.
+        params: the query string of ``/api/game``; on a POST route the JSON body fields when ``json`` is
+            omitted (``None`` keeps the route default), else extra query-string fields; unused by ``/pages/matcher``.
+        json: the JSON body fields of a POST route (the generated wrappers send them here).
         **kwargs: forwarded to the transport (``timeout``).
 
     Returns:
@@ -471,7 +477,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         body = euro_hockey_runtime._get(url, clean, **kwargs)
         _guard(url, lambda: _check(path, body, clean, {}))
         return body
-    request, stamp = build_body(path, params)
+    if json is None:  # a direct call: the params ARE the body fields
+        request, stamp = build_body(path, params)
+    else:  # the generated wrappers: body in ``json``, caller ``params`` stay on the query string
+        request, stamp = build_body(path, json)
+        query = {k: v for k, v in (params or {}).items() if v is not None}
+        if query:
+            url = f"{url}?{urlencode(query, doseq=True)}"
     body = _rt._download_json(_post, url, json=request, **kwargs)
     _guard(url, lambda: _check(path, body, request, stamp))
     return _stamped(body, stamp)

@@ -237,3 +237,90 @@ def test_unknown_method_is_a_spec_error(tmp_path):
     )
     with pytest.raises(spec.SpecError, match="method 'put'"):
         spec.load_flat_api(y, {})
+
+
+_BODY_YAML = (
+    "api: b\nhost: 'https://b.test'\nname_pattern: 'b_{{short}}'\nmodule: b\nruntime_imports: [_get]\n"
+    "endpoints:\n"
+    "  - short: rows\n    summary: 'Rows.'\n    path: '/rows'\n    method: post\n    body: {body}\n"
+    "    fixed_params: {{ kind: all }}\n"
+    "    example_args: {{ season: 2026, page: 2 }}\n"
+    "    extra_params:\n"
+    "      - {{ name: season, query_key: season, type: int }}\n"
+    "      - {{ name: page, query_key: pageNumber, type: int, in: query }}\n"
+    "  - short: plain\n    summary: 'Plain.'\n    path: '/plain'\n    example_args: {{ season: 2026 }}\n"
+    "    extra_params: [ {{ name: season, query_key: season, type: int }} ]\n"
+)
+
+
+@pytest.mark.parametrize("body, kw", [("form", "data"), ("json", "json")])
+def test_body_kind_splits_query_and_body_params(tmp_path, monkeypatch, body, kw):
+    src, mod = _render_and_load(tmp_path, _BODY_YAML.format(body=body), f"_gen_body_{body}")
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(season=2026, page=2)
+    assert seen["params"] == {"pageNumber": 2}  # paging stays in the query string
+    assert seen[kw] == {"kind": "all", "season": 2026}  # fixed params and body fields travel in the body
+    rows = src.split("def b_rows")[1].split("def b_plain")[0]
+    assert "season: season body field." in rows and "page: pageNumber query parameter." in rows
+    assert "Endpoint: ``POST https://b.test/rows``" in rows
+    assert "Example URL:" not in rows  # body fields are never rendered into a query string
+    assert "curl" in rows and "?pageNumber=2" in rows
+
+
+@pytest.mark.parametrize("body, kw", [("form", "data"), ("json", "json")])
+def test_caller_params_override_a_body_field_and_other_keys_stay_in_the_query(tmp_path, monkeypatch, body, kw):
+    _, mod = _render_and_load(tmp_path, _BODY_YAML.format(body=body), f"_gen_override_{body}")
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(params={"season": 2024, "debug": "1", "kind": "x"})  # season=None would otherwise win
+    assert seen[kw] == {"kind": "x", "season": 2024}  # the caller's body values, even over a fixed param
+    assert seen["params"] == {"pageNumber": None, "debug": "1"}  # a non-body key rides the query string
+
+
+def test_fixed_in_query_must_name_a_fixed_param(tmp_path):
+    y = tmp_path / "f.yaml"
+    y.write_text(
+        "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+        "endpoints:\n  - { short: a, path: '/a', method: post, body: json, fixed_params: {k: 1}, fixed_in_query: [kk] }\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="fixed_in_query"):
+        spec.load_flat_api(y, {})
+
+
+def test_body_endpoint_view_has_no_valid_url_but_curl(tmp_path):
+    y = tmp_path / "v.yaml"
+    y.write_text(
+        _BODY_YAML.format(body="json").replace("name_pattern: 'b_{short}'", "name_pattern: 'b_{short}'"),
+        encoding="utf-8",
+    )
+    views = generate._flat_views(spec.load_flat_api(y, {}))
+    v = {x.short: x for x in views}
+    assert v["rows"].valid_url == "" and "curl -X POST" in v["rows"].curl_example
+    assert v["plain"].curl_example == "" and "?season=2026" in v["plain"].valid_url
+
+
+def test_query_body_default_is_unchanged(tmp_path, monkeypatch):
+    # no ``body``: the call still passes only params=, the old byte-for-byte shape
+    src, mod = _render_and_load(
+        tmp_path,
+        _BODY_YAML.format(body="query")
+        .split("  - short: plain")[0]
+        .replace("    body: query\n", "")
+        .replace("    fixed_params: { kind: all }\n", ""),
+        "_gen_body_q",
+    )
+    assert "json=" not in src and "data=" not in src and "_body" not in src
+
+
+def test_body_needs_post_and_known_kind(tmp_path):
+    for bad, match in (("    body: json\n", "post"), ("    method: post\n    body: xml\n", "body 'xml'")):
+        y = tmp_path / "bad.yaml"
+        y.write_text(
+            "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+            f"endpoints:\n  - short: a\n    path: '/a'\n{bad}",
+            encoding="utf-8",
+        )
+        with pytest.raises(spec.SpecError, match=match):
+            spec.load_flat_api(y, {})

@@ -15,15 +15,15 @@ Derive expected points added (EPA) from pre-scored EP point estimates.
 This is the **derivation half** of `NFLPlayProcess.__process_epa` lifted
 into a shared, model-free function so the same nflfastR-faithful EPA logic
 can be reused by the streaming `enrich_nfl_pbp` pipeline and by
-process_epa` itself.  It performs **no** model inference — the caller
+`__process_epa` itself.  It performs **no** model inference — the caller
 must already have scored the per-play EP point estimates.
 
-Derivation rules (mirror nflfastR / the original process_epa`):
+Derivation rules (mirror nflfastR / the original `__process_epa`):
 
 * Scoring overlays rewrite `EP_end` to the realized point value
   (offense TD `+7` / `+6.92` / 2pt variants, made FG `+3`,
   defensive scores, extra points, etc.) using the same `type.text` /
-  `text` classification as process_epa`.
+  `text` classification as `__process_epa`.
 * Turnovers (`end_change_vec` / `downs_turnover`), kickoff turnovers
   and recovered onside kicks flip `EP_end` to the opponent's
   perspective (`EP_end * -1`).
@@ -36,14 +36,14 @@ Derivation rules (mirror nflfastR / the original process_epa`):
 
 **Every** `shift` is grouped `.over("game_id")` so a concatenated
 multi-game frame never leaks EP across game boundaries — this differs from
-process_epa` (which runs one game per instance and therefore needs no
+`__process_epa` (which runs one game per instance and therefore needs no
 grouping).
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the EP point estimates under the ESPN-internal names `EP_start`, `EP_end` and `EP_start_touchback` (e.g. as produced by the EP-scoring half of process_epa`), plus the play-classification / flag columns: `game_id`, `type.text`, `text`, `change_of_pos_team`, `downs_turnover`, `kickoff_onside`, `scoring_play`, `end_of_half` and `penalty_in_text`. See EPA_REQUIRED_COLUMNS`. This function does **not** score EP itself — score it first via the EP feature pipeline (the `EP_*` triple is the ESPN-internal naming, distinct from `calculate_expected_points`'s lowercase `ep`). |
+| `df` | `DataFrame` |  | Play-by-play DataFrame that already carries the EP point estimates under the ESPN-internal names `EP_start`, `EP_end` and `EP_start_touchback` (e.g. as produced by the EP-scoring half of `__process_epa`), plus the play-classification / flag columns: `game_id`, `type.text`, `text`, `change_of_pos_team`, `downs_turnover`, `kickoff_onside`, `scoring_play`, `end_of_half` and `penalty_in_text`. See `_EPA_REQUIRED_COLUMNS`. This function does **not** score EP itself — score it first via the EP feature pipeline (the `EP_*` triple is the ESPN-internal naming, distinct from `calculate_expected_points`'s lowercase `ep`). |
 
 **Returns**
 

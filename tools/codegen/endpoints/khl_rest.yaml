@@ -10,6 +10,9 @@ docstring:
     are run by Russian operators, some clubs by sanctioned state companies. Fetching
     on your own machine is fine; any published data release, hosted mirror or redistribution
     needs owner (sanctions / legal) sign-off first.'
+  - 'The documented curl request is schematic: the runtime primes a session (adds
+    the form field ``sessid``), maps ``season`` / ``stage`` to the form field ``values[tournament]``
+    (the tournament id) and sends the X-Requested-With, Origin and Referer headers.'
   raises:
   - 'sportsdataverse.errors.AssetFetchError: khl.ru answered an error envelope (status
     != success), a 307 again after re-priming the session, or a page for another game
@@ -25,7 +28,8 @@ docstring:
     note: SportsDataverse hockey package (R)
     url: https://fastRhockey.sportsdataverse.org
 endpoints:
-- example_args:
+- body: form
+  example_args:
     season: 2026
   extra_params:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
@@ -56,7 +60,8 @@ endpoints:
   short: schedule
   summary: Season schedule and results of a tournament, one row per game (All-Star
     games dropped).
-- example_args:
+- body: form
+  example_args:
     club_id: 7
   extra_params:
   - description: Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not
@@ -73,7 +78,8 @@ endpoints:
   returns_schema: native/khl_rest/roster
   short: roster
   summary: 'Club roster (current season only): one row per player.'
-- example_args:
+- body: form
+  example_args:
     season: 2026
   extra_params:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
@@ -104,7 +110,8 @@ endpoints:
   short: stat_filters
   summary: 'Stats filter options: seasons, tournaments, position groups and clubs
     (one row per option).'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -143,7 +150,8 @@ endpoints:
   returns_schema: native/khl_rest/game_header
   short: game_header
   summary: 'Game header: status, teams, score, arena (one row).'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -181,7 +189,8 @@ endpoints:
   short: game_protocol
   summary: 'Game protocol: one row per goal with scorer, assistants, strength and
     the jerseys on the ice.'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -218,7 +227,8 @@ endpoints:
   returns_schema: native/khl_rest/game_info
   short: game_info
   summary: 'Game info: teams, score, arena, officials, starting goalies (one row).'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -256,7 +266,8 @@ endpoints:
   short: player_box
   summary: 'Skater box score by period: one row per period, side and jersey, with
     the player id.'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -294,7 +305,8 @@ endpoints:
   short: pbp
   summary: 'Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties
     and goals (2008-09 on).'
-- example_args:
+- body: form
+  example_args:
     game_id: 898236
     season: 2026
   extra_params:
@@ -332,7 +344,8 @@ endpoints:
   short: shots
   summary: 'Shot map: one row per shot with its x / y on the 1000 x 500 rink grid
     (2024-25 on).'
-- example_args:
+- body: form
+  example_args:
     player_id: 41928
   extra_params:
   - description: Required. khl.ru player id (the box score / roster player_id).
@@ -346,7 +359,8 @@ endpoints:
   returns_schema: native/khl_rest/player_profile
   short: player_profile
   summary: 'Player profile: bio, contract, club (one row).'
-- example_args:
+- body: form
+  example_args:
     player_id: 41928
   extra_params:
   - description: Required. khl.ru player id (the box score / roster player_id).
@@ -360,7 +374,8 @@ endpoints:
   returns_schema: native/khl_rest/player_career
   short: player_career
   summary: 'Player career: one row per season tournament.'
-- example_args:
+- body: form
+  example_args:
     season: 2026
   extra_params:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
@@ -385,7 +400,8 @@ endpoints:
   returns_schema: native/khl_rest/playoff_bracket
   short: playoff_bracket
   summary: 'Playoff bracket: one row per team per series.'
-- example_args:
+- body: form
+  example_args:
     season: 2026
   extra_params:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
@@ -410,7 +426,8 @@ endpoints:
   short: standings
   summary: 'Regular-season standings: one row per team per table (league, conferences,
     divisions).'
-- example_args:
+- body: form
+  example_args:
     position: forwards
     season: 2026
   extra_params:

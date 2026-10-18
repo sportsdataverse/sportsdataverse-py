@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Dict, List, Optional
 
@@ -31,6 +31,11 @@ class Param:
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
+    # Travels in the request body (``Endpoint.body`` form / json) instead of the query string.
+    in_body: bool = False
+    # Runtime function that maps the public value to the one sent on the wire; used only to render the
+    # curl example of a body endpoint (the wrapper passes the public value, the runtime converts it).
+    wire_transform: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -74,6 +79,20 @@ class Endpoint:
     # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
     # the docstring say ``POST`` and call the arguments body fields.
     method: str = "get"
+    # Where the params go on a ``post``: ``query`` (default, the getter gets ``params=`` only),
+    # ``form`` (``data=``) or ``json`` (``json=``). Non-query kinds send every param and every
+    # ``fixed_params`` entry in the body unless the param says ``in: query`` (paging keys).
+    body: str = "query"
+    # ``fixed_params`` keys that stay in the query string of a body endpoint (CBA ``startNum``).
+    fixed_in_query: List[str] = field(default_factory=list)
+
+    @property
+    def url_fixed(self) -> Dict[str, object]:
+        return {k: v for k, v in self.fixed_params.items() if self.body == "query" or k in self.fixed_in_query}
+
+    @property
+    def body_fixed(self) -> Dict[str, object]:
+        return {k: v for k, v in self.fixed_params.items() if k not in self.url_fixed}
 
 
 @dataclass(frozen=True)
@@ -260,8 +279,20 @@ def _resolve_param(name: str, registry: Dict[str, Param], src: Path) -> Param:
 
 def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint:
     """Parse one endpoint dict (shared by ESPN + flat-API loaders)."""
+    body = str(e.get("body") or "query").lower()
     qps = [_resolve_param(k, registry, path) for k in e.get("params", [])]
+    if body != "query":
+        qps = [replace(p, in_body=True) for p in qps]
     for extra in e.get("extra_params", []):
+        where = extra.get("in")
+        if where not in (None, "query", "body"):
+            raise SpecError(
+                f"{path}: endpoint {e.get('short')!r} param {extra['name']!r} in {where!r} is not query or body"
+            )
+        if where == "body" and body == "query":
+            raise SpecError(
+                f"{path}: endpoint {e.get('short')!r} param {extra['name']!r} is in: body but the endpoint has no body kind"
+            )
         # Inherit description from the shared registry when not set inline.
         reg_desc = registry.get(extra["name"], None)
         inherited_desc = reg_desc.description if reg_desc is not None else ""
@@ -276,6 +307,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 description=extra.get("description", "") or inherited_desc,
                 choices=[str(c) for c in extra.get("choices") or []],
                 kw_only=bool(extra.get("kw_only", False)),
+                in_body=body != "query" and where != "query",
+                wire_transform=extra.get("wire_transform"),
             ),
         )
     pps = []
@@ -314,9 +347,18 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         method=str(e.get("method") or "get").lower(),
+        body=body,
+        fixed_in_query=list(e.get("fixed_in_query") or []),
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
+    unknown = sorted(set(ep.fixed_in_query) - set(ep.fixed_params))
+    if unknown:
+        raise SpecError(f"{path}: endpoint {ep.short!r} fixed_in_query names {unknown} not in fixed_params")
+    if ep.body not in ("query", "form", "json"):
+        raise SpecError(f"{path}: endpoint {ep.short!r} body {ep.body!r} is not query, form or json")
+    if ep.body != "query" and ep.method != "post":
+        raise SpecError(f"{path}: endpoint {ep.short!r} sets body {ep.body!r} but is not a post")
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")
