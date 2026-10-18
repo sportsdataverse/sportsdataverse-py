@@ -481,3 +481,78 @@ def test_the_aggregate_families_declare_the_flag():
         and spec.load_flat_api(generate.ENDPOINTS / f"{stem}.yaml", params).no_r_fallback
     }
     assert flagged == {"nflpro", "nfl_api", "pff", "pff_api", "on3"}
+
+
+# --- typed choices -----------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("raw", "ptype", "want"),
+    [
+        (["a", "b"], "str", ["a", "b"]),
+        ([1, 2], "str", ["1", "2"]),  # a str param keeps strings, as before
+        ([1, "2", -3], "int", [1, 2, -3]),
+        (["2026-01-01", "2026-02-28"], "date", ["2026-01-01", "2026-02-28"]),
+        ([1, "x"], "int|str", ["1", "x"]),  # a mixed-type param is compared as strings
+        (None, "int", []),
+    ],
+)
+def test_typed_choices(raw, ptype, want):
+    assert spec.typed_choices(raw, ptype, "w") == want
+
+
+@pytest.mark.parametrize(
+    ("raw", "ptype", "match"),
+    [
+        ([1, "x"], "int", "'x' is not an int"),
+        ([True], "int", "True is not an int"),
+        ([2.5], "int", "2.5 is not an int"),
+        (["2026-13-01"], "date", "not an ISO date"),
+        (["2026-1-1"], "date", "not an ISO date"),
+        (["01/02/2026"], "date", "not an ISO date"),
+        ([1, "1"], "int", "repeat"),
+        ("a,b", "str", "must be a list"),
+    ],
+)
+def test_bad_typed_choices_are_spec_errors(raw, ptype, match):
+    with pytest.raises(spec.SpecError, match=match):
+        spec.typed_choices(raw, ptype, "w")
+
+
+_CHOICES_YAML = (
+    "api: c\nhost: 'https://c.test'\nname_pattern: 'c_{short}'\nmodule: c\nruntime_imports: [_get]\n"
+    "endpoints:\n"
+    "  - short: games\n    summary: 'Games.'\n    path: '/games'\n"
+    "    example_args: { period: 2, day: '2026-01-01' }\n"
+    "    extra_params:\n"
+    "      - { name: period, query_key: period, type: int, choices: [1, 2, 3], description: 'Period.' }\n"
+    "      - { name: day, query_key: day, type: date, choices: [2026-01-01, '2026-01-02'] }\n"
+    "      - { name: side, query_key: side, type: str, choices: [home, away] }\n"
+)
+
+
+def test_typed_choices_validate_and_render(tmp_path):
+    import datetime
+
+    src, mod = _render_and_load(tmp_path, _CHOICES_YAML, "_gen_typed_choices")
+    calls = []
+    mod._get = lambda url, **kw: calls.append(kw["params"]) or {}
+    mod.c_games(period=2, day="2026-01-01")
+    mod.c_games(period=3, day=datetime.date(2026, 1, 2))  # a date object compares by its ISO text
+    mod.c_games()  # every param optional: None skips the check
+    assert calls[0] == {"period": 2, "day": "2026-01-01", "side": None}
+    for kw, match in (
+        ({"period": 4}, r"period must be one of \(1, 2, 3\); got 4"),
+        ({"period": True}, "period must be one of"),  # True == 1 must not pass an int set
+        ({"period": "2"}, "period must be one of"),
+        ({"day": "2026-01-03"}, r"day must be one of \('2026-01-01', '2026-01-02'\)"),
+        ({"day": datetime.date(2026, 1, 3)}, "day must be one of"),
+        ({"side": "x"}, "side must be one of"),
+    ):
+        with pytest.raises(ValueError, match=match):
+            mod.c_games(**kw)
+    # a typed set is rendered into the docstring (a string set is already in its description)
+    assert "period: Period. One of: 1, 2, 3." in src
+    assert "day: day query parameter. One of: 2026-01-01, 2026-01-02." in src
+    assert "side: side query parameter.\n" in src and "One of: home" not in src
+    assert "day: Optional[str]" in src  # a date is an ISO string on the wire

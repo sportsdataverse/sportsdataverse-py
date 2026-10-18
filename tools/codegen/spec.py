@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
@@ -27,7 +28,9 @@ class Param:
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
     description: str = ""  # authored human-readable description for docs
-    choices: List[str] = field(default_factory=list)  # closed value set; the wrapper raises ValueError otherwise
+    # Closed value set; the wrapper raises ValueError otherwise. Typed by ``type`` (see :func:`typed_choices`):
+    # ints for ``int``, ISO-date strings for ``date``, strings for everything else.
+    choices: List[object] = field(default_factory=list)
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
@@ -304,6 +307,42 @@ def load_leagues(path: Path) -> LeaguesConfig:
     return LeaguesConfig(hosts=dict(raw["hosts"]), leagues=leagues)
 
 
+def typed_choices(raw: object, ptype: str, where: str) -> List[object]:
+    """A param's ``choices:`` as values of its declared ``type`` (the wrapper compares them as typed).
+
+    * ``int``: ints (a digit string is read as its int); ``True`` / ``2.5`` / ``"x"`` are a spec error.
+    * ``date``: ISO ``YYYY-MM-DD`` strings, each a real calendar date.
+    * anything else (``str``, ``int|str``, ...): strings, as before.
+
+    Raises:
+        SpecError: ``choices`` is not a list, or an entry does not fit the type.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise SpecError(f"{where}: choices must be a list; got {raw!r}")
+    out: List[object] = []
+    for c in raw:
+        if ptype == "int":
+            if isinstance(c, bool) or not (isinstance(c, int) or (isinstance(c, str) and re.fullmatch(r"-?\d+", c))):
+                raise SpecError(f"{where}: choice {c!r} is not an int (the param is type: int)")
+            out.append(int(c))
+        elif ptype == "date":
+            text = str(c)  # YAML reads an unquoted 2026-01-01 as a date; str() is its ISO form
+            try:
+                ok = bool(re.fullmatch(r"\d{4}-\d\d-\d\d", text)) and date.fromisoformat(text).isoformat() == text
+            except ValueError:
+                ok = False
+            if not ok:
+                raise SpecError(f"{where}: choice {c!r} is not an ISO date YYYY-MM-DD (the param is type: date)")
+            out.append(text)
+        else:
+            out.append(str(c))
+    if len(set(out)) != len(out):
+        raise SpecError(f"{where}: choices repeat a value: {raw!r}")
+    return out
+
+
 def _parse_transform(raw: object, where: str) -> dict:
     """``transform:`` of a param -> ``Param`` kwargs. A bare name is a runtime callable of the value;
     ``{fn: name, with: [other params]}`` also passes those params; ``{offset: N}`` is ``int(value) + N``."""
@@ -342,7 +381,9 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 required=extra.get("required", False),
                 default=extra.get("default"),
                 description=extra.get("description", "") or inherited_desc,
-                choices=[str(c) for c in extra.get("choices") or []],
+                choices=typed_choices(
+                    extra.get("choices"), extra.get("type", "str"), f"{path}: {e.get('short')}.{extra['name']}"
+                ),
                 kw_only=bool(extra.get("kw_only", False)),
                 **_parse_transform(extra.get("transform"), f"{path}: {e.get('short')}.{extra['name']}"),
             ),
@@ -357,7 +398,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 required=b.get("required", False),
                 default=b.get("default"),
                 description=b.get("description", ""),
-                choices=[str(c) for c in b.get("choices") or []],
+                choices=typed_choices(b.get("choices"), b.get("type", "str"), f"{path}: {e.get('short')}.{b['name']}"),
                 kw_only=bool(b.get("kw_only", False)),
                 in_body=True,
                 **_parse_transform(b.get("transform"), f"{path}: {e.get('short')}.{b['name']}"),
@@ -376,7 +417,9 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 optional_segment=pp.get("optional_segment", False),
                 default_from=pp.get("default_from"),
                 description=pp.get("description", ""),
-                choices=[str(c) for c in pp.get("choices") or []],
+                choices=typed_choices(
+                    pp.get("choices"), pp.get("type", "str"), f"{path}: {e.get('short')}.{pp['name']}"
+                ),
                 **_parse_transform(pp.get("transform"), f"{path}: {e.get('short')}.{pp['name']}"),
             ),
         )

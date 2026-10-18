@@ -293,6 +293,13 @@ _BODY_FORMAT_DOC = {
 _BODY_FORMAT_LABEL = {"json": "JSON", "form": "form-encoded", "text": "raw text"}
 
 
+def _choices_note(p: spec.Param) -> str:
+    """`` One of: 1, 2, 3.`` for a typed (non-string) ``choices:`` set; a string set is already in its description."""
+    if not p.choices or p.type in ("str", ""):
+        return ""
+    return " One of: " + ", ".join(str(c) for c in p.choices) + "."
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -355,7 +362,7 @@ def _build_docstring(
     def _arg_doc(p: spec.Param, generic: str) -> str:
         # Collapse any embedded newline -- a raw one would land as an unindented
         # continuation line and corrupt the docstring's Args block.
-        return (p.description or generic).replace("\n", " ").strip()
+        return ((p.description or generic).replace("\n", " ").strip() + _choices_note(p)).strip()
 
     lines.append("Args:")
     for p in ep.path_params:
@@ -494,7 +501,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     rows: list[dict] = []
     for p in (*ep.path_params, *ep.query_params):
         # Prefer the authored spec description; fall back to the parsed docstring.
-        raw_desc = p.description or doc_descs.get(p.python_name, "")
+        raw_desc = (p.description or doc_descs.get(p.python_name, "")) + _choices_note(p)
         # Escape pipe chars and collapse newlines so the description is safe
         # inside a single markdown table cell.
         desc = raw_desc.replace("|", "\\|").replace("\n", " ").strip()
@@ -1112,6 +1119,22 @@ def _return_table(schema_name: str | None, league: str | None = None) -> str:
     return tbl(cols) if cols else ""
 
 
+def _choice_check(p: spec.Param, unset_ok: str) -> str:
+    """The ``if ...: raise ValueError`` lines checking ``p``'s ``choices:`` before the request.
+
+    A typed set compares typed: an ``int`` choice rejects ``True`` (``True == 1``) and a ``date`` choice
+    accepts the ISO string or a ``datetime.date`` (compared by ``str``); a string set is the plain
+    ``not in`` test. ``unset_ok`` is the None guard of an optional param defaulting to None."""
+    name, choices = p.python_name, tuple(p.choices)
+    if p.type == "int":
+        test = f"{unset_ok}(isinstance({name}, bool) or {name} not in {choices!r})"
+    elif p.type == "date":
+        test = f"{unset_ok}str({name}) not in {choices!r}"
+    else:
+        test = f"{unset_ok}{name} not in {choices!r}"
+    return f"if {test}:\n        raise ValueError(" + f'f"{name} must be one of {choices!r}; got {{{name}!r}}")'
+
+
 class _EndpointView:
     """Template-facing view of an Endpoint with computed render fields.
 
@@ -1179,13 +1202,7 @@ class _EndpointView:
         def _unset_ok(p: spec.Param) -> str:
             return f"{p.python_name} is not None and " if not p.required and p.default is None else ""
 
-        self.choice_checks = [
-            f"if {_unset_ok(p)}{p.python_name} not in {tuple(p.choices)!r}:"
-            + "\n        raise ValueError("
-            + f'f"{p.python_name} must be one of {tuple(p.choices)!r}; got {{{p.python_name}!r}}")'
-            for p in ordered
-            if p.choices
-        ]
+        self.choice_checks = [_choice_check(p, _unset_ok(p)) for p in ordered if p.choices]
 
         self.league_param = league.league_param
         # In param mode, keep {league} as a runtime f-string token (sport still baked).
