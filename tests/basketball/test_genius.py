@@ -433,10 +433,13 @@ def test_status_vocabulary(answer, status, text, exc):
         rt._get(DATA_URL)
 
 
-def test_a_hosted_500_website_error_page_points_at_the_embed_route(answer):
+def test_a_hosted_500_website_error_page_is_named_an_intermittent_host_failure(answer):
+    # 2026-10-18: the same URL answered this page and a full schedule minutes apart, for every org probed
+    # (ESAKE included), so the page says nothing about the org: it must not claim "no plain hosted site".
     answer(500, "<html>A website error has occurred. Contact the administrator</html>")
-    with pytest.raises(AssetFetchError, match="genius_schedule_embed"):
+    with pytest.raises(AssetFetchError, match="intermittent") as err:
         rt._get(SCHEDULE_URL)
+    assert "no plain hosted site" not in str(err.value)
 
 
 @pytest.mark.parametrize(
@@ -444,7 +447,7 @@ def test_a_hosted_500_website_error_page_points_at_the_embed_route(answer):
     [
         (503, "down", True),
         (429, "slow down", True),
-        (500, "<html>A website error has occurred</html>", False),  # deterministic: no plain hosted site
+        (500, "<html>A website error has occurred</html>", True),  # intermittent host-side failure
         (403, CLOUDFRONT, False),
         (403, "<html>forbidden</html>", False),
     ],

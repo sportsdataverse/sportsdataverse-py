@@ -13,7 +13,7 @@ datacenter IPs). The proxy URL can carry credentials, so it is never logged or p
 503 / 504) unless the provider uses 500 for a deterministic answer, in which case retrying only adds load. Not
 retried, because their refs captures show 500 for an unknown or rejected id, body or parameter: ``cba`` (a body it
 dislikes), ``cebl``, ``easl`` (an unknown fixture), ``fiba_hub`` (a missing parameter), ``genius`` (the 402-byte
-"A website error has occurred" page), ``ibba`` (the ASMX stack trace), ``kbl``, ``lba``, ``dbl`` (sportality),
+"A website error has occurred" page: intermittent, but sticky per URL, so an immediate retry fails too), ``ibba`` (the ASMX stack trace), ``kbl``, ``lba``, ``dbl`` (sportality),
 ``plg`` (both specs: an unknown id) and ``tbf``; ``tpbl`` retries 500 except on the player game log (an unknown
 ``division_id``). Retried: ``aba``, ``acb``, ``bleague``, ``bnxt``, ``feb``, ``lkl``, ``scb`` and the families on the package default (``atrium``,
 ``kzs``, ``nbl_au``, ``vtb``, ``wjbl``), whose captures show no 500 for an unknown id. A new family follows
