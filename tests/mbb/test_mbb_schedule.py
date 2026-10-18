@@ -78,6 +78,22 @@ def test_mbb_season_sweep_failed_day_raises(monkeypatch, fail):
         espn_mbb_schedule(dates=2024)
 
 
+def test_mbb_season_sweep_day_that_fills_its_limit_raises(monkeypatch):
+    """R855-8: a day answering exactly ``limit`` events may be truncated, so it raises, never a short day.
+    The captured 20231106 day holds 2 of that day's 184 games, as ESPN would answer ``limit=2``."""
+    calls, _, _ = _season_route(monkeypatch)
+    with pytest.raises(AssetFetchError, match="20231106 filled limit=2"):
+        espn_mbb_schedule(dates=2024, limit=2)
+    assert "limit=2" in calls[-1]
+
+
+def test_mbb_season_sweep_caps_the_day_limit_at_1000(monkeypatch):
+    """R855-8: ESPN answers 25 events for a limit above ~1000 (live 2026-10-18: 184 at 1000, 25 at 1500)."""
+    calls, _, _ = _season_route(monkeypatch)
+    espn_mbb_schedule(dates=2024, limit=1500)
+    assert all("limit=1000" in c for c in calls[1:]) and len(calls) == 149
+
+
 def test_mbb_season_sweep_skips_an_event_with_a_non_mapping_season(monkeypatch):
     """PR #855 review: ``{"season": "2024"}`` is dropped like a missing season, not an AttributeError."""
     day = json.loads(_capture("mbb_season_days_2024.json"))["20240210"]

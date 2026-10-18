@@ -28,7 +28,9 @@ def espn_mbb_schedule(
             season, sorted by date. A day that fails raises ``AssetFetchError``.
         groups (int): Used to define different divisions. 50 is Division I, 51 is Division II/Division III.
         season_type (int): 2 for regular season, 3 for post-season, 4 for off-season.
-        limit (int): number of records to return, default: 500.
+        limit (int): number of records to return, default: 500. A season pull sends it per day, capped
+            at 1000 (ESPN answers 25 events above that), and raises ``AssetFetchError`` for a day that
+            fills it.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
     Returns:
         pl.DataFrame: Polars dataframe containing schedule dates for the requested season. A day or season
@@ -43,7 +45,7 @@ def espn_mbb_schedule(
 
         Season-level pull (2024 season)::
 
-            season = espn_mbb_schedule(dates=2024, limit=1500)
+            season = espn_mbb_schedule(dates=2024)
             print(season.shape)
 
         Filter to a specific team (Duke ``team_id=150``)::
@@ -81,6 +83,9 @@ def espn_mbb_schedule(
     return _schedule_frame(events, scoreboard_event_parsing, "mbb", return_as_pandas=return_as_pandas)
 
 
+_DAY_LIMIT = 1000
+
+
 def _season_events(season: int, url: str, params: dict, **kwargs) -> list:
     """Every event ESPN assigns to ``season``, one request per game day (B-M13, R855-1).
 
@@ -92,11 +97,16 @@ def _season_events(season: int, url: str, params: dict, **kwargs) -> list:
     by date. A day that fails raises (``AssetFetchError``), so a gap is never silent.
     """
     days = espn_mbb_calendar(season, **kwargs)["dateURL"].unique(maintain_order=True).to_list()
+    # R855-8: above ~1000 ESPN silently answers 25 events, so a day never asks for more than 1000 (the
+    # busiest 2023-24 day had 184). A day that fills its limit may hold more games, so it raises.
+    limit = min(int(params.get("limit") or _DAY_LIMIT), _DAY_LIMIT)
     events: list = []
     for day in days:  # ponytail: sequential on purpose; ESPN 403s under parallel load
-        payload = _download_json(download, url, params={**params, "dates": day}, **kwargs)
+        payload = _download_json(download, url, params={**params, "dates": day, "limit": limit}, **kwargs)
         if not isinstance(payload, dict) or not isinstance(payload.get("events"), list):
             raise _AssetFetchError(f"ESPN scoreboard for {day} answered without an events list")
+        if len(payload["events"]) >= limit:
+            raise _AssetFetchError(f"ESPN scoreboard for {day} filled limit={limit}; games may be missing")
         events += payload["events"]
     seen: set = set()
     keep = []
