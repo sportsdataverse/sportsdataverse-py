@@ -1256,7 +1256,8 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
 # hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
-# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py).
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
+# hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py, main #860).
 _NO_PARSER = {
     "athlete_statistics_core_nba_1966_2024",
     "athlete_statslog_lbj",
@@ -1265,6 +1266,7 @@ _NO_PARSER = {
     "depthcharts_nfl",
     "depthcharts_nhl",
     "error_404_body",
+    "wbb_calendar_2001",
 }
 _PKG = Path(__file__).parents[1] / "sportsdataverse"
 
