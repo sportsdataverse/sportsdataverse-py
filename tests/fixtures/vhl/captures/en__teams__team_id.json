@@ -1,0 +1,50 @@
+{
+  "name": "Toros",
+  "full_name": "Toros",
+  "city": "Neftekamsk",
+  "founded": 1984,
+  "phone": "+7 (34783) 5-54-23, +7 (34783) 5-54-25, +7 (34783) 5-53-60",
+  "site": "http://hctoros.ru",
+  "officials": [
+    {
+      "role": "Director",
+      "name": "Ivan Aryutin"
+    },
+    {
+      "role": "Head Coach",
+      "name": "Nikolai Voevodin"
+    }
+  ],
+  "address": "452680, Russia, Bashkortostan, Neftekamsk, Lenina str., 19d",
+  "calendar_tn": 1430,
+  "calendar_team_season_id": 15531,
+  "roster_as_of": "12.10.2026",
+  "arena_capacity": 2000,
+  "roster": [
+    {
+      "jersey": 40,
+      "position": "goaltender",
+      "player_id": 46860,
+      "player": "Ананьев Иван",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    },
+    {
+      "jersey": 28,
+      "position": "forward",
+      "player_id": 41563,
+      "player": "Ахсянов Булат",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    },
+    {
+      "jersey": 97,
+      "position": "forward",
+      "player_id": 40678,
+      "player": "Бабенко Матвей",
+      "born": "DD.MM.YYYY",
+      "country": "Russia"
+    }
+  ],
+  "honours": []
+}

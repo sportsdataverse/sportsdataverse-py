@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "data": {
+    "data": [
+      {
+        "id": 714,
+        "libelle": "Saison régulière",
+        "visible": true,
+        "type_phase": "C",
+        "parametrage": {
+          "appuis": 0,
+          "grille_id": null,
+          "extra_poule": false,
+          "aller_retour": 0,
+          "phase_finale": false,
+          "prolongation": true,
+          "score_cumule": false,
+          "nombre_groupe": 1,
+          "petite_finale": true,
+          "nombre_plateaux": null,
+          "type_assignation": "M",
+          "avec_bascule_auto": true,
+          "nombre_participant": 12,
+          "avec_classement_final": true,
+          "nombre_match_par_confrontation": 4
+        },
+        "competition_libelle": "Synerglace Ligue Magnus"
+      }
+    ],
+    "time": "0.0007 sec."
+  }
+}

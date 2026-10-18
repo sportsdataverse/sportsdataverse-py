@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: slot
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: match_player_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: surname
+  type: character
+- description: ''
+  name: jersey
+  type: integer
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: captain
+  type: logical
+- description: ''
+  name: starting_six
+  type: logical
+kind: dataframe
+schema: del_roster

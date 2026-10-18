@@ -181,3 +181,5 @@ then requests each game day.
 |---|---|---|
 | `scoreboard_mbb_dates_2024.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard?dates=2024&groups=50&limit=500` (HTTP 200, 8.8 MB, 500 events) | `leagues` whole (its `calendar` lists the 2023-24 season's 148 game days, 2023-11-06 .. 2024-04-08), the first 3 `events`, `eventsDate`. The full answer's events span 2024-01-01 .. 2024-01-13 only: ESPN reads a bare year as the calendar year and stops at `limit` (the B-M13 live TP). |
 | `scoreboard_mbb_2024_season_days.json` | the same URL with `dates=` 20231106, 20231220, 20240120, 20240210, 20240309, 20240321, 20240408 (HTTP 200 each: 184, 43, 145, 155, 102, 16, 1 events) | One object keyed by the requested day; each value is that answer's first 2 `events` (1 on 20240408) plus `eventsDate`. Season 2024 throughout; season type 3 (NCAA tournament) on 20240321 and 20240408. |
+
+- `wbb_calendar_2001.json`: `leagues[0].calendar` of `site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates=2001` (125 dates, 2000-11-10 to 2001-04-01), captured 2026-10-17.

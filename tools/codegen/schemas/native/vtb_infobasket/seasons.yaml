@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: comp_id
+  type: integer
+- description: ''
+  name: name_ru
+  type: character
+- description: ''
+  name: name_en
+  type: character
+- description: ''
+  name: db
+  type: character
+- description: ''
+  name: tag
+  type: character
+kind: dataframe
+schema: vtb_infobasket_seasons

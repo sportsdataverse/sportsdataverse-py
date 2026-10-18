@@ -1,0 +1,834 @@
+api: tbf
+docstring:
+  example_import: true
+  notes:
+  - 'Official TBF app API, unofficial for SportsDataverse: the backend of the Turkish
+    Basketball Federation''s mobile app (miniappapi.tbf.org.tr), which serves BSL,
+    TBL, KBSL and the other TBF leagues. It needs no key; robots.txt answers 404 on
+    the host, and ``tbf_runtime`` spaces requests at least 1 s apart. SportsDataverse
+    has not ruled on TBF''s terms, so payloads are not redistributed as release assets.
+    The vendor''s origin hosts (nikayazilim.com) serve the same data without Cloudflare
+    but are deliberately not used, redirects are never followed, and www.tbf.org.tr''s
+    interactive Turnstile is neither used nor automated.'
+  - 'Coverage: season and competition are parameters (``bsl`` Basketbol Super Ligi,
+    back to 1966-67 in the league list; ``tbl`` second tier; ``kbsl`` women, both
+    from 2015-16). Game wrappers serve FINISHED games only (an unfinished game raises
+    AssetFetchError). Box scores exist from 2006-07 (no starters flagged that season);
+    play-by-play and shots from 2025-26 only, an earlier finished game raises NoDataError.
+    Every game carries a Genius LiveStats id (``genius_id``, joins the ``genius``
+    family) from 2018-19 on some seasons and on every game of 2025-26 and later. Birth
+    dates, contact details, photos and logos are dropped. Names and category labels
+    are Turkish; the column descriptions give the English gloss.'
+  raises:
+  - 'sportsdataverse.errors.NoDataError: TBF has nothing for the request (an unknown
+    game or player, a season the league list lacks, an empty list, a finished game
+    before 2025-26 asked for play-by-play or shots).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not
+    the one asked for (an unfinished game, a body for another game, season, league
+    or team, an error envelope, a redirect, a partial page or a changed capped list).'
+  raw_doc: 'the raw body (``dict``): the TBF envelope ``{data, isSuccess, message,
+    problemDetails}`` with personal fields redacted, plus ``_request`` (the season,
+    competition, game and team ids the runtime resolved)'
+  see_also:
+  - name: TBF
+    note: the Turkish Basketball Federation whose app backend these wrappers read
+    url: https://www.tbf.org.tr
+  - name: wehoop
+    note: SportsDataverse women's basketball (R)
+    url: https://wehoop.sportsdataverse.org
+  - name: hoopR
+    note: SportsDataverse men's basketball (R)
+    url: https://hoopR.sportsdataverse.org
+endpoints:
+- example_args: {}
+  parser: parse_tbf_seasons
+  path: /Season/get-seasons
+  returns_schema: native/tbf/seasons
+  short: seasons
+  summary: The 20 most recent TBF seasons, domestic and international (a server cap),
+    newest first.
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  parser: parse_tbf_leagues
+  path: /League/get-leagues-for-filter
+  returns_schema: native/tbf/leagues
+  short: leagues
+  summary: 'The featured leagues (league-season activities) of one TBF season: BSL,
+    TBL, KBSL and the others.'
+- example_args:
+    competition: bsl
+  extra_params:
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_league_seasons
+  path: /League/get-leagues-and-seasons-by-prefix
+  returns_schema: native/tbf/league_seasons
+  short: league_seasons
+  summary: Every season of one TBF league (bsl back to 1966-67) with its activity
+    and season ids.
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_weeks
+  path: /League/get-league-weeks
+  returns_schema: native/tbf/weeks
+  short: weeks
+  summary: The weeks (rounds) of one league-season, playoff rounds included.
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: 'Week (hafta) number as returned by tbf_weeks, e.g. 1; playoff rounds
+      continue the numbering (31-33 in 2025-26). Default: the latest week for standings,
+      every week for the schedule.'
+    name: week
+    query_key: week
+    type: int
+  parser: parse_tbf_standings
+  path: /League/get-standings-table
+  returns_schema: native/tbf/standings
+  short: standings
+  summary: League table of one league-season after a week (default the latest), one
+    row per team and group.
+- example_args:
+    competition: bsl
+    season: 2027
+    week: 1
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: 'Week (hafta) number as returned by tbf_weeks, e.g. 1; playoff rounds
+      continue the numbering (31-33 in 2025-26). Default: the latest week for standings,
+      every week for the schedule.'
+    name: week
+    query_key: week
+    type: int
+  parser: parse_tbf_schedule
+  path: /Match/get-all-matches-for-filter
+  returns_schema: native/tbf/schedule
+  short: schedule
+  summary: 'Schedule and results of one league-season: the games of one week, or of
+    every week.'
+- example_args:
+    match_date: '2026-10-11'
+  extra_params:
+  - description: Required. Game date 'YYYY-MM-DD' (Turkey local date), e.g. '2026-10-11'.
+    name: match_date
+    query_key: match_date
+    required: true
+    type: str
+  - description: 'Optional, with competition: Season END year (2027 = the 2026-2027
+      season). TBF keys a league-season by internal season and activity ids; ``tbf_runtime``
+      reads them from the league''s season list by the END year of the label. A year
+      the list lacks raises NoDataError. Default: games of every competition.'
+    name: season
+    query_key: season
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl. Optional, with season. Default: every competition.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_daily_matches
+  path: /Match/get-daily-matches
+  returns_schema: native/tbf/daily_matches
+  short: daily_matches
+  summary: Every TBF game played on one date, grouped by competition, optionally for
+    one league-season.
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_game_header
+  path: /Match/mac-header
+  returns_schema: native/tbf/game_header
+  short: game_header
+  summary: 'Game header of a finished game: teams, coaches, final score, officials,
+    venue and the Genius LiveStats id.'
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_game_players
+  path: /Match/mac-header
+  returns_schema: native/tbf/game_players
+  short: game_players
+  summary: 'Game roster from the header: every listed player of both sides (names
+    and shirt numbers, no usable ids).'
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_player_box
+  path: /Match/mac-istatistik
+  returns_schema: native/tbf/player_box
+  short: player_box
+  summary: 'Player box score of a finished game: minutes, shooting splits, rebounds,
+    assists, +/- and efficiency.'
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_team_box
+  path: /Match/mac-istatistik
+  returns_schema: native/tbf/team_box
+  short: team_box
+  summary: Team totals of a finished game with the team-credited rebounds, turnovers
+    and fouls.
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_pbp
+  path: /Match/game-flow
+  returns_schema: native/tbf/pbp
+  short: pbp
+  summary: Play-by-play of a finished game (2025-26 onward), in game order, with the
+    running score and an English gloss.
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_shots
+  path: /Match/shot-chart
+  returns_schema: native/tbf/shots
+  short: shots
+  summary: Every field-goal attempt of a finished game (2025-26 onward) with its court
+    position.
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_period_scores
+  path: /Match/mac-ozet
+  returns_schema: native/tbf/period_scores
+  short: period_scores
+  summary: Points each side scored in each period of a finished game, overtime included.
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_highlights
+  path: /Match/mac-ozet
+  returns_schema: native/tbf/highlights
+  short: highlights
+  summary: 'Team comparison of a finished game: rebounds, paint points, fast-break
+    points, lead changes and more.'
+- example_args:
+    match_id: 346279
+  extra_params:
+  - description: Required. TBF game id (integer), e.g. 346279; match_id in tbf_schedule.
+      One global sequence across leagues and seasons. Only a finished game is served.
+    name: match_id
+    query_key: match_id
+    required: true
+    type: int
+  parser: parse_tbf_game_leaders
+  path: /Match/mac-leader
+  returns_schema: native/tbf/game_leaders
+  short: game_leaders
+  summary: Game leaders of a finished game per statistic category (top five each).
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_players
+  path: /Player/get-player-list
+  returns_schema: native/tbf/players
+  short: players
+  summary: Every player registered in one league-season (birth dates are not returned).
+- example_args:
+    player_id: 196413
+  parser: parse_tbf_player_career
+  path: /Player/get-player-detail-profile-and-career-info/{player_id}
+  path_params:
+  - description: Required. TBF person id, e.g. 196413; person_id in tbf_players and
+      the box score.
+    name: player_id
+    required: true
+    type: int
+  returns_schema: native/tbf/player_career
+  short: player_career
+  summary: 'One player''s career: a row per season and competition with totals (birth
+    date is not returned).'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_teams
+  path: /Team/get-teams-by-leauge
+  returns_schema: native/tbf/teams
+  short: teams
+  summary: Every team registered in one league-season with its team-season id (team_process_id)
+    and club id.
+- example_args:
+    season: 2027
+    team_process_id: 265995
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: Required. Team-season id (team registration), e.g. 265995 = Tofas
+      in BSL 2026-27; team_process_id in tbf_teams and tbf_schedule. New for every
+      club in every league-season; not the stable club_id.
+    name: team_process_id
+    query_key: team_process_id
+    required: true
+    type: int
+  parser: parse_tbf_team_player_stats
+  path: /Team/get-team-detail-statistic
+  returns_schema: native/tbf/team_player_stats
+  short: team_player_stats
+  summary: 'Season player statistics of one team-season: totals, percentages and per-game
+    averages.'
+- example_args:
+    season: 2027
+    team_process_id: 265995
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: Required. Team-season id (team registration), e.g. 265995 = Tofas
+      in BSL 2026-27; team_process_id in tbf_teams and tbf_schedule. New for every
+      club in every league-season; not the stable club_id.
+    name: team_process_id
+    query_key: team_process_id
+    required: true
+    type: int
+  parser: parse_tbf_team_games
+  path: /Team/get-team-detail-matches-by-season-and-league
+  returns_schema: native/tbf/team_games
+  short: team_games
+  summary: Games and results of one team-season, scheduled games included.
+- example_args:
+    season: 2027
+    team_process_id: 265995
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: Required. Team-season id (team registration), e.g. 265995 = Tofas
+      in BSL 2026-27; team_process_id in tbf_teams and tbf_schedule. New for every
+      club in every league-season; not the stable club_id.
+    name: team_process_id
+    query_key: team_process_id
+    required: true
+    type: int
+  parser: parse_tbf_team_roster
+  path: /Team/get-team-active-player-list-by-season-and-league
+  returns_schema: native/tbf/team_roster
+  short: team_roster
+  summary: Roster of one team-season with games, minutes and per-game points and efficiency
+    (birth dates dropped).
+- example_args:
+    season: 2027
+    team_process_id: 265995
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  - description: Required. Team-season id (team registration), e.g. 265995 = Tofas
+      in BSL 2026-27; team_process_id in tbf_teams and tbf_schedule. New for every
+      club in every league-season; not the stable club_id.
+    name: team_process_id
+    query_key: team_process_id
+    required: true
+    type: int
+  parser: parse_tbf_team_staff
+  path: /Team/get-team-detail-team-staff-by-season-and-league
+  returns_schema: native/tbf/team_staff
+  short: team_staff
+  summary: Coaching and club staff of one team-season.
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-point-leaders
+  returns_schema: native/tbf/leaders_points
+  short: leaders_points
+  summary: 'Season leaders in points: the server''s top 20 by season total and by
+    per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-asist-leaders
+  returns_schema: native/tbf/leaders_assists
+  short: leaders_assists
+  summary: 'Season leaders in assists: the server''s top 20 by season total and by
+    per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-blok-leaders
+  returns_schema: native/tbf/leaders_blocks
+  short: leaders_blocks
+  summary: 'Season leaders in blocks: the server''s top 20 by season total and by
+    per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-ribound-leaders
+  returns_schema: native/tbf/leaders_rebounds
+  short: leaders_rebounds
+  summary: 'Season leaders in rebounds: the server''s top 20 by season total and by
+    per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-top-calma-leaders
+  returns_schema: native/tbf/leaders_steals
+  short: leaders_steals
+  summary: 'Season leaders in steals: the server''s top 20 by season total and by
+    per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-duration-leaders
+  returns_schema: native/tbf/leaders_minutes
+  short: leaders_minutes
+  summary: 'Season leaders in minutes played: the server''s top 20 by season total
+    and by per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-3Point-leaders
+  returns_schema: native/tbf/leaders_threes
+  short: leaders_threes
+  summary: 'Season leaders in three-point field goals made: the server''s top 20 by
+    season total and by per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-top-kaybi-leaders
+  returns_schema: native/tbf/leaders_turnovers
+  short: leaders_turnovers
+  summary: 'Season leaders in turnovers: the server''s top 20 by season total and
+    by per-game average.'
+- example_args:
+    competition: bsl
+    season: 2027
+  extra_params:
+  - description: Required. Season END year (2027 = the 2026-2027 season). TBF keys
+      a league-season by internal season and activity ids; ``tbf_runtime`` reads them
+      from the league's season list by the END year of the label. A year the list
+      lacks raises NoDataError.
+    name: season
+    query_key: season
+    required: true
+    type: int
+  - choices:
+    - bsl
+    - tbl
+    - kbsl
+    default: bsl
+    description: 'TBF league: bsl (Basketbol Super Ligi), tbl (second tier) or kbsl
+      (women''s Super Ligi). The top flight was named TBL until 2007-08 and is listed
+      under bsl.'
+    name: competition
+    query_key: competition
+    type: str
+  parser: parse_tbf_leaders
+  path: /Player/get-mvp-leaders
+  returns_schema: native/tbf/leaders_efficiency
+  short: leaders_efficiency
+  summary: 'Season leaders in efficiency rating: the server''s top 20 by season total
+    and by per-game average.'
+getter_module: sportsdataverse.basketball.tbf.tbf_runtime
+host: https://miniappapi.tbf.org.tr/webapi-service/api
+module: tbf
+name_pattern: tbf_{short}
+parser_columns: true
+parser_module: basketball.tbf.tbf_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+schema_prefix: tbf_

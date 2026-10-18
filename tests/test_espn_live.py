@@ -1028,3 +1028,26 @@ def test_espn_epl_alias_scoreboard_parsed():
     df = espn_epl_scoreboard()  # fixed-league alias, no league arg, parsed
     assert isinstance(df, pl.DataFrame)
     assert {"home_team", "away_team"} <= set(df.columns)
+
+
+@pytest.mark.parametrize(
+    "prefix, min_teams",
+    [
+        ("nbl", 8),
+        ("fiba", 20),
+        ("olympics_mbk", 10),
+        ("olympics_wbk", 10),
+        ("nbasl_lv", 20),
+        ("nbasl_ut", 4),
+        ("nbasl_ca", 6),
+        ("nbasl_sac", 6),
+        ("nbasl_orl", 6),
+        ("nbasl_gs", 4),
+    ],
+)
+def test_espn_intl_basketball_teams_site_parse(prefix, min_teams):
+    import importlib
+
+    mod = importlib.import_module(f"sportsdataverse.{prefix}")
+    teams = getattr(mod, f"espn_{prefix}_teams_site")()
+    assert teams.height >= min_teams, f"{prefix}: expected >={min_teams} teams, got {teams.height}"

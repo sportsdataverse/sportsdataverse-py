@@ -1,0 +1,27 @@
+columns:
+- description: ''
+  name: org
+  type: character
+- description: ''
+  name: comp_id
+  type: integer
+- description: ''
+  name: label
+  type: character
+- description: ''
+  name: league_id
+  type: integer
+- description: ''
+  name: year
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_rule
+  type: character
+- description: ''
+  name: selected
+  type: logical
+kind: dataframe
+schema: genius_competitions

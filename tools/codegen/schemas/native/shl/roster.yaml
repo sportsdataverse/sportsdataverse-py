@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: position_code
+  type: character
+- description: ''
+  name: player_type
+  type: character
+- description: ''
+  name: gender
+  type: character
+- description: ''
+  name: uuid
+  type: character
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: full_name
+  type: character
+- description: ''
+  name: nationality
+  type: character
+- description: ''
+  name: jersey_number
+  type: integer
+- description: ''
+  name: portrait_url
+  type: character
+kind: dataframe
+schema: shl_roster

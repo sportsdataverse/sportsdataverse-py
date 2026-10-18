@@ -384,7 +384,7 @@ espn_wbb_schedule - look up the women's college basketball schedule for a given 
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `dates` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `dates` | `int` | `None` | Used to define different seasons. 2001 is the earliest available season. |
 | `groups` | `int` | `50` | Used to define different divisions. 50 is Division I, 51 is Division II/Division III. |
 | `season_type` | `int` | `None` | 2 for regular season, 3 for post-season, 4 for off-season. |
 | `limit` | `int` | `500` | number of records to return, default: 500. |

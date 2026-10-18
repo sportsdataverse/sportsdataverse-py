@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: unit
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: line
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: number
+  type: character
+- description: ''
+  name: is_topscorer
+  type: logical
+- description: ''
+  name: is_captain
+  type: logical
+- description: ''
+  name: first_goalkeeper
+  type: logical
+kind: dataframe
+schema: nl_lineups

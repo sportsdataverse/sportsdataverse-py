@@ -1,0 +1,832 @@
+{
+  "status": "success",
+  "data": {
+    "CALENDAR": {
+      "2025-09-01": {
+        "day": "01",
+        "mouth": "09",
+        "dayweek": 1,
+        "disabled": true
+      },
+      "2025-09-02": {
+        "day": "02",
+        "mouth": "09",
+        "dayweek": 2,
+        "disabled": true
+      },
+      "2025-09-03": {
+        "day": "03",
+        "mouth": "09",
+        "dayweek": 3,
+        "disabled": true
+      }
+    },
+    "TEXT": {
+      "OT": "Овертайм",
+      "now": "Сейчас",
+      "SO": "Буллиты",
+      "DNAME": [
+        "Вс",
+        "Пн",
+        "Вт"
+      ],
+      "NEXT": "Далее",
+      "BACK": "Назад",
+      "CALENDAR": "Календарь",
+      "NO_GAMES": "Нет игр",
+      "GET_TIME": "Воспользуйтесь этим временем, чтобы пересмотреть прошедшие матчи!",
+      "MSK": "мск",
+      "MONTH": {
+        "01": "Янв",
+        "02": "Фев",
+        "03": "Мар"
+      },
+      "DAYS": {
+        "2025-09-01": {
+          "name": "1 сент",
+          "dayweek": "пн",
+          "day": "01",
+          "month": "09"
+        },
+        "2025-09-02": {
+          "name": "2 сент",
+          "dayweek": "вт",
+          "day": "02",
+          "month": "09"
+        },
+        "2025-09-03": {
+          "name": "3 сент",
+          "dayweek": "ср",
+          "day": "03",
+          "month": "09"
+        }
+      }
+    },
+    "TEAMS": {
+      "1": {
+        "NAME": "Локомотив",
+        "LOGO": "//img.khl.ru/teams/ru/1369/1/200.png?u=2026"
+      },
+      "25": {
+        "NAME": "Трактор",
+        "LOGO": "//img.khl.ru/teams/ru/1369/25/200.png?u=2026"
+      },
+      "37": {
+        "NAME": "Металлург Мг",
+        "LOGO": "//img.khl.ru/teams/ru/1369/37/200.png?u=2026"
+      }
+    },
+    "ARENAS": {
+      "6": "Ярославль",
+      "24": "Магнитогорск",
+      "52": "Москва"
+    },
+    "GAMES": [
+      {
+        "2025-09-05": [
+          {
+            "approved": 1,
+            "arenaid": 6,
+            "date": "2025-09-05",
+            "homeScore": 2,
+            "id": 897491,
+            "links": {
+              "preview": "/game/1369/897491/preview/",
+              "stat": "/game/1369/897491/headtohead/",
+              "text": "/game/1369/897491/text/",
+              "teams": "/game/1369/897491/teams/",
+              "ics": "",
+              "resume": "/game/1369/897491/resume/",
+              "protocol": "/game/1369/897491/protocol/"
+            },
+            "ots": "SO",
+            "teama": 1,
+            "teamb": 25,
+            "time_format": "19:30",
+            "tnId": 1369,
+            "visitorScore": 1,
+            "scP": [
+              "0:0",
+              "1:0",
+              "0:1"
+            ],
+            "win": 1
+          }
+        ],
+        "2025-09-06": [
+          {
+            "approved": 1,
+            "arenaid": 24,
+            "date": "2025-09-06",
+            "homeScore": 4,
+            "id": 897492,
+            "links": {
+              "preview": "/game/1369/897492/preview/",
+              "stat": "/game/1369/897492/headtohead/",
+              "text": "/game/1369/897492/text/",
+              "teams": "/game/1369/897492/teams/",
+              "ics": "",
+              "resume": "/game/1369/897492/resume/",
+              "protocol": "/game/1369/897492/protocol/"
+            },
+            "ots": "SO",
+            "teama": 37,
+            "teamb": 53,
+            "time_format": "14:30",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "1:0",
+              "1:1",
+              "1:2"
+            ],
+            "win": 37
+          },
+          {
+            "approved": 1,
+            "arenaid": 52,
+            "date": "2025-09-06",
+            "homeScore": 6,
+            "id": 897494,
+            "links": {
+              "preview": "/game/1369/897494/preview/",
+              "stat": "/game/1369/897494/headtohead/",
+              "text": "/game/1369/897494/text/",
+              "teams": "/game/1369/897494/teams/",
+              "ics": "",
+              "resume": "/game/1369/897494/resume/",
+              "protocol": "/game/1369/897494/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 2,
+            "teamb": 719,
+            "time_format": "16:00",
+            "tnId": 1369,
+            "visitorScore": 2,
+            "scP": [
+              "3:1",
+              "1:0",
+              "2:1"
+            ],
+            "win": 2
+          },
+          {
+            "approved": 1,
+            "arenaid": 15,
+            "date": "2025-09-06",
+            "homeScore": 4,
+            "id": 897493,
+            "links": {
+              "preview": "/game/1369/897493/preview/",
+              "stat": "/game/1369/897493/headtohead/",
+              "text": "/game/1369/897493/text/",
+              "teams": "/game/1369/897493/teams/",
+              "ics": "",
+              "resume": "/game/1369/897493/resume/",
+              "protocol": "/game/1369/897493/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 26,
+            "teamb": 38,
+            "time_format": "17:00",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "1:0",
+              "1:2",
+              "2:1"
+            ],
+            "win": 26
+          }
+        ],
+        "2025-09-07": [
+          {
+            "approved": 1,
+            "arenaid": 205,
+            "date": "2025-09-07",
+            "homeScore": 0,
+            "id": 897499,
+            "links": {
+              "preview": "/game/1369/897499/preview/",
+              "stat": "/game/1369/897499/headtohead/",
+              "text": "/game/1369/897499/text/",
+              "teams": "/game/1369/897499/teams/",
+              "ics": "",
+              "resume": "/game/1369/897499/resume/",
+              "protocol": "/game/1369/897499/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 29,
+            "teamb": 54,
+            "time_format": "13:30",
+            "tnId": 1369,
+            "visitorScore": 2,
+            "scP": [
+              "0:0",
+              "0:1",
+              "0:1"
+            ],
+            "win": 54
+          },
+          {
+            "approved": 1,
+            "arenaid": 53,
+            "date": "2025-09-07",
+            "homeScore": 4,
+            "id": 897496,
+            "links": {
+              "preview": "/game/1369/897496/preview/",
+              "stat": "/game/1369/897496/headtohead/",
+              "text": "/game/1369/897496/text/",
+              "teams": "/game/1369/897496/teams/",
+              "ics": "",
+              "resume": "/game/1369/897496/resume/",
+              "protocol": "/game/1369/897496/protocol/"
+            },
+            "ots": "OT",
+            "teama": 198,
+            "teamb": 25,
+            "time_format": "14:30",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "1:1",
+              "1:1",
+              "1:1"
+            ],
+            "win": 198
+          },
+          {
+            "approved": 1,
+            "arenaid": 4,
+            "date": "2025-09-07",
+            "homeScore": 4,
+            "id": 897497,
+            "links": {
+              "preview": "/game/1369/897497/preview/",
+              "stat": "/game/1369/897497/headtohead/",
+              "text": "/game/1369/897497/text/",
+              "teams": "/game/1369/897497/teams/",
+              "ics": "",
+              "resume": "/game/1369/897497/resume/",
+              "protocol": "/game/1369/897497/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 7,
+            "teamb": 451,
+            "time_format": "17:00",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "0:0",
+              "3:3",
+              "1:0"
+            ],
+            "win": 7
+          }
+        ]
+      },
+      {
+        "2025-09-08": [
+          {
+            "approved": 1,
+            "arenaid": 197,
+            "date": "2025-09-08",
+            "homeScore": 1,
+            "id": 897501,
+            "links": {
+              "preview": "/game/1369/897501/preview/",
+              "stat": "/game/1369/897501/headtohead/",
+              "text": "/game/1369/897501/text/",
+              "teams": "/game/1369/897501/teams/",
+              "ics": "",
+              "resume": "/game/1369/897501/resume/",
+              "protocol": "/game/1369/897501/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 34,
+            "teamb": 53,
+            "time_format": "16:30",
+            "tnId": 1369,
+            "visitorScore": 2,
+            "scP": [
+              "0:1",
+              "0:1",
+              "1:0"
+            ],
+            "win": 53
+          },
+          {
+            "approved": 1,
+            "arenaid": 24,
+            "date": "2025-09-08",
+            "homeScore": 2,
+            "id": 897504,
+            "links": {
+              "preview": "/game/1369/897504/preview/",
+              "stat": "/game/1369/897504/headtohead/",
+              "text": "/game/1369/897504/text/",
+              "teams": "/game/1369/897504/teams/",
+              "ics": "",
+              "resume": "/game/1369/897504/resume/",
+              "protocol": "/game/1369/897504/protocol/"
+            },
+            "ots": "OT",
+            "teama": 37,
+            "teamb": 38,
+            "time_format": "17:00",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "1:1",
+              "1:0",
+              "0:1"
+            ],
+            "win": 38
+          },
+          {
+            "approved": 1,
+            "arenaid": 19,
+            "date": "2025-09-08",
+            "homeScore": 4,
+            "id": 897502,
+            "links": {
+              "preview": "/game/1369/897502/preview/",
+              "stat": "/game/1369/897502/headtohead/",
+              "text": "/game/1369/897502/text/",
+              "teams": "/game/1369/897502/teams/",
+              "ics": "",
+              "resume": "/game/1369/897502/resume/",
+              "protocol": "/game/1369/897502/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 66,
+            "teamb": 190,
+            "time_format": "18:00",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "1:2",
+              "1:0",
+              "2:1"
+            ],
+            "win": 66
+          }
+        ],
+        "2025-09-09": [
+          {
+            "approved": 1,
+            "arenaid": 53,
+            "date": "2025-09-09",
+            "homeScore": 4,
+            "id": 897505,
+            "links": {
+              "preview": "/game/1369/897505/preview/",
+              "stat": "/game/1369/897505/headtohead/",
+              "text": "/game/1369/897505/text/",
+              "teams": "/game/1369/897505/teams/",
+              "ics": "",
+              "resume": "/game/1369/897505/resume/",
+              "protocol": "/game/1369/897505/protocol/"
+            },
+            "ots": "SO",
+            "teama": 198,
+            "teamb": 54,
+            "time_format": "17:00",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "0:1",
+              "3:1",
+              "0:1"
+            ],
+            "win": 198
+          },
+          {
+            "approved": 1,
+            "arenaid": 17,
+            "date": "2025-09-09",
+            "homeScore": 3,
+            "id": 897509,
+            "links": {
+              "preview": "/game/1369/897509/preview/",
+              "stat": "/game/1369/897509/headtohead/",
+              "text": "/game/1369/897509/text/",
+              "teams": "/game/1369/897509/teams/",
+              "ics": "",
+              "resume": "/game/1369/897509/resume/",
+              "protocol": "/game/1369/897509/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 71,
+            "teamb": 25,
+            "time_format": "19:00",
+            "tnId": 1369,
+            "visitorScore": 4,
+            "scP": [
+              "1:0",
+              "0:0",
+              "2:4"
+            ],
+            "win": 25
+          },
+          {
+            "approved": 1,
+            "arenaid": 4,
+            "date": "2025-09-09",
+            "homeScore": 0,
+            "id": 897506,
+            "links": {
+              "preview": "/game/1369/897506/preview/",
+              "stat": "/game/1369/897506/headtohead/",
+              "text": "/game/1369/897506/text/",
+              "teams": "/game/1369/897506/teams/",
+              "ics": "",
+              "resume": "/game/1369/897506/resume/",
+              "protocol": "/game/1369/897506/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 7,
+            "teamb": 207,
+            "time_format": "19:30",
+            "tnId": 1369,
+            "visitorScore": 3,
+            "scP": [
+              "0:2",
+              "0:1",
+              "0:0"
+            ],
+            "win": 207
+          }
+        ],
+        "2025-09-10": [
+          {
+            "approved": 1,
+            "arenaid": 16,
+            "date": "2025-09-10",
+            "homeScore": 3,
+            "id": 897510,
+            "links": {
+              "preview": "/game/1369/897510/preview/",
+              "stat": "/game/1369/897510/headtohead/",
+              "text": "/game/1369/897510/text/",
+              "teams": "/game/1369/897510/teams/",
+              "ics": "",
+              "resume": "/game/1369/897510/resume/",
+              "protocol": "/game/1369/897510/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 53,
+            "teamb": 190,
+            "time_format": "19:30",
+            "tnId": 1369,
+            "visitorScore": 6,
+            "scP": [
+              "1:2",
+              "0:4",
+              "2:0"
+            ],
+            "win": 190
+          },
+          {
+            "approved": 1,
+            "arenaid": 52,
+            "date": "2025-09-10",
+            "homeScore": 1,
+            "id": 897511,
+            "links": {
+              "preview": "/game/1369/897511/preview/",
+              "stat": "/game/1369/897511/headtohead/",
+              "text": "/game/1369/897511/text/",
+              "teams": "/game/1369/897511/teams/",
+              "ics": "",
+              "resume": "/game/1369/897511/resume/",
+              "protocol": "/game/1369/897511/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 2,
+            "teamb": 418,
+            "time_format": "19:30",
+            "tnId": 1369,
+            "visitorScore": 0,
+            "scP": [
+              "1:0",
+              "0:0",
+              "0:0"
+            ],
+            "win": 2
+          }
+        ]
+      },
+      {
+        "2025-09-15": [
+          {
+            "approved": 1,
+            "arenaid": 30,
+            "date": "2025-09-15",
+            "homeScore": 5,
+            "id": 897532,
+            "links": {
+              "preview": "/game/1369/897532/preview/",
+              "stat": "/game/1369/897532/headtohead/",
+              "text": "/game/1369/897532/text/",
+              "teams": "/game/1369/897532/teams/",
+              "ics": "",
+              "resume": "/game/1369/897532/resume/",
+              "protocol": "/game/1369/897532/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 54,
+            "teamb": 568,
+            "time_format": "12:15",
+            "tnId": 1369,
+            "visitorScore": 4,
+            "scP": [
+              "3:1",
+              "0:0",
+              "2:3"
+            ],
+            "win": 54
+          },
+          {
+            "approved": 1,
+            "arenaid": 31,
+            "date": "2025-09-15",
+            "homeScore": 2,
+            "id": 897534,
+            "links": {
+              "preview": "/game/1369/897534/preview/",
+              "stat": "/game/1369/897534/headtohead/",
+              "text": "/game/1369/897534/text/",
+              "teams": "/game/1369/897534/teams/",
+              "ics": "",
+              "resume": "/game/1369/897534/resume/",
+              "protocol": "/game/1369/897534/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 418,
+            "teamb": 29,
+            "time_format": "12:30",
+            "tnId": 1369,
+            "visitorScore": 0,
+            "scP": [
+              "1:0",
+              "0:0",
+              "1:0"
+            ],
+            "win": 418
+          },
+          {
+            "approved": 1,
+            "arenaid": 197,
+            "date": "2025-09-15",
+            "homeScore": 5,
+            "id": 897531,
+            "links": {
+              "preview": "/game/1369/897531/preview/",
+              "stat": "/game/1369/897531/headtohead/",
+              "text": "/game/1369/897531/text/",
+              "teams": "/game/1369/897531/teams/",
+              "ics": "",
+              "resume": "/game/1369/897531/resume/",
+              "protocol": "/game/1369/897531/protocol/"
+            },
+            "ots": "SO",
+            "teama": 34,
+            "teamb": 207,
+            "time_format": "16:30",
+            "tnId": 1369,
+            "visitorScore": 4,
+            "scP": [
+              "1:1",
+              "2:0",
+              "1:3"
+            ],
+            "win": 34
+          }
+        ],
+        "2025-09-16": [
+          {
+            "approved": 1,
+            "arenaid": 19,
+            "date": "2025-09-16",
+            "homeScore": 1,
+            "id": 897535,
+            "links": {
+              "preview": "/game/1369/897535/preview/",
+              "stat": "/game/1369/897535/headtohead/",
+              "text": "/game/1369/897535/text/",
+              "teams": "/game/1369/897535/teams/",
+              "ics": "",
+              "resume": "/game/1369/897535/resume/",
+              "protocol": "/game/1369/897535/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 66,
+            "teamb": 1,
+            "time_format": "18:00",
+            "tnId": 1369,
+            "visitorScore": 6,
+            "scP": [
+              "0:1",
+              "0:4",
+              "1:1"
+            ],
+            "win": 1
+          },
+          {
+            "approved": 1,
+            "arenaid": 14,
+            "date": "2025-09-16",
+            "homeScore": 2,
+            "id": 897536,
+            "links": {
+              "preview": "/game/1369/897536/preview/",
+              "stat": "/game/1369/897536/headtohead/",
+              "text": "/game/1369/897536/text/",
+              "teams": "/game/1369/897536/teams/",
+              "ics": "",
+              "resume": "/game/1369/897536/resume/",
+              "protocol": "/game/1369/897536/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 56,
+            "teamb": 37,
+            "time_format": "19:00",
+            "tnId": 1369,
+            "visitorScore": 5,
+            "scP": [
+              "0:0",
+              "0:4",
+              "2:1"
+            ],
+            "win": 37
+          },
+          {
+            "approved": 1,
+            "arenaid": 52,
+            "date": "2025-09-16",
+            "homeScore": 5,
+            "id": 897537,
+            "links": {
+              "preview": "/game/1369/897537/preview/",
+              "stat": "/game/1369/897537/headtohead/",
+              "text": "/game/1369/897537/text/",
+              "teams": "/game/1369/897537/teams/",
+              "ics": "",
+              "resume": "/game/1369/897537/resume/",
+              "protocol": "/game/1369/897537/protocol/"
+            },
+            "ots": "SO",
+            "teama": 2,
+            "teamb": 7,
+            "time_format": "19:30",
+            "tnId": 1369,
+            "visitorScore": 6,
+            "scP": [
+              "1:1",
+              "4:3",
+              "0:1"
+            ],
+            "win": 7
+          }
+        ],
+        "2025-09-17": [
+          {
+            "approved": 1,
+            "arenaid": 30,
+            "date": "2025-09-17",
+            "homeScore": 3,
+            "id": 897540,
+            "links": {
+              "preview": "/game/1369/897540/preview/",
+              "stat": "/game/1369/897540/headtohead/",
+              "text": "/game/1369/897540/text/",
+              "teams": "/game/1369/897540/teams/",
+              "ics": "",
+              "resume": "/game/1369/897540/resume/",
+              "protocol": "/game/1369/897540/protocol/"
+            },
+            "ots": "SO",
+            "teama": 54,
+            "teamb": 29,
+            "time_format": "12:15",
+            "tnId": 1369,
+            "visitorScore": 4,
+            "scP": [
+              "1:0",
+              "1:1",
+              "1:2"
+            ],
+            "win": 29
+          },
+          {
+            "approved": 1,
+            "arenaid": 31,
+            "date": "2025-09-17",
+            "homeScore": 4,
+            "id": 897543,
+            "links": {
+              "preview": "/game/1369/897543/preview/",
+              "stat": "/game/1369/897543/headtohead/",
+              "text": "/game/1369/897543/text/",
+              "teams": "/game/1369/897543/teams/",
+              "ics": "",
+              "resume": "/game/1369/897543/resume/",
+              "protocol": "/game/1369/897543/protocol/"
+            },
+            "ots": "",
+            "scP4": "",
+            "teama": 418,
+            "teamb": 568,
+            "time_format": "12:30",
+            "tnId": 1369,
+            "visitorScore": 0,
+            "scP": [
+              "0:0",
+              "2:0",
+              "2:0"
+            ],
+            "win": 418
+          },
+          {
+            "approved": 1,
+            "arenaid": 197,
+            "date": "2025-09-17",
+            "homeScore": 3,
+            "id": 897542,
+            "links": {
+              "preview": "/game/1369/897542/preview/",
+              "stat": "/game/1369/897542/headtohead/",
+              "text": "/game/1369/897542/text/",
+              "teams": "/game/1369/897542/teams/",
+              "ics": "",
+              "resume": "/game/1369/897542/resume/",
+              "protocol": "/game/1369/897542/protocol/"
+            },
+            "ots": "OT",
+            "teama": 34,
+            "teamb": 38,
+            "time_format": "16:30",
+            "tnId": 1369,
+            "visitorScore": 2,
+            "scP": [
+              "0:1",
+              "2:0",
+              "0:1"
+            ],
+            "win": 34
+          }
+        ]
+      }
+    ],
+    "fteam": false,
+    "config": {
+      "week": {
+        "active": 0
+      },
+      "day": {
+        "active": "2025-09-01"
+      },
+      "current_date": "2026-10-12",
+      "next_week": {
+        "firstDay": {
+          "year": "2025",
+          "month": "09",
+          "day": "08"
+        },
+        "lastDay": {
+          "year": "2025",
+          "month": "09",
+          "day": "14"
+        }
+      }
+    },
+    "values": {
+      "tournament": "1369",
+      "fullDate": {
+        "year": "2025",
+        "month": "09",
+        "day": "01"
+      }
+    },
+    "JSONLIST": "{\"tournament\":\"1369\",\"fullDate\":{\"year\":\"2025\",\"month\":\"09\",\"day\":\"01\"}}",
+    "JSONCALENDAR": "{\"2025-09-01\":{\"day\":\"01\",\"mouth\":\"09\",\"dayweek\":1,\"disabled\":true},\"2025-09-02\":{\"day\":\"02\",\"mouth\":\"09\",\"dayweek\":2,\"disabled\":true},\"2025-09-03\":{\"day\":\"03\",\"mouth\":\"09\",\"dayweek\":3,\"disabled\":true...[truncated 10462 chars]",
+    "JSONTEXT": "{\"OT\":\"\\u041e\\u0432\\u0435\\u0440\\u0442\\u0430\\u0439\\u043c\",\"now\":\"\\u0421\\u0435\\u0439\\u0447\\u0430\\u0441\",\"SO\":\"\\u0411\\u0443\\u043b\\u043b\\u0438\\u0442\\u044b\",\"DNAME\":[\"\\u0412\\u0441\",\"\\u041f\\u043d\",\"\\u0412\\u...[truncated 20458 chars]"
+  },
+  "errors": []
+}

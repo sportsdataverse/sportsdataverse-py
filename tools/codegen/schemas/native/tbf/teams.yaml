@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: team_process_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: city
+  type: character
+- description: ''
+  name: code
+  type: character
+- description: ''
+  name: season_id
+  type: integer
+- description: ''
+  name: season_label
+  type: character
+kind: dataframe
+schema: tbf_teams

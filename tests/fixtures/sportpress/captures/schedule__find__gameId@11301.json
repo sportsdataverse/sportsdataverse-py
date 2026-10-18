@@ -1,0 +1,123 @@
+{
+  "data": {
+    "id": 11301,
+    "game_time": "2026-10-10 20:30:00",
+    "status": "finished",
+    "video_url": null,
+    "competitors": [
+      {
+        "side": 1,
+        "finalScore": 79,
+        "competition_team": {
+          "id": 563,
+          "name": "Kangoeroes Basket Mechelen",
+          "short_name": "MEC",
+          "ticket_url": "https://kangoeroes-mannen.ordering.be/o/7%C2%A0%C2%A0%C2%A0",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "Mechelen",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/P/1/P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/P/1/small-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png",
+              "medium": "https://bnxt.sportpress.info/storage/P/1/medium-P1CAfeaMcbepHMFRHSXcktt6k1785845272.png"
+            }
+          },
+          "created_at": "2026-07-24"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 21
+          },
+          {
+            "period_id": 2,
+            "score": 28
+          },
+          {
+            "period_id": 3,
+            "score": 16
+          }
+        ]
+      },
+      {
+        "side": 2,
+        "finalScore": 94,
+        "competition_team": {
+          "id": 557,
+          "name": "Partena Professional Okapi Aalst",
+          "short_name": "AAL",
+          "ticket_url": "https://shop.ticket.monster/seller/okapi-aalst-mheh",
+          "club": {
+            "id": 1,
+            "name": "Belgium"
+          },
+          "team_logo": {
+            "name": "Aalst",
+            "description": null,
+            "alt": null,
+            "keywords": null,
+            "public_url": "https://bnxt.sportpress.info/storage/0/j/0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+            "thumbnails": {
+              "small": "https://bnxt.sportpress.info/storage/0/j/small-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png",
+              "medium": "https://bnxt.sportpress.info/storage/0/j/medium-0jJNXOYfAzMPS1sgPDxG4wSUM1785845350.png"
+            }
+          },
+          "created_at": "2026-07-24"
+        },
+        "period_scores": [
+          {
+            "period_id": 1,
+            "score": 23
+          },
+          {
+            "period_id": 2,
+            "score": 19
+          },
+          {
+            "period_id": 3,
+            "score": 26
+          }
+        ]
+      }
+    ],
+    "period": {
+      "name": "Q4"
+    },
+    "round": {
+      "name": "",
+      "priority": 20
+    },
+    "phase": {
+      "id": 183,
+      "name": "Regular season 2026-27",
+      "standings_visible": true
+    },
+    "competition": {
+      "id": 25,
+      "season": 2027,
+      "visible": true,
+      "standings_visible": true,
+      "simple_team_view": false,
+      "summer_season": false,
+      "name": "BNXT League 2026-2027",
+      "logo": null,
+      "ticket_url": null,
+      "video_url": null,
+      "created_at": "2026-07-24"
+    },
+    "arena": {
+      "name": "Winketkaai"
+    },
+    "referees": [],
+    "last_game": null,
+    "next_game": null,
+    "last10": null,
+    "created_at": "2026-08-03"
+  }
+}

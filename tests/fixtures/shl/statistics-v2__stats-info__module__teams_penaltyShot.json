@@ -1,0 +1,943 @@
+[
+  {
+    "dataColumns": [
+      {
+        "name": "Rank",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Team",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "GP",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      }
+    ],
+    "defaultSortKey": {
+      "name": "SOW",
+      "order": "DESC"
+    },
+    "stats": [
+      {
+        "Rank": 1,
+        "Team": 0,
+        "GP": 52,
+        "SOW": 4,
+        "SOL": 2,
+        "PS": 1,
+        "PSG": 0,
+        "PSA": 1,
+        "PSSVS": 0,
+        "SO_PS": 22,
+        "SO_PSG": 5,
+        "SO_PSPerc": "22.73",
+        "SO_PSA": 23,
+        "SO_PSSVS": 20,
+        "SO_PSSVSPerc": "86.96",
+        "info": {
+          "type": "team",
+          "id": "FBK",
+          "uuid": "752c-752c12zB7Z",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "fbk1-fbk-88173",
+          "lastModified": "2024-09-24T12:58:08.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "fbk1_fbk",
+          "ownersite": "FBK",
+          "teamCode": "FBK",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg",
+          "teamNames": {
+            "code": "FBK",
+            "short": "Färjestad",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb",
+            "code_site": "FBK",
+            "short_site": "Färjestad Herr",
+            "full_site": "Färjestad Bollklubb Herr",
+            "long_site": "Färjestad BK"
+          },
+          "clubName": {
+            "code": "FBK",
+            "short": "Färjestad Herr",
+            "long": "Färjestad BK",
+            "full": "Färjestad Bollklubb Herr"
+          },
+          "teamInfo": {
+            "founded": "1932",
+            "golds": "10 st (1981, 1986, 1988, 1997, 1998, 2002, 2006, 2009, 2011, 2022)",
+            "finals": "21 st (1976, 1977, 1981, 1983, 1986, 1987, 1988, 1990, 1991, 1997, 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2009, 2011, 2014, 2022)",
+            "retired_numbers": "# 02 Tommy Samuelsson\r\n# 05 Håkan Loob\r\n# 09 Thomas Rundqvist\r\n# 09 Ulf Sterner\r\n# 17 Mathias Johansson\r\n# Peter Nordström\r\n# 21 Jörgen Jönsson\r\n# 51 Rickard Wallin",
+            "address": "Färjestad BK\r\nBox 318\r\n651 08 KARLSTAD",
+            "phone": "054-22 33 00",
+            "email": "kundcenter@farjestadsbk.se",
+            "chairman": "Lars Appelqvist",
+            "manager": "Stefan Larsson",
+            "accreditation": "Stefan Eriksson, stefan.eriksson@farjestadsbk.se",
+            "contact": "Besöksadress:\r\nFärjestad BK Kundcenter\r\nNorra Infarten 79\r\n654 65 KARLSTAD",
+            "facebook": "https://www.facebook.com/farjestadbk",
+            "instagram": "https://www.instagram.com/farjestad_bk/",
+            "twitter": "https://twitter.com/farjestad_bk"
+          },
+          "teamExtIds": [
+            {
+              "id": 7,
+              "extId": "FBK",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 8,
+              "extId": "6",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 7,
+              "extId": "FBK",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 8,
+              "extId": "6",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "FBK",
+          "siteDisplayName": "Färjestad BK"
+        }
+      },
+      {
+        "Rank": 1,
+        "Team": 0,
+        "GP": 52,
+        "SOW": 4,
+        "SOL": 2,
+        "PS": 3,
+        "PSG": 0,
+        "PSA": 2,
+        "PSSVS": 0,
+        "SO_PS": 26,
+        "SO_PSG": 7,
+        "SO_PSPerc": "26.92",
+        "SO_PSA": 27,
+        "SO_PSSVS": 22,
+        "SO_PSSVSPerc": "81.48",
+        "info": {
+          "type": "team",
+          "id": "BIF",
+          "uuid": "1ab8-1ab8bfj7N",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "bif1-bif-713a5",
+          "lastModified": "2024-10-31T17:06:28.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "bif1_bif",
+          "ownersite": "BIF",
+          "teamCode": "BIF",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+          "teamNames": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening",
+            "code_site": "BIF",
+            "short_site": "Brynäs",
+            "full_site": "Brynäs Idrottsförening",
+            "long_site": "Brynäs IF"
+          },
+          "clubName": {
+            "code": "BIF",
+            "short": "Brynäs",
+            "long": "Brynäs IF",
+            "full": "Brynäs Idrottsförening"
+          },
+          "teamInfo": {
+            "founded": "1912",
+            "golds": "13 (1964, 1966, 1967, 1968, 1970, 1971, 1972, 1976, 1977, 1980, 1993, 1999, 2012).",
+            "finals": "11* (1966, 1967, 1975, 1976, 1977, 1980, 1993, 1995, 1999, 2012, 2017).\r\n\r\n*Vissa guld togs efter seriespel, därav färre antal finaler än SM-guld",
+            "retired_numbers": "#06 Tord Lundström\r\n#26 Anders Huss",
+            "address": "Brynäs IF, Gavlehovsvägen 13, 806 33 Gävle",
+            "email": "info@brynas.se",
+            "facebook": "https://www.facebook.com/brynasif/",
+            "instagram": "https://www.instagram.com/brynas__if/",
+            "twitter": "https://twitter.com/Brynas"
+          },
+          "teamExtIds": [
+            {
+              "id": 3,
+              "extId": "BIF",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 4,
+              "extId": "3",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 3,
+              "extId": "BIF",
+              "locked": true,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 4,
+              "extId": "3",
+              "locked": true,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "BIF",
+          "siteDisplayName": "Brynäs IF"
+        }
+      },
+      {
+        "Rank": 3,
+        "Team": 0,
+        "GP": 52,
+        "SOW": 3,
+        "SOL": 0,
+        "PS": 2,
+        "PSG": 0,
+        "PSA": 1,
+        "PSSVS": 1,
+        "SO_PS": 10,
+        "SO_PSG": 4,
+        "SO_PSPerc": "40.00",
+        "SO_PSA": 11,
+        "SO_PSSVS": 10,
+        "SO_PSSVSPerc": "90.91",
+        "info": {
+          "type": "team",
+          "id": "DIF",
+          "uuid": "2459-2459QTs1f",
+          "createdAt": null,
+          "createdBy": null,
+          "deleted": false,
+          "gender": "male",
+          "graphicsLibrary": "dif1-dif-896f9",
+          "lastModified": "2025-09-18T21:35:41.000Z",
+          "nationality": "sv",
+          "ownerInstanceId": "dif1_dif",
+          "ownersite": "DIF",
+          "teamCode": "DIF",
+          "series": [
+            {
+              "uuid": "qQ9-bb0bzEWUk",
+              "code": "SHL",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2023-03-01T13:47:40.000Z",
+              "displayName": "SHL",
+              "names": {
+                "0": {
+                  "language": "sv",
+                  "translation": "SHL"
+                },
+                "1": {
+                  "language": "en",
+                  "translation": "SHL"
+                }
+              }
+            }
+          ],
+          "sport": [
+            {
+              "uuid": "qQ9-bd0dSLh6k",
+              "code": "hockey",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": "2022-09-28T13:18:06.000Z"
+            }
+          ],
+          "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+          "teamNames": {
+            "code": "DIF",
+            "short": "Djurgården",
+            "long": "Djurgårdens IF",
+            "full": "Djurgården Hockey",
+            "codeSite": "DIF Herr",
+            "shortSite": "Djurgården Herr",
+            "fullSite": "Djurgården Hockey Herr",
+            "longSite": "Djurgården Hockey Herr"
+          },
+          "clubName": {},
+          "teamInfo": {
+            "founded": "1891",
+            "golds": "16 st (1926, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1983, 1989, 1990, 1991, 2000, 2001)",
+            "finals": "26 st (1923, 1924, 1926, 1927, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1979, 1983, 1984, 1985, 1989, 1990, 1991, 1992, 1998, 2000, 2001, 2010, 2019)",
+            "retired_numbers": "#2 Roland Stoltz\r\n#2 Charles Berglund\r\n#5 Sven Tumba\r\n#11 Jens Öhling\r\n#12 Lasse Björn\r\n#16 Nichlas Falk\r\n#22 Håkan Södergren\r\n#25 Mikael Johansson\r\n#27 Thomas Eriksson",
+            "address": "Djurgården Hockey AB\r\nLindetorpsvägen 25\r\nBox 2\r\n121 25 STOCKHOLM-GLOBEN",
+            "phone": "08-600 81 00",
+            "fax": "08-600 81 99",
+            "chairman": "Kaarel Lehiste",
+            "accreditation": "Senast dagen före match till ackreditering@difhockey.se."
+          },
+          "teamExtIds": [
+            {
+              "id": 5,
+              "extId": "DIF",
+              "locked": false,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 6,
+              "extId": "2",
+              "locked": false,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "extIds": [
+            {
+              "id": 5,
+              "extId": "DIF",
+              "locked": false,
+              "extIdType": {
+                "uuid": "165a-d5bcMnEuq",
+                "code": "isa",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": true,
+                "name": "ISA / Statnet"
+              }
+            },
+            {
+              "id": 6,
+              "extId": "2",
+              "locked": false,
+              "extIdType": {
+                "uuid": "7b6a-e633fcdB7",
+                "code": "ramses_legacy",
+                "createdAt": null,
+                "createdBy": null,
+                "deleted": false,
+                "lastModified": null,
+                "visible": false,
+                "name": "Ramses gammalt id"
+              }
+            }
+          ],
+          "logo": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+          "socialMedia": [],
+          "displayName": "",
+          "code": "DIF",
+          "siteDisplayName": "Djurgårdens IF"
+        }
+      }
+    ],
+    "provider": "statnet",
+    "teams": {
+      "FBK": {
+        "type": "team",
+        "id": "FBK",
+        "uuid": "752c-752c12zB7Z",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "fbk1-fbk-88173",
+        "lastModified": "2024-09-24T12:58:08.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "fbk1_fbk",
+        "ownersite": "FBK",
+        "teamCode": "FBK",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg",
+        "teamNames": {
+          "code": "FBK",
+          "short": "Färjestad",
+          "long": "Färjestad BK",
+          "full": "Färjestad Bollklubb",
+          "code_site": "FBK",
+          "short_site": "Färjestad Herr",
+          "full_site": "Färjestad Bollklubb Herr",
+          "long_site": "Färjestad BK"
+        },
+        "clubName": {
+          "code": "FBK",
+          "short": "Färjestad Herr",
+          "long": "Färjestad BK",
+          "full": "Färjestad Bollklubb Herr"
+        },
+        "teamInfo": {
+          "founded": "1932",
+          "golds": "10 st (1981, 1986, 1988, 1997, 1998, 2002, 2006, 2009, 2011, 2022)",
+          "finals": "21 st (1976, 1977, 1981, 1983, 1986, 1987, 1988, 1990, 1991, 1997, 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2009, 2011, 2014, 2022)",
+          "retired_numbers": "# 02 Tommy Samuelsson\r\n# 05 Håkan Loob\r\n# 09 Thomas Rundqvist\r\n# 09 Ulf Sterner\r\n# 17 Mathias Johansson\r\n# Peter Nordström\r\n# 21 Jörgen Jönsson\r\n# 51 Rickard Wallin",
+          "address": "Färjestad BK\r\nBox 318\r\n651 08 KARLSTAD",
+          "phone": "054-22 33 00",
+          "email": "kundcenter@farjestadsbk.se",
+          "chairman": "Lars Appelqvist",
+          "manager": "Stefan Larsson",
+          "accreditation": "Stefan Eriksson, stefan.eriksson@farjestadsbk.se",
+          "contact": "Besöksadress:\r\nFärjestad BK Kundcenter\r\nNorra Infarten 79\r\n654 65 KARLSTAD",
+          "facebook": "https://www.facebook.com/farjestadbk",
+          "instagram": "https://www.instagram.com/farjestad_bk/",
+          "twitter": "https://twitter.com/farjestad_bk"
+        },
+        "teamExtIds": [
+          {
+            "id": 7,
+            "extId": "FBK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 8,
+            "extId": "6",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 7,
+            "extId": "FBK",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 8,
+            "extId": "6",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/fbk1_fbk.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Färjestad BK"
+      },
+      "BIF": {
+        "type": "team",
+        "id": "BIF",
+        "uuid": "1ab8-1ab8bfj7N",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "bif1-bif-713a5",
+        "lastModified": "2024-10-31T17:06:28.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "bif1_bif",
+        "ownersite": "BIF",
+        "teamCode": "BIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+        "teamNames": {
+          "code": "BIF",
+          "short": "Brynäs",
+          "long": "Brynäs IF",
+          "full": "Brynäs Idrottsförening",
+          "code_site": "BIF",
+          "short_site": "Brynäs",
+          "full_site": "Brynäs Idrottsförening",
+          "long_site": "Brynäs IF"
+        },
+        "clubName": {
+          "code": "BIF",
+          "short": "Brynäs",
+          "long": "Brynäs IF",
+          "full": "Brynäs Idrottsförening"
+        },
+        "teamInfo": {
+          "founded": "1912",
+          "golds": "13 (1964, 1966, 1967, 1968, 1970, 1971, 1972, 1976, 1977, 1980, 1993, 1999, 2012).",
+          "finals": "11* (1966, 1967, 1975, 1976, 1977, 1980, 1993, 1995, 1999, 2012, 2017).\r\n\r\n*Vissa guld togs efter seriespel, därav färre antal finaler än SM-guld",
+          "retired_numbers": "#06 Tord Lundström\r\n#26 Anders Huss",
+          "address": "Brynäs IF, Gavlehovsvägen 13, 806 33 Gävle",
+          "email": "info@brynas.se",
+          "facebook": "https://www.facebook.com/brynasif/",
+          "instagram": "https://www.instagram.com/brynas__if/",
+          "twitter": "https://twitter.com/Brynas"
+        },
+        "teamExtIds": [
+          {
+            "id": 3,
+            "extId": "BIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 4,
+            "extId": "3",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 3,
+            "extId": "BIF",
+            "locked": true,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 4,
+            "extId": "3",
+            "locked": true,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/bif1_bif.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Brynäs IF"
+      },
+      "DIF": {
+        "type": "team",
+        "id": "DIF",
+        "uuid": "2459-2459QTs1f",
+        "createdAt": null,
+        "createdBy": null,
+        "deleted": false,
+        "gender": "male",
+        "graphicsLibrary": "dif1-dif-896f9",
+        "lastModified": "2025-09-18T21:35:41.000Z",
+        "nationality": "sv",
+        "ownerInstanceId": "dif1_dif",
+        "ownersite": "DIF",
+        "teamCode": "DIF",
+        "series": [
+          {
+            "uuid": "qQ9-bb0bzEWUk",
+            "code": "SHL",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2023-03-01T13:47:40.000Z",
+            "displayName": "SHL",
+            "names": {
+              "0": {
+                "language": "sv",
+                "translation": "SHL"
+              },
+              "1": {
+                "language": "en",
+                "translation": "SHL"
+              }
+            }
+          }
+        ],
+        "sport": [
+          {
+            "uuid": "qQ9-bd0dSLh6k",
+            "code": "hockey",
+            "createdAt": null,
+            "createdBy": null,
+            "deleted": false,
+            "lastModified": "2022-09-28T13:18:06.000Z"
+          }
+        ],
+        "teamMedia": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+        "teamNames": {
+          "code": "DIF",
+          "short": "Djurgården",
+          "long": "Djurgårdens IF",
+          "full": "Djurgården Hockey",
+          "codeSite": "DIF Herr",
+          "shortSite": "Djurgården Herr",
+          "fullSite": "Djurgården Hockey Herr",
+          "longSite": "Djurgården Hockey Herr"
+        },
+        "clubName": {},
+        "teamInfo": {
+          "founded": "1891",
+          "golds": "16 st (1926, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1983, 1989, 1990, 1991, 2000, 2001)",
+          "finals": "26 st (1923, 1924, 1926, 1927, 1950, 1954, 1955, 1958, 1959, 1960, 1961, 1962, 1963, 1979, 1983, 1984, 1985, 1989, 1990, 1991, 1992, 1998, 2000, 2001, 2010, 2019)",
+          "retired_numbers": "#2 Roland Stoltz\r\n#2 Charles Berglund\r\n#5 Sven Tumba\r\n#11 Jens Öhling\r\n#12 Lasse Björn\r\n#16 Nichlas Falk\r\n#22 Håkan Södergren\r\n#25 Mikael Johansson\r\n#27 Thomas Eriksson",
+          "address": "Djurgården Hockey AB\r\nLindetorpsvägen 25\r\nBox 2\r\n121 25 STOCKHOLM-GLOBEN",
+          "phone": "08-600 81 00",
+          "fax": "08-600 81 99",
+          "chairman": "Kaarel Lehiste",
+          "accreditation": "Senast dagen före match till ackreditering@difhockey.se."
+        },
+        "teamExtIds": [
+          {
+            "id": 5,
+            "extId": "DIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 6,
+            "extId": "2",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "extIds": [
+          {
+            "id": 5,
+            "extId": "DIF",
+            "locked": false,
+            "extIdType": {
+              "uuid": "165a-d5bcMnEuq",
+              "code": "isa",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": true,
+              "name": "ISA / Statnet"
+            }
+          },
+          {
+            "id": 6,
+            "extId": "2",
+            "locked": false,
+            "extIdType": {
+              "uuid": "7b6a-e633fcdB7",
+              "code": "ramses_legacy",
+              "createdAt": null,
+              "createdBy": null,
+              "deleted": false,
+              "lastModified": null,
+              "visible": false,
+              "name": "Ramses gammalt id"
+            }
+          }
+        ],
+        "logo": "https://sportality.cdn.s8y.se/team-logos/dif1_dif.svg",
+        "socialMedia": [],
+        "displayName": "",
+        "siteDisplayName": "Djurgårdens IF"
+      }
+    },
+    "games": {},
+    "seasonSeriesGameTypes": {},
+    "type": "team",
+    "totalCount": 14
+  }
+]

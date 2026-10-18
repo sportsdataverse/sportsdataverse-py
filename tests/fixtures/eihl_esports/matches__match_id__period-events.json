@@ -1,0 +1,404 @@
+{
+  "last_event_time": 3600,
+  "1": [
+    {
+      "time": 0,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 21568,
+        "team": "home",
+        "time": 0,
+        "player": {
+          "playerId": 5152,
+          "matchPlayerId": 173128,
+          "jersey": 32,
+          "name": "Rasmus",
+          "surname": "Tirronen"
+        },
+        "outgoingGoalkeeper": null
+      }
+    },
+    {
+      "time": 0,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 21569,
+        "team": "visitor",
+        "time": 0,
+        "player": {
+          "playerId": 5136,
+          "matchPlayerId": 173137,
+          "jersey": 1,
+          "name": "Brad",
+          "surname": "Arvanitis"
+        },
+        "outgoingGoalkeeper": null
+      }
+    },
+    {
+      "time": 367,
+      "type": "goal",
+      "data": {
+        "id": 17919,
+        "team": "home",
+        "currentScore": "1:0",
+        "realTime": "2026-10-11 16:15:35",
+        "scoreboardTime": 367,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 4892,
+          "matchPlayerId": 173119,
+          "jersey": 49,
+          "name": "Steven",
+          "surname": "Seigo"
+        },
+        "assistants": [
+          {
+            "playerId": 5157,
+            "matchPlayerId": 173133,
+            "jersey": 89,
+            "name": "Josh",
+            "surname": "Tarzwell"
+          },
+          {
+            "playerId": 4898,
+            "matchPlayerId": 173123,
+            "jersey": 94,
+            "name": "Cade",
+            "surname": "Neilson"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 5152,
+              "matchPlayerId": 173128,
+              "jersey": 32,
+              "name": "Rasmus",
+              "surname": "Tirronen"
+            },
+            {
+              "playerId": 4892,
+              "matchPlayerId": 173119,
+              "jersey": 49,
+              "name": "Steven",
+              "surname": "Seigo"
+            },
+            {
+              "playerId": 5157,
+              "matchPlayerId": 173133,
+              "jersey": 89,
+              "name": "Josh",
+              "surname": "Tarzwell"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 5136,
+              "matchPlayerId": 173137,
+              "jersey": 1,
+              "name": "Brad",
+              "surname": "Arvanitis"
+            },
+            {
+              "playerId": 4104,
+              "matchPlayerId": 173142,
+              "jersey": 91,
+              "name": "Joshua",
+              "surname": "Waller"
+            },
+            {
+              "playerId": 4371,
+              "matchPlayerId": 173153,
+              "jersey": 95,
+              "name": "Cole",
+              "surname": "Sanford "
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "2": [
+    {
+      "time": 1382,
+      "type": "goal",
+      "data": {
+        "id": 17924,
+        "team": "visitor",
+        "currentScore": "2:1",
+        "realTime": "2026-10-11 16:57:11",
+        "scoreboardTime": 1382,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 5044,
+          "matchPlayerId": 173156,
+          "jersey": 67,
+          "name": "Justin",
+          "surname": "Ducharme"
+        },
+        "assistants": [],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 5136,
+              "matchPlayerId": 173137,
+              "jersey": 1,
+              "name": "Brad",
+              "surname": "Arvanitis"
+            },
+            {
+              "playerId": 5044,
+              "matchPlayerId": 173156,
+              "jersey": 67,
+              "name": "Justin",
+              "surname": "Ducharme"
+            },
+            {
+              "playerId": 4686,
+              "matchPlayerId": 173146,
+              "jersey": 13,
+              "name": "Tyler",
+              "surname": "Busch"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 5152,
+              "matchPlayerId": 173128,
+              "jersey": 32,
+              "name": "Rasmus",
+              "surname": "Tirronen"
+            },
+            {
+              "playerId": 5156,
+              "matchPlayerId": 173132,
+              "jersey": 82,
+              "name": "David",
+              "surname": "Madsen"
+            },
+            {
+              "playerId": 4894,
+              "matchPlayerId": 173122,
+              "jersey": 71,
+              "name": "Rylan",
+              "surname": "Schwartz"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 1479,
+      "type": "goal",
+      "data": {
+        "id": 17925,
+        "team": "visitor",
+        "currentScore": "2:2",
+        "realTime": "2026-10-11 16:59:50",
+        "scoreboardTime": 1479,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 4924,
+          "matchPlayerId": 173149,
+          "jersey": 16,
+          "name": "Jack",
+          "surname": "Jacome"
+        },
+        "assistants": [
+          {
+            "playerId": 4669,
+            "matchPlayerId": 173144,
+            "jersey": 28,
+            "name": "Matt",
+            "surname": "Alvaro"
+          },
+          {
+            "playerId": 4584,
+            "matchPlayerId": 173151,
+            "jersey": 68,
+            "name": "Brett",
+            "surname": "Neumann"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 5136,
+              "matchPlayerId": 173137,
+              "jersey": 1,
+              "name": "Brad",
+              "surname": "Arvanitis"
+            },
+            {
+              "playerId": 4728,
+              "matchPlayerId": 173150,
+              "jersey": 26,
+              "name": "Nate",
+              "surname": "Kallen"
+            },
+            {
+              "playerId": 4584,
+              "matchPlayerId": 173151,
+              "jersey": 68,
+              "name": "Brett",
+              "surname": "Neumann"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 5152,
+              "matchPlayerId": 173128,
+              "jersey": 32,
+              "name": "Rasmus",
+              "surname": "Tirronen"
+            },
+            {
+              "playerId": 5154,
+              "matchPlayerId": 173130,
+              "jersey": 67,
+              "name": "Cole",
+              "surname": "Kodsi"
+            },
+            {
+              "playerId": 5157,
+              "matchPlayerId": 173133,
+              "jersey": 89,
+              "name": "Josh",
+              "surname": "Tarzwell"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "3": [
+    {
+      "time": 2551,
+      "type": "goal",
+      "data": {
+        "id": 17938,
+        "team": "visitor",
+        "currentScore": "2:3",
+        "realTime": "2026-10-11 17:47:05",
+        "scoreboardTime": 2551,
+        "balance": "EQ",
+        "ea": false,
+        "en": false,
+        "shooting": false,
+        "technical": false,
+        "scorer": {
+          "playerId": 5191,
+          "matchPlayerId": 173309,
+          "jersey": 14,
+          "name": "Alexandre",
+          "surname": "Lavoie"
+        },
+        "assistants": [
+          {
+            "playerId": 4929,
+            "matchPlayerId": 173152,
+            "jersey": 71,
+            "name": "Karl",
+            "surname": "Boudrias"
+          }
+        ],
+        "attendants": {
+          "positive": [
+            {
+              "playerId": 5136,
+              "matchPlayerId": 173137,
+              "jersey": 1,
+              "name": "Brad",
+              "surname": "Arvanitis"
+            },
+            {
+              "playerId": 5044,
+              "matchPlayerId": 173156,
+              "jersey": 67,
+              "name": "Justin",
+              "surname": "Ducharme"
+            },
+            {
+              "playerId": 5191,
+              "matchPlayerId": 173309,
+              "jersey": 14,
+              "name": "Alexandre",
+              "surname": "Lavoie"
+            }
+          ],
+          "negative": [
+            {
+              "playerId": 5152,
+              "matchPlayerId": 173128,
+              "jersey": 32,
+              "name": "Rasmus",
+              "surname": "Tirronen"
+            },
+            {
+              "playerId": 5154,
+              "matchPlayerId": 173130,
+              "jersey": 67,
+              "name": "Cole",
+              "surname": "Kodsi"
+            },
+            {
+              "playerId": 5157,
+              "matchPlayerId": 173133,
+              "jersey": 89,
+              "name": "Josh",
+              "surname": "Tarzwell"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "time": 3148,
+      "type": "videoReview",
+      "data": {
+        "id": 330,
+        "team": "home",
+        "teamId": 96,
+        "teamShortcut": "GLA",
+        "realTime": "2026-10-11 18:00:32",
+        "scoreboardTime": 3148,
+        "goalReview": "Initiated by referees",
+        "onIceDecision": "No goal",
+        "reasonForReview": "Puck crossing the goal line",
+        "decisionAfterReview": "No goal"
+      }
+    },
+    {
+      "time": 3404,
+      "type": "goalkeeperChange",
+      "data": {
+        "id": 21592,
+        "team": "home",
+        "time": 3404,
+        "player": null,
+        "outgoingGoalkeeper": {
+          "playerId": 5152,
+          "matchPlayerId": 173128,
+          "jersey": 32,
+          "name": "Rasmus",
+          "surname": "Tirronen"
+        }
+      }
+    }
+  ],
+  "overtime": [],
+  "shootout": []
+}

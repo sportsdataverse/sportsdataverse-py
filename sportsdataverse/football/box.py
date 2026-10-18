@@ -101,6 +101,68 @@ def fill_missing(df: "pl.DataFrame") -> "pl.DataFrame":
     return df.with_columns(pl.col(pl.Boolean).fill_null(False)).fill_null(0.0)
 
 
+_START_EP_NEED = {"scrimmage_play", "pos_team", "drive.id", "start.yardsToEndzone"}
+
+
+def _drive_first_snaps(df: "pl.DataFrame") -> "pl.DataFrame":
+    """Each offense's first scrimmage snap of each drive: ``pos_team, drive.id, start_yte``."""
+    return (
+        df.filter((pl.col("scrimmage_play") == True) & pl.col("drive.id").is_not_null())  # noqa: E712
+        .with_columns(pos_team=pl.col("pos_team").cast(pl.Int32, strict=False))
+        .filter(pl.col("pos_team").is_not_null())
+        .group_by(["pos_team", "drive.id"], maintain_order=True)
+        .agg(start_yte=pl.col("start.yardsToEndzone").first())
+    )
+
+
+def _avg_start_ep(
+    play_df: "pl.DataFrame", curve: "pl.DataFrame", full_game: "pl.DataFrame | None" = None
+) -> "pl.DataFrame":
+    """Mean expected points of each offense's drive starts, on the league's field-position curve.
+
+    A drive starts at its first scrimmage snap's ``start.yardsToEndzone``; its value is the
+    curve's EP at own yard line ``100 - start.yardsToEndzone`` (clipped to 1..99), and a
+    team's value is the mean over its drives. This is the number Game on Paper put in its
+    Drives table and feeds its Paper Index field-position input. Only scrimmage snaps count, as
+    in Game on Paper: a drive that opens with a pre-snap penalty is valued at the post-penalty
+    spot, and a drive with no scrimmage snap is left out, so the drive count can differ from
+    the ``drives`` and ``avg_field_position`` rows.
+
+    ``full_game`` is the whole game's frame when ``play_df`` is a window of it (a quarter,
+    a half): the window's drives are the ones with a snap in it, each valued at its first
+    snap of the GAME, so a drive carried over from the previous quarter keeps its real
+    start. A window drive missing from ``full_game`` falls back to its first snap in
+    ``play_df``.
+
+    Returns:
+        ``pos_team: Int32, avg_start_ep: Float64``, one row per offense with a drive;
+        empty when ``play_df`` lacks the drive columns.
+    """
+    empty = pl.DataFrame(schema={"pos_team": pl.Int32, "avg_start_ep": pl.Float64})
+    if not _START_EP_NEED <= set(play_df.columns):
+        return empty
+    keys = ["pos_team", "drive.id"]
+    starts = _drive_first_snaps(play_df)
+    if isinstance(full_game, pl.DataFrame) and _START_EP_NEED <= set(full_game.columns):
+        game = _drive_first_snaps(full_game).rename({"start_yte": "_game_yte"}).with_columns(_in_game=pl.lit(True))
+        for k in keys:  # join keys must agree: a window frame typed apart from its game would mis-match
+            assert starts.schema[k] == game.schema[k], f"{k}: {starts.schema[k]} vs {game.schema[k]}"
+        starts = starts.join(game, on=keys, how="left").with_columns(
+            start_yte=pl.when(pl.col("_in_game") == True)  # noqa: E712
+            .then(pl.col("_game_yte"))
+            .otherwise(pl.col("start_yte"))
+        )
+    if starts.height == 0:
+        return empty
+    assert curve.schema["yardline_own"] == pl.Int64, f"curve yardline_own is {curve.schema['yardline_own']}"
+    return (
+        starts.with_columns(yardline_own=(100 - pl.col("start_yte")).cast(pl.Int64).clip(1, 99))
+        .join(curve.select("yardline_own", "ep"), on="yardline_own", how="left")
+        .group_by("pos_team", maintain_order=True)
+        .agg(avg_start_ep=pl.col("ep").mean().cast(pl.Float64))
+    )
+
+
 def player_event_box(play_df, name_col, out, team_col, yds_col=None, team_out=None, extra_filter=None):
     """Count non-null occurrences of `name_col` per (team, player); sum `yds_col`.
 

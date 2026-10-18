@@ -1,0 +1,113 @@
+{
+  "players": [
+    {
+      "familyName": "Bengtsson",
+      "firstName": "Christopher",
+      "id": 2690,
+      "documentId": "xk3ojogy15d4kcx4htv30zbt",
+      "headshots": {
+        "large": "https://ha-media.hadigital.se/ha-league/2288_AIK_HA_Bengtsson_large_0c2d142811/2288_AIK_HA_Bengtsson_large_0c2d142811.webp",
+        "small": "https://ha-media.hadigital.se/ha-league/2288_AIK_HA_Bengtsson_small_d6cfa49460/2288_AIK_HA_Bengtsson_small_d6cfa49460.webp",
+        "thumb": "https://ha-media.hadigital.se/ha-league/2288_AIK_HA_Bengtsson_thumb_2a3e9ca3e1/2288_AIK_HA_Bengtsson_thumb_2a3e9ca3e1.webp",
+        "medium": "https://ha-media.hadigital.se/ha-league/2288_AIK_HA_Bengtsson_medium_6230ff0335/2288_AIK_HA_Bengtsson_medium_6230ff0335.webp"
+      },
+      "positionCode": "CE",
+      "jerseyNumber": "25",
+      "birthDate": "1993-10-19",
+      "country": "SWE",
+      "height": "180",
+      "weight": "83",
+      "shoots": "L",
+      "youthTeam": "Huddinge IK",
+      "isRookie": false,
+      "teamPlayer": "AIK | CE 25 | Bengtsson",
+      "slug": "christopher-bengtsson",
+      "positionName": "Center",
+      "team": {
+        "id": 81,
+        "documentId": "ake13zmd7dr8lggeeckz2yh3",
+        "shortName": "AIK",
+        "mainColorHex": "#052944",
+        "name": "AIK",
+        "logo": {
+          "id": 92,
+          "documentId": "qe7y38vni7sb2ec2fmrdcgf0",
+          "url": "https://ha-media.hadigital.se/ha-league/AIK_logo_aeaee9d0d7/AIK_logo_aeaee9d0d7.webp"
+        }
+      }
+    },
+    {
+      "familyName": "Björk",
+      "firstName": "Christoffer",
+      "id": 2695,
+      "documentId": "b4b8exr9vlq9vw3m7s32jbt9",
+      "headshots": {
+        "large": "https://ha-media.hadigital.se/ha-league/5860_AIK_HA_Bjoerk_large_bef97ef155/5860_AIK_HA_Bjoerk_large_bef97ef155.webp",
+        "small": "https://ha-media.hadigital.se/ha-league/5860_AIK_HA_Bjoerk_small_abae831b5c/5860_AIK_HA_Bjoerk_small_abae831b5c.webp",
+        "thumb": "https://ha-media.hadigital.se/ha-league/5860_AIK_HA_Bjoerk_thumb_b8e9e07711/5860_AIK_HA_Bjoerk_thumb_b8e9e07711.webp",
+        "medium": "https://ha-media.hadigital.se/ha-league/5860_AIK_HA_Bjoerk_medium_4333dfbe5d/5860_AIK_HA_Bjoerk_medium_4333dfbe5d.webp"
+      },
+      "positionCode": "CE",
+      "jerseyNumber": "27",
+      "birthDate": "1999-10-16",
+      "country": "SWE",
+      "height": "181",
+      "weight": "85",
+      "shoots": "L",
+      "youthTeam": "IF Björklöven",
+      "isRookie": false,
+      "teamPlayer": "AIK | CE 27 | Björk",
+      "slug": "christoffer-bjork",
+      "positionName": "Center",
+      "team": {
+        "id": 81,
+        "documentId": "ake13zmd7dr8lggeeckz2yh3",
+        "shortName": "AIK",
+        "mainColorHex": "#052944",
+        "name": "AIK",
+        "logo": {
+          "id": 92,
+          "documentId": "qe7y38vni7sb2ec2fmrdcgf0",
+          "url": "https://ha-media.hadigital.se/ha-league/AIK_logo_aeaee9d0d7/AIK_logo_aeaee9d0d7.webp"
+        }
+      }
+    },
+    {
+      "familyName": "Boije",
+      "firstName": "Sid",
+      "id": 2368,
+      "documentId": "vom6f8tbmwfffw44no38p8yo",
+      "headshots": null,
+      "positionCode": "CE",
+      "jerseyNumber": "45",
+      "birthDate": "2007-03-10",
+      "country": "SWE",
+      "height": "177",
+      "weight": "75",
+      "shoots": "R",
+      "youthTeam": "Solna SK",
+      "isRookie": false,
+      "teamPlayer": "AIK | CE 45 | Boije",
+      "slug": "sid-boije",
+      "positionName": "Center",
+      "team": {
+        "id": 81,
+        "documentId": "ake13zmd7dr8lggeeckz2yh3",
+        "shortName": "AIK",
+        "mainColorHex": "#052944",
+        "name": "AIK",
+        "logo": {
+          "id": 92,
+          "documentId": "qe7y38vni7sb2ec2fmrdcgf0",
+          "url": "https://ha-media.hadigital.se/ha-league/AIK_logo_aeaee9d0d7/AIK_logo_aeaee9d0d7.webp"
+        }
+      }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "pageSize": 100,
+    "pageCount": 1,
+    "total": 29
+  }
+}

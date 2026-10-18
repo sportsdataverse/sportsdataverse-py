@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: website_id
+  type: integer
+- description: ''
+  name: person_id
+  type: character
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: bib
+  type: character
+- description: ''
+  name: team_id
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: image_url
+  type: character
+- description: ''
+  name: date_of_birth
+  type: date
+- description: ''
+  name: age
+  type: integer
+- description: ''
+  name: nationality
+  type: character
+- description: ''
+  name: points_per_game
+  type: numeric
+- description: ''
+  name: rebounds_offensive_per_game
+  type: numeric
+- description: ''
+  name: rebounds_defensive_per_game
+  type: numeric
+kind: dataframe
+schema: atrium_player

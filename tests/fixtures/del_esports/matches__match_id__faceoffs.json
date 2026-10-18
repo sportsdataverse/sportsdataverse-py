@@ -1,0 +1,47 @@
+[
+  {
+    "id": 936176,
+    "time": 0,
+    "realtime": "2026-10-11 14:30:08",
+    "position": "BULY_CENTRAL",
+    "positionShortcut": "C",
+    "winner": {
+      "id": 550,
+      "name": "Dominik Kahun"
+    },
+    "losser": {
+      "id": 4337,
+      "name": "Curtis Valk"
+    }
+  },
+  {
+    "id": 936177,
+    "time": 14,
+    "realtime": "2026-10-11 14:30:43",
+    "position": "BULY_HOME_DEFENSE_RIGHT",
+    "positionShortcut": "HDR",
+    "winner": {
+      "id": 550,
+      "name": "Dominik Kahun"
+    },
+    "losser": {
+      "id": 4337,
+      "name": "Curtis Valk"
+    }
+  },
+  {
+    "id": 936179,
+    "time": 24,
+    "realtime": "2026-10-11 14:31:12",
+    "position": "BULY_HOME_DEFENSE_RIGHT",
+    "positionShortcut": "HDR",
+    "winner": {
+      "id": 4337,
+      "name": "Curtis Valk"
+    },
+    "losser": {
+      "id": 550,
+      "name": "Dominik Kahun"
+    }
+  }
+]
