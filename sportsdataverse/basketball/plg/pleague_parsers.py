@@ -1856,6 +1856,14 @@ _ACTION_EN = {code: en for _z, (code, en) in ACTIONS.items()}
 _ACTION_EN[UNLABELLED[0]] = UNLABELLED[1]
 
 
+def _action_en(code: Optional[str], phrase: Any) -> Optional[str]:
+    """The meaning of the row's own phrase (codes like ``ft_made`` cover many phrases); the code's as a fallback."""
+    if code is None:
+        return None
+    hit = ACTIONS.get(phrase) if isinstance(phrase, str) else None
+    return hit[1] if hit else _ACTION_EN.get(code)
+
+
 def _period_no(label: Any) -> Optional[int]:
     m = re.fullmatch(r"(Q|OT)([1-9])", label) if isinstance(label, str) else None
     return None if not m else int(m.group(2)) if m.group(1) == "Q" else 4 + int(m.group(2))
@@ -1910,7 +1918,7 @@ def parse_pleague_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Opti
                 "player_zh": _s(e.get("player_zh")),
                 "action": code,
                 "action_zh": e.get("action_zh") if isinstance(e.get("action_zh"), str) else None,
-                "action_en": _ACTION_EN.get(code or ""),
+                "action_en": _action_en(code, e.get("action_zh")),
                 "text_zh": _s(e.get("text_zh")),
                 "ft_number": _i(e.get("ft_number")),
                 "ft_awarded": _i(e.get("ft_awarded")),

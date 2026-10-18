@@ -29,7 +29,7 @@ Player career totals, one row per ssgt.
 | `g` | integer | Games played in the ssgt. |
 | `gps` | integer | Games started (0 on every row seen). |
 | `mpg` | numeric | Minutes per game, 'M.m' string. |
-| `ppg` | numeric | Points per game (a number or. |
+| `ppg` | numeric | Points per game. |
 | `drpg` | numeric | Defensive rebounds per game. |
 | `orpg` | numeric | Offensive rebounds per game. |
 | `rpg` | numeric | Rebounds per game. |
