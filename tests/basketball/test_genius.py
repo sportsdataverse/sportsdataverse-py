@@ -524,6 +524,31 @@ def test_a_schedule_block_linking_another_match_is_refused(answer):
         rt._get(SCHEDULE_URL)
 
 
+FFBB_URL = f"https://{rt.HOSTED}/FFBB/en/competition/21849/schedule"
+
+
+def test_a_to_be_determined_block_takes_the_scope_the_other_blocks_prove(answer):
+    # Block 1 of the real FFBB 21849 page is an unfilled play-off slot: no team links, no match link.
+    text = _html("hosted_FFBB_21849_first3.html")
+    assert P._page_record("schedule", text)["matches"][0]["comp_id"] is None
+    answer(200, text)
+    rec = rt._get(FFBB_URL)
+    assert [(m["match_id"], m["comp_id"], m["org"]) for m in rec["matches"]] == [
+        (1145701, 21849, "FFBB"), (909156, 21849, "FFBB"), (909159, 21849, "FFBB")
+    ]  # fmt: skip
+    with pytest.raises(AssetFetchError, match="not the competition asked for"):  # still refused under another comp
+        rt._get(f"https://{rt.HOSTED}/FFBB/en/competition/18540/schedule")
+
+
+def test_a_schedule_of_only_placeholder_blocks_is_refused(answer):
+    text = _html("hosted_FFBB_21849_first3.html")
+    first, second = text.find('<div class="match-wrap '), text.find('<div class="match-wrap ', 100)
+    answer(200, text[:second] + "</body></html>")
+    assert text[first:second].count("extfix_1145701") == 1
+    with pytest.raises(AssetFetchError, match="no block names"):
+        rt._get(FFBB_URL)
+
+
 def test_embed_envelope(answer):
     answer(200, _html("embednf_HKS_49946_first3.json"))
     rec = rt._get(f"https://{rt.HOSTED}/embednf/HKS/en/competition/49946/schedule", {"roundNumber": -1})

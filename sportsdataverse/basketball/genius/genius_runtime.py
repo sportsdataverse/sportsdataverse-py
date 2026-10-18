@@ -234,6 +234,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         rec["_request"] = {"org": org}
     else:  # schedule / embednf
         org, comp_id = ids[0], int(ids[1])
+        # A "To be determined" slot (an unfilled play-off game: FFBB 21849) has no team or match link, so it names
+        # no scope. It takes the one the page's other blocks prove; a page of nothing but such slots is refused.
+        empty = [m for m in rec["matches"] if m.get("comp_id") is None and m.get("org") is None]
+        if len(empty) == len(rec["matches"]):
+            raise AssetFetchError(f"{_rt._where(url)}: no block names a competition, so the page cannot be checked")
+        for m in empty:
+            m["comp_id"], m["org"] = comp_id, org
         for m in rec["matches"]:
             if not _same(m.get("comp_id"), comp_id):
                 raise _wrong(url, "competition", m.get("comp_id"), comp_id)

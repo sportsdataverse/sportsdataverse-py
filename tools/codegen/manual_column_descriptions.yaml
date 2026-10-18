@@ -26192,7 +26192,7 @@ genius_schedule:
     pages, the tid of the widget, the teamId of data/competition). data.json carries no team id: join on name/code'
   away_team_name: Away team full name
   comp_id: CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked
-    for
+    for. A 'To be determined' slot (no team or match link) takes the {compId} the page's other blocks prove
   date_time: Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled
   home_score: Home points; null before tip-off (typed integer only on a route whose 3 sampled rows were all played)
   home_team_code: Home team code (local script possible)
@@ -26214,7 +26214,7 @@ genius_schedule_embed:
     pages, the tid of the widget, the teamId of data/competition). data.json carries no team id: join on name/code'
   away_team_name: Away team full name
   comp_id: CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked
-    for
+    for. A 'To be determined' slot (no team or match link) takes the {compId} the page's other blocks prove
   date_time: Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled
   home_score: Home points; null before tip-off (typed integer only on a route whose 3 sampled rows were all played)
   home_team_code: Home team code (local script possible)

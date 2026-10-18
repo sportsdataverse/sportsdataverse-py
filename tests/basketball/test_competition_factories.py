@@ -460,6 +460,16 @@ def test_genius_game_of_another_competition_of_the_org_is_refused(genius_pages):
         genius_rt.esake_player_box(2902690)
 
 
+def test_lfb_2019_schedule_keeps_its_to_be_determined_play_off_slot(genius_pages, monkeypatch):
+    # The real 2018-19 LFB page (comp 21849) opens with a never-filled play-off slot: no teams, no links.
+    pages, _ = genius_pages
+    pages["/FFBB/en/competition/21849/schedule"] = (GFX / "html" / "hosted_FFBB_21849_first3.html").read_text("utf-8")
+    monkeypatch.setattr(genius_api, "genius_competitions", lambda **kw: _genius_frame("lfb"))
+    df = genius_rt.lfb_schedule(season=2019)
+    assert df["match_id"].to_list() == [1145701, 909156, 909159]
+    assert df["comp_id"].to_list() == [21849] * 3 and df["org"].to_list() == ["FFBB"] * 3
+
+
 def test_genius_unknown_match_is_no_data_before_any_shell(genius_pages):
     _, calls = genius_pages
     with pytest.raises(NoDataError):

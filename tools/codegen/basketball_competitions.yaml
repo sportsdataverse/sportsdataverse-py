@@ -22,8 +22,14 @@
 #   accepts. FFBB: /u/FFBB/2875354/ names 'LIGUE FEMININE 2' (comp 49551, 2026-27), which the anchored
 #   ^ligue feminine( de basket)?$ rightly refuses; the chooser labels it accepts ('LIGUE FEMININE' 2017-18 comp
 #   18540, 'LIGUE FEMININE DE BASKET' 2018-19 comp 21849) are the refs leagues.json chooser rows. The FFBB hosted
-#   schedule of comp 21849 did not answer as that competition (scope refusal), so no LFB-proper /u/ page was read
-#   within the budget: the positive LFB case rests on the chooser labels.
+#   schedule of comp 21849 was refused on 2026-10-17 ('answered None'): its first block is an unfilled play-off slot
+#   ('To be determined', match 1145701) with no team or match link, so it named no competition; the runtime now gives
+#   such a slot the scope the page's other blocks prove. Re-checked live on 2026-10-18 (15 requests): the FFBB chooser
+#   lists LFB for Genius years 2017 and 2018 only (18540 'LIGUE FEMININE', 21849 'LIGUE FEMININE DE BASKET'), both
+#   schedules parse (176 and 168 matches), lfb_pbp(1148688) (2019 final) passes its /u/ check, and /u/FFBB/869758/
+#   names 'LIGUE FEMININE' (comp 18540). The oldest chooser season of ESAKE (5426), FRB (11929) and FUBB (21546) has no
+#   such slot; the WBBL, SLB, BAL and NZNBL hosted schedules (oldest and current, plain and embednf) answered HTTP 500
+#   'A website error has occurred' that day, a host-side failure the scope rule cannot change.
 # atrium: website_id = the embed site config id (one site carries many competitions).
 #
 # Left out on purpose (already have a dedicated home, so a second prefix would only duplicate it):
@@ -94,7 +100,7 @@ genius:
      season_rule: "END year; Genius year + 1 (2022-23 = 2023)"}
   - {key: lfb, prefix: lfb, label: "Ligue Feminine de Basket (France, FFBB)", org: FFBB, live_org: FFBB, gender: women,
      label_include: "^ligue feminine( de basket)?$", label_exclude: "^$",
-     season_rule: "END year; Genius year + 1 (2018-19 = 2019)"}
+     season_rule: "END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and 2019"}
   - {key: lnbm, prefix: lnbm, label: "Liga Nationala de Baschet Masculin (Romania)", org: FRB, live_org: FRB, gender: men,
      label_include: "lnbm|liga nationala de baschet masculin", label_exclude: "^$",
      season_rule: "END year; Genius year + 1 (2016-17 = 2017)"}

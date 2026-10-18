@@ -183,7 +183,8 @@ REGISTRY: Dict[str, List[Dict[str, Any]]] = {   'fiba': [   {   'key': 'world_cu
                       'gender': 'women',
                       'label_include': '^ligue feminine( de basket)?$',
                       'label_exclude': '^$',
-                      'season_rule': 'END year; Genius year + 1 (2018-19 = 2019)'},
+                      'season_rule': 'END year; Genius year + 1 (2018-19 = 2019); Genius hosts only 2018 and '
+                                     '2019'},
                   {   'key': 'lnbm',
                       'prefix': 'lnbm',
                       'label': 'Liga Nationala de Baschet Masculin (Romania)',
