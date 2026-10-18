@@ -301,7 +301,7 @@ the WBB period model for each game's era bound.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
+| `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`5722355.5`) are dropped, an integral float (`5722355.0`) is read as `"5722355"`. |
 | `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |

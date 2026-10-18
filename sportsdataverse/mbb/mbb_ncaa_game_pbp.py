@@ -1265,6 +1265,10 @@ def ncaa_mbb_game_pbp(
         The 35-column play-by-play frame (zero rows when the game is not
         found).
 
+    Raises:
+        ValueError: ``game_id`` is not an integral contest id (``None``,
+            NaN, ``6470186.5``); a float such as ``6470186.0`` is accepted.
+
     Example:
         Quick start::
 
@@ -1324,7 +1328,9 @@ def ncaa_mbb_play_by_play(
     row-binds the survivors, and logs the removed ids.
 
     Args:
-        game_ids: NCAA contest ids; ``None``/NaN entries are dropped.
+        game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
+            floats (``6470186.5``) are dropped, an integral float
+            (``6470186.0``) is read as ``"6470186"``.
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
         return_as_pandas: Return a pandas DataFrame instead of polars.

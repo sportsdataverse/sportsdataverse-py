@@ -113,6 +113,10 @@ def ncaa_wbb_game_pbp(
     Returns:
         The 35-column play-by-play frame (zero rows when the game is not found).
 
+    Raises:
+        ValueError: ``game_id`` is not an integral contest id (``None``,
+            NaN, ``5722355.5``); a float such as ``5722355.0`` is accepted.
+
     Example:
         Quick start::
 
@@ -146,7 +150,9 @@ def ncaa_wbb_play_by_play(
     the WBB period model for each game's era bound.
 
     Args:
-        game_ids: NCAA contest ids; ``None``/NaN entries are dropped.
+        game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
+            floats (``5722355.5``) are dropped, an integral float
+            (``5722355.0``) is read as ``"5722355"``.
         season: Season shared by every id, as an ending year or span. When
             omitted each page's era is inferred from its first-period clock, so
             ids from both eras may be mixed.
