@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 _SECRET_PAIR = _re.compile(
     r"(?=[ACIJKPRSTacijkprst])(?:(?<![A-Za-z0-9])|(?<=%[0-9A-Fa-f]{2}))"
     r"((password|passwd|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
-    r"|api[_-]?key|key|jwt)"
+    r"|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth)"
     r"[\"']?\s*(?:[:=]|%3[AD])\s*[\"']?)"
     # A quoted value runs to its closing quote (it may hold spaces); an unquoted one
     # stops at the first separator.
@@ -35,6 +35,12 @@ _SECRET_PAIR = _re.compile(
 # ``name=value`` shapes -- never sees it, and the key would survive into every error message,
 # every ``download`` retry log line and every chained traceback.
 _PATH_KEY = _re.compile(r"(/api/v[12]/json/)[^/\s?#\"']+")
+
+# A password in a URL's userinfo (``http://user:pw@proxy:8080``, the proxy shape ``download``
+# documents and ``mbb_ncaa_fetch`` builds) and a bearer token quoted from a header
+# (``Authorization: Bearer <jwt>``, whose unquoted value ``_SECRET_PAIR`` stops at the space).
+_USERINFO = _re.compile(r"(://[^\s/?#@:\"']*:)[^\s/?#@\"']+@")
+_BEARER = _re.compile(r"(?<![A-Za-z0-9])(bearer\s+)[A-Za-z0-9._~+/=-]{8,}", _re.IGNORECASE)
 
 
 def _redact_pair(match: _re.Match[str]) -> str:
@@ -55,14 +61,21 @@ def _redact_pair(match: _re.Match[str]) -> str:
 def _redact_secrets(text: str) -> str:
     """Replace the value of every credential pair in ``text`` with ``REDACTED``.
 
-    Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``key`` / ``token`` /
-    ``access_token`` / ``password`` / ``secret`` / ``client_secret`` (and the other
-    names sportsdataverse-js redacts), case-insensitively, as ``name=value``, as
-    ``name%3Dvalue``, and as ``'name': 'value'``. Everything else -- host, path,
+    Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``appkey`` / ``access_key`` /
+    ``subscription-key`` / ``key`` / ``token`` / ``access_token`` / ``password`` /
+    ``secret`` / ``client_secret`` / ``sig`` / ``signature`` / ``auth`` /
+    ``Authorization`` (and the other names sportsdataverse-js redacts),
+    case-insensitively, as ``name=value``, as ``name%3Dvalue``, and as
+    ``'name': 'value'``; a key as a TheSportsDB path segment; the password of a
+    ``user:pw@host`` URL; and a ``Bearer <token>``. Everything else -- host, path,
     status, the other params -- is left as it was, so the line still says which
     request failed.
     """
-    return _PATH_KEY.sub(r"\1REDACTED", _SECRET_PAIR.sub(_redact_pair, text))
+    # Bearer first: ``Authorization: Bearer <jwt>`` as a pair would redact only the word "Bearer".
+    text = _BEARER.sub(r"\1REDACTED", text)
+    text = _SECRET_PAIR.sub(_redact_pair, text)
+    text = _USERINFO.sub(r"\1REDACTED@", text)
+    return _PATH_KEY.sub(r"\1REDACTED", text)
 
 
 class SportsDataverseError(Exception):

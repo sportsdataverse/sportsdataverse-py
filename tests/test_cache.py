@@ -409,3 +409,119 @@ def test_cache_hit_equals_live_body_for_credential_like_text(reset_cache):
     body = {"note": "key: 1234 token=abc", "title": "password=reset day"}
     cache.cache_set("https://x.example/text", None, body)
     assert cache.cache_get("https://x.example/text") == body  # only URL-like strings are pattern-redacted
+
+
+# ---------------------------------------------------------------------------
+# Task 4.7: a keyed URL never reaches the cache dir; an authenticated request is never cached
+# (every credential below is a fake)
+# ---------------------------------------------------------------------------
+
+_FAKE_SECRET = "FAKE-not-a-real-credential-0001"
+
+
+def _count_gets(monkeypatch, body):
+    """Stub ``requests.Session.get`` with a 200 JSON answer; returns the list of calls."""
+    import json as _json
+
+    calls = []
+
+    def fake_get(self, url, params=None, headers=None, **kwargs):
+        calls.append((url, dict(headers or {})))
+        resp = requests.Response()
+        resp.status_code = 200
+        resp._content = _json.dumps(body).encode("utf-8")
+        resp.headers["Content-Type"] = "application/json"
+        resp.url = url
+        return resp
+
+    monkeypatch.setattr("requests.Session.get", fake_get)
+    return calls
+
+
+def test_redact_keyed_thesportsdb_entry_never_reaches_disk(monkeypatch, tmp_cache_dir, reset_cache):
+    """A-N1 / A-L66: the premium key rides in the URL path; the filesystem entry holds none of it."""
+    from sportsdataverse import cache
+    from sportsdataverse.thesportsdb import thesportsdb_runtime as rt
+
+    cache.set_cache_mode("filesystem")
+    monkeypatch.setenv("THESPORTSDB_API_KEY", _FAKE_SECRET)
+    body = {"sports": [{"idSport": "102", "strSport": "Soccer"}]}
+    calls = _count_gets(monkeypatch, body)
+    url = "https://www.thesportsdb.com/api/v1/json/{key}/all_sports.php"
+    assert rt._get(url) == body
+    assert _FAKE_SECRET in calls[0][0]  # the key was sent ...
+    on_disk = "".join(p.read_text(encoding="utf-8") for p in tmp_cache_dir.glob("*.json"))
+    assert on_disk and _FAKE_SECRET not in on_disk  # ... and never stored
+    assert rt._get(url) == body and len(calls) == 1  # still a read-through hit
+
+
+_AUTH_REQUESTS = {
+    "authorization": {"headers": {"Authorization": f"Bearer {_FAKE_SECRET}"}},
+    "cookie": {"headers": {"Cookie": f"_premium_key={_FAKE_SECRET}"}},
+    "api-key-header": {"headers": {"X-Api-Key": _FAKE_SECRET}},
+}
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+@pytest.mark.parametrize("how", [*_AUTH_REQUESTS, "session-cookie"])
+def test_no_cache_authenticated_request(how, mode, monkeypatch, tmp_cache_dir, reset_cache):
+    """A-M8: the cache key holds no credential, so an authenticated body would be served to a
+    second credential; such a request is fetched every time and nothing is stored."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode(mode)
+    calls = _count_gets(monkeypatch, {"entitled": True})
+    if how == "session-cookie":
+        sess = requests.Session()
+        sess.cookies.set("sessionid", _FAKE_SECRET)
+        kwargs = {"session": sess}
+    else:
+        kwargs = dict(_AUTH_REQUESTS[how])
+    for _ in range(2):
+        assert download("https://api.example.com/premium", **kwargs).json() == {"entitled": True}
+    assert len(calls) == 2
+    assert not cache._MEMORY_CACHE and not list(tmp_cache_dir.glob("*.json"))
+
+
+def test_no_cache_authenticated_leaves_plain_requests_cached(monkeypatch, reset_cache):
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"ok": 1})
+    for _ in range(2):
+        download("https://api.example.com/public", headers={"User-Agent": "x", "Accept": "application/json"})
+    assert len(calls) == 1
+
+
+def test_no_cache_authenticated_runtimes(monkeypatch, reset_cache):
+    """The legacy cookie PFF transport and the bearer api.nfl.com getter go through download()
+    with their credential in a header: neither body is cached."""
+    from sportsdataverse import cache
+    from sportsdataverse.nfl import nfl_api_runtime, pff_runtime
+    from sportsdataverse.nfl.nfl_games import nfl_headers_gen
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"data": []})
+    for _ in range(2):
+        pff_runtime._default_transport("https://premium.pff.com/api/v1/x", {}, {}, {"_premium_key": _FAKE_SECRET})
+        nfl_api_runtime._get("https://api.nfl.com/football/v2/x", headers=nfl_headers_gen(token=_FAKE_SECRET))
+    assert len(calls) == 4
+    assert not cache._MEMORY_CACHE
+
+
+def test_no_cache_authenticated_runtimes_spell_it_cache_ttl_0(monkeypatch, reset_cache):
+    """The basketball runtimes pass ``cache_ttl=0`` (an int): with a cache mode on that reached
+    ``.total_seconds()`` and raised AttributeError before any request was made."""
+    from sportsdataverse import cache
+    from sportsdataverse.dl_utils import download
+
+    cache.set_cache_mode("memory")
+    calls = _count_gets(monkeypatch, {"ok": 1})
+    for _ in range(2):
+        assert download("https://api.example.com/x", cache_ttl=0).json() == {"ok": 1}
+    assert len(calls) == 2 and not cache._MEMORY_CACHE
+    download("https://api.example.com/y", cache_ttl=3600)  # seconds work too
+    download("https://api.example.com/y", cache_ttl=3600)
+    assert len(calls) == 3

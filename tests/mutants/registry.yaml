@@ -1273,3 +1273,124 @@
   test: tests/codegen/test_runtime_errors.py -k business_code
   expected: kill
   note: R880-5
+
+# --- Task 4.7: secrets never cached or logged (A-M8, A-L64, A-L65, A-L71) -------------------------
+- id: redact-userinfo-password
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _USERINFO.sub(r"\1REDACTED@", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k proxy_password
+  expected: kill
+  note: a proxy URL's password (http://user:pw@host) reached error messages and log lines
+
+- id: redact-extra-credential-names
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: '|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth)'
+  mutant: '|api[_-]?key|key|jwt)'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: appkey / access_key / subscription-key / sig / signature / auth / Authorization were not redacted
+
+- id: redact-bearer-token
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _BEARER.sub(r"\1REDACTED", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: an Authorization header line redacted only the word Bearer, not the jwt after it
+
+- id: redact-exception-drops-every-credential-header
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/dl_utils.py
+  snippet: 'for name in [h for h in headers if _SECRET_HEADER.search(str(h))]:'
+  mutant: 'for name in [h for h in headers if str(h).lower() in ("authorization", "proxy-authorization", "cookie")]:'
+  test: tests/test_errors.py -k exception_drops
+  expected: kill
+  note: X-Api-Key / x-api-secret / X-Authorization survived on a failed request's headers
+
+- id: download-never-caches-a-credential-header
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: '        cache_ttl = 0'
+  mutant: '        pass'
+  test: tests/test_cache.py -k no_cache_authenticated_request
+  expected: kill
+  note: the cache key holds no credential, so a second credential was served the first one's body
+
+- id: download-never-caches-a-cookie-session
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: 'if getattr(session, "auth", None) or getattr(session, "cookies", None):'
+  mutant: 'if False:'
+  test: tests/test_cache.py -k "no_cache_authenticated_request and session"
+  expected: kill
+  note: a subscription session's cookies authenticate the request (KenPom / Her Hoop Stats)
+
+- id: cache-ttl-accepts-seconds
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/cache.py
+  snippet: '        return timedelta(seconds=override)'
+  mutant: '        pass'
+  test: tests/test_cache.py -k spell_it_cache_ttl_0
+  expected: kill
+  note: cache_ttl=0 (the basketball runtimes) raised AttributeError whenever a cache mode was on
+
+- id: subscription-session-key-has-password-digest
+  group: codegen-runtime
+  finding: A-L64
+  file: sportsdataverse/_subscription_http.py
+  snippet: 'key = (site.name, resolved_email, pw_digest, repr('
+  mutant: 'key = (site.name, resolved_email, "", repr('
+  test: tests/test_subscription_http.py -k changed_password
+  expected: kill
+  note: a changed or wrong password reused the old session for 30 minutes
+
+- id: subscription-concurrent-misses-log-in-once
+  group: codegen-runtime
+  finding: A-L64
+  file: sportsdataverse/_subscription_http.py
+  snippet: '    with _login_lock:'
+  mutant: '    if True:'
+  test: tests/test_subscription_http.py -k concurrent_cache_misses
+  expected: kill
+  note: two threads that missed the cache both logged in; a second login can invalidate the first
+
+- id: sports247-jwt-mint-locked
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/sports247_runtime.py
+  snippet: '    with _jwt_lock:'
+  mutant: '    if True:'
+  test: tests/test_sports247_parsers.py -k concurrent_jwt
+  expected: kill
+  note: A-N12, unlocked module global minted by every thread that missed it
+
+- id: sports247-refresh-reuses-another-threads-token
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/sports247_runtime.py
+  snippet: 'if _jwt is None or (refresh and _jwt == stale):'
+  mutant: 'if _jwt is None or refresh:'
+  test: tests/test_sports247_parsers.py -k reminted
+  expected: kill
+  note: a 401 after another thread re-minted would mint again
+
+- id: on3-build-id-discovery-locked
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/on3_runtime.py
+  snippet: '    with _build_id_lock:'
+  mutant: '    if True:'
+  test: tests/test_on3_rdb.py -k concurrent_build_id
+  expected: kill
+  note: A-N12, every thread that found no buildId scraped a page for one

@@ -40,6 +40,7 @@ resolved path so the shim wrapper signatures stay positional.
 from __future__ import annotations
 
 import re
+import threading
 from typing import Any, Dict, Optional
 
 from sportsdataverse._codegen_runtime import _json_body, _text_body, _transport_errors, _where
@@ -55,6 +56,7 @@ _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 # Process-lifetime cache; refreshed automatically when a data-route 404 signals
 # that On3 deployed (buildId rotated).
 _build_id: Optional[str] = None
+_build_id_lock = threading.Lock()  # threads that miss together share one discovery (A-L71)
 
 
 def _headers() -> Dict[str, str]:
@@ -74,6 +76,17 @@ def _extract_build_id(text: str) -> Optional[str]:
     """
     m = _BUILD_ID_RE.search(text or "")
     return m.group(1) if m else None
+
+
+def _current_build_id(page_url: str, stale: Optional[str] = None, *, refresh: bool = False, **kwargs: Any) -> str:
+    """The cached buildId, discovered when there is none (or, with ``refresh``, when it is still
+    the ``stale`` one a data route 404'd on -- another thread may have refreshed it already)."""
+    global _build_id
+    with _build_id_lock:
+        build_id = _build_id
+        if build_id is None or (refresh and build_id == stale):
+            build_id = _build_id = _discover_build_id(page_url, **kwargs)
+        return build_id
 
 
 def _discover_build_id(page_url: str, **kwargs: Any) -> str:
@@ -162,8 +175,6 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
             connection failure outlived the retries, the page carries no buildId,
             or a 2xx data body is empty, not JSON, or not a JSON object.
     """
-    global _build_id
-
     path = url[len(_HOST) :] if url.startswith(_HOST) else url
     m = _RANKINGS_PATH_RE.match(path)
     if not m:
@@ -183,11 +194,9 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
         "year": year,
     }
 
-    if _build_id is None:
-        _build_id = _discover_build_id(page_url, headers=headers, **kwargs)
-
+    build_id = _current_build_id(page_url, headers=headers, **kwargs)
     for attempt in range(2):
-        data_url = f"{_HOST}/_next/data/{_build_id}{path}"
+        data_url = f"{_HOST}/_next/data/{build_id}{path}"
         try:
             with _transport_errors(data_url):
                 resp = download(url=data_url, params=query, headers=headers, **kwargs)
@@ -197,9 +206,9 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
             # authoritative -- the resource genuinely does not exist.
             if attempt == 1:
                 raise
-            stale = _build_id
-            _build_id = _discover_build_id(page_url, headers=headers, **kwargs)
-            if _build_id == stale:
+            stale = build_id
+            build_id = _current_build_id(page_url, stale, refresh=True, headers=headers, **kwargs)
+            if build_id == stale:
                 raise
             continue
         body = _json_body(resp, data_url)

@@ -218,11 +218,18 @@ def set_default_ttl(ttl: Optional[Union[timedelta, int]]) -> None:
 
 def _resolve_ttl(
     url: str,
-    override: Optional[timedelta] = None,
+    override: Optional[Union[timedelta, float]] = None,
     *,
     params: Optional[Dict[str, Any]] = None,
 ) -> timedelta:
-    """Apply override → default-override → tier-rule fallback chain."""
+    """Apply override → default-override → tier-rule fallback chain.
+
+    ``override`` is a ``timedelta`` or seconds: the runtimes spell "never cache" as
+    ``cache_ttl=0``, which reached ``.total_seconds()`` on an ``int`` and raised whenever a
+    cache mode was on.
+    """
+    if isinstance(override, (int, float)) and not isinstance(override, bool):
+        return timedelta(seconds=override)
     if override is not None:
         return override
     if params:
@@ -310,7 +317,7 @@ def cache_get(
     url: str,
     params: Optional[Dict[str, Any]] = None,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: Optional[Union[timedelta, float]] = None,
 ) -> Optional[Dict[str, Any]]:
     """Fetch a cached body. Returns ``None`` on miss / expiry / mode=off."""
     if _MODE == "off":
@@ -386,7 +393,7 @@ def cache_set(
     params: Optional[Dict[str, Any]],
     body: Any,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: Optional[Union[timedelta, float]] = None,
 ) -> None:
     """Persist a body to the cache. No-op when mode=off or TTL=LIVE."""
     if _MODE == "off":

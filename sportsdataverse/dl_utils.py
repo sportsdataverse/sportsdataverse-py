@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlsplit
 from itertools import chain, starmap
+from typing import Any
 
 import numpy as np
 import polars as pl
@@ -44,8 +45,27 @@ _URLLIB3_LOGGERS = ("urllib3.connectionpool", "urllib3.connection", "urllib3.uti
 for _urllib3_logger in _URLLIB3_LOGGERS:
     logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
 
-# Request headers that carry a credential; dropped from an exception's request.
-_SECRET_HEADERS = frozenset({"authorization", "proxy-authorization", "cookie"})
+# A request header that carries a credential (``Authorization``, ``Cookie``, ``X-Api-Key``,
+# ``x-api-secret``, ``X-Authorization``, ...): dropped from an exception's request, and a
+# request that sends one is never cached. ponytail: name-based; a credential under an unrelated
+# header name would still be cached -- add the name here.
+_SECRET_HEADER = re.compile(r"auth|cookie|key|secret|token|password", re.IGNORECASE)
+
+
+def _carries_credential(headers: Any, session: Any) -> bool:
+    """True when the request authenticates outside its URL: a credential header, or a caller's
+    own session holding cookies, ``auth`` or a credential header.
+
+    The cache key is the URL and params only, so such a body would be served to a different
+    credential in the same process or cache dir (A-M8), and keying on the credential would store
+    it. A key in the URL is part of the key already (and scrubbed from the entry).
+    """
+    names = [str(h) for h in (headers or {})]
+    if session is not None:  # the caller's own; the shared session holds no credential of ours
+        if getattr(session, "auth", None) or getattr(session, "cookies", None):
+            return True
+        names += [str(h) for h in (getattr(session, "headers", None) or {})]
+    return any(_SECRET_HEADER.search(n) for n in names)
 
 
 def _redact_exception(exc: BaseException) -> None:
@@ -88,7 +108,7 @@ def _redact_exception(exc: BaseException) -> None:
         headers = getattr(request, "headers", None)
         if headers is not None:
             try:
-                for name in [h for h in headers if str(h).lower() in _SECRET_HEADERS]:
+                for name in [h for h in headers if _SECRET_HEADER.search(str(h))]:
                     del headers[name]
             except (AttributeError, TypeError):
                 pass
@@ -298,6 +318,12 @@ def download(
             when you need isolation (separate cookies / auth / proxy lifecycle).
         logger: Optional ``logging.Logger``. Defaults to the package
             logger ``"sdv.dl_utils"``.
+        cache_ttl: Response-cache lifetime (``timedelta`` or seconds; ``0`` never
+            caches); ``None`` uses the URL's tier. A request that authenticates
+            outside its URL -- a credential header (``Authorization``, ``Cookie``,
+            ``X-Api-Key``, ...) or a ``session`` holding cookies or ``auth`` -- is never
+            cached, whatever this says: the cache key holds no credential, so the body
+            would be served to another one.
         retry_statuses: Iterable of HTTP status codes to retry (with the same
             ``Retry-After``-aware backoff as connection failures). Defaults to
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
@@ -385,6 +411,10 @@ def download(
         # is accepted; it takes nothing away.
         num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES)
 
+    # An authenticated request is never cached (A-M8): checked before the shared session
+    # stands in for a missing one.
+    if _carries_credential(headers, session):
+        cache_ttl = 0
     session, params, logger = init_request_settings(params, session, logger)
 
     # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).
