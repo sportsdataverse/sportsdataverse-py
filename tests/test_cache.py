@@ -389,3 +389,22 @@ def test_cache_set_clean_body_unchanged(reset_cache):
     assert cache.cache_get("https://x.example/clean", {"dates": 2025}) == body
     (entry,) = cache._MEMORY_CACHE.values()
     assert entry["url"] == "https://x.example/clean"
+
+
+def test_cache_set_scrubs_a_key_sent_as_a_param(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    params = {"apiKey": _KEY, "regions": "us"}
+    cache.cache_set("https://x.example/odds", params, {"echo": {"apiKey": _KEY}, "regions": "us"})
+    assert _KEY not in repr(cache._MEMORY_CACHE)
+    assert cache.cache_get("https://x.example/odds", params) == {"echo": {"apiKey": "REDACTED"}, "regions": "us"}
+
+
+def test_cache_hit_equals_live_body_for_credential_like_text(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    body = {"note": "key: 1234 token=abc", "title": "password=reset day"}
+    cache.cache_set("https://x.example/text", None, body)
+    assert cache.cache_get("https://x.example/text") == body  # only URL-like strings are pattern-redacted

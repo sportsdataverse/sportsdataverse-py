@@ -349,18 +349,18 @@ def cache_get(
 def _scrub_body(node: Any, secrets: "list[str]") -> Any:
     """Copy of ``node`` with credentials removed (the live response is left untouched).
 
-    Credentials are removed two ways, neither of which touches ordinary data: any value
-    that rode in on the request URL is replaced wherever it appears in a string leaf, and
-    every string leaf is passed through ``_redact_secrets`` (echoed ``?apiKey=...`` links).
-    Dict keys and non-string leaves are never rewritten, so a field legitimately named
-    ``key`` or ``token`` keeps its value; a body without a credential comes back equal.
+    Every string leaf has each collected credential value (:func:`_request_secrets`) replaced
+    exactly; only URL-like leaves (``http...``) also go through ``_redact_secrets``, for echoed
+    ``?apiKey=...`` links. Ordinary text (``"key: 1234"``) is never pattern-matched, dict keys
+    and non-string leaves are never rewritten, so a cache hit equals a live call for any body
+    that does not carry the request's own credential.
     """
     from sportsdataverse.errors import _redact_secrets
 
     if isinstance(node, str):
         for sec in secrets:
             node = node.replace(sec, "REDACTED")
-        return _redact_secrets(node)
+        return _redact_secrets(node) if node.lstrip().lower().startswith("http") else node
     if isinstance(node, dict):
         return {k: _scrub_body(v, secrets) for k, v in node.items()}
     if isinstance(node, list):
@@ -368,13 +368,17 @@ def _scrub_body(node: Any, secrets: "list[str]") -> Any:
     return node
 
 
-def _url_secrets(url: str) -> "list[str]":
-    """The credential values carried by ``url`` (query pairs and key-as-path-segment)."""
+def _request_secrets(url: str, params: Optional[Dict[str, Any]] = None) -> "list[str]":
+    """The credential values a request carried: URL query pairs, key-as-path-segment, and
+    ``params`` entries whose NAME is a credential name (``apiKey``, ``token``, ...)."""
     from sportsdataverse.errors import _PATH_KEY, _SECRET_PAIR
 
     found = [m.group(3).rstrip(",;)]}") for m in _SECRET_PAIR.finditer(url)]
     found += [m.group(0)[len(m.group(1)) :] for m in _PATH_KEY.finditer(url)]
-    return [v for v in found if len(v) >= 8]  # a short value would shred ordinary text
+    for k, v in (params or {}).items():
+        if isinstance(v, (str, int)) and not isinstance(v, bool) and _SECRET_PAIR.fullmatch(f"{k}={v}"):
+            found.append(str(v))
+    return [v for v in dict.fromkeys(found) if len(v) >= 8]  # a short value would shred ordinary text
 
 
 def cache_set(
@@ -399,7 +403,7 @@ def cache_set(
     entry = {
         "saved_at": datetime.now(timezone.utc).isoformat(),
         "url": _redact_secrets(url),
-        "body": _scrub_body(body, _url_secrets(url)),
+        "body": _scrub_body(body, _request_secrets(url, params)),
     }
     if _MODE == "memory":
         _MEMORY_CACHE[key] = entry
