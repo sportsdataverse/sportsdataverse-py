@@ -211,7 +211,8 @@ def _flat_rows(
     """Flattened, renamed rows of ``raw``; ``lists_only`` refuses an object (a list route's malformed body)."""
     if lists_only and not isinstance(raw, list):
         return []
-    return [_rename(_flatten(r), renames or {}) for r in _rows(_scrub(raw))]
+    flat = (_rename(_flatten(r), renames or {}) for r in _rows(_scrub(raw)))
+    return [r for r in flat if any(v is not None for v in r.values())]  # {"data": null} -> no row
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +350,11 @@ def parse_nationalleague(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
             from sportsdataverse.hockey.nl import parse_nationalleague
             parse_nationalleague([{"gameId": "20261105000325", "arena": "zondacrypto-Arena"}])
+
+    See Also:
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _frame(_flat_rows(raw), {}, return_as_pandas)
 
@@ -371,6 +377,14 @@ def parse_nationalleague_games(raw: Any, *, return_as_pandas: bool = False) -> F
 
             from sportsdataverse.hockey.nl import nl_schedule
             nl_schedule(season=2026)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_schedule` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_current_games` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_team_schedule` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _frame(_flat_rows(raw, lists_only=True), _SCHEMAS["games"], return_as_pandas)
 
@@ -397,6 +411,13 @@ def parse_nationalleague_bracket(raw: Any, *, return_as_pandas: bool = False) ->
 
             from sportsdataverse.hockey.nl import nl_playoffs
             nl_playoffs(season=2026)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_playoffs` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_playouts` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows: List[Dict[str, Any]] = []
     for rnd in _rows(_scrub(raw)) if isinstance(raw, list) else []:
@@ -433,6 +454,15 @@ def parse_nationalleague_player_stats(raw: Any, *, return_as_pandas: bool = Fals
 
             from sportsdataverse.hockey.nl import nl_player_stats
             nl_player_stats(season=2026, phase=4940)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_top_scorers` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_team_player_stats` - the wrapper whose body this parses.
+        * :func:`sportsdataverse.hockey.nl.nl_player_season` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _frame(_flat_rows(raw, _SEASON_RENAMES), _SCHEMAS["player_stats"], return_as_pandas)
 
@@ -458,6 +488,12 @@ def parse_nationalleague_standings(raw: Any, *, return_as_pandas: bool = False) 
 
             from sportsdataverse.hockey.nl import nl_standings
             nl_standings(season=2026, phase=4940)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_standings` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _frame(_flat_rows(raw, _SEASON_RENAMES, lists_only=True), _SCHEMAS["standings"], return_as_pandas)
 
@@ -482,6 +518,12 @@ def parse_nationalleague_team_info(raw: Any, *, return_as_pandas: bool = False) 
 
             from sportsdataverse.hockey.nl import nl_team_info
             nl_team_info(team_id=101144)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_team_info` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     renames = {"id": "cms_node_id", "fields_team_id": "team_id"}
     return _frame(_flat_rows(raw, renames), _SCHEMAS["team_info"], return_as_pandas)
@@ -547,6 +589,12 @@ def parse_nationalleague_game_overview(raw: Any, *, return_as_pandas: bool = Fal
 
             from sportsdataverse.hockey.nl import nl_game_overview
             nl_game_overview(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_game_overview` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def build(game: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -594,6 +642,12 @@ def parse_nationalleague_pbp(raw: Any, *, return_as_pandas: bool = False) -> Fra
 
             from sportsdataverse.hockey.nl import nl_pbp
             nl_pbp(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_pbp` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def build(game: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -638,6 +692,12 @@ def parse_nationalleague_lineups(raw: Any, *, return_as_pandas: bool = False) ->
 
             from sportsdataverse.hockey.nl import nl_lineups
             nl_lineups(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_lineups` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def build(game: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -676,6 +736,12 @@ def parse_nationalleague_player_box(raw: Any, *, return_as_pandas: bool = False)
 
             from sportsdataverse.hockey.nl import nl_player_box
             nl_player_box(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_player_box` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def build(game: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -714,6 +780,12 @@ def parse_nationalleague_team_stats(raw: Any, *, return_as_pandas: bool = False)
 
             from sportsdataverse.hockey.nl import nl_team_stats
             nl_team_stats(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_team_stats` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def build(game: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -757,6 +829,12 @@ def parse_nationalleague_shots(raw: Any, *, return_as_pandas: bool = False) -> F
 
             from sportsdataverse.hockey.nl import nl_shots
             nl_shots(game_id=20261105000325)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.nl.nl_shots` - the wrapper whose body this parses.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     renames = {"pid": "player_id", "sec": "period", "sit": "strength", "type": "shot_type"}
 

@@ -319,6 +319,7 @@ def main() -> None:
         "api": "on3",
         "host": HOST,
         "name_pattern": "on3_{short}",
+        "no_r_fallback": True,  # aggregate tables: no R-package column descriptions
         "module": "on3",
         "parser_module": "cfb.on3_parsers",
         "getter_module": "sportsdataverse.cfb.on3_runtime",

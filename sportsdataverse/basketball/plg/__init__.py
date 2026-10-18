@@ -31,6 +31,8 @@ from sportsdataverse.basketball.plg.pleague_preciser import *  # noqa: F401,F403
 from sportsdataverse.basketball.plg.pleague_preciser_parsers import *  # noqa: F401,F403
 from sportsdataverse.basketball.plg.pleague_runtime import season_slug
 
+from sportsdataverse.basketball.basketball_crosswalk import pleague_team_crosswalk
+
 # Explicit, so the top-level ``from sportsdataverse.basketball.plg import *`` exports only these.
 __all__ = [
     *_site_api.__all__,
@@ -38,4 +40,5 @@ __all__ = [
     *_vendor_api.__all__,
     *_vendor_parsers.__all__,
     "season_slug",
+    "pleague_team_crosswalk",
 ]

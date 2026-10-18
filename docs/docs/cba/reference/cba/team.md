@@ -108,7 +108,7 @@ A team's per-game averages or totals, one row per season of the team.
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/teams/basic-data`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/teams/basic-data?targetId=29128&matchTypeId=1&statisticalDimension=1&selfOrOther=1](https://data-server.cbaleague.com/api/teams/basic-data?targetId=29128&matchTypeId=1&statisticalDimension=1&selfOrOther=1)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/basic-data' -H 'Content-Type: application/json' -d '{"targetId": 29128, "matchTypeId": 1, "statisticalDimension": 1, "selfOrOther": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -170,7 +170,7 @@ A team's four-factors table, one row per season of the team.
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/teams/four-elements`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/teams/four-elements?targetId=29128&matchTypeId=1](https://data-server.cbaleague.com/api/teams/four-elements?targetId=29128&matchTypeId=1)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/four-elements' -H 'Content-Type: application/json' -d '{"targetId": 29128, "matchTypeId": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -272,7 +272,7 @@ A team's overview table (record, pace, per-100 ratings), one row per season of t
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list?teamId=29128&matchTypeId=1&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list?teamId=29128&matchTypeId=1&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/team-entirety-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"teamId": 29128, "matchTypeId": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -323,7 +323,7 @@ A team's shot-zone profile, one row per season of the team (zone splits from 201
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list?teamId=29128&matchTypeId=1&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list?teamId=29128&matchTypeId=1&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/team-shoot-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"teamId": 29128, "matchTypeId": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
