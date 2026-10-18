@@ -1,6 +1,6 @@
 {
-  "commit": "2b13d53c15 (devel-test-harness after the 10-18 sync of program-setup 85710b65f4, main 3cda70429a); CI run 39106149074",
-  "measured_at": "2026-10-18T07:18:35+00:00",
+  "commit": "7b788f4379 (devel-codegen-runtime after #880, PR #894 head); CI run 39161702521",
+  "measured_at": "2026-10-18T20:32:34+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 848,
@@ -8,7 +8,7 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 322717,
+      "value": 322975,
       "better": "info",
       "label": "Hand-written lines"
     },
@@ -38,7 +38,7 @@
       "label": "Files in the mypy strict list"
     },
     "lint_outdated_syntax": {
-      "value": 10854,
+      "value": 10851,
       "better": "lower",
       "label": "Outdated syntax a newer Python spells shorter (ruff UP)"
     },
@@ -48,7 +48,7 @@
       "label": "Loops and calls that should be comprehensions (ruff C4)"
     },
     "lint_simplifiable_code": {
-      "value": 93,
+      "value": 92,
       "better": "lower",
       "label": "Code with a simpler equivalent (ruff SIM)"
     },
@@ -113,7 +113,7 @@
       "label": "Functions with over 50 statements (ruff PLR0915)"
     },
     "coverage_handwritten_percent": {
-      "value": 89.27,
+      "value": 89.28,
       "better": "higher",
       "label": "Line coverage of hand-written code (%)"
     },
@@ -148,7 +148,7 @@
       "label": "Line coverage of sportsdataverse/nfl/nfl_stats.py (%)"
     },
     "coverage__common_espn_parsers_percent": {
-      "value": 79.84,
+      "value": 81.02,
       "better": "higher",
       "label": "Line coverage of sportsdataverse/_common_espn_parsers.py (%)"
     },
@@ -200,7 +200,7 @@
       "2924 lines  sportsdataverse/nfl/nfl_loaders.py",
       "2913 lines  sportsdataverse/basketball/acb/acb_parsers.py",
       "2811 lines  sportsdataverse/nfl/nfl_stats.py",
-      "2668 lines  sportsdataverse/_common_espn_parsers.py",
+      "2779 lines  sportsdataverse/_common_espn_parsers.py",
       "2339 lines  sportsdataverse/mbb/mbb_rapm.py",
       "2271 lines  sportsdataverse/basketball/plg/pleague_parsers.py",
       "2008 lines  sportsdataverse/hockey/vhl/vhl_parsers.py",
@@ -316,8 +316,8 @@
       },
       {
         "file": "sportsdataverse/_common_espn_parsers.py",
-        "total": 114,
-        "UP": 89,
+        "total": 111,
+        "UP": 86,
         "B": 2,
         "RUF": 12,
         "F841": 1,
