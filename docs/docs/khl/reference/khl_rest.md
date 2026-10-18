@@ -818,10 +818,10 @@ League player stats of a tournament, one page (goalies: every page) (one row per
 | `sop` | integer | Games that went to a shootout (goalies only) |
 | `ga` | integer | Goals against (goalies only) |
 | `sv` | integer | Saves, shots on goal stopped (goalies only) |
-| `sv_pct` | numeric | Save percentage (goalies only) |
-| `gaa` | numeric | Goals-against average, 60 min x goals against / time on ice (goalies only) |
+| `sv_pct` | numeric | Save percentage on a 0-100 scale, saves / shots on goal x 100 (92.2 = .922; goalies only) |
+| `gaa` | numeric | Goals-against average, goals against per 60 minutes of ice time (goalies only) |
 | `so` | integer | Shutouts, games without a goal against (goalies only) |
-| `toi` | character | Total time on the ice (goalies only; text, null when none) |
+| `toi` | character | Total time on the ice over the stage, text "minutes:seconds" (e.g. "3521:21"; goalies only, null when none) |
 
 **`return_parsed=False`** — the raw khl.ru envelope `Dict` (`{status, data, errors}`).
 
