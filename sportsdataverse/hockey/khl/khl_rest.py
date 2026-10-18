@@ -467,7 +467,9 @@ def khl_schedule(
     """Season schedule and results of a tournament, one row per game (All-Star games dropped).
 
     Endpoint: ``POST https://www.khl.ru/rest/calendar/list/``
-    Example URL: https://www.khl.ru/rest/calendar/list/?season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/calendar/list/
+    Example body: season=2026&stage=regular
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -505,15 +507,15 @@ def khl_schedule(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/calendar/list/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -533,7 +535,9 @@ def khl_roster(
     """Club roster (current season only): one row per player.
 
     Endpoint: ``POST https://www.khl.ru/rest/clubs/team/``
-    Example URL: https://www.khl.ru/rest/clubs/team/?page=team&values%5Bclub_id%5D=7
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/clubs/team/
+    Example body: page=team&values[club_id]=7
 
     Args:
         club_id: Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not a team-season id.
@@ -567,14 +571,14 @@ def khl_roster(
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "page": "team",
         "values[club_id]": club_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/clubs/team/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -596,7 +600,9 @@ def khl_stat_filters(
     """Stats filter options: seasons, tournaments, position groups and clubs (one row per option).
 
     Endpoint: ``POST https://www.khl.ru/rest/filters/statplayers/``
-    Example URL: https://www.khl.ru/rest/filters/statplayers/?season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/filters/statplayers/
+    Example body: season=2026&stage=regular
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -634,15 +640,15 @@ def khl_stat_filters(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/filters/statplayers/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -665,7 +671,9 @@ def khl_game_header(
     """Game header: status, teams, score, arena (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/header/``
-    Example URL: https://www.khl.ru/rest/game/header/?page=resume&values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/header/
+    Example body: page=resume&values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -704,17 +712,17 @@ def khl_game_header(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "page": "resume",
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/header/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -737,7 +745,9 @@ def khl_game_protocol(
     """Game protocol: one row per goal with scorer, assistants, strength and the jerseys on the ice.
 
     Endpoint: ``POST https://www.khl.ru/rest/game/protocol/``
-    Example URL: https://www.khl.ru/rest/game/protocol/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/protocol/
+    Example body: values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -776,16 +786,16 @@ def khl_game_protocol(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/protocol/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -808,7 +818,9 @@ def khl_game_info(
     """Game info: teams, score, arena, officials, starting goalies (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/text/
+    Example body: values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -847,16 +859,16 @@ def khl_game_info(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -879,7 +891,9 @@ def khl_player_box(
     """Skater box score by period: one row per period, side and jersey, with the player id.
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/text/
+    Example body: values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -918,16 +932,16 @@ def khl_player_box(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -950,7 +964,9 @@ def khl_pbp(
     """Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and goals (2008-09 on).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/text/
+    Example body: values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -989,16 +1005,16 @@ def khl_pbp(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1021,7 +1037,9 @@ def khl_shots(
     """Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 on).
 
     Endpoint: ``POST https://www.khl.ru/rest/game/text/``
-    Example URL: https://www.khl.ru/rest/game/text/?values%5Bgameid%5D=898236&season=2026&stage=regular
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/game/text/
+    Example body: values[gameid]=898236&season=2026&stage=regular
 
     Args:
         game_id: Required. khl.ru game id (the schedule's game_id; equals webcaster event khl_id).
@@ -1060,16 +1078,16 @@ def khl_shots(
     if stage not in ("regular", "playoff"):
         raise ValueError(f"stage must be one of ('regular', 'playoff'); got {stage!r}")
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[gameid]": game_id,
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/game/text/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1089,7 +1107,9 @@ def khl_player_profile(
     """Player profile: bio, contract, club (one row).
 
     Endpoint: ``POST https://www.khl.ru/rest/players/profile/``
-    Example URL: https://www.khl.ru/rest/players/profile/?values%5Bid%5D=41928
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/players/profile/
+    Example body: values[id]=41928
 
     Args:
         player_id: Required. khl.ru player id (the box score / roster player_id).
@@ -1123,13 +1143,13 @@ def khl_player_profile(
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[id]": player_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/players/profile/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1151,7 +1171,9 @@ def khl_player_career(
     """Player career: one row per season tournament.
 
     Endpoint: ``POST https://www.khl.ru/rest/players/stats/``
-    Example URL: https://www.khl.ru/rest/players/stats/?values%5Bid%5D=41928
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/players/stats/
+    Example body: values[id]=41928
 
     Args:
         player_id: Required. khl.ru player id (the box score / roster player_id).
@@ -1185,13 +1207,13 @@ def khl_player_career(
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[id]": player_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/players/stats/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1212,7 +1234,9 @@ def khl_playoff_bracket(
     """Playoff bracket: one row per team per series.
 
     Endpoint: ``POST https://www.khl.ru/rest/standings/playoff/``
-    Example URL: https://www.khl.ru/rest/standings/playoff/?stage=playoff&values%5Btype%5D=playoff&season=2026
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/standings/playoff/
+    Example body: stage=playoff&values[type]=playoff&season=2026
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). Required unless tournament_id is given.
@@ -1247,16 +1271,16 @@ def khl_playoff_bracket(
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "stage": "playoff",
         "values[type]": "playoff",
         "season": season,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/standings/playoff/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1279,7 +1303,9 @@ def khl_standings(
     """Regular-season standings: one row per team per table (league, conferences, divisions).
 
     Endpoint: ``POST https://www.khl.ru/rest/standings/regular/``
-    Example URL: https://www.khl.ru/rest/standings/regular/?values%5Btype%5D=regular&season=2026
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/standings/regular/
+    Example body: values[type]=regular&season=2026
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -1314,15 +1340,15 @@ def khl_standings(
         * Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any published data release, hosted mirror or redistribution needs owner (sanctions / legal) sign-off first.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "values[type]": "regular",
         "season": season,
         "values[tournament]": tournament_id,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/standings/regular/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )
@@ -1348,7 +1374,9 @@ def khl_player_stats(
     """League player stats of a tournament, one page (one row per player).
 
     Endpoint: ``POST https://www.khl.ru/rest/stat/players/``
-    Example URL: https://www.khl.ru/rest/stat/players/?season=2026&stage=regular&values%5Bamplua_full%5D=forwards&nav%5Bpage%5D=1&nav%5Bcount%5D=20
+    Body: form-encoded (application/x-www-form-urlencoded)
+    Example request: POST https://www.khl.ru/rest/stat/players/
+    Example body: season=2026&stage=regular&values[amplua_full]=forwards&nav[page]=1&nav[count]=20
 
     Args:
         season: Season by its END year (2026 = 2025-26), mapped to the KHL tournament id (tnId) through the webcaster season table (khl_webcaster_stages). None = the site's current season.
@@ -1394,7 +1422,7 @@ def khl_player_stats(
             f"position must be one of ('goalies', 'defenses', 'forwards', 'skaters', 'all'); got {position!r}"
         )
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+    _body = {
         "season": season,
         "stage": stage,
         "values[tournament]": tournament_id,
@@ -1403,10 +1431,10 @@ def khl_player_stats(
         "nav[page]": page,
         "nav[count]": per_page,
     }
-    _params.update(_caller_params)
+    _body.update(_caller_params)
     raw = _get(
         "https://www.khl.ru/rest/stat/players/",
-        params=_params,
+        body=_body,
         headers=headers,
         **kwargs,
     )

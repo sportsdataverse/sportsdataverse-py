@@ -237,3 +237,84 @@ def test_unknown_method_is_a_spec_error(tmp_path):
     )
     with pytest.raises(spec.SpecError, match="method 'put'"):
         spec.load_flat_api(y, {})
+
+
+_BODY_YAML = (
+    "api: b\nhost: 'https://b.test'\nname_pattern: 'b_{short}'\nmodule: b\nruntime_imports: [_get]\n"
+    "endpoints:\n"
+    "  - short: games\n    summary: 'Games.'\n    path: '/rest/games/'\n    method: post\n    format: form\n"
+    "    fixed_params: { page: team }\n    example_args: { season: 2026 }\n"
+    "    body:\n"
+    "      - { name: season, key: 'values[season]', type: int }\n"
+    "      - { name: team, key: team, type: str, default: all }\n"
+    "    extra_params: [ { name: lang, query_key: lang, type: str, default: en } ]\n"
+    "  - short: info\n    summary: 'Info.'\n    path: '/info'\n    example_args: { id: 3 }\n"
+    "    extra_params: [ { name: id, query_key: id, type: int } ]\n"
+)
+
+
+def test_body_route_plumbs_body_and_query_separately(tmp_path):
+    src, mod = _render_and_load(tmp_path, _BODY_YAML, "_gen_body")
+    calls = []
+    mod._get = lambda url, **kw: calls.append((url, kw)) or {}
+    mod.b_games(season=2026, params={"extra": 1})
+    mod.b_info(id=3)
+    (url, kw), (iurl, ikw) = calls
+    assert url == "https://b.test/rest/games/"
+    assert kw == {"params": {"lang": "en"}, "body": {"page": "team", "values[season]": 2026, "team": "all", "extra": 1}}
+    assert "body" not in ikw and ikw["params"] == {"id": 3}  # a GET route is untouched
+    games = src.split("def b_info")[0]
+    assert "Body: form-encoded (application/x-www-form-urlencoded)" in games
+    # the example is a POST: query string in the URL, the body shown apart (not GET-shaped)
+    assert "Example request: POST https://b.test/rest/games/?lang=en" in games
+    assert "Example body: page=team&values[season]=2026&team=all" in games
+    assert "season: values[season] body field." in games and "lang: lang query parameter." in games
+
+
+def test_body_route_without_query_params_passes_only_body(tmp_path):
+    _, mod = _render_and_load(
+        tmp_path,
+        "api: c\nhost: 'https://c.test'\nname_pattern: 'c_{short}'\nmodule: c\nruntime_imports: [_get]\n"
+        "endpoints:\n  - short: g\n    summary: 'G.'\n    path: '/g'\n    method: post\n    body: []\n",
+        "_gen_body_empty",
+    )
+    calls = []
+    mod._get = lambda url, **kw: calls.append(kw) or {}
+    mod.c_g()
+    assert calls == [{"body": {}}]
+
+
+def test_body_example_formats():
+    ep = spec.Endpoint(
+        short="s",
+        path="/s",
+        method="post",
+        body_declared=True,
+        query_params=[spec.Param("a", "a", in_body=True), spec.Param("b", "b", in_body=True)],
+        example_args={"a": 1, "b": "x y"},
+    )
+    url, body = generate._example_request("https://h.test", ep, "", "")
+    assert (url, body) == ("https://h.test/s", {"a": 1, "b": "x y"})
+    assert generate._render_example_body(body, "json") == '{"a": 1, "b": "x y"}'
+    assert generate._render_example_body(body, "form") == "a=1&b=x+y"
+    assert generate._render_example_body(body, "text") == "1\nx y"
+
+
+@pytest.mark.parametrize(
+    ("extra", "match"),
+    [
+        ("method: get\n    body: []", "declares body"),
+        ("method: post\n    body: []\n    format: yaml", "format 'yaml'"),
+        ("method: post\n    format: json", "needs body"),
+        ("method: post\n    body: [ { name: a } ]\n    extra_params: [ { name: a } ]", "repeats a parameter"),
+    ],
+)
+def test_body_and_format_spec_errors(tmp_path, extra, match):
+    y = tmp_path / "e.yaml"
+    y.write_text(
+        "api: e\nhost: 'https://e.test'\nname_pattern: 'e_{short}'\nmodule: e\n"
+        f"endpoints:\n  - short: a\n    path: '/a'\n    {extra}\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match=match):
+        spec.load_flat_api(y, {})

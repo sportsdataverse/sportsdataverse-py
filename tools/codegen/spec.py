@@ -31,6 +31,15 @@ class Param:
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
+    # A request BODY field (``body:`` in the endpoint YAML) rather than a query parameter. Body
+    # fields ride in ``query_params`` (signature, choices, docs rows are shared) and the template
+    # splits them out by this flag.
+    in_body: bool = False
+
+
+#: Wire encodings of a POST body (``format:``): ``json`` (default), ``form``
+#: (``application/x-www-form-urlencoded``) or ``text`` (one raw text payload).
+BODY_FORMATS = ("json", "form", "text")
 
 
 @dataclass(frozen=True)
@@ -74,6 +83,22 @@ class Endpoint:
     # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
     # the docstring say ``POST`` and call the arguments body fields.
     method: str = "get"
+    # ``body:`` was declared (even as ``[]``): this POST route's body fields are in ``query_params``
+    # flagged ``in_body``, the wrapper builds a ``_body`` and hands it to the getter as ``body=``, and
+    # the docs show a POST request with a body instead of a GET-shaped URL. A ``method: post`` route
+    # WITHOUT ``body:`` keeps the legacy docs-only meaning (cba mixes query and body fields).
+    body_declared: bool = False
+    # How the body is encoded on the wire (see :data:`BODY_FORMATS`); only with ``body:``.
+    format: str = "json"
+
+    @property
+    def body_params(self) -> List[Param]:
+        return [p for p in self.query_params if p.in_body]
+
+    @property
+    def url_params(self) -> List[Param]:
+        """The query-string params: every query param that is not a body field."""
+        return [p for p in self.query_params if not p.in_body]
 
 
 @dataclass(frozen=True)
@@ -278,6 +303,22 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 kw_only=bool(extra.get("kw_only", False)),
             ),
         )
+    body_declared = e.get("body") is not None
+    for b in e.get("body") or []:
+        qps.append(
+            Param(
+                python_name=b["name"],
+                api=b.get("key", b["name"]),
+                type=b.get("type", "str"),
+                required=b.get("required", False),
+                default=b.get("default"),
+                transform=b.get("transform"),
+                description=b.get("description", ""),
+                choices=[str(c) for c in b.get("choices") or []],
+                kw_only=bool(b.get("kw_only", False)),
+                in_body=True,
+            ),
+        )
     pps = []
     for pp in e.get("path_params", []):
         pps.append(
@@ -314,9 +355,20 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         method=str(e.get("method") or "get").lower(),
+        body_declared=body_declared,
+        format=str(e.get("format") or "json").lower(),
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
+    if body_declared and ep.method != "post":
+        raise SpecError(f"{path}: endpoint {ep.short!r} declares body: but its method is {ep.method!r}, not post")
+    if ep.format not in BODY_FORMATS or (e.get("format") is not None and not body_declared):
+        raise SpecError(
+            f"{path}: endpoint {ep.short!r} format {e.get('format')!r} must be one of {BODY_FORMATS} and needs body:"
+        )
+    names = [p.python_name for p in (*ep.query_params, *ep.path_params)]
+    if len(names) != len(set(names)):
+        raise SpecError(f"{path}: endpoint {ep.short!r} repeats a parameter name: {sorted(names)}")
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")

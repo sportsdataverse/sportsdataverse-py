@@ -212,7 +212,7 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/play-by-play`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/play-by-play?statNetGameNumber=23401&homeStatNetId=AIK&awayStatNetId=MODO&scheduledDateTime=2026-09-18T17%3A00%3A00.000Z](https://hockeyallsvenskan.se/api/play-by-play?statNetGameNumber=23401&homeStatNetId=AIK&awayStatNetId=MODO&scheduledDateTime=2026-09-18T17%3A00%3A00.000Z)
+**Example request:** `POST https://hockeyallsvenskan.se/api/play-by-play`, body (JSON): `{"statNetGameNumber": 23401, "homeStatNetId": "AIK", "awayStatNetId": "MODO", "scheduledDateTime": "2026-09-18T17:00:00.000Z"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -270,7 +270,7 @@ Every game of a season, played or scheduled (is_played): date, display team code
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-time-games-stats`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-time-games-stats?season=2026&phase=HA&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all](https://hockeyallsvenskan.se/api/all-time-games-stats?season=2026&phase=HA&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-time-games-stats`, body (JSON): `{"season": 2026, "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -332,7 +332,7 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/league-standings-all-time`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/league-standings-all-time?season=2026&phase=HA&location=all](https://hockeyallsvenskan.se/api/league-standings-all-time?season=2026&phase=HA&location=all)
+**Example request:** `POST https://hockeyallsvenskan.se/api/league-standings-all-time`, body (JSON): `{"season": 2026, "phase": "HA", "location": "all"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -381,7 +381,7 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-time-skaters-stats`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-time-skaters-stats?season=2026&phase=HA&categories=summary&position=all&ages=all&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all](https://hockeyallsvenskan.se/api/all-time-skaters-stats?season=2026&phase=HA&categories=summary&position=all&ages=all&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-time-skaters-stats`, body (JSON): `{"season": 2026, "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -439,7 +439,7 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats?season=2026&phase=HA&categories=summary&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all](https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats?season=2026&phase=HA&categories=summary&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats`, body (JSON): `{"season": 2026, "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -492,7 +492,7 @@ Team stats of a season, one category per call. W / L are totals including overti
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-time-teams-stats`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-time-teams-stats?season=2026&phase=HA&categories=results&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all](https://hockeyallsvenskan.se/api/all-time-teams-stats?season=2026&phase=HA&categories=results&team_side=all&team=all&against_team=all&all_results=all&game_status=all&decided_in=all)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-time-teams-stats`, body (JSON): `{"season": 2026, "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -548,7 +548,7 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats?season=2026&phase=HA](https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats?season=2026&phase=HA)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats`, body (JSON): `{"season": 2026, "phase": "HA"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -588,7 +588,7 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/player-leaderboard`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/player-leaderboard?metric=TP&phase=HA](https://hockeyallsvenskan.se/api/player-leaderboard?metric=TP&phase=HA)
+**Example request:** `POST https://hockeyallsvenskan.se/api/player-leaderboard`, body (JSON): `{"metric": "TP", "phase": "HA"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -638,7 +638,7 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 
 **Endpoint URL:** `POST https://hockeyallsvenskan.se/api/all-players`
 
-**Valid URL:** [https://hockeyallsvenskan.se/api/all-players?teamShortName=AIK&orderBy=familyName](https://hockeyallsvenskan.se/api/all-players?teamShortName=AIK&orderBy=familyName)
+**Example request:** `POST https://hockeyallsvenskan.se/api/all-players`, body (JSON): `{"teamShortName": "AIK", "orderBy": "familyName"}`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

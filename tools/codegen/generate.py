@@ -86,29 +86,34 @@ def _transform(name: str, module: str = "sportsdataverse._codegen_runtime"):
     return found or getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name))
 
 
-def _example_url(
+def _example_request(
     host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
-) -> str:
-    """The URL the generated wrapper requests when called with ``ep.example_args``.
+) -> tuple[str, dict | None]:
+    """``(url, body)`` the generated wrapper sends when called with ``ep.example_args``.
 
     Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
     and :meth:`_EndpointView._build_path_expr`): argument defaults, ``default_from``,
     ``transform``, ``[optional segments]`` and ``now_variant``, then every non-None
     query param in ``_params`` order -- passed through the getter module's own
     ``_build_query`` when it has one (SIHF folds its filters into ``searchQuery`` /
-    ``filterBy`` / ``filterQuery`` before requesting). Empty when the example omits a
+    ``filterBy`` / ``filterQuery`` before requesting). Empty URL when the example omits a
     required argument, since that call raises before it requests anything.
+
+    A ``body:`` route (``ep.body_declared``) splits the fields: the query-string params stay in
+    the URL and the body fields (``fixed_params`` first, as the wrapper builds ``_body``) come
+    back as the second item; any other route returns ``None`` there.
     """
     import importlib
 
     params = [*ep.path_params, *ep.query_params]
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
-        return ""
+        return "", None
     vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in params}
-    qs = {**ep.fixed_params}
+    qs: dict = {} if ep.body_declared else {**ep.fixed_params}
+    body: dict = {**ep.fixed_params} if ep.body_declared else {}
     for p in ep.query_params:
         v = vals[p.python_name]
-        qs[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
+        (body if p.in_body else qs)[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
     for p in ep.path_params:  # same statement order as _build_path_expr
         if p.default_from and vals[p.python_name] is None:
             vals[p.python_name] = vals[p.default_from]
@@ -127,7 +132,24 @@ def _example_url(
     if build is not None:  # the runtime rewrites the query before it requests (sihf_runtime)
         built = build(qs)
         qs = built[0] if isinstance(built, tuple) else built
-    return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
+    url = f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
+    return url, ({k: v for k, v in body.items() if v is not None} if ep.body_declared else None)
+
+
+def _example_url(
+    host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
+) -> str:
+    """The URL the generated wrapper requests when called with ``ep.example_args`` (see :func:`_example_request`)."""
+    return _example_request(host_url, ep, sport, league, getter_module)[0]
+
+
+def _render_example_body(body: dict, fmt: str) -> str:
+    """A ``body:`` route's example body as it goes on the wire: JSON, ``k=v&...`` for a form, or the raw text."""
+    if fmt == "json":
+        return json.dumps(body, ensure_ascii=False)
+    if fmt == "form":
+        return urlencode(body, safe="[]")
+    return "\n".join(str(v) for v in body.values())
 
 
 def _example_call(ep: spec.Endpoint, fn_name: str, league: str = "") -> str:
@@ -228,6 +250,18 @@ _VOCAB_RAISES = (
 )
 
 
+#: The ``Body:`` docstring line per ``format:`` of a ``body:`` route.
+_BODY_FORMAT_DOC = {
+    "json": "JSON (application/json)",
+    "form": "form-encoded (application/x-www-form-urlencoded)",
+    "text": "raw text (text/plain)",
+}
+
+
+#: The short encoding name in the reference docs' "Example request" line.
+_BODY_FORMAT_LABEL = {"json": "JSON", "form": "form-encoded", "text": "raw text"}
+
+
 def _build_docstring(
     ep: spec.Endpoint,
     sport: str,
@@ -242,6 +276,7 @@ def _build_docstring(
     import_from: str = "",
     returns_frames: bool = False,
     vocab_raises: bool = False,
+    example_body: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -261,6 +296,8 @@ def _build_docstring(
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
     ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name.
+    ``example_body`` is a ``body:`` route's rendered example body (:func:`_render_example_body`);
+    the docstring then names the body encoding and shows ``Example body:`` after the URL.
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -276,8 +313,12 @@ def _build_docstring(
             lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
     lines.append(f"Endpoint: ``{ep.method.upper()} {host_url}{ep.path}``")
+    if ep.body_declared:
+        lines.append(f"Body: {_BODY_FORMAT_DOC[ep.format]}")
     if example_url:
-        lines.append(f"Example URL: {example_url}")
+        lines.append(f"Example request: POST {example_url}" if ep.body_declared else f"Example URL: {example_url}")
+    if example_body:
+        lines.append(f"Example body: {example_body}")
     lines.append("")
 
     def _arg_doc(p: spec.Param, generic: str) -> str:
@@ -288,8 +329,10 @@ def _build_docstring(
     lines.append("Args:")
     for p in ep.path_params:
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
-    q_kind = "body field" if ep.method == "post" else "query parameter"
     for p in ep.query_params:
+        # A ``body:`` route labels each param by where it goes; a legacy ``method: post`` route
+        # (no ``body:``) keeps calling every param a body field.
+        q_kind = "body field" if p.in_body or (ep.method == "post" and not ep.body_declared) else "query parameter"
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} {q_kind}.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
@@ -1138,7 +1181,12 @@ class _EndpointView:
             needs_fstring = bool(ep.path_params) or league.league_param
             self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
 
-        self.example_url = _example_url(ep_host, ep, league.sport, league.league, getter_module)
+        self.body_declared = ep.body_declared
+        self.url_params = ep.url_params
+        self.body_params = ep.body_params
+        self.example_url, _example_body = _example_request(ep_host, ep, league.sport, league.league, getter_module)
+        self.example_body = _render_example_body(_example_body, ep.format) if _example_body else ""
+        self.body_format = ep.format
         self.example_call = _example_call(ep, fn_name, league.league if league.league_param else "")
         self.docstring = _build_docstring(
             ep,
@@ -1154,13 +1202,17 @@ class _EndpointView:
             import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
             vocab_raises=getter_module in _VOCAB_GETTERS,
+            example_body=self.example_body,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
         self.http_method = ep.method.upper()
-        self.valid_url = self.example_url
+        # A GET-shaped link is wrong for a body route (a GET would 405): the docs show the POST + body.
+        self.valid_url = "" if ep.body_declared else self.example_url
+        self.example_request_url = self.example_url if ep.body_declared else ""
+        self.body_format_label = _BODY_FORMAT_LABEL[ep.format] if ep.body_declared else ""
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         schema_doc = _schema_doc(ep.returns_schema, league.prefix)

@@ -19,8 +19,8 @@ The column descriptions (refs ``khl-returns.md`` plus the columns the parsers re
 merged into ``manual_column_descriptions.yaml`` at integration; edit them there. ``main`` still
 builds them, only to report the described count.
 
-The REST wrappers send their form fields as the getter's ``params``: the codegen always renders
-``_get(url, params=...)``, and ``sportsdataverse.hockey.khl.khl_runtime._get`` POSTs them as the form.
+The REST endpoints are ``method: post`` / ``format: form`` with a ``body:`` list: the wrappers hand their form
+fields to the getter as ``body=``, and ``sportsdataverse.hockey.khl.khl_runtime._get`` POSTs them as the form.
 Every route's wire fields come from the spec's ``requestBody``; a spec route this table does not
 wrap (or a wrapped route the spec lacks) fails the build.
 
@@ -668,11 +668,12 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
                 "path": path,
                 "parser": parser,
                 "returns_schema": f"native/khl_rest/{short}",
-                "method": "post",  # khl_runtime._get POSTs params as the form
+                "method": "post",
+                "format": "form",  # khl_runtime._get POSTs ``body`` as the form
                 "example_args": example,
+                # the form fields: ``key`` is the wire name (``values[gameid]`` ...)
+                "body": [{**{k: v for k, v in p.items() if k != "query_key"}, "key": p["query_key"]} for p in params],
             }
-            if params:
-                entry["extra_params"] = params
             if fixed:
                 entry["fixed_params"] = fixed
             endpoints.append(entry)
