@@ -1,0 +1,339 @@
+{
+  "data": {
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "config": {
+      "currentPage": "fixtures",
+      "labelPage": "Schedule",
+      "navigation": {
+        "main": []
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "entities": null,
+    "fixtures": [
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": null,
+            "colors": {
+              "primary": "0032d7",
+              "secondary": "ffffff",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a1137856-ab6e-11f1-9f35-e3a2cb0694f8",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwlzDEOwjAMQNGrVJ6xVGPXSdi7cgfH2FPLQMUAiLujiPFJX_8DB1wm8KDikol2Y0GiJLTmgp211C5ipg6nCbYRxx3X69B76Hjuuz1ewzFsRFzqomhd479qyQsG29n7rE2ywvcHXBgfAw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/76398bd98fc741df9b3452affe9f6fa9?size=100",
+            "name": "Budućnost VOLI",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "94",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": null,
+            "colors": {
+              "primary": "00b3ff",
+              "secondary": "ffffff",
+              "tertiary": "0060c8"
+            },
+            "draw": false,
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwtzDsOhDAMANGrINfrIsT50W_LHRwnrpYtQBSAuDuyRPmk0VywwTSAdJeEVJGbJ3ROHXIRwupjypWIOQp8BvhZ3P_4nU2naduXhdfD3M1FfQk5s63Cu_JpRKoisVFSbQr3A2GiH58"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/2bf9f1b503d447b6b78f6f5e8012df5a?size=100",
+            "name": "Turk Telekom",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "84",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "2b5223e5-ad3a-11f1-8ff6-d3e713a71a8f",
+        "fixtureType": "FINAL",
+        "link": "&~w=f~eJwlyz0OgDAIQOGrNMwyUOiP7q7egdIyGRdH491N4_gl7z1wwxbABhUTd9TOgkROqKsJNs6lNhHVbLAEOGc8LtyPKZ-KLcXII81V_7W6Z-w8CrEW0urwfnf8GqQ",
+        "name": "Final",
+        "pool": "",
+        "round": "Day: 2",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "a4c1f2fca3f84211ba3e8459f8588a",
+        "startTimeLocal": "2026-09-13T20:00:00",
+        "startTimeUTC": "2026-09-13T18:00:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Podgorica",
+        "venue": "SC Morača",
+        "venueId": "04b6f820-ad3f-11f1-a9c5-65a2cae4537e"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": null,
+            "colors": {
+              "primary": "ff0000",
+              "secondary": "ffffff",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "a16e5594-ab6e-11f1-b7ea-e3a2cb0694f8",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwlzDEOwjAMQNGrVJ5rCTeu07B37R1s40yUgYoBEHevLMYnff0vHHAdwIOqc--ot8JI1Am1OaMVqYsxq4rDOMA943jguqU-qeO17_p8pyOtJDHPjVFN4r-yGopRdHK7SOO-wO8EaQwfjw"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/5f86fb9f985a4f7aba13338103532eb0?size=100",
+            "name": "SC Derby",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "74",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": null,
+            "colors": {
+              "primary": "790000",
+              "secondary": "c18a00",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "114a3a15-ad36-11f1-afdf-2313c418cebe",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwtzDEOwkAMBdGrRK7j4mOzCfRpcwevY1eEgogCEHdHliifNJoPHXQdyAOTaybbJspAgu3iyl3aNHdVs-Y0DnSrOO68rKV36Xjuuz1e5SgDamI416r9V7klnwTiitmjB31_YBsfdQ"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/5738c5bf995748acb4e1ff8e9b89edf2?size=100",
+            "name": "Bosna BH Telecom",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "72",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "14aa918c-ad3a-11f1-b5b5-531c76a28df8",
+        "fixtureType": "PLAYOFF",
+        "link": "&~w=f~eJwlizkOgDAMwL6CMpMhNL3YWflDkjYTYmFE_B0qRsv2DResE1inbOyO0gIjkRNKNUYNKRdlFkkG8wTHiPuJ2z7IB9EnKxUbq_yrRo0YA1lOspTmBZ4Xe0AaoQ",
+        "name": "3rd place",
+        "pool": "",
+        "round": "Day: 2",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "a4c1f2fca3f84211ba3e8459f8588a",
+        "startTimeLocal": "2026-09-13T17:00:00",
+        "startTimeUTC": "2026-09-13T15:00:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Podgorica",
+        "venue": "SC Morača",
+        "venueId": "04b6f820-ad3f-11f1-a9c5-65a2cae4537e"
+      },
+      {
+        "attendance": null,
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": null,
+            "colors": {
+              "primary": "790000",
+              "secondary": "c18a00",
+              "tertiary": "ffffff"
+            },
+            "draw": false,
+            "entityId": "114a3a15-ad36-11f1-afdf-2313c418cebe",
+            "isHome": true,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwtzDEOwkAMBdGrRK7j4mOzCfRpcwevY1eEgogCEHdHliifNJoPHXQdyAOTaybbJspAgu3iyl3aNHdVs-Y0DnSrOO68rKV36Xjuuz1e5SgDamI416r9V7klnwTiitmjB31_YBsfdQ"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/5738c5bf995748acb4e1ff8e9b89edf2?size=100",
+            "name": "Bosna BH Telecom",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "83",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": null,
+            "colors": {
+              "primary": "00b3ff",
+              "secondary": "ffffff",
+              "tertiary": "0060c8"
+            },
+            "draw": false,
+            "entityId": "9f39588a-ad35-11f1-a372-4bcc6d47ffdf",
+            "isHome": false,
+            "link": {
+              "fragment": null,
+              "openInNewTab": false,
+              "origin": null,
+              "path": null,
+              "queryParams": {
+                "~w": "e~eJwtzDsOhDAMANGrINfrIsT50W_LHRwnrpYtQBSAuDuyRPmk0VywwTSAdJeEVJGbJ3ROHXIRwupjypWIOQp8BvhZ3P_4nU2naduXhdfD3M1FfQk5s63Cu_JpRKoisVFSbQr3A2GiH58"
+              }
+            },
+            "logo": "https://images.dc.connect.sportradar.com/b1st5/2bf9f1b503d447b6b78f6f5e8012df5a?size=100",
+            "name": "Turk Telekom",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "91",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureId": "bf067dd0-ad39-11f1-9be5-69b9febfe3b2",
+        "fixtureType": "PLAYOFF",
+        "link": "&~w=f~eJwlyzEKgDAMQNGrlMwGWhtb4-7qHZo2mcTFUby7BMcH_z9wwxaga6qdzLCNTJiSJWzcCSWXugpRa6XDFOD0WC_cD5e5xGKpY0Rf-V9ZdMHCwqZimmWG9wOEoRtE",
+        "name": "Semifinal 2",
+        "pool": "",
+        "round": "Day: 1",
+        "roundCode": null,
+        "series": null,
+        "stageCode": "a4c1f2fca3f84211ba3e8459f8588a",
+        "startTimeLocal": "2026-09-12T20:00:00",
+        "startTimeUTC": "2026-09-12T18:00:00",
+        "status": {
+          "label": "Final",
+          "value": "CONFIRMED"
+        },
+        "timesUnconfirmed": false,
+        "timezone": "Europe/Podgorica",
+        "venue": "SC Morača",
+        "venueId": "04b6f820-ad3f-11f1-a9c5-65a2cae4537e"
+      }
+    ],
+    "labels": {
+      "toBeConfirmed": "To Be Confirmed",
+      "toBeConfirmedAbbreviation": "TBC"
+    },
+    "locale": "en-EN",
+    "noFixturesMessage": "No Fixtures to display",
+    "reverseTeamOrder": false,
+    "rounds": {
+      "id": "round-select",
+      "options": [
+        {
+          "label": "All Rounds",
+          "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1U6oFANcbD3c",
+          "order": -1,
+          "value": "All"
+        },
+        {
+          "active": false,
+          "label": "Day: 1",
+          "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1A_GqQLwg1-BQn5BgEL8oDyRgqFQLAMiGFZA",
+          "order": 1,
+          "value": "1"
+        },
+        {
+          "active": false,
+          "label": "Day: 2",
+          "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1A_GqQLwg1-BQn5BgEL8oDyRgpFQLAMiJFZE",
+          "order": 2,
+          "value": "2"
+        }
+      ],
+      "selected": "All"
+    },
+    "seasonId": "ce17c4ff-ad34-11f1-a9c4-b3678b44aa6c",
+    "seasons": {
+      "competitions": {
+        "ec2755ad-ad33-11f1-bdcf-c7121a89b558": {
+          "name": "Memorial Tournament \"Ljubo Jovanović\""
+        }
+      },
+      "seasons": [
+        {
+          "abbreviationLocal": null,
+          "competitionId": "ec2755ad-ad33-11f1-bdcf-c7121a89b558",
+          "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1U6oFANcbD3c",
+          "nameLocal": "Memorijalni turnir \"Ljubo Jovanović\"",
+          "seasonId": "ce17c4ff-ad34-11f1-a9c4-b3678b44aa6c",
+          "year": 2026
+        }
+      ]
+    },
+    "series": null,
+    "showFixtureName": true,
+    "stageTabs": {},
+    "sub": "RESULTS",
+    "subPageTabs": [
+      {
+        "label": "Schedule",
+        "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1A_GqQDw3z4iQ0CDXYKVaAPxIE5k",
+        "value": "FIXTURES"
+      },
+      {
+        "label": "Results",
+        "link": "&~w=fl~eJyrVipWslJQSk41NE82SUvTTUwxNtE1NEwz1E20TDbRTTI2M7dIMjFJTDRLVtJRUMoBKU7N03X1A_GqQLwg1-BQn5BgpVoA6NwTUQ",
+        "value": "RESULTS"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/326/fixtures"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 16,
+    "fromCache": false,
+    "generated": "2026-10-12T18:34:58.285879+00:00Z",
+    "generationTime": 1.27971,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:34:58.285897+00:00Z",
+    "version": 1
+  }
+}

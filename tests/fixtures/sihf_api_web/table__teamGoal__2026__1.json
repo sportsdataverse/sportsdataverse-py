@@ -1,0 +1,305 @@
+{
+  "title": "Team Stats",
+  "description": "Team Stats - Goals",
+  "pages": 0,
+  "selectedPage": 0,
+  "orderBy": "goalsFor",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:10:26.318698+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Goals",
+      "rowIdentifierKey": "goalsFor",
+      "isOrderDescending": true,
+      "alias": "teamGoal"
+    },
+    {
+      "name": "Goals Pos/Nation",
+      "rowIdentifierKey": "goalsForFw",
+      "isOrderDescending": true,
+      "alias": "teamGoalPosNation"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogSog",
+      "isOrderDescending": true,
+      "alias": "teamShotDetail"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        9
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "rank"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "GF",
+      "description": "Tore geschossen",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsFor"
+    },
+    {
+      "name": "GF/GP",
+      "description": "Erzielte Tore/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsForQuotient"
+    },
+    {
+      "name": "GA",
+      "description": "Tore erhalten",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsAgainst"
+    },
+    {
+      "name": "GA/GP",
+      "description": "Erhaltene Tore/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "goalsAgainstQuotient"
+    },
+    {
+      "name": "GF even",
+      "description": "Geschossene Tore bei Gleichzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "evenGoalsFor"
+    },
+    {
+      "name": "GF even/GP",
+      "description": "Erzielte Tore Gleichzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "evenGoalsForQuotient"
+    },
+    {
+      "name": "GA even",
+      "description": "Erhaltene Tore bei Gleichzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "evenGoalsAgainst"
+    },
+    {
+      "name": "GA even/GP",
+      "description": "Erhaltene Tore Gleichzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "evenGoalsAgainstQuotient"
+    },
+    {
+      "name": "PPG",
+      "description": "Erzielte Tore in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsFor"
+    },
+    {
+      "name": "PPG/GP",
+      "description": "Erzielte Tore in Überzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsForQuotient"
+    },
+    {
+      "name": "PP GA",
+      "description": "Erhaltene Tore in Überzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsAgainst"
+    },
+    {
+      "name": "PP GA/GP",
+      "description": "Erhaltene Tore in Überzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "ppGoalsAgainstQuotient"
+    },
+    {
+      "name": "SHG",
+      "description": "Erzielte Tore in Unterzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "shGoals"
+    },
+    {
+      "name": "PK GF/GP",
+      "description": "Erzielte Tore in Unterzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "shGoalsQuotient"
+    },
+    {
+      "name": "PK GA",
+      "description": "Erhaltene Tore in Unterzahl",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pkGoalsAgainst"
+    },
+    {
+      "name": "PK GA/GP",
+      "description": "Erhaltene Tore in Unterzahl/Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "pkGoalsAgainstQuotient"
+    }
+  ],
+  "data": [
+    [
+      "14",
+      {
+        "id": 103144,
+        "name": "HC Ajoie",
+        "acronym": "HCA",
+        "signed": false,
+        "type": "team"
+      },
+      "56",
+      "113",
+      "2.02",
+      "197",
+      "3.52",
+      "82",
+      "1.46",
+      "152",
+      "2.71",
+      "28",
+      "0.50",
+      "9",
+      "0.16",
+      "0",
+      "0.00",
+      "34",
+      "0.61"
+    ],
+    [
+      "13",
+      {
+        "id": 101149,
+        "name": "EHC Kloten",
+        "acronym": "EHCK",
+        "signed": false,
+        "type": "team"
+      },
+      "52",
+      "117",
+      "2.25",
+      "143",
+      "2.75",
+      "83",
+      "1.60",
+      "108",
+      "2.08",
+      "32",
+      "0.62",
+      "5",
+      "0.10",
+      "2",
+      "0.04",
+      "26",
+      "0.50"
+    ],
+    [
+      "12",
+      {
+        "id": 102126,
+        "name": "SC Bern",
+        "acronym": "SCB",
+        "signed": false,
+        "type": "team"
+      },
+      "60",
+      "134",
+      "2.23",
+      "148",
+      "2.47",
+      "102",
+      "1.70",
+      "113",
+      "1.88",
+      "25",
+      "0.42",
+      "3",
+      "0.05",
+      "2",
+      "0.03",
+      "31",
+      "0.52"
+    ]
+  ],
+  "alias": "teamGoal"
+}

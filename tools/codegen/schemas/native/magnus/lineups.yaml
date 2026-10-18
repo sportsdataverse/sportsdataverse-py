@@ -1,0 +1,45 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: home_away
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_participant_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: registered_jersey_number
+  type: character
+- description: ''
+  name: licence_number
+  type: character
+- description: ''
+  name: position_code
+  type: character
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: captaincy
+  type: character
+- description: ''
+  name: is_mvp
+  type: logical
+- description: ''
+  name: photo_url
+  type: character
+kind: dataframe
+schema: magnus_lineups

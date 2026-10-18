@@ -1,0 +1,294 @@
+{
+  "data": [
+    {
+      "id": 11277,
+      "game_time": "2026-10-03 20:30:00",
+      "status": "finished",
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 63,
+          "competition_team": {
+            "id": 543,
+            "name": "CityX Mons",
+            "short_name": "MON",
+            "ticket_url": "https://shop.monshainaut.be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Mons",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/b/t/bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/b/t/small-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png",
+                "medium": "https://bnxt.sportpress.info/storage/b/t/medium-bt3TLIdQmf3JGqHKQP6cJHii81786374757.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 5
+            },
+            {
+              "period_id": 2,
+              "score": 19
+            },
+            {
+              "period_id": 3,
+              "score": 23
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 100,
+          "competition_team": {
+            "id": 541,
+            "name": "Windrose Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+                "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 26
+            },
+            {
+              "period_id": 3,
+              "score": 27
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Q4"
+      },
+      "round": null,
+      "phase": {
+        "id": 183,
+        "name": "Regular season 2026-27",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      },
+      "arena": {
+        "name": "mons.arena"
+      },
+      "referees": [],
+      "total": {
+        "minute": 200,
+        "starter": true,
+        "foul": 26,
+        "defensive_foul": 23,
+        "dunk_made": 0,
+        "dunk_all": 0,
+        "dunk_percent": 0,
+        "two_point_made": 24,
+        "two_point_all": 43,
+        "two_point_percent": 55.81,
+        "three_point_made": 12,
+        "three_point_all": 29,
+        "three_point_percent": 41.38,
+        "throw_made": 36,
+        "throw_all": 72,
+        "throw_percent": 50,
+        "free_throw_made": 16,
+        "free_throw_all": 20,
+        "free_throw_percent": 80,
+        "offensive_rebound": 18,
+        "defensive_rebound": 20,
+        "total_rebound": 38,
+        "block": 0,
+        "block_against": 2,
+        "turnover": 18,
+        "steal": 15,
+        "assist": 18,
+        "points": 100,
+        "value": 136,
+        "plusminus": 29
+      }
+    },
+    {
+      "id": 11295,
+      "game_time": "2026-10-10 20:30:00",
+      "status": "finished",
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 113,
+          "competition_team": {
+            "id": 541,
+            "name": "Windrose Giants Antwerp",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Antwerp",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/9/R/9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/9/R/small-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png",
+                "medium": "https://bnxt.sportpress.info/storage/9/R/medium-9RqRyVjfwOCfzZAoYGKXREj7t1785845391.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 22
+            },
+            {
+              "period_id": 2,
+              "score": 24
+            },
+            {
+              "period_id": 3,
+              "score": 19
+            }
+          ]
+        },
+        {
+          "side": 2,
+          "finalScore": 106,
+          "competition_team": {
+            "id": 565,
+            "name": "House of Talents Spurs Kortrijk",
+            "short_name": "KOR",
+            "ticket_url": "https://shop.ticket.monster/seller/hot-spurs-kortrijk-h2r9",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Kortrijk",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/W/Z/WZW7QcAreIiPReoaGtc8B3YYK1785845053.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/W/Z/small-WZW7QcAreIiPReoaGtc8B3YYK1785845053.png",
+                "medium": "https://bnxt.sportpress.info/storage/W/Z/medium-WZW7QcAreIiPReoaGtc8B3YYK1785845053.png"
+              }
+            },
+            "created_at": "2026-07-24"
+          },
+          "period_scores": [
+            {
+              "period_id": 1,
+              "score": 24
+            },
+            {
+              "period_id": 2,
+              "score": 21
+            },
+            {
+              "period_id": 3,
+              "score": 16
+            }
+          ]
+        }
+      ],
+      "period": {
+        "name": "Extra2"
+      },
+      "round": null,
+      "phase": {
+        "id": 183,
+        "name": "Regular season 2026-27",
+        "standings_visible": true
+      },
+      "competition": {
+        "id": 25,
+        "season": 2027,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2026-2027",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2026-07-24"
+      },
+      "arena": {
+        "name": "Lotto Arena"
+      },
+      "referees": [],
+      "total": {
+        "minute": 250,
+        "starter": true,
+        "foul": 30,
+        "defensive_foul": 26,
+        "dunk_made": 0,
+        "dunk_all": 0,
+        "dunk_percent": 0,
+        "two_point_made": 29,
+        "two_point_all": 45,
+        "two_point_percent": 64.44,
+        "three_point_made": 13,
+        "three_point_all": 39,
+        "three_point_percent": 33.33,
+        "throw_made": 42,
+        "throw_all": 84,
+        "throw_percent": 50,
+        "free_throw_made": 16,
+        "free_throw_all": 22,
+        "free_throw_percent": 72.73,
+        "offensive_rebound": 12,
+        "defensive_rebound": 29,
+        "total_rebound": 41,
+        "block": 7,
+        "block_against": 4,
+        "turnover": 18,
+        "steal": 9,
+        "assist": 30,
+        "points": 113,
+        "value": 160,
+        "plusminus": 8
+      }
+    }
+  ]
+}

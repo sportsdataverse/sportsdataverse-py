@@ -1,0 +1,1035 @@
+{
+ "title": "Goalie Stats",
+ "description": "Goalie Stats - Wins/Shutout",
+ "pages": 35,
+ "selectedPage": 1,
+ "orderBy": "wins",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-05-01T13:10:18.4908505+02:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    },
+    {
+     "name": "2018/19",
+     "alias": "2019"
+    },
+    {
+     "name": "2017/18",
+     "alias": "2018"
+    },
+    {
+     "name": "2016/17",
+     "alias": "2017"
+    },
+    {
+     "name": "2015/16",
+     "alias": "2016"
+    },
+    {
+     "name": "2014/15",
+     "alias": "2015"
+    },
+    {
+     "name": "2013/14",
+     "alias": "2014"
+    },
+    {
+     "name": "2012/13",
+     "alias": "2013"
+    },
+    {
+     "name": "2011/12",
+     "alias": "2012"
+    },
+    {
+     "name": "2010/11",
+     "alias": "2011"
+    },
+    {
+     "name": "2009/10",
+     "alias": "2010"
+    },
+    {
+     "name": "2008/09",
+     "alias": "2009"
+    },
+    {
+     "name": "1046/47",
+     "alias": "1047"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  }
+ ],
+ "secondaryMenu": [
+  {
+   "name": "Summary",
+   "rowIdentifierKey": "goalsAgainstAverage",
+   "isOrderDescending": false,
+   "alias": "goalkeeper"
+  },
+  {
+   "name": "Shots",
+   "rowIdentifierKey": "sogaSog",
+   "isOrderDescending": true,
+   "alias": "goalkeeperShotDetail"
+  },
+  {
+   "name": "Wins/Shutout",
+   "rowIdentifierKey": "wins",
+   "isOrderDescending": true,
+   "alias": "goalkeeperWin"
+  },
+  {
+   "name": "Shootout",
+   "rowIdentifierKey": "penShotsAgainst",
+   "isOrderDescending": true,
+   "alias": "goalkeeperShootout"
+  }
+ ],
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "average",
+   "rows": [
+    12
+   ]
+  },
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    17
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "rank"
+  },
+  {
+   "name": "Spieler",
+   "description": "Spielername",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "player"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "GPI",
+   "description": "Spiele als 1. Torhüter",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "firstKeeper"
+  },
+  {
+   "name": "WT",
+   "description": "Siege Total",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "wins"
+  },
+  {
+   "name": "W",
+   "description": "Siege nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "winsIntime"
+  },
+  {
+   "name": "OTW",
+   "description": "Siege nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "winsOvertime"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "winsPenalty"
+  },
+  {
+   "name": "LT",
+   "description": "Niederlagen Total",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "losses"
+  },
+  {
+   "name": "L",
+   "description": "Niederlagen nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "lossesIntime"
+  },
+  {
+   "name": "OTL",
+   "description": "Niederlagen nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "lossesOvertime"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "lossesPenalty"
+  },
+  {
+   "name": "SO",
+   "description": "Spiele ohne Gegentor",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "shutout"
+  }
+ ],
+ "data": [
+  [
+   "16",
+   "Senn Gilles",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "26",
+   "26",
+   "7",
+   "6",
+   "1",
+   "0",
+   "19",
+   "15",
+   "3",
+   "1",
+   "0"
+  ],
+  [
+   "15",
+   "Ciaccio Damiano",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "29",
+   "28",
+   "8",
+   "5",
+   "1",
+   "2",
+   "19",
+   "17",
+   "2",
+   "0",
+   "0"
+  ],
+  [
+   "14",
+   "Boltshauser Luca",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "29",
+   "29",
+   "9",
+   "8",
+   "1",
+   "0",
+   "18",
+   "13",
+   "2",
+   "3",
+   "3"
+  ],
+  [
+   "13",
+   "Waeber Ludovic",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "25",
+   "22",
+   "9",
+   "6",
+   "3",
+   "0",
+   "13",
+   "11",
+   "2",
+   "0",
+   "1"
+  ],
+  [
+   "12",
+   "Meyer Robin",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "22",
+   "21",
+   "11",
+   "8",
+   "2",
+   "1",
+   "11",
+   "10",
+   "0",
+   "1",
+   "3"
+  ],
+  [
+   "11",
+   "Wüthrich Philip",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "32",
+   "30",
+   "17",
+   "12",
+   "2",
+   "3",
+   "13",
+   "12",
+   "1",
+   "0",
+   "3"
+  ],
+  [
+   "10",
+   "Reideborn Adam",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "39",
+   "39",
+   "18",
+   "13",
+   "2",
+   "3",
+   "21",
+   "19",
+   "1",
+   "1",
+   "6"
+  ],
+  [
+   "9",
+   "Genoni Leonardo",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "51",
+   "19",
+   "16",
+   "1",
+   "2",
+   "31",
+   "24",
+   "3",
+   "4",
+   "4"
+  ],
+  [
+   "8",
+   "Säteri Harri",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "45",
+   "45",
+   "20",
+   "13",
+   "3",
+   "4",
+   "25",
+   "21",
+   "2",
+   "2",
+   "2"
+  ],
+  [
+   "7",
+   "Schlegel Niklas",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "42",
+   "42",
+   "20",
+   "18",
+   "0",
+   "2",
+   "22",
+   "16",
+   "3",
+   "3",
+   "2"
+  ],
+  [
+   "6",
+   "Pasche Kevin",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "42",
+   "41",
+   "21",
+   "18",
+   "3",
+   "0",
+   "20",
+   "15",
+   "5",
+   "0",
+   "3"
+  ],
+  [
+   "",
+   "Durchschnitt",
+   {
+    "id": 100000,
+    "name": "Durchschnitt",
+    "acronym": "Durchschnitt",
+    "signed": false,
+    "type": "team"
+   },
+   "44",
+   "43",
+   "22",
+   "17",
+   "2",
+   "1",
+   "20",
+   "16",
+   "2",
+   "1",
+   "3"
+  ],
+  [
+   "5",
+   "Nyffeler Melvin",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "55",
+   "54",
+   "31",
+   "25",
+   "4",
+   "2",
+   "23",
+   "17",
+   "4",
+   "2",
+   "3"
+  ],
+  [
+   "4",
+   "Charlin Stéphane",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "66",
+   "64",
+   "34",
+   "29",
+   "4",
+   "1",
+   "29",
+   "26",
+   "1",
+   "2",
+   "7"
+  ],
+  [
+   "3",
+   "Hrubec Simon",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "60",
+   "60",
+   "36",
+   "32",
+   "2",
+   "2",
+   "24",
+   "16",
+   "5",
+   "3",
+   "10"
+  ],
+  [
+   "2",
+   "Aeschlimann Sandro",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "67",
+   "65",
+   "45",
+   "39",
+   "4",
+   "2",
+   "20",
+   "11",
+   "7",
+   "2",
+   "9"
+  ],
+  [
+   "1",
+   "Berra Reto",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "75",
+   "74",
+   "51",
+   "35",
+   "11",
+   "5",
+   "21",
+   "18",
+   "2",
+   "1",
+   "7"
+  ],
+  [
+   "",
+   "Patenaude Noah",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "7",
+   "6",
+   "0",
+   "0",
+   "0",
+   "0",
+   "6",
+   "5",
+   "1",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Neckar Martin",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "3",
+   "2",
+   "0",
+   "0",
+   "0",
+   "0",
+   "3",
+   "1",
+   "1",
+   "1",
+   "0"
+  ],
+  [
+   "",
+   "Conz Benjamin",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "9",
+   "8",
+   "1",
+   "1",
+   "0",
+   "0",
+   "6",
+   "5",
+   "1",
+   "0",
+   "1"
+  ],
+  [
+   "",
+   "Taponen Roope",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "1",
+   "1",
+   "1",
+   "1",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Neuenschwander Elijah",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "1",
+   "1",
+   "1",
+   "0",
+   "1",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Zumbühl Robin",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "10",
+   "10",
+   "3",
+   "3",
+   "0",
+   "0",
+   "7",
+   "5",
+   "1",
+   "1",
+   "1"
+  ],
+  [
+   "",
+   "Huet Ewan",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "8",
+   "8",
+   "3",
+   "3",
+   "0",
+   "0",
+   "5",
+   "3",
+   "0",
+   "2",
+   "0"
+  ],
+  [
+   "",
+   "Keller Antoine",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "16",
+   "14",
+   "4",
+   "3",
+   "0",
+   "1",
+   "11",
+   "9",
+   "1",
+   "1",
+   "1"
+  ],
+  [
+   "",
+   "Janett Luis",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "11",
+   "11",
+   "6",
+   "3",
+   "0",
+   "3",
+   "5",
+   "4",
+   "1",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Mayer Robert",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "17",
+   "12",
+   "7",
+   "5",
+   "2",
+   "0",
+   "6",
+   "6",
+   "0",
+   "0",
+   "0"
+  ],
+  [
+   "",
+   "Fadani Davide",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "25",
+   "22",
+   "8",
+   "6",
+   "2",
+   "0",
+   "14",
+   "10",
+   "2",
+   "2",
+   "2"
+  ],
+  [
+   "",
+   "Zurkirchen Sandro",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "22",
+   "21",
+   "8",
+   "4",
+   "2",
+   "2",
+   "13",
+   "10",
+   "3",
+   "0",
+   "2"
+  ],
+  [
+   "",
+   "Punnenovs Ivars",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "21",
+   "20",
+   "8",
+   "8",
+   "0",
+   "0",
+   "12",
+   "10",
+   "0",
+   "2",
+   "1"
+  ],
+  [
+   "",
+   "van Pottelberghe Joren",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "18",
+   "18",
+   "8",
+   "8",
+   "0",
+   "0",
+   "10",
+   "9",
+   "1",
+   "0",
+   "2"
+  ],
+  [
+   "",
+   "Wolf Tim",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "19",
+   "15",
+   "8",
+   "8",
+   "0",
+   "0",
+   "8",
+   "6",
+   "1",
+   "1",
+   "0"
+  ],
+  [
+   "",
+   "Galley Loic",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "18",
+   "15",
+   "8",
+   "5",
+   "1",
+   "2",
+   "8",
+   "7",
+   "0",
+   "1",
+   "0"
+  ],
+  [
+   "",
+   "Hughes Connor",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "29",
+   "25",
+   "14",
+   "10",
+   "2",
+   "2",
+   "11",
+   "9",
+   "0",
+   "2",
+   "2"
+  ],
+  [
+   "",
+   "Hollenstein Luca",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "20",
+   "20",
+   "15",
+   "12",
+   "2",
+   "1",
+   "5",
+   "3",
+   "0",
+   "2",
+   "2"
+  ]
+ ],
+ "alias": "goalkeeperWin"
+}

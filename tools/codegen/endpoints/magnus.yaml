@@ -1,0 +1,289 @@
+api: magnus
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request
+    (success=false ''Aucune donnée disponible'', an empty data stub, zero rows, a
+    season outside 2020-21 onwards, an unknown or unplayed game).'
+  - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is success=false
+    with any other message, outside the requested scope, a partial schedule page,
+    or a game page without its embedded game sheet.'
+  see_also:
+  - name: Ligue Magnus
+    note: the league site whose data the wrappers read
+    url: https://liguemagnus.com/
+endpoints:
+- example_args: {}
+  extra_params:
+  - default: 1
+    description: 'Competition type: 1 = Ligue Magnus, 2 = Division 1. Omitted: success=false
+      ''Aucune donnée disponible'' (probed 2026-10-12).'
+    name: competition_type
+    query_key: id_type
+    type: int
+  fixed_params:
+    action: get_competition_by_type
+  parser: parse_magnus_competitions
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/competitions
+  short: competitions
+  summary: Competitions (one per season) of a competition type.
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request
+      (success=false ''Aucune donnée disponible'', an empty data stub, zero rows,
+      a season outside 2020-21 onwards, an unknown or unplayed game).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      success=false with any other message, outside the requested scope, a partial
+      schedule page, or a game page without its embedded game sheet.'
+    raw_doc: the game sheet ``Dict`` extracted from the page's embedded JSON (staff
+      birth dates removed)
+    see_also:
+    - name: Ligue Magnus
+      note: the league site whose data the wrappers read
+      url: https://liguemagnus.com/
+  example_args:
+    game_id: 77779
+  parser: parse_magnus_game
+  path: /rencontre/{game_id}/
+  path_params:
+  - description: 'Game id (get_rencontres data.data[].id). Example 77779 (2026-27,
+      shootout + MVPs); also sampled: 68838, 865.'
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/magnus/game
+  short: game
+  summary: 'Game header from the game sheet: teams, score, start time, status, attendance
+    and rink (one row).'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request
+      (success=false ''Aucune donnée disponible'', an empty data stub, zero rows,
+      a season outside 2020-21 onwards, an unknown or unplayed game).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      success=false with any other message, outside the requested scope, a partial
+      schedule page, or a game page without its embedded game sheet.'
+    raw_doc: the game sheet ``Dict`` extracted from the page's embedded JSON (staff
+      birth dates removed)
+    see_also:
+    - name: Ligue Magnus
+      note: the league site whose data the wrappers read
+      url: https://liguemagnus.com/
+  example_args:
+    game_id: 77779
+  parser: parse_magnus_lineups
+  path: /rencontre/{game_id}/
+  path_params:
+  - description: 'Game id (get_rencontres data.data[].id). Example 77779 (2026-27,
+      shootout + MVPs); also sampled: 68838, 865.'
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/magnus/lineups
+  short: lineups
+  summary: 'Game roster from the game sheet: one row per dressed player, with the
+    person id, the per-game participant id, jersey, licence number, position, captaincy
+    and MVP flag.'
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request
+      (success=false ''Aucune donnée disponible'', an empty data stub, zero rows,
+      a season outside 2020-21 onwards, an unknown or unplayed game).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      success=false with any other message, outside the requested scope, a partial
+      schedule page, or a game page without its embedded game sheet.'
+    raw_doc: the game sheet ``Dict`` extracted from the page's embedded JSON (staff
+      birth dates removed)
+    see_also:
+    - name: Ligue Magnus
+      note: the league site whose data the wrappers read
+      url: https://liguemagnus.com/
+  example_args:
+    game_id: 77779
+  parser: parse_magnus_pbp
+  path: /rencontre/{game_id}/
+  path_params:
+  - description: 'Game id (get_rencontres data.data[].id). Example 77779 (2026-27,
+      shootout + MVPs); also sampled: 68838, 865.'
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/magnus/pbp
+  short: pbp
+  summary: 'Play-by-play from the game sheet: goals, penalties, shots, faceoffs, goalie
+    changes and timeouts in game order, with English event types and derived periods.
+    No shot coordinates.'
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Required. Season by its END year (2027 = 2026-27), sent as the season's
+      competition_id. Coverage starts in 2020-21 (2021); an earlier season, or one
+      the federation does not list, raises NoDataError.
+    name: season
+    query_key: competition_id
+    required: true
+    transform: _competition_id
+    type: int
+  fixed_params:
+    action: get_phases
+  parser: parse_magnus_phases
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/phases
+  short: phases
+  summary: Phases of a competition (regular season, playoffs, relegation).
+- example_args:
+    phase_id: 714
+    round: 1
+  extra_params:
+  - description: 'Required. Phase id from get_phases. Omitted: data='''' (probed 2026-10-12).'
+    name: phase_id
+    query_key: phase_id
+    required: true
+    type: int
+  - description: 'Required. Round number (tour), 1-based. Omitted: data='''' (probed
+      2026-10-12).'
+    name: round
+    query_key: journee
+    required: true
+    type: int
+  fixed_params:
+    action: get_rencontrestours
+  parser: parse_magnus_schedule
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/round_games
+  short: round_games
+  summary: One round of a phase with its games.
+- example_args:
+    phase_id: 714
+  extra_params:
+  - description: 'Required. Phase id from get_phases. Omitted: data='''' (probed 2026-10-12).'
+    name: phase_id
+    query_key: phase_id
+    required: true
+    type: int
+  fixed_params:
+    action: get_liste_tours
+  parser: parse_magnus_rounds
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/rounds
+  short: rounds
+  summary: Rounds (journees) of a phase with their dates (games via get_rencontrestours).
+- example_args:
+    season: 2027
+  extra_params:
+  - description: Required. Season by its END year (2027 = 2026-27), sent as the season's
+      competition_id. Coverage starts in 2020-21 (2021); an earlier season, or one
+      the federation does not list, raises NoDataError.
+    name: season
+    query_key: competition_id
+    required: true
+    transform: _competition_id
+    type: int
+  - description: 'Phase id. Omitted: every phase of the competition (314 games for
+      2025-26 vs 264 for its regular season, probed 2026-10-12).'
+    name: phase_id
+    query_key: phase_id
+    type: int
+  - description: 'Team id (get_equipes data[].id): that team''s games only (44 for
+      2025-26, probed 2026-10-12). Non-numeric: a validation error.'
+    name: team_id
+    query_key: equipe_id
+    type: int
+  - description: 'Earliest game date, YYYY-MM-DD (verified: 2025-10-01..2025-10-31
+      gave 44 games, probed 2026-10-12).'
+    name: start_date
+    query_key: date_min
+    type: str
+  - description: Latest game date, YYYY-MM-DD.
+    name: end_date
+    query_key: date_max
+    type: str
+  - description: 'Round number (tour): that round''s games only (6 per round, probed
+      2026-10-12).'
+    name: round
+    query_key: journee
+    type: int
+  fixed_params:
+    action: get_rencontres
+    par_page: 700
+  parser: parse_magnus_schedule
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/schedule
+  short: schedule
+  summary: Games (schedule and results); Laravel-paginated, par_page=700 returns a
+    full season.
+- docstring:
+    example_import: true
+    raises:
+    - 'sportsdataverse.errors.NoDataError: liguemagnus.com has no data for the request
+      (success=false ''Aucune donnée disponible'', an empty data stub, zero rows,
+      a season outside 2020-21 onwards, an unknown or unplayed game).'
+    - 'sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is
+      success=false with any other message, outside the requested scope, a partial
+      schedule page, or a game page without its embedded game sheet.'
+    raw_doc: the game sheet ``Dict`` extracted from the page's embedded JSON (staff
+      birth dates removed)
+    see_also:
+    - name: Ligue Magnus
+      note: the league site whose data the wrappers read
+      url: https://liguemagnus.com/
+  example_args:
+    game_id: 77779
+  parser: parse_magnus_shootout
+  path: /rencontre/{game_id}/
+  path_params:
+  - description: 'Game id (get_rencontres data.data[].id). Example 77779 (2026-27,
+      shootout + MVPs); also sampled: 68838, 865.'
+    name: game_id
+    required: true
+    type: int
+  returns_schema: native/magnus/shootout
+  short: shootout
+  summary: 'Shootout attempts from the game sheet: round, shooter, goalie and result
+    (zero rows when the game had no shootout).'
+- example_args:
+    phase_id: 714
+  extra_params:
+  - description: 'Required. Phase id from get_phases. Omitted: data='''' (probed 2026-10-12).'
+    name: phase_id
+    query_key: phase_id
+    required: true
+    type: int
+  fixed_params:
+    action: get_classementsphase
+  parser: parse_magnus_standings
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/standings
+  short: standings
+  summary: Standings of a phase.
+- example_args:
+    phase_id: 714
+  extra_params:
+  - description: 'Required. Phase id from get_phases. Omitted: every team of every
+      competition in the federation database (~680 KB) (probed 2026-10-12).'
+    name: phase_id
+    query_key: phase_id
+    required: true
+    type: int
+  fixed_params:
+    action: get_equipes
+  parser: parse_magnus_teams
+  path: /wp-admin/admin-ajax.php
+  returns_schema: native/magnus/teams
+  short: teams
+  summary: Teams of a phase.
+getter_module: sportsdataverse.hockey.magnus.magnus_runtime
+host: https://liguemagnus.com
+module: magnus
+name_pattern: magnus_{short}
+parser_module: hockey.magnus.magnus_parsers
+passthrough_query: false
+qualifier: ''
+runtime_imports:
+- _get
+- _competition_id
+schema_prefix: magnus_

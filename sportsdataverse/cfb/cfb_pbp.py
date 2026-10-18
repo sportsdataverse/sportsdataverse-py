@@ -2041,6 +2041,7 @@ from sportsdataverse.football.attribution import (  # noqa: E402
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
 from sportsdataverse.football.box import _ordered_rows  # noqa: E402
+from sportsdataverse.football.box import _avg_start_ep  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
 from sportsdataverse.football.box import fill_missing as _fill_missing  # noqa: E402
@@ -9772,6 +9773,14 @@ class CFBPlayProcess(object):
                 pos_team=pl.col("pos_team").cast(pl.Int32),
             )
         )
+        # Drive starts in EP units on the league's field-position curve. On a window of the
+        # game (Game on Paper's quarter / half boxes re-run this on a slice of plays_frame),
+        # each drive is valued at its first snap of the whole game, not of the window.
+        from sportsdataverse.cfb.cfb_field_position import load_fp_curve as _load_curve
+
+        start_ep = _avg_start_ep(play_df, _load_curve(), getattr(self, "plays_frame", None))
+        assert drives_data.schema["pos_team"] == start_ep.schema["pos_team"]
+        drives_data = drives_data.join(start_ep, on="pos_team", how="left")
 
         # --- defensive players (0.0.53): per-defender havoc events, attributed by player ---
         defensive_players_json = _build_defensive_players_box(play_df)

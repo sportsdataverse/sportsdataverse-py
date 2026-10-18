@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: game_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: competition_team_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: score
+  type: integer
+kind: dataframe
+schema: sportpress_game_periods

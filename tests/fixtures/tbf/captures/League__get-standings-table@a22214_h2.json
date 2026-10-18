@@ -1,0 +1,191 @@
+{
+  "data": [
+    {
+      "grup": "",
+      "weeksByGroup": [
+        "3",
+        "2",
+        "1"
+      ],
+      "standings": [
+        {
+          "takimIslemId": 266026,
+          "faaliyetAltAlanId": 22214,
+          "takimAdi": "GALATASARAY MCT TECHNIC",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 2,
+          "sira": 4,
+          "o": 2,
+          "g": 1,
+          "m": 1,
+          "a": 173,
+          "y": 157,
+          "puan": 3,
+          "icP": "0",
+          "icA": "0",
+          "toA": "16",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/27c5991a-e2b8-4699-977f-94ff7a3db973_GalatasarayMCTTechnic.png",
+          "tiedRows": [
+            {
+              "order": 5,
+              "teamName": "YUKATEL DENİZLİ BASKET",
+              "teamProcessId": 266028,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -4,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 6,
+              "teamName": "BİOTEKNO KÖRFEZ BASKET",
+              "teamProcessId": 268222,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 9,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 266048,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 266028,
+          "faaliyetAltAlanId": 22214,
+          "takimAdi": "YUKATEL DENİZLİ BASKET",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 2,
+          "sira": 5,
+          "o": 2,
+          "g": 1,
+          "m": 1,
+          "a": 182,
+          "y": 172,
+          "puan": 3,
+          "icP": "0",
+          "icA": "0",
+          "toA": "10",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/be447bdd-b2e6-496c-892b-be016c5c24c0_yukateldenizlibasket.png",
+          "tiedRows": [
+            {
+              "order": 5,
+              "teamName": "YUKATEL DENİZLİ BASKET",
+              "teamProcessId": 266028.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -4,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 6,
+              "teamName": "BİOTEKNO KÖRFEZ BASKET",
+              "teamProcessId": 268222.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 9,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 266048.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        },
+        {
+          "takimIslemId": 268222,
+          "faaliyetAltAlanId": 22214,
+          "takimAdi": "BİOTEKNO KÖRFEZ BASKET",
+          "faaliyetAdi": null,
+          "grup": "",
+          "hafta": 2,
+          "sira": 6,
+          "o": 2,
+          "g": 1,
+          "m": 1,
+          "a": 172,
+          "y": 164,
+          "puan": 3,
+          "icP": "0",
+          "icA": "0",
+          "toA": "8",
+          "ihrac": 0,
+          "teamLogo": "https://tbf.org.tr/res/80a252e3-e69f-45b1-b71e-9f52bb3a5b0a_biotekno_korfez_basket_logo.png",
+          "tiedRows": [
+            {
+              "order": 5,
+              "teamName": "YUKATEL DENİZLİ BASKET",
+              "teamProcessId": 266028.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -4,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 6,
+              "teamName": "BİOTEKNO KÖRFEZ BASKET",
+              "teamProcessId": 268222.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": 9,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            },
+            {
+              "order": 10,
+              "teamName": "ALİAĞA PETKİM SPOR",
+              "teamProcessId": 266048.0,
+              "homePointFor": 0,
+              "homePointAgainst": 0,
+              "homePoint": "0",
+              "homePointDiff": -5,
+              "homeMaxScore": 0,
+              "totalDiff": 0,
+              "groupMaxScore": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

@@ -1,0 +1,130 @@
+{
+  "status": "OK",
+  "data": {
+    "id": 62586,
+    "round": 1,
+    "fibaLiveStatsUrl": "https://fibalivestats.dcd.shared.geniussports.com/u/KZS/1725343/",
+    "dateTime": "2020-09-25T17:30:00Z",
+    "attendance": 0,
+    "organiserTeam": {},
+    "firstTeam": {
+      "id": 125159,
+      "teamId": 41,
+      "name": "VBO Maribor",
+      "homeJerseyColor": "#FFFFFF",
+      "guestJerseyColor": "#000000",
+      "logoUuid": "7c528e85-22fc-41b2-a54c-0448ad80642b",
+      "code": "MAR",
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "secondTeam": {
+      "id": 125160,
+      "teamId": 8827,
+      "name": "Pro-Bit Konjice",
+      "homeJerseyColor": "#40DEF8",
+      "guestJerseyColor": "#18207E",
+      "logoUuid": "e29e80a7-0adf-4ce8-a740-f1249857b9cf",
+      "code": "KON",
+      "forfeited": false,
+      "isPlaceholder": false
+    },
+    "sportHall": {
+      "id": 10,
+      "name": "Dvorana Tabor"
+    },
+    "firstTeamScore": 61,
+    "secondTeamScore": 71,
+    "scoreInsertedManually": false,
+    "status": "FINISHED",
+    "scores": [
+      {
+        "id": 228124,
+        "matchPart": "QUARTER1",
+        "firstTeamScore": 15,
+        "secondTeamScore": 21
+      },
+      {
+        "id": 228125,
+        "matchPart": "QUARTER2",
+        "firstTeamScore": 17,
+        "secondTeamScore": 21
+      },
+      {
+        "id": 228126,
+        "matchPart": "QUARTER3",
+        "firstTeamScore": 12,
+        "secondTeamScore": 18
+      }
+    ],
+    "referee1": {
+      "id": 227,
+      "person": {
+        "id": 96037,
+        "firstName": "Grega",
+        "lastName": "Oprčkal",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "referee2": {
+      "id": 137,
+      "person": {
+        "id": 95972,
+        "firstName": "David",
+        "lastName": "Maguša",
+        "addressesPostOfficeName": [
+          "<redacted>"
+        ],
+        "gender": "MALE"
+      },
+      "ranks": []
+    },
+    "competitions": [
+      {
+        "competitionId": 30,
+        "competitionName": "1. SKL za ženske",
+        "competitionType": "LEAGUE",
+        "competitionPhase": {
+          "id": 5200,
+          "name": "1. del"
+        },
+        "transferred": false
+      }
+    ],
+    "liveStreams": [],
+    "streams": [],
+    "gender": "FEMALE",
+    "liveStats": false,
+    "withoutStats": false,
+    "commissionerReportHtml": "​Tehnična napaka, dosojena igralki ekipe <b>Pro-Bit Konjice, Šporar To., zaradi nešportne reakcije - metanja žoge.<br><br><b>SKLEP:<br>1. <b>ŽKK Konjice se zaradi tehnične napake, dosojene igralki ekipe, kaznuje z denarno kaznijo 40 EUR.<br><br>Odlična organizacija tekme in odlično delo pomožnih sodnikov.<br><br>Korektno vedenje akterjev tekme.<br><br>Zanimivo športno srečanje brez posebnosti.<br><br>Po pregledu fotodokumentacije tekme je bilo ugotovljeno, da predstavnik ekipe <b>Konjice na tekmi v dvorani ni imel nameščene zaščitne maske. O tem je komisar tekmovanja naknadno, 26. 9.,&nbsp;opozoril klub.",
+    "conclusions": [],
+    "delegated": true,
+    "delegationChanges": [],
+    "moveRequests": [],
+    "homeJerseyColor": "#FFFFFF",
+    "guestJerseyColor": "#18207E",
+    "bests": [
+      {
+        "statCategory": "POINTS",
+        "firstTeamPlayer": {
+          "playerId": 55846,
+          "playerFirstName": "Merisa",
+          "playerLastName": "Dedić",
+          "playerPhotoUuid": "4ed114d1-b8a7-490d-a51b-099391f06a77",
+          "value": 16
+        },
+        "secondTeamPlayer": {
+          "playerId": 54740,
+          "playerFirstName": "Tia",
+          "playerLastName": "Tajhar",
+          "playerPhotoUuid": "ab39627d-ec42-4af6-bf30-9934975e92c3",
+          "value": 17
+        }
+      }
+    ]
+  }
+}

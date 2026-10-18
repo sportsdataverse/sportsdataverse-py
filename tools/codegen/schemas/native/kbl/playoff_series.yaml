@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: integer
+- description: ''
+  name: bracket_format
+  type: character
+- description: ''
+  name: round
+  type: character
+- description: ''
+  name: series_no
+  type: integer
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: opponent_code
+  type: character
+- description: ''
+  name: seed
+  type: integer
+- description: ''
+  name: wins
+  type: integer
+- description: ''
+  name: losses
+  type: integer
+- description: ''
+  name: game_date
+  type: date
+kind: dataframe
+schema: kbl_playoff_series

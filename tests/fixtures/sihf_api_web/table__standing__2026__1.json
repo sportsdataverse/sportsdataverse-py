@@ -1,0 +1,537 @@
+{
+ "title": "Rangliste",
+ "description": null,
+ "pages": 0,
+ "selectedPage": 0,
+ "orderBy": "",
+ "orderByDescending": false,
+ "isLive": false,
+ "availableExports": [
+  "Csv",
+  "Pdf"
+ ],
+ "updateDateTime": "2026-03-10T19:11:33.6200553+01:00",
+ "filters": [
+  {
+   "title": "Saison",
+   "entries": [
+    {
+     "name": "2026/27",
+     "alias": "2027"
+    },
+    {
+     "name": "2025/26",
+     "alias": "2026"
+    },
+    {
+     "name": "2024/25",
+     "alias": "2025"
+    },
+    {
+     "name": "2023/24",
+     "alias": "2024"
+    },
+    {
+     "name": "2022/23",
+     "alias": "2023"
+    },
+    {
+     "name": "2021/22",
+     "alias": "2022"
+    },
+    {
+     "name": "2020/21",
+     "alias": "2021"
+    },
+    {
+     "name": "2019/20",
+     "alias": "2020"
+    }
+   ],
+   "selected": "2026",
+   "type": "Dropdown",
+   "alias": "Season"
+  },
+  {
+   "title": "Heim/Auswärts",
+   "entries": [
+    {
+     "name": "Heim/Auswärts",
+     "alias": "All"
+    },
+    {
+     "name": "Heim",
+     "alias": "Home"
+    },
+    {
+     "name": "Auswärts",
+     "alias": "Away"
+    }
+   ],
+   "selected": "All",
+   "type": "Dropdown",
+   "alias": "ContentType"
+  }
+ ],
+ "secondaryMenu": null,
+ "fixTableLeft": 2,
+ "rowIdentifier": 1,
+ "highlightedPositions": [
+  {
+   "name": null,
+   "style": "line",
+   "rows": [
+    6,
+    10,
+    12
+   ]
+  }
+ ],
+ "header": [
+  {
+   "name": "R",
+   "description": "Rang",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "rank"
+  },
+  {
+   "name": "Team",
+   "description": "Teamname",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "team"
+  },
+  {
+   "name": "GP",
+   "description": "Gespielte Spiele",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesPlayed"
+  },
+  {
+   "name": "PTS",
+   "description": "Punktetotal",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "points"
+  },
+  {
+   "name": "P/GP",
+   "description": "Punktetotal pro Spiel",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "pointsQuotient"
+  },
+  {
+   "name": "W",
+   "description": "Siege nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonInTime"
+  },
+  {
+   "name": "OTW",
+   "description": "Siege nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonExtraTime"
+  },
+  {
+   "name": "SOW",
+   "description": "Siege nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesWonPenalty"
+  },
+  {
+   "name": "SOL",
+   "description": "Niederlagen nach Penaltyschiessen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostPenalty"
+  },
+  {
+   "name": "OTL",
+   "description": "Niederlage nach Verlängerung",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostExtraTime"
+  },
+  {
+   "name": "L",
+   "description": "Niederlagen nach regulärer Spielzeit",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "gamesLostInTime"
+  },
+  {
+   "name": "GF",
+   "description": "Tore geschossen",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsFor"
+  },
+  {
+   "name": "GA",
+   "description": "Tore erhalten",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsAgainst"
+  },
+  {
+   "name": "GDF",
+   "description": "Tordifferenz",
+   "align": "center",
+   "showTooltip": true,
+   "isSortable": true,
+   "alias": "goalsDifference"
+  },
+  {
+   "name": "Streak",
+   "description": "Letzte Spiele",
+   "align": "left",
+   "showTooltip": true,
+   "isSortable": false,
+   "alias": "streak"
+  }
+ ],
+ "data": [
+  [
+   "1",
+   {
+    "id": 101151,
+    "name": "HC Davos",
+    "acronym": "HCD",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "117",
+   "2.250",
+   "34",
+   "2",
+   "3",
+   "4",
+   "1",
+   "8",
+   "191",
+   "120",
+   "71",
+   "W+W+W+W+W+W+L+W+W+W+"
+  ],
+  [
+   "2",
+   {
+    "id": 103138,
+    "name": "Fribourg-Gottéron",
+    "acronym": "FRI",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "100",
+   "1.923",
+   "24",
+   "5",
+   "8",
+   "2",
+   "0",
+   "13",
+   "172",
+   "126",
+   "46",
+   "W-W-W+W-L+W+W+W+L+W+"
+  ],
+  [
+   "3",
+   {
+    "id": 103140,
+    "name": "Genève-Servette HC",
+    "acronym": "GSHC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "91",
+   "1.750",
+   "26",
+   "4",
+   "1",
+   "2",
+   "1",
+   "18",
+   "162",
+   "147",
+   "15",
+   "W+L-L+L+L+W-W+W+W+W+"
+  ],
+  [
+   "4",
+   {
+    "id": 101139,
+    "name": "ZSC Lions",
+    "acronym": "ZSC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "91",
+   "1.750",
+   "25",
+   "2",
+   "2",
+   "4",
+   "4",
+   "15",
+   "147",
+   "115",
+   "32",
+   "L-W+W+L+W+W-L+W+L+W+"
+  ],
+  [
+   "5",
+   {
+    "id": 101150,
+    "name": "HC Lugano",
+    "acronym": "HCL",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "89",
+   "1.712",
+   "26",
+   "0",
+   "2",
+   "3",
+   "4",
+   "17",
+   "150",
+   "120",
+   "30",
+   "L+W+L+W+L-W+L+L+L-W+"
+  ],
+  [
+   "6",
+   {
+    "id": 103141,
+    "name": "Lausanne HC",
+    "acronym": "LHC",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "85",
+   "1.635",
+   "22",
+   "5",
+   "2",
+   "2",
+   "3",
+   "18",
+   "155",
+   "137",
+   "18",
+   "L-W-L+W+L-L-W+L+W+L-"
+  ],
+  [
+   "7",
+   {
+    "id": 101060,
+    "name": "SC Rapperswil-Jona Lakers",
+    "acronym": "SCRJ",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "81",
+   "1.558",
+   "21",
+   "4",
+   "2",
+   "4",
+   "2",
+   "19",
+   "150",
+   "154",
+   "-4",
+   "L+L+L+W+W+L+W+W+W-W+"
+  ],
+  [
+   "8",
+   {
+    "id": 101144,
+    "name": "EV Zug",
+    "acronym": "EVZ",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "75",
+   "1.442",
+   "20",
+   "1",
+   "2",
+   "5",
+   "4",
+   "20",
+   "126",
+   "145",
+   "-19",
+   "W+L+L+W+L+W+W+L-L-L+"
+  ],
+  [
+   "9",
+   {
+    "id": 102126,
+    "name": "SC Bern",
+    "acronym": "SCB",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "68",
+   "1.308",
+   "15",
+   "4",
+   "5",
+   "1",
+   "4",
+   "23",
+   "118",
+   "128",
+   "-10",
+   "W+W-L+W+L-L-L+W-L+L+"
+  ],
+  [
+   "10",
+   {
+    "id": 102128,
+    "name": "EHC Biel-Bienne",
+    "acronym": "EHCB",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "67",
+   "1.288",
+   "14",
+   "3",
+   "7",
+   "2",
+   "3",
+   "23",
+   "143",
+   "165",
+   "-22",
+   "W+W+L+L-W-L+W+L+W+L+"
+  ],
+  [
+   "11",
+   {
+    "id": 102127,
+    "name": "SCL Tigers",
+    "acronym": "SCL",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "64",
+   "1.231",
+   "16",
+   "3",
+   "1",
+   "5",
+   "3",
+   "24",
+   "140",
+   "147",
+   "-7",
+   "L-L+L-W+L+L+L+L+L+L+"
+  ],
+  [
+   "12",
+   {
+    "id": 101149,
+    "name": "EHC Kloten",
+    "acronym": "EHCK",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "63",
+   "1.212",
+   "15",
+   "5",
+   "0",
+   "4",
+   "4",
+   "24",
+   "117",
+   "143",
+   "-26",
+   "L+L+L-W-W-W+W+L+W-L+"
+  ],
+  [
+   "13",
+   {
+    "id": 101152,
+    "name": "HC Ambri-Piotta",
+    "acronym": "HCAP",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "59",
+   "1.135",
+   "14",
+   "3",
+   "3",
+   "1",
+   "4",
+   "27",
+   "129",
+   "178",
+   "-49",
+   "W-L-W+L+W-L+L+W-W+L+"
+  ],
+  [
+   "14",
+   {
+    "id": 103144,
+    "name": "HC Ajoie",
+    "acronym": "HCA",
+    "signed": false,
+    "type": "team"
+   },
+   "52",
+   "42",
+   "0.808",
+   "9",
+   "1",
+   "3",
+   "2",
+   "5",
+   "32",
+   "105",
+   "180",
+   "-75",
+   "W-W+L+L+L+L+L+L-L+W-"
+  ]
+ ],
+ "alias": "standing"
+}

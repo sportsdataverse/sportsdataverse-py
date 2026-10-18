@@ -1,0 +1,61 @@
+{
+  "data": {
+    "matchId": "345690",
+    "shotInfos": [
+      {
+        "x": 34,
+        "y": 51,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": false,
+        "playerId": 2498975,
+        "playerName": "Alperi Onar",
+        "jerseyNumber": "10",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "x": 26,
+        "y": 12,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": true,
+        "playerId": 2817648,
+        "playerName": "Tima Pouye",
+        "jerseyNumber": "32",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      },
+      {
+        "x": 8,
+        "y": 47,
+        "period": 1,
+        "periodType": 1,
+        "isSucceed": true,
+        "playerId": 2499939,
+        "playerName": "Zeynep Şevval  Gül",
+        "jerseyNumber": "12",
+        "image": "",
+        "isHome": true,
+        "isActive": false,
+        "isStarter": false,
+        "pno": 0,
+        "caption": false,
+        "teamName": ""
+      }
+    ]
+  },
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

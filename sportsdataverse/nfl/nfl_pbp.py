@@ -56,6 +56,7 @@ from sportsdataverse.football.attribution import (
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box
 from sportsdataverse.football.box import _ordered_rows
+from sportsdataverse.football.box import _avg_start_ep
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
 from sportsdataverse.football.espn_box import espn_passes_defended as _espn_passes_defended
@@ -7734,6 +7735,14 @@ class NFLPlayProcess(object):
                 pos_team=pl.col("pos_team").cast(pl.Int32),
             )
         )
+        # Drive starts in EP units on the league's field-position curve. On a window of the
+        # game (Game on Paper's quarter / half boxes re-run this on a slice of plays_frame),
+        # each drive is valued at its first snap of the whole game, not of the window.
+        from sportsdataverse.nfl.nfl_field_position import load_nfl_fp_curve as _load_curve
+
+        start_ep = _avg_start_ep(play_df, _load_curve(), getattr(self, "plays_frame", None))
+        assert drives_data.schema["pos_team"] == start_ep.schema["pos_team"]
+        drives_data = drives_data.join(start_ep, on="pos_team", how="left")
 
         box = {
             "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),

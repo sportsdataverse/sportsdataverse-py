@@ -1,0 +1,202 @@
+api: elh
+docstring:
+  example_import: true
+  raises:
+  - 'sportsdataverse.errors.NoDataError: a missing file (404 NoSuchKey), a scoreboard
+    day outside the rolling window, or a stub body (no comments / shots / minutes,
+    no Extraliga game that day).'
+  - 'sportsdataverse.errors.AssetFetchError: an error envelope, a body for another
+    game or day, or a broken listing page.'
+  see_also:
+  - name: hokej.cz
+    note: the Czech hockey federation site whose pages read these files
+    url: https://www.hokej.cz/tipsport-extraliga
+  - name: fastRhockey
+    note: hockey data in R
+    url: https://fastRhockey.sportsdataverse.org
+endpoints:
+- example_args:
+    match_id: 2928321
+  parser: parse_elh_events
+  path: /visualization/events/{match_id}.json
+  path_params:
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/events
+  short: events
+  summary: Cumulative shot attempts and shots on goal of one game, per team and game
+    minute.
+- docstring:
+    raw_doc: the raw ListObjects V1 XML page as text (``str``)
+  example_args:
+    max_keys: '3'
+    prefix: match/2026/full/
+  extra_params:
+  - description: Key prefix, e.g. `match/2026/full/` or `visualization/shots/`.
+    name: prefix
+    query_key: prefix
+    type: str
+  - description: '`/` groups keys below the next slash into CommonPrefixes (folder
+      view).'
+    name: delimiter
+    query_key: delimiter
+    type: str
+  - description: 'ListObjects V1 paging: the last `Key` of the previous page; repeat
+      until `IsTruncated` is false (V1 sends `NextMarker` only with a delimiter).'
+    name: marker
+    query_key: marker
+    type: str
+  - description: Page size, at most 1000 (the default).
+    name: max_keys
+    query_key: max-keys
+    type: str
+  - description: '`2` switches to ListObjectsV2 (`KeyCount`, `NextContinuationToken`);
+      omitted = V1 as documented here.'
+    name: list_type
+    query_key: list-type
+    type: str
+  - description: 'V2 only (`list-type=2`): `NextContinuationToken` of the previous
+      page.'
+    name: continuation_token
+    query_key: continuation-token
+    type: str
+  - description: 'V2 only (`list-type=2`): list keys after this key.'
+    name: start_after
+    query_key: start-after
+    type: str
+  parser: parse_elh_game_ids
+  path: /
+  returns_schema: native/elh/list_objects
+  short: list_objects
+  summary: One page (up to 1,000 keys) of the hokej.cz S3 bucket listing; match keys
+    carry the hokej.cz game id. The bucket is not Extraliga-only.
+- example_args:
+    match_id: 2928321
+    season: 2027
+  parser: parse_elh_pbp
+  path: /match/{season}/full/{match_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026-27); the bucket files it under
+      the START year (match/2026/). Play-by-play starts in 2014-15 (season 2015).
+    name: season
+    required: true
+    transform: elh_start_year
+    type: int
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/pbp
+  short: pbp
+  summary: 'Play-by-play commentary of one game, every entry, oldest first: goals
+    and penalties with team and players (onlajny ids).'
+- example_args:
+    match_id: 2928321
+    season: 2027
+  parser: parse_elh_pbp_goals
+  path: /match/{season}/full/{match_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026-27); the bucket files it under
+      the START year (match/2026/). Play-by-play starts in 2014-15 (season 2015).
+    name: season
+    required: true
+    transform: elh_start_year
+    type: int
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/pbp_goals
+  short: pbp_goals
+  summary: Players on the ice at each goal of one game (onlajny ids), one row per
+    player, with the strength.
+- example_args:
+    match_id: 2928321
+    season: 2027
+  parser: parse_elh_pbp
+  path: /match/{season}/short/{match_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026-27); the bucket files it under
+      the START year (match/2026/). Play-by-play starts in 2014-15 (season 2015).
+    name: season
+    required: true
+    transform: elh_start_year
+    type: int
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/pbp_latest
+  short: pbp_latest
+  summary: The newest 20 play-by-play entries of one game (same columns as elh_pbp).
+- example_args:
+    match_id: 2928321
+    season: 2027
+  parser: parse_elh_pbp_mobile
+  path: /match/{season}/mobile/{match_id}.json
+  path_params:
+  - description: Season by its END year (2027 = 2026-27); the bucket files it under
+      the START year (match/2026/). Play-by-play starts in 2014-15 (season 2015).
+    name: season
+    required: true
+    transform: elh_start_year
+    type: int
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/pbp_mobile
+  short: pbp_mobile
+  summary: Play-by-play of one game as plain text (no team or player ids), oldest
+    first.
+- example_args:
+    date: '2026-10-11'
+  host: https://json.esports.cz/hokejcz
+  parser: parse_elh_scoreboard
+  path: /scoreboard/{date}.json
+  path_params:
+  - description: 'Day, YYYY-MM-DD. The scoreboard is a ROLLING window of recent days:
+      an older day (and today) answers 404, raised as NoDataError; a day without an
+      Extraliga game raises NoDataError too.'
+    name: date
+    required: true
+    type: str
+  returns_schema: native/elh/scoreboard
+  short: scoreboard
+  summary: Extraliga games of one recent day with both id spaces (hokej.cz and onlajny)
+    for games and teams.
+- example_args:
+    match_id: 2928321
+  parser: parse_elh_shots
+  path: /visualization/shots/{match_id}.json
+  path_params:
+  - description: hokej.cz game id (the S3 file name; hokejcz_game_id of elh_game_ids
+      / elh_scoreboard), e.g. 2928321. Not the onlajny game id.
+    name: match_id
+    required: true
+    type: int
+  returns_schema: native/elh/shots
+  short: shots
+  summary: Shot attempts of one game with rink coordinates and result code (hokej.cz
+    ids).
+getter_module: sportsdataverse.hockey.elh.elh_runtime
+host: https://s3-eu-west-1.amazonaws.com/hokej.cz
+module: elh
+name_pattern: elh_{short}
+parser_module: hockey.elh.elh_parsers
+passthrough_query: false
+qualifier: ''
+raw_types:
+- Dict
+- str
+runtime_imports:
+- _get
+- elh_start_year
+schema_prefix: elh_

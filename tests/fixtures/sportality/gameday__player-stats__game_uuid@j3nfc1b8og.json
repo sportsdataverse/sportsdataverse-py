@@ -1,0 +1,253 @@
+{
+  "dataColumns": [
+    {
+      "name": "Player",
+      "displayed": true
+    },
+    {
+      "name": "NR",
+      "displayed": true
+    },
+    {
+      "name": "teamNumber",
+      "displayed": false
+    }
+  ],
+  "players": {
+    "homeTeamValue": {
+      "289158": {
+        "fullName": "Jacob Enevold Jensen",
+        "firstName": "Jacob Enevold",
+        "lastName": "Jensen"
+      },
+      "380920": {
+        "fullName": "Anton Gajda Harbo",
+        "firstName": "Anton Gajda",
+        "lastName": "Harbo"
+      },
+      "1002809": {
+        "fullName": "Martin Lindholm Christiansen",
+        "firstName": "Martin Lindholm",
+        "lastName": "Christiansen"
+      }
+    },
+    "awayTeamValue": {
+      "172045": {
+        "fullName": "Frederik Rungby",
+        "firstName": "Frederik",
+        "lastName": "Rungby"
+      },
+      "289043": {
+        "fullName": "Sami Eleraky",
+        "firstName": "Sami",
+        "lastName": "Eleraky"
+      },
+      "337485": {
+        "fullName": "Marius Kirkholt Sørensen",
+        "firstName": "Marius Kirkholt",
+        "lastName": "Sørensen"
+      }
+    }
+  },
+  "stats": {
+    "homeTeamValue": [
+      {
+        "NR": 1,
+        "teamNumber": 1,
+        "pno": 2078538,
+        "MINS": "11:58",
+        "PTS": 4,
+        "FG": "0-2",
+        "FG%": 0,
+        "2P": "0-1",
+        "2P%": 0,
+        "3P": "0-1",
+        "3P%": 0,
+        "FT": "4-4",
+        "FT%": 100,
+        "OFF": 0,
+        "DEF": 1,
+        "REB": 1,
+        "AST": 0,
+        "TO": 0,
+        "STL": 0,
+        "BLK": 0,
+        "BLKR": 0,
+        "PF": 0,
+        "FOn": 3,
+        "+/-": -8,
+        "info": {
+          "period": 0,
+          "playerId": 2078538,
+          "team": "Svendborg Rabbits"
+        }
+      },
+      {
+        "NR": "",
+        "teamNumber": "",
+        "pno": "",
+        "MINS": "",
+        "PTS": "",
+        "FG": "",
+        "FG%": "",
+        "2P": "",
+        "2P%": "",
+        "3P": "",
+        "3P%": "",
+        "FT": "",
+        "FT%": "",
+        "OFF": 0,
+        "DEF": 4,
+        "REB": 4,
+        "AST": "",
+        "TO": 0,
+        "STL": "",
+        "BLK": "",
+        "BLKR": "",
+        "PF": 0,
+        "FOn": "",
+        "+/-": "",
+        "info": {
+          "playerId": "",
+          "teamSummary": true,
+          "label": "sports.stats.team_coach",
+          "period": 0,
+          "side": "home"
+        }
+      },
+      {
+        "NR": "",
+        "teamNumber": "",
+        "pno": "",
+        "MINS": "",
+        "PTS": 80,
+        "FG": "27-58",
+        "FG%": 46.6,
+        "2P": "16-35",
+        "2P%": 45.7,
+        "3P": "11-23",
+        "3P%": 47.8,
+        "FT": "15-19",
+        "FT%": 78.9,
+        "OFF": 3,
+        "DEF": 24,
+        "REB": 31,
+        "AST": 18,
+        "TO": 8,
+        "STL": 2,
+        "BLK": 2,
+        "BLKR": 2,
+        "PF": 18,
+        "FOn": 17,
+        "+/-": "",
+        "info": {
+          "playerId": "",
+          "teamSummary": true,
+          "label": "sports.stats.team_totals",
+          "period": 0,
+          "side": "home"
+        }
+      }
+    ],
+    "awayTeamValue": [
+      {
+        "NR": 1,
+        "teamNumber": 2,
+        "pno": 905599,
+        "MINS": "20:04",
+        "PTS": 6,
+        "FG": "2-6",
+        "FG%": 33.3,
+        "2P": "0-1",
+        "2P%": 0,
+        "3P": "2-5",
+        "3P%": 40,
+        "FT": "0-0",
+        "FT%": 0,
+        "OFF": 0,
+        "DEF": 2,
+        "REB": 2,
+        "AST": 1,
+        "TO": 0,
+        "STL": 0,
+        "BLK": 0,
+        "BLKR": 0,
+        "PF": 1,
+        "FOn": 1,
+        "+/-": -3,
+        "info": {
+          "period": 0,
+          "playerId": 905599,
+          "team": "Horsens IC"
+        }
+      },
+      {
+        "NR": "",
+        "teamNumber": "",
+        "pno": "",
+        "MINS": "",
+        "PTS": "",
+        "FG": "",
+        "FG%": "",
+        "2P": "",
+        "2P%": "",
+        "3P": "",
+        "3P%": "",
+        "FT": "",
+        "FT%": "",
+        "OFF": 3,
+        "DEF": 3,
+        "REB": 6,
+        "AST": "",
+        "TO": 1,
+        "STL": "",
+        "BLK": "",
+        "BLKR": "",
+        "PF": 0,
+        "FOn": "",
+        "+/-": "",
+        "info": {
+          "playerId": "",
+          "teamSummary": true,
+          "label": "sports.stats.team_coach",
+          "period": 0,
+          "side": "away"
+        }
+      },
+      {
+        "NR": "",
+        "teamNumber": "",
+        "pno": "",
+        "MINS": "",
+        "PTS": 77,
+        "FG": "28-71",
+        "FG%": 39.4,
+        "2P": "19-42",
+        "2P%": 45.2,
+        "3P": "9-29",
+        "3P%": 31,
+        "FT": "12-16",
+        "FT%": 75,
+        "OFF": 13,
+        "DEF": 29,
+        "REB": 48,
+        "AST": 14,
+        "TO": 11,
+        "STL": 2,
+        "BLK": 2,
+        "BLKR": 2,
+        "PF": 18,
+        "FOn": 18,
+        "+/-": "",
+        "info": {
+          "playerId": "",
+          "teamSummary": true,
+          "label": "sports.stats.team_totals",
+          "period": 0,
+          "side": "away"
+        }
+      }
+    ]
+  },
+  "provider": "genius-basketball"
+}

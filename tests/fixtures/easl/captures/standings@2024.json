@@ -1,0 +1,260 @@
+[
+  {
+    "id": "a9b5006e-9d18-11f0-b131-85105bf9984f",
+    "position": 2,
+    "team": {
+      "id": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "name": "Taoyuan Pauian Pilots",
+      "code": "",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW"
+    },
+    "pool": {
+      "id": "6a5477234bcd4fd69dd3810052fd5a",
+      "name": "Group A",
+      "abb": "A"
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 4,
+      "winsHome": 2,
+      "winsAway": 2,
+      "losses": 2,
+      "lossesHome": 1,
+      "lossesAway": 1,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 0.67,
+      "winPercentageHome": 0.67,
+      "winPercentageAway": 0.67,
+      "pointDifference": 85,
+      "pointDifferenceHome": 51,
+      "pointDifferenceAway": 34,
+      "pointsFor": 544,
+      "pointsAgainst": 459,
+      "steak": 1,
+      "streakAway": 0,
+      "streakHome": 1
+    },
+    "lastFiveMatches": [
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "68",
+        "scoreAgainst": "72",
+        "startTimeUTC": "2025-03-09T11:10:00",
+        "opponent": {
+          "id": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+          "name": "Hiroshima Dragonflies",
+          "code": "HDF",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "87",
+        "scoreAgainst": "61",
+        "startTimeUTC": "2025-02-05T11:10:00",
+        "opponent": {
+          "id": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+          "name": "Hong Kong Eastern",
+          "code": "HKE",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "92",
+        "scoreAgainst": "95",
+        "startTimeUTC": "2025-01-22T10:10:00",
+        "opponent": {
+          "id": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+          "name": "Hiroshima Dragonflies",
+          "code": "HDF",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW"
+        }
+      }
+    ]
+  },
+  {
+    "id": "a9b99702-9d18-11f0-8dc3-85105bf9984f",
+    "position": 5,
+    "team": {
+      "id": "86625aaf-b0f5-11ed-8cb0-c199a9dea184",
+      "name": "San Miguel Beermen",
+      "code": "",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/8c2abae188de4881abb3fb6b1e07a3ed?size=RAW"
+    },
+    "pool": {
+      "id": "6a5477234bcd4fd69dd3810052fd5a",
+      "name": "Group A",
+      "abb": "A"
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 0,
+      "winsHome": 0,
+      "winsAway": 0,
+      "losses": 6,
+      "lossesHome": 3,
+      "lossesAway": 3,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 0,
+      "winPercentageHome": 0,
+      "winPercentageAway": 0,
+      "pointDifference": -85,
+      "pointDifferenceHome": -32,
+      "pointDifferenceAway": -53,
+      "pointsFor": 446,
+      "pointsAgainst": 531,
+      "steak": 0,
+      "streakAway": 0,
+      "streakHome": 0
+    },
+    "lastFiveMatches": [
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "81",
+        "scoreAgainst": "94",
+        "startTimeUTC": "2025-02-12T10:10:00",
+        "opponent": {
+          "id": "a0d339ca-5ad9-11ef-9034-e57ee855c509",
+          "name": "Suwon KT Sonicboom",
+          "code": "KT",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/b2f914fe6a124b5a9681b808c008779a?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": true,
+        "isNeutralVenue": false,
+        "scoreFor": "74",
+        "scoreAgainst": "84",
+        "startTimeUTC": "2025-01-15T12:10:00",
+        "opponent": {
+          "id": "27492b3f-5ada-11ef-86eb-61fb7e764dd2",
+          "name": "Hong Kong Eastern",
+          "code": "HKE",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/adf60619aed949ffb17b68c344ba8302?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "63",
+        "scoreAgainst": "94",
+        "startTimeUTC": "2025-01-08T10:10:00",
+        "opponent": {
+          "id": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+          "name": "Hiroshima Dragonflies",
+          "code": "HDF",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW"
+        }
+      }
+    ]
+  },
+  {
+    "id": "a9c1eb14-9d18-11f0-a5cb-85105bf9984f",
+    "position": 1,
+    "team": {
+      "id": "865db37a-b0f5-11ed-b344-c199a9dea184",
+      "name": "Ryukyu Golden Kings",
+      "code": "",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/52ff4d6fc57c42c4bdbde948f1f19c55?size=RAW"
+    },
+    "pool": {
+      "id": "8e7bc6f4fa624c67a46b61a426b389",
+      "name": "Group B",
+      "abb": "B"
+    },
+    "live": false,
+    "latest": false,
+    "stats": {
+      "gamePlayed": 6,
+      "gamePlayedHome": 3,
+      "gamePlayedAway": 3,
+      "wins": 5,
+      "winsHome": 3,
+      "winsAway": 2,
+      "losses": 1,
+      "lossesHome": 0,
+      "lossesAway": 1,
+      "draws": 0,
+      "drawsHome": 0,
+      "drawsAway": 0,
+      "winPercentage": 0.83,
+      "winPercentageHome": 1,
+      "winPercentageAway": 0.67,
+      "pointDifference": 5,
+      "pointDifferenceHome": 20,
+      "pointDifferenceAway": -15,
+      "pointsFor": 498,
+      "pointsAgainst": 493,
+      "steak": 1,
+      "streakAway": 1,
+      "streakHome": 3
+    },
+    "lastFiveMatches": [
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "80",
+        "scoreAgainst": "84",
+        "startTimeUTC": "2025-03-09T08:10:00",
+        "opponent": {
+          "id": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+          "name": "New Taipei Kings",
+          "code": "NTK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW"
+        }
+      },
+      {
+        "result": "W",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "89",
+        "scoreAgainst": "71",
+        "startTimeUTC": "2025-01-22T12:10:00",
+        "opponent": {
+          "id": "c6b1277e-64c1-11ee-862b-3b1d78292126",
+          "name": "Meralco Bolts",
+          "code": "MRB",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/121e63062e194cfd84e381b0c7528dd3?size=RAW"
+        }
+      },
+      {
+        "result": "L",
+        "isHome": false,
+        "isNeutralVenue": false,
+        "scoreFor": "63",
+        "scoreAgainst": "99",
+        "startTimeUTC": "2025-01-08T11:10:00",
+        "opponent": {
+          "id": "b18c0d83-64c1-11ee-94b6-3b1d78292126",
+          "name": "New Taipei Kings",
+          "code": "NTK",
+          "logo": "https://images.dc.connect.sportradar.com/b1e0z/0187cc9d82c04ebf8dc15852744a2951?size=RAW"
+        }
+      }
+    ]
+  }
+]
