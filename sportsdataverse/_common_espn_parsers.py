@@ -655,13 +655,36 @@ def parse_athlete_overview(payload: Dict, return_as_pandas: bool = False) -> pl.
 # ===========================================================================
 
 
+def _stat_split_row(cat_name: str, names: list[str], split: dict) -> dict:
+    """One row of a stat category: the split's labels plus its ``stats`` under ``names``.
+
+    A Web v3 per-season row carries ``season`` instead of a name: its label becomes
+    ``split_name`` and the row gains ``season`` (end year), ``team_id`` and ``position``.
+    """
+    season = split.get("season") or {}
+    row = {
+        "category": cat_name,
+        "split_name": split.get("name") or split.get("displayName") or season.get("displayName"),
+        "split_category": split.get("category"),
+        "split_value": split.get("value"),
+    }
+    if season:
+        row.update(season=season.get("year"), team_id=split.get("teamId"), position=split.get("position"))
+    for i, val in enumerate(split.get("stats") or []):
+        row[underscore(names[i]) if i < len(names) else f"stat_{i}"] = val
+    return row
+
+
 def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse an athlete stats response into a tidy polars frame.
 
     Input: raw payload from ``_espn_athlete_stats()``.
     Output: one row per (category × split) combination. The parallel
     ``labels``/``names``/``displayNames`` arrays become column names; each
-    ``splits[].stats[]`` array becomes the values.
+    ``splits[].stats[]`` array becomes the values. The Web v3 payload holds
+    its rows under ``categories[].statistics[]``, one per season and team:
+    ``split_name`` is then the season label (``"2010-11"``) and the row also
+    carries ``season`` (the end year), ``team_id`` and ``position``.
 
     Args:
         payload: Raw JSON dict from the athlete stats endpoint.
@@ -693,26 +716,17 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
         cat_name = cat.get("name") or cat.get("displayName") or ""
         labels: List[str] = cat.get("labels") or cat.get("names") or []
         names: List[str] = cat.get("names") or labels
-        splits = cat.get("splits") or []
-        for split in splits:
-            stats: List = split.get("stats") or []
-            row = {
-                "category": cat_name,
-                "split_name": split.get("name") or split.get("displayName"),
-                "split_category": split.get("category"),
-                "split_value": split.get("value"),
-            }
-            for i, val in enumerate(stats):
-                col = underscore(names[i]) if i < len(names) else f"stat_{i}"
-                row[col] = val
-            rows.append(row)
+        # Web v3 answers one row per season and team under ``statistics`` (real capture, 2026-10-18).
+        splits = cat.get("splits") or cat.get("statistics") or []
+        rows.extend(_stat_split_row(cat_name, names, split) for split in splits)
 
     if not rows:
         return _empty_frame(return_as_pandas)
 
-    df = pd.DataFrame(rows)
-    df = _snake_columns(df)
-    return _to_output(df, return_as_pandas)
+    out = _to_output(_snake_columns(pd.DataFrame(rows)), return_as_pandas)
+    if isinstance(out, pl.DataFrame) and "team_id" in out.columns:
+        out = out.with_columns(pl.col("team_id").cast(pl.Int64, strict=False))  # ESPN ids are Int64 (A-M15)
+    return out
 
 
 # ===========================================================================
@@ -984,7 +998,10 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     Input: raw payload from ``_core_v2_season_draft()`` or
     ``_site_v2_draft()``.
     Output: one row per pick from ``rounds[].picks[]``.  Falls back to
-    ``items[]`` or ``picks[]`` when the rounds structure is absent.
+    ``items[]`` or ``picks[]`` when the rounds structure is absent. The Core v2
+    season draft is an index whose ``rounds`` is a ``{"$ref"}`` link, with no
+    picks inline: it parses to one row of the draft's own fields (``year``,
+    ``display_name``, ``number_of_rounds``, the ``$ref`` links).
 
     Args:
         payload: Raw JSON dict from the draft endpoint.
@@ -1002,6 +1019,8 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         return _empty_frame(return_as_pandas)
 
     rounds = payload.get("rounds") or []
+    if isinstance(rounds, dict):  # Core v2: the rounds are a $ref, so this is the draft's index row
+        return _single_row(payload, return_as_pandas)
     all_picks: List[dict] = []
 
     if rounds:
@@ -1105,6 +1124,8 @@ def parse_event_competitor_statistics(payload: Dict, return_as_pandas: bool = Fa
         return _empty_frame(return_as_pandas)
 
     splits = payload.get("splits") or []
+    if isinstance(splits, dict):  # Core v2 answers one split object ("All Splits"), not a list
+        splits = [splits]
     if not splits:
         # Some endpoints expose categories directly
         cats = payload.get("categories") or []

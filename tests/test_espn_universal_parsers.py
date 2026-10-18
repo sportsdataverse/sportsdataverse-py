@@ -116,6 +116,39 @@ def test_parse_items_handles_entries_key_for_statisticslog():
     assert df.height >= 1, "parse_items must fall back to the 'entries' key for athlete_statisticslog payloads"
 
 
+# The three parsers below had never seen a real payload (their schemas said ``unverified``); each test
+# reads the 2026-10-18 capture its fix was made against.
+
+
+def test_athlete_stats_reads_the_web_v3_per_season_rows():
+    """Web v3 keeps the rows under ``categories[].statistics[]``: it parsed to 0 x 0."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    df = parse_athlete_stats(_load("athlete_stats_nba"))
+    assert df.height == 36  # 3 categories x 12 season rows
+    first = df.filter((pl.col("category") == "averages") & (pl.col("split_name") == "2010-11"))
+    assert first.select("season", "team_id", "position", "games_played", "avg_minutes").rows() == [
+        (2011, 20, "G", "78", "23.0")
+    ]
+
+
+def test_event_competitor_statistics_reads_the_one_split_object():
+    """Core v2 answers ``splits`` as one object: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_event_competitor_statistics
+
+    df = parse_event_competitor_statistics(_load("event_competitor_statistics_nba"))
+    assert df.height == 98 and set(df["category_name"]) == {"defensive", "general", "offensive"}
+    assert df.filter(pl.col("stat_name") == "blocks").select("split_name", "stat_value").rows() == [("All Splits", 7.0)]
+
+
+def test_season_draft_index_parses_to_its_own_row():
+    """The Core v2 season draft's ``rounds`` is a ``$ref``: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+
+    df = parse_draft(_load("season_draft_nba"))
+    assert df.select("year", "number_of_rounds", "short_display_name").rows() == [(2024, 2, "2024 NBA Draft")]
+
+
 # ===========================================================================
 # Empty-payload contract for ALL new parsers
 # ===========================================================================

@@ -74,9 +74,57 @@ ESPN endpoint.
 
 ### Returns {#espn_nfl_player_stats_v3-returns}
 
-**`return_parsed=True`** (default) — the output of `parse_athlete_stats`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
-No returns table is published for this endpoint: parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit under keys it does not read (top level: categories, filters, glossary, teams).
+| col_name | type | description |
+|---|---|---|
+| `category` | character | ESPN stat category the row belongs to (NBA "averages", "totals" or "miscellaneous"); each category carries its own stat columns, and the other categories' columns are null on its rows. |
+| `split_name` | character | Season label of the row (e.g., "2010-11") on the Web v3 payload; the split's name on payloads that ship named splits. |
+| `split_category` | character | Category of a named split; null on the Web v3 per-season rows. |
+| `split_value` | character | Value of a named split; null on the Web v3 per-season rows. |
+| `season` | integer | Season end year of the row (e.g., 2011 for 2010-11). |
+| `team_id` | integer | ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. |
+| `position` | character | Position abbreviation the athlete was listed at for that season and team (e.g., "G"). |
+| `games_played` | character | Games played (GP), as ESPN ships it (a string). |
+| `games_started` | character | Games started (GS). |
+| `avg_minutes` | character | Minutes per game (MIN). |
+| `avg_field_goals_made_avg_field_goals_attempted` | character | Field goals made-attempted per game (FG), one "made-attempted" string (e.g., "3.9-9.0"). |
+| `field_goal_pct` | character | Field goal percentage (FG%), FGM / FGA x 100. |
+| `avg_three_point_field_goals_made_avg_three_point_field_goals_attempted` | character | Three-point field goals made-attempted per game (3PT), one "made-attempted" string. |
+| `three_point_field_goal_pct` | character | Three-point field goal percentage (3P%), 3PM / 3PA x 100. |
+| `avg_free_throws_made_avg_free_throws_attempted` | character | Free throws made-attempted per game (FT), one "made-attempted" string. |
+| `free_throw_pct` | character | Free throw percentage (FT%), FTM / FTA x 100. |
+| `avg_offensive_rebounds` | character | Offensive rebounds per game (OR). |
+| `avg_defensive_rebounds` | character | Defensive rebounds per game (DR). |
+| `avg_rebounds` | character | Rebounds per game (REB). |
+| `avg_assists` | character | Assists per game (AST). |
+| `avg_blocks` | character | Blocks per game (BLK). |
+| `avg_steals` | character | Steals per game (STL). |
+| `avg_fouls` | character | Personal fouls per game (PF). |
+| `avg_turnovers` | character | Turnovers per game (TO). |
+| `avg_points` | character | Points per game (PTS). |
+| `field_goals_made_field_goals_attempted` | character | Season field goals made-attempted (FG), one "made-attempted" string. |
+| `three_point_field_goals_made_three_point_field_goals_attempted` | character | Season three-point field goals made-attempted (3PT), one "made-attempted" string. |
+| `free_throws_made_free_throws_attempted` | character | Season free throws made-attempted (FT), one "made-attempted" string. |
+| `offensive_rebounds` | character | Season offensive rebounds (OR). |
+| `defensive_rebounds` | character | Season defensive rebounds (DR). |
+| `total_rebounds` | character | Season rebounds (REB). |
+| `assists` | character | Season assists (AST). |
+| `blocks` | character | Season blocked shots (BLK). |
+| `steals` | character | Season steals (STL). |
+| `fouls` | character | Season personal fouls (PF). |
+| `turnovers` | character | Season turnovers (TO). |
+| `points` | character | Season points (PTS). |
+| `double_double` | character | Games with double figures in two of points, rebounds, assists, steals and blocks (DD2). |
+| `triple_double` | character | Games with double figures in three of points, rebounds, assists, steals and blocks (TD3). |
+| `disqualifications` | character | Times the athlete fouled out (DQ). |
+| `ejections` | character | Times the athlete was ejected (EJECT). |
+| `technical_fouls` | character | Technical fouls called on the athlete (TECH). |
+| `flagrant_fouls` | character | Flagrant fouls called on the athlete (FLAG). |
+| `assist_turnover_ratio` | character | Assists per turnover (AST/TO). |
+| `steal_turnover_ratio` | character | Steals per turnover (STL/TO). |
+| `scoring_efficiency` | character | ESPN's scoring efficiency (SC-EFF). |
+| `shooting_efficiency` | character | ESPN's shooting efficiency (SH-EFF). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

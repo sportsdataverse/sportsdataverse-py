@@ -148,6 +148,57 @@
    "season_$ref": "String"
   }
  },
+ "athlete_stats_nba": {
+  "": {
+   "category": "String",
+   "split_name": "String",
+   "split_category": "String",
+   "split_value": "String",
+   "season": "Int64",
+   "team_id": "Int64",
+   "position": "String",
+   "games_played": "String",
+   "games_started": "String",
+   "avg_minutes": "String",
+   "avg_field_goals_made_avg_field_goals_attempted": "String",
+   "field_goal_pct": "String",
+   "avg_three_point_field_goals_made_avg_three_point_field_goals_attempted": "String",
+   "three_point_field_goal_pct": "String",
+   "avg_free_throws_made_avg_free_throws_attempted": "String",
+   "free_throw_pct": "String",
+   "avg_offensive_rebounds": "String",
+   "avg_defensive_rebounds": "String",
+   "avg_rebounds": "String",
+   "avg_assists": "String",
+   "avg_blocks": "String",
+   "avg_steals": "String",
+   "avg_fouls": "String",
+   "avg_turnovers": "String",
+   "avg_points": "String",
+   "field_goals_made_field_goals_attempted": "String",
+   "three_point_field_goals_made_three_point_field_goals_attempted": "String",
+   "free_throws_made_free_throws_attempted": "String",
+   "offensive_rebounds": "String",
+   "defensive_rebounds": "String",
+   "total_rebounds": "String",
+   "assists": "String",
+   "blocks": "String",
+   "steals": "String",
+   "fouls": "String",
+   "turnovers": "String",
+   "points": "String",
+   "double_double": "String",
+   "triple_double": "String",
+   "disqualifications": "String",
+   "ejections": "String",
+   "technical_fouls": "String",
+   "flagrant_fouls": "String",
+   "assist_turnover_ratio": "String",
+   "steal_turnover_ratio": "String",
+   "scoring_efficiency": "String",
+   "shooting_efficiency": "String"
+  }
+ },
  "athletes_index_nba": {
   "": {
    "$ref": "String"
@@ -340,6 +391,17 @@
    "starter": "Boolean",
    "did_not_play": "Boolean",
    "ejected": "Boolean"
+  }
+ },
+ "event_competitor_statistics_nba": {
+  "": {
+   "split_name": "String",
+   "category_name": "String",
+   "stat_name": "String",
+   "stat_abbreviation": "String",
+   "stat_value": "Float64",
+   "stat_display_value": "String",
+   "stat_description": "String"
   }
  },
  "event_competitors_nba": {
@@ -2231,6 +2293,21 @@
  "season_coaches_nba": {
   "": {
    "$ref": "String"
+  }
+ },
+ "season_draft_nba": {
+  "": {
+   "$ref": "String",
+   "display_name": "String",
+   "links": "String",
+   "number_of_rounds": "Int64",
+   "positions": "String",
+   "short_display_name": "String",
+   "uid": "String",
+   "year": "Int64",
+   "athletes_$ref": "String",
+   "rounds_$ref": "String",
+   "status_$ref": "String"
   }
  },
  "season_futures_nba": {

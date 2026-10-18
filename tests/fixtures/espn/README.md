@@ -3,6 +3,7 @@
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [ESPN universal-endpoint fixture payloads](#espn-universal-endpoint-fixture-payloads)
+  - [Parser-repair captures (2026-10-18)](#parser-repair-captures-2026-10-18)
   - [Returns-table captures (2026-10-07)](#returns-table-captures-2026-10-07)
   - [Schedule and teams captures (2026-06-08, `tools/capture_espn_fixtures.py`)](#schedule-and-teams-captures-2026-06-08-toolscapture_espn_fixturespy)
   - [Provider-gate captures (2026-10-11, task 1.4)](#provider-gate-captures-2026-10-11-task-14)
@@ -54,6 +55,20 @@ of the same shape family.
 To refresh, re-capture with the same URLs and overwrite the files
 (stem-matched). The parser tests are payload-agnostic so newer captures
 will keep working as long as the schema doesn't change.
+
+## Parser-repair captures (2026-10-18)
+
+Three endpoints whose parsers had never seen a real payload (their schemas were `unverified`), captured
+2026-10-18 by `tools/codegen/capture_fixtures.py --endpoints ...` with the wrapper's documented example
+(raw, `return_parsed=False`, NOT trimmed: the stat lists are the rows). Each fixes one parser: Web v3 athlete
+stats keep their rows under `categories[].statistics[]`, the Core v2 competitor statistics answer one `splits`
+object, and the Core v2 season draft is an index whose `rounds` is a `$ref`.
+
+| file | endpoint | league | URL |
+|---|---|---|---|
+| `athlete_stats_nba.json` | espn_web_v3 `athlete_stats` | nba | <https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba/athletes/4239/stats> |
+| `event_competitor_statistics_nba.json` | espn_core_v2 `event_competitor_statistics` | nba | <https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401584793/competitions/401584793/competitors/4/statistics> |
+| `season_draft_nba.json` | espn_core_v2 `season_draft` | nba | <https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/draft> |
 
 ## Returns-table captures (2026-10-07)
 

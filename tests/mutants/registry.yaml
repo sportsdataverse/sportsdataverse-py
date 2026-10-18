@@ -931,3 +931,34 @@
   test: tests/codegen/test_query_params.py::test_names_types_skip_and_clash
   expected: kill
   note: MLS and NWSL rename a query param that clashes with a path token to filter_<name>; CBS/On3 drop it.
+
+# --- the three ESPN parsers repaired against their first real captures (fix/espn-parsers-real-payloads,
+# the coverage prerequisite of task 4.1) --------------------------------------------------------------
+- id: athlete-stats-ignores-statistics-rows
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'splits = cat.get("splits") or cat.get("statistics") or []'
+  mutant: 'splits = cat.get("splits") or []'
+  test: tests/test_espn_universal_parsers.py -k web_v3_per_season
+  expected: kill
+
+- id: competitor-statistics-split-object
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |2-
+        if isinstance(splits, dict):  # Core v2 answers one split object ("All Splits"), not a list
+            splits = [splits]
+  mutant: '    pass'
+  test: tests/test_espn_universal_parsers.py -k one_split_object
+  expected: kill
+
+- id: season-draft-rounds-ref
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if isinstance(rounds, dict):  # Core v2: the rounds are a $ref, so this is the draft''s index row'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k season_draft_index
+  expected: kill
