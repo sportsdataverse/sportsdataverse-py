@@ -44,7 +44,7 @@ sportality_athlete_career:
   orpg: Offensive rebounds per game.
   pfpg: Personal fouls per game.
   plus_minus_pg: Plus/minus per game.
-  ppg: Points per game (a number or.
+  ppg: Points per game.
   rpg: Rebounds per game.
   stpg: Steals per game.
   topg: Turnovers per game.
@@ -692,7 +692,7 @@ sportality_stats_info:
   2nd_ch_pa_avg: Second-chance field goals attempted per game (unverified).
   2nd_ch_pm: Second-chance field goals made (unverified).
   2nd_ch_pm_avg: Second-chance field goals made per game (unverified).
-  3_p_perc: Three-point percentage, 0-100 (the integer 0, or.
+  3_p_perc: Three-point percentage, 0-100.
   3_pa: Three-pointers attempted (total).
   3_pa_avg: Three-pointers attempted per game.
   3_pm: Three-pointers made (total).
@@ -711,7 +711,7 @@ sportality_stats_info:
   away_team: Name of the away team.
   b_avg: Blocks per game.
   blk: Blocks (total).
-  blkpg: Blocks per game, or the integer 0).
+  blkpg: Blocks per game.
   br: Blocks received (shots of the player that were blocked), total (read from BLKR
     in the box score; unverified).
   br_avg: Blocks received per game.
@@ -726,7 +726,7 @@ sportality_stats_info:
   dr_perc: Defensive rebound percentage; values far below ORPerc in the same row suggest
     a different base (unverified).
   dtr: Defensive team rebounds (unverified).
-  ec: Unverified in the hundreds, e.g. '509.0'; possibly an efficiency sum).
+  ec: Unverified (in the hundreds, e.g. '509.0'; possibly an efficiency sum).
   eff: Efficiency (valuation) per game; the formula is the site's own (unverified).
   egs: Game score per game (unverified).
   f: Total personal fouls committed.
@@ -762,7 +762,7 @@ sportality_stats_info:
   fo: Fouls-out count (unverified).
   fo_avg: Per-game average of FO (unverified).
   for: Points scored by the team (points for).
-  ft_perc: Free-throw percentage, 0-100, or the integer 0).
+  ft_perc: Free-throw percentage, 0-100.
   fta: Free throws attempted (total).
   fta_avg: Free throws attempted per game.
   ftm: Free throws made (total).

@@ -744,7 +744,7 @@ Stats table of one module for a season (players, teams, games, standings).
 | `rpg` | numeric | Rebounds per game. |
 | `apg` | numeric | Assists per game. |
 | `stpg` | numeric | Steals per game. |
-| `blkpg` | numeric | Blocks per game, or the integer 0). |
+| `blkpg` | numeric | Blocks per game. |
 | `info_uuid` | character | Athlete uuid on player tables, team uuid on team tables (platform key space). |
 | `info_full_name` | character | Full display name of the player. |
 | `info_first_name` | character | Given (first) name(s) of the player. |
@@ -773,8 +773,8 @@ Stats table of one module for a season (players, teams, games, standings).
 | `b_avg` | numeric | Blocks per game. |
 | `f_avg` | numeric | Fouls per game. |
 | `2_p_perc` | numeric | Two-point percentage, 0-100. |
-| `3_p_perc` | numeric | Three-point percentage, 0-100 (the integer 0, or. |
-| `ft_perc` | numeric | Free-throw percentage, 0-100, or the integer 0). |
+| `3_p_perc` | numeric | Three-point percentage, 0-100. |
+| `ft_perc` | numeric | Free-throw percentage, 0-100. |
 | `info_name` | character | Name of the team. |
 | `info_site_display_name` | character | Team name as the league site displays it. |
 | `info_owner_instance_id` | character | Site instance id of the club that owns the team (platform key space, e.g. hol2_hol). |
@@ -870,7 +870,7 @@ Stats table of one module for a season (players, teams, games, standings).
 | `o_rat_avg` | numeric | Offensive rating per game average. |
 | `ad` | integer | Assists difference or assists allowed (0 in every row seen; unverified). |
 | `ad_avg` | integer | Per-game average of AD (0 in every row seen; unverified). |
-| `ec` | numeric | Unverified in the hundreds, e.g. '509.0'; possibly an efficiency sum). |
+| `ec` | numeric | Unverified (in the hundreds, e.g. '509.0'; possibly an efficiency sum). |
 | `to` | integer | Turnovers (total). |
 | `to_avg` | numeric | Turnovers per game. |
 | `fbp_avg` | numeric | Fast-break points per game. |
