@@ -1,0 +1,74 @@
+{
+ "count": 2,
+ "pageIndex": 1,
+ "pageSize": 25,
+ "pageCount": 1,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752?lang=en&region=us",
+   "id": "2752",
+   "uid": "s:40~l:41~t:2752",
+   "type": "team",
+   "order": 0,
+   "homeAway": "home",
+   "winner": true,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2752/records?lang=en&region=us"
+   },
+   "curatedRank": {
+    "current": 22
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569?lang=en&region=us",
+   "id": "2569",
+   "uid": "s:40~l:41~t:2569",
+   "type": "team",
+   "order": 1,
+   "homeAway": "away",
+   "winner": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2569?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/events/401715624/competitions/401715624/competitors/2569/records?lang=en&region=us"
+   },
+   "curatedRank": {
+    "current": 99
+   }
+  }
+ ]
+}

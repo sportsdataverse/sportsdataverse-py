@@ -1,0 +1,246 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes/4426773?lang=en&region=us",
+ "id": "4426773",
+ "uid": "s:20~l:23~a:4426773",
+ "guid": "29508481-3112-5426-8178-1c376538c5f0",
+ "type": "football",
+ "alternateIds": {
+  "sdr": "4426773"
+ },
+ "firstName": "Cade",
+ "lastName": "Briggs",
+ "fullName": "Cade Briggs",
+ "displayName": "Cade Briggs",
+ "shortName": "C. Briggs",
+ "weight": 305.0,
+ "displayWeight": "305 lbs",
+ "height": 75.0,
+ "displayHeight": "6' 3\"",
+ "links": [
+  {
+   "language": "en-US",
+   "rel": [
+    "playercard",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/_/id/4426773/cade-briggs",
+   "text": "Player Card",
+   "shortText": "Player Card",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/stats/_/id/4426773/cade-briggs",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23~a:4426773&section=stats",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "splits",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/splits/_/id/4426773/cade-briggs",
+   "text": "Splits",
+   "shortText": "Splits",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/gamelog/_/id/4426773/cade-briggs",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23~a:4426773&section=gamelog",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/news/_/id/4426773/cade-briggs",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23~a:4426773&section=news",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/bio/_/id/4426773/cade-briggs",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23~a:4426773&section=bio",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/college-football/player/_/id/4426773/cade-briggs",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:20~l:23~a:4426773",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  }
+ ],
+ "birthPlace": {
+  "city": "Las Vegas",
+  "state": "NV",
+  "country": "USA"
+ },
+ "birthCountry": {
+  "alternateId": "1",
+  "abbreviation": "USA"
+ },
+ "college": {
+  "$ref": "http://sports.core.api.espn.com/v2/colleges/9?lang=en&region=us"
+ },
+ "slug": "cade-briggs",
+ "headshot": {
+  "href": "https://a.espncdn.com/i/headshots/college-football/players/full/4426773.png",
+  "alt": "Cade Briggs"
+ },
+ "jersey": "55",
+ "flag": {
+  "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+  "alt": "USA",
+  "rel": [
+   "country-flag"
+  ]
+ },
+ "position": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions/45?lang=en&region=us",
+  "id": "45",
+  "name": "Offensive Lineman",
+  "displayName": "Offensive Lineman",
+  "abbreviation": "OL",
+  "leaf": true,
+  "parent": {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/positions/70?lang=en&region=us"
+  }
+ },
+ "injuries": [],
+ "linked": true,
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/9?lang=en&region=us"
+ },
+ "teams": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/teams/9?lang=en&region=us"
+  }
+ ],
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes/4426773/notes?lang=en&region=us"
+ },
+ "experience": {
+  "years": 4,
+  "displayValue": "Senior",
+  "abbreviation": "SR"
+ },
+ "active": false,
+ "eventLog": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/athletes/4426773/eventlog?lang=en&region=us"
+ },
+ "status": {
+  "id": "2",
+  "name": "Inactive",
+  "type": "inactive",
+  "abbreviation": "Inactive"
+ }
+}

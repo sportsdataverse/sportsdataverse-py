@@ -1,0 +1,251 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/athletes/4432869?lang=en&region=us",
+ "id": "4432869",
+ "uid": "s:40~l:41~a:4432869",
+ "guid": "84cddb2d-77fd-3d9b-b952-7d019d694ccf",
+ "type": "basketball",
+ "alternateIds": {
+  "sdr": "4432869"
+ },
+ "firstName": "Zach",
+ "lastName": "Freemantle",
+ "fullName": "Zach Freemantle",
+ "displayName": "Zach Freemantle",
+ "shortName": "Z. Freemantle",
+ "weight": 227.0,
+ "displayWeight": "227 lbs",
+ "height": 81.0,
+ "displayHeight": "6' 9\"",
+ "age": 25,
+ "dateOfBirth": "2000-10-18T07:00Z",
+ "links": [
+  {
+   "language": "en-US",
+   "rel": [
+    "playercard",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/_/id/4432869/zach-freemantle",
+   "text": "Player Card",
+   "shortText": "Player Card",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/stats/_/id/4432869/zach-freemantle",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~a:4432869&section=stats",
+   "text": "Stats",
+   "shortText": "Stats",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "splits",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/splits/_/id/4432869/zach-freemantle",
+   "text": "Splits",
+   "shortText": "Splits",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/gamelog/_/id/4432869/zach-freemantle",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "gamelog",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~a:4432869&section=gamelog",
+   "text": "Game Log",
+   "shortText": "Game Log",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/news/_/id/4432869/zach-freemantle",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "news",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~a:4432869&section=news",
+   "text": "News",
+   "shortText": "News",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/bio/_/id/4432869/zach-freemantle",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "bio",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~a:4432869&section=bio",
+   "text": "Bio",
+   "shortText": "Bio",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "desktop",
+    "athlete"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/player/_/id/4432869/zach-freemantle",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "overview",
+    "sportscenter",
+    "app",
+    "athlete"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~a:4432869",
+   "text": "Overview",
+   "shortText": "Overview",
+   "isExternal": false,
+   "isPremium": false
+  }
+ ],
+ "birthPlace": {
+  "city": "Teaneck",
+  "state": "NJ",
+  "country": "USA"
+ },
+ "birthCountry": {
+  "alternateId": "1",
+  "abbreviation": "USA"
+ },
+ "college": {
+  "$ref": "http://sports.core.api.espn.com/v2/colleges/2752?lang=en&region=us"
+ },
+ "slug": "zach-freemantle",
+ "headshot": {
+  "href": "https://a.espncdn.com/i/headshots/mens-college-basketball/players/full/4432869.png",
+  "alt": "Zach Freemantle"
+ },
+ "jersey": "32",
+ "flag": {
+  "href": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
+  "alt": "USA",
+  "rel": [
+   "country-flag"
+  ]
+ },
+ "position": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/positions/2?lang=en&region=us",
+  "id": "2",
+  "name": "Forward",
+  "displayName": "Forward",
+  "abbreviation": "F",
+  "leaf": false
+ },
+ "injuries": [],
+ "linked": true,
+ "team": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752?lang=en&region=us"
+ },
+ "teams": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752?lang=en&region=us"
+  }
+ ],
+ "statistics": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/0/athletes/4432869/statistics?lang=en&region=us"
+ },
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/athletes/4432869/notes?lang=en&region=us"
+ },
+ "experience": {
+  "years": 4,
+  "displayValue": "Senior",
+  "abbreviation": "SR"
+ },
+ "proAthlete": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/athletes/4432869?lang=en&region=us"
+ },
+ "active": false,
+ "eventLog": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/athletes/4432869/eventlog?lang=en&region=us"
+ },
+ "status": {
+  "id": "2",
+  "name": "Inactive",
+  "type": "inactive",
+  "abbreviation": "Inactive"
+ }
+}
