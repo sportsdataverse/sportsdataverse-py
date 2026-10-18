@@ -11,15 +11,28 @@
 #   gender (men | women | both; "women"/"both" entries are the wehoop mirror's to port), season_rule.
 # fiba:   family_id = GDAP competitionMarketingNameId (the competition family; one edition per season);
 #   example_season = a season that has an edition, used by the docstring examples.
-# genius: org = Genius ORG code; label_include / label_exclude = case-insensitive regexes over the
+# genius: org = Genius (hosted) ORG code; live_org = the LiveStats ORG of its /u/{ORG}/{matchId}/ shells (NZNBL is
+#   NZN there; leagues.json live_org); label_include / label_exclude = case-insensitive regexes over the
 #   competition label of genius_competitions(org) that pick THE competition of a season (an org lists
-#   cups, play-offs and youth leagues beside the headline league).
+#   cups, play-offs and youth leagues beside the headline league). The minted game functions apply the same
+#   rule to the competition name of the game's /u/ shell, so a game of another org or competition is refused.
 # atrium: website_id = the embed site config id (one site carries many competitions).
 #
 # Left out on purpose (already have a dedicated home, so a second prefix would only duplicate it):
 #   Genius CEBL, BNXT, IBBA, LKL, KZS; and orgs the hosted schedule does not serve (POL, CBFFE, BSN,
-#   LNBP history, NBL, SPB, HKS embed-only). Not yet minted for lack of a verified GDAP family id:
-#   EuroBasket (men), AmeriCup, Asia Cup, EuroCup Women, BCL Americas/Asia.
+#   LNBP history, NBL, SPB, HKS embed-only). Not yet minted for lack of a verified GDAP family id: BCL Asia
+#   (a 2025-04-01..06-01 games window lists only its "BCL Asia-East" qualifier, comp 208932, category CCCQ-1).
+#
+# FIBA family ids, verified against the live GDAP API (digital-api.fiba.basketball/hapi, the public APIM key):
+#   201/320/306/112/211 from fiba/README.md; 352, 179, 297 by getGdapCompetitionById on 2026-10-17 (Paris 2024
+#   women 208723, AfroBasket 2025 208938, Women's EuroBasket 2025 208854). On 2026-10-18 the 2025 editions were
+#   found with getgdapgamesbetweentwodates (final-day windows) and getGdapCompetitionById gave each family id:
+#     EuroBasket 208853 -> 208, AmeriCup 208811 -> 184, Asia Cup 208895 -> 195, EuroCup Women 208856 -> 165
+#     ("FIBA Women's European Club Competitions - Tier 2"), BCL Americas 208898 -> 110, Women's AmeriCup 208812 -> 303,
+#     Women's Asia Cup Division A 208896 -> 305, Women's AfroBasket 208937 -> 302, Intercontinental Cup 208979 -> 215.
+#   getgdapcompetitionsbyseasonsandcompetitionmarketingname(season 2025) lists exactly that one edition for 305, 165,
+#   208, 184, 195, 110 and 302 (Division B of the Women's Asia Cup, 208897, is not in family 305); 303 and 215 were
+#   not listed (budget), only fetched by id.
 fiba:
   - {key: world_cup, prefix: fiba_wc, example_season: 2023, label: "FIBA Basketball World Cup", family_id: 201, gender: men,
      season_rule: "event year (World Cup 2023 = 2023)"}
@@ -37,29 +50,47 @@ fiba:
      season_rule: "event year (2025 = 2025)"}
   - {key: womens_eurobasket, prefix: fiba_weurobasket, example_season: 2025, label: "FIBA Women's EuroBasket", family_id: 297, gender: women,
      season_rule: "event year (2025 = 2025)"}
+  - {key: eurobasket, prefix: fiba_eurobasket, example_season: 2025, label: "FIBA EuroBasket", family_id: 208, gender: men,
+     season_rule: "event year (2025 = 2025)"}
+  - {key: americup, prefix: fiba_americup, example_season: 2025, label: "FIBA AmeriCup", family_id: 184, gender: men,
+     season_rule: "event year (2025 = 2025)"}
+  - {key: asia_cup, prefix: fiba_asiacup, example_season: 2025, label: "FIBA Asia Cup", family_id: 195, gender: men,
+     season_rule: "event year (2025 = 2025)"}
+  - {key: intercontinental_cup, prefix: fiba_icup, example_season: 2025, label: "FIBA Intercontinental Cup", family_id: 215,
+     gender: men, season_rule: "event year (Singapore 2025 = 2025)"}
+  - {key: bcl_americas, prefix: fiba_bcla, example_season: 2025, label: "Basketball Champions League Americas", family_id: 110,
+     gender: men, season_rule: "END year (2024-25 = 2025)"}
+  - {key: eurocup_women, prefix: fiba_ecw, example_season: 2025, label: "EuroCup Women (FIBA Women's European Club Competitions Tier 2)",
+     family_id: 165, gender: women, season_rule: "END year (2024-25 = 2025)"}
+  - {key: womens_americup, prefix: fiba_wamericup, example_season: 2025, label: "FIBA Women's AmeriCup", family_id: 303,
+     gender: women, season_rule: "event year (2025 = 2025)"}
+  - {key: womens_asia_cup, prefix: fiba_wasiacup, example_season: 2025, label: "FIBA Women's Asia Cup (Division A)", family_id: 305,
+     gender: women, season_rule: "event year (2025 = 2025)"}
+  - {key: womens_afrobasket, prefix: fiba_wafrobasket, example_season: 2025, label: "FIBA Women's AfroBasket", family_id: 302,
+     gender: women, season_rule: "event year (2025 = 2025)"}
 genius:
-  - {key: wbbl, prefix: wbbl, label: "Women's British Basketball League", org: WBBL, gender: women,
+  - {key: wbbl, prefix: wbbl, label: "Women's British Basketball League", org: WBBL, live_org: WBBL, gender: women,
      label_include: "Championship", label_exclude: "Play-?Offs",
      season_rule: "END year; the label span 2025-26 = 2026"}
-  - {key: slb, prefix: slb, label: "Super League Basketball (UK)", org: SLB, gender: men,
+  - {key: slb, prefix: slb, label: "Super League Basketball (UK)", org: SLB, live_org: SLB, gender: men,
      label_include: "Championship", label_exclude: "^$",
      season_rule: "END year; the label span 2025-26 = 2026"}
-  - {key: bal, prefix: bal, label: "Basketball Africa League", org: BAL, gender: men,
+  - {key: bal, prefix: bal, label: "Basketball Africa League", org: BAL, live_org: BAL, gender: men,
      label_include: ".", label_exclude: "^$",
      season_rule: "calendar year (BAL 2025 = 2025); 2023 lists two competitions, so pass comp_id"}
-  - {key: nznbl, prefix: nznbl, label: "New Zealand National Basketball League", org: NZNBL, gender: men,
+  - {key: nznbl, prefix: nznbl, label: "New Zealand National Basketball League", org: NZNBL, live_org: NZN, gender: men,
      label_include: "national basketball league|sals nbl", label_exclude: "rapid|women",
      season_rule: "calendar year (2025 = 2025)"}
-  - {key: esake, prefix: esake, label: "Greek Basket League (ESAKE)", org: ESAKE, gender: men,
+  - {key: esake, prefix: esake, label: "Greek Basket League (ESAKE)", org: ESAKE, live_org: ESAKE, gender: men,
      label_include: "basket league|gbl", label_exclude: "super cup|woman",
      season_rule: "END year; Genius year + 1 (2022-23 = 2023)"}
-  - {key: lfb, prefix: lfb, label: "Ligue Feminine de Basket (France, FFBB)", org: FFBB, gender: women,
+  - {key: lfb, prefix: lfb, label: "Ligue Feminine de Basket (France, FFBB)", org: FFBB, live_org: FFBB, gender: women,
      label_include: "^ligue feminine( de basket)?$", label_exclude: "^$",
      season_rule: "END year; Genius year + 1 (2018-19 = 2019)"}
-  - {key: lnbm, prefix: lnbm, label: "Liga Nationala de Baschet Masculin (Romania)", org: FRB, gender: men,
+  - {key: lnbm, prefix: lnbm, label: "Liga Nationala de Baschet Masculin (Romania)", org: FRB, live_org: FRB, gender: men,
      label_include: "lnbm|liga nationala de baschet masculin", label_exclude: "^$",
      season_rule: "END year; Genius year + 1 (2016-17 = 2017)"}
-  - {key: lub, prefix: lub, label: "Liga Uruguaya de Basquetbol", org: FUBB, gender: men,
+  - {key: lub, prefix: lub, label: "Liga Uruguaya de Basquetbol", org: FUBB, live_org: FUBB, gender: men,
      label_include: "liga uruguaya|^lub", label_exclude: "amistosos|femenina",
      season_rule: "END year; Genius year + 1 (2025-26 = 2026)"}
 atrium:
