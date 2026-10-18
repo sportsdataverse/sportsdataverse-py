@@ -285,7 +285,7 @@ the task 2.5 touchdown rule got wrong (review PR-808, R808-2/3/4) or one task 2.
 
 ## Era play order (`era_play_order/`, task 2.19)
 
-Seven ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
+Eight ESPN Site v2 summaries from `nflverse-dev/nfl-raw` `nfl/espn/raw/<season>/<game_id>.json.gz` (source
 `https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=<game_id>`), trimmed to the same keys as
 the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The oracle is nflverse
 (`nflverse-dev/nfl-data` `python/.cache/nflverse_pbp/pbp_<season>.parquet`, joined on `game_id` + `play_id`).
@@ -298,4 +298,5 @@ the whole-game captures, read by `tests/nfl/test_nfl_era_play_order.py`. The ora
 | 281005009 (`2008_05_ATL_GB`) | 4b1d90b6 | 1872, Q3 opening kickoff between two Q2 timeouts | period 3 | `qtr` 3 | R832-10 (clock check) |
 | 401030749 (`2018_08_IND_OAK`) | d0480d17 | 906, a Q2 snap whose id sorts among Q1 rows | period 2 | `qtr` 2 | R832-10 (season floor) |
 | 301107009 (`2010_09_DAL_GB`) | 56da67ca | 1557, GB recovers DAL's kickoff fumble and scores | `Kickoff Return Touchdown` | `epa` -7.672 | R831-6 |
+| 281109021 (`2008_10_NYG_PHI`) | 4b1d90b6 | 3307, D.Hixon's 73-yard punt return "TOUCHDOWN NULLIFIED by Penalty" (holding) | `Punt Return Touchdown`, `td_play` false | `touchdown` 0, `epa` -1.690 | R856-1 (`def_score` needs the TD to stand) |
 | 271223008 (`2007_16_KC_DET`) | 4f540c18 | 1912, KC's bare "KickOff" at 0:23 of Q2, a touchback; ESPN's end clock (1:08) is a timeout row filed after it | `Kickoff`, start 0:23 / end 1:08 | `touchback` 1, `epa` 0.000 | R856-2 (owner ruling: EP_end at the start clock) |

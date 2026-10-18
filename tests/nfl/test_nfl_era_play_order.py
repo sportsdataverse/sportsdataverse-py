@@ -80,10 +80,16 @@ _EPA = {
     # scored (task 2.20 cleared td_play); the overlay still scored the receiver's touchdown: EPA 5.134 / 5.748.
     ("td_flag_residuals/summary_401671715.json.gz", 401671715, 2262): (0.926, 0.26),
     ("td_flag_residuals/summary_401671715.json.gz", 401671715, 4728): (1.419, 0.40),
+    # R856-1: a defence-typed score that did not stand. D.Hixon's 73-yard "Punt Return Touchdown" was nullified by
+    # holding (td_play false); without td_stood on def_score the punting offence took the receiver's -6.92: EPA
+    # -5.833. The rest (0.321 vs -1.690) is the punt end state, not the overlay.
+    (_era(281109021), 281109021, 3307): (-1.690, 2.02),
 }
 
 
-@pytest.mark.parametrize(("path", "game_id", "play_id"), list(_EPA), ids=["kicker-td", "short-kick", "onside"])
+@pytest.mark.parametrize(
+    ("path", "game_id", "play_id"), list(_EPA), ids=["kicker-td", "short-kick", "onside", "punt-td-nullified"]
+)
 def test_scoring_overlay_reads_the_corrected_flags(path, game_id, play_id):
     nflverse_epa, ceiling = _EPA[(path, game_id, play_id)]
     row = _row(path, game_id, play_id)

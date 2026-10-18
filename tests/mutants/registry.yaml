@@ -1748,3 +1748,16 @@
     Owner ruling (2026-10-17): a touchback kickoff's EP_end is scored at its start clock. At ESPN's end
     clock 271223008/1912 (start 0:23, end 1:08 from a misfiled timeout row) scores EPA +0.516 against
     nflverse 0.000.
+
+- id: nfl-epa-defence-overlay-needs-td-to-stand
+  group: nfl-era-play-order
+  finding: R856-1
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood'
+  mutant: '    def_score = pl.col("type.text").is_in(defense_score_vec) | kicker_td'
+  test: tests/nfl/test_nfl_era_play_order.py -k "punt-td-nullified"
+  expected: kill
+  note: >-
+    A defence-typed score whose touchdown did not stand takes no scoring overlay: 281109021/3307, a punt
+    return touchdown nullified by holding (td_play false), would score the receiver's -6.92 again (EPA -5.833
+    against nflverse -1.690).
