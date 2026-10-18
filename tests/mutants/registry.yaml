@@ -931,3 +931,97 @@
   test: tests/codegen/test_query_params.py::test_names_types_skip_and_clash
   expected: kill
   note: MLS and NWSL rename a query param that clashes with a path token to filter_<name>; CBS/On3 drop it.
+
+# --- task 4.1: runtime chokepoints speak the vocabulary (ledger gates json-body-rejects-scalars,
+# envelope-parsers-zero-rows, parse-items-short-page-warns; plus the chokepoints' own findings) ------
+- id: json-body-accepts-scalar
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if not isinstance(body, (dict, list)):'
+  mutant: '    if False:'
+  test: tests/codegen/test_runtime_errors.py -k scalar_body
+  expected: kill
+  note: returning the parsed scalar (the original) is data reaching a parser
+
+- id: json-body-ignores-error-envelope
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    code = _error_envelope_code(body)'
+  mutant: '    code = None'
+  test: tests/codegen/test_runtime_errors.py -k error_envelope
+  expected: kill
+
+- id: text-body-accepts-html-page
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if not html and text.lstrip('
+  mutant: '    if False and text.lstrip('
+  test: tests/codegen/test_runtime_errors.py -k "statcast_html or (discovered and html_200)"
+  expected: kill
+
+- id: espn-parsers-envelope-to-rows
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        if not isinstance(payload, dict) or _error_envelope_code(payload) is not None:'
+  mutant: '        if False:'
+  test: tests/test_espn_universal_parsers.py -k "hostile and _common_espn_parsers"
+  expected: kill
+  note: json_normalize on the envelope again yields a 1 x 2 frame; a list body raises AttributeError (A-L17)
+
+- id: parse-items-short-page-silent
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if isinstance(pages, int) and pages > 1:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k parse_items_short_page
+  expected: kill
+
+- id: yahoo-array-becomes-empty-dict
+  group: codegen-runtime
+  finding: A-L18
+  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  snippet: '    if not isinstance(body, dict):  # every Shangrila route answers {"data": ...}'
+  mutant: '    if False:'
+  test: tests/codegen/test_runtime_errors.py -k yahoo_object
+  expected: kill
+
+- id: download-retries-permanent-403
+  group: codegen-runtime
+  finding: A-L19
+  file: sportsdataverse/dl_utils.py
+  snippet: 'retryable = status in retry_statuses and not (status == 403 and permanent_403)'
+  mutant: 'retryable = status in retry_statuses'
+  test: tests/test_dl_utils.py -k permanent_403
+  expected: kill
+
+- id: download-retries-malformed-url
+  group: codegen-runtime
+  finding: A-L30
+  file: sportsdataverse/dl_utils.py
+  snippet: '        except ValueError as e:'
+  mutant: '        except UnicodeError as e:'
+  test: tests/test_dl_utils.py -k malformed_url
+  expected: kill
+
+- id: download-retry-wait-unbudgeted
+  group: codegen-runtime
+  finding: A-N11
+  file: sportsdataverse/dl_utils.py
+  snippet: '                and waited + delay <= _MAX_TOTAL_RETRY_WAIT'
+  mutant: '                and True'
+  test: tests/test_dl_utils.py -k retry_after_waits
+  expected: kill
+
+- id: cache-team-scoreboard-not-live
+  group: codegen-runtime
+  finding: B-M11
+  file: sportsdataverse/cache.py
+  snippet: 'r"/scoreboard/(?:[^/?#]+/)?now\b"'
+  mutant: 'r"/scoreboard/now\b"'
+  test: tests/test_cache.py -k pick_ttl_classifies_by_url
+  expected: kill

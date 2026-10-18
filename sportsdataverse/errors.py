@@ -5,7 +5,7 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 import re as _re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     import requests
@@ -301,6 +301,19 @@ class EraCoverageWarning(UserWarning):
 
             warnings.filterwarnings("ignore", category=EraCoverageWarning)
     """
+
+
+def _error_envelope_code(body: Any) -> Optional[int]:
+    """The status of an ESPN-style ``{"code": <4xx/5xx>, "message": ...}`` error body, else ``None``.
+
+    Only a dict holding exactly those two keys counts, so a payload that merely carries a
+    ``code`` field next to its data is never mistaken for one (A-M13).
+    """
+    if isinstance(body, dict) and set(body) == {"code", "message"}:
+        code = body["code"]
+        if isinstance(code, int) and not isinstance(code, bool) and code >= 400:
+            return code
+    return None
 
 
 def no_espn_data(response: "requests.Response") -> "requests.Response":

@@ -28,6 +28,10 @@ from sportsdataverse._codegen_runtime import _as_season_list, _csv, bool_str  # 
 from sportsdataverse._codegen_runtime import _check_response, _json_body, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
+#: The two leaderboards Savant serves as an HTML page even with ``csv=true`` (their rows sit in a
+#: ``const data=[...]`` script blob); from any other endpoint a page is an error or challenge page.
+_HTML_PAGES = ("/leaderboard/fielding-run-value", "/leaderboard/statcast-park-factors")
+
 
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, str]:
     """GET ``url`` and return JSON (``dict``) or raw text (``str``).
@@ -49,8 +53,9 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
         NoDataError: Savant answered 404.
         ValueError: Savant answered 400 / 422 -- the request is wrong.
         AssetFetchError: any other non-2xx or a connection failure after retries, or
-            an empty 200, or a JSON-labelled body that does not decode -- its error
-            page is not data.
+            an empty 200, a JSON-labelled body that does not decode, or an HTML page
+            from an endpoint other than the two HTML leaderboards -- its error page is
+            not data.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
     with _transport_errors(url):
@@ -60,4 +65,4 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, 
     if "json" in ctype:
         # A JSON-labelled body that will not decode is a failed fetch, never text to parse.
         return _json_body(resp, url)
-    return _text_body(resp, url)
+    return _text_body(resp, url, html=any(page in url for page in _HTML_PAGES))

@@ -132,5 +132,4 @@ def _get(
     _transport = transport or _curl_transport
     with _transport_errors(url):
         status, text = _transport(url, clean, hdrs, proxy_url)
-    body = _json_text(url, status, text)
-    return body if isinstance(body, (dict, list)) else {}
+    return _json_text(url, status, text)

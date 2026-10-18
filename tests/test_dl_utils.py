@@ -413,3 +413,57 @@ def test_none_num_retries_is_treated_as_omitted(monkeypatch):
     monkeypatch.setenv(d._ENV_RETRIES, "4")
     # would raise TypeError before this change
     assert d.download("https://example.invalid/x", session=session, num_retries=None) is not None
+
+
+# --------------------------------------------------------------------------------------
+# A-L19 / A-L30 / A-N11: what download() refuses to retry, and how long it may wait
+# --------------------------------------------------------------------------------------
+
+
+def _offline(monkeypatch, status: int, headers: dict | None = None):
+    """Answer every ``session.get`` with ``status``; record the calls and every sleep."""
+    import sportsdataverse.cache as _cache
+
+    calls, sleeps = [], []
+    monkeypatch.setattr(_cache, "get_cache_mode", lambda: "off")
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+
+    def fake_get(self, url, **kwargs):
+        calls.append(url)
+        return types.SimpleNamespace(status_code=status, url=url, reason="x", headers=headers or {}, json=lambda: {})
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+    return calls, sleeps
+
+
+@pytest.mark.parametrize("host", ["api.nfl.com", "premium.pff.com", "comp.uefa.com", "kenpom.com", "herhoopstats.com"])
+def test_a_403_from_a_permanent_403_host_is_not_retried(monkeypatch, host):
+    calls, sleeps = _offline(monkeypatch, 403)
+    assert download(f"https://{host}/x", num_retries=15).status_code == 403
+    assert (len(calls), sleeps) == (1, [])  # was 5 calls and 4 backoffs
+
+
+def test_a_403_from_espn_is_still_retried(monkeypatch):
+    # ESPN Core v2 answers 403 under load: that one stays transient.
+    calls, _ = _offline(monkeypatch, 403)
+    download("https://sports.core.api.espn.com/v2/x", num_retries=15)
+    assert len(calls) == 5
+
+
+def test_a_malformed_url_raises_without_a_retry(monkeypatch):
+    sleeps = []
+    monkeypatch.setattr("sportsdataverse.dl_utils.time.sleep", sleeps.append)
+    with pytest.raises(requests.exceptions.MissingSchema):
+        download("not-a-url", num_retries=15)
+    assert sleeps == []  # was 15 backoffs, about 50 s
+
+
+def test_retry_after_waits_share_one_budget_and_long_waits_log(monkeypatch, caplog):
+    from sportsdataverse import dl_utils as d
+
+    calls, sleeps = _offline(monkeypatch, 429, {"Retry-After": "120"})
+    with caplog.at_level("WARNING", logger="sdv.dl_utils"):
+        assert download("https://site.api.espn.com/x", num_retries=15).status_code == 429
+    # four honoured 120 s waits (8 minutes) before; now the second would cross the budget
+    assert sleeps == [120.0] and sum(sleeps) <= d._MAX_TOTAL_RETRY_WAIT and len(calls) == 2
+    assert "waiting 120s before retrying" in caplog.text
