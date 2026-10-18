@@ -36,17 +36,20 @@ CONVERTERS = {
 
 
 def _hoopr(summary: dict) -> list[tuple[float, float, float, float]]:
-    """(x, y, x_raw, y_raw) per play: hoopR / wehoop ``helper_espn_<lg>_pbp`` with the R844-3 free-throw match."""
+    """(x, y, x_raw, y_raw) per play: hoopR / wehoop ``helper_espn_<lg>_pbp``, the R844-3 match on the transformed pair."""
     competitors = summary["header"]["competitions"][0]["competitors"]
     home = next(int(c["team"]["id"]) for c in competitors if c["homeAway"] == "home")
     out = []
     for p in summary["plays"]:
         x, y = float(p["coordinate"]["x"]), float(p["coordinate"]["y"])
-        if re.search(r"(?i)free ?throw", (p.get("type") or {}).get("text") or ""):
+        text = (p.get("type") or {}).get("text") or ""
+        # R pins the raw pair on its case-sensitive match; R844-3 moves only the transformed pair
+        x_raw, y_raw = (25.0, 13.75) if "Free Throw" in text else (x, y)
+        if re.search(r"(?i)free ?throw", text):
             x, y = 25.0, 13.75
         team = (p.get("team") or {}).get("id")
         sign = -1 if team is not None and int(team) == home else 1
-        out.append((sign * (y - 41.75), sign * (x - 25), x, y))
+        out.append((sign * (y - 41.75), sign * (x - 25), x_raw, y_raw))
     return out
 
 
@@ -69,7 +72,13 @@ def test_free_throws_pinned_and_home_plays_flipped(monkeypatch, lg: str, name: s
     plays, _ = _process(monkeypatch, lg, summary)
     ft = plays.filter(pl.col("type.text").str.contains(r"(?i)free ?throw"))
     assert ft.height > 0
-    assert set(ft.select("coordinate.x.raw", "coordinate.y.raw").rows()) == {(25.0, 13.75)}
+    # the raw pair is pinned only where R's case-sensitive "Free Throw" matches: every NBA free
+    # throw; MBB's "MadeFreeThrow" keeps ESPN's rim value there (R844-3 moves the transformed pair)
+    r_ft = ft.filter(pl.col("type.text").str.contains("Free Throw", literal=True))
+    assert set(r_ft.select("coordinate.x.raw", "coordinate.y.raw").rows()) <= {(25.0, 13.75)}
+    assert (r_ft.height == ft.height) == (lg == "nba")
+    if lg == "mbb":
+        assert set(ft.select("coordinate.x.raw", "coordinate.y.raw").rows()) == {(25.0, 0.0)}
     # a free throw sits 28 feet from half court on its own team's end: -28 at home, +28 away
     home = ft.filter(pl.col("team.id").cast(pl.Int64) == pl.col("homeTeamId"))
     away = ft.filter(pl.col("team.id").cast(pl.Int64) != pl.col("homeTeamId"))
@@ -119,7 +128,9 @@ def test_published_rows_equal_except_ncaa_free_throws(monkeypatch, lg: str, name
     # every departure is an NCAA free throw on the line; R left those at ESPN's coordinates
     ft = pl.col("type_text").str.contains(r"(?i)free ?throw") & ~pl.col("type_text").str.contains("Free Throw")
     assert diff.filter(~ft).height == 0
-    assert set(diff.select("lib_x.raw", "lib_y.raw").rows()) <= {(25.0, 13.75)}
+    # ... in the transformed pair only: the raw pair equals the published file on every row
+    assert diff.filter(~pl.col("lib_x.raw").eq_missing(pl.col("coordinate_x_raw"))).height == 0
+    assert diff.filter(~pl.col("lib_y.raw").eq_missing(pl.col("coordinate_y_raw"))).height == 0
     assert diff.height == PUBLISHED_FT_DIFFS[gid]
     assert (lg in ("mbb", "wbb")) == (diff.height > 0)
 
