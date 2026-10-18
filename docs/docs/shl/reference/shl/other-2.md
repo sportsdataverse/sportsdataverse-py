@@ -1,11 +1,66 @@
 ---
-title: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: stats_info"
-sidebar_label: "Other: stats_info"
+title: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: standings–stats_info"
+sidebar_label: "Other: standings–stats_info"
 sidebar_position: 5
-description: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: stats_info — function reference in sdv-py, the SportsDataverse Python package."
+description: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: standings–stats_info — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# SHL — SHL site API (www.shl.se/api, Sweden) — Other: stats_info
+# SHL — SHL site API (www.shl.se/api, Sweden) — Other: standings–stats_info
+
+## shl_standings
+
+Standings of an ssgt (gameday widget).
+
+**Endpoint URL:** `GET https://www.shl.se/api/gameday/team-standings/{ssgt_uuid}`
+
+**Valid URL:** [https://www.shl.se/api/gameday/team-standings/iuzqg7dqk9](https://www.shl.se/api/gameday/team-standings/iuzqg7dqk9)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
+
+### Returns {#shl_standings-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season END year (2026 = 2025/26). |
+| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
+| `team_code` | character | StatNet team code (SAIK, FHC). |
+| `team_uuid` | character | Platform team uuid. |
+| `team_name` | character | Name of the team. |
+| `team_short_name` | character | Short display name of the team. |
+| `rank` | integer | Position in the table (1 = top). |
+| `rank_diff` | integer | Change in standings rank, in places (the reference point is unverified). |
+| `gp` | integer | Number of games played. |
+| `w` | integer | Regulation wins. |
+| `t` | integer | Games tied after regulation, decided in overtime or a shootout (= OTW + OTL). |
+| `l` | integer | Regulation losses. |
+| `otw` | integer | Overtime and shootout wins. |
+| `otl` | integer | Overtime and shootout losses. |
+| `p` | integer | Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO loss). |
+| `gf` | integer | Number of goals scored (goals for). |
+| `ga` | integer | Number of goals conceded (goals against). |
+| `diff` | integer | Goal difference. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#shl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#shl_standings-example}
+
+```python
+shl_standings(ssgt_uuid='iuzqg7dqk9')
+```
+
+_Last validated n/a._
 
 ## shl_stats_info
 
@@ -296,7 +351,7 @@ Stats table of one module for an ssgt (standings, players, goalies, teams, games
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

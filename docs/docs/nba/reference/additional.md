@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # NBA — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.nba`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.nba` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## Highlights
 

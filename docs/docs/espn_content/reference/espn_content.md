@@ -73,7 +73,7 @@ Headlines for one league (limit, offset).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | content.core answered 404 (unknown story id, sport or league slug). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -146,7 +146,7 @@ Cross-sport headlines (limit, offset).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | content.core answered 404 (unknown story id, sport or league slug). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -217,7 +217,7 @@ One story (same envelope, one headline).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | content.core answered 404 (unknown story id, sport or league slug). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

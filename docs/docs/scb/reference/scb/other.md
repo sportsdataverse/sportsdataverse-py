@@ -1,11 +1,11 @@
 ---
-title: "SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–records_per"
-sidebar_label: "Other: seasons–records_per"
+title: "SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–transfers_teams"
+sidebar_label: "Other: seasons–transfers_teams"
 sidebar_position: 3
-description: "SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–records_per — function reference in sdv-py, the SportsDataverse Python package."
+description: "SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–transfers_teams — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–records_per
+# SCB — SCB basketball API (BBL and DBBL, Germany) — Other: seasons–transfers_teams
 
 ## scb_seasons
 
@@ -36,7 +36,7 @@ Seasons, newest first, with the active flag (BBL back to 1966, DBBL 2024 on).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -82,7 +82,7 @@ Every player registered in a season: the id crosswalk (season_player_id, real_pl
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -128,7 +128,7 @@ Every team of a season: club id, season-team id, name and three-letter code.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -184,7 +184,7 @@ Playoff bracket of a season: one row per series (quarter-finals, semi-finals, fi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -237,7 +237,7 @@ Every playoff game of a season with its series and the points of each series tea
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -348,7 +348,7 @@ Season player stat table: totals and per-game values, one row per player and sta
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -479,7 +479,7 @@ Games of a season (the whole season in one page): teams, score by period, offici
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -608,7 +608,7 @@ One game header: teams, score by period, officials, venue and top scorer.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -702,7 +702,7 @@ League table of a season: record, home / away split, streaks and tie-break detai
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -760,7 +760,7 @@ Player profile by season-player id: bio, position, club and previous clubs.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -804,7 +804,7 @@ Current referees and commissioners (BBL only).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -851,7 +851,7 @@ Latest transfers, one row per move (BBL only).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -900,7 +900,7 @@ Per club, the players joining and leaving, one row per move with its direction (
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -908,65 +908,6 @@ Per club, the players joining and leaving, one row per move with its direction (
 
 ```python
 scb_transfers_teams()
-```
-
-_Last validated n/a._
-
-## scb_records_per_game
-
-Single-game records: the season's and the all-time ones, one row per record.
-
-**Endpoint URL:** `GET https://api.basketball-bundesliga.de/records/per-game/{season}`
-
-**Valid URL:** [https://api.basketball-bundesliga.de/records/per-game/2025](https://api.basketball-bundesliga.de/records/per-game/2025)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  | `Y` |  | Season END year (2026 = 2025-26, the sdv key). Sent to the API as its START-year seasonId (season - 1). |
-| `league` | `league` |  |  | `Y` | League: `bbl` (men, easyCredit Basketball Bundesliga, api.basketball-bundesliga.de) or `dbbl` (women, Toyota Damen-Basketball-Bundesliga, api-1.dbbl.scb.world). The two share one API; game ids overlap, so a game is (league, game_id). |
-
-### Returns {#scb_records_per_game-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `league` | character | League the row belongs to: `bbl` (men) or `dbbl` (women); BBL and DBBL game ids overlap, so a game is (league, game_id). |
-| `season` | integer | Season END year (2026 = 2025-26), the sdv key; the API's `season_id` plus one. |
-| `season_id` | integer | The API's own season key, the START year (2025 = 2025-26); `season` minus one. |
-| `scope` | character | `season` for the requested season's records, `all_time` for the all-time list. |
-| `stat` | character | The record's stat: points, rebounds, assists, steals, blocks, turnovers, efficiency, free_throws_made, three_point_shots_made or free_throws_success_percentage. |
-| `place` | integer | Rank within the list (1 = best); 0 on some rows. |
-| `all_time_place` | integer | Rank on the all-time list; null when not on it. |
-| `order_id` | integer | Sort order within the list. |
-| `all_time_order_id` | integer | Sort order on the all-time list; null when not on it. |
-| `value` | numeric | The record value. A STRING in /records/per-game ('52'); a number in /records/season-averages. |
-| `ratio` | numeric | [made, attempted] as strings, on percentage records only; null otherwise. |
-| `season_player_id` | character | Season-player id: one player's engagement with one club (kept across seasons while he stays, new after a move; see README). Joins to box-score `seasonPlayer.id`, action `seasonPlayerId` and /season-players/{seasonPlayerId}. |
-| `real_player_id` | integer | Global person id: the same across clubs and seasons. Joins to `realPlayerId` everywhere. |
-| `first_name` | character | Player's given name. |
-| `last_name` | character | Player's family name. |
-| `team_name` | character | Team name as listed that season (sponsor names included). |
-| `team_tlc` | character | The player's team code. |
-| `home_tlc` | character | Three-letter code of the home team of the record game. |
-| `guest_tlc` | character | Three-letter code of the guest team of the record game. |
-| `game_id` | character | Game id, a string. Joins to /games/{gameId}. |
-| `scheduled_time` | character | Scheduled tip-off, ISO 8601 UTC. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Raises {#scb_records_per_game-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
-
-### Example {#scb_records_per_game-example}
-
-```python
-scb_records_per_game(season=2026)
 ```
 
 _Last validated n/a._

@@ -36,7 +36,7 @@ Every league FotMob covers, grouped as popular / international / by country.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -74,7 +74,7 @@ Matches with audio commentary available, with their languages.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -156,7 +156,7 @@ League page: details, tabs, current table, fixtures, stats, transfers (one wide 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -235,7 +235,7 @@ Match page: general info, header, lineups, events, stats (one wide row).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -281,7 +281,7 @@ All matches on a date, one row per league with that league's matches nested.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -388,7 +388,7 @@ Player page: bio, primary team, career history, recent matches, stats (one wide 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -429,7 +429,7 @@ Search suggestions for a term, one row per result group (players, teams, leagues
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -478,7 +478,7 @@ A data.fotmob.com league table file: legend, filters and the all/home/away/xg ta
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -584,7 +584,7 @@ Team page: details, squad, table, fixtures, stats, transfers, history (one wide 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -631,7 +631,7 @@ News timeline for a league or team, one row per story.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -694,7 +694,7 @@ Top transfers across FotMob, one row per transfer.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -736,7 +736,7 @@ Team-of-the-week rounds for a league season, one row per round.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -780,7 +780,7 @@ Trending news stories (host-root route), one row per story.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -838,7 +838,7 @@ TV listings for a country, one row per broadcast with the match id in `id`.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FotMob answered HTTP 404 (route withdrawn). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FotMob answered HTTP 404 (route withdrawn). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

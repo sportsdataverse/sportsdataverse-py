@@ -40,7 +40,8 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -102,7 +103,8 @@ Team lineups (starting XI + bench + staff) for a match.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -154,7 +156,8 @@ Match days (rounds) for a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -244,7 +247,8 @@ Player-stats leaderboard for a season (paginated).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -396,7 +400,8 @@ Matches across one or more seasons within a US-format date window.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -436,7 +441,8 @@ Competition stages for a season (may be empty for league play).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -508,7 +514,8 @@ Overall standings table for a season (table/home/away splits).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -580,7 +587,8 @@ Team-stats leaderboard for a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -653,7 +661,8 @@ Teams participating in a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

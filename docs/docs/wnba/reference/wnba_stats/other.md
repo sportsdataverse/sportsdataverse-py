@@ -218,6 +218,14 @@ GET /stats/alltimeleadersgrids
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_alltimeleadersgrids-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_alltimeleadersgrids-example}
 
 ```python
@@ -259,6 +267,14 @@ GET /stats/assistleaders
 | `ast` | numeric | Assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_assistleaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_assistleaders-example}
 
@@ -316,6 +332,14 @@ GET /stats/assisttracker
 | `assists` | numeric | Total assists. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_assisttracker-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_assisttracker-example}
 
@@ -394,6 +418,14 @@ GET /stats/draftcombinestats
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_draftcombinestats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_draftcombinestats-example}
 
 ```python
@@ -449,9 +481,9 @@ GET /stats/drafthistory
 | Exception | Description |
 |---|---|
 | `ImportError` | `curl_cffi` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain `requests`, so the live transport requires it (`pip install curl_cffi`, or `pip install sportsdataverse[all]`). |
-| `NoDataError` | The host answered HTTP 404. |
-| `ValueError` | The host answered HTTP 400 / 422 (it rejected a parameter value). |
-| `AssetFetchError` | Any other non-2xx (401 / 403 / 429 / 5xx; a missing required `Season` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a connection failure (timeout, reset), once `SDV_PY_NBA_STATS_RETRIES` retries are exhausted. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered HTTP 404. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The host answered HTTP 400 / 422 (it rejected a parameter value). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx (401 / 403 / 429 / 5xx; a missing required `Season` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a connection failure (timeout, reset), once `SDV_PY_NBA_STATS_RETRIES` retries are exhausted. |
 
 ### Example {#wnba_stats_drafthistory-example}
 
@@ -520,6 +552,14 @@ GET /stats/fantasywidget
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_fantasywidget-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_fantasywidget-example}
 
 ```python
@@ -580,6 +620,14 @@ GET /stats/gamerotation
 | `usg_pct` | numeric | Percentage or rate for usage percentage in the requested NBA or WNBA Stats split. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_gamerotation-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_gamerotation-example}
 
@@ -652,6 +700,14 @@ GET /stats/homepageleaders
 | `pts_per48` | numeric | Points scored per 48 minutes played. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_homepageleaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_homepageleaders-example}
 
@@ -765,6 +821,14 @@ GET /stats/homepagev2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_homepagev2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_homepagev2-example}
 
 ```python
@@ -855,6 +919,14 @@ GET /stats/hustlestatsboxscore
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_hustlestatsboxscore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_hustlestatsboxscore-example}
 
 ```python
@@ -916,6 +988,14 @@ GET /stats/infographicfanduelplayer
 | `plus_minus` | integer | Plus/minus point differential while on court. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_infographicfanduelplayer-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_infographicfanduelplayer-example}
 
@@ -997,6 +1077,14 @@ GET /stats/leaderstiles
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_leaderstiles-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_leaderstiles-example}
 
 ```python
@@ -1070,6 +1158,14 @@ GET /stats/playbyplayv2
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_playbyplayv2-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#wnba_stats_playbyplayv2-example}
 
 ```python
@@ -1099,6 +1195,14 @@ GET /stats/playbyplayv3
 No returns table is published for this endpoint: the committed capture tests/fixtures/wnba_stats/endpoints/playbyplayv3.json holds no rows, so parse_nba_stats_result_sets emits no columns; a capture with rows needs a residential IP (stats.nba.com / stats.wnba.com hang on datacenter IPs) and SDV_PY_NBA_STATS_LIVE=1.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_playbyplayv3-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_playbyplayv3-example}
 
@@ -1143,6 +1247,14 @@ GET /stats/videostatus
 | `pt_xyz_available` | integer | Pt xyz available. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#wnba_stats_videostatus-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#wnba_stats_videostatus-example}
 

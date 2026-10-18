@@ -45,9 +45,9 @@ Every CEBL season (2019 on), with the active and live flags.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_seasons-example}
 
@@ -89,9 +89,9 @@ Every franchise identity, past and present (15 team ids; a relocated franchise h
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_teams-example}
 
@@ -156,9 +156,9 @@ Standings of one season, one row per team: record, home/away splits, games behin
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_standings-example}
 
@@ -203,9 +203,9 @@ One team's roster in one season: player, nationality, birth date, position and j
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_roster-example}
 
@@ -287,9 +287,9 @@ Team statistic table (totals or per game) with a league row; filter by season, c
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_team_stats-example}
 
@@ -352,9 +352,9 @@ Schedule and results of one season (regular season and finals), with the Genius 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_games-example}
 
@@ -430,9 +430,9 @@ Player statistic table (totals or per game) for a season or all-time; filter by 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player_stats-example}
 
@@ -487,9 +487,9 @@ Top five players per requested statistic (long frame, one row per statistic and 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player_leaders-example}
 
@@ -562,9 +562,9 @@ One player's per-season rows and career row (totals or per game).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player_seasons-example}
 
@@ -615,9 +615,9 @@ One player's profile and current team: name, nationality, birth date, position, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player-example}
 
@@ -684,9 +684,9 @@ One player's game log: one row per game played, with the Genius match id of the 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player_gamelog-example}
 
@@ -728,9 +728,9 @@ News articles in one language. The API answered an empty list on every probe, so
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
-| `ValueError` | a mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_news-example}
 

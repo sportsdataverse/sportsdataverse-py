@@ -1,23 +1,23 @@
 ---
-title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: wafrobasket_schedule–wamericup_player"
-sidebar_label: "FIBA digital API and game pages: wafrobasket_schedule–wamericup_player"
+title: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: oly_schedule–wafrobasket_player"
+sidebar_label: "FIBA digital API and game pages: oly_schedule–wafrobasket_player"
 sidebar_position: 10
-description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: wafrobasket_schedule–wamericup_player — function reference in sdv-py, the SportsDataverse Python package."
+description: "FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: oly_schedule–wafrobasket_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: wafrobasket_schedule–wamericup_player
+# FIBA (digital API and game pages) — additional Python functions — FIBA digital API and game pages: oly_schedule–wafrobasket_player
 
-### fiba_wafrobasket_schedule {#fiba_wafrobasket_schedule}
+### fiba_oly_schedule {#fiba_oly_schedule}
 
-`fiba_wafrobasket_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_oly_schedule(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Schedule and results of one FIBA Women's AfroBasket edition, one row per game.
+Schedule and results of one Men's Olympic Basketball Tournament edition, one row per game.
 
-FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
+Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
 
 Convenience wrapper: a thin binding of `fiba_gdap_schedule` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -64,7 +64,7 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 | `game_date_time_utc` | character | Tip-off in UTC, ISO 8601 without the Z. |
 | `has_time_game_date_time` | logical | False when only the date is known (the time part is then 00:00:00). |
 | `iana_time_zone` | character | IANA time zone of the venue. |
-| `utc_offset` | integer | Venue UTC offset at tip-off, hours. |
+| `utc_offset` | numeric | Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample). |
 | `is_postponed` | logical | True when the game was postponed. |
 | `is_played_behind_closed_doors` | logical | True when played without spectators. |
 | `venue_capacity` | integer | Venue capacity (0 = unknown). |
@@ -125,39 +125,36 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | The season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. The season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_schedule
-fiba_wafrobasket_schedule(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule
+fiba_oly_schedule(season=2024)
 ```
 
-### fiba_wafrobasket_shots {#fiba_wafrobasket_shots}
+### fiba_oly_shots {#fiba_oly_shots}
 
-`fiba_wafrobasket_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_oly_shots(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Shot chart of one FIBA Women's AfroBasket game.
+Shot chart of one Men's Olympic Basketball Tournament game.
 
-FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
+Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
+| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Required unless `comp` is given: a game function never guesses the edition. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -192,33 +189,30 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_schedule, fiba_wafrobasket_shots
-games = fiba_wafrobasket_schedule(season=2025)
-fiba_wafrobasket_shots(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_shots
+games = fiba_oly_schedule(season=2024)
+fiba_oly_shots(game_id=int(games['game_id'][0]), season=2024)
 ```
 
-### fiba_wafrobasket_standings {#fiba_wafrobasket_standings}
+### fiba_oly_standings {#fiba_oly_standings}
 
-`fiba_wafrobasket_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_oly_standings(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Final standings of one FIBA Women's AfroBasket edition.
+Final standings of one Men's Olympic Basketball Tournament edition.
 
-FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
+Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
 
 Convenience wrapper: a thin binding of `fiba_gdap_final_standings` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -249,39 +243,36 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | The season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. The season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_standings
-fiba_wafrobasket_standings(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_oly_standings
+fiba_oly_standings(season=2024)
 ```
 
-### fiba_wafrobasket_team_box {#fiba_wafrobasket_team_box}
+### fiba_oly_team_box {#fiba_oly_team_box}
 
-`fiba_wafrobasket_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_oly_team_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Team box score of one FIBA Women's AfroBasket game.
+Team box score of one Men's Olympic Basketball Tournament game.
 
-FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
+Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
+| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Required unless `comp` is given: a game function never guesses the edition. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -354,33 +345,30 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_schedule, fiba_wafrobasket_team_box
-games = fiba_wafrobasket_schedule(season=2025)
-fiba_wafrobasket_team_box(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_oly_schedule, fiba_oly_team_box
+games = fiba_oly_schedule(season=2024)
+fiba_oly_team_box(game_id=int(games['game_id'][0]), season=2024)
 ```
 
-### fiba_wafrobasket_teams {#fiba_wafrobasket_teams}
+### fiba_oly_teams {#fiba_oly_teams}
 
-`fiba_wafrobasket_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_oly_teams(season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Teams of one FIBA Women's AfroBasket edition.
+Teams of one Men's Olympic Basketball Tournament edition.
 
-FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
+Men's Olympic Basketball Tournament (men's); season rule: event year (Paris 2024 = 2024).
 
 Convenience wrapper: a thin binding of `fiba_gdap_teams` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: FIBA's terms restrict this source. The GDAP developer-portal terms limit API use to 'Authorized Users' (federations, organisers, FIBA partners) and say any broader use 'is not authorised'; the fiba.basketball terms say no portion of the site may be duplicated, redistributed or manipulated. The package owner reviewed both clauses on 2026-10-12, accepted them and approved the full intake, published data releases included. Users who are not themselves authorised by FIBA should check the terms before using the wrappers.
 
 **Parameters**
 
@@ -431,27 +419,24 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | The season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. The season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_teams
-fiba_wafrobasket_teams(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_oly_teams
+fiba_oly_teams(season=2024)
 ```
 
-### fiba_wamericup_editions {#fiba_wamericup_editions}
+### fiba_wafrobasket_editions {#fiba_wafrobasket_editions}
 
-`fiba_wamericup_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_wafrobasket_editions(season: 'Optional[int]' = None, to_season: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Every edition of FIBA Women's AmeriCup.
+Every edition of FIBA Women's AfroBasket.
 
-FIBA Women's AmeriCup (women's); season rule: event year (2025 = 2025).
+FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gdap_editions` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -507,24 +492,24 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wamericup_editions
-fiba_wamericup_editions(season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_editions
+fiba_wafrobasket_editions(season=2025)
 ```
 
-### fiba_wamericup_pbp {#fiba_wamericup_pbp}
+### fiba_wafrobasket_pbp {#fiba_wafrobasket_pbp}
 
-`fiba_wamericup_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_wafrobasket_pbp(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Play-by-play of one FIBA Women's AmeriCup game.
+Play-by-play of one FIBA Women's AfroBasket game.
 
-FIBA Women's AmeriCup (women's); season rule: event year (2025 = 2025).
+FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -536,7 +521,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
+| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Required unless `comp` is given: a game function never guesses the edition. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -578,28 +563,25 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wamericup_schedule, fiba_wamericup_pbp
-games = fiba_wamericup_schedule(season=2025)
-fiba_wamericup_pbp(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_schedule, fiba_wafrobasket_pbp
+games = fiba_wafrobasket_schedule(season=2025)
+fiba_wafrobasket_pbp(game_id=int(games['game_id'][0]), season=2025)
 ```
 
-### fiba_wamericup_player_box {#fiba_wamericup_player_box}
+### fiba_wafrobasket_player_box {#fiba_wafrobasket_player_box}
 
-`fiba_wamericup_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+`fiba_wafrobasket_player_box(game_id: 'int', season: 'Optional[int]' = None, comp: 'Optional[int]' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-Player box score of one FIBA Women's AmeriCup game.
+Player box score of one FIBA Women's AfroBasket game.
 
-FIBA Women's AmeriCup (women's); season rule: event year (2025 = 2025).
+FIBA Women's AfroBasket (women's); season rule: event year (2025 = 2025).
 
 Convenience wrapper: a thin binding of `fiba_gamepage_box_players` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
@@ -611,7 +593,7 @@ Read before use: FIBA's terms restrict this source. The GDAP developer-portal te
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `int` |  | FIBA game id (game_id in the schedule). |
-| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Omitted = the newest edition that has started. |
+| `season` | `Optional[int]` | `None` | Edition season key (see the season rule above). Required unless `comp` is given: a game function never guesses the edition. |
 | `comp` | `Optional[int]` | `None` | FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions. Checked to be an edition of this competition (one cached getGdapCompetitionById request). |
 | `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
 | `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
@@ -670,17 +652,14 @@ A polars/pandas DataFrame by default; the game-page `Dict` (`game`, `playByPlay`
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
-| `ValueError` | Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
-| `NoDataError` | FIBA lists no edition for the season. |
-| `AssetFetchError` | `comp` is an edition of another competition family. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). FIBA lists no edition for the season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game). `comp` is an edition of another competition family, or GDAP gives it no family to check. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. Neither `season` nor `comp` is given, or the season lists several editions (pass `comp`). |
 
 **Example**
 
 ```python
-from sportsdataverse.basketball.fiba_hub import fiba_wamericup_schedule, fiba_wamericup_player_box
-games = fiba_wamericup_schedule(season=2025)
-fiba_wamericup_player_box(game_id=int(games['game_id'][0]), season=2025)
+from sportsdataverse.basketball.fiba_hub import fiba_wafrobasket_schedule, fiba_wafrobasket_player_box
+games = fiba_wafrobasket_schedule(season=2025)
+fiba_wafrobasket_player_box(game_id=int(games['game_id'][0]), season=2025)
 ```

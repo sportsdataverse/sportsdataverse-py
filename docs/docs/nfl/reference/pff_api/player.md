@@ -37,9 +37,9 @@ List the seasons a player has data for
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_seasons-example}
 
@@ -101,9 +101,9 @@ Snap counts for a player, broken out by position
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_snaps_summary-example}
 
@@ -145,9 +145,9 @@ Player snap counts pivoted by position
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_position_pivot-example}
 
@@ -226,9 +226,9 @@ Offense summary for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_summary-example}
 
@@ -316,9 +316,9 @@ Blocking report for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_blocking-example}
 
@@ -405,9 +405,9 @@ Pass-blocking report for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_pass_blocking-example}
 
@@ -483,9 +483,9 @@ Run-blocking report for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_run_blocking-example}
 
@@ -590,9 +590,9 @@ Passing summary for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_passing_summary-example}
 
@@ -847,9 +847,9 @@ Passing by play concept for one player
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_passing_concept-example}
 

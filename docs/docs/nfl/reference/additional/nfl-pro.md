@@ -53,7 +53,7 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 
 | Exception | Description |
 |---|---|
-| `ValueError` | if `group` is not a recognized key. |
+| `ValueError` | If `group` is not a recognized key. |
 
 **Example**
 
@@ -160,7 +160,7 @@ A polars (or pandas) `DataFrame`, one row per leader entry.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | if `category` is not a recognized key. |
+| `ValueError` | If `category` is not a recognized key. |
 
 **Example**
 

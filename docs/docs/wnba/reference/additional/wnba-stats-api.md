@@ -302,7 +302,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
 | `NoDataError` | The game has no liveData boxscore object. |
 | `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
-| `ImportError` | curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
 
 **Example**
 
@@ -404,7 +404,7 @@ If `raw=True`, the raw JSON dict. Otherwise, a DataFrame with one row per action
 | `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
 | `NoDataError` | The game has no liveData play-by-play object. |
 | `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
-| `ImportError` | curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
 
 **Example**
 

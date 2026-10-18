@@ -72,7 +72,7 @@ Box score of one game: per-player and team totals per side, by-quarter scores, r
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -154,7 +154,7 @@ Game header: teams, codes, coaches, score by quarter, venue, referees.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -211,7 +211,7 @@ Play-by-play of one game, one array per quarter (FirstQuarter ... ForthQuarter, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -267,7 +267,7 @@ Shot chart of one game: one row per made/missed FG and made FT, with COORD_X/COO
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -351,7 +351,7 @@ Game report: date, round, phase, both clubs with score and last-5 form.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -492,7 +492,7 @@ Box score of one game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

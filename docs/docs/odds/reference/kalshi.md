@@ -49,7 +49,7 @@ One event, optionally with its markets nested.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -102,7 +102,7 @@ Events, filterable by series and status; cursor-paged.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -142,7 +142,7 @@ Exchange and trading status.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -221,7 +221,7 @@ One market.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -302,7 +302,7 @@ Markets, filterable by event/series/status; cursor-paged.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -343,7 +343,7 @@ Order book of a market (fixed-point dollar levels).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -395,7 +395,7 @@ One series.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -446,7 +446,7 @@ Series (market families) in a category; the whole category in one body.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -495,7 +495,7 @@ Public trades, filterable by market; cursor-paged.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Kalshi answered 404 (unknown series, event or market ticker). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

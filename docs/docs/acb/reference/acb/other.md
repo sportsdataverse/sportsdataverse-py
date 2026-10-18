@@ -1,11 +1,11 @@
 ---
-title: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–standings_rounds"
-sidebar_label: "Other: period_scores–standings_rounds"
-sidebar_position: 4
-description: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–standings_rounds — function reference in sdv-py, the SportsDataverse Python package."
+title: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games"
+sidebar_label: "Other: period_scores–bracket_games"
+sidebar_position: 5
+description: "ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–standings_rounds
+# ACB — ACB API (api2.acb.com, Spain) — Other: period_scores–bracket_games
 
 ## acb_period_scores
 
@@ -36,9 +36,9 @@ Points each team scored in each period of a game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_period_scores-example}
 
@@ -86,9 +86,9 @@ Coaches and game facts per team: head coach, assistants, arena, attendance, refe
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_box_info-example}
 
@@ -161,9 +161,9 @@ Play-by-play of a game (2016-17 onward): every shot, rebound, foul, turnover, su
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_pbp-example}
 
@@ -222,9 +222,9 @@ Every field-goal and free-throw attempt of a game (2016-17 onward) with its cour
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_shots-example}
 
@@ -269,9 +269,9 @@ Score through a game, one row per scoring moment, with the margin.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_lead_tracker-example}
 
@@ -312,9 +312,9 @@ Lead statistics of a game (best run, maximum lead, time ahead, lead changes) per
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_lead_stats-example}
 
@@ -371,9 +371,9 @@ Players of a game with their game line, starters first.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_lineup-example}
 
@@ -430,9 +430,9 @@ The playoff series a game belongs to, one row per game of the series (HTTP 204 o
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_serie-example}
 
@@ -479,9 +479,9 @@ Pre-match facts per team: standing, record, recent results.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_quickfacts-example}
 
@@ -533,9 +533,9 @@ Each team's season leaders before a game, by category.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_season_leaders-example}
 
@@ -603,199 +603,14 @@ The games of the round (or week) around a game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_matchlist-example}
 
 ```python
 acb_matchlist(match_id=105401)
-```
-
-_Last validated n/a._
-
-## acb_competition_editions
-
-Every competition edition (season) the API knows, one row per edition.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_editions-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `competition_name` | character | The API's competition name ('Liga Nacional' for the Liga). |
-| `edition_id` | integer | Season id (START year - 1935). |
-| `season_start_year` | integer | Calendar year the season starts (2026 for 2026-27). |
-| `season` | integer | Season END year (2027 for 2026-27) = seasonEndYear. |
-| `n_rounds` | integer | Rounds the edition lists. |
-| `n_weeks` | integer | Weeks the edition lists. |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Raises {#acb_competition_editions-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
-
-### Example {#acb_competition_editions-example}
-
-```python
-acb_competition_editions()
-```
-
-_Last validated n/a._
-
-## acb_competition_rounds
-
-The rounds of every competition edition: the round ids to crawl.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_rounds-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the round belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `round_id` | integer | Round id: global across seasons, not the round number (6017 = Liga 2026-27 round 3; 2600 = 2016-17 round 1) |
-| `round_number` | integer | Round number within the phase |
-| `subphase_id` | integer | Sub-phase id inside a phase (a playoff round or a cup round, e.g. 291, 292, 293); null in the regular season |
-| `subphase_number` | integer | Sub-phase number; null in the regular season |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Raises {#acb_competition_rounds-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
-
-### Example {#acb_competition_rounds-example}
-
-```python
-acb_competition_rounds()
-```
-
-_Last validated n/a._
-
-## acb_competition_weeks
-
-The weeks of every competition edition: the week ids to crawl.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_weeks-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa. |
-| `edition_id` | integer | Season id the week belongs to (START year - 1935). |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week id: global across seasons (2989 = the week of 2026-10-10) |
-| `description` | character | Spanish week label ('Semana 1'). |
-| `start_date` | character | Monday the week starts (UTC midnight). |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Raises {#acb_competition_weeks-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
-
-### Example {#acb_competition_weeks-example}
-
-```python
-acb_competition_weeks()
-```
-
-_Last validated n/a._
-
-## acb_competition_current
-
-The API's current pointers: competition, edition, week, round and match.
-
-**Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Menu/competition-data`
-
-**Valid URL:** [https://api2.acb.com/api/matchdata/Menu/competition-data](https://api2.acb.com/api/matchdata/Menu/competition-data)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `competitionIds` | `competition_ids` |  |  | `Y` | Competition id (1, 2, 3, 10) or a list of ids for several. Omitted = the API's default competition. |
-
-### Returns {#acb_competition_current-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `competition_id` | integer | Competition the site opens by default. |
-| `edition_id` | integer | Edition (season) the site opens by default. |
-| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
-| `week_id` | integer | Week the site opens by default. |
-| `round_id` | integer | Round the site opens by default. |
-| `match_grouping` | character | round or week (current pointers) |
-| `match_id` | integer | The current match (the featured game). |
-| `status` | character | State of the current match. |
-| `start` | character | Tip-off instant (UTC) of the current match. |
-| `home_team_id` | integer | Home season-team entry id of the current match. |
-| `home_club_id` | integer | Home stable club id of the current match. |
-| `home_team` | character | Home team name of the current match. |
-| `home_team_abbr` | character | Home team abbreviation of the current match. |
-| `away_team_id` | integer | Away season-team entry id of the current match. |
-| `away_club_id` | integer | Away stable club id of the current match. |
-| `away_team` | character | Away team name of the current match. |
-| `away_team_abbr` | character | Away team abbreviation of the current match. |
-
-**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
-
-### Raises {#acb_competition_current-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
-
-### Example {#acb_competition_current-example}
-
-```python
-acb_competition_current()
 ```
 
 _Last validated n/a._
@@ -854,9 +669,9 @@ Games of one round (or week) with scores, status and broadcasters.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_round_matches-example}
 
@@ -915,9 +730,9 @@ League table after a round (default: the current round).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_standings-example}
 
@@ -967,14 +782,130 @@ Standings history: each team's position after each round, with the round's game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
-| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_standings_rounds-example}
 
 ```python
 acb_standings_rounds(season=2027)
+```
+
+_Last validated n/a._
+
+## acb_bracket
+
+Playoff bracket: one row per series (quarter-final, semifinal, final).
+
+**Endpoint URL:** `GET https://api2.acb.com/api/seasondata/Competition/bracket`
+
+**Valid URL:** [https://api2.acb.com/api/seasondata/Competition/bracket?season=2026](https://api2.acb.com/api/seasondata/Competition/bracket?season=2026)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `competitionId` | `competition_id` |  |  | `Y` | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa (youth). Omitted = the API's default competition. |
+| `season` | `season` |  |  | `Y` | Season END year (2027 = 2026-27; the first ACB season, 1983-84, is 1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted = the current season. |
+
+### Returns {#acb_bracket-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `stage` | character | Bracket stage: quarter_finals, semifinals, final (other_positions when present). |
+| `phase_id` | integer | Phase id of the series (111 = Play Off Titulo). |
+| `subphase_id` | integer | Sub-phase id (the playoff stage). |
+| `home_team_id` | integer | Season-team id: one team's entry in one competition edition (4467 = Barça in Liga 2026-27, 4388 = Real Madrid in Liga 2025-26). Changes every season and competition. Joins every `homeTeamId` / `awayTeamId` / `teamId` / `teamEditionId`. Not the club id. |
+| `home_club_id` | integer | Club id, stable across seasons and sponsor names (2 = Barça, 9 = Real Madrid, 13 = Valencia Basket): the `clubId` request param and every `homeClubId` / `awayClubId`. |
+| `home_team` | character | Team name that season (sponsor names change) |
+| `home_team_abbr` | character | Three-letter abbreviation (BAR, RMB) |
+| `away_team_id` | integer | Season-team id: one team's entry in one competition edition (4467 = Barça in Liga 2026-27, 4388 = Real Madrid in Liga 2025-26). Changes every season and competition. Joins every `homeTeamId` / `awayTeamId` / `teamId` / `teamEditionId`. Not the club id. |
+| `away_club_id` | integer | Club id, stable across seasons and sponsor names (2 = Barça, 9 = Real Madrid, 13 = Valencia Basket): the `clubId` request param and every `homeClubId` / `awayClubId`. |
+| `away_team` | character | Team name that season (sponsor names change) |
+| `away_team_abbr` | character | Three-letter abbreviation (BAR, RMB) |
+| `home_wins` | integer | Games won by the home-court team in the series. |
+| `away_wins` | integer | Games won by the other team in the series. |
+| `finished` | logical | True once the series is decided. |
+| `best_of` | integer | Series length (best of N). |
+| `n_games` | integer | Games listed for the series. |
+| `edition_id` | integer | Season id (`editionId`) = season START year - 1935 (91 = 2026-27, 81 = 2016-17, 70 = 2005-06, 48 = 1983-84, the first). The sdv season (END year) is editionId + 1936. Season lists also carry `seasonStartYear` / `seasonEndYear` |
+| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
+
+**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_bracket-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
+### Example {#acb_bracket-example}
+
+```python
+acb_bracket(season=2026)
+```
+
+_Last validated n/a._
+
+## acb_bracket_games
+
+The games of every playoff series of a bracket, one row per game.
+
+**Endpoint URL:** `GET https://api2.acb.com/api/seasondata/Competition/bracket`
+
+**Valid URL:** [https://api2.acb.com/api/seasondata/Competition/bracket?season=2026](https://api2.acb.com/api/seasondata/Competition/bracket?season=2026)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `competitionId` | `competition_id` |  |  | `Y` | Competition id: 1 Liga Endesa, 2 Copa del Rey, 3 Supercopa Endesa, 10 Minicopa Endesa (youth). Omitted = the API's default competition. |
+| `season` | `season` |  |  | `Y` | Season END year (2027 = 2026-27; the first ACB season, 1983-84, is 1984). ``acb_runtime`` sends the API's ``editionId`` = season - 1936. Omitted = the current season. |
+
+### Returns {#acb_bracket_games-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `stage` | character | Bracket stage: quarter_finals, semifinals, final, other_positions. |
+| `phase_id` | integer | Phase id of the series (111 = Play Off Titulo). |
+| `subphase_id` | integer | Sub-phase id of the series (the playoff stage). |
+| `series_home_team_id` | integer | Season-team entry of the series' home-court team (new every season). |
+| `series_home_club_id` | integer | Stable club id of the series' home-court team. |
+| `series_away_team_id` | integer | Season-team entry of the other team of the series. |
+| `series_away_club_id` | integer | Stable club id of the other team of the series. |
+| `series_home_wins` | integer | Games won by the home-court team in the series (the API's homeScore). |
+| `series_away_wins` | integer | Games won by the other team in the series (the API's awayScore). |
+| `series_finished` | logical | True once the series is decided. |
+| `best_of` | integer | Series length (best of N) as sent; 0 in the 2016-17 final sample, so read 0 as unknown. |
+| `edition_id` | integer | Season id (editionId) = season START year - 1935 (91 = 2026-27). The wrappers take the END year, `season`. |
+| `season` | integer | Season END year (2027 = 2026-27) = edition_id + 1936: the key the wrappers take. |
+| `match_id` | integer | Match id. Legacy ids (seasons up to 2019-20) sit below about 20000 (12559 = 2005-06 final, 17718 = 2016-17 final); from 2020-21 they start at about 100000 (102920 in 2021-22, 105401 in 2026-27). One key space across competitions: the matchId param of every matchdata route. |
+| `home_team_id` | integer | Home team. Season-team id: one team's entry in one competition edition (4467 = Barça in Liga 2026-27, 4388 = Real Madrid in Liga 2025-26). Changes every season and competition. Joins every `homeTeamId` / `awayTeamId` / `teamId` / `teamEditionId`. Not the club id. |
+| `away_team_id` | integer | Away team. Season-team id: one team's entry in one competition edition (4467 = Barça in Liga 2026-27, 4388 = Real Madrid in Liga 2025-26). Changes every season and competition. Joins every `homeTeamId` / `awayTeamId` / `teamId` / `teamEditionId`. Not the club id. |
+| `home_score` | integer | Home points (null before the match) |
+| `away_score` | integer | Away points (null before the match) |
+| `start` | character | Tip-off, ISO 8601 UTC |
+| `status` | character | Match state (x-match-statuses) |
+| `is_on_half_time` | logical | At half time (live) |
+| `current_quarter` | integer | Current or last quarter (5+ = overtime); not reliable after the match (1 in the 2017 series rows) |
+
+**`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_bracket_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
+### Example {#acb_bracket_games-example}
+
+```python
+acb_bracket_games(season=2026)
 ```
 
 _Last validated n/a._

@@ -18,12 +18,6 @@ Wraps `mlb/event/{game_id}/matchup`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -42,12 +36,6 @@ Wraps `mlb/event/{game_id}/recap`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -68,12 +56,6 @@ Wraps `mlb/event/{game_id}/standings`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -92,12 +74,6 @@ Wraps `mlb/league/conferences`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -130,12 +106,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `image_alt_text` | character | Image alt text Fox ships with the header, the full league name (e.g., 'Major League Baseball'). |
 | `rank` | character | Rank within the team leaderboard. |
 | `details` | character | Details. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -204,12 +174,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `to_win` | character | Team's moneyline in American odds, as a signed string (e.g., '-142', '+118'). |
 | `total` | character | Total. |
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -243,12 +207,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `content_uri` | character | Fox content URI of the player the item is about (e.g., 'baseball/mlb/athletes/11258'); athlete_id is its trailing number. |
 | `web_url` | character | Site-relative foxsports.com path of the player's page (e.g., '/mlb/gabriel-moreno-player'). |
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -267,12 +225,6 @@ Wraps `mlb/league/polls`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -304,12 +256,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
 | `group_id` | character | ESPN group id. |
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -339,12 +285,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `web_url` | character | Site-relative foxsports.com scores page path for that date (e.g., '/mlb/scores?date=2026-02-20'). |
 | `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
 | `group_id` | character | ESPN group id. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -391,12 +331,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `cactus_league` | character | Position number ('1'-'15') from the first column of Fox's CACTUS LEAGUE spring-training table, not ordered by win percentage in sampled data; null on rows from every other table. |
 | `grapefruit_league` | character | Position number ('1'-'15') from the first column of Fox's GRAPEFRUIT LEAGUE spring-training table, whose header text names this column; null on rows from every other table. |
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -423,12 +357,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `stat_abbreviation` | character | Fox's short label for the leader's stat (e.g., 'HR', 'ERA', 'ISO'). |
 | `player` | character |  |
 | `value` | character | Numeric value. |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -493,12 +421,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `selected` | character | Fox's default-selection flag, which Fox sets only on group-filter (groupList) items; this league's navigation payload has no groupList, so the column is null on every row. The current date or week is marked by the payload-level currentSelectionId, which the parser does not return. |
 | `group_id` | character | ESPN group id. |
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -518,12 +440,6 @@ Wraps `mlb/scorechip/{chip_id}`.
 
 The raw JSON `dict`.
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | transport failures surface from the underlying getter. |
-
 **Example**
 
 ```python
@@ -542,12 +458,6 @@ Wraps `mlb/league/scores-segment/{segment_id}`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -656,12 +566,6 @@ Wraps `mlb/team/{team_id}/header`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
-
 **Example**
 
 ```python
@@ -763,12 +667,6 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `web_url` | character | Site-relative foxsports.com path of the team page (e.g., '/mlb/philadelphia-phillies-team'). |
 | `color` | character | Primary color (hex, no leading '#'). |
 | `logo_url` | character |  |
-
-**Raises**
-
-| Exception | Description |
-|---|---|
-| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 

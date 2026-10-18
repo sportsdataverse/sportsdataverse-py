@@ -746,8 +746,8 @@ def lba_championships(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -810,8 +810,8 @@ def lba_calendar(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -871,8 +871,8 @@ def lba_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -932,8 +932,8 @@ def lba_box_score(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -993,8 +993,8 @@ def lba_team_box_score(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1056,8 +1056,8 @@ def lba_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1118,8 +1118,8 @@ def lba_pbp_legend(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1180,8 +1180,8 @@ def lba_shots(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1243,8 +1243,8 @@ def lba_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1304,8 +1304,8 @@ def lba_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1365,8 +1365,8 @@ def lba_roster(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1425,8 +1425,8 @@ def lba_roster_coach(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1487,8 +1487,8 @@ def lba_team_players_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1553,8 +1553,8 @@ def lba_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1615,8 +1615,8 @@ def lba_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1676,8 +1676,8 @@ def lba_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1738,8 +1738,8 @@ def lba_game_log(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1802,8 +1802,8 @@ def lba_players_leaderboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1868,8 +1868,8 @@ def lba_teams_leaderboard(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

@@ -68,5 +68,5 @@ toc_max_heading_level: 2
 | [fiba_gdap_roster_latest](fiba_gdap/other.md#fiba_gdap_roster_latest) | A team's latest roster (same shape as the roster). |
 | [fiba_gdap_round_gamedays](fiba_gdap/other.md#fiba_gdap_round_gamedays) | Rounds of a competition with their game days. |
 | [fiba_gdap_round_standings](fiba_gdap/other.md#fiba_gdap_round_standings) | Group standings of every round of a competition. |
-| [fiba_gdap_rounds](fiba_gdap/other.md#fiba_gdap_rounds) | Rounds of a competition (group stage, knockout rounds). |
+| [fiba_gdap_rounds](fiba_gdap/other-2.md#fiba_gdap_rounds) | Rounds of a competition (group stage, knockout rounds). |
 | [fiba_gdap_schedule](fiba_gdap/other-2.md#fiba_gdap_schedule) | Schedule and results of one competition (edition): one row per game. |

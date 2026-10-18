@@ -59,7 +59,7 @@ Team goals for and against per season: totals and per game, even strength, power
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -116,7 +116,7 @@ Team goals by scorer: forwards, defensemen and import players (totals and shares
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -179,7 +179,7 @@ Team shots per season: on goal (total, slot, shooting percentage), missed, post,
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -236,7 +236,7 @@ Team power play per season: opportunities, goals, conversion percentage, power-p
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -293,7 +293,7 @@ Team penalty kill per season: times short-handed, goals against, kill percentage
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -347,7 +347,7 @@ Team penalties per season: 2-, 5- and 10-minute penalties, game misconducts, mat
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -405,7 +405,7 @@ Team shootouts per season: shootout wins and losses, attempts, goals and percent
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -463,7 +463,7 @@ Team faceoffs per season: taken, won, lost, per game, and win percentage overall
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -523,7 +523,7 @@ Team faceoffs by zone (offensive, neutral, defensive) per season: taken, won, lo
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -580,7 +580,7 @@ Team faceoffs by zone (offensive, neutral, defensive) per game: taken, won and l
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -632,7 +632,7 @@ Team home attendance per season: home games, total and average spectators, avera
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

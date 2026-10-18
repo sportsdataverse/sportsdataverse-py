@@ -285,7 +285,7 @@ dict | None: `{"home_share": float, "away_share": float, "margins": {name: float
 
 | Exception | Description |
 |---|---|
-| `ValueError` | unknown `league`, missing columns, plays from more than one game, or `home_id` and `away_id` naming the same team. |
+| `ValueError` | Unknown `league`, missing columns, plays from more than one game, or `home_id` and `away_id` naming the same team. |
 | `TypeError` | `pos_team_id` is float. |
 
 **Example**
@@ -349,8 +349,8 @@ keyed by `(game_id, team_id)`, sorted by them; `game_id` and `team_id` keep the 
 
 | Exception | Description |
 |---|---|
-| `ValueError` | unknown `league` or missing columns. |
-| `TypeError` | a float id column, or `homeTeamId` / `awayTeamId` typed unlike `pos_team_id` (the join would silently miss). |
+| `ValueError` | Unknown `league` or missing columns. |
+| `TypeError` | A float id column, or `homeTeamId` / `awayTeamId` typed unlike `pos_team_id` (the join would silently miss). |
 
 **Example**
 

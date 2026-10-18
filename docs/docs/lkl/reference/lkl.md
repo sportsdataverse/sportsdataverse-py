@@ -62,8 +62,8 @@ Game header from the game page: status, tip-off, venue, attendance, officials an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_info-example}
@@ -106,8 +106,8 @@ Game roster from the game page: every player on either team sheet with the lkl.l
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_players-example}
@@ -179,8 +179,8 @@ Per-player box score of a finished game: minutes, points, shooting splits, rebou
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_player_box-example}
@@ -254,8 +254,8 @@ Team game totals of both teams: shooting, rebounds, assists, turnovers, fouls, p
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_team_box-example}
@@ -297,8 +297,8 @@ Points each team scored in each period of a game, overtime included.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_period_scores-example}
@@ -346,8 +346,8 @@ Summary tab: the head-to-head comparison of both teams (shooting, rebounds, assi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_summary-example}
@@ -387,8 +387,8 @@ Score line of a game: both scores and the clock text.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_score-example}
@@ -436,8 +436,8 @@ Statistics tab: the head-to-head comparison of both teams, one row per statistic
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_stats-example}
@@ -480,8 +480,8 @@ Lead chart of a game: the score margin at each chart point of each period.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_lead_chart-example}
@@ -527,8 +527,8 @@ Leaders tab: each team's top players in points, rebounds, assists, efficiency, s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_leaders-example}
@@ -582,8 +582,8 @@ Play-by-play of a finished game (2024-25 onward), oldest first, with the running
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_pbp-example}
@@ -633,8 +633,8 @@ Every field-goal attempt of a finished game (2024-25 onward) with its court posi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_shots-example}
@@ -687,8 +687,8 @@ Every played game of one LKL season (all pages of the site's results list, merge
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_results-example}
@@ -738,8 +738,8 @@ League table of one LKL season: overall, home and away records, and the final ra
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_standings-example}

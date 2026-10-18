@@ -61,8 +61,8 @@ One row per finished game: period and clock state, both teams' names, codes and 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_game-example}
@@ -163,8 +163,8 @@ Team box score of a finished game: score by period, fouls, timeouts and the team
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_team_box-example}
@@ -251,8 +251,8 @@ Player box score of a finished game: minutes, shooting, rebounds, assists and th
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_player_box-example}
@@ -313,8 +313,8 @@ Play-by-play of a finished game, newest action first, with the running score and
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_pbp-example}
@@ -363,8 +363,8 @@ Shot chart of a finished game: court x/y (percent of the full court), result and
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_shots-example}
@@ -420,8 +420,8 @@ The recent-games window of a competition, with the global Genius team ids.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_competition_games-example}
@@ -464,8 +464,8 @@ The competition (comp_id and name) a game belongs to, from its LiveStats HTML sh
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_match_competition-example}
@@ -509,8 +509,8 @@ Every competition of an org from the hosted WebStats chooser, with its END-year 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_competitions-example}
@@ -564,8 +564,8 @@ Every match of a competition (hosted WebStats): ids, status, venue, teams and sc
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_schedule-example}
@@ -619,8 +619,8 @@ Every match of a competition from the JSON-wrapped embed page (orgs whose plain 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_schedule_embed-example}
@@ -667,8 +667,8 @@ The latest games a league site's results widget shows (needs no proxy).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#genius_widget_games-example}

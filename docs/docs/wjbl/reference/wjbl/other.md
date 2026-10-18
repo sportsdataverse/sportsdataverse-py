@@ -34,9 +34,9 @@ Every competition edition (league_id): the W League seasons back to 1999-2000, a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_leagues-example}
 
@@ -113,9 +113,9 @@ Games of a season in ONE month (default: the season's latest month) with teams, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_schedule-example}
 
@@ -186,9 +186,9 @@ Game header of a final game: both teams, the result flag and the score by period
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_game-example}
 
@@ -229,9 +229,9 @@ Points of each side in each period played (quarters and overtimes) from the game
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_period_scores-example}
 
@@ -290,9 +290,9 @@ Box score of a final game (2013-14 on): one row per player of both teams.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_box_score-example}
 
@@ -351,9 +351,9 @@ Play-by-play of a final game (2018-19 on): one row per play, Japanese action voc
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_pbp-example}
 
@@ -394,9 +394,9 @@ Every season phase (season_id) with its edition name and standings flags.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_standing_seasons-example}
 
@@ -438,9 +438,9 @@ Head-to-head results grid (hoshitori-hyo) of one or more season phases: one row 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_head_to_head-example}
 
@@ -498,9 +498,9 @@ Players of a team in a season phase, with the head coach.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_roster-example}
 
@@ -546,9 +546,9 @@ Staff of a team in a season phase (general manager, assistant coaches, support s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
-| `ValueError` | a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422. |
 
 ### Example {#wjbl_staff-example}
 

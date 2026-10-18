@@ -42,8 +42,8 @@ Competitions (one per season) of a competition type.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_competitions-example}
@@ -100,8 +100,8 @@ Game header from the game sheet: teams, score, start time, status, attendance an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_game-example}
@@ -151,8 +151,8 @@ Game roster from the game sheet: one row per dressed player, with the person id,
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_lineups-example}
@@ -217,8 +217,8 @@ Play-by-play from the game sheet: goals, penalties, shots, faceoffs, goalie chan
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_pbp-example}
@@ -262,8 +262,8 @@ Phases of a competition (regular season, playoffs, relegation).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_phases-example}
@@ -322,8 +322,8 @@ One round of a phase with its games.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_round_games-example}
@@ -368,8 +368,8 @@ Rounds (journees) of a phase with their dates (games via get_rencontrestours).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_rounds-example}
@@ -432,8 +432,8 @@ Games (schedule and results); Laravel-paginated, par_page=700 returns a full sea
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_schedule-example}
@@ -479,8 +479,8 @@ Shootout attempts from the game sheet: round, shooter, goalie and result (zero r
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_shootout-example}
@@ -533,8 +533,8 @@ Standings of a phase.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_standings-example}
@@ -581,8 +581,8 @@ Teams of a phase.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liguemagnus.com has no data for the request (success=false 'Aucune donnée disponible', an empty data stub, zero rows, a season outside 2020-21 onwards, an unknown or unplayed game). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is success=false with any other message, outside the requested scope, a partial schedule page, or a game page without its embedded game sheet. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#magnus_teams-example}

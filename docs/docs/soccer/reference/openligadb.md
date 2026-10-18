@@ -37,7 +37,7 @@ Current matchday.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -78,7 +78,7 @@ Top scorers.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -144,7 +144,7 @@ Matches of one matchday.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -185,7 +185,7 @@ Matchdays of a league-season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -225,7 +225,7 @@ Last change timestamp (bare ISO string).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -267,7 +267,7 @@ All leagues (shortcut, season, sport).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -331,7 +331,7 @@ One match.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -396,7 +396,7 @@ Next match of a team (404 text once the season is over).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -461,7 +461,7 @@ All matches of a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -511,7 +511,7 @@ League table.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -554,7 +554,7 @@ Teams of a league-season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

@@ -48,8 +48,8 @@ The latest 14 finished games of a competition plus every upcoming game, with the
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_slider-example}
@@ -106,8 +106,8 @@ One game: teams, scores, phase, venue and the neighbouring game ids.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_find-example}
@@ -148,8 +148,8 @@ Points each side scored in each period of a game (periods 5 and up are overtimes
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_periods-example}
@@ -220,8 +220,8 @@ Team totals of both sides of a finished game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_overview-example}
@@ -297,8 +297,8 @@ The top performer of each side of a finished game, with his full line.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_top_performers-example}
@@ -346,8 +346,8 @@ The game leader of each side in every statistic (one row per side and statistic)
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_leaders-example}
@@ -429,8 +429,8 @@ Per-player box score of a finished game (one row per player line).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_box-example}
@@ -502,8 +502,8 @@ Team totals of both sides from the box score of a finished game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_team_box-example}
@@ -564,8 +564,8 @@ Play-by-play ('film') of a finished game with court x/y (2021-22 and 2026-27 onl
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_game_film-example}

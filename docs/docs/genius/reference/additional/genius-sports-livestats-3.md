@@ -89,10 +89,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FRB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FRB). |
 
 **Example**
 
@@ -152,11 +151,9 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `ValueError` | The season matches several competitions (pass `comp_id`). |
-| `NoDataError` | The org lists no matching competition. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). The org lists no matching competition. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The season matches several competitions (pass `comp_id`). |
 
 **Example**
 
@@ -210,10 +207,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FRB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FRB). |
 
 **Example**
 
@@ -320,10 +316,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FRB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FRB). |
 
 **Example**
 
@@ -372,8 +367,8 @@ A polars/pandas DataFrame by default; the chooser page record (`dict`): the sdv-
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 **Example**
@@ -440,10 +435,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FUBB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FUBB). |
 
 **Example**
 
@@ -536,10 +530,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FUBB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FUBB). |
 
 **Example**
 
@@ -599,11 +592,9 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `ValueError` | The season matches several competitions (pass `comp_id`). |
-| `NoDataError` | The org lists no matching competition. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). The org lists no matching competition. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The season matches several competitions (pass `comp_id`). |
 
 **Example**
 
@@ -657,10 +648,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of FUBB), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FUBB). |
 
 **Example**
 

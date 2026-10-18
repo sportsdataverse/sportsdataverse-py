@@ -83,7 +83,7 @@ One event.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -167,7 +167,7 @@ One league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -253,7 +253,7 @@ Next 15 events of a league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -353,7 +353,7 @@ Teams in a league (by league name).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -392,7 +392,7 @@ All leagues.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -500,7 +500,7 @@ One player.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -550,7 +550,7 @@ Search players by name.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -618,7 +618,7 @@ Events of a league-season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -661,7 +661,7 @@ All sports.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -719,7 +719,7 @@ League table.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -819,7 +819,7 @@ One team.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -927,7 +927,7 @@ Players of a team.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | TheSportsDB answered 404 (unknown id or route). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

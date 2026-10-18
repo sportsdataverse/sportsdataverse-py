@@ -6,9 +6,9 @@ sidebar_position: 50
 ---
 # GENIUS — additional Python functions
 
-Additional functions in `sportsdataverse.basketball.genius` not covered by the generated API-endpoint
-reference above: per-competition functions minted from the competition registry (each
-binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
+Additional functions in `sportsdataverse.basketball.genius` that are not generated API-endpoint wrappers (those
+have their own reference pages): per-competition functions minted from the competition registry
+(each binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
 
 ## Genius Sports LiveStats
 
@@ -24,7 +24,7 @@ binds a base wrapper to one competition), plus hand-written wrappers, loaders, a
 | [esake_pbp](additional/genius-sports-livestats.md#esake_pbp) | Play-by-play of a finished Greek Basket League (ESAKE) game. |
 | [esake_player_box](additional/genius-sports-livestats.md#esake_player_box) | Player box score of a finished Greek Basket League (ESAKE) game. |
 | [esake_schedule](additional/genius-sports-livestats.md#esake_schedule) | Every match of one Greek Basket League (ESAKE) season (hosted WebStats): ids, status, venue, teams and scores. |
-| [esake_shots](additional/genius-sports-livestats.md#esake_shots) | Shot chart of a finished Greek Basket League (ESAKE) game. |
+| [esake_shots](additional/genius-sports-livestats-2.md#esake_shots) | Shot chart of a finished Greek Basket League (ESAKE) game. |
 | [esake_team_box](additional/genius-sports-livestats-2.md#esake_team_box) | Team box score of a finished Greek Basket League (ESAKE) game. |
 | [lfb_competitions](additional/genius-sports-livestats-2.md#lfb_competitions) | Every competition of the FFBB Genius org, with its END-year season. |
 | [lfb_pbp](additional/genius-sports-livestats-2.md#lfb_pbp) | Play-by-play of a finished Ligue Feminine de Basket (France, FFBB) game. |
@@ -60,7 +60,7 @@ binds a base wrapper to one competition), plus hand-written wrappers, loaders, a
 | [wbbl_pbp](additional/genius-sports-livestats-5.md#wbbl_pbp) | Play-by-play of a finished Women's British Basketball League game. |
 | [wbbl_player_box](additional/genius-sports-livestats-5.md#wbbl_player_box) | Player box score of a finished Women's British Basketball League game. |
 | [wbbl_schedule](additional/genius-sports-livestats-5.md#wbbl_schedule) | Every match of one Women's British Basketball League season (hosted WebStats): ids, status, venue, teams and scores. |
-| [wbbl_shots](additional/genius-sports-livestats-5.md#wbbl_shots) | Shot chart of a finished Women's British Basketball League game. |
+| [wbbl_shots](additional/genius-sports-livestats-6.md#wbbl_shots) | Shot chart of a finished Women's British Basketball League game. |
 | [wbbl_team_box](additional/genius-sports-livestats-6.md#wbbl_team_box) | Team box score of a finished Women's British Basketball League game. |
 
 ## IDs and crosswalks

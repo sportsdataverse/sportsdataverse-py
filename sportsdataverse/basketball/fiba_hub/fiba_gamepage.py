@@ -234,9 +234,9 @@ def fiba_gamepage_box_players(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::
@@ -299,9 +299,9 @@ def fiba_gamepage_box_teams(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::
@@ -364,9 +364,9 @@ def fiba_gamepage_lineup(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::
@@ -427,9 +427,9 @@ def fiba_gamepage_pbp(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::
@@ -490,9 +490,9 @@ def fiba_gamepage_period_scores(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::
@@ -555,9 +555,9 @@ def fiba_gamepage_shots(
         A polars/pandas DataFrame by default; the game-page ``Dict`` (``game``, ``playByPlay``, ``gameDetails``, ``playersTeamA``, ``playersTeamB``) cut out of the RSC flight payload with its tokens resolved when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
-        ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
+        NoDataError: The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a wrong game page, a live game).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.
 
     Example:
         Quick start::

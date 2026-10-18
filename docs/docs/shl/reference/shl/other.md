@@ -1,11 +1,11 @@
 ---
-title: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–standings"
-sidebar_label: "Other: boxscore–standings"
+title: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–ssgt_provider"
+sidebar_label: "Other: boxscore–ssgt_provider"
 sidebar_position: 4
-description: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–standings — function reference in sdv-py, the SportsDataverse Python package."
+description: "SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–ssgt_provider — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–standings
+# SHL — SHL site API (www.shl.se/api, Sweden) — Other: boxscore–ssgt_provider
 
 ## shl_boxscore
 
@@ -61,7 +61,7 @@ Skater and goalie box score per team (2023/24 on).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -138,7 +138,7 @@ Games of the last played match day of an ssgt.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -185,7 +185,7 @@ Directory of every SHL ssgt (season + series + game type) with teams and the sta
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -262,7 +262,7 @@ Games of the next match day of an ssgt.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -366,7 +366,7 @@ Play-by-play events with shot coordinates (2023/24 on).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -440,7 +440,7 @@ Extended skater and goalie game stats per team (2023/24 on).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -534,7 +534,7 @@ Player head-to-head for a matchup.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -588,7 +588,7 @@ Post-game team comparison.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -636,7 +636,7 @@ Current roster of a team, grouped by position.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -716,7 +716,7 @@ Schedule and results of one season + series + game type.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -759,7 +759,7 @@ Series, seasons (1975/76 on) and game types with their uuids, plus the default s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -801,7 +801,7 @@ Teams (sites) taking part in an ssgt.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -839,7 +839,7 @@ Stats provider of an ssgt, a bare string such as statnet.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -847,61 +847,6 @@ Stats provider of an ssgt, a bare string such as statnet.
 
 ```python
 shl_ssgt_provider(ssgt_uuid='iuzqg7dqk9')
-```
-
-_Last validated n/a._
-
-## shl_standings
-
-Standings of an ssgt (gameday widget).
-
-**Endpoint URL:** `GET https://www.shl.se/api/gameday/team-standings/{ssgt_uuid}`
-
-**Valid URL:** [https://www.shl.se/api/gameday/team-standings/iuzqg7dqk9](https://www.shl.se/api/gameday/team-standings/iuzqg7dqk9)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `ssgt_uuid` | `ssgt_uuid` |  | `Y` |  | ssgt uuid: one season + series + game type (e.g. 2025/2026 SHL regular season). Directory: /statistics-v2/layout-info seasonSeriesGameTypeTeams[].ssgtUuid. |
-
-### Returns {#shl_standings-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `season` | integer | Season END year (2026 = 2025/26). |
-| `ssgt_uuid` | character | ssgt uuid (platform key space: one season + series + game type); label via layout-info seasonSeriesGameTypeTeams[]. |
-| `team_code` | character | StatNet team code (SAIK, FHC). |
-| `team_uuid` | character | Platform team uuid. |
-| `team_name` | character | Name of the team. |
-| `team_short_name` | character | Short display name of the team. |
-| `rank` | integer | Position in the table (1 = top). |
-| `rank_diff` | integer | Change in standings rank, in places (the reference point is unverified). |
-| `gp` | integer | Number of games played. |
-| `w` | integer | Regulation wins. |
-| `t` | integer | Games tied after regulation, decided in overtime or a shootout (= OTW + OTL). |
-| `l` | integer | Regulation losses. |
-| `otw` | integer | Overtime and shootout wins. |
-| `otl` | integer | Overtime and shootout losses. |
-| `p` | integer | Standings points (3 per regulation win, 2 per OT/SO win, 1 per OT/SO loss). |
-| `gf` | integer | Number of goals scored (goals for). |
-| `ga` | integer | Number of goals conceded (goals against). |
-| `diff` | integer | Goal difference. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Raises {#shl_standings-raises}
-
-| Exception | Description |
-|---|---|
-| `sportsdataverse.errors.NoDataError` | SHL answered 404, an empty body (gameday routes before 2023/24), a table with no rows, another game / team / ssgt than the one asked for, or the season and game type are not in layout-info. |
-| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
-
-### Example {#shl_standings-example}
-
-```python
-shl_standings(ssgt_uuid='iuzqg7dqk9')
 ```
 
 _Last validated n/a._

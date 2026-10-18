@@ -33,7 +33,7 @@ polars.DataFrame | pandas.DataFrame: one row per game with `game_key` (the provi
 
 | Exception | Description |
 |---|---|
-| `ValueError` | unknown `source`, a missing column, or a key that maps to two ids. |
+| `ValueError` | Unknown `source`, a missing column, or a key that maps to two ids. |
 | `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
 
 **Example**
@@ -74,7 +74,7 @@ polars.DataFrame | pandas.DataFrame: `team_uuid` (`Utf8`) and `genius_team_id` (
 
 | Exception | Description |
 |---|---|
-| `ValueError` | unknown `source`, a missing column, or a key that maps to two ids. |
+| `ValueError` | Unknown `source`, a missing column, or a key that maps to two ids. |
 | `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
 
 **Example**

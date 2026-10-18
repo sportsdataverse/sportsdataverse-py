@@ -51,7 +51,7 @@ Skater season totals: games, goals, assists, points, penalty minutes, plus-minus
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -114,7 +114,7 @@ Skater goals and assists by situation: even strength, power play, short-handed, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -175,7 +175,7 @@ Skater shots: on goal (total, slot, shooting percentage), missed, post and block
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -231,7 +231,7 @@ Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game miscondu
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -286,7 +286,7 @@ Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -346,7 +346,7 @@ Skater faceoffs: taken, won, lost, per game, and win percentage overall and by z
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -408,7 +408,7 @@ Skater faceoffs by zone (offensive, neutral, defensive): taken, won, lost and wi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -467,7 +467,7 @@ Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -528,7 +528,7 @@ Skater ice time by situation (even strength, power play, penalty kill), totals a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

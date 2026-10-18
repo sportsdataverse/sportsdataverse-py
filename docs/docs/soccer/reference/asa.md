@@ -51,7 +51,8 @@ Games/fixtures with final scores, venue/official/manager FKs.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -113,7 +114,8 @@ Per-game expected-goals + expected points for both sides.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -162,7 +164,8 @@ Per-goalkeeper Goals Added with a per-action-type data[] breakdown.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -218,7 +221,8 @@ Per-goalkeeper shot-stopping vs post-shot expected goals.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -258,7 +262,8 @@ Managers/head coaches.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -306,7 +311,8 @@ Players in the league (identity + biometrics + positions).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -356,7 +362,8 @@ Per-player Goals Added (g+) with a per-action-type data[] breakdown.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -409,7 +416,8 @@ Player salaries (MLS only; server caps the response at 10000 rows).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -473,7 +481,8 @@ Per-player expected-goals + attacking production.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -532,7 +541,8 @@ Per-player expected-passing (completion over expected, distance, share of team t
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -573,7 +583,8 @@ Match referees.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -625,7 +636,8 @@ Stadia (venue metadata incl. coordinates + pitch dimensions).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -666,7 +678,8 @@ Teams in the league (full table, no filter params).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -714,7 +727,8 @@ Per-team Goals Added for/against with a per-action-type data[] breakdown.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -773,7 +787,8 @@ Per-team expected-goals for/against + expected points.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -835,7 +850,8 @@ Per-team expected-passing (completion over expected, vertical distance).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the ASA API returned 404 (route not published for that league). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The ASA API returned 404 (route not published for that league). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

@@ -83,8 +83,8 @@ One game's team lines: the team totals, the team-level counts and the game aggre
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
-| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#atrium_team_box_score-example}
@@ -129,8 +129,8 @@ The teams of a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
-| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#atrium_teams-example}
@@ -202,8 +202,8 @@ A team page (summary tab): the team and its last and next game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
-| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#atrium_team-example}
@@ -256,8 +256,8 @@ Team season statistics in long form (one row per team, table and statistic).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
-| `AssetFetchError` | also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (no such season, an empty fixture list, a game with no play-by-play yet, an unknown id answered 404, a fixture id the site does not serve: unknown, or a game of another site, which the API answers alike with an empty game, so it is not called a wrong scope). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Also raised for an error body, a stub, or a body that belongs to another site, type, season, game, player or team than the one asked for. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#atrium_team_stats-example}

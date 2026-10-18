@@ -1,11 +1,66 @@
 ---
-title: "FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: schedule"
-sidebar_label: "Other: schedule"
+title: "FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: rounds–schedule"
+sidebar_label: "Other: rounds–schedule"
 sidebar_position: 6
-description: "FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: schedule — function reference in sdv-py, the SportsDataverse Python package."
+description: "FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: rounds–schedule — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: schedule
+# FIBA (digital API and game pages) — FIBA digital API (GDAP, digital-api.fiba.basketball) — Other: rounds–schedule
+
+## fiba_gdap_rounds
+
+Rounds of a competition (group stage, knockout rounds).
+
+**Endpoint URL:** `GET https://digital-api.fiba.basketball/hapi/getgdaproundsbycompetitionid`
+
+**Valid URL:** [https://digital-api.fiba.basketball/hapi/getgdaproundsbycompetitionid?gdapCompetitionId=208182](https://digital-api.fiba.basketball/hapi/getgdaproundsbycompetitionid?gdapCompetitionId=208182)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `gdapCompetitionId` | `comp` |  | `Y` |  | Required. FIBA competition id (GDAP key space), one per edition: competition.competitionId of any game row (208182 = World Cup 2023, 208722 = Paris 2024 men, 208850 = BCL 2024-25). Find it with fiba_gdap_editions or fiba_gdap_games_between. |
+
+### Returns {#fiba_gdap_rounds-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `game_system` | character | Pairing system label (Single, Home and Away, Best of 3). |
+| `game_system_code` | character | Pairing system code: S single game, HA home and away, BOF3 best of three. |
+| `parent_round_id` | integer | roundId of the round this one belongs to; null for a top-level round. |
+| `round_code` | character | Round code (GP group phase, QF, SF, F final, RS regular season, CL17-32 classification...). |
+| `round_id` | integer | Round id (GDAP key space, unique across competitions); the first segment of gameName. |
+| `round_name` | character | Round label (Group Phase, Quarter-Finals, Final...). |
+| `round_number` | integer | Round number within the competition (1-based). |
+| `round_type` | character | Round type label: Group Round, Non Group Round, Super Round (getgdapgamesbycompetitionid uses the code G/NG here). |
+| `round_type_code` | character | Round type code: G group, NG non-group (knockout), S super round. |
+| `round_status_code` | character | Round status: COMPL completed, PROGR in progress, CLOS closed. |
+| `start_date` | character | Round start, local date-time. |
+| `end_date` | character | Round end, local date-time (23:59:59.9999999 on the last day). |
+| `has_teams_assigned` | logical | True once the round's teams are known. |
+| `round_kind` | character | Standard Round or Qualifiers. |
+| `standing_header_code` | character | Code of the standings table the round feeds. |
+| `standing_header_name` | character | Name of the standings table the round feeds. |
+| `qualified_team_information` | character | Qualification note of the round; null in every sample. |
+| `round_order` | integer | Display order of the round. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#fiba_gdap_rounds-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. |
+
+### Example {#fiba_gdap_rounds-example}
+
+```python
+fiba_gdap_rounds(comp=208182)
+```
+
+_Last validated n/a._
 
 ## fiba_gdap_schedule
 
@@ -55,7 +110,7 @@ Schedule and results of one competition (edition): one row per game.
 | `game_date_time_utc` | character | Tip-off in UTC, ISO 8601 without the Z. |
 | `has_time_game_date_time` | logical | False when only the date is known (the time part is then 00:00:00). |
 | `iana_time_zone` | character | IANA time zone of the venue. |
-| `utc_offset` | integer | Venue UTC offset at tip-off, hours. |
+| `utc_offset` | numeric | Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample). |
 | `is_postponed` | logical | True when the game was postponed. |
 | `is_played_behind_closed_doors` | logical | True when played without spectators. |
 | `venue_capacity` | integer | Venue capacity (0 = unknown). |
@@ -118,9 +173,9 @@ Schedule and results of one competition (edition): one row per game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
-| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for an unknown id). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. HTTP 400 / 422, or a malformed id, season or date. |
 
 ### Example {#fiba_gdap_schedule-example}
 

@@ -184,7 +184,7 @@ No returns table is published for this function: no capture: it reads stats.wnba
 
 | Exception | Description |
 |---|---|
-| `ValueError` | when *transition_variant* is not one of `~sportsdataverse.nba.nba_play_context_constants.TRANSITION_VARIANTS` (propagated from `~sportsdataverse.nba.nba_play_context.add_transition`). |
+| `ValueError` | When *transition_variant* is not one of `~sportsdataverse.nba.nba_play_context_constants.TRANSITION_VARIANTS` (propagated from `~sportsdataverse.nba.nba_play_context.add_transition`). |
 
 **Example**
 

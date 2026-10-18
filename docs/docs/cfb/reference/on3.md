@@ -100,7 +100,7 @@ toc_max_heading_level: 2
 | [on3_player_verified](on3/player.md#on3_player_verified) | GET /rdb/v1/player/verified |
 | [on3_player_videos](on3/player.md#on3_player_videos) | GET /rdb/v1/player/{personKey}/videos |
 | [on3_player_visit_center](on3/player.md#on3_player_visit_center) | GET /rdb/v1/player/{playerKey}/visit-center |
-| [on3_players_industry_comparision](on3/player.md#on3_players_industry_comparision) | GET /rdb/v1/players/industry-comparision |
+| [on3_players_industry_comparision](on3/player-2.md#on3_players_industry_comparision) | GET /rdb/v1/players/industry-comparision |
 | [on3_players_industry_comparision_list](on3/player-2.md#on3_players_industry_comparision_list) | GET /rdb/v1/players/industry-comparision-list |
 
 ## Recruitment

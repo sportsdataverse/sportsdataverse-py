@@ -66,8 +66,8 @@ Game header: competition, tip-off, venue, officials, status, both teams and the 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_game_info-example}
@@ -107,8 +107,8 @@ Points each team scored in each period of a game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_period_scores-example}
@@ -183,8 +183,8 @@ Team totals of both teams in a game: shooting, rebounds, assists, turnovers, fou
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_team_stats-example}
@@ -258,8 +258,8 @@ Per-player box score of a game: minutes, points, shooting splits, rebounds, assi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_player_box-example}
@@ -322,8 +322,8 @@ Play-by-play of a game (KeyFacts): every shot, rebound, foul, substitution and t
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_pbp-example}
@@ -370,8 +370,8 @@ Every field-goal attempt of a game with its court position (percent of a full-co
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_shots-example}
@@ -419,8 +419,8 @@ Each team's top players of a game by points, rebounds, assists and fouls.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_leaders-example}
@@ -480,8 +480,8 @@ Today's (or the latest) games of every live FEB competition, with scores and sta
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_overview-example}
@@ -536,8 +536,8 @@ Full schedule of one group (phase) of a competition season: every round, game, r
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_schedule-example}
@@ -591,8 +591,8 @@ Latest round's results and the next round's fixtures of a competition season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_results-example}
@@ -646,8 +646,8 @@ League table of a competition season (live standings, or the final classificatio
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_standings-example}

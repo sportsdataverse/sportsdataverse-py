@@ -57,7 +57,7 @@ Roster and bio of every player in a season range.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -112,7 +112,7 @@ One player's bio, teams by season and active seasons.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -188,7 +188,7 @@ One player's career: season totals by tournament.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -268,7 +268,7 @@ One player's game log for a season, every tournament.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -353,7 +353,7 @@ Player stat table summed over a season range, by data_type (the whole league, un
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

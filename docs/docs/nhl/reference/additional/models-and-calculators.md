@@ -489,7 +489,7 @@ The `LeagueConstants` row for `league`.
 
 | Exception | Description |
 |---|---|
-| `ValueError` | if `league` is not a known key of `LEAGUE_CONSTANTS`. |
+| `ValueError` | If `league` is not a known key of `LEAGUE_CONSTANTS`. |
 
 **Example**
 

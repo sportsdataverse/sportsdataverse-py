@@ -34,9 +34,9 @@ Liveness probe of the unofficial sync server: status, message and the server's o
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_health-example}
 
@@ -90,9 +90,9 @@ Every configured EASL season (the four editions 2023-24 to 2026-27) with its Dat
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_seasons-example}
 
@@ -171,9 +171,9 @@ Every fixture of one season: status, tip-off, stage, pool, venue and both teams 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_schedule-example}
 
@@ -252,9 +252,9 @@ Header of one finished fixture: teams, final score, status, stage, pool, venue a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_game-example}
 
@@ -309,9 +309,9 @@ Play-by-play of a finished game in delivered order, with the running score and t
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_pbp-example}
 
@@ -382,9 +382,9 @@ Group-stage standings of one season: rank within the pool, record, splits, point
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_standings-example}
 
@@ -435,9 +435,9 @@ Tournament top-5 player leaders in nine categories (points, rebounds, assists, s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
-| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_leaders-example}
 

@@ -169,8 +169,8 @@ Whole-game box score lines of every player on either team sheet, keyed by GoHoop
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_players-example}
@@ -343,8 +343,8 @@ Per-quarter box score lines of the players who were on court, overtimes included
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_player_periods-example}
@@ -420,8 +420,8 @@ Whole-game team totals of both teams: shooting, rebounds, fouls, assists, turnov
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_teams-example}
@@ -498,8 +498,8 @@ Per-quarter team lines of both teams: points scored and conceded in the quarter,
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_team_periods-example}

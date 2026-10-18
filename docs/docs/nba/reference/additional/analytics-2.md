@@ -59,7 +59,7 @@ If `raw=True`, the raw JSON dict with keys "nba", "gl", "wnba". Otherwise, a dic
 | Exception | Description |
 |---|---|
 | `ValueError` | If league is not "nba", "gl", or "wnba", or date is not a valid "YYYY-MM-DD" date (checked before any request). |
-| `NoDataError` | official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without games is not this: it comes back as a 200 with empty `rows` (see the Note). |
+| `NoDataError` | Official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without games is not this: it comes back as a 200 with empty `rows` (see the Note). |
 | `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), the 200 body is not a JSON object, or the league's `Table`/`Table1` rows are missing or malformed (a `Table` row without a 10-digit `game_id`, or a `Table1` row without a `replaycenter_official` name, included). With `raw=True` all three leagues are checked, since the whole payload is returned. |
 
 **Example**
@@ -558,7 +558,7 @@ One row per (player, team) with `PLAYER_PLAY_CONTEXT_SCHEMA`. Empty input return
 
 | Exception | Description |
 |---|---|
-| `ValueError` | when the `off_player_*` columns are missing. |
+| `ValueError` | When the `off_player_*` columns are missing. |
 
 **Example**
 
@@ -1245,7 +1245,7 @@ not carry who is on the floor).
 
 | Exception | Description |
 |---|---|
-| `ValueError` | when the `off_player_*` / `def_player_*` columns are absent. |
+| `ValueError` | When the `off_player_*` / `def_player_*` columns are absent. |
 
 **Example**
 

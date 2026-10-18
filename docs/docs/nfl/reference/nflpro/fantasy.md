@@ -231,7 +231,7 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_fantasy_season-example}
 
@@ -472,7 +472,7 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_fantasy_game-example}
 

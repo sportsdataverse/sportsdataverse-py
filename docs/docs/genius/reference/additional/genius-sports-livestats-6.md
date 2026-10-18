@@ -1,10 +1,67 @@
 ---
-title: "GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_team"
-sidebar_label: "Genius Sports LiveStats: wbbl_team"
+title: "GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_shots–wbbl_team"
+sidebar_label: "Genius Sports LiveStats: wbbl_shots–wbbl_team"
 sidebar_position: 6
-description: "GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_team — function reference in sdv-py, the SportsDataverse Python package."
+description: "GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_shots–wbbl_team — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_team
+# GENIUS — additional Python functions — Genius Sports LiveStats: wbbl_shots–wbbl_team
+
+### wbbl_shots {#wbbl_shots}
+
+`wbbl_shots(match_id: 'int', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
+
+Shot chart of a finished Women's British Basketball League game.
+
+Women's British Basketball League (women's); season rule: END year; the label span 2025-26 = 2026.
+
+Convenience wrapper: a thin binding of `genius_shots` to this competition, minted from the
+competition registry (`tools/codegen/basketball_competitions.yaml`).
+
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/WBBL/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_shots(match_id=...) reads any game unchecked. Women's competition data: flagged for the wehoop mirror (Phase C).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
+| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
+| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
+
+| col_name | type | description |
+|---|---|---|
+| `match_id` | integer | Genius match id of the game. data.json does not carry it: it is the match_id asked for, stamped by the runtime (the global match sequence shared by every Genius customer). |
+| `tno` | integer | Team number within this game: 1 = the team listed first (home on the hosted schedule and widget), 2 = the other, 0 = no team. In-game only: not a team id. |
+| `pno` | integer | Player number within this game, the key of the team's player map; 0 = no player. In-game only: not a person id and not the shirt number. |
+| `action_number` | integer | Action sequence number, unique within the game (gaps where actions were deleted); a shot joins its play-by-play row on it. Null in the 2014-15 feed. |
+| `period` | integer | Period number; restarts at 1 for the first overtime (read it with period_type). |
+| `period_type` | character | Period type: REGULAR or OVERTIME. |
+| `action_type` | character | Shot value: 2pt or 3pt |
+| `sub_type` | character | Shot type (layup, drivinglayup, jumpshot, pullupjumpshot, dunk, ...) |
+| `result` | integer | Shot result: 1 = made, 0 = missed. |
+| `x` | numeric | Court x, PERCENT of the full court length (0-100, float), along the long axis. Not normalised to one basket: a team attacks one end in periods 1-2 and the other end in periods 3-4 (ESAKE 2902690: team 1 mean x 90 and 86 in P1-P2, 11 and 19 in P3-P4). Which end x = 0 is, and which end team 1 starts at, are unverified |
+| `y` | numeric | Court y, PERCENT of the full court width (0-100, float), across the court (observed 1.7-97.2). Origin side unverified |
+| `player` | character | Shooter's display name as the org enters it, in the local script when it uses one. |
+| `shirt_number` | character | Shooter's shirt number (string) |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of WBBL), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
+**Example**
+
+```python
+from sportsdataverse.basketball.genius import wbbl_schedule, wbbl_shots
+games = wbbl_schedule()
+wbbl_shots(match_id=int(games['match_id'][0]))
+```
 
 ### wbbl_team_box {#wbbl_team_box}
 
@@ -103,10 +160,9 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. The match is not a game of this competition (another org's game, or a cup or play-off of WBBL), or the scope check could not run (the /u/ shell request failed twice or names no competition). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of WBBL). |
 
 **Example**
 

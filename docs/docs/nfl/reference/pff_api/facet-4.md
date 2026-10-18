@@ -251,9 +251,9 @@ League-wide passing-under-pressure leaderboard
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_passing_pressure-example}
 
@@ -342,9 +342,9 @@ League-wide passing summary leaderboard
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_passing_summary-example}
 
@@ -460,9 +460,9 @@ League-wide receiving-by-concept leaderboard
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_receiving_concept-example}
 
@@ -590,9 +590,9 @@ League-wide receiving-versus-coverage leaderboard
 | Exception | Description |
 |---|---|
 | `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
-| `NoDataError` | PFF answered 404 (no such route, report or team). |
-| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
-| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_receiving_coverage-example}
 

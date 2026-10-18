@@ -102,8 +102,7 @@ No returns table is published for this function: no capture: it reads stats.wnba
 
 | Exception | Description |
 |---|---|
-| `CrosswalkSourceError` | A Stats team-directory or `commonteamroster` call for any team failed or was refused (stats.wnba.com answers a throttle or block with an empty body), so `wnba_*` would otherwise be silently null. Throttles are retried only when `SDV_PY_NBA_STATS_RETRIES` is set (default `0`, backoff `SDV_PY_NBA_STATS_BACKOFF`); without it one transient refusal aborts the whole build. |
-| `CrosswalkSourceError` | The per-team ESPN or Fox rosters failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+| `CrosswalkSourceError` | A Stats team-directory or `commonteamroster` call for any team failed or was refused (stats.wnba.com answers a throttle or block with an empty body), so `wnba_*` would otherwise be silently null. Throttles are retried only when `SDV_PY_NBA_STATS_RETRIES` is set (default `0`, backoff `SDV_PY_NBA_STATS_BACKOFF`); without it one transient refusal aborts the whole build. The per-team ESPN or Fox rosters failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
 
 **Example**
 

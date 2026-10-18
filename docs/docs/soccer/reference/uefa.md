@@ -80,9 +80,9 @@ UEFA competitions by id (Champions League 1, Europa League 3, Conference League 
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_competitions-example}
 
@@ -120,9 +120,9 @@ Matches live right now across UEFA competitions.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_livescore-example}
 
@@ -767,9 +767,9 @@ Matches of a UEFA competition season.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_matches-example}
 
@@ -888,9 +888,9 @@ Players registered in a UEFA competition season.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_players-example}
 
@@ -1010,9 +1010,9 @@ Group / league-phase standings of a UEFA competition season.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_standings-example}
 
@@ -1050,9 +1050,9 @@ Per-team match statistics of one UEFA match (one row per team).
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_team_statistics-example}
 
@@ -1151,9 +1151,9 @@ Teams entered in a UEFA competition season.
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
-| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
-| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_teams-example}
 

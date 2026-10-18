@@ -63,7 +63,7 @@ One game's goals: scorer, assists, strength codes and skaters on ice.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -118,7 +118,7 @@ One game's penalties, both teams: player, fault, minutes, start and end.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -167,7 +167,7 @@ One game's shootout attempts: shooter, goalkeeper and result (none for a game wi
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -237,7 +237,7 @@ One game's lineups, both teams: line, role, jersey, captaincy and bio.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -347,7 +347,7 @@ One game's lineups with each player's all-time, season, season-in-team and versu
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -445,7 +445,7 @@ One game's per-period player box score, skaters and goalies, with tracking where
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -505,7 +505,7 @@ One game's per-period team stats with puck possession.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

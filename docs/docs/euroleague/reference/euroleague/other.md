@@ -53,7 +53,7 @@ Clubs in a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -91,7 +91,7 @@ Competitions (EuroLeague E, EuroCup U, ...).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -226,7 +226,7 @@ Games of a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -310,7 +310,7 @@ People (players, coaches) in a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -416,7 +416,7 @@ Season player stats, traditional (box-score totals or per-game averages) or adva
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -462,7 +462,7 @@ Rounds of a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -515,7 +515,7 @@ Seasons of a competition.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -658,7 +658,7 @@ Standings as of a round: basic (W-L, points, home/away/last-10 records), calenda
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -756,7 +756,7 @@ Season team stats, traditional (box-score totals or per-game averages) or advanc
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the EuroLeague API returned 404 (unknown competition, season, round or game code). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The EuroLeague API returned 404 (unknown competition, season, round or game code). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

@@ -42,7 +42,7 @@ toc_max_heading_level: 2
 | [cba_player_extras](cba/player.md#cba_player_extras) | Fast-break points, dunk points and paint points per player of a finished game, one row per player. |
 | [cba_player_base](cba/player.md#cba_player_base) | Season player box (one page of the season player table). |
 | [cba_player_offensive](cba/player.md#cba_player_offensive) | Season player offensive rates (one page). |
-| [cba_player_defensive](cba/player.md#cba_player_defensive) | Season player defensive rates (one page). |
+| [cba_player_defensive](cba/player-2.md#cba_player_defensive) | Season player defensive rates (one page). |
 | [cba_player_shots](cba/player-2.md#cba_player_shots) | Season player shot-zone profile (one page). |
 
 ## Team

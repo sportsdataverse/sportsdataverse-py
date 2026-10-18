@@ -96,7 +96,7 @@ GET /api/secured/stats/players-offense/passing/season — one row per passer for
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_passing_season-example}
 
@@ -203,7 +203,7 @@ GET /api/secured/stats/players-offense/passing/week — one row per passer per w
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_passing_week-example}
 
@@ -297,7 +297,7 @@ GET /api/secured/stats/players-offense/rushing/season — one row per rusher for
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_rushing_season-example}
 
@@ -399,7 +399,7 @@ GET /api/secured/stats/players-offense/rushing/week — one row per rusher per w
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_rushing_week-example}
 
@@ -500,7 +500,7 @@ GET /api/secured/stats/players-offense/receiving/season — one row per receiver
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_receiving_season-example}
 
@@ -609,7 +609,7 @@ GET /api/secured/stats/players-offense/receiving/week — one row per receiver p
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_players_offense_receiving_week-example}
 

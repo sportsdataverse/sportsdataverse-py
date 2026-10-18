@@ -52,5 +52,5 @@ toc_max_heading_level: 2
 | [scb_referees](scb/other.md#scb_referees) | Current referees and commissioners (BBL only). |
 | [scb_transfers](scb/other.md#scb_transfers) | Latest transfers, one row per move (BBL only). |
 | [scb_transfers_teams](scb/other.md#scb_transfers_teams) | Per club, the players joining and leaving, one row per move with its direction (BBL only). |
-| [scb_records_per_game](scb/other.md#scb_records_per_game) | Single-game records: the season's and the all-time ones, one row per record. |
+| [scb_records_per_game](scb/other-2.md#scb_records_per_game) | Single-game records: the season's and the all-time ones, one row per record. |
 | [scb_records_season_averages](scb/other-2.md#scb_records_season_averages) | All-time season-average records (points, rebounds, assists, ...), one row per record. |

@@ -55,8 +55,8 @@ Game header: tip-off, competition, both teams and the game state (scores are in 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_game_info-example}
@@ -103,8 +103,8 @@ Both teams' game rosters with Segev player ids and names in English and Hebrew.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_rosters-example}
@@ -179,8 +179,8 @@ Per-player box score of a finished game, plus a team-credited line per side.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_player_box-example}
@@ -260,8 +260,8 @@ Team totals of both sides: final score, timeouts, lead stats, shooting, rebounds
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_team_box-example}
@@ -303,8 +303,8 @@ Points and team fouls in each period of a finished game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_period_scores-example}
@@ -370,8 +370,8 @@ Play-by-play of a finished game: every action with shot coordinates, running sco
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_pbp-example}

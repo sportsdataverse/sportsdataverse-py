@@ -56,8 +56,8 @@ Season schedule and results of a tournament, one row per game (All-Star games dr
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_schedule-example}
@@ -103,8 +103,8 @@ Club roster (current season only): one row per player.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_roster-example}
@@ -148,8 +148,8 @@ Stats filter options: seasons, tournaments, position groups and clubs (one row p
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_stat_filters-example}
@@ -235,8 +235,8 @@ Game header: status, teams, score, arena (one row).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_game_header-example}
@@ -296,8 +296,8 @@ Game protocol: one row per goal with scorer, assistants, strength and the jersey
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_game_protocol-example}
@@ -407,8 +407,8 @@ Game info: teams, score, arena, officials, starting goalies (one row).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_game_info-example}
@@ -477,8 +477,8 @@ Skater box score by period: one row per period, side and jersey, with the player
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_player_box-example}
@@ -543,8 +543,8 @@ Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties and
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_pbp-example}
@@ -598,8 +598,8 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_shots-example}
@@ -666,8 +666,8 @@ Player profile: bio, contract, club (one row).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_player_profile-example}
@@ -743,8 +743,8 @@ Player career: one row per season tournament.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_player_career-example}
@@ -790,8 +790,8 @@ Playoff bracket: one row per team per series.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_playoff_bracket-example}
@@ -845,8 +845,8 @@ Regular-season standings: one row per team per table (league, conferences, divis
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_standings-example}
@@ -924,8 +924,8 @@ League player stats of a tournament, one page (one row per player).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.AssetFetchError` | khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
-| `sportsdataverse.errors.NoDataError` | khl.ru answered no rows, or the season has no such stage. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Khl.ru answered an error envelope (status != success), a 307 again after re-priming the session, or a page for another game / player / tournament than the one requested. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Khl.ru answered no rows, or the season has no such stage. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_player_stats-example}

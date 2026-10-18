@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # SHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.shl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.shl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## SHL site API
 
@@ -39,8 +39,8 @@ polars.DataFrame | pandas.DataFrame: one row per player: `player_id` (isa, `Int6
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | layout-info lists no such ssgt, or the table has no rows. |
-| `AssetFetchError` | the fetch failed or the table came back cut. |
+| `NoDataError` | Layout-info lists no such ssgt, or the table has no rows. |
+| `AssetFetchError` | The fetch failed or the table came back cut. |
 
 **Example**
 
@@ -75,9 +75,9 @@ the ssgt uuid (e.g. `"iuzqg7dqk9"` for the 2025/26 regular season).
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | layout-info lists no ssgt for that season and game type. |
+| `NoDataError` | Layout-info lists no ssgt for that season and game type. |
 | `ValueError` | `season` is not a year. |
-| `AssetFetchError` | layout-info could not be fetched or read. |
+| `AssetFetchError` | Layout-info could not be fetched or read. |
 
 **Example**
 

@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # WBB — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.wbb`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.wbb` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## ESPN
 

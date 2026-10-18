@@ -29,8 +29,8 @@ The season's UUID, for the `season_id` argument of every season-scoped wrapper.
 | Exception | Description |
 |---|---|
 | `ValueError` | `season` is not an integer, the site is not in `SITES`, it lists no seasons (236), or the year is shared by several competitions and `competition_id` is missing. |
-| `sportsdataverse.errors.NoDataError` | the site lists no such season. |
-| `AssetFetchError` | the season list could not be fetched or is not the site's. |
+| `sportsdataverse.errors.NoDataError` | The site lists no such season. |
+| `AssetFetchError` | The season list could not be fetched or is not the site's. |
 
 **Example**
 

@@ -71,7 +71,7 @@ one row per `(season, team_id, position_group)` the defense faced, `OUTPUT_SCHEM
 | Exception | Description |
 |---|---|
 | `ValueError` | `league` is not `"cfb"` or `"nfl"`, or a non-empty `pbp` has no `seasonType` (CFB) / `season_type` (NFL) column. |
-| `TypeError` | a team, game or player id column (pbp or roster) is float. |
+| `TypeError` | A team, game or player id column (pbp or roster) is float. |
 
 **Example**
 
@@ -145,7 +145,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 
 | Exception | Description |
 |---|---|
-| `TypeError` | an id column is float (it would stringify as `"123.0"`). |
+| `TypeError` | An id column is float (it would stringify as `"123.0"`). |
 
 **Example**
 
@@ -191,8 +191,8 @@ No returns table is published for this function: no capture: its game_dates inpu
 
 | Exception | Description |
 |---|---|
-| `TypeError` | an id column is float. |
-| `ValueError` | a play's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
+| `TypeError` | An id column is float. |
+| `ValueError` | A play's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
 
 **Example**
 
@@ -257,7 +257,7 @@ one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_t
 | Exception | Description |
 |---|---|
 | `TypeError` | `player_id` / `team_id` is float. |
-| `ValueError` | unknown `league`, a `metric` with no bucket edges, or an attempts frame that mixes id namespaces (more than one `id_source`). |
+| `ValueError` | Unknown `league`, a `metric` with no bucket edges, or an attempts frame that mixes id namespaces (more than one `id_source`). |
 
 **Example**
 
@@ -326,7 +326,7 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`.
 
 | Exception | Description |
 |---|---|
-| `TypeError` | an id column is float. |
+| `TypeError` | An id column is float. |
 
 **Example**
 
@@ -455,7 +455,7 @@ one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for th
 
 | Exception | Description |
 |---|---|
-| `TypeError` | an id column is float. |
+| `TypeError` | An id column is float. |
 | `ValueError` | `league` is not `"nba"` or `"wnba"`. |
 
 **Example**
@@ -513,7 +513,7 @@ one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats
 | Exception | Description |
 |---|---|
 | `TypeError` | `person_id` or `team_id` is float. |
-| `ValueError` | a shot's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
+| `ValueError` | A shot's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
 
 **Example**
 

@@ -96,8 +96,8 @@ A polars/pandas DataFrame by default; the raw JSON `Dict` when `return_parsed=Fa
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | api-web answered 404. |
-| `ValueError` | api-web answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Api-web answered 404. |
+| `ValueError` | Api-web answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty (not 204/205) or not JSON. |
 
 **Example**

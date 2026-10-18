@@ -30,8 +30,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_divisions {#mlb_divisions}
@@ -56,8 +56,8 @@ The StatsAPI JSON body, unparsed: `copyright` and `divisions` (one dict per divi
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_draft_prospects {#mlb_draft_prospects}
@@ -82,8 +82,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_pbp_diff {#mlb_pbp_diff}
@@ -110,8 +110,8 @@ dict | list: The parsed JSON body of the diff, unparsed (no committed capture pi
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_pbp_live {#mlb_pbp_live}
@@ -142,8 +142,8 @@ The StatsAPI JSON body, unparsed: `copyright`, `gamePk`, `link`, `metaData`, `ga
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_person_stats {#mlb_person_stats}
@@ -176,8 +176,8 @@ The StatsAPI JSON body, unparsed: `copyright` and `stats` -- one dict per reques
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_schedule {#mlb_schedule}
@@ -212,8 +212,8 @@ The StatsAPI JSON body, unparsed: `copyright`, the `totalItems` / `totalGames` /
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_seasons {#mlb_seasons}
@@ -238,8 +238,8 @@ The StatsAPI JSON body, unparsed: `copyright` and `seasons` (one dict per season
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_standings {#mlb_standings}
@@ -270,8 +270,8 @@ The StatsAPI JSON body, unparsed: `copyright` and `records` -- one dict per divi
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_stats {#mlb_stats}
@@ -308,8 +308,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_stats_leaders {#mlb_stats_leaders}
@@ -338,8 +338,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_stats_streaks {#mlb_stats_streaks}
@@ -369,8 +369,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_team_leaders {#mlb_team_leaders}
@@ -400,8 +400,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_team_stats {#mlb_team_stats}
@@ -433,8 +433,8 @@ The StatsAPI JSON body for this endpoint, unparsed (no committed capture pins it
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |
 
 ### mlb_teams {#mlb_teams}
@@ -463,6 +463,6 @@ The StatsAPI JSON body, unparsed: `copyright` and `teams` (one dict per team).
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | statsapi answered 404. |
-| `ValueError` | statsapi answered 400 / 422 -- the request is wrong. |
+| `NoDataError` | Statsapi answered 404. |
+| `ValueError` | Statsapi answered 400 / 422 -- the request is wrong. |
 | `AssetFetchError` | Any other non-2xx or a connection failure after retries, or a 2xx whose body is empty or not JSON. |

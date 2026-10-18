@@ -53,5 +53,5 @@ toc_max_heading_level: 2
 | [shl_season_filter](shl/other.md#shl_season_filter) | Series, seasons (1975/76 on) and game types with their uuids, plus the default ssgt. |
 | [shl_sites](shl/other.md#shl_sites) | Teams (sites) taking part in an ssgt. |
 | [shl_ssgt_provider](shl/other.md#shl_ssgt_provider) | Stats provider of an ssgt, a bare string such as statnet. |
-| [shl_standings](shl/other.md#shl_standings) | Standings of an ssgt (gameday widget). |
+| [shl_standings](shl/other-2.md#shl_standings) | Standings of an ssgt (gameday widget). |
 | [shl_stats_info](shl/other-2.md#shl_stats_info) | Stats table of one module for an ssgt (standings, players, goalies, teams, games). |

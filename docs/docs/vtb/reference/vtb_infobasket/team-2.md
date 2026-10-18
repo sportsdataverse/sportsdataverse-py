@@ -95,9 +95,9 @@ Season totals of every player of a club in one season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
-| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_infobasket_team_player_stats-example}
 
@@ -154,9 +154,9 @@ Technical fouls and games of every coach of a club in one season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
-| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_infobasket_team_coach_stats-example}
 

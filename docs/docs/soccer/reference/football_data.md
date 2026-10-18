@@ -59,7 +59,7 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -189,7 +189,7 @@ Upcoming fixtures with odds.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -359,7 +359,7 @@ One league-season of results + closing odds (main leagues).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

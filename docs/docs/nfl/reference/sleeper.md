@@ -63,7 +63,7 @@ A draft.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -119,7 +119,7 @@ Picks of a draft.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -185,7 +185,7 @@ Drafts of a league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -369,7 +369,7 @@ A league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -415,7 +415,7 @@ Matchups for a week.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -504,7 +504,7 @@ All NFL players (large; fetch at most once per day).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -564,7 +564,7 @@ Rosters in a league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -610,7 +610,7 @@ Current NFL week and season state.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -652,7 +652,7 @@ Traded draft picks.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -706,7 +706,7 @@ Transactions for a week.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -746,7 +746,7 @@ Trending adds (lookback_hours, limit).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -804,7 +804,7 @@ Look up a user by username or id.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -1000,7 +1000,7 @@ Leagues a user is in for a season.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -1056,7 +1056,7 @@ Users in a league.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -1100,7 +1100,7 @@ Playoff bracket.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the Sleeper API returned 404 (unknown user, league or draft id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

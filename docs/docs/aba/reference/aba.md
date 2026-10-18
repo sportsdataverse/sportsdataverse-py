@@ -71,8 +71,8 @@ Header of one finished game: round, date, venue, attendance, both clubs with the
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_game-example}
@@ -118,8 +118,8 @@ Points each team scored in each quarter and overtime of one finished game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_periods-example}
@@ -196,8 +196,8 @@ Player box score of one finished game (2001-02 on): minutes, points, shooting sp
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_box_players-example}
@@ -269,8 +269,8 @@ Team totals of one finished game: the Team Compare table, home then away.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_box_teams-example}
@@ -326,8 +326,8 @@ Play-by-play of one finished game (2017-18 on), in game order: shots, rebounds, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_pbp-example}
@@ -375,8 +375,8 @@ Shot chart of one finished game (2017-18 on): every field-goal attempt with its 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_shots-example}
@@ -421,8 +421,8 @@ Score after every whole minute of one finished game (the Result Graph; 2017-18 o
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_score_flow-example}
@@ -467,8 +467,8 @@ Score after every whole minute of one finished game, from the Score difference c
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_score_difference-example}
@@ -525,8 +525,8 @@ Full schedule and results of one season of one league: every round and game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_calendar-example}
@@ -579,8 +579,8 @@ Standings tables of one season of one league: regular season groups, Top 8 and P
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_standings-example}
@@ -631,8 +631,8 @@ One player's bio for one season and league: club, position, height, birth date a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_player-example}
@@ -704,8 +704,8 @@ One player's game log for one season and league: one row per game with the box-s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_player_games-example}

@@ -64,8 +64,8 @@ Schedule and results of one season and stage (pre-season, regular season, playof
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_schedule-example}
@@ -118,8 +118,8 @@ Header of one finished game: date, venue, both clubs with their score and the Pr
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_game-example}
@@ -160,8 +160,8 @@ Points each team scored in each quarter and overtime of one finished game.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_periods-example}
@@ -202,8 +202,8 @@ The referee and the two umpires printed under the header of one finished game (n
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_officials-example}
@@ -286,8 +286,8 @@ Player box score of one finished game: minutes, points, shooting splits, rebound
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_box_players-example}
@@ -346,8 +346,8 @@ Team totals of one finished game: the box score's total row, home then away.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_box_teams-example}
@@ -409,8 +409,8 @@ Play-by-play of one finished game (2022-23 on) in game order, with shot x / y an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_pbp-example}
@@ -466,8 +466,8 @@ Regular-season standings of one season: record, scoring averages, home / away an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_standings-example}
@@ -548,8 +548,8 @@ Player season averages and totals of one season and stage: shooting, rebounds, a
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_stat_player-example}
@@ -600,8 +600,8 @@ One player's profile: names, club, jersey, position, height, weight and birthpla
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_player-example}
@@ -660,8 +660,8 @@ One player's season totals and per-game averages, league and East Asia Super Lea
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_player_seasons-example}

@@ -103,8 +103,8 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_schedule-example}
@@ -210,8 +210,8 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_game-example}
@@ -276,8 +276,8 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_pbp-example}
@@ -346,8 +346,8 @@ Every game of a season, played or scheduled (is_played): date, display team code
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_games-example}
@@ -403,8 +403,8 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_standings-example}
@@ -469,8 +469,8 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_skater_stats-example}
@@ -530,8 +530,8 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_goalie_stats-example}
@@ -594,8 +594,8 @@ Team stats of a season, one category per call. W / L are totals including overti
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_team_stats-example}
@@ -642,8 +642,8 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_teams-example}
@@ -700,8 +700,8 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_leaders-example}
@@ -765,8 +765,8 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
-| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_players-example}

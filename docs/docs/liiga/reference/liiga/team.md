@@ -56,7 +56,7 @@ Every team's regular-season record, one row per team and season since 1976.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -106,7 +106,7 @@ Team directory: every current and past team with logos, venue capacity and club 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -213,7 +213,7 @@ Team stat table of a season range, by data_type.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

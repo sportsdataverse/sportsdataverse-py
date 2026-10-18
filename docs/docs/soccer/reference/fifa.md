@@ -136,7 +136,7 @@ Match calendar of a competition season (first page; results and fixtures).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -187,7 +187,7 @@ One competition by id.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -238,7 +238,7 @@ All FIFA competitions (first page).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -379,7 +379,7 @@ Matches live right now across FIFA competitions.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -440,7 +440,7 @@ Players matching a name (first page).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -496,7 +496,7 @@ Seasons of a competition (first page).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -557,7 +557,7 @@ Stadiums (first page).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -625,7 +625,7 @@ One team by id.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -693,7 +693,7 @@ Teams matching a name (first page).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FIFA API returned 404 (unknown competition or team id). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

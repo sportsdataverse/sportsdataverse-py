@@ -796,8 +796,8 @@ def cba_seasons(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -856,8 +856,8 @@ def cba_match_types(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -918,8 +918,8 @@ def cba_team_options(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -981,8 +981,8 @@ def cba_teams(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1045,8 +1045,8 @@ def cba_schedule_month(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1112,8 +1112,8 @@ def cba_schedule_day(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1177,8 +1177,8 @@ def cba_game_info(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1239,8 +1239,8 @@ def cba_player_box(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1307,8 +1307,8 @@ def cba_period_scores(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1375,8 +1375,8 @@ def cba_game_team_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1445,8 +1445,8 @@ def cba_player_advanced(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1515,8 +1515,8 @@ def cba_player_extras(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1583,8 +1583,8 @@ def cba_game_team_four(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1653,8 +1653,8 @@ def cba_best_player(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1715,8 +1715,8 @@ def cba_best_stats(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1777,8 +1777,8 @@ def cba_rosters(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1839,8 +1839,8 @@ def cba_report_status(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1903,8 +1903,8 @@ def cba_pbp(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1974,8 +1974,8 @@ def cba_team_counts(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2044,8 +2044,8 @@ def cba_team_basic(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2117,8 +2117,8 @@ def cba_team_four(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2192,8 +2192,8 @@ def cba_team_overview(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2270,8 +2270,8 @@ def cba_team_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2354,8 +2354,8 @@ def cba_player_base(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2445,8 +2445,8 @@ def cba_player_offensive(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2540,8 +2540,8 @@ def cba_player_defensive(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -2635,8 +2635,8 @@ def cba_player_shots(
         A polars/pandas DataFrame by default; the raw DECRYPTED JSON (``list`` or ``dict``); a game route that answers an object also carries ``_request`` (the game id), and play-by-play is merged over every period into ``{records, total}`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host answered 404, or the game has no play-by-play (2009-10).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

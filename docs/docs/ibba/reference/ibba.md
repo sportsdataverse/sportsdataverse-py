@@ -46,8 +46,8 @@ Season settings: the season label, round counters and the standings cut line.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_configuration-example}
@@ -88,8 +88,8 @@ Competitions (boards) of a season: league, cup, playoff rounds, play-in, Supercu
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_boards-example}
@@ -128,8 +128,8 @@ External competitions a club played in during a season (European cups, national 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_boards_ex-example}
@@ -192,8 +192,8 @@ Teams of a board and season with their standings line and club profile fields.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_teams-example}
@@ -264,8 +264,8 @@ One team-season: standings line and club profile (colours, sponsors, social link
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_team-example}
@@ -316,8 +316,8 @@ The roster of a team-season: jersey, names, position, height and birth date.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_players-example}
@@ -363,8 +363,8 @@ One player-season row: jersey, team, names and photo.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_player-example}
@@ -411,8 +411,8 @@ The coaching staff of a team-season (birth dates are dropped).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_coaches-example}
@@ -482,8 +482,8 @@ Box score of a finished game: player lines, a team-credited line per side and th
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_box_score-example}
@@ -551,8 +551,8 @@ A player-season's totals, or per-game averages with is_averages=True.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_player_stats-example}
@@ -589,8 +589,8 @@ The stat categories ibba_leaders accepts (the stat_type codes) with their Hebrew
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_stats_types-example}
@@ -636,8 +636,8 @@ The top five players of a season in one stat category, for all teams or one team
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_leaders-example}
@@ -703,8 +703,8 @@ A team-season's totals, or per-game averages with is_averages=True.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_team_stats-example}
@@ -775,8 +775,8 @@ Games (schedule and results) of a season filtered by board, round, team and game
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_games-example}
@@ -830,8 +830,8 @@ A club's games of a season in external competitions (BoardsEx boards: European c
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_games_ex-example}
@@ -898,8 +898,8 @@ Every game of a club in a season, domestic and external, in one frame.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
-| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_games_by_team-example}

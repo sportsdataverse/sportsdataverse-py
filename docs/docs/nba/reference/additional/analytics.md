@@ -764,7 +764,7 @@ One row per (team, lineup) with `LINEUP_PLAY_CONTEXT_SCHEMA`. Empty input return
 
 | Exception | Description |
 |---|---|
-| `ValueError` | when the `off_player_*` columns are missing. |
+| `ValueError` | When the `off_player_*` columns are missing. |
 
 **Example**
 
@@ -1077,7 +1077,7 @@ A `polars.DataFrame` (or `pandas.DataFrame` when `return_as_pandas=True`) with s
 | Exception | Description |
 |---|---|
 | `ValueError` | `season` is not a 4-digit year (an int or an all-digit string), checked before any request. |
-| `NoDataError` | official.nba.com has no listing page for that season (a 404, or S3's `AccessDenied` 403) -- e.g. a future season, or one from before the L2M program began. |
+| `NoDataError` | Official.nba.com has no listing page for that season (a 404, or S3's `AccessDenied` 403) -- e.g. a future season, or one from before the L2M program began. |
 | `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), or a 200 response that is missing the expected "Last Two Minute" page marker (an Akamai interstitial, a blank body, or a redesigned page), or that links reports in a shape the parser does not read (a redesigned page) -- checked here, not in `parse_nba_l2m_games`, so the parser itself never raises. |
 
 **Example**
@@ -1194,7 +1194,7 @@ so a trade is visible rather than silently collapsed.
 
 **Returns**
 
-One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one.
+One row per `player_id` with `PLAYER_IDENTITY_SCHEMA`. An empty input -- or one missing any required column, `min` included -- gives the zero-row frame with that schema, so callers can join unconditionally. `min` is required rather than optional: without it every team totals zero minutes and "primary team" quietly degrades to whichever `team_id` sorts first, which looks like an answer but is not one. A malformed frame yields the typed zero-row frame instead of raising, so a caller can join unconditionally.
 
 | col_name | type | description |
 |---|---|---|

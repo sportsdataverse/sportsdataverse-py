@@ -61,8 +61,8 @@ Schedule and results for one season: NL plus exhibitions.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_schedule-example}
@@ -127,8 +127,8 @@ The current or next game day.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_current_games-example}
@@ -203,8 +203,8 @@ Playoff and play-in series by round: one row per game, with its series score.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_playoffs-example}
@@ -279,8 +279,8 @@ Playout and league-qualification series by round: one row per game, with its ser
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_playouts-example}
@@ -363,8 +363,8 @@ One game's header: teams, date, status, final and per-period score, coaches, ref
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_game_overview-example}
@@ -434,8 +434,8 @@ One game's event timeline: goals with assists, penalties, goaltender changes, re
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_pbp-example}
@@ -484,8 +484,8 @@ One game's lineups: every dressed player by unit, with licence number, position 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_lineups-example}
@@ -541,8 +541,8 @@ One game's shot attempts with rink location (metres) and expected goals (xG); NL
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_shots-example}
@@ -725,8 +725,8 @@ Top scorers (same row shape as /player).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_top_scorers-example}
@@ -886,8 +886,8 @@ Standings with team season stats.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
-| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_standings-example}

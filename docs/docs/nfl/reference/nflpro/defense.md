@@ -72,7 +72,7 @@ GET /api/secured/stats/defense/overview/season — one row per defender for the 
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_defense_overview_season-example}
 
@@ -155,7 +155,7 @@ GET /api/secured/stats/defense/overview/week — one row per defender per week �
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_defense_overview_week-example}
 
@@ -230,7 +230,7 @@ GET /api/secured/stats/defense/nearest/season — one row per defender for the s
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_defense_nearest_season-example}
 
@@ -313,7 +313,7 @@ GET /api/secured/stats/defense/nearest/week — one row per defender per week �
 | Exception | Description |
 |---|---|
 | `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
-| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+| `ValueError` | Pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_defense_nearest_week-example}
 

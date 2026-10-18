@@ -34,7 +34,7 @@ Current state of the league: game week of the season in progress and its last ga
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -131,7 +131,7 @@ Every game of a season and tournament: teams, score, xG, power plays, periods an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -199,7 +199,7 @@ Every goal of a season and tournament: scorer, assists, strength codes and skate
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -272,7 +272,7 @@ Schedule of a season and tournament: game ids, teams, goals, xG, start and rink.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -313,7 +313,7 @@ Number of game weeks of a season and tournament.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -406,7 +406,7 @@ One game's header: teams, score, xG, power plays, periods, rink, referees and at
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -459,7 +459,7 @@ One game's shots with rink-image coordinates (pixels), shooter, blocker and skat
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -545,7 +545,7 @@ Standings of a season: regular season, playoffs, preseason, playout and qualific
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

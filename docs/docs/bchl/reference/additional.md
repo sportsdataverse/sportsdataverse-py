@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # BCHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.bchl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.bchl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## HockeyTech / LeagueStat
 
@@ -216,9 +216,8 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 
 | Exception | Description |
 |---|---|
-| `NoDataError` | The feed answered 404. |
+| `NoDataError` | The feed answered 404. With no season given, the seasons feed lists no regular season. |
 | `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
-| `NoDataError` | With no season given, the seasons feed lists no regular season. |
 | `ValueError` | No season matches `season`. |
 
 ### bchl_standings {#bchl_standings}

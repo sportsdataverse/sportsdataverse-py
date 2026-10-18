@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # SOCCER — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.soccer`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.soccer` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## kloppy open event data
 
@@ -263,7 +263,7 @@ A kloppy `EventDataset`.
 
 | Exception | Description |
 |---|---|
-| `ImportError` | kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
+| `ImportError` | Kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
 | `ValueError` | `provider` is not a supported open-data key. |
 
 **Example**
@@ -333,7 +333,7 @@ A polars DataFrame (pandas with `return_as_pandas=True`), one row per event; see
 
 | Exception | Description |
 |---|---|
-| `ImportError` | kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
+| `ImportError` | Kloppy is not installed -- `pip install "sportsdataverse[soccer]"`. |
 | `ValueError` | `provider` is not a supported open-data key. |
 
 **Example**
@@ -397,8 +397,8 @@ One row per on-ball action with the SPADL columns (`type_name`, `result_name`, `
 
 | Exception | Description |
 |---|---|
-| `ImportError` | kloppy is missing (`pip install "sportsdataverse[soccer]"`). |
-| `ValueError` | neither the dataset nor `game_id` names the game; or the dataset's provider has no usable coordinate system (unknown / `OTHER`) or its pitch dimensions are not fixed. |
+| `ImportError` | Kloppy is missing (`pip install "sportsdataverse[soccer]"`). |
+| `ValueError` | Neither the dataset nor `game_id` names the game; or the dataset's provider has no usable coordinate system (unknown / `OTHER`) or its pitch dimensions are not fixed. |
 
 **Example**
 

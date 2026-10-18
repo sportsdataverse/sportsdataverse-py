@@ -41,8 +41,8 @@ Cumulative shot attempts and shots on goal of one game, per team and game minute
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_events-example}
@@ -165,8 +165,8 @@ Play-by-play commentary of one game, every entry, oldest first: goals and penalt
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp-example}
@@ -220,8 +220,8 @@ Players on the ice at each goal of one game (onlajny ids), one row per player, w
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp_goals-example}
@@ -297,8 +297,8 @@ The newest 20 play-by-play entries of one game (same columns as elh_pbp).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp_latest-example}
@@ -339,8 +339,8 @@ Play-by-play of one game as plain text (no team or player ids), oldest first.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp_mobile-example}
@@ -399,8 +399,8 @@ Extraliga games of one recent day with both id spaces (hokej.cz and onlajny) for
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_scoreboard-example}
@@ -459,8 +459,8 @@ Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
-| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. A missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. An error envelope, a body for another game or day, or a broken listing page. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_shots-example}

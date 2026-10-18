@@ -57,8 +57,8 @@ Schedule and results of one season stage: every game with its club ids, score an
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_schedule-example}
@@ -128,8 +128,8 @@ Game header of a report: date, attendance, score by period, teams, coaches and o
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_game_info-example}
@@ -192,8 +192,8 @@ Goals of a game with scorer, assists, strength and the jerseys on ice for both t
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_goals-example}
@@ -244,8 +244,8 @@ Penalties of a game: team, time, player, minutes and infraction.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_penalties-example}
@@ -316,8 +316,8 @@ Skater box score of a game: scoring, shots, faceoffs, time on ice, hits and bloc
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_player_box-example}
@@ -379,8 +379,8 @@ Goalie box score of a game: shots against, saves, save percentage and time on ic
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_goalie_box-example}
@@ -434,8 +434,8 @@ Text broadcast of a game (online.vhlru.ru, Russian text): goals, penalties, shoo
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_pbp-example}
@@ -487,8 +487,8 @@ League standings of one regular season (/standings/league/; /standings/regular/ 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_standings-example}
@@ -557,8 +557,8 @@ Season stats of every defenseman and forward of one season stage.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_skater_stats-example}
@@ -616,8 +616,8 @@ Season stats of every goalie of one season stage.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_goalie_stats-example}
@@ -663,8 +663,8 @@ Player card: position, height, weight, birth date, age, country and photo.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_player-example}
@@ -739,8 +739,8 @@ Player career by season stage and team (skater and goalie columns in one frame).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_player_career-example}
@@ -787,8 +787,8 @@ CURRENT roster of a team page (player names in Cyrillic even on /en/).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
-| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_roster-example}

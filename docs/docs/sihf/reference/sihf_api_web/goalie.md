@@ -54,7 +54,7 @@ Goaltender season totals: games, starts, goals against, GAA, shots, saves, save 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -112,7 +112,7 @@ Goaltender shots against: on goal (total, slot), missed, post, with per-game rat
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -171,7 +171,7 @@ Goaltender decisions: starts, wins and losses in regulation, overtime and shooto
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -224,7 +224,7 @@ Goaltender shootouts: attempts faced, goals against, saves and save percentage.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

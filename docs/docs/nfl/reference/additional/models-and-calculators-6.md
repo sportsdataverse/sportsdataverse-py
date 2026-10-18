@@ -427,7 +427,7 @@ DataFrame with the original columns plus `xpass` (predicted pass probability, nu
 
 | Exception | Description |
 |---|---|
-| `FileNotFoundError` | when `xpass_model.ubj` cannot be located (no bundled / cached copy and no network). |
+| `FileNotFoundError` | When `xpass_model.ubj` cannot be located (no bundled / cached copy and no network). |
 
 **Example**
 

@@ -70,7 +70,8 @@ Single club detail (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -109,7 +110,8 @@ List seasons for a competition (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -150,7 +152,8 @@ List competitions (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -219,7 +222,8 @@ Season content entity by slug (dapi / Contentful).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -283,7 +287,8 @@ Query season content entities (dapi / Contentful).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -354,7 +359,8 @@ Single match detail incl. lineups + referees (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -438,7 +444,8 @@ List matches in a season, date-windowed (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -500,7 +507,8 @@ Club roster with player Sportec ids (sportapi).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -549,7 +557,8 @@ Batch club detail by Sportec ids (sportapi).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -664,7 +673,8 @@ Single match detail (sportapi / .NET).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -777,7 +787,8 @@ Batch match detail by Sportec ids (sportapi).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
@@ -844,7 +855,8 @@ Standings table for a competition season (stats-api).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoESPNDataError` | the MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `sportsdataverse.errors.NoESPNDataError` | The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 

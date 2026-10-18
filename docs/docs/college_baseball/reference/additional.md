@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # COLLEGE_BASEBALL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.college_baseball`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.college_baseball` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## stats.ncaa.org
 

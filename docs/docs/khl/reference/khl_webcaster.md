@@ -44,8 +44,8 @@ Season table: every stage (season END year, regular / playoff) with its khl.ru t
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_stages-example}
@@ -241,8 +241,8 @@ One game: officials, team totals, per-player match stats, goals, penalties (one 
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_event-example}
@@ -339,8 +339,8 @@ Games of a stage, 16 per page (one row per game; khl_id is the khl.ru game id).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_events-example}
@@ -393,8 +393,8 @@ Stat leaders of a stage: one row per player per category.
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_leaders-example}
@@ -463,8 +463,8 @@ Players with stage-scoped stats (one row per player; khl_id is the khl.ru player
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_players-example}
@@ -510,8 +510,8 @@ Every current player: webcaster id, khl.ru id, jersey and team (one row per play
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_players_light-example}
@@ -576,8 +576,8 @@ League table of every season (one row per season per team, from the championship
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_tables-example}
@@ -661,8 +661,8 @@ One team with roster, stats and news feed (one row; lists as JSON text).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_team-example}
@@ -710,8 +710,8 @@ Teams of a stage (one row per team; khl_id is the khl.ru club id).
 
 | Exception | Description |
 |---|---|
-| `sportsdataverse.errors.NoDataError` | an error envelope with code 404 (unknown id), an empty object, or an unknown season. |
-| `sportsdataverse.errors.AssetFetchError` | a body for another id / stage / player than the one requested, or any other error envelope. |
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope. |
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#khl_webcaster_teams-example}
