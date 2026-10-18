@@ -1331,11 +1331,14 @@
   group: codegen-runtime
   finding: A-M6
   file: sportsdataverse/_codegen_runtime.py
-  snippet: '    if isinstance(value, numbers.Integral):'
-  mutant: '    if isinstance(value, int):'
+  snippet: '    if _is_many(seasons):'
+  mutant: '    if not isinstance(seasons, (int, str)):'
   test: tests/test_runtime_coercion.py -k "season_list_accepts or numpy_or_float"
   expected: kill
-  note: np.int64(2024) raised in every generated loader (278 call sites)
+  note: >-
+    the original dispatch; np.int64(2024) and 2024.0 were iterated and raised TypeError in every generated
+    loader (278 call sites). (Narrowing the Integral check alone is an equivalent mutant: the Real branch
+    still takes a numpy integer.)
 
 - id: season-list-fraction-truncated
   group: codegen-runtime
