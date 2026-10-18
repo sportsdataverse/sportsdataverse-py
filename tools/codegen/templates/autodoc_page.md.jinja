@@ -6,8 +6,14 @@ sidebar_position: {{ sidebar_position }}
 ---
 # {{ title }}
 
+{% if minted %}
+Additional functions in `{{ module }}` not covered by the generated API-endpoint
+reference above: per-competition functions minted from the competition registry (each
+binds a base wrapper to one competition), plus hand-written wrappers, loaders, and helpers.
+{% else %}
 Hand-written wrappers, loaders, and helpers in `{{ module }}`
 not covered by the generated API-endpoint reference above.
+{% endif %}
 
 {% for group in groups %}
 ## {{ group.family }}
@@ -55,6 +61,16 @@ _No description available._
 No returns table is published for this function: {{ fn.return_unverified }}.
 {% endif %}
 {% endif %}
+{% if fn.raises %}
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+{% for r in fn.raises %}
+| `{{ r.exc }}` | {{ r.description }} |
+{% endfor %}
+{% endif %}
 {% if fn.example %}
 
 **Example**
@@ -96,6 +112,16 @@ _No description available._
 **Returns**
 
 {{ m.returns }}
+{% endif %}
+{% if m.raises %}
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+{% for r in m.raises %}
+| `{{ r.exc }}` | {{ r.description }} |
+{% endfor %}
 {% endif %}
 {% if m.example %}
 

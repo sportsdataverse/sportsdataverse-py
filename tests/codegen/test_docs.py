@@ -233,3 +233,71 @@ def test_flat_reference_page_heads_with_the_family_notes():
     head = page.split("\n## ", 1)[0]
     assert "> **Note:**" in head
     assert "> **Note:**" not in _gen.render_reference_page("nhl", "nhl_api_web").split("\n## ", 1)[0]
+
+
+def test_doc_view_lists_the_docstring_raises():
+    def f(x):
+        """Do it.
+
+        Args:
+            x: a value.
+
+        Raises:
+            ValueError: a bad | value,
+                wrapped.
+            NoDataError: nothing there.
+        """
+
+    assert generate._doc_view(f)["raises"] == [
+        {"exc": "ValueError", "description": "a bad | value, wrapped."},
+        {"exc": "NoDataError", "description": "nothing there."},
+    ]
+
+
+def _autodoc_fn(**over):
+    fn = {
+        "name": "f",
+        "signature": "()",
+        "short": "Do it.",
+        "long": "",
+        "params": [],
+        "returns": "A frame.",
+        "return_columns": [],
+        "return_unverified": "",
+        "raises": [{"exc": "ValueError", "description": "bad."}],
+        "example": "",
+        "methods": [],
+    }
+    return {**fn, **over}
+
+
+def test_autodoc_page_renders_raises_after_returns():
+    from tools.codegen import render
+
+    md = render.ENV.get_template("autodoc_page.md.jinja").render(
+        title="T", module="m", sidebar_position=50, groups=[{"family": "F", "functions": [_autodoc_fn()]}], minted=False
+    )
+    assert "**Raises**\n\n| Exception | Description |\n|---|---|\n| `ValueError` | bad. |\n" in md
+    assert md.index("**Returns**") < md.index("**Raises**")
+    bare = render.ENV.get_template("autodoc_page.md.jinja").render(
+        title="T",
+        module="m",
+        sidebar_position=50,
+        groups=[{"family": "F", "functions": [_autodoc_fn(raises=[])]}],
+        minted=False,
+    )
+    assert "**Raises**" not in bare
+
+
+def test_autodoc_intro_names_minted_functions_only_where_there_are_some():
+    from tools.codegen import render
+
+    def page(minted):
+        return render.ENV.get_template("autodoc_page.md.jinja").render(
+            title="T", module="m", sidebar_position=50, groups=[], minted=minted
+        )
+
+    assert "Hand-written wrappers, loaders, and helpers in `m`\nnot covered" in page(False)
+    assert "Hand-written wrappers" not in page(True)
+    assert "per-competition functions minted from the competition registry" in page(True)
+    assert "Hand-written wrappers, loaders, and helpers in `" in generate.render_autodoc_page("mbb", "")

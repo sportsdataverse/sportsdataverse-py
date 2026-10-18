@@ -133,7 +133,8 @@ def _example_url(
 
 
 def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
-    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint."""
+    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint,
+    passed through the endpoint's ``body_builder`` when it declares one (as the wrapper does)."""
     body = {**ep.body_fixed}
     for p in ep.query_params:
         if p.in_body:
@@ -141,6 +142,8 @@ def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
             body[p.api] = _transform(p.transform, getter_module)(v) if p.transform else v
             if p.wire_transform and body[p.api] is not None:  # what the runtime really sends
                 body[p.api] = _transform(p.wire_transform, getter_module)(body[p.api])
+    if ep.body_builder:
+        body = _transform(ep.body_builder, getter_module)(body)
     return {k: v for k, v in body.items() if v is not None}
 
 
@@ -358,10 +361,7 @@ def _build_docstring(
         )
     else:
         lines.append(f"    {raw_doc.capitalize() if raw_doc else 'The raw JSON ``Dict``'}.")
-    raises = list(extras.get("raises") or [])
-    if vocab_raises:
-        named = " ".join(raises)
-        raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
+    raises = _raises_lines(extras, vocab_raises)
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -393,6 +393,24 @@ def _build_docstring(
         lines += [f"    * {n}" for n in notes]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _raises_lines(extras: dict, vocab_raises: bool) -> list[str]:
+    """The ``Raises:`` lines of a generated wrapper: the YAML ``raises:`` plus the vocabulary lines it omits."""
+    raises = [str(r) for r in extras.get("raises") or []]
+    if vocab_raises:
+        named = " ".join(raises)
+        raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
+    return raises
+
+
+def _raises_rows(lines: list[str]) -> list[dict]:
+    """``[{exc, description}]`` table rows (pipe-escaped markdown) from ``"Exc: description"`` lines."""
+    rows = []
+    for line in lines:
+        exc, _, desc = line.partition(":")
+        rows.append({"exc": exc.strip(), "description": _normalize_rst(" ".join(desc.split())).replace("|", "\\|")})
+    return rows
 
 
 @functools.lru_cache(maxsize=None)
@@ -437,7 +455,8 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     3. Empty string (silent fallback).
 
     Pipe characters in descriptions are escaped so they don't break the markdown
-    table renderer.
+    table renderer. ``where`` is ``path`` / ``query`` / ``body``: the reference block of a
+    body endpoint (``body: form|json``) shows it as an ``In`` column.
     """
     doc_descs: dict[str, str] = {}
     if league_prefix and fn_name:
@@ -457,6 +476,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
                 "required": p.required,
                 "nullable": not p.required,
                 "description": desc,
+                "where": "body" if p.in_body else ("query" if p.is_query else "path"),
             },
         )
     return rows
@@ -1171,6 +1191,7 @@ class _EndpointView:
         self.body_params = [p for p in ep.query_params if p.in_body]
         self.url_fixed = ep.url_fixed
         self.body_fixed = ep.body_fixed
+        self.body_builder = ep.body_builder or ""
         self.curl_example = ""
         if ep.body != "query":
             if self.example_url:
@@ -1200,6 +1221,7 @@ class _EndpointView:
         self.http_method = ep.method.upper()
         self.valid_url = self.example_url
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
+        self.raises_rows = _raises_rows(_raises_lines(doc_extras or {}, getter_module in _VOCAB_GETTERS))
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         schema_doc = _schema_doc(ep.returns_schema, league.prefix)
         self.return_frames = schema_doc.get("kind") == "frames"
@@ -1579,6 +1601,8 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
             for rt in api.runtime_imports:
                 if rt != "_get" and rt in v.path_build_expr:
                     transforms.add(rt)
+        if v.body_builder:
+            transforms.add(v.body_builder)
     # Always include _get; include YAML-declared extras only when actually used.
     runtime_imports = list(dict.fromkeys(["_get", *sorted(transforms)]))
     template = render.ENV.get_template("api_module.py.jinja")
@@ -4377,11 +4401,18 @@ def _doc_view(obj) -> dict:
     if not raw_example and fb["example"]:
         raw_example = fb["example"]
     example = _clean_example(raw_example)
+    # ponytail: strict-parser Raises only; a docstring the strict parser drops renders none
+    raises = [
+        {"exc": r.type_name, "description": _normalize_rst(" ".join((r.description or "").split()))}
+        for r in (ds.raises if ds is not None else [])
+        if r.type_name
+    ]
     result = {
         "short": _normalize_rst((ds_short or "").strip()),
         "long": long,
         "params": params,
         "returns": returns,
+        "raises": raises,
         "example": example,
         "methods": [],
     }
@@ -4463,11 +4494,15 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         for p in view["params"]:
             for k in ("type", "default", "description"):
                 p[k] = p[k].replace("|", "\\|")
+        for r in view["raises"]:
+            r["description"] = r["description"].replace("|", "\\|")
         # Class methods (classes only): escape each method's param cells too.
         for m in view.get("methods", []):
             for p in m["params"]:
                 for k in ("type", "default", "description"):
                     p[k] = p[k].replace("|", "\\|")
+            for r in m["raises"]:
+                r["description"] = r["description"].replace("|", "\\|")
         # Returns column table from the committed autodoc schema (offline read);
         # empty list -> the template falls back to the docstring Returns prose.
         # Blank description cells are backfilled from the mined SDV R-package dict
@@ -4487,6 +4522,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 "signature": _autodoc_signature(obj),
                 "return_columns": return_columns,
                 "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                "minted": hasattr(obj, "__sdv_base__"),
                 **view,
             },
         )
@@ -4520,8 +4556,9 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
     else:
         title = f"{_doc_display_name(prefix)} — additional Python functions"
         module = _home_module(prefix)
+    minted = any(fn.get("minted") for g in groups for fn in g["functions"])
     template = render.ENV.get_template("autodoc_page.md.jinja")
-    return template.render(title=title, module=module, sidebar_position=50, groups=groups)
+    return template.render(title=title, module=module, sidebar_position=50, groups=groups, minted=minted)
 
 
 def _autodoc_names_by_scope() -> dict[str | None, list[str]]:

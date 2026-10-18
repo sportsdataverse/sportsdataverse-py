@@ -247,6 +247,8 @@ def download(
     logger=None,
     cache_ttl=None,
     retry_statuses=_RETRYABLE_STATUS,
+    data=None,
+    json=None,
 ):
     """Download a URL with retries and ESPN-aware error handling.
 
@@ -284,6 +286,9 @@ def download(
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
             403 is a real forbidden rather than ESPN-under-load.
+        data: Form body. When ``data`` or ``json`` is given the request is a
+            ``POST`` (same retries and error handling) and is never cached.
+        json: JSON body (see ``data``).
 
     Raises:
         NoDataError: When the host answers 404, or ESPN answers 200 with a
@@ -371,7 +376,10 @@ def download(
         get_cache_mode,
     )
 
-    if get_cache_mode() != "off":
+    # A POST body is not part of the cache key, so a body request is never cached.
+    body = {k: v for k, v in (("data", data), ("json", json)) if v is not None}
+    use_cache = get_cache_mode() != "off" and not body
+    if use_cache:
         # Build a hashable params dict (drop None values + ignore the
         # batters_lookup[] convention which is request-shaped)
         _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
@@ -394,7 +402,8 @@ def download(
     status_retries = 0
     for attempt in range(attempts):
         try:
-            response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
+            send = session.post if body else session.get
+            response = send(url, params=params, proxies=proxy, headers=headers, timeout=timeout, **body)
             response = no_espn_data(response)
             # Transient status codes (rate-limit / server errors) come back as a
             # normal Response — `requests` does not raise on them. Retry with the
@@ -434,7 +443,7 @@ def download(
             # Persist only successful (2xx) responses to the cache — never cache a
             # 429/5xx body. Catches any body-parse error so a cache write never
             # breaks the call.
-            if get_cache_mode() != "off" and status is not None and 200 <= status < 300:
+            if use_cache and status is not None and 200 <= status < 300:
                 try:
                     cache_set(url, _cache_params, response.json(), ttl=cache_ttl)
                 except Exception:  # noqa: BLE001
