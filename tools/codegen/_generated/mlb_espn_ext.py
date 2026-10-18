@@ -198,6 +198,7 @@ def espn_mlb_scoreboard(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -251,6 +252,7 @@ def espn_mlb_summary(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -297,6 +299,7 @@ def espn_mlb_calendar(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -343,6 +346,7 @@ def espn_mlb_news(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -389,6 +393,7 @@ def espn_mlb_injuries(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -435,6 +440,7 @@ def espn_mlb_transactions(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -481,6 +487,7 @@ def espn_mlb_conferences(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -525,6 +532,7 @@ def espn_mlb_statistics_league(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -569,6 +577,7 @@ def espn_mlb_draft(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -615,6 +624,7 @@ def espn_mlb_teams_site(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -661,8 +671,9 @@ def espn_mlb_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -709,8 +720,9 @@ def espn_mlb_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -759,8 +771,9 @@ def espn_mlb_team_schedule(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -807,8 +820,9 @@ def espn_mlb_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -853,8 +867,9 @@ def espn_mlb_team_depthcharts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -899,8 +914,9 @@ def espn_mlb_team_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -945,8 +961,9 @@ def espn_mlb_team_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -991,8 +1008,9 @@ def espn_mlb_team_history(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1039,8 +1057,9 @@ def espn_mlb_team_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1087,8 +1106,9 @@ def espn_mlb_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1133,8 +1153,9 @@ def espn_mlb_player_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1179,8 +1200,9 @@ def espn_mlb_player_bio(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1225,8 +1247,9 @@ def espn_mlb_player_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1277,6 +1300,7 @@ def espn_mlb_standings(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1325,8 +1349,9 @@ def espn_mlb_player_overview(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1373,8 +1398,9 @@ def espn_mlb_player_stats_v3(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1423,8 +1449,9 @@ def espn_mlb_player_gamelog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1473,8 +1500,9 @@ def espn_mlb_player_splits(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1533,6 +1561,7 @@ def espn_mlb_leaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1584,6 +1613,7 @@ def espn_mlb_league_root(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1628,6 +1658,7 @@ def espn_mlb_season_pointer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1674,6 +1705,7 @@ def espn_mlb_seasons(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1720,8 +1752,9 @@ def espn_mlb_season_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1766,8 +1799,9 @@ def espn_mlb_season_types(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1814,8 +1848,9 @@ def espn_mlb_season_type(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1864,8 +1899,9 @@ def espn_mlb_season_group(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1912,8 +1948,9 @@ def espn_mlb_season_groups(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1964,8 +2001,9 @@ def espn_mlb_season_group_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2018,8 +2056,9 @@ def espn_mlb_season_group_children(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2068,8 +2107,9 @@ def espn_mlb_season_type_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2116,8 +2156,9 @@ def espn_mlb_season_type_corrections(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2164,8 +2205,9 @@ def espn_mlb_season_weeks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2214,8 +2256,9 @@ def espn_mlb_season_week(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2266,8 +2309,9 @@ def espn_mlb_season_week_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2320,8 +2364,9 @@ def espn_mlb_season_week_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2372,8 +2417,9 @@ def espn_mlb_season_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2423,8 +2469,9 @@ def espn_mlb_season_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2473,8 +2520,9 @@ def espn_mlb_season_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2524,8 +2572,9 @@ def espn_mlb_season_coaches(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2572,8 +2621,9 @@ def espn_mlb_season_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2620,8 +2670,9 @@ def espn_mlb_season_draft_round_picks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2666,8 +2717,9 @@ def espn_mlb_season_futures(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2712,8 +2764,9 @@ def espn_mlb_season_freeagents(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2760,8 +2813,9 @@ def espn_mlb_season_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2811,8 +2865,9 @@ def espn_mlb_season_powerindex_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2859,8 +2914,9 @@ def espn_mlb_season_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2911,8 +2967,9 @@ def espn_mlb_players_index(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a flag is not a bool or one of 'true'/'false'/'1'/'0'.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2961,8 +3018,9 @@ def espn_mlb_player_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3009,8 +3067,9 @@ def espn_mlb_player_career_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3060,8 +3119,9 @@ def espn_mlb_player_statisticslog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3106,8 +3166,9 @@ def espn_mlb_player_eventlog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3152,8 +3213,9 @@ def espn_mlb_player_contracts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3198,8 +3260,9 @@ def espn_mlb_player_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3244,8 +3307,9 @@ def espn_mlb_player_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3290,8 +3354,9 @@ def espn_mlb_player_records(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3336,8 +3401,9 @@ def espn_mlb_player_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3382,8 +3448,9 @@ def espn_mlb_player_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3430,8 +3497,9 @@ def espn_mlb_player_vs_player(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3480,6 +3548,7 @@ def espn_mlb_games(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3527,8 +3596,9 @@ def espn_mlb_game(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3575,8 +3645,9 @@ def espn_mlb_game_competition(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3625,8 +3696,9 @@ def espn_mlb_game_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3677,8 +3749,9 @@ def espn_mlb_game_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3729,8 +3802,9 @@ def espn_mlb_game_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3781,8 +3855,9 @@ def espn_mlb_game_team_linescores(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3833,8 +3908,9 @@ def espn_mlb_game_team_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3885,8 +3961,9 @@ def espn_mlb_game_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3937,8 +4014,9 @@ def espn_mlb_game_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3987,8 +4065,9 @@ def espn_mlb_game_odds(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4039,8 +4118,9 @@ def espn_mlb_game_probabilities(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4093,8 +4173,9 @@ def espn_mlb_game_plays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4147,8 +4228,9 @@ def espn_mlb_game_play(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4199,8 +4281,9 @@ def espn_mlb_game_play_personnel(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4249,8 +4332,9 @@ def espn_mlb_game_situation(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4299,8 +4383,9 @@ def espn_mlb_game_status(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4349,8 +4434,9 @@ def espn_mlb_game_officials(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4399,8 +4485,9 @@ def espn_mlb_game_broadcasts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4449,8 +4536,9 @@ def espn_mlb_game_predictor(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4499,8 +4587,9 @@ def espn_mlb_game_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4549,8 +4638,9 @@ def espn_mlb_game_propbets(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4599,8 +4689,9 @@ def espn_mlb_game_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4649,8 +4740,9 @@ def espn_mlb_game_scoringplays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4701,8 +4793,9 @@ def espn_mlb_game_official_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4753,6 +4846,7 @@ def espn_mlb_teams_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4800,8 +4894,9 @@ def espn_mlb_team_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4848,6 +4943,7 @@ def espn_mlb_venues(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4894,8 +4990,9 @@ def espn_mlb_venue(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4942,6 +5039,7 @@ def espn_mlb_franchises(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4988,8 +5086,9 @@ def espn_mlb_franchise(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5034,8 +5133,9 @@ def espn_mlb_coach(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5082,8 +5182,9 @@ def espn_mlb_coach_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5130,8 +5231,9 @@ def espn_mlb_coach_season(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5178,6 +5280,7 @@ def espn_mlb_positions(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5224,8 +5327,9 @@ def espn_mlb_position(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5272,6 +5376,7 @@ def espn_mlb_tournaments(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5320,6 +5425,7 @@ def espn_mlb_awards(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5366,8 +5472,9 @@ def espn_mlb_award(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5412,6 +5519,7 @@ def espn_mlb_standings_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5456,6 +5564,7 @@ def espn_mlb_leaders_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5500,6 +5609,7 @@ def espn_mlb_league_notes(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5544,6 +5654,7 @@ def espn_mlb_talentpicks(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5588,8 +5699,9 @@ def espn_mlb_player_hotzones(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5640,6 +5752,7 @@ def espn_mlb_fpi(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5691,6 +5804,7 @@ def espn_mlb_cdn_playbyplay(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5741,6 +5855,7 @@ def espn_mlb_cdn_boxscore(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5796,6 +5911,7 @@ def espn_mlb_cdn_schedule(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5854,6 +5970,7 @@ def espn_mlb_cdn_scoreboard(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::

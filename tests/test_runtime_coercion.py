@@ -61,6 +61,7 @@ _CSV_CASES = [
     ([2024.0, 2025.0], "2024,2025"),
     (np.int64(2024), "2024"),
     (np.array([2024.0]), "2024"),
+    ([True, False], "true,false"),  # the lowercase the hosts expect, not "True,False"
 ]
 
 

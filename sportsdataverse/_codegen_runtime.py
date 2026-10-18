@@ -288,7 +288,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
     return _download_json(download, url, params=clean, **kwargs)
 
 
-def _integral(value: Any) -> Optional[int]:
+def _integral(value: Any) -> int | None:
     """``value`` as an ``int`` when it is a whole number (an int, a numpy integer, ``2024.0``), else ``None``.
 
     A bool is not a number here: ``True`` as a season or an id is a caller's mistake.
@@ -381,9 +381,25 @@ def bool_str(value: Any, name: str = "value") -> Optional[str]:
     Passes ``None`` through unchanged so ``_get`` still strips it. A string is parsed,
     not tested for truth: ``"false"`` and ``"0"`` are ``"false"`` (A-M17).
 
+    Args:
+        value: a bool (or anything with a truth value), one of ``"true"`` / ``"false"`` /
+            ``"1"`` / ``"0"`` in any case, or ``None``.
+        name: the parameter ``value`` came from; the ``ValueError`` names it.
+
+    Returns:
+        ``"true"`` / ``"false"``, or ``None`` when ``value`` is ``None``.
+
     Raises:
         ValueError: ``value`` is a string other than true / false / 1 / 0 (any case);
             the message names the parameter ``name``.
+
+    Example:
+        Basic use::
+
+            from sportsdataverse._codegen_runtime import bool_str
+
+            bool_str("False", name="active")
+            # 'false'
     """
     if value is None:
         return None

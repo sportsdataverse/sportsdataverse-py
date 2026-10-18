@@ -1379,3 +1379,18 @@
   test: tests/test_runtime_coercion.py -k misspelled_kwarg
   expected: kill
   note: date= for dates= reached download and failed naming download(), after the wrapper had run
+
+- id: wire-text-bool-as-python-repr
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  # block scalars: the first line sets the indent, the later line keeps its 4 spaces
+  snippet: |-
+    return "true" if value else "false"
+        whole = _integral(value)
+  mutant: |-
+    pass
+        whole = _integral(value)
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: R896-3, a bool in a list-valued param went to the wire as "True" rather than "true"

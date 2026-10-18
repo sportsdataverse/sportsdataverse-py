@@ -420,6 +420,21 @@ def _build_docstring(
     if vocab_raises:
         named = " ".join(raises)
         raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
+    if vocab_raises and not flat:  # an ESPN wrapper checks its inputs before the request (A-M17, A-N2, A-N3)
+        checks = []
+        if any(p.transform == "bool_str" for p in ep.query_params):
+            checks.append("a flag is not a bool or one of 'true'/'false'/'1'/'0'")
+        if ep.path_params or league_param:
+            checks.append("a path value is a collection")
+        if checks:
+            raises = [
+                f"{r} Also raised before any request when {' or '.join(checks)}." if r.startswith("ValueError:") else r
+                for r in raises
+            ]
+        raises.append(
+            "TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), "
+            "raised before any request."
+        )
     if raises:
         lines.append("")
         lines.append("Raises:")
