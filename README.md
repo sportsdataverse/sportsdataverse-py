@@ -15,7 +15,7 @@
   - [Examples and tutorials](#examples-and-tutorials)
   - [Using with AI agents](#using-with-ai-agents)
   - [Companion packages](#companion-packages)
-  - [Star History](#star-history)
+  - [Follow the SportsDataverse (@SportsDataverse) on X and star this repo](#follow-the-sportsdataverse-sportsdataverse-on-x-and-star-this-repo)
 - [**Our Authors**](#our-authors)
   - [**Cheat sheet**](#cheat-sheet)
   - [**Citations**](#citations)
@@ -293,7 +293,11 @@ The NFL submodule is a near drop-in replacement for [nflreadpy](https://github.c
 the broader [nflverse](https://nflverse.nflverse.com) ecosystem is the
 upstream data source for many of those loaders.
 
-## Star History
+## Follow the SportsDataverse (@SportsDataverse) on X and star this repo
+
+[![X Follow](https://img.shields.io/twitter/follow/SportsDataverse?color=blue&label=%40SportsDataverse&logo=x&style=for-the-badge)](https://x.com/SportsDataverse)
+
+[![GitHub stars](https://img.shields.io/github/stars/sportsdataverse/sportsdataverse-py.svg?color=eee&logo=github&style=for-the-badge&label=Star%20sportsdataverse-py&maxAge=2592000)](https://github.com/sportsdataverse/sportsdataverse-py)
 
 <a href="https://github.com/sportsdataverse/sportsdataverse-py/stargazers">
   <picture>
