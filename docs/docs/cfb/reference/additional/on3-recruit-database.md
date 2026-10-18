@@ -10,7 +10,7 @@ description: "CFB — additional Python functions — On3 Recruit Database — f
 
 `on3_industry_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-On3 Industry Comparison player rankings (**deprecated** next/data` scrape).
+On3 Industry Comparison player rankings (**deprecated** `_next/data` scrape).
 
 **Parameters**
 
@@ -231,7 +231,7 @@ print(df.shape)
 
 `on3_industry_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-On3 Industry Comparison team rankings (**deprecated** next/data` scrape).
+On3 Industry Comparison team rankings (**deprecated** `_next/data` scrape).
 
 **Parameters**
 
@@ -316,7 +316,7 @@ print(df.shape)
 
 `on3_player_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-On3 player rankings for a class year (**deprecated** next/data` scrape).
+On3 player rankings for a class year (**deprecated** `_next/data` scrape).
 
 **Parameters**
 
@@ -538,7 +538,7 @@ print(df.shape)
 
 `on3_team_rankings(year: 'Union[int, str]', sport_slug: 'str' = 'football', page: 'Any' = None, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
 
-On3 team recruiting-class rankings (**deprecated** next/data` scrape).
+On3 team recruiting-class rankings (**deprecated** `_next/data` scrape).
 
 **Parameters**
 

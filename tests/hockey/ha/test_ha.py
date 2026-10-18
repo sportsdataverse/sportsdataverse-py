@@ -403,6 +403,19 @@ def test_runtime_posts_the_default_body_with_the_mapped_season_and_throttles(tra
     assert body["_request"] == {"season": 2026}
 
 
+def test_runtime_sends_wrapper_params_on_the_query_string_and_json_as_the_body(transport):
+    transport["queue"] = [_Resp(200, {**_load("api__all-time-skaters-stats.json"), "count": 3})]
+    R._get(f"{HOST}/api/all-time-skaters-stats", {"customFilter": "x", "team": None}, json={"season": 2026})
+    sent = transport["posts"][0]
+    assert sent["url"] == f"{HOST}/api/all-time-skaters-stats?customFilter=x"
+    assert sent["json"] == {**R.BODIES["/api/all-time-skaters-stats"], "season": "2025"}
+    assert "customFilter" not in sent["json"]
+
+
+def test_runtime_wire_season_is_the_start_year():
+    assert R.wire_season(2026) == "2025"
+
+
 def test_runtime_stamps_the_pbp_request(transport):
     transport["queue"] = [_ok("api__play-by-play.json")]
     req = {
