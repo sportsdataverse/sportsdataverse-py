@@ -9,8 +9,9 @@ The SHL site API is keyless JSON. Its contracts, all from the refs capture
   the pair through ``/statistics-v2/layout-info`` (fetched once per process, cached) to
   ``ssgtUuid`` for ``stats-info``, to ``seasonSeriesGameType`` for the match-day routes, and
   to the three ``seasonUuid`` / ``seriesUuid`` / ``gameTypeUuid`` that ``game-schedule``
-  requires. The athlete season game log takes the START year, so its ``season`` is reduced
-  by one. A season or game type layout-info does not list raises
+  requires. The athlete season game log takes the START year: its wrapper reduces ``season`` by
+  one (``transform: {offset: -1}`` in ``shl.yaml``), so ``_get`` sends that route's ``season`` as
+  given. A season or game type layout-info does not list raises
   :class:`~sportsdataverse.errors.NoDataError`. :func:`shl_ssgt_uuid` exposes the mapping.
 * **stats-info truncates silently.** Without ``count=1000`` it serves 50 rows and its
   ``totalCount`` echoes 50. :func:`_get` always sends ``count=1000`` and raises
@@ -28,8 +29,8 @@ The SHL site API is keyless JSON. Its contracts, all from the refs capture
   as text/html; anything else there (the SPA shell) raises ``AssetFetchError``.
 
 Every attempt, retries included, goes through
-:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which waits for ``_polite_wait``
-(at least 1 s between two requests to the host). Status codes follow the package vocabulary
+:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which runs it inside ``_polite``
+(at least 1 s from the host's last answer to the next request). Status codes follow the package vocabulary
 through :mod:`sportsdataverse._codegen_runtime`: 404 -> ``NoDataError``, 400 / 422 ->
 ``ValueError``, any other non-2xx or a dead connection -> ``AssetFetchError``.
 """
@@ -224,6 +225,12 @@ def shl_ssgt_uuid(season: int, game_type: str = "regular") -> str:
             from sportsdataverse.hockey.shl import shl_ssgt_uuid
             shl_ssgt_uuid(2026)              # 2025/26 regular season
             shl_ssgt_uuid(2025, "playoff")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_schedule` - a route this feeds.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _resolve(season, game_type)["ssgt"]
 
@@ -232,9 +239,7 @@ def _map_query(route: str, params: Dict[str, Any]) -> Tuple[Dict[str, Any], Opti
     """Rewrite the wrappers' ``season`` / ``gameType`` into the provider's keys; also return the ssgt."""
     q = dict(params)
     if route == r"/statistics-v2/athlete/playerProfile_seasonGameLog":
-        if q.get("season") is not None:
-            q["season"] = int(q["season"]) - 1  # this route alone takes the START year
-        return q, None
+        return q, None  # its ``season`` is already the START year: the wrapper declares ``transform: {offset: -1}``
     if route not in _SEASON_ROUTES:
         return q, None  # e.g. the filter route, whose ``season`` is a season uuid
     season, gtype = q.pop("season", None), q.pop("gameType", None)
@@ -352,8 +357,10 @@ def shl_player_crosswalk(season: int, game_type: str = "regular", *, return_as_p
 
     Returns:
         polars.DataFrame | pandas.DataFrame: one row per player: ``player_id`` (isa, ``Int64``),
-        ``athlete_uuid`` (null where SHL has none, common before about 2005), names, birth date,
-        nationality, position, jersey number, height and weight.
+        ``athlete_uuid`` (``Utf8``; null where SHL has none, common before about 2005),
+        ``first_name``, ``last_name``, ``full_name``, ``date_of_birth`` (``YYYY-MM-DD``), ``nationality``,
+        ``gender``, ``position``, ``shoots``, ``ep_url`` (all ``Utf8``), ``jersey_number``, ``weight`` (kg)
+        and ``height`` (cm) (``Int64``).
 
     Raises:
         NoDataError: layout-info lists no such ssgt, or the table has no rows.
@@ -365,6 +372,12 @@ def shl_player_crosswalk(season: int, game_type: str = "regular", *, return_as_p
             from sportsdataverse.hockey.shl import shl_player_crosswalk
             xw = shl_player_crosswalk(2026)
             xw.filter(xw["player_id"] == 2427)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_player_crosswalk` - the HA lookup built on this frame.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     raw = _get(f"{BASE}/statistics-v2/stats-info/players_summary", {"season": season, "gameType": game_type})
     return parse_shl_player_crosswalk(raw, return_as_pandas=return_as_pandas)

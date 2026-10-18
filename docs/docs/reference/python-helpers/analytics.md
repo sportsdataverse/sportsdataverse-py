@@ -107,7 +107,7 @@ Populations (regular season + postseason):
   `usage_box._standing_scrimmage` semantics. No player rows.
 * `success_by_down_distance`: every standing scrimmage play on downs 1-4 with
   a distance; success = `EPA_success`; `down` is the second axis. No player
-  rows. Distance follows standing_scrimmage` (clipped to 1-25, so ESPN's rare
+  rows. Distance follows `_standing_scrimmage` (clipped to 1-25, so ESPN's rare
   `distance == 0` lands in the 1-yard bucket).
 
 **Parameters**

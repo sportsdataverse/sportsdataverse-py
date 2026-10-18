@@ -45,6 +45,10 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
         if v.parser:
             kwargs["return_parsed"] = False
         fn = getattr(mod, v.fn_name)
+        if getattr(v, "body_kind", "query") != "query":  # POST body endpoint: no fetchable URL, a curl example instead
+            assert not v.valid_url and v.curl_example and v.curl_example in v.docstring, v.fn_name
+            checked += 1
+            continue
         if not v.valid_url:  # only when the example omits a required argument
             with pytest.raises(TypeError):
                 fn(**kwargs)
@@ -98,3 +102,26 @@ def test_summary_documents_a_dict_of_section_frames(prefix):
     for v in summary:
         assert v.parsed_doc_md == "a dict of `polars.DataFrame`s keyed by summary section", v.fn_name
         assert "keyed by summary section by default" in v.docstring, v.fn_name
+
+
+def test_body_curl_examples_show_the_wire_season():
+    """CBA / HockeyAllsvenskan send ``season - 1``; the documented curl request must show that value."""
+    for stem in ("cba", "ha"):
+        prefix = dict(generate.FLAT_APIS)[stem]
+        fa = spec.load_flat_api(generate.ENDPOINTS / f"{stem}.yaml", _PARAMS)
+        views = [
+            v
+            for v in generate._flat_views(fa, league_prefix=prefix)
+            if v.curl_example and v.example_args.get("season") == 2026
+        ]
+        assert views, stem
+        for v in views:
+            assert '"season": "2025"' in v.curl_example or '"season": 2025' in v.curl_example, v.fn_name
+
+
+def test_rst_normalisation_keeps_a_literal_that_starts_with_an_underscore():
+    n = generate._normalize_rst
+    assert n("plus ``_request`` (the id)") == "plus `_request` (the id)"
+    assert n("in ``_PBP_COLS``.") == "in `_PBP_COLS`."
+    assert n("see `the docs <https://x.test>`_ now") == "see [the docs](https://x.test) now"
+    assert n("dangling `_ here") == "dangling  here"

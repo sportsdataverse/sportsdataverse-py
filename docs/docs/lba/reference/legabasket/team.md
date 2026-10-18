@@ -155,13 +155,13 @@ Season totals of each player of a team-season.
 | `slam_dunk_sum` | integer | Season total of dunks. |
 | `shots_2p_realized_sum` | integer | Season total of 2-point field goals made. |
 | `shots_2p_total_sum` | integer | Season total of 2-point field goals attempted. |
-| `shots_2p_perc_sum` | numeric | Season 2-point percentage, 0-100 (a rate despite sum`). |
+| `shots_2p_perc_sum` | numeric | Season 2-point percentage, 0-100 (a rate despite `_sum`). |
 | `shots_3p_realized_sum` | integer | Season total of 3-point field goals made. |
 | `shots_3p_total_sum` | integer | Season total of 3-point field goals attempted. |
-| `shots_3p_perc_sum` | numeric | Season 3-point percentage, 0-100 (a rate despite sum`). |
+| `shots_3p_perc_sum` | numeric | Season 3-point percentage, 0-100 (a rate despite `_sum`). |
 | `free_throws_realized_sum` | integer | Season total of free throws made. |
 | `free_throws_total_sum` | integer | Season total of free throws attempted. |
-| `free_throws_perc_sum` | numeric | Season free-throw percentage, 0-100 (a rate despite sum`). |
+| `free_throws_perc_sum` | numeric | Season free-throw percentage, 0-100 (a rate despite `_sum`). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

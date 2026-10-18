@@ -1,0 +1,10 @@
+schema: genius_game_crosswalk
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_key
+  type: integer / character
+  description: ''
+- name: genius_match_id
+  type: integer
+  description: ''

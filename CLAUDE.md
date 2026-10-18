@@ -782,8 +782,8 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - **The European leagues nest the same way** (`generate._EURO_HOCKEY_HOMES` -> `_NESTED_HOMES`):
   `sportsdataverse.hockey.<lg>` for `icehl`, `eihl`, `metal`, `elh`, `liiga`, `shl`, `ha`, `nl`,
   `magnus`, `khl`, `vhl`. DEL's docs prefix is `del` but its package is `hockey.del_`: `del` is a
-  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime spaces
-  requests at least 1 s apart through `hockey/euro_hockey_runtime.py`, and takes the season as the
+  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime leaves
+  at least 1 s from one answer to the next request to a host through `hockey/euro_hockey_runtime.py`, and takes the season as the
   END year, mapping it to the provider's key at the boundary.
 - **The international basketball families nest the same way** (`generate._BASKETBALL_HOMES` ->
   `_NESTED_HOMES`): `sportsdataverse.basketball.<home>`. `basketball/` is a generated container (like

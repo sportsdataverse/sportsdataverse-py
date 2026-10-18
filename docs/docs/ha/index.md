@@ -9,13 +9,15 @@ description: "sdv-py HA: endpoint references, dataset loaders and parsers for HA
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [HockeyAllsvenskan site API](#hockeyallsvenskan-site-api) | `hockeyallsvenskan.se` | 11 | none |
+| [HockeyAllsvenskan site API](#hockeyallsvenskan-site-api) | `hockeyallsvenskan.se` | 12 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
 
 ## HockeyAllsvenskan site API {#hockeyallsvenskan-site-api}
 
 | Reference | Functions |
 |---|---:|
 | [HockeyAllsvenskan site API (hockeyallsvenskan.se, Sweden)](reference/ha) | 11 |
+| [Hand-written wrappers](reference/additional) | 1 |
 
 ## Examples
 

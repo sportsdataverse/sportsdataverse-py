@@ -13,7 +13,7 @@ _TEMPLATES = Path(__file__).parent / "templates"
 
 def type_hint(t: str) -> str:
     """Map a spec type string to a Python annotation. 'int|str' -> 'Union[int, str]'."""
-    parts = [p.strip() for p in t.split("|")]
+    parts = ["str" if p.strip() == "date" else p.strip() for p in t.split("|")]  # a date is an ISO string
     if len(parts) == 1:
         return parts[0]
     return f"Union[{', '.join(parts)}]"
