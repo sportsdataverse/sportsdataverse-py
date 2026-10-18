@@ -702,7 +702,7 @@ special-teams oracle (`tests/fixtures/cfb_prediction/sp_plus_2023.parquet`
   centered deviations are summed -- true EPA units. This centered form
   reached Spearman 0.865 against SP+ special teams, beating both the
   originally-shipped z-scored composite (0.768 -- dimensionless, std
-  ~1.7, range +-5 under an epa` column name; replaced 2026-07-28)
+  ~1.7, range +-5 under an `_epa` column name; replaced 2026-07-28)
   and a single-unit offense-minus-intercept ridge fit (0.703).
 
 `adj_st_epa` is therefore the sum, over the three special-teams units

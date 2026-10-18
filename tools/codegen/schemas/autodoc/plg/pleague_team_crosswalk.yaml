@@ -1,0 +1,10 @@
+schema: pleague_team_crosswalk
+kind: dataframe
+hand_authored: true
+columns:
+- name: team_id
+  type: integer
+  description: ''
+- name: team_uuid
+  type: character
+  description: ''

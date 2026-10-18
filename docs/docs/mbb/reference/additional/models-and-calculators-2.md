@@ -89,7 +89,7 @@ players load onto which collinear combo -- the classic Belsley-Kuh-Welsch
 collinearity-diagnostics recipe (see the upstream comment's
 [colldiag.m](https://github.com/brian-lau/colldiag/blob/master/colldiag.m)
 citation). Also builds a plain Pearson player/player correlation matrix
-(calc_player_correlations`) and folds it into a possession
+(`_calc_player_correlations`) and folds it into a possession
 -weighted `adaptive_correl_weights` summary per player.
 
 **`numpy.linalg.svd(weight_matrix, full_matrices=False)` replaces
@@ -146,7 +146,7 @@ Faithful port of `RapmUtils.calcLineupOutputs` (`RapmUtils.ts:598-751`).
 For each filtered lineup, computes a possession-weighted residual: the
 lineup's own stat value, plus any global luck adjustment, minus the
 accumulated "prior offset" contributed by every player on the lineup
-(a strong-prior blend for kept players -- see get_strong_weight`
+(a strong-prior blend for kept players -- see `_get_strong_weight`
 -- or a fixed baseline contribution for removed players).
 
 Upstream keeps this as a plain `Array<Array<number>>` (*not* a mathjs
@@ -167,7 +167,7 @@ the upstream distinction.
 | `off_offset` | `float` |  | The D1-average offensive value for `field` (the regression's starting/baseline value on the RHS). |
 | `def_offset` | `float` |  | The D1-average defensive value for `field`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext`, e.g. from `build_player_context`. |
-| `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see get_strong_weight`. |
+| `adaptive_correl_weights` | `list[float] \| None` | `None` | Optional per-player adaptive-correlation weights (index-aligned with `ctx["col_to_player"]`), used as the strong-prior blend fallback when `ctx["prior_info"] ["strong_weight"] < 0` -- see `_get_strong_weight`. |
 | `use_old_val_if_possible` | `tuple[bool, bool]` | `(False, False)` | `(use_old_val_for_off, use_old_val_for_def)` -- whether to prefer each lineup/team stat's luck-adjusted `old_value` over its raw `value` when present. This is the luck-adjustment hook Task 3.1's classification map flags as an **inherited coverage gap**: the vendored oracle fixture has `old_value == value` on every field (via `insertOldValues`), so neither jest nor this port's replay test ever observes this flag change the resulting numbers -- only that passing it doesn't crash. See the module docstring's "Task 3.3 coverage gap" note. |
 
 **Returns**
@@ -571,7 +571,7 @@ directly rather than recomputing), then writes `{playerId}.rapm[field]
 **NOTE (upstream comment, verbatim): when `write_value_key ==
 "old_value"`, this must be called *after* an initial `write_value_key
 == "value"` call on the same `players` list** -- the `old_value`
-pass .merge`s (lodash_merge`) its results into each player's
+pass .merge`s (`_lodash_merge`) its results into each player's
 *existing* `rapm` dict rather than replacing it, so a player's
 `rapm["field"]` ends up carrying both a `value` (from the first
 call) and an `old_value` (from the second) side by side.
@@ -585,7 +585,7 @@ call) and an `old_value` (from the second) side by side.
 | `def_rapm_input` | `RapmProcessingInputs` |  | `pick_ridge_regression`'s defensive output. |
 | `stats_averages` | `PureStatSet` |  | League/context average stat set -- consulted for each field's off/def offset before `ctx["team_info"]`. |
 | `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` (the same one `pick_ridge_regression` was called with). |
-| `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / get_strong_weight` exactly as `pick_ridge_regression` does. |
+| `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / `_get_strong_weight` exactly as `pick_ridge_regression` does. |
 | `read_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- which key (`"value"`/`"old_value"`) to prefer when reading `stats_averages`/`ctx["team_info"]` offsets and when calling `calc_lineup_outputs` (forwarded as its `use_old_val_if_possible` flag). |
 | `write_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key each written field carries its result under. |
 
@@ -1248,7 +1248,7 @@ Faithful port of `RapmUtils.pickRidgeRegression` (`RapmUtils.ts:1001-1540`)
 `lambda_range` by the design matrix's mean singular value
 (`avg_eigen_val`) into an actual ridge strength, solves via
 `slow_regression`/`calculate_rapm`, blends in each player's
-strong prior (get_strong_weight`), reconciles the possession
+strong prior (`_get_strong_weight`), reconciles the possession
 -weighted team total against the actual team efficiency
 (`[IMPORTANT-EQUATION-01]`, see below), nudges the result back towards
 the weak priors on any remaining error (`apply_weak_priors`), and
@@ -1278,7 +1278,7 @@ drops below `pick_ridge_thresh` (`0.061` off / `0.091` def --
 
 **Adaptive-weight / prior asymmetry** (the deep-equality oracle's load
 -bearing behavior): the per-player strong-prior blend
-(get_strong_weight(ctx["prior_info"], adaptive_correl_weights[i])`)
+(`_get_strong_weight(ctx["prior_info"], adaptive_correl_weights[i])`)
 only consults `adaptive_correl_weights` when
 `ctx["prior_info"]["strong_weight"] < 0` (adaptive mode) -- a fixed,
 non-negative `strong_weight` always wins. A fixture whose
