@@ -1,9 +1,7 @@
 """The reference docs' "Valid URL" is the URL the documented example call requests.
 
 Offline: each generated wrapper is called with its example args against a stub
-``_get`` that records the URL and params instead of fetching. A ``body:`` (POST) route has no
-GET-shaped "Valid URL": its documented "Example request" is the POST URL and its "Example body"
-the ``body=`` the wrapper hands the getter.
+``_get`` that records the URL and params instead of fetching.
 """
 
 from __future__ import annotations
@@ -35,8 +33,8 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
     # the wire, so the documented URL is compared with the query after the same rewrite.
     build = getattr(importlib.import_module(mod._get.__module__), "_build_query", None)
 
-    def fake_get(url, params=None, body=None, **_kw):
-        seen.update(url=url, params=params or {}, body=body)
+    def fake_get(url, params=None, **_kw):
+        seen.update(url=url, params=params or {})
         return {}
 
     monkeypatch.setattr(mod, "_get", fake_get)
@@ -47,8 +45,11 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
         if v.parser:
             kwargs["return_parsed"] = False
         fn = getattr(mod, v.fn_name)
-        documented = v.example_request_url if v.body_declared else v.valid_url
-        if not documented:  # only when the example omits a required argument
+        if getattr(v, "body_kind", "query") != "query":  # POST body endpoint: no fetchable URL, a curl example instead
+            assert not v.valid_url and v.curl_example and v.curl_example in v.docstring, v.fn_name
+            checked += 1
+            continue
+        if not v.valid_url:  # only when the example omits a required argument
             with pytest.raises(TypeError):
                 fn(**kwargs)
             continue
@@ -59,14 +60,8 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
             built = build(query)
             query = built[0] if isinstance(built, tuple) else built
         got = seen["url"] + (f"?{urlencode(query, doseq=True)}" if query else "")
-        assert documented == got, v.fn_name
-        assert f"{v.fn_name}(" in v.example_call, v.fn_name
-        if v.body_declared:
-            sent = {k: val for k, val in (seen["body"] or {}).items() if val is not None}
-            assert (generate._render_example_body(sent, v.body_format) if sent else "") == v.example_body, v.fn_name
-            assert f"Example request: POST {documented}" in v.docstring and not v.valid_url, v.fn_name
-        else:
-            assert seen["body"] is None and v.valid_url in v.docstring, v.fn_name
+        assert v.valid_url == got, v.fn_name
+        assert f"{v.fn_name}(" in v.example_call and v.valid_url in v.docstring, v.fn_name
         checked += 1
     return checked
 
@@ -107,3 +102,26 @@ def test_summary_documents_a_dict_of_section_frames(prefix):
     for v in summary:
         assert v.parsed_doc_md == "a dict of `polars.DataFrame`s keyed by summary section", v.fn_name
         assert "keyed by summary section by default" in v.docstring, v.fn_name
+
+
+def test_body_curl_examples_show_the_wire_season():
+    """CBA / HockeyAllsvenskan send ``season - 1``; the documented curl request must show that value."""
+    for stem in ("cba", "ha"):
+        prefix = dict(generate.FLAT_APIS)[stem]
+        fa = spec.load_flat_api(generate.ENDPOINTS / f"{stem}.yaml", _PARAMS)
+        views = [
+            v
+            for v in generate._flat_views(fa, league_prefix=prefix)
+            if v.curl_example and v.example_args.get("season") == 2026
+        ]
+        assert views, stem
+        for v in views:
+            assert '"season": "2025"' in v.curl_example or '"season": 2025' in v.curl_example, v.fn_name
+
+
+def test_rst_normalisation_keeps_a_literal_that_starts_with_an_underscore():
+    n = generate._normalize_rst
+    assert n("plus ``_request`` (the id)") == "plus `_request` (the id)"
+    assert n("in ``_PBP_COLS``.") == "in `_PBP_COLS`."
+    assert n("see `the docs <https://x.test>`_ now") == "see [the docs](https://x.test) now"
+    assert n("dangling `_ here") == "dangling  here"

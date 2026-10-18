@@ -70175,3 +70175,15 @@ vhl_standings:
     Not the stable club id (*_club_id) and not the team page id.'
   tn: Tournament id of the season stage (2025/26 regular season = 1374, playoffs = 1375); vhl_tn maps season + stage to it.
   wins: Regulation wins (W).
+genius_game_crosswalk:
+  game_key: 'Provider''s own game key: the BNXT, CEBL, TBF or KZS integer game id, or the Sportality platform game uuid (a string) for source sportality.'
+  genius_match_id: Genius Sports LiveStats match id of the same game (the match_id every genius_* wrapper takes).
+genius_team_crosswalk:
+  team_uuid: Sportality platform team uuid.
+  genius_team_id: Genius team id of the same team (home_team_id / away_team_id of the genius schedule frames).
+ibba_segev_game_crosswalk:
+  game_id: IBBA game id (the game_id of the ibba_games frame).
+  segev_game_id: Segev game id of the same game (the game_id every ibba_segev_* wrapper takes).
+pleague_team_crosswalk:
+  team_id: P. LEAGUE+ site team id (1-8), stable across seasons and renames.
+  team_uuid: Preciser team uuid of the same club (team_uuid of the pleague_preciser frames).

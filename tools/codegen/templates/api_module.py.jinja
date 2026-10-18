@@ -77,28 +77,10 @@ def {{ ep.fn_name }}(
     {{ check }}
 {% endfor %}
     _caller_params = kwargs.pop("params", None) or {}
-{% if ep.body_declared %}
-    _body = {
-{% for k, v in ep.fixed_params.items() %}
-        "{{ k }}": {{ v|py_repr }},
-{% endfor %}
-{% for p in ep.body_params %}
-{% if p.has_transform %}
-        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
-{% else %}
-        "{{ p.api }}": {{ p.python_name }},
-{% endif %}
-{% endfor %}
-    }
-    _body.update(_caller_params)
-{% endif %}
-{% if not ep.body_declared or ep.url_params %}
     _params = {
-{% if not ep.body_declared %}
-{% for k, v in ep.fixed_params.items() %}
+{% for k, v in ep.url_fixed.items() %}
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
-{% endif %}
 {% for p in ep.url_params %}
 {% if p.has_transform %}
         "{{ p.api }}": {{ p.transform_call(p.python_name) }},
@@ -110,9 +92,22 @@ def {{ ep.fn_name }}(
         **{_k: _v for _k, _v in kwargs.items() if _v is not None},
 {% endif %}
     }
-{% if not ep.body_declared %}
     _params.update(_caller_params)
+{% if ep.body_kind != "query" %}
+    _body = {
+{% for k, v in ep.body_fixed.items() %}
+        "{{ k }}": {{ v|py_repr }},
+{% endfor %}
+{% for p in ep.body_params %}
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
+{% else %}
+        "{{ p.api }}": {{ p.python_name }},
 {% endif %}
+{% endfor %}
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
 {% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
@@ -122,11 +117,9 @@ def {{ ep.fn_name }}(
     raw = {{ ep.getter_name }}(
         {{ ep.url_literal }},
 {% endif %}
-{% if not ep.body_declared or ep.url_params %}
         params=_params,
-{% endif %}
-{% if ep.body_declared %}
-        body=_body,
+{% if ep.body_kind != "query" %}
+        {{ "data" if ep.body_kind == "form" else "json" }}=_body,
 {% endif %}
 {% if auth %}
         headers=headers,

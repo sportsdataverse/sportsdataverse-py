@@ -129,8 +129,8 @@ The lineup(s) ending in this clump, enriched with possession counts. Empty if `c
 3P-only shot-decomposition wrapper.
 
 Public port of `build3PShotInfo` (`LuckUtils.ts:741-759`) --
-remaps build_shot_info`'s generic keys to the 3pm`/
-3pa`/3p` suffixes used throughout the luck-adjustment engine.
+remaps `_build_shot_info`'s generic keys to the `_3pm`/
+`_3pa`/`_3p` suffixes used throughout the luck-adjustment engine.
 
 **Parameters**
 
@@ -159,7 +159,7 @@ print(info["shot_info_total_3p"])
 
 Public port of `buildAdjusted3P` (`LuckUtils.ts:812-835`, "retained
 for bwc [backwards compat]" per the upstream comment) -- a thin remap of
-build_adjusted_fg` called with `shot_type="3p"`.
+`_build_adjusted_fg` called with `shot_type="3p"`.
 
 **Parameters**
 
@@ -347,7 +347,7 @@ string as a single fragment). Splits on that separator, trims whitespace,
 drops empty fragments and `[`-prefixed ones (reserved for aggregation-key
 filters elsewhere in the app), then routes each fragment to the positive
 or negative bucket by a leading `-`, and parses each fragment's optional
-`=<tokens>` position spec via decomp_positional_filter_fragment`.
+`=<tokens>` position spec via `_decomp_positional_filter_fragment`.
 
 **Parameters**
 
@@ -646,7 +646,7 @@ upstream `void` + mutable-arg contract. Recomputes the per-field weight
 tables from `mutable_acc` itself (`getSimpleWeights(mutableAcc, 1,
 regressDiffs)` -- note the `default_val=1`, unlike `weighted_avg`'s
 `default_val=0`), then, unless `harmonic_weighting` is set, calls
-recalculate_play_type_poss` to fix up the transition/scramble
+`_recalculate_play_type_poss` to fix up the transition/scramble
 possession fields that `weighted_avg` skipped. Finally divides every
 non-ignored field's accumulated weighted sum by its matching weight
 total (shot-type / `ppp_totals` / `orb_totals` / `fta_totals` /
@@ -661,8 +661,8 @@ than dividing their own weighted sum.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `mutable_acc` | `LineupStatSet` |  | The `weighted_avg`-accumulated `LineupStatSet` to finish in place. Every field with a non-`total_`/`SUM_FIELDS` key is converted from a weighted sum to a weighted average. |
-| `harmonic_weighting` | `bool` | `False` | When `True`, skips the recalculate_play_type_poss` fixup and uses a harmonic-style division for `off_ftr`/`def_ftr` instead of the totals-based recompute. Matches the upstream default (`False`) used by `calculate_aggregated_lineup_stats`. |
-| `regress_diffs` | `float` | `0.0` | Forwarded to get_simple_weights` -- regression toward ~1000 possessions for on/off diff calculations. Defaults to `0.0` (no regression), matching `calculate_aggregated_lineup_stats`'s call site. |
+| `harmonic_weighting` | `bool` | `False` | When `True`, skips the `_recalculate_play_type_poss` fixup and uses a harmonic-style division for `off_ftr`/`def_ftr` instead of the totals-based recompute. Matches the upstream default (`False`) used by `calculate_aggregated_lineup_stats`. |
+| `regress_diffs` | `float` | `0.0` | Forwarded to `_get_simple_weights` -- regression toward ~1000 possessions for on/off diff calculations. Defaults to `0.0` (no regression), matching `calculate_aggregated_lineup_stats`'s call site. |
 
 **Returns**
 
@@ -805,7 +805,7 @@ Reversibly mutate a stat set in place with luck-adjustment deltas.
 Faithful port of `LuckUtils.injectLuck` (`LuckUtils.ts:534-650`).
 Works on a team, lineup, or player stat dict -- only the fields already
 present on `mutable_stats` are touched (see
-override_mutable_val`'s object-presence gate), so calling this
+`_override_mutable_val`'s object-presence gate), so calling this
 on a stat set that doesn't carry a given field (e.g. a bare
 `{"key": ..., "doc_count": 0}` placeholder) is a safe no-op for that
 field. Passing `off_luck=None, def_luck=None` resets every field this
@@ -927,7 +927,7 @@ weren't) buckets, merging each bucket via `weighted_avg` /
 `complete_weighted_avg`. Also builds a `teammates` map of
 possession overlap with every other player, and -- when
 `inc_replacement=True` -- a "replacement" on-minus-off composite via
-combine_replacement_on_off`.
+`_combine_replacement_on_off`.
 
 Lineups whose `key` is the empty string are skipped in the
 on/off-partition loop (workaround for an upstream data issue, tracked
@@ -943,7 +943,7 @@ input list) is deleted as a side effect while building the roster --
 |---|---|---|---|
 | `lineup_report` | `LineupStatSet` |  | `{"lineups": [...], "avgOff": ..., "error_code": ...}` -- the per-team lineup list plus metadata (mirrors upstream's `LineupStatsModel`). Only `lineups` and `error_code` are consumed here. |
 | `inc_replacement` | `bool` | `False` | When `True`, additionally builds each player's `replacement` on-minus-off composite (more expensive -- scans every OFF lineup against every ON lineup for a 4-of-5-shared- players complement match). |
-| `regress_diffs` | `float` | `0.0` | Forwarded to combine_replacement_on_off`'s final `complete_weighted_avg` call -- regression toward ~1000 possessions for the replacement diff (only meaningful when `inc_replacement=True`). |
+| `regress_diffs` | `float` | `0.0` | Forwarded to `_combine_replacement_on_off`'s final `complete_weighted_avg` call -- regression toward ~1000 possessions for the replacement diff (only meaningful when `inc_replacement=True`). |
 | `rep_on_off_diag_mode` | `int` | `0` | When `> 0`, retains diagnostic detail (`myLineups` on each player's replacement entry, plus `lineupUsage` bookkeeping) instead of discarding it after use. |
 
 **Returns**
@@ -983,7 +983,7 @@ for the algorithm, column contract, and the `fix_tip_in` vocab fix.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`ncaa_wbb_game_pbp` output). |
-| `include_transition` | `bool` | `False` | Append the trans`/half` split surface. |
+| `include_transition` | `bool` | `False` | Append the `_trans`/`_half` split surface. |
 | `fix_tip_in` | `bool` | `True` | Count the real `"Tip In"` vocabulary (default); False reproduces R's `"Tip-In"` bug for oracle parity. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -1201,7 +1201,7 @@ Pure delegation to
 | `min_mins` | `float` | `0` | Keep combos with total on-court minutes strictly greater than this. |
 | `included` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be on the court in every lineup. |
 | `excluded` | `Union[str, Sequence[str], None]` | `None` | Player name(s) that must be off the court in every lineup. |
-| `include_transition` | `bool` | `False` | Re-derive the trans`/half` ratio surface. |
+| `include_transition` | `bool` | `False` | Re-derive the `_trans`/`_half` ratio surface. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -1408,7 +1408,7 @@ Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
 
 Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
 Greedily fits each player (in input order) to their best-scoring slot via
-fit_player` (dominated by `pos_class_to_score` on the
+`_fit_player` (dominated by `pos_class_to_score` on the
 player's `posClass`, tie-broken by their raw `posConfidences`),
 evicting and recursively re-fitting any player displaced along the way,
 then applies `apply_relative_positional_overrides` (keyed on
@@ -1483,7 +1483,7 @@ Select and seed a tournament field from a per-team résumé frame.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `resume` | `DataFrame` |  | One row per (season, team_id) with `adj_em_z, sos, wab, quad1_w` (the ratings + strength-of-schedule outputs joined). |
-| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see conference_auto_bids`); always in the field. |
+| `auto_bids` | `set[str]` |  | `team_id` set of conference auto-bid winners (see `_conference_auto_bids`); always in the field. |
 | `league` | `str` | `'mens'` | `"mens"` or `"womens"` (kept for shim parity; the blend is league-agnostic). |
 | `field_size` | `int` | `68` | Tournament field size (68). |
 

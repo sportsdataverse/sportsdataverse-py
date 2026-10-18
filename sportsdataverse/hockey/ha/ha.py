@@ -500,9 +500,7 @@ def ha_pbp(
     """One game's events (2025/26 onward): shots with outcome, goals with assists and strength, penalties, goalkeeper changes, timeouts. No coordinates, no on-ice players.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/play-by-play``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/play-by-play
-    Example body: {"statNetGameNumber": 23401, "homeStatNetId": "AIK", "awayStatNetId": "MODO", "scheduledDateTime": "2026-09-18T17:00:00.000Z"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/play-by-play' -H 'Content-Type: application/json' -d '{"statNetGameNumber": 23401, "homeStatNetId": "AIK", "awayStatNetId": "MODO", "scheduledDateTime": "2026-09-18T17:00:00.000Z"}'``
 
     Args:
         statnet_game_number: StatNet game number (statnet_game_number in ha_schedule / ha_game), e.g. 23401.
@@ -536,6 +534,8 @@ def ha_pbp(
         .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "statNetGameNumber": statnet_game_number,
         "homeStatNetId": home_statnet_id,
@@ -543,10 +543,12 @@ def ha_pbp(
         "scheduledDateTime": scheduled_date_time,
         "playedDateTime": played_date_time,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/play-by-play",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -571,9 +573,7 @@ def ha_games(
     """Every game of a season, played or scheduled (is_played): date, display team codes, score, periods, arena, attendance, shots and power play. No game id.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-games-stats``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-time-games-stats
-    Example body: {"season": 2026, "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-games-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -620,6 +620,8 @@ def ha_games(
     if decided_in not in ("all", "ft", "ot", "so", "wo"):
         raise ValueError(f"decided_in must be one of ('all', 'ft', 'ot', 'so', 'wo'); got {decided_in!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
@@ -630,10 +632,12 @@ def ha_games(
         "game_status": game_status,
         "decided_in": decided_in,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-games-stats",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -653,9 +657,7 @@ def ha_standings(
     """Standings of a season. Wins and losses are REGULATION only; overtime counts include shootouts.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/league-standings-all-time``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/league-standings-all-time
-    Example body: {"season": 2026, "phase": "HA", "location": "all"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/league-standings-all-time' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "location": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -691,15 +693,19 @@ def ha_standings(
     if location not in ("all", "home", "away"):
         raise ValueError(f"location must be one of ('all', 'home', 'away'); got {location!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
         "location": location,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/league-standings-all-time",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -727,9 +733,7 @@ def ha_skater_stats(
     """Skater stats of a season, one category (column set) per call. Names and StatNet team ids, no player ids.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-skaters-stats``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-time-skaters-stats
-    Example body: {"season": 2026, "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-skaters-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -802,6 +806,8 @@ def ha_skater_stats(
     if decided_in not in ("all", "ft", "ot", "so", "wo"):
         raise ValueError(f"decided_in must be one of ('all', 'ft', 'ot', 'so', 'wo'); got {decided_in!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
@@ -815,10 +821,12 @@ def ha_skater_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-skaters-stats",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -844,9 +852,7 @@ def ha_goalie_stats(
     """Goalkeeper stats of a season, one category per call. Names and StatNet team ids, no player ids.
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats
-    Example body: {"season": 2026, "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -898,6 +904,8 @@ def ha_goalie_stats(
     if decided_in not in ("all", "ft", "ot", "so", "wo"):
         raise ValueError(f"decided_in must be one of ('all', 'ft', 'ot', 'so', 'wo'); got {decided_in!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
@@ -909,10 +917,12 @@ def ha_goalie_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -938,9 +948,7 @@ def ha_team_stats(
     """Team stats of a season, one category per call. W / L are totals including overtime and shootout (wins_total / losses_total).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-teams-stats``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-time-teams-stats
-    Example body: {"season": 2026, "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-teams-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -1005,6 +1013,8 @@ def ha_team_stats(
     if decided_in not in ("all", "ft", "ot", "so", "wo"):
         raise ValueError(f"decided_in must be one of ('all', 'ft', 'ot', 'so', 'wo'); got {decided_in!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
@@ -1016,10 +1026,12 @@ def ha_team_stats(
         "game_status": game_status,
         "decided_in": decided_in,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-teams-stats",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -1038,9 +1050,7 @@ def ha_teams(
     """Teams of a season with both team keys: StatNet team id <-> display code (from the stats tables' teams list).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats
-    Example body: {"season": 2026, "phase": "HA"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA"}'``
 
     Args:
         season: Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006).
@@ -1073,14 +1083,18 @@ def ha_teams(
     if phase not in ("HA", "HAPlayoff", "HAkval"):
         raise ValueError(f"phase must be one of ('HA', 'HAPlayoff', 'HAkval'); got {phase!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "season": season,
         "phase": phase,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -1101,9 +1115,7 @@ def ha_leaders(
     """Current-season top 25 of one metric, with the StatNet player id (the only stats route that has one).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/player-leaderboard``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/player-leaderboard
-    Example body: {"metric": "TP", "phase": "HA"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/player-leaderboard' -H 'Content-Type: application/json' -d '{"metric": "TP", "phase": "HA"}'``
 
     Args:
         metric: Leaderboard metric. Seen on the site: TP, G, A, PlusMinus, Hits, FOPerc, TOI/GP (skaters).
@@ -1138,16 +1150,20 @@ def ha_leaders(
     if phase not in ("HA", "HAPlayoff", "HAkval"):
         raise ValueError(f"phase must be one of ('HA', 'HAPlayoff', 'HAkval'); got {phase!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "metric": metric,
         "phase": phase,
         "team": team,
         "isGoalkeeper": is_goalkeeper,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/player-leaderboard",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:
@@ -1167,9 +1183,7 @@ def ha_players(
     """One team's players from the CMS directory: CMS ids, position, jersey, birth date, size, headshots. One team per call (league-wide paging is unreliable).
 
     Endpoint: ``POST https://hockeyallsvenskan.se/api/all-players``
-    Body: JSON (application/json)
-    Example request: POST https://hockeyallsvenskan.se/api/all-players
-    Example body: {"teamShortName": "AIK", "orderBy": "familyName"}
+    Example request: ``curl -X POST 'https://hockeyallsvenskan.se/api/all-players' -H 'Content-Type: application/json' -d '{"teamShortName": "AIK", "orderBy": "familyName"}'``
 
     Args:
         team: Team display code (CMS short name: AIK, MORA, ÖIK, ...). Required: the directory pages unreliably league-wide.
@@ -1203,15 +1217,19 @@ def ha_players(
     if order_by not in ("familyName", "firstName"):
         raise ValueError(f"order_by must be one of ('familyName', 'firstName'); got {order_by!r}")
     _caller_params = kwargs.pop("params", None) or {}
+    _params = {}
+    _params.update(_caller_params)
     _body = {
         "teamShortName": team,
         "orderBy": order_by,
         "searchQuery": search_query,
     }
-    _body.update(_caller_params)
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
     raw = _get(
         "https://hockeyallsvenskan.se/api/all-players",
-        body=_body,
+        params=_params,
+        json=_body,
         **kwargs,
     )
     if return_parsed:

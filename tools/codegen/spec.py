@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -34,10 +34,13 @@ class Param:
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
-    # A request BODY field (``body:`` in the endpoint YAML) rather than a query parameter. Body
-    # fields ride in ``query_params`` (signature, choices, docs rows are shared) and the template
-    # splits them out by this flag.
+    # Travels in the request body (``Endpoint.body`` form / json) instead of the query string.
+    # Body fields ride in ``query_params`` (signature, choices, docs rows are shared); the template splits
+    # them out by this flag.
     in_body: bool = False
+    # Runtime function that maps the public value to the one sent on the wire; used only to render the
+    # curl example of a body endpoint (the wrapper passes the public value, the runtime converts it).
+    wire_transform: Optional[str] = None
     # Extra arguments (OTHER params of the same endpoint, by python name) passed after the value to the
     # named ``transform`` -- ``transform: {fn: shl_ssgt_uuid, with: [game_type]}`` renders
     # ``shl_ssgt_uuid(season, game_type)``. They are read as the wrapper's variables are at that point.
@@ -55,11 +58,6 @@ class Param:
             sign = "-" if self.transform_offset < 0 else "+"
             return f"None if {arg} is None else int({arg}) {sign} {abs(self.transform_offset)}"
         return f"{self.transform}({', '.join((arg, *self.transform_with))})"
-
-
-#: Wire encodings of a POST body (``format:``): ``json`` (default), ``form``
-#: (``application/x-www-form-urlencoded``) or ``text`` (one raw text payload).
-BODY_FORMATS = ("json", "form", "text")
 
 
 @dataclass(frozen=True)
@@ -103,19 +101,26 @@ class Endpoint:
     # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
     # the docstring say ``POST`` and call the arguments body fields.
     method: str = "get"
-    # ``body:`` was declared (even as ``[]``): this POST route's body fields are in ``query_params``
-    # flagged ``in_body``, the wrapper builds a ``_body`` and hands it to the getter as ``body=``, and
-    # the docs show a POST request with a body instead of a GET-shaped URL. A ``method: post`` route
-    # WITHOUT ``body:`` keeps the legacy docs-only meaning (cba mixes query and body fields).
-    body_declared: bool = False
-    # How the body is encoded on the wire (see :data:`BODY_FORMATS`); only with ``body:``.
-    format: str = "json"
+    # Where the params go on a ``post``: ``query`` (default, the getter gets ``params=`` only),
+    # ``form`` (``data=``) or ``json`` (``json=``). Non-query kinds send every param and every
+    # ``fixed_params`` entry in the body unless the param says ``in: query`` (paging keys).
+    body: str = "query"
+    # ``fixed_params`` keys that stay in the query string of a body endpoint (CBA ``startNum``).
+    fixed_in_query: List[str] = field(default_factory=list)
     # Per-route getter: the callable this route's wrapper calls instead of the family ``_get``. A bare name
     # is looked up in the family ``getter_module``; ``pkg.module:name`` imports it from that module (a
     # multi-host family whose routes need different transports). Its module supplies the route's
     # ``_build_query`` for the example replay and decides the error-vocabulary docstring; transforms still
     # come from the family ``getter_module``.
     getter: Optional[str] = None
+
+    @property
+    def url_fixed(self) -> Dict[str, object]:
+        return {k: v for k, v in self.fixed_params.items() if self.body == "query" or k in self.fixed_in_query}
+
+    @property
+    def body_fixed(self) -> Dict[str, object]:
+        return {k: v for k, v in self.fixed_params.items() if k not in self.url_fixed}
 
     @property
     def body_params(self) -> List[Param]:
@@ -368,8 +373,20 @@ def _resolve_param(name: str, registry: Dict[str, Param], src: Path) -> Param:
 
 def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint:
     """Parse one endpoint dict (shared by ESPN + flat-API loaders)."""
+    body = str(e.get("body") or "query").lower()
     qps = [_resolve_param(k, registry, path) for k in e.get("params", [])]
+    if body != "query":
+        qps = [replace(p, in_body=True) for p in qps]
     for extra in e.get("extra_params", []):
+        where = extra.get("in")
+        if where not in (None, "query", "body"):
+            raise SpecError(
+                f"{path}: endpoint {e.get('short')!r} param {extra['name']!r} in {where!r} is not query or body"
+            )
+        if where == "body" and body == "query":
+            raise SpecError(
+                f"{path}: endpoint {e.get('short')!r} param {extra['name']!r} is in: body but the endpoint has no body kind"
+            )
         # Inherit description from the shared registry when not set inline.
         reg_desc = registry.get(extra["name"], None)
         inherited_desc = reg_desc.description if reg_desc is not None else ""
@@ -385,23 +402,9 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                     extra.get("choices"), extra.get("type", "str"), f"{path}: {e.get('short')}.{extra['name']}"
                 ),
                 kw_only=bool(extra.get("kw_only", False)),
+                in_body=body != "query" and where != "query",
+                wire_transform=extra.get("wire_transform"),
                 **_parse_transform(extra.get("transform"), f"{path}: {e.get('short')}.{extra['name']}"),
-            ),
-        )
-    body_declared = e.get("body") is not None
-    for b in e.get("body") or []:
-        qps.append(
-            Param(
-                python_name=b["name"],
-                api=b.get("key", b["name"]),
-                type=b.get("type", "str"),
-                required=b.get("required", False),
-                default=b.get("default"),
-                description=b.get("description", ""),
-                choices=typed_choices(b.get("choices"), b.get("type", "str"), f"{path}: {e.get('short')}.{b['name']}"),
-                kw_only=bool(b.get("kw_only", False)),
-                in_body=True,
-                **_parse_transform(b.get("transform"), f"{path}: {e.get('short')}.{b['name']}"),
             ),
         )
     pps = []
@@ -442,18 +445,19 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         method=str(e.get("method") or "get").lower(),
-        body_declared=body_declared,
-        format=str(e.get("format") or "json").lower(),
+        body=body,
+        fixed_in_query=list(e.get("fixed_in_query") or []),
         getter=e.get("getter"),
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
-    if body_declared and ep.method != "post":
-        raise SpecError(f"{path}: endpoint {ep.short!r} declares body: but its method is {ep.method!r}, not post")
-    if ep.format not in BODY_FORMATS or (e.get("format") is not None and not body_declared):
-        raise SpecError(
-            f"{path}: endpoint {ep.short!r} format {e.get('format')!r} must be one of {BODY_FORMATS} and needs body:"
-        )
+    unknown = sorted(set(ep.fixed_in_query) - set(ep.fixed_params))
+    if unknown:
+        raise SpecError(f"{path}: endpoint {ep.short!r} fixed_in_query names {unknown} not in fixed_params")
+    if ep.body not in ("query", "form", "json"):
+        raise SpecError(f"{path}: endpoint {ep.short!r} body {ep.body!r} is not query, form or json")
+    if ep.body != "query" and ep.method != "post":
+        raise SpecError(f"{path}: endpoint {ep.short!r} sets body {ep.body!r} but is not a post")
     names = [p.python_name for p in (*ep.query_params, *ep.path_params)]
     if len(names) != len(set(names)):
         raise SpecError(f"{path}: endpoint {ep.short!r} repeats a parameter name: {sorted(names)}")

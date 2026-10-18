@@ -326,8 +326,8 @@ def test_yaml_categories_are_the_probed_sets():
         ("goalie_stats", "/api/all-time-goalkeepers-stats", 5),
         ("team_stats", "/api/all-time-teams-stats", 12),
     ):
-        cat = {p["name"]: p for p in by[short]["body"]}["category"]
-        assert cat["key"] == "categories" and tuple(cat["choices"]) == R.CATEGORIES[route]
+        cat = {p["name"]: p for p in by[short]["extra_params"]}["category"]
+        assert cat["query_key"] == "categories" and tuple(cat["choices"]) == R.CATEGORIES[route]
         assert len(cat["choices"]) == n and cat["default"] == R.BODIES[route]["categories"]
     assert {route: tuple(enum) for route, enum in SNAPSHOT["categories"].items()} == R.CATEGORIES
 
@@ -339,15 +339,14 @@ def test_runtime_default_bodies_are_the_spec_examples():
 
 def test_players_wrapper_requires_a_team():
     by = {e["short"]: e for e in _yaml()["endpoints"]}
-    team = {p["name"]: p for p in by["players"]["body"]}["team"]
-    assert team["key"] == "teamShortName" and team["required"] is True
+    team = {p["name"]: p for p in by["players"]["extra_params"]}["team"]
+    assert team["query_key"] == "teamShortName" and team["required"] is True
 
 
 def test_no_path_token_named_league_or_sport():
     for e in _yaml()["endpoints"]:
         assert not {"league", "sport"} & set(re.findall(r"\{([^}]+)\}", e["path"])), e["path"]
-        fields = [*e.get("extra_params", []), *e.get("body", [])]
-        assert not {"league", "sport"} & {p["name"] for p in fields}, e["short"]
+        assert not {"league", "sport"} & {p["name"] for p in e.get("extra_params", [])}, e["short"]
 
 
 # --- runtime ------------------------------------------------------------------------------------
@@ -402,6 +401,19 @@ def test_runtime_posts_the_default_body_with_the_mapped_season_and_throttles(tra
     assert sent["json"] == {**R.BODIES["/api/all-time-skaters-stats"], "season": "2025"}
     assert transport["waited"] == [f"{HOST}/api/all-time-skaters-stats"]
     assert body["_request"] == {"season": 2026}
+
+
+def test_runtime_sends_wrapper_params_on_the_query_string_and_json_as_the_body(transport):
+    transport["queue"] = [_Resp(200, {**_load("api__all-time-skaters-stats.json"), "count": 3})]
+    R._get(f"{HOST}/api/all-time-skaters-stats", {"customFilter": "x", "team": None}, json={"season": 2026})
+    sent = transport["posts"][0]
+    assert sent["url"] == f"{HOST}/api/all-time-skaters-stats?customFilter=x"
+    assert sent["json"] == {**R.BODIES["/api/all-time-skaters-stats"], "season": "2025"}
+    assert "customFilter" not in sent["json"]
+
+
+def test_runtime_wire_season_is_the_start_year():
+    assert R.wire_season(2026) == "2025"
 
 
 def test_runtime_stamps_the_pbp_request(transport):

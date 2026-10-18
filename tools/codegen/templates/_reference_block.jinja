@@ -10,9 +10,10 @@
 {% if ep.valid_url %}
 
 **Valid URL:** [{{ ep.valid_url }}]({{ ep.valid_url }})
-{% elif ep.example_request_url %}
+{% endif %}
+{% if ep.curl_example %}
 
-**Example request:** `POST {{ ep.example_request_url }}`{% if ep.example_body %}, body ({{ ep.body_format_label }}): `{{ ep.example_body }}`{% endif %}{{ "" }}
+**Example request:** `{{ ep.curl_example }}`
 {% endif %}
 {% if ep.r_equivalent %}
 

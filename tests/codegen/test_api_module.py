@@ -240,84 +240,90 @@ def test_unknown_method_is_a_spec_error(tmp_path):
 
 
 _BODY_YAML = (
-    "api: b\nhost: 'https://b.test'\nname_pattern: 'b_{short}'\nmodule: b\nruntime_imports: [_get]\n"
+    "api: b\nhost: 'https://b.test'\nname_pattern: 'b_{{short}}'\nmodule: b\nruntime_imports: [_get]\n"
     "endpoints:\n"
-    "  - short: games\n    summary: 'Games.'\n    path: '/rest/games/'\n    method: post\n    format: form\n"
-    "    fixed_params: { page: team }\n    example_args: { season: 2026 }\n"
-    "    body:\n"
-    "      - { name: season, key: 'values[season]', type: int }\n"
-    "      - { name: team, key: team, type: str, default: all }\n"
-    "    extra_params: [ { name: lang, query_key: lang, type: str, default: en } ]\n"
-    "  - short: info\n    summary: 'Info.'\n    path: '/info'\n    example_args: { id: 3 }\n"
-    "    extra_params: [ { name: id, query_key: id, type: int } ]\n"
+    "  - short: rows\n    summary: 'Rows.'\n    path: '/rows'\n    method: post\n    body: {body}\n"
+    "    fixed_params: {{ kind: all }}\n"
+    "    example_args: {{ season: 2026, page: 2 }}\n"
+    "    extra_params:\n"
+    "      - {{ name: season, query_key: season, type: int }}\n"
+    "      - {{ name: page, query_key: pageNumber, type: int, in: query }}\n"
+    "  - short: plain\n    summary: 'Plain.'\n    path: '/plain'\n    example_args: {{ season: 2026 }}\n"
+    "    extra_params: [ {{ name: season, query_key: season, type: int }} ]\n"
 )
 
 
-def test_body_route_plumbs_body_and_query_separately(tmp_path):
-    src, mod = _render_and_load(tmp_path, _BODY_YAML, "_gen_body")
-    calls = []
-    mod._get = lambda url, **kw: calls.append((url, kw)) or {}
-    mod.b_games(season=2026, params={"extra": 1})
-    mod.b_info(id=3)
-    (url, kw), (iurl, ikw) = calls
-    assert url == "https://b.test/rest/games/"
-    assert kw == {"params": {"lang": "en"}, "body": {"page": "team", "values[season]": 2026, "team": "all", "extra": 1}}
-    assert "body" not in ikw and ikw["params"] == {"id": 3}  # a GET route is untouched
-    games = src.split("def b_info")[0]
-    assert "Body: form-encoded (application/x-www-form-urlencoded)" in games
-    # the example is a POST: query string in the URL, the body shown apart (not GET-shaped)
-    assert "Example request: POST https://b.test/rest/games/?lang=en" in games
-    assert "Example body: page=team&values[season]=2026&team=all" in games
-    assert "season: values[season] body field." in games and "lang: lang query parameter." in games
+@pytest.mark.parametrize("body, kw", [("form", "data"), ("json", "json")])
+def test_body_kind_splits_query_and_body_params(tmp_path, monkeypatch, body, kw):
+    src, mod = _render_and_load(tmp_path, _BODY_YAML.format(body=body), f"_gen_body_{body}")
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(season=2026, page=2)
+    assert seen["params"] == {"pageNumber": 2}  # paging stays in the query string
+    assert seen[kw] == {"kind": "all", "season": 2026}  # fixed params and body fields travel in the body
+    rows = src.split("def b_rows")[1].split("def b_plain")[0]
+    assert "season: season body field." in rows and "page: pageNumber query parameter." in rows
+    assert "Endpoint: ``POST https://b.test/rows``" in rows
+    assert "Example URL:" not in rows  # body fields are never rendered into a query string
+    assert "curl" in rows and "?pageNumber=2" in rows
 
 
-def test_body_route_without_query_params_passes_only_body(tmp_path):
-    _, mod = _render_and_load(
-        tmp_path,
-        "api: c\nhost: 'https://c.test'\nname_pattern: 'c_{short}'\nmodule: c\nruntime_imports: [_get]\n"
-        "endpoints:\n  - short: g\n    summary: 'G.'\n    path: '/g'\n    method: post\n    body: []\n",
-        "_gen_body_empty",
-    )
-    calls = []
-    mod._get = lambda url, **kw: calls.append(kw) or {}
-    mod.c_g()
-    assert calls == [{"body": {}}]
+@pytest.mark.parametrize("body, kw", [("form", "data"), ("json", "json")])
+def test_caller_params_override_a_body_field_and_other_keys_stay_in_the_query(tmp_path, monkeypatch, body, kw):
+    _, mod = _render_and_load(tmp_path, _BODY_YAML.format(body=body), f"_gen_override_{body}")
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(params={"season": 2024, "debug": "1", "kind": "x"})  # season=None would otherwise win
+    assert seen[kw] == {"kind": "x", "season": 2024}  # the caller's body values, even over a fixed param
+    assert seen["params"] == {"pageNumber": None, "debug": "1"}  # a non-body key rides the query string
 
 
-def test_body_example_formats():
-    ep = spec.Endpoint(
-        short="s",
-        path="/s",
-        method="post",
-        body_declared=True,
-        query_params=[spec.Param("a", "a", in_body=True), spec.Param("b", "b", in_body=True)],
-        example_args={"a": 1, "b": "x y"},
-    )
-    url, body = generate._example_request("https://h.test", ep, "", "")
-    assert (url, body) == ("https://h.test/s", {"a": 1, "b": "x y"})
-    assert generate._render_example_body(body, "json") == '{"a": 1, "b": "x y"}'
-    assert generate._render_example_body(body, "form") == "a=1&b=x+y"
-    assert generate._render_example_body(body, "text") == "1\nx y"
-
-
-@pytest.mark.parametrize(
-    ("extra", "match"),
-    [
-        ("method: get\n    body: []", "declares body"),
-        ("method: post\n    body: []\n    format: yaml", "format 'yaml'"),
-        ("method: post\n    format: json", "needs body"),
-        ("method: post\n    body: [ { name: a } ]\n    extra_params: [ { name: a } ]", "repeats a parameter"),
-    ],
-)
-def test_body_and_format_spec_errors(tmp_path, extra, match):
-    y = tmp_path / "e.yaml"
+def test_fixed_in_query_must_name_a_fixed_param(tmp_path):
+    y = tmp_path / "f.yaml"
     y.write_text(
-        "api: e\nhost: 'https://e.test'\nname_pattern: 'e_{short}'\nmodule: e\n"
-        f"endpoints:\n  - short: a\n    path: '/a'\n    {extra}\n",
+        "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+        "endpoints:\n  - { short: a, path: '/a', method: post, body: json, fixed_params: {k: 1}, fixed_in_query: [kk] }\n",
         encoding="utf-8",
     )
-    with pytest.raises(spec.SpecError, match=match):
+    with pytest.raises(spec.SpecError, match="fixed_in_query"):
         spec.load_flat_api(y, {})
+
+
+def test_body_endpoint_view_has_no_valid_url_but_curl(tmp_path):
+    y = tmp_path / "v.yaml"
+    y.write_text(
+        _BODY_YAML.format(body="json").replace("name_pattern: 'b_{short}'", "name_pattern: 'b_{short}'"),
+        encoding="utf-8",
+    )
+    views = generate._flat_views(spec.load_flat_api(y, {}))
+    v = {x.short: x for x in views}
+    assert v["rows"].valid_url == "" and "curl -X POST" in v["rows"].curl_example
+    assert v["plain"].curl_example == "" and "?season=2026" in v["plain"].valid_url
+
+
+def test_query_body_default_is_unchanged(tmp_path, monkeypatch):
+    # no ``body``: the call still passes only params=, the old byte-for-byte shape
+    src, mod = _render_and_load(
+        tmp_path,
+        _BODY_YAML.format(body="query")
+        .split("  - short: plain")[0]
+        .replace("    body: query\n", "")
+        .replace("    fixed_params: { kind: all }\n", ""),
+        "_gen_body_q",
+    )
+    assert "json=" not in src and "data=" not in src and "_body" not in src
+
+
+def test_body_needs_post_and_known_kind(tmp_path):
+    for bad, match in (("    body: json\n", "post"), ("    method: post\n    body: xml\n", "body 'xml'")):
+        y = tmp_path / "bad.yaml"
+        y.write_text(
+            "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+            f"endpoints:\n  - short: a\n    path: '/a'\n{bad}",
+            encoding="utf-8",
+        )
+        with pytest.raises(spec.SpecError, match=match):
+            spec.load_flat_api(y, {})
 
 
 # --- declarative transforms and per-route getters ----------------------------------------------
@@ -556,3 +562,14 @@ def test_typed_choices_validate_and_render(tmp_path):
     assert "day: day query parameter. One of: 2026-01-01, 2026-01-02." in src
     assert "side: side query parameter.\n" in src and "One of: home" not in src
     assert "day: Optional[str]" in src  # a date is an ISO string on the wire
+
+
+def test_a_repeated_param_name_is_a_spec_error(tmp_path):
+    y = tmp_path / "e.yaml"
+    y.write_text(
+        "api: e\nhost: 'https://e.test'\nname_pattern: 'e_{short}'\nmodule: e\n"
+        "endpoints:\n  - short: a\n    path: '/a'\n    extra_params: [ { name: a }, { name: a } ]\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="repeats a parameter"):
+        spec.load_flat_api(y, {})

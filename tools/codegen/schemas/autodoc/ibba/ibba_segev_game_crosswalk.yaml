@@ -1,0 +1,10 @@
+schema: ibba_segev_game_crosswalk
+kind: dataframe
+hand_authored: true
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: segev_game_id
+  type: integer
+  description: ''

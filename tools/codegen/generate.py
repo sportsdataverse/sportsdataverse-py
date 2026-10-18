@@ -100,8 +100,8 @@ def _example_request(
     league: str,
     getter_module: str = "sportsdataverse._codegen_runtime",
     route_getter_module: str | None = None,
-) -> tuple[str, dict | None]:
-    """``(url, body)`` the generated wrapper sends when called with ``ep.example_args``.
+) -> str:
+    """The URL the generated wrapper requests when called with ``ep.example_args``.
 
     Replays the wrapper body (see ``espn_league_module.py.jinja`` / ``api_module.py.jinja``
     and :meth:`_EndpointView._build_path_expr`): argument defaults, ``default_from``,
@@ -111,9 +111,8 @@ def _example_request(
     ``filterBy`` / ``filterQuery`` before requesting). Empty URL when the example omits a
     required argument, since that call raises before it requests anything.
 
-    A ``body:`` route (``ep.body_declared``) splits the fields: the query-string params stay in
-    the URL and the body fields (``fixed_params`` first, as the wrapper builds ``_body``) come
-    back as the second item; any other route returns ``None`` there.
+    A body endpoint (``body: form|json``) keeps only its ``in: query`` params and ``fixed_in_query``
+    keys in the URL; :func:`_example_body` builds the rest.
 
     ``getter_module`` supplies the transforms; ``route_getter_module`` (the route's own ``getter:``
     module, default the same) supplies the ``_build_query`` rewrite.
@@ -122,13 +121,14 @@ def _example_request(
 
     params = [*ep.path_params, *ep.query_params]
     if any(p.required and p.default_from is None and p.python_name not in ep.example_args for p in params):
-        return "", None
+        return ""
     vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in params}
-    qs: dict = {} if ep.body_declared else {**ep.fixed_params}
-    body: dict = {**ep.fixed_params} if ep.body_declared else {}
+    qs = {**ep.url_fixed}
     for p in ep.query_params:
+        if p.in_body:
+            continue
         v = vals[p.python_name]
-        (body if p.in_body else qs)[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
+        qs[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
     for p in ep.path_params:  # same statement order as _build_path_expr
         if p.default_from and vals[p.python_name] is None:
             vals[p.python_name] = vals[p.default_from]
@@ -147,8 +147,7 @@ def _example_request(
     if build is not None:  # the runtime rewrites the query before it requests (sihf_runtime)
         built = build(qs)
         qs = built[0] if isinstance(built, tuple) else built
-    url = f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
-    return url, ({k: v for k, v in body.items() if v is not None} if ep.body_declared else None)
+    return f"{host_url}{path}" + (f"?{urlencode(qs, doseq=True)}" if qs else "")
 
 
 def _route_getter(ep: spec.Endpoint, api: spec.FlatApi) -> tuple[str, str, tuple[str, str, str] | None]:
@@ -171,16 +170,27 @@ def _example_url(
     host_url: str, ep: spec.Endpoint, sport: str, league: str, getter_module: str = "sportsdataverse._codegen_runtime"
 ) -> str:
     """The URL the generated wrapper requests when called with ``ep.example_args`` (see :func:`_example_request`)."""
-    return _example_request(host_url, ep, sport, league, getter_module)[0]
+    return _example_request(host_url, ep, sport, league, getter_module)
 
 
-def _render_example_body(body: dict, fmt: str) -> str:
-    """A ``body:`` route's example body as it goes on the wire: JSON, ``k=v&...`` for a form, or the raw text."""
-    if fmt == "json":
-        return json.dumps(body, ensure_ascii=False)
-    if fmt == "form":
-        return urlencode(body, safe="[]")
-    return "\n".join(str(v) for v in body.values())
+def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
+    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint."""
+    body = {**ep.body_fixed}
+    vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in (*ep.path_params, *ep.query_params)}
+    for p in ep.query_params:
+        if p.in_body:
+            v = vals[p.python_name]
+            body[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
+            if p.wire_transform and body[p.api] is not None:  # what the runtime really sends
+                body[p.api] = _transform(p.wire_transform, getter_module)(body[p.api])
+    return {k: v for k, v in body.items() if v is not None}
+
+
+def _example_curl(url: str, body: dict, kind: str) -> str:
+    """A curl-style POST of ``body`` to ``url`` (JSON, or form fields)."""
+    if kind == "json":
+        return f"curl -X POST '{url}' -H 'Content-Type: application/json' -d '{json.dumps(body)}'"
+    return f"curl -X POST '{url}' -d '{urlencode(body, doseq=True)}'"
 
 
 def _example_call(ep: spec.Endpoint, fn_name: str, league: str = "") -> str:
@@ -281,18 +291,6 @@ _VOCAB_RAISES = (
 )
 
 
-#: The ``Body:`` docstring line per ``format:`` of a ``body:`` route.
-_BODY_FORMAT_DOC = {
-    "json": "JSON (application/json)",
-    "form": "form-encoded (application/x-www-form-urlencoded)",
-    "text": "raw text (text/plain)",
-}
-
-
-#: The short encoding name in the reference docs' "Example request" line.
-_BODY_FORMAT_LABEL = {"json": "JSON", "form": "form-encoded", "text": "raw text"}
-
-
 def _choices_note(p: spec.Param) -> str:
     """`` One of: 1, 2, 3.`` for a typed (non-string) ``choices:`` set; a string set is already in its description."""
     if not p.choices or p.type in ("str", ""):
@@ -314,7 +312,7 @@ def _build_docstring(
     import_from: str = "",
     returns_frames: bool = False,
     vocab_raises: bool = False,
-    example_body: str = "",
+    curl_example: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
 
@@ -334,8 +332,6 @@ def _build_docstring(
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
     ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name.
-    ``example_body`` is a ``body:`` route's rendered example body (:func:`_render_example_body`);
-    the docstring then names the body encoding and shows ``Example body:`` after the URL.
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -351,12 +347,10 @@ def _build_docstring(
             lines.append(f"Bound to sport={sport!r}, league={league!r}.")
         lines.append("")
     lines.append(f"Endpoint: ``{ep.method.upper()} {host_url}{ep.path}``")
-    if ep.body_declared:
-        lines.append(f"Body: {_BODY_FORMAT_DOC[ep.format]}")
     if example_url:
-        lines.append(f"Example request: POST {example_url}" if ep.body_declared else f"Example URL: {example_url}")
-    if example_body:
-        lines.append(f"Example body: {example_body}")
+        lines.append(f"Example URL: {example_url}")
+    if curl_example:
+        lines.append(f"Example request: ``{curl_example}``")
     lines.append("")
 
     def _arg_doc(p: spec.Param, generic: str) -> str:
@@ -368,9 +362,8 @@ def _build_docstring(
     for p in ep.path_params:
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} path parameter.')}")
     for p in ep.query_params:
-        # A ``body:`` route labels each param by where it goes; a legacy ``method: post`` route
-        # (no ``body:``) keeps calling every param a body field.
-        q_kind = "body field" if p.in_body or (ep.method == "post" and not ep.body_declared) else "query parameter"
+        in_body = p.in_body if ep.body != "query" else ep.method == "post"
+        q_kind = "body field" if in_body else "query parameter"
         lines.append(f"    {p.python_name}: {_arg_doc(p, f'{p.api} {q_kind}.')}")
     if auth:
         # Families differ in how their headers are minted and whether an
@@ -1231,14 +1224,19 @@ class _EndpointView:
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
-        self.body_declared = ep.body_declared
+        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)
+        # A body endpoint (``body: form|json``) has no fetchable URL: the query string carries only the
+        # ``in: query`` params and the rest travels in the body, so show a curl request instead.
+        self.body_kind = ep.body
         self.url_params = ep.url_params
         self.body_params = ep.body_params
-        self.example_url, _example_body = _example_request(
-            ep_host, ep, league.sport, league.league, getter_module, route_module
-        )
-        self.example_body = _render_example_body(_example_body, ep.format) if _example_body else ""
-        self.body_format = ep.format
+        self.url_fixed = ep.url_fixed
+        self.body_fixed = ep.body_fixed
+        self.curl_example = ""
+        if ep.body != "query":
+            if self.example_url:
+                self.curl_example = _example_curl(self.example_url, _example_body(ep, getter_module), ep.body)
+            self.example_url = ""
         self.example_call = _example_call(ep, fn_name, league.league if league.league_param else "")
         self.docstring = _build_docstring(
             ep,
@@ -1254,17 +1252,14 @@ class _EndpointView:
             import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, league.prefix)),
             vocab_raises=route_module in _VOCAB_GETTERS,
-            example_body=self.example_body,
+            curl_example=self.curl_example,
         )
 
         # ---- docs-rendering fields (consumed by _reference_block.jinja) ----
         # Every attribute below is read under StrictUndefined, so all must exist.
         self.endpoint_url = f"{ep_host}{_sub_slugs(ep.path, league.sport, league.league)}"
         self.http_method = ep.method.upper()
-        # A GET-shaped link is wrong for a body route (a GET would 405): the docs show the POST + body.
-        self.valid_url = "" if ep.body_declared else self.example_url
-        self.example_request_url = self.example_url if ep.body_declared else ""
-        self.body_format_label = _BODY_FORMAT_LABEL[ep.format] if ep.body_declared else ""
+        self.valid_url = self.example_url  # empty for a body endpoint (a GET would 405): its docs show the curl request
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         schema_doc = _schema_doc(ep.returns_schema, league.prefix)
@@ -3827,6 +3822,11 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
     fallback). A tuple (not list) so the result is hashable under lru_cache."""
     p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
     if not p.exists():
+        # A minted per-competition wrapper (basketball/_competitions.py) returns its base wrapper's
+        # frame: its table is the base's native schema, not a second copy.
+        pointer = getattr(_scope_callable(scope, fn), "__sdv_schema__", "")
+        p = ROOT / "tools" / "codegen" / "schemas" / f"{pointer}.yaml" if pointer else p
+    if not p.exists():
         return ()
     import yaml
 
@@ -3985,7 +3985,8 @@ _ARG_LINE_RE = re.compile(
 _RST_LINK_RE = re.compile(r"`([^`<]+?)\s*<([^>]+)>`_+")
 # Bare reST trailing-underscore / role artifacts left after link stripping, e.g.
 # a dangling `` `_ `` or `` ` ``-wrapped fragment with no target.
-_RST_BACKTICK_ARTIFACT_RE = re.compile(r"`_+")
+# Not the opening of a literal that starts with an underscore (``` ``_request`` ```).
+_RST_BACKTICK_ARTIFACT_RE = re.compile(r"(?<!`)`_+(?!\w)")
 # Sphinx cross-reference roles: :func:`X`, :class:`X`, etc. -> `X`
 _RST_ROLE_RE = re.compile(r":(?:func|class|mod|meth|attr|data|ref|obj|exc):`([^`]+)`")
 # reST double-backtick literals: ``X`` -> `X`
@@ -4543,7 +4544,9 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
         for c in return_columns:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(str(c.get("description", "")), league, raw_name, n)
+            c["description"] = _table_cell_desc(
+                str(c.get("description", "")), league, raw_name, getattr(obj, "__sdv_base__", n)
+            )
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
@@ -4797,6 +4800,8 @@ def refresh_autodoc_schemas() -> int:
             if obj is None or not callable(obj):
                 continue
             in_scope.add((scope_key, fn))
+            if hasattr(obj, "__sdv_schema__"):
+                continue  # minted wrapper: its table is its base's native schema, never captured or called
             kwargs = scope_args.get(fn, {})
             annotated = _returns_a_frame((getattr(obj, "__annotations__", {}) or {}).get("return"))
             if not (annotated or fn in scope_args or (_AUTODOC_SCHEMA_DIR / scope_key / f"{fn}.yaml").exists()):
