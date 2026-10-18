@@ -1266,3 +1266,12 @@
   test: tests/wbb/test_wbb_ncaa_shots_shim.py -k float_season
   expected: kill
   note: season=2015.0 becomes "2015.0" and binds the quarters model for a halves-era season (R853-5).
+- id: ncaa-wbb-shots-adapter-float-season
+  group: ncaa-era
+  finding: B-L26
+  file: sportsdataverse/mbb/mbb_shots_adapter.py
+  snippet: "wbb_period_model(_utf8_id(season))"
+  mutant: "wbb_period_model(str(season))"
+  test: tests/mbb/test_mbb_shots_period.py -k float_season
+  expected: kill
+  note: season=2015.0 becomes "2015.0", binds the quarters model and labels a halves-era shot quarter 3 (R853-6).
