@@ -333,6 +333,10 @@ def test_goalie_stats_columns_are_declared_and_typed():
     assert [df.schema[c] for c in goalie] == [pl.Int64] * 5 + [pl.Float64] * 2 + [pl.Int64, pl.Utf8]
     assert df.columns[: len(DECL)] == DECL  # no stray extras
     assert df["gp"].to_list() == [0, 0, 0]  # the site lists no-game goalies first (gaa ascending)
+    assert df["toi"].to_list() == [None, None, None]  # the site's "-" placeholder is null, not text
+    skaters = P.parse_khl_player_stats(_load("stat__players.json"), columns=DECL)
+    assert skaters.select(goalie).null_count().row(0) == (skaters.height,) * len(goalie)
+    assert [skaters.schema[c] for c in goalie] == [df.schema[c] for c in goalie]
 
 
 def test_goalie_stats_descriptions_exist():

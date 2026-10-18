@@ -257,11 +257,15 @@ def _stat_cast(df: pl.DataFrame, cols: Iterable[str]) -> pl.DataFrame:
     A column with any ``mm:ss`` value stays text; a rate (``*_pct`` / ``*_avg`` / ``ts`` / ``dt`` /
     ``as`` / ``pcd``) is always ``Float64``, so a page whose first rows are whole numbers never types a
     rate as an integer; any other all-integer column is ``Int64``, an all-numeric one ``Float64``.
-    ``"-"`` / ``""`` are null.
+    ``"-"`` / ``""`` are null, also in the text columns (goalie ``toi``).
     """
     exprs = []
     for c in cols:
-        if c not in df.columns or c in _TEXT_STATS:
+        if c in _TEXT_STATS and c in df.columns:  # text kept, but the "-" / "" placeholders are null
+            t = df[c].cast(pl.Utf8).str.strip_chars()
+            exprs.append(pl.when(t.is_in(["-", ""])).then(None).otherwise(t).alias(c))
+            continue
+        if c not in df.columns:
             continue
         text = df[c].cast(pl.Utf8).str.strip_chars()
         values = [v for v in text.to_list() if v not in (None, "", "-")]
