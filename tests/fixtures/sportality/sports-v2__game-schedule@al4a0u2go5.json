@@ -1,0 +1,378 @@
+{
+  "gameInfo": [
+    {
+      "uuid": "lyidpqqdfv",
+      "rawStartDateTime": "2026-04-27T17:00:00.000Z",
+      "startDateTime": "2026-04-27 19:00:00",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": null,
+      "ssgtUuid": "al4a0u2go5",
+      "homeTeamInfo": {
+        "status": "LOSE",
+        "uuid": "iutrlqp3ef",
+        "ownerInstanceId": "tfn1_tfn",
+        "code": "TFN",
+        "names": {
+          "code": "TFN",
+          "short": "Team FOG Næstved",
+          "long": "Team FOG Næstved",
+          "full": "Team FOG Næstved",
+          "codeSite": "TFN",
+          "shortSite": "Team FOG Næstved",
+          "fullSite": "Team FOG Næstved",
+          "longSite": "Team FOG Næstved"
+        },
+        "score": 88,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/tfn1_tfn.svg"
+      },
+      "awayTeamInfo": {
+        "status": "WIN",
+        "uuid": "kgmhwo9l5d",
+        "ownerInstanceId": "sve1_sve",
+        "code": "SVE",
+        "names": {
+          "code": "SVE",
+          "short": "Svendborg Rabbits",
+          "long": "Svendborg Rabbits",
+          "full": "Svendborg Rabbits",
+          "codeSite": "SVE",
+          "shortSite": "Svendborg Rabbits",
+          "fullSite": "Svendborg Rabbits",
+          "longSite": "Svendborg Rabbits"
+        },
+        "score": 101,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg"
+      },
+      "venueInfo": {
+        "uuid": "id1w09p40r",
+        "name": "Arena Næstved"
+      },
+      "seriesInfo": {
+        "uuid": "m1ay3mpa4t",
+        "code": "Basketligaen",
+        "displayName": "Basketligaen"
+      },
+      "roundNumber": 0,
+      "roundLabel": ""
+    },
+    {
+      "uuid": "rkkiwwdo4p",
+      "rawStartDateTime": "2026-04-27T17:00:00.000Z",
+      "startDateTime": "2026-04-27 19:00:00",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": null,
+      "ssgtUuid": "al4a0u2go5",
+      "homeTeamInfo": {
+        "status": "WIN",
+        "uuid": "ktcu9aaala",
+        "ownerInstanceId": "bak1_bak",
+        "code": "BAK",
+        "names": {
+          "code": "BAK",
+          "short": "Bakken Bears",
+          "long": "Bakken Bears",
+          "full": "Bakken Bears",
+          "codeSite": "BAK",
+          "shortSite": "Bakken Bears",
+          "fullSite": "Bakken Bears",
+          "longSite": "Bakken Bears"
+        },
+        "score": 89,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg"
+      },
+      "awayTeamInfo": {
+        "status": "LOSE",
+        "uuid": "hip2m60a45",
+        "ownerInstanceId": "hic1_hic",
+        "code": "HIC",
+        "names": {
+          "code": "HIC",
+          "short": "Horsens IC",
+          "long": "Horsens IC",
+          "full": "Horsens IC",
+          "codeSite": "HIC",
+          "shortSite": "Horsens IC",
+          "fullSite": "Horsens IC",
+          "longSite": "Horsens IC"
+        },
+        "score": 79,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/hic1_hic.svg"
+      },
+      "venueInfo": {
+        "uuid": "zt52e5o663",
+        "name": "Sparekassen Danmark Basketball Center"
+      },
+      "seriesInfo": {
+        "uuid": "m1ay3mpa4t",
+        "code": "Basketligaen",
+        "displayName": "Basketligaen"
+      },
+      "roundNumber": 0,
+      "roundLabel": ""
+    },
+    {
+      "uuid": "d86w4vh77j",
+      "rawStartDateTime": "2026-04-28T17:00:00.000Z",
+      "startDateTime": "2026-04-28 19:00:00",
+      "state": "post-game",
+      "overtime": false,
+      "shootout": null,
+      "ssgtUuid": "al4a0u2go5",
+      "homeTeamInfo": {
+        "status": "LOSE",
+        "uuid": "ozojzoejir",
+        "ownerInstanceId": "vbh1_vbh",
+        "code": "VBH",
+        "names": {
+          "code": "VBH",
+          "short": "Værløse Blue Hawks",
+          "long": "Værløse Blue Hawks",
+          "full": "Værløse Blue Hawks",
+          "codeSite": "VBH",
+          "shortSite": "Værløse Blue Hawks",
+          "fullSite": "Værløse Blue Hawks",
+          "longSite": "Værløse Blue Hawks"
+        },
+        "score": 70,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/vbh1_vbh.svg"
+      },
+      "awayTeamInfo": {
+        "status": "WIN",
+        "uuid": "swr1d65lew",
+        "ownerInstanceId": "bac1_bac",
+        "code": "BAC",
+        "names": {
+          "code": "BAC",
+          "short": "Bears Academy",
+          "long": "Bears Academy",
+          "full": "Bears Academy",
+          "codeSite": "BAC",
+          "shortSite": "Bears Academy",
+          "fullSite": "Bears Academy",
+          "longSite": "Bears Academy"
+        },
+        "score": 91,
+        "icon": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg"
+      },
+      "venueInfo": {
+        "uuid": "t54gs7luft",
+        "name": "Søndersøhallen"
+      },
+      "seriesInfo": {
+        "uuid": "m1ay3mpa4t",
+        "code": "Basketligaen",
+        "displayName": "Basketligaen"
+      },
+      "roundNumber": 0,
+      "roundLabel": ""
+    }
+  ],
+  "teamList": [
+    {
+      "uuid": "swr1d65lew",
+      "createdAt": "2026-06-17T11:18:29.000Z",
+      "createdBy": null,
+      "deleted": false,
+      "gender": "male",
+      "graphicsLibrary": null,
+      "lastModified": "2026-08-18T06:41:05.000Z",
+      "nationality": "DK",
+      "ownerInstanceId": "bac1_bac",
+      "ownersite": null,
+      "teamCode": "BAC",
+      "series": [],
+      "sport": [],
+      "teamMedia": [],
+      "teamNames": {
+        "code": "BAC",
+        "short": "Bears Academy",
+        "long": "Bears Academy",
+        "full": "Bears Academy",
+        "codeSite": "BAC",
+        "shortSite": "Bears Academy",
+        "fullSite": "Bears Academy",
+        "longSite": "Bears Academy"
+      },
+      "clubName": {},
+      "teamInfo": {},
+      "teamExtIds": [
+        {
+          "id": 867,
+          "extId": "130088",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "extIds": [
+        {
+          "id": 867,
+          "extId": "130088",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "logo": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg",
+      "socialMedia": [],
+      "displayName": "Bears Academy"
+    },
+    {
+      "uuid": "ktcu9aaala",
+      "createdAt": "2026-06-17T11:18:29.000Z",
+      "createdBy": null,
+      "deleted": false,
+      "gender": "male",
+      "graphicsLibrary": null,
+      "lastModified": "2026-09-14T19:12:01.000Z",
+      "nationality": "DK",
+      "ownerInstanceId": "bak1_bak",
+      "ownersite": null,
+      "teamCode": "BAK",
+      "series": [],
+      "sport": [],
+      "teamMedia": [],
+      "teamNames": {
+        "code": "BAK",
+        "short": "Bakken Bears",
+        "long": "Bakken Bears",
+        "full": "Bakken Bears",
+        "codeSite": "BAK",
+        "shortSite": "Bakken Bears",
+        "fullSite": "Bakken Bears",
+        "longSite": "Bakken Bears"
+      },
+      "clubName": {},
+      "teamInfo": {
+        "founded": "1954",
+        "facebook": "https://www.facebook.com/bakkenbears",
+        "instagram": "https://www.instagram.com/bakkenbears_official"
+      },
+      "teamExtIds": [
+        {
+          "id": 872,
+          "extId": "22248",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "extIds": [
+        {
+          "id": 872,
+          "extId": "22248",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "logo": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg",
+      "socialMedia": [],
+      "displayName": "Bakken Bears"
+    },
+    {
+      "uuid": "kgmhwo9l5d",
+      "createdAt": "2026-06-17T11:18:29.000Z",
+      "createdBy": null,
+      "deleted": false,
+      "gender": "male",
+      "graphicsLibrary": null,
+      "lastModified": "2026-09-14T19:09:01.000Z",
+      "nationality": "DK",
+      "ownerInstanceId": "sve1_sve",
+      "ownersite": null,
+      "teamCode": "SVE",
+      "series": [],
+      "sport": [],
+      "teamMedia": [],
+      "teamNames": {
+        "code": "SVE",
+        "short": "Svendborg Rabbits",
+        "long": "Svendborg Rabbits",
+        "full": "Svendborg Rabbits",
+        "codeSite": "SVE",
+        "shortSite": "Svendborg Rabbits",
+        "fullSite": "Svendborg Rabbits",
+        "longSite": "Svendborg Rabbits"
+      },
+      "clubName": {},
+      "teamInfo": {
+        "founded": "2006",
+        "facebook": "https://www.facebook.com/rabbits.dk",
+        "instagram": "https://www.instagram.com/svendborgrabbitsofficial/"
+      },
+      "teamExtIds": [
+        {
+          "id": 863,
+          "extId": "22256",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "extIds": [
+        {
+          "id": 863,
+          "extId": "22256",
+          "locked": false,
+          "extIdType": {
+            "uuid": "552a-c2beuydsj",
+            "code": "genius-basketball",
+            "createdAt": null,
+            "createdBy": "dbl1_dbl",
+            "deleted": false,
+            "lastModified": null,
+            "visible": true,
+            "name": "Genius Sports Basketball"
+          }
+        }
+      ],
+      "logo": "https://sportality.cdn.s8y.se/team-logos/sve1_sve.svg",
+      "socialMedia": [],
+      "displayName": "Svendborg Rabbits"
+    }
+  ],
+  "ssgtUuid": "al4a0u2go5"
+}

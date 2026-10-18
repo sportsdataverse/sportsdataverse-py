@@ -1,0 +1,266 @@
+{
+  "safe_live_shift": 0,
+  "stages_v2": [
+    {
+      "id": 407,
+      "khl_id": 1436,
+      "title": "Regular",
+      "type": "regular",
+      "season": "2026/2027",
+      "percent_points_scored": false,
+      "display_rule": "default"
+    },
+    {
+      "id": 395,
+      "khl_id": 1370,
+      "title": "Playoff",
+      "type": "playoff",
+      "season": "2025/2026",
+      "percent_points_scored": false,
+      "display_rule": "playoff_2024"
+    },
+    {
+      "id": 370,
+      "khl_id": 1369,
+      "title": "Regular",
+      "type": "regular",
+      "season": "2025/2026",
+      "percent_points_scored": false,
+      "display_rule": "default"
+    }
+  ],
+  "about_khl": null,
+  "current_stage_id": 407,
+  "mastercard_enabled_stage_ids": [],
+  "android_app_version": "202604301",
+  "ios_app_version": "4.24.0",
+  "server_time": 1791806208000,
+  "teams": [
+    {
+      "id": 10,
+      "khl_id": 34,
+      "name": "Avangard",
+      "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=10"
+    },
+    {
+      "id": 56,
+      "khl_id": 190,
+      "name": "Avtomobilist",
+      "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sdc/team_pics/56/original/avtomobilist__200x200.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=56"
+    },
+    {
+      "id": 61,
+      "khl_id": 418,
+      "name": "Admiral",
+      "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/61/original/admiral_2024_200x200.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=61"
+    }
+  ],
+  "teams_for_filter": [
+    {
+      "id": 10,
+      "khl_id": 34,
+      "name": "Avangard",
+      "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sdb/team_pics/10/original/Avangard_2026_500x500_NEW.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=10"
+    },
+    {
+      "id": 56,
+      "khl_id": 190,
+      "name": "Avtomobilist",
+      "image": "https://thumbs.webcaster.pro/rec-1-2.webcaster.pro/fc/sda/team_pics/56/original/avtomobilist__200x200.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=56"
+    },
+    {
+      "id": 61,
+      "khl_id": 418,
+      "name": "Admiral",
+      "image": "https://thumbs.webcaster.pro/rec-2-3.webcaster.pro/fc/sdg/team_pics/61/original/admiral_2024_200x200.png",
+      "tickets_site": null,
+      "about_team": "https://khl.api.webcaster.pro/api/khl_mobile/team_info?locale=en&team_id=61"
+    }
+  ],
+  "current_customer": null,
+  "push_notification_subscriptions": [],
+  "transaction_types": [
+    {
+      "id": 2,
+      "android_app_product_id": "",
+      "ios_app_product_id": "",
+      "season": false,
+      "events_filter_rule": "one_from_all",
+      "event_ids": "",
+      "teams_filter_rule": "all",
+      "team_ids": "",
+      "stages_filter_rule": "all",
+      "stage_ids": "",
+      "description": "",
+      "custom_data": null,
+      "amount": 5000,
+      "name": "Single match"
+    },
+    {
+      "id": 12,
+      "android_app_product_id": "",
+      "ios_app_product_id": "",
+      "season": false,
+      "events_filter_rule": "one_from_all",
+      "event_ids": "",
+      "teams_filter_rule": "all",
+      "team_ids": "",
+      "stages_filter_rule": "all",
+      "stage_ids": "",
+      "description": "",
+      "custom_data": null,
+      "amount": 3000,
+      "name": "Archive match"
+    },
+    {
+      "id": 17,
+      "android_app_product_id": "",
+      "ios_app_product_id": "",
+      "season": false,
+      "events_filter_rule": "one_from_all",
+      "event_ids": "",
+      "teams_filter_rule": "all",
+      "team_ids": "",
+      "stages_filter_rule": "all",
+      "stage_ids": "",
+      "description": "",
+      "custom_data": null,
+      "amount": 9900,
+      "name": "Single match (HD)"
+    }
+  ],
+  "transactions": [],
+  "mqtt_broker": {
+    "host": "mq.webcaster.pro",
+    "port": 8883,
+    "secure": true,
+    "event_topic": "event_data"
+  },
+  "mastercard_api": "https://mastercard.khl.ru",
+  "stages": [
+    "13/14 | playoffs",
+    "13/14 | reg.",
+    "13/14 | NC"
+  ],
+  "sms_data": {
+    "live": {
+      "sd": {
+        "number": "",
+        "code": "",
+        "avg_cost": ""
+      },
+      "hd": {
+        "number": "",
+        "code": "",
+        "avg_cost": ""
+      }
+    },
+    "archiv": {
+      "sd": {
+        "number": "",
+        "code": "",
+        "avg_cost": ""
+      }
+    }
+  },
+  "server_day": 1791752400,
+  "test_event": {
+    "game_state": "Finished",
+    "hd": false,
+    "commentator": true,
+    "id": 12330,
+    "type_id": 18,
+    "is_vertical_video": false,
+    "khl_id": 34127,
+    "name": "Amur - Atlant",
+    "stage_id": 59,
+    "free": true,
+    "yandex_rights": false,
+    "yandex_id": "768116",
+    "match_id": "34127",
+    "balancer_type": "file",
+    "event_or_quote_type_name": "Архив",
+    "outer_stage_id": 222,
+    "stage_name": "Regular 2012/2013",
+    "start_at_day": 1346788800,
+    "localized_start_at": "September  5, 11:50",
+    "start_at": 1346831400000,
+    "end_at": 1346841000000,
+    "image_url": "https://bl.webcaster.pro/events/12330/main_thumbnail/small.jpg",
+    "team_a": {
+      "id": 12,
+      "khl_id": 54,
+      "name": "Amur",
+      "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdm/team_pics/12/small/amur_2015__200x200.png",
+      "tv_image": "/images/khl_tv/teams/12.png",
+      "location": "Khabarovsk"
+    },
+    "team_b": {
+      "id": 14,
+      "khl_id": 206,
+      "name": "Atlant",
+      "image": "https://thumbs.webcaster.pro/rec-2-10.webcaster.pro/fc/sda/team_pics/14/small/atlant.png",
+      "tv_image": "/images/khl_tv/teams/14.png",
+      "location": "Moscow Region"
+    },
+    "score": "3:1",
+    "has_geo_error": false,
+    "has_video": true,
+    "m3u8_url": "https://bl.webcaster.pro/file/start/free_ed184b720824ddf0a388a4da202ef905/2_34127/a2f6a26a07ae99deaedac97ea358ac0c/1791849304.m3u8?locale=en&sr=42",
+    "feed_url": "https://bl.webcaster.pro/feed/start/free_ed184b720824ddf0a388a4da202ef905/2_34127/a2f6a26a07ae99deaedac97ea358ac0c/1791849304?sr=42&locale=en&type_id=18",
+    "iframe_url": "//api-video.khl.ru/iframe/feed/start/free_ed184b720824ddf0a388a4da202ef905/2_34127/f089a58199186963d9706b3f66d7ee59/1791849304?sr=42&type_id=18&width=730&height=397&iframe_width=730&iframe_height=397&lang=en&skin_name=khl",
+    "iframe_code": "<iframe allow=\"encrypted-media; autoplay; fullscreen\" frameborder=\"0\" height=\"397\" onload=\"this.contentWindow.postMessage({ referrer: window.location.toString(), prevPageUrl: window.parent.document.referrer.toString() }, new window.URL(this.src).origin)\" referrerpolicy=\"no-referrer-when-downgrade\" scrolling=\"no\" src=\"//api-video.khl.ru/iframe/feed/start/free_ed184b720824ddf0a388a4da202ef905/2_34127/f089a58199186963d9706b3f66d7ee59/1791849304?sr=42&type_id=18&width=100%25&height=100%25&iframe_width=730&iframe_height=397&lang=en&skin_name=khl\" width=\"730\"></iframe>",
+    "payload": null,
+    "last_transaction": null
+  },
+  "stat_url": "https://bl.webcaster.pro/?user_id=$user_id",
+  "exchange_rate_usd": 84.9048,
+  "video_types": [
+    {
+      "id": "e_4",
+      "title": "Highlights"
+    },
+    {
+      "id": "e_6",
+      "title": "Moments"
+    },
+    {
+      "id": "q_28",
+      "title": "Goals"
+    }
+  ],
+  "selections": [
+    {
+      "url": "https://webcaster.pro/api/khl_mobile/events_v2.json?q[type_id_in][]=4&not_only_matches=1",
+      "name": "Highlights"
+    },
+    {
+      "url": "https://webcaster.pro/api/khl_mobile/events_v2.json?q[type_id_in][]=6&not_only_matches=1",
+      "name": "Moments"
+    },
+    {
+      "url": "https://webcaster.pro/api/khl_mobile/events_v2.json?not_only_matches=1&recommended=1",
+      "name": "Recommended"
+    }
+  ],
+  "balance_payment_services": [
+    {
+      "id": "payture",
+      "title": "Payture",
+      "desc": "Credit cards, Masterpass"
+    }
+  ],
+  "geo_error": null,
+  "alternative_payment_services": [],
+  "country": "US"
+}

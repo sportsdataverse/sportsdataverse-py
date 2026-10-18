@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: shift_id
+  type: integer
+- description: ''
+  name: start_time
+  type: integer
+- description: ''
+  name: start_real_time
+  type: character
+- description: ''
+  name: end_time
+  type: integer
+- description: ''
+  name: end_real_time
+  type: character
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: player_name
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: duration
+  type: integer
+kind: dataframe
+schema: del_shifts

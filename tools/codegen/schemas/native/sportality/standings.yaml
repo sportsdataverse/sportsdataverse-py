@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: team_uuid
+  type: character
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: rank
+  type: integer
+- description: ''
+  name: gp
+  type: integer
+- description: ''
+  name: w
+  type: integer
+- description: ''
+  name: l
+  type: integer
+- description: ''
+  name: tp
+  type: integer
+- description: ''
+  name: for
+  type: integer
+- description: ''
+  name: ga
+  type: integer
+- description: ''
+  name: plus_minus
+  type: integer
+- description: ''
+  name: strk
+  type: integer
+kind: dataframe
+schema: sportality_standings

@@ -1,0 +1,120 @@
+{
+  "gameId": 110128,
+  "roundName": "Final",
+  "technicalName": "26618-38-A",
+  "roundType": "Non Group Round",
+  "groupPairingCode": "38",
+  "gameNumber": "A",
+  "statusCode": "VALID",
+  "gameDay": 10,
+  "teamAFrom": "Winner of Game 35",
+  "teamBFrom": "Winner of Game 36",
+  "teamA": {
+    "teamId": 278796,
+    "organisationId": 39,
+    "code": "CHN",
+    "officialName": "People 's Republic of China",
+    "shortName": "China"
+  },
+  "teamB": {
+    "teamId": 278803,
+    "organisationId": 154,
+    "code": "USA",
+    "officialName": "USA",
+    "shortName": "USA"
+  },
+  "teamAScore": 61,
+  "teamBScore": 83,
+  "teamAAggregatedScore": 0,
+  "teamBAggregatedScore": 0,
+  "hostCity": "Sydney",
+  "hostCountry": "Australia",
+  "hostCountryCode": "AUS",
+  "venueId": 60537,
+  "venueName": "Sydney SuperDome",
+  "gameDateTime": "2022-10-01T16:00:00",
+  "gameDateTimeUTC": "2022-10-01T06:00:00",
+  "hasTimeGameDateTime": true,
+  "ianaTimeZone": "Australia/Sydney",
+  "utcOffset": 10,
+  "isPostponed": false,
+  "isPlayedBehindClosedDoors": false,
+  "venueCapacity": 0,
+  "spectators": 15895,
+  "nominations": [
+    {
+      "personId": 23984,
+      "firstName": "Maruta",
+      "lastName": "Eglite",
+      "dateOfBirth": "REDACTED",
+      "gender": "F",
+      "roleCode": "FIBATD",
+      "roleName": "FIBA Technical delegate",
+      "roleOrder": null,
+      "defaultNationality": "LAT",
+      "licenseNationality": "GER"
+    },
+    {
+      "personId": 24102,
+      "firstName": "Gatis",
+      "lastName": "Salins",
+      "dateOfBirth": "REDACTED",
+      "gender": "M",
+      "roleCode": "CC",
+      "roleName": "Crew chief",
+      "roleOrder": null,
+      "defaultNationality": "LAT",
+      "licenseNationality": "LAT"
+    },
+    {
+      "personId": 15618,
+      "firstName": "Julio",
+      "lastName": "Anaya",
+      "dateOfBirth": "REDACTED",
+      "gender": "M",
+      "roleCode": "UMP",
+      "roleName": "Umpire",
+      "roleOrder": "1",
+      "defaultNationality": "PAN",
+      "licenseNationality": "PAN"
+    }
+  ],
+  "periods": [
+    {
+      "name": "Q1",
+      "number": 1,
+      "teamAScore": 13,
+      "teamBScore": 18,
+      "teamAFrom": "Winner of Game 35",
+      "teamBFrom": "Winner of Game 36"
+    },
+    {
+      "name": "Q2",
+      "number": 2,
+      "teamAScore": 20,
+      "teamBScore": 25,
+      "teamAFrom": "Winner of Game 35",
+      "teamBFrom": "Winner of Game 36"
+    },
+    {
+      "name": "Q3",
+      "number": 3,
+      "teamAScore": 14,
+      "teamBScore": 25,
+      "teamAFrom": "Winner of Game 35",
+      "teamBFrom": "Winner of Game 36"
+    }
+  ],
+  "isLive": false,
+  "currentPeriod": "Q4",
+  "chrono": "00:00",
+  "liveGameStatus": 999,
+  "currentPeriodStatus": "E",
+  "gameStatisticStatusCode": "VALID",
+  "gamePlayByPlayStatusCode": "VALID",
+  "gameResultStatusCode": "VALID",
+  "gameResultAdditionalInformation": "None",
+  "windowId": null,
+  "windowCode": null,
+  "windowName": null
+}

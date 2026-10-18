@@ -1,0 +1,15 @@
+schema: sihf_phases
+kind: dataframe
+columns:
+- name: season
+  type: integer
+  description: ''
+- name: phase_id
+  type: integer
+  description: ''
+- name: phase_name
+  type: character
+  description: ''
+- name: n_games
+  type: integer
+  description: ''

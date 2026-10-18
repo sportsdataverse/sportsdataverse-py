@@ -1,0 +1,18 @@
+columns:
+- description: ''
+  name: match_id
+  type: integer
+- description: ''
+  name: minute
+  type: integer
+- description: ''
+  name: score1
+  type: integer
+- description: ''
+  name: score2
+  type: integer
+- description: ''
+  name: total_minutes
+  type: integer
+kind: dataframe
+schema: kzs_score_changes

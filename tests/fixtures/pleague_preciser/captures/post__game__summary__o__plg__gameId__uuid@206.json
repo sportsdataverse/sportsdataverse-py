@@ -1,0 +1,178 @@
+[
+  {
+    "away_team": {
+      "color": "#3C8DC2",
+      "id": "e86394aa-3d88-11ed-8ba8-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e86394aa-3d88-11ed-8ba8-7f44ba46b0b1.png",
+      "name": "臺北富邦勇士"
+    },
+    "fast_break_points": {
+      "away_progress": 54.5,
+      "away_value": 12.0,
+      "home_progress": 45.5,
+      "home_value": 10.0
+    },
+    "game_id": "e74f5828-3e5b-11ed-899b-5d17350689cf",
+    "home_team": {
+      "color": "#4f1781",
+      "id": "e8674343-3d88-11ed-98b4-7f44ba46b0b1",
+      "logo_url": "https://photonew.preciser.io/plg/teams/e8674343-3d88-11ed-98b4-7f44ba46b0b1.png",
+      "name": "新竹御頂攻城獅"
+    },
+    "home_team_probability_over_time": [
+      50,
+      50,
+      50
+    ],
+    "leadStats": {
+      "biggestLead": {
+        "away": 4,
+        "home": 14
+      },
+      "biggestScoringRun": {
+        "away": 7,
+        "home": 10
+      },
+      "leadChanges": 6,
+      "leadPerMinutes": [
+        {
+          "away_score": 0,
+          "home_score": 0,
+          "quarter": "q1",
+          "score_difference": 0,
+          "time": "12:00"
+        },
+        {
+          "away_score": 0,
+          "home_score": 2,
+          "quarter": "q1",
+          "score_difference": 2,
+          "time": "11:00"
+        },
+        {
+          "away_score": 0,
+          "home_score": 4,
+          "quarter": "q1",
+          "score_difference": 4,
+          "time": "10:00"
+        }
+      ],
+      "timeLeadingSeconds": {
+        "away": 162,
+        "home": 2893
+      }
+    },
+    "paint_points": {
+      "away_progress": 47.4,
+      "away_value": 54.0,
+      "home_progress": 52.6,
+      "home_value": 60.0
+    },
+    "pbp": [
+      {
+        "away_score": 0,
+        "home_score": 0,
+        "quarter": "q1",
+        "time": "11:39"
+      },
+      {
+        "away_score": 0,
+        "home_score": 2,
+        "quarter": "q1",
+        "time": "11:23"
+      },
+      {
+        "away_score": 0,
+        "home_score": 2,
+        "quarter": "q1",
+        "time": "11:04"
+      }
+    ],
+    "second_chance_points": {
+      "away_progress": 50.0,
+      "away_value": 17.0,
+      "home_progress": 50.0,
+      "home_value": 17.0
+    },
+    "team_comparison": {
+      "assists": {
+        "away_progress": 1.0,
+        "away_value": 24,
+        "home_progress": 0.92,
+        "home_value": 22
+      },
+      "blocks": {
+        "away_progress": 0.43,
+        "away_value": 3,
+        "home_progress": 1.0,
+        "home_value": 7
+      },
+      "field_goal_percentage": {
+        "away_progress": 1.0,
+        "away_value": 22,
+        "home_progress": 1.0,
+        "home_value": 22
+      },
+      "free_throw_percentage": {
+        "away_progress": 0.58,
+        "away_value": 57.9,
+        "home_progress": 0.48,
+        "home_value": 47.6
+      },
+      "points": {
+        "away_progress": 0.96,
+        "away_value": 104,
+        "home_progress": 1.0,
+        "home_value": 108
+      },
+      "rebounds": {
+        "away_progress": 0.97,
+        "away_value": 56,
+        "home_progress": 1.0,
+        "home_value": 58
+      },
+      "steals": {
+        "away_progress": 0.67,
+        "away_value": 8,
+        "home_progress": 1.0,
+        "home_value": 12
+      },
+      "three_points_percentage": {
+        "away_progress": 0.19,
+        "away_value": 19.4,
+        "home_progress": 0.24,
+        "home_value": 24.2
+      },
+      "turnovers": {
+        "away_progress": 1.0,
+        "away_value": 15,
+        "home_progress": 0.87,
+        "home_value": 13
+      },
+      "two_points_percentage": {
+        "away_progress": 0.53,
+        "away_value": 52.9,
+        "home_progress": 0.54,
+        "home_value": 54.4
+      }
+    },
+    "top_performers": {
+      "away_player": {
+        "assists": 3,
+        "jersey_number": "5",
+        "name": "強森",
+        "photo_url": "https://storage.googleapis.com/photo.preciser.io/plg/players/7ff29ae5-4554-11ed-a232-1f49181d2d53.png?t=1788884408156",
+        "points": 39,
+        "rebound": 20
+      },
+      "home_player": {
+        "assists": 1,
+        "jersey_number": "35",
+        "name": "辛巴",
+        "photo_url": "https://storage.googleapis.com/photo.preciser.io/plg/players/d48b1ece-3d8d-11ed-959e-c7930d27d079.png?t=1788888370713",
+        "points": 22,
+        "rebound": 18
+      }
+    }
+  }
+]

@@ -1,0 +1,246 @@
+{
+  "title": "Goalie Stats",
+  "description": "Goalie Stats - Shots",
+  "pages": 35,
+  "selectedPage": 1,
+  "orderBy": "sogaSog",
+  "orderByDescending": false,
+  "isLive": false,
+  "availableExports": [
+    "Csv",
+    "Pdf"
+  ],
+  "updateDateTime": "2026-05-01T13:40:29.8574863+02:00",
+  "filters": [
+    {
+      "title": "Saison",
+      "entries": [
+        {
+          "name": "2026/27",
+          "alias": "2027"
+        },
+        {
+          "name": "2025/26",
+          "alias": "2026"
+        },
+        {
+          "name": "2024/25",
+          "alias": "2025"
+        }
+      ],
+      "selected": "2026",
+      "type": "Dropdown",
+      "alias": "Season"
+    }
+  ],
+  "secondaryMenu": [
+    {
+      "name": "Summary",
+      "rowIdentifierKey": "goalsAgainstAverage",
+      "isOrderDescending": false,
+      "alias": "goalkeeper"
+    },
+    {
+      "name": "Shots",
+      "rowIdentifierKey": "sogaSog",
+      "isOrderDescending": true,
+      "alias": "goalkeeperShotDetail"
+    },
+    {
+      "name": "Wins/Shutout",
+      "rowIdentifierKey": "wins",
+      "isOrderDescending": true,
+      "alias": "goalkeeperWin"
+    }
+  ],
+  "fixTableLeft": 2,
+  "rowIdentifier": 1,
+  "highlightedPositions": [
+    {
+      "name": null,
+      "style": "average",
+      "rows": [
+        10
+      ]
+    },
+    {
+      "name": null,
+      "style": "line",
+      "rows": [
+        17
+      ]
+    }
+  ],
+  "header": [
+    {
+      "name": "R",
+      "description": "Rang",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": false,
+      "alias": "rank"
+    },
+    {
+      "name": "Spieler",
+      "description": "Spielername",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "player"
+    },
+    {
+      "name": "Team",
+      "description": "Teamname",
+      "align": "left",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "team"
+    },
+    {
+      "name": "GP",
+      "description": "Gespielte Spiele",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "gamesPlayed"
+    },
+    {
+      "name": "SA",
+      "description": "Erhaltene Schüsse aufs Tor total",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSog"
+    },
+    {
+      "name": "SA/GP",
+      "description": "Erhaltene Schüsse aufs Tor pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogPerGame"
+    },
+    {
+      "name": "SA slot",
+      "description": "Erhaltene Schüsse aufs Tor aus Slot",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogSlot"
+    },
+    {
+      "name": "SA slot/GP",
+      "description": "Erhaltene Schüsse aufs Tor aus Slot pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaSogSlotPerGame"
+    },
+    {
+      "name": "MSA",
+      "description": "Erhaltene Schüsse neben das Tor",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaMissed"
+    },
+    {
+      "name": "MSA/GP",
+      "description": "Erhaltene Schüsse neben das Tor pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaMissedPerGame"
+    },
+    {
+      "name": "FSA",
+      "description": "Erhaltene Schüsse an Torumrandung",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaPost"
+    },
+    {
+      "name": "FSA/GP",
+      "description": "Erhaltene Schüsse an Torumrandung pro Spiel",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "sogaPostPerGame"
+    },
+    {
+      "name": "SV% Slot",
+      "description": "Save% bei Schüssen aus Slot",
+      "align": "center",
+      "showTooltip": true,
+      "isSortable": true,
+      "alias": "savesSlotPercentage"
+    }
+  ],
+  "data": [
+    [
+      "16",
+      "Meyer Robin",
+      {
+        "id": 102127,
+        "name": "SCL Tigers",
+        "acronym": "SCL",
+        "signed": false,
+        "type": "team"
+      },
+      "22",
+      "608",
+      "27.64",
+      "266",
+      "12.09",
+      "192",
+      "12.09",
+      "14",
+      "0.64",
+      "86.47"
+    ],
+    [
+      "15",
+      "Waeber Ludovic",
+      {
+        "id": 101149,
+        "name": "EHC Kloten",
+        "acronym": "EHCK",
+        "signed": false,
+        "type": "team"
+      },
+      "25",
+      "622",
+      "24.88",
+      "289",
+      "11.56",
+      "192",
+      "11.56",
+      "10",
+      "0.40",
+      "85.47"
+    ],
+    [
+      "14",
+      "Senn Gilles",
+      {
+        "id": 101152,
+        "name": "HC Ambri-Piotta",
+        "acronym": "HCAP",
+        "signed": false,
+        "type": "team"
+      },
+      "26",
+      "747",
+      "28.73",
+      "358",
+      "13.77",
+      "234",
+      "13.77",
+      "17",
+      "0.65",
+      "81.28"
+    ]
+  ],
+  "alias": "goalkeeperShotDetail"
+}

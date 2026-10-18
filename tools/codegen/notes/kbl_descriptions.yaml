@@ -1,0 +1,873 @@
+kbl_current_standings:
+  away_losses: Losses in the team's away games.
+  away_wins: Wins in the team's away games.
+  conti_loss: Current losing streak (0 when the last game was a win).
+  conti_win: Current winning streak (0 when the last game was a loss).
+  draws: Draws (always 0 in basketball).
+  home_losses: Losses in the team's home games.
+  home_wins: Wins in the team's home games.
+  last_five: 'The last five results as a comma-separated string, most recent first:
+    1 win, 0 loss.'
+  losses: Losses (a count on this route).
+  max_loss: Longest losing streak of the season.
+  max_win: Longest winning streak of the season.
+  rank: Standing (1 = first).
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: 'Team short name (Korean, e.g. ''창원 LG'' = Changwon LG), as it was at
+    the time. English names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined
+    on the team code.'
+  team_name_full: Team full name (Korean, e.g. '창원 LG 세이커스' = Changwon LG Sakers).
+  win_diff: Games behind the leader.
+  wins: Wins (a count on this route; on /league/rank/{glkey} win is a boolean about
+    the latest game).
+kbl_game:
+  away_coaches: JSON list of the away assistant coaches' names (staff appear by name
+    only).
+  away_manager: Away head coach's name (officials and coaches appear by name only).
+  away_score: Away team final points, summed from the period scores (the header carries
+    no totals).
+  away_team_code: 'Away team code. KBL team code (2-digit string, e.g. ''50'' = Changwon
+    LG). Joins to /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast.
+    Not stable across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98
+    and ''70'' today. D-League sides have their own codes (`teamCodeD`).'
+  away_team_name: 'Away team short name (Korean, e.g. ''창원 LG'' = Changwon LG). English
+    names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  away_team_name_full: Away team full name (Korean).
+  crowds: Attendance of the game (spectators).
+  detail_url: Path of the game page on www.kbl.or.kr.
+  game_code: 'Competition type within the season (2-digit string; code table in the
+    README and below): 01 regular season, 03 playoffs, 04 final, ...'
+  game_date: Game date (KST).
+  game_end: End time, HHMM (KST); '0000' or blanks when not recorded.
+  game_no: Game number within the competition (glkey); the N part of the gmkey.
+  game_start: Tip-off time, HHMM (KST).
+  game_time: Duration of the game in minutes.
+  glkey: 'Competition key `S{seasonCode}G{gameCode}` (e.g. S47G01 = 2025-26 regular
+    season): the id of the /leagues and /league/rank routes.'
+  gmkey: 'Game key `S{seasonCode}G{gameCode}N{gameNo}` (e.g. S47G01N49): the id of
+    every /match/{gmkey} route.'
+  highlight_url: URL of the game's page on Naver Sports.
+  home_coaches: JSON list of the home assistant coaches' names (staff appear by name
+    only).
+  home_manager: Home head coach's name (officials and coaches appear by name only).
+  home_score: Home team final points, summed from the period scores (the header carries
+    no totals).
+  home_team_code: 'Home team code. KBL team code (2-digit string, e.g. ''50'' = Changwon
+    LG). Joins to /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast.
+    Not stable across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98
+    and ''70'' today. D-League sides have their own codes (`teamCodeD`).'
+  home_team_name: 'Home team short name (Korean, e.g. ''고양 소노'' = Goyang Sono). English
+    names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  home_team_name_full: Home team full name (Korean).
+  is_ended: '1 when the game is over. Unreliable: 0 on every finished game through
+    2005-06 and on some later ones (e.g. S45G01N95''s header); the capture treats
+    a past-dated game with scores as final.'
+  is_started: 1 when the game has started. Unreliable for old games (0 on finished
+    1997-2006 games in /match/list).
+  overtimes: Number of overtime periods played (0 for a game decided in regulation).
+  playing_quarter: 'Period in progress: ''X'' when none (before or after the game),
+    else e.g. ''Q4'' or ''EQ1''. Can stay stale after the game (the overtime sample
+    says ''EQ1'').'
+  referee_main: Crew chief's name (officials appear by name only).
+  referees_sub: JSON list of the umpires' names (officials appear by name only).
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_category_name: 'Category name in Korean: ''정규시즌'' regular season, ''플레이오프''
+    playoffs, ''챔피언결정전'' championship final, ''D리그 1차'' / ''D리그 2차'' D-League stage
+    1 / 2, ''올스타게임'' All-Star Game, ''컵대회'' cup, ''KBL컵대회'' KBL Cup, ''EASL'', ''OPEN
+    MATCH DAY''.'
+  season_code: 'KBL season code: sequential over every season and D-League edition
+    (2 = 1997-98, 47 = 2025-26); the crosswalk to the sdv END year is in the README.'
+  season_grade: 'Division: 1 = the KBL itself, 2 = the KBL D-League (reserve league).'
+  season_name: 'Season label: ''YYYY-YYYY'' for a KBL season (e.g. ''2025-2026''),
+    ''1997'' for the 1997 inaugural season, or the D-League edition name (e.g. ''2010KBLWINTER'',
+    ''2024 KBL D리그'' = 2024 KBL D-League).'
+  stadium_name: Venue short name (Korean).
+  stadium_name_en: Venue name in English; an empty string, or the Korean name, for
+    some old venues.
+  stadium_name_full: Venue full name (Korean).
+  tv: Broadcaster name(s), e.g. 'tvN SPORTS', 'SPOTV2 / SPOTV ON'.
+  tv_code: Broadcaster code(s), comma-separated (e.g. 'T24,T25'); the site uses it
+    instead of `tv` from seasonCode 45.
+  week_day: 'Day of the week in Korean: 월 Mon, 화 Tue, 수 Wed, 목 Thu, 금 Fri, 토 Sat,
+    일 Sun.'
+kbl_game_leaders:
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  part: 'Category code: score points, rb rebounds, ast assists, stl steals, bs blocks.'
+  pcode: KBL player code (six-digit string) of the team's leader in the category.
+  play_min: Minutes the leader played this game; add play_sec seconds.
+  play_sec: Seconds part of the leader's playing time (0-59).
+  player_name: Leader's name in Korean (foreign players in Hangul transliteration).
+  player_name_en: Leader's name in English / romanized.
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  side: 'Side of the leader: home or away.'
+  team_name: The leader's team short name (Korean).
+  value: The leader's total in the category in this game.
+kbl_pbp:
+  action: English meaning of action_code (kbl_codes.ACTIONS), translated from the
+    site's Korean label; null for an unknown code.
+  action_code: Action code (string, e.g. '201'); table in the returns md.
+  action_ko: The site's own Korean label of action_code (e.g. 2점슛성공 = two-point field
+    goal made).
+  action_number: 1-based position of the event in the feed, which is in game order
+    (the wire's n is 0 on every row of some games).
+  clock_seconds_left: Seconds left in the period (minutes_left * 60 + seconds_left);
+    quarters are 10 minutes, overtimes 5.
+  event_number: Sequence number of the event in the game (1-based); 0 on every row
+    of some games (e.g. S45G01N95), so order by array position.
+  foul: English meaning of foul_code (e.g. TCF = technical foul). No sampled row carries
+    a foul code, so this is unverified.
+  foul_code: 'Foul type code (the site reads an f field; no sampled row carries it):
+    PNF personal, TCF technical, FRF unsportsmanlike, FTF fighting, PCF punching,
+    EBF elbow.'
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  minutes_left: Minutes remaining in the period (10-minute quarters, 5-minute overtimes).
+  period: 'Period number: 1-4 for the quarters, 5, 6, ... for the overtimes (the wire
+    says X1 in the play-by-play, EQ1 in the match chart).'
+  period_label: 'Period label: Q1-Q4, then OT1, OT2, ... (normalised from the wire''s
+    X1 / EQ1 / eq1).'
+  player_name: Player name in Korean; absent on team and game events.
+  player_name_en: Player name in English / romanized; absent on team and game events.
+  points: 'Points the event scored: 2 for a made two-point shot or dunk (201, 207),
+    3 for a made three (205), 1 for a made free throw (203); null otherwise.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  seconds_left: Seconds part of the time remaining (0-59).
+  substitution: English meaning of substitution_code on substitution-out rows (e.g.
+    106_1 = fouled out, five fouls); null otherwise.
+  substitution_code: Substitution sub-type code on substitution-out (102) rows (e.g.
+    '101_0'); table in the returns md.
+  team_code: Team code of the acting team (the KBL team code, as `tcodeH`/`tcodeA`);
+    '' (or ' ' in 1997-98) on game events such as period start/end.
+kbl_period_scores:
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  period: 'Period number: 1-4 for the quarters, 5, 6, ... for the overtimes (the wire
+    says X1 in the play-by-play, EQ1 in the match chart).'
+  period_label: 'Period label: Q1-Q4, then OT1, OT2, ... (normalised from the wire''s
+    X1 / EQ1 / eq1).'
+  score: Points the side scored in the period.
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  side: 'Which side of the game the row belongs to: home or away.'
+  team_code: 'Team code: the KBL club in that season (two-digit string with a leading
+    zero, e.g. ''50'' = Changwon LG). Joins kbl_teams team_code; not stable across
+    ownership changes (the Anyang club is ''40'' in 1997-98, ''70'' today).'
+kbl_player_box:
+  ast: Assists (action 211). This game.
+  ast_ratio: 'Assist ratio: assists per 100 possessions used. This game.'
+  ast_rt: 'Assist rate: share of teammates'' field goals assisted while on court,
+    0-100. This game.'
+  ast_to: Assist-to-turnover ratio. This game.
+  back_num: Jersey number (string).
+  bs: Blocked shots (action 213). This game.
+  defr: Defensive rebounds (action 210). This game.
+  defrtg: 'Defensive rating: points allowed per 100 possessions (estimated). This
+    game.'
+  dfl: Deflections (action 227; tracked in recent seasons only, 0 before). This game.
+  dk: Dunks made (action 207); included in `fg`. This game.
+  dk_a: Dunk attempts (made + missed, actions 207 + 208). This game.
+  dreb_rt: Defensive-rebound percentage, 0-100. This game.
+  ef: Meaning unverified (0 in every game sample; non-zero in some season totals).
+    This game.
+  efg_rt: Effective field-goal percentage, 0-100. This game.
+  fb: Fast breaks credited to the player (action 217 rows that name a player, as in
+    1997-98); 0 in recent seasons, where fast breaks are team rows (`tfb`). This game.
+  fg: 'Two-point field goals made, dunks included: 201 + 207 rows (score = 2*fg +
+    3*threep + ft holds on every sampled box). This game.'
+  fg_a: 'Two-point field-goal attempts, made + missed, dunks included: 201 + 202 +
+    207 + 208 rows (checked per team on S47G01N49). This game.'
+  fgt: Field goals made, two- and three-point (fg + threep). This game.
+  fgt_a: Field-goal attempts, two- and three-point (fgA + threepA). This game.
+  fo: Fouls drawn (the player rows of a team sum to the opponent's `foul`, checked
+    on the 2025-26 sample game). This game.
+  foul: Personal fouls (wft + woft). This game.
+  ft: Free throws made (action 203). This game.
+  ft_a: Free-throw attempts, made + missed (203 + 204). This game.
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gd: Good-defense plays (action 221). This game.
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  home_away: 'Side (string): ''1'' home, ''2'' away; ''3'' on both teams'' rows in
+    the 1997-98 sample, so join on `player.tcode` instead.'
+  idf: Illegal-defense violations (action 219; an early-KBL rule, so non-zero only
+    in old seasons). This game.
+  inout: Times the player entered the game, the start included (checked on the 2025-26
+    sample game); a team row sums its players. This game.
+  inout1: Times the player was substituted out before the end (checked on the 2025-26
+    sample game); a team row sums its players. This game.
+  margin_cn: 'Plus-minus: the point margin while the player was on court. This game.'
+  minutes_played: Playing time in minutes (play_min + play_sec / 60), derived.
+  netrtg: 'Net rating: offrtg - defrtg. This game.'
+  offr: Offensive rebounds (action 209). This game.
+  offrtg: 'Offensive rating: points scored per 100 possessions (estimated). This game.'
+  oreb_rt: Offensive-rebound percentage, 0-100. This game.
+  pace: Possessions per 40 minutes (estimated; a player row covers his minutes on
+    court). This game.
+  pcode: KBL player code (6-digit string). Joins to `pcode` on every route and to
+    `playerNo` in /league/round-mvp.
+  per: Player efficiency rating (KBL's formula; scale unverified). This game.
+  pie: 'Player impact estimate: share of the game''s positive events, as a percentage.
+    This game.'
+  play_min: Minutes of playing time; add `playSec` seconds. This game.
+  play_sec: Seconds part of the playing time (0-59), added to `playMin`. This game.
+  player_flag: 'Player type (string): ''0'' domestic, ''1'' foreign import, ''2''
+    Asian-quota player.'
+  player_name: Player name in Korean (foreign players in Hangul transliteration).
+  player_name_en: Player name in English / romanized (sometimes Hangul for former
+    players, e.g. 'CJ 레슬리').
+  pos: 'Position code (string): C center, FD forward, GD guard, FC forward-center,
+    GF guard-forward; table in the returns md.'
+  poss: Possessions (estimated). This game.
+  pp: Field goals made in the paint. This game.
+  pp_a: Field-goal attempts in the paint. This game.
+  pscore: Points in the paint (2 * pp). This game.
+  rb: Total rebounds (offr + defr; team rebounds are `teamR`). This game.
+  reb_rt: Total-rebound percentage, 0-100. This game.
+  sast: Screen assists (action 226; tracked in recent seasons only, 0 before). This
+    game.
+  score: Points. This game.
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  started: 1 when the player started the game, else 0.
+  stl: Steals (action 212). This game.
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: 'Team short name (Korean, e.g. ''창원 LG'' = Changwon LG), as it was at
+    the time. English names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined
+    on the team code.'
+  tf: Probably technical fouls (unverified; 0 in most rows). This game.
+  threep: Three-point field goals made (action 205). This game.
+  threep_a: Three-point attempts, made + missed (205 + 206). This game.
+  to: Turnovers (action 214). This game.
+  to_ratio: 'Turnover ratio: turnovers per 100 possessions used. This game.'
+  tov_rt: 'Turnover rate: turnovers per 100 possessions, 0-100. This game.'
+  ts_rt: True-shooting percentage, 0-100. This game.
+  usg_rt: 'Usage rate: share of team possessions used while on court, 0-100. This
+    game.'
+  wft: Fouls that awarded free throws (action 215). This game.
+  woft: Fouls that awarded no free throws (action 216). This game.
+kbl_player_totals:
+  ast: Assists (action 211). Season total for the competition (glkey).
+  back_num: Jersey number (string).
+  bs: Blocked shots (action 213). Season total for the competition (glkey).
+  defr: Defensive rebounds (action 210). Season total for the competition (glkey).
+  dfl: Deflections (action 227; tracked in recent seasons only, 0 before). Season
+    total for the competition (glkey).
+  dk: Dunks made (action 207); included in `fg`. Season total for the competition
+    (glkey).
+  dk_a: Dunk attempts (made + missed, actions 207 + 208). Season total for the competition
+    (glkey).
+  ef: Meaning unverified (0 in every game sample; non-zero in some season totals).
+    Season total for the competition (glkey).
+  fb: Fast breaks credited to the player (action 217 rows that name a player, as in
+    1997-98); 0 in recent seasons, where fast breaks are team rows (`tfb`). Season
+    total for the competition (glkey).
+  fg: 'Two-point field goals made, dunks included: 201 + 207 rows (score = 2*fg +
+    3*threep + ft holds on every sampled box). Season total for the competition (glkey).'
+  fg_a: 'Two-point field-goal attempts, made + missed, dunks included: 201 + 202 +
+    207 + 208 rows (checked per team on S47G01N49). Season total for the competition
+    (glkey).'
+  fgt: Field goals made, two- and three-point (fg + threep). Season total for the
+    competition (glkey).
+  fgt_a: Field-goal attempts, two- and three-point (fgA + threepA). Season total for
+    the competition (glkey).
+  foul: Personal fouls (wft + woft). Season total for the competition (glkey).
+  foulout: 'Meaning unverified: values exceed games played (70 for a 40-game player
+    with 74 fouls); possibly fouls drawn, as this route has no `fo`.'
+  ft: Free throws made (action 203). Season total for the competition (glkey).
+  ft_a: Free-throw attempts, made + missed (203 + 204). Season total for the competition
+    (glkey).
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_count: Games played (this season or competition).
+  gd: Good-defense plays (action 221). Season total for the competition (glkey).
+  glkey: 'Competition key S{seasonCode}G{gameCode} (e.g. S47G01 = 2025-26 regular
+    season): the id of the season routes.'
+  idf: Illegal-defense violations (action 219; an early-KBL rule, so non-zero only
+    in old seasons). Season total for the competition (glkey).
+  inout: Times the player entered the game, the start included (checked on the 2025-26
+    sample game); a team row sums its players. Season total for the competition (glkey).
+  inout1: Times the player was substituted out before the end (checked on the 2025-26
+    sample game); a team row sums its players. Season total for the competition (glkey).
+  minutes_played: Playing time in minutes (play_min + play_sec / 60), derived.
+  offr: Offensive rebounds (action 209). Season total for the competition (glkey).
+  pcode: KBL player code (six-digit string).
+  play_min: Minutes of playing time; add `playSec` seconds. Season total for the competition
+    (glkey).
+  play_sec: Seconds part of the playing time (0-59), added to `playMin`. Season total
+    for the competition (glkey).
+  player_flag: 'Player type (string): ''0'' domestic, ''1'' foreign import, ''2''
+    Asian-quota player.'
+  player_name: Player name in Korean (foreign players in Hangul transliteration).
+  player_name_en: Player name in English / romanized (sometimes Hangul for former
+    players, e.g. 'CJ 레슬리').
+  pos: 'Position code (string): C center, FD forward, GD guard, FC forward-center,
+    GF guard-forward; table in the returns md.'
+  pp: Field goals made in the paint. Season total for the competition (glkey).
+  pp_a: Field-goal attempts in the paint. Season total for the competition (glkey).
+  pscore: Points in the paint (2 * pp). Season total for the competition (glkey).
+  rb: Total rebounds (offr + defr; team rebounds are `teamR`). Season total for the
+    competition (glkey).
+  sast: Screen assists (action 226; tracked in recent seasons only, 0 before). Season
+    total for the competition (glkey).
+  score: Points. Season total for the competition (glkey).
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  start_count: 'Meaning unverified: up to 4 x gameCount in every sampled row, so probably
+    quarters started.'
+  stl: Steals (action 212). Season total for the competition (glkey).
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: 'Team short name (Korean, e.g. ''창원 LG'' = Changwon LG), as it was at
+    the time. English names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined
+    on the team code.'
+  tf: Probably technical fouls (unverified; 0 in most rows). Season total for the
+    competition (glkey).
+  threep: Three-point field goals made (action 205). Season total for the competition
+    (glkey).
+  threep_a: Three-point attempts, made + missed (205 + 206). Season total for the
+    competition (glkey).
+  to: Turnovers (action 214). Season total for the competition (glkey).
+  wft: Fouls that awarded free throws (action 215). Season total for the competition
+    (glkey).
+  woft: Fouls that awarded no free throws (action 216). Season total for the competition
+    (glkey).
+kbl_players:
+  back_num: Jersey number (string).
+  last_career: 'Meaning unverified: a season-code-like number, ''A'' or ''''.'
+  pcode: KBL player code (6-digit string). Joins to `pcode` on every route and to
+    `playerNo` in /league/round-mvp.
+  player_flag: 'Player type (string): ''0'' domestic, ''1'' foreign import, ''2''
+    Asian-quota player.'
+  player_name: Player name in Korean (foreign players in Hangul transliteration).
+  player_name_en: Player name in English / romanized (sometimes Hangul for former
+    players, e.g. 'CJ 레슬리').
+  pos: 'Position code (string): C center, FD forward, GD guard, FC forward-center,
+    GF guard-forward; table in the returns md.'
+  team_code: 'Team code of the player''s current or last team. KBL team code (2-digit
+    string, e.g. ''50'' = Changwon LG). Joins to /common/teamList `teamCode`, game
+    `tcodeH`/`tcodeA`, `t` in text-cast. Not stable across ownership changes: the
+    Anyang club is ''40'' (SBS) in 1997-98 and ''70'' today. D-League sides have their
+    own codes (`teamCodeD`).'
+  team_name: Short name (Korean) of the player's current or last team.
+  team_name_en: Current team short name in English (e.g. 'JUNG KWAN JANG').
+kbl_playoff_games:
+  away_score: Away team points.
+  away_team_code: 'Away team code. Team code: the KBL club in that season (two-digit
+    string with a leading zero, e.g. ''50'' = Changwon LG). Joins kbl_teams team_code;
+    not stable across ownership changes (the Anyang club is ''40'' in 1997-98, ''70''
+    today).'
+  away_team_name: Away team short name (Korean).
+  game_code: 'Competition type of the game: 03 playoffs, 04 championship final.'
+  game_date: Game date, KST.
+  game_no: Game number inside the competition, from the bracket's gmkey object.
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  home_score: Home team points.
+  home_team_code: 'Home team code. Team code: the KBL club in that season (two-digit
+    string with a leading zero, e.g. ''50'' = Changwon LG). Joins kbl_teams team_code;
+    not stable across ownership changes (the Anyang club is ''40'' in 1997-98, ''70''
+    today).'
+  home_team_name: Home team short name (Korean).
+  home_win: 1 when the home team won, else 0.
+  round: 'Playoff round: quarterfinal (6강, seeds 3-6), semifinal (4강) or final; on
+    the round-MVP and rounds frames the round number of the season.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: KBL season code of the game (from the bracket's gmkey object).
+  series_no: Series number inside the round (1 or 2 for the quarterfinals and semifinals,
+    1 for the final).
+kbl_playoff_seeds:
+  game_code: 'Competition type of the standings: ''01'' regular season.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: sequential over every season and D-League edition
+    (2 = 1997-98, 47 = 2025-26); the crosswalk to the sdv END year is in the README.'
+  seed: Final regular-season standing, i.e. the playoff seed (1-6).
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: 'Team short name (Korean, e.g. ''원주 DB'' = Wonju DB). English names:
+    /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  team_name_full: Team full name (Korean).
+kbl_playoff_series:
+  bracket_format: 'Playoff bracket format: old (seasons through 2023-24, per-team
+    series results) or new (2024-25 on, bracket numbers and games).'
+  game_date: Date of a game of the series, KST (which one is unverified); old bracket
+    format only.
+  losses: Losses of the team in the series.
+  opponent_code: Team code of the series opponent; null when the opponent cannot be
+    told from the body.
+  round: 'Playoff round: quarterfinal (6강, seeds 3-6), semifinal (4강) or final; on
+    the round-MVP and rounds frames the round number of the season.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  seed: Regular-season finish that seeded the team (1-6), from the bracket's seed
+    table; null for a team outside it.
+  series_no: Series number inside the round (the wire's gameHoi, '1' or '2'; 1 for
+    the final).
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  wins: Wins of the team in the series.
+kbl_round_mvps:
+  game_count: Games played in the round.
+  pcode: KBL player code (six-digit string) of the round MVP (the wire's playerNo).
+  player_name: Round MVP's name in Korean (kname).
+  player_name_en: Player name in English / romanized (sometimes Hangul for former
+    players, e.g. 'CJ 레슬리').
+  round: Round number of the season (the KBL plays six rounds).
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: sequential over every season and D-League edition
+    (2 = 1997-98, 47 = 2025-26); the crosswalk to the sdv END year is in the README.'
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  total_assist: Assists over the round.
+  total_rebound: Rebounds over the round.
+  total_score: Points over the round.
+  total_seconds: Playing time over the round in seconds (totalHour * 3600 + totalMinute
+    * 60 + totalSecond; only the seconds part is non-zero in the samples).
+kbl_rounds:
+  from_date: First date of the round, YYYYMMDD.
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  glkey: 'Competition key S{seasonCode}G{gameCode} (e.g. S47G01 = 2025-26 regular
+    season): the id of the season routes.'
+  round: Round number of the season (the KBL plays six rounds).
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  to_date: Last date of the round, YYYYMMDD.
+kbl_schedule:
+  article_id: Id of the game's news article on kbl.or.kr; null when none.
+  away_score: Away team points (scoreA).
+  away_team_code: 'Away team code. KBL team code (2-digit string, e.g. ''50'' = Changwon
+    LG). Joins to /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast.
+    Not stable across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98
+    and ''70'' today. D-League sides have their own codes (`teamCodeD`).'
+  away_team_name: 'Away team short name (Korean, e.g. ''창원 LG'' = Changwon LG). English
+    names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  away_team_name_full: Away team full name (Korean).
+  challenge_id: Id of the game in KBL Challenge (the site's prediction game); null
+    when none.
+  game_code: 'Competition type within the season (2-digit string; code table in the
+    README and below): 01 regular season, 03 playoffs, 04 final, ...'
+  game_date: Game date (KST).
+  game_end: End time, HHMM (KST); '0000' or blanks when not recorded.
+  game_no: Game number within the competition (glkey); the N part of the gmkey.
+  game_start: Tip-off time, HHMM (KST).
+  game_time: Duration of the game in minutes (a numeric string on the wire; null on
+    some rows).
+  glkey: 'Competition key `S{seasonCode}G{gameCode}` (e.g. S47G01 = 2025-26 regular
+    season): the id of the /leagues and /league/rank routes.'
+  gmkey: 'Game key `S{seasonCode}G{gameCode}N{gameNo}` (e.g. S47G01N49): the id of
+    every /match/{gmkey} route.'
+  home_score: Home team points (scoreH).
+  home_team_code: 'Home team code. KBL team code (2-digit string, e.g. ''50'' = Changwon
+    LG). Joins to /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast.
+    Not stable across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98
+    and ''70'' today. D-League sides have their own codes (`teamCodeD`).'
+  home_team_name: 'Home team short name (Korean, e.g. ''고양 소노'' = Goyang Sono). English
+    names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  home_team_name_full: Home team full name (Korean).
+  is_ended: '1 when the game is over. Unreliable: 0 on every finished game through
+    2005-06 and on some later ones (e.g. S45G01N95''s header); the capture treats
+    a past-dated game with scores as final.'
+  is_started: 1 when the game has started. Unreliable for old games (0 on finished
+    1997-2006 games in /match/list).
+  playing_quarter: 'Period in progress: ''X'' when none (before or after the game),
+    else e.g. ''Q4'' or ''EQ1''. Can stay stale after the game (the overtime sample
+    says ''EQ1'').'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_category: 'Category code of the competition: R regular season, PO playoffs,
+    CP final, D1/D2 D-League stages, AS All-Star, EG/CU cups, EA EASL, OM Open Match
+    Day (table below).'
+  season_category_name: 'Category name in Korean: ''정규시즌'' regular season, ''플레이오프''
+    playoffs, ''챔피언결정전'' championship final, ''D리그 1차'' / ''D리그 2차'' D-League stage
+    1 / 2, ''올스타게임'' All-Star Game, ''컵대회'' cup, ''KBL컵대회'' KBL Cup, ''EASL'', ''OPEN
+    MATCH DAY''.'
+  season_code: 'KBL season code: sequential over every season and D-League edition
+    (2 = 1997-98, 47 = 2025-26); the crosswalk to the sdv END year is in the README.'
+  season_grade: 'Division: 1 = the KBL itself, 2 = the KBL D-League (reserve league).'
+  season_name: 'Season label as sent: ''YYYY-YYYY'' for a KBL season, ''1997'' for
+    the inaugural one, a D-League edition label, or an empty string on EASL rows.'
+  stadium_name: Venue short name (Korean).
+  stadium_name_en: Venue name in English; an empty string, or the Korean name, for
+    some old venues.
+  stadium_name_full: Venue full name (Korean).
+  tv: Broadcaster name(s), e.g. 'tvN SPORTS', 'SPOTV2 / SPOTV ON'.
+  tv_code: Broadcaster code(s), comma-separated (e.g. 'T24,T25'); the site uses it
+    instead of `tv` from seasonCode 45.
+  week_day: 'Day of the week in Korean: 월 Mon, 화 Tue, 수 Wed, 목 Thu, 금 Fri, 토 Sat,
+    일 Sun.'
+kbl_score_track:
+  away_score: 'Away team points: cumulative at the checkpoint on the score track,
+    the final total (all periods summed) on a game row, the full-time score in the
+    schedule.'
+  checkpoint: '1-based checkpoint inside the period: eight per period, evenly spaced
+    is assumed (every 75 s of a quarter; unverified), the last at the period''s end.'
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  home_margin: Home margin (home minus away points) at the checkpoint.
+  home_score: 'Home team points: cumulative at the checkpoint on the score track,
+    the final total (all periods summed) on a game row, the full-time score in the
+    schedule.'
+  period: 'Period number: 1-4 for the quarters, 5, 6, ... for the overtimes (the wire
+    says X1 in the play-by-play, EQ1 in the match chart).'
+  period_label: 'Period label: Q1-Q4, then OT1, OT2, ... (normalised from the wire''s
+    X1 / EQ1 / eq1).'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+kbl_season_leaders:
+  back_num: Jersey number (string).
+  game_count: Games played this season.
+  part: 'Leader category code: score, rb, ast, bs, stl, fgt, threep, ftR, fgtR, threepR
+    or dk.'
+  part_label: English meaning of part (kbl_codes.LEADER_PARTS), e.g. score = points
+    per game.
+  pcode: KBL player code (6-digit string). Joins to `pcode` on every route and to
+    `playerNo` in /league/round-mvp.
+  player_flag: 'Player type (string): ''0'' domestic, ''1'' foreign import, ''2''
+    Asian-quota player.'
+  player_name: Player name in Korean (foreign players in Hangul transliteration).
+  player_name_en: Player name in English / romanized (sometimes Hangul for former
+    players, e.g. 'CJ 레슬리').
+  pos: 'Position code (string): C center, FD forward, GD guard, FC forward-center,
+    GF guard-forward; table in the returns md.'
+  rank: Rank in the category.
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: 'Team short name (Korean, e.g. ''창원 LG'' = Changwon LG), as it was at
+    the time. English names: /common/teamList `teamNameEn` / `teamNameFullEn`, joined
+    on the team code.'
+  value: 'The player''s value in the category: a per-game average, or a percentage
+    for the *R categories.'
+kbl_seasons:
+  end_date: Last date of the season, YYYYMMDD.
+  game_code: 'Competition type within the season: 01 regular season (the only value
+    the list returns).'
+  glkey: 'Competition key `S{seasonCode}G{gameCode}` (e.g. S47G01 = 2025-26 regular
+    season): the id of the /leagues and /league/rank routes.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_category: 'Category code of the competition: R regular season, PO playoffs,
+    CP final, D1/D2 D-League stages, AS All-Star, EG/CU cups, EA EASL, OM Open Match
+    Day (table below).'
+  season_code: 'KBL season code: sequential over every season and D-League edition
+    (2 = 1997-98, 47 = 2025-26); the crosswalk to the sdv END year is in the README.'
+  season_grade: 'Division: 1 = the KBL itself, 2 = the KBL D-League (reserve league).'
+  season_name: 'Season label: ''YYYY-YYYY'' for a KBL season (e.g. ''2025-2026''),
+    ''1997'' for the inaugural season.'
+  season_name_full: 'Division label: ''1군시즌'' = first-team (top-division) season.'
+  start_date: First date of the season, YYYYMMDD.
+kbl_shots:
+  basket: 'Target basket: ''1'' the right-hand one (x > 363), ''2'' the left-hand
+    one; teams switch baskets at half-time.'
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  made: True when the shot went in (wire o = 'O'), False when it missed ('X').
+  pcode: KBL player code (six-digit string) of the shooter.
+  period: 'Period number: 1-4 for the quarters, 5, 6, ... for the overtimes (the wire
+    says X1 in the play-by-play, EQ1 in the match chart).'
+  period_label: 'Period label: Q1-Q4, then OT1, OT2, ... (normalised from the wire''s
+    X1 / EQ1 / eq1).'
+  player_name: Shooter's name in Korean.
+  player_name_en: Shooter's name in English / romanized.
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  x: Shot location x, pixels on the site's 726 x 412 full-court image (origin top-left,
+    x along the court, right); see basket.
+  y: Shot location y, pixels on the 726 x 412 full-court image (origin top-left, y
+    down).
+kbl_standings:
+  ast: Assists. Team season total for the competition (glkey).
+  away_losses: Losses in the team's away games.
+  away_wins: Wins in the team's away games.
+  bf: Meaning unverified (probably bench fouls; 0 in every game sample). Team season
+    total for the competition (glkey).
+  bs: Blocked shots. Team season total for the competition (glkey).
+  conti_date: Date (YYYYMMDD) the current streak started (inferred; unverified).
+  conti_loss: Current losing streak (0 when the last game was a win).
+  conti_win: Current winning streak (0 when the last game was a loss).
+  defr: Defensive rebounds. Team season total for the competition (glkey).
+  dk: Dunks made (action 207); included in `fg`. Team season total for the competition
+    (glkey).
+  dk_a: Dunk attempts (made + missed, actions 207 + 208). Team season total for the
+    competition (glkey).
+  draws: Draws (TDraw, always 0).
+  ef: Meaning unverified (0 in every game sample; non-zero in some season totals).
+    Team season total for the competition (glkey).
+  fb: Fast breaks credited to the player (action 217 rows that name a player, as in
+    1997-98); 0 in recent seasons, where fast breaks are team rows (`tfb`). Team season
+    total for the competition (glkey).
+  fg: 'Two-point field goals made, dunks included: 201 + 207 rows (score = 2*fg +
+    3*threep + ft holds on every sampled box). Team season total for the competition
+    (glkey).'
+  fg_a: 'Two-point field-goal attempts, made + missed, dunks included: 201 + 202 +
+    207 + 208 rows (checked per team on S47G01N49). Team season total for the competition
+    (glkey).'
+  foul_total: Personal fouls over the season (foulTot).
+  foulout: Players fouled out (unverified). Team season total for the competition
+    (glkey).
+  ft: Free throws made (action 203). Team season total for the competition (glkey).
+  ft_a: Free-throw attempts, made + missed (203 + 204). Team season total for the
+    competition (glkey).
+  game_code: 'Competition type within the season (2-digit string; code table in the
+    README and below): 01 regular season, 03 playoffs, 04 final, ...'
+  game_count: Games played (this season or competition).
+  game_flag: Boolean flag in the standings row; meaning unverified (true in the sample).
+  gd: Good-defense plays (action 221). Team season total for the competition (glkey).
+  home_losses: Losses in the team's home games.
+  home_wins: Wins in the team's home games.
+  idf: Illegal-defense violations (action 219; an early-KBL rule, so non-zero only
+    in old seasons). Team season total for the competition (glkey).
+  inout: Times the player entered the game, the start included (checked on the 2025-26
+    sample game); a team row sums its players. Team season total for the competition
+    (glkey).
+  inout1: Times the player was substituted out before the end (checked on the 2025-26
+    sample game); a team row sums its players. Team season total for the competition
+    (glkey).
+  last_five: 'The last five results as a comma-separated string, most recent first:
+    1 win, 0 loss (the name is cut short in the API).'
+  last_game_date: Date of the latest game counted in the row, YYYYMMDD.
+  last_game_drawn: True when the team's latest game was a draw (always false).
+  last_game_lost: True when the team's latest game was a loss (inferred from conti_loss).
+  last_game_won: True when the team's latest game was a win (the wire's win; a boolean,
+    not a count).
+  losses: Season losses of the team (the wire's TLoss).
+  max_loss: Longest losing streak of the season.
+  max_win: Longest winning streak of the season.
+  offr: Offensive rebounds. Team season total for the competition (glkey).
+  play_min: Minutes of playing time; add `playSec` seconds. Team season total for
+    the competition (glkey).
+  play_sec: Seconds part of the playing time (0-59), added to `playMin`. Team season
+    total for the competition (glkey).
+  pp: 'Paint field goals made: 0 in every sampled row (see PScore).'
+  pp_a: 'Paint field-goal attempts: 0 in every sampled row (see PScore).'
+  pscore: Points in the paint (pp/ppA are 0 on this route in every sampled row). Team
+    season total for the competition (glkey).
+  rank: Standing (1 = first).
+  score: Points. Team season total for the competition (glkey).
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  stl: Steals. Team season total for the competition (glkey).
+  team_code: 'Team code: the KBL club in that season (two-digit string with a leading
+    zero, e.g. ''50'' = Changwon LG). Joins kbl_teams team_code; not stable across
+    ownership changes (the Anyang club is ''40'' in 1997-98, ''70'' today).'
+  team_name: 'Team short name (Korean, e.g. ''원주 DB'' = Wonju DB). English names:
+    /common/teamList `teamNameEn` / `teamNameFullEn`, joined on the team code.'
+  team_name_full: Team full name (Korean).
+  team_r: Team rebounds (action 218), unverified against `teamR`. Team season total
+    for the competition (glkey).
+  tf: Probably technical fouls (unverified; 0 in most rows). Team season total for
+    the competition (glkey).
+  tfb: Team fast breaks (action 217). Team season total for the competition (glkey).
+  threep: Three-point field goals made (action 205). Team season total for the competition
+    (glkey).
+  threep_a: Three-point attempts, made + missed (205 + 206). Team season total for
+    the competition (glkey).
+  to: Turnovers. Team season total for the competition (glkey).
+  tto: Team turnovers (action 223). Team season total for the competition (glkey).
+  updated_at: When the standings row was written (ISO 8601 UTC timestamp).
+  wft: Fouls that awarded free throws (action 215). Team season total for the competition
+    (glkey).
+  win_diff: Games behind the leader.
+  win_rate: Win fraction, 0-1.
+  wins: Season wins of the team (the wire's TWin).
+  woft: Fouls that awarded no free throws (action 216). Team season total for the
+    competition (glkey).
+kbl_team_box:
+  ast: Assists (action 211). This game, team total.
+  ast_ratio: 'Assist ratio: assists per 100 possessions used. This game, team total.'
+  ast_rt: 'Assist rate: share of teammates'' field goals assisted while on court,
+    0-100. This game, team total.'
+  ast_to: Assist-to-turnover ratio. This game, team total.
+  bench_score_cn: Bench points. This game, team total.
+  bf: Meaning unverified (probably bench fouls; 0 in every game sample). This game,
+    team total.
+  bs: Blocked shots (action 213). This game, team total.
+  defr: Defensive rebounds (action 210). This game, team total.
+  defrtg: 'Defensive rating: points allowed per 100 possessions (estimated). This
+    game, team total.'
+  dfl: Deflections (action 227; tracked in recent seasons only, 0 before). This game,
+    team total.
+  dk: Dunks made (action 207); included in `fg`. This game, team total.
+  dk_a: Dunk attempts (made + missed, actions 207 + 208). This game, team total.
+  dreb_rt: Defensive-rebound percentage, 0-100. This game, team total.
+  ef: Meaning unverified (0 in every game sample; non-zero in some season totals).
+    This game, team total.
+  efg_rt: Effective field-goal percentage, 0-100. This game, team total.
+  fb: Fast breaks credited to the player (action 217 rows that name a player, as in
+    1997-98); 0 in recent seasons, where fast breaks are team rows (`tfb`). This game,
+    team total.
+  fb_score_cn: Fast-break points. This game, team total.
+  fg: 'Two-point field goals made, dunks included: 201 + 207 rows (score = 2*fg +
+    3*threep + ft holds on every sampled box). This game, team total.'
+  fg_a: 'Two-point field-goal attempts, made + missed, dunks included: 201 + 202 +
+    207 + 208 rows (checked per team on S47G01N49). This game, team total.'
+  fgt: Field goals made, two- and three-point (fg + threep). This game, team total.
+  fgt_a: Field-goal attempts, two- and three-point (fgA + threepA). This game, team
+    total.
+  foul: Personal fouls (wft + woft). This game, team total.
+  foulout: Players fouled out (unverified). This game, team total.
+  ft: Free throws made (action 203). This game, team total.
+  ft_a: Free-throw attempts, made + missed (203 + 204). This game, team total.
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_no: 'Game number inside the competition (glkey): the N part of the gmkey.'
+  gd: Good-defense plays (action 221). This game, team total.
+  gmkey: 'Game key S{seasonCode}G{gameCode}N{gameNo} (e.g. S47G01N49): the id of every
+    game route and game frame.'
+  idf: Illegal-defense violations (action 219; an early-KBL rule, so non-zero only
+    in old seasons). This game, team total.
+  inout: Times the player entered the game, the start included (checked on the 2025-26
+    sample game); a team row sums its players. This game, team total.
+  inout1: Times the player was substituted out before the end (checked on the 2025-26
+    sample game); a team row sums its players. This game, team total.
+  max_conti_score_cn: 'Longest scoring run: the most consecutive points without an
+    opponent score. This game, team total.'
+  max_lead_score_cn: Largest lead, in points. This game, team total.
+  minutes_played: Playing time in minutes (play_min + play_sec / 60), derived.
+  netrtg: 'Net rating: offrtg - defrtg. This game, team total.'
+  offr: Offensive rebounds (action 209). This game, team total.
+  offrtg: 'Offensive rating: points scored per 100 possessions (estimated). This game,
+    team total.'
+  oreb_rt: Offensive-rebound percentage, 0-100. This game, team total.
+  pace: Possessions per 40 minutes (estimated; a player row covers his minutes on
+    court). This game, team total.
+  play_min: Minutes of playing time summed over the players (200 = 5 x 40 in regulation);
+    add playSec. This game, team total.
+  play_sec: Seconds part of the playing time (0-59), added to `playMin`. This game,
+    team total.
+  poss: Possessions (estimated). This game, team total.
+  pp: Field goals made in the paint. This game, team total.
+  pp_a: Field-goal attempts in the paint. This game, team total.
+  pscore: Points in the paint (2 * pp). This game, team total.
+  rb: Total rebounds (offr + defr; team rebounds are `teamR`). This game, team total.
+  reb_rt: Total-rebound percentage, 0-100. This game, team total.
+  sast: Screen assists (action 226; tracked in recent seasons only, 0 before). This
+    game, team total.
+  score: Points. This game, team total.
+  score_high_time_cn: Seconds the team led (the two teams' values sum to less than
+    the 2,400-second game when it was tied or level at times). This game, team total.
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  sec_chance_score_cn: Second-chance points. This game, team total.
+  stl: Steals (action 212). This game, team total.
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_r: Team rebounds (action 218). This game, team total.
+  tf: Probably technical fouls (unverified; 0 in most rows). This game, team total.
+  tfb: Team fast breaks (action 217). This game, team total.
+  threep: Three-point field goals made (action 205). This game, team total.
+  threep_a: Three-point attempts, made + missed (205 + 206). This game, team total.
+  to: Turnovers (action 214). This game, team total.
+  tov_rt: 'Turnover rate: turnovers per 100 possessions, 0-100. This game, team total.'
+  ts_rt: True-shooting percentage, 0-100. This game, team total.
+  tto: Team turnovers (action 223). This game, team total.
+  turnover_score_cn: Points off turnovers. This game, team total.
+  wft: Fouls that awarded free throws (action 215). This game, team total.
+  woft: Fouls that awarded no free throws (action 216). This game, team total.
+kbl_team_tracks:
+  game_code: 'Competition inside the season, two digits: 01 regular season, 03 playoffs,
+    04 final, 07 EASL, 08 D-League stage 2, 10 All-Star, 11/13 cups, 14 Open Match
+    Day.'
+  game_number: '1-based game number in the team''s season: the n-th entry of the team''s
+    rank track.'
+  glkey: 'Competition key S{seasonCode}G{gameCode} (e.g. S47G01 = 2025-26 regular
+    season): the id of the season routes.'
+  rank: 'Standing (1 = first): after the game_number-th game on the rank track, the
+    current rank on the standings routes.'
+  season: Season END year (2026 = 2025-26), derived from season_code through the crosswalk
+    (kbl_codes.SEASONS).
+  season_code: 'KBL season code: one sequential number over every season and D-League
+    edition (47 = 2025-26, 48 = the 2025 D-League).'
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_name: Team short name in English (e.g. 'KT').
+kbl_teams:
+  team_code: 'KBL team code (2-digit string, e.g. ''50'' = Changwon LG). Joins to
+    /common/teamList `teamCode`, game `tcodeH`/`tcodeA`, `t` in text-cast. Not stable
+    across ownership changes: the Anyang club is ''40'' (SBS) in 1997-98 and ''70''
+    today. D-League sides have their own codes (`teamCodeD`).'
+  team_code_d: Team code of the club's D-League (reserve) side, in the same team-code
+    space as `teamCode`.
+  team_name: Team short name (Korean, no space, e.g. '창원LG' = Changwon LG); the English
+    form is `teamNameEn`.
+  team_name_en: Team short name in English.
+  team_name_full: Team full name (Korean).
+  team_name_full_en: Team full name in English (e.g. 'CHANGWON LG SAKERS').

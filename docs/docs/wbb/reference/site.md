@@ -782,7 +782,7 @@ ESPN endpoint.
 | `season_type_type` | integer | Season type numeric code. |
 | `season_type_name` | character | Season type name (e.g. Regular Season). |
 | `season_type_abbreviation` | character | Season type abbreviation. |
-| `week_number` | double |  |
+| `week_number` | double | Week number. |
 | `week_text` | character | Human-readable label for the week or scheduling block in which the event falls (e.g., 'Week 3', 'Bowl Week'), as returned by the ESPN schedule API. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.

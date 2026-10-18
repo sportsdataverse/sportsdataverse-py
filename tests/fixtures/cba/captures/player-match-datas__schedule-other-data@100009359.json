@@ -1,0 +1,66 @@
+{
+  "homePlayers": [
+    {
+      "playerId": 958794,
+      "number": "23",
+      "cnAlias": "赛义德-阿巴斯",
+      "upTime": 2571,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 6,
+      "fieldGoalsAtRimMade": 0
+    },
+    {
+      "playerId": 100004236,
+      "number": "1",
+      "cnAlias": "约翰-卢卡斯",
+      "upTime": 2423,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 0
+    },
+    {
+      "playerId": 555265,
+      "number": "8",
+      "cnAlias": "刘炜",
+      "upTime": 2088,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 0
+    }
+  ],
+  "visitingPlayers": [
+    {
+      "playerId": 100003778,
+      "number": "9",
+      "cnAlias": "巴特尔",
+      "upTime": 2577,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 0
+    },
+    {
+      "playerId": 100003142,
+      "number": "8",
+      "cnAlias": "木拉提",
+      "upTime": 2334,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 0,
+      "fieldGoalsAtRimMade": 0
+    },
+    {
+      "playerId": 100004152,
+      "number": "45",
+      "cnAlias": "迈隆-阿伦",
+      "upTime": 2046,
+      "gameStart": 1,
+      "fastBreakPoints": 0,
+      "dunksPoints": 2,
+      "fieldGoalsAtRimMade": 0
+    }
+  ]
+}

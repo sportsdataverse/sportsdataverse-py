@@ -1,0 +1,66 @@
+{
+  "attendance": 2288,
+  "broadcasts": null,
+  "competitors": [
+    {
+      "draw": false,
+      "entityId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+      "isHome": true,
+      "resultPlace": 1,
+      "score": "72",
+      "nameFullLatin": "Hiroshima Dragonflies",
+      "nameFullLocal": "Hiroshima Dragonflies",
+      "teamId": "d042f639-5ad9-11ef-9305-6523ca47a22e",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/34be0fafbe3a4049bd3c3eb4e4bcfce7?size=RAW",
+      "codeLatin": null,
+      "codeLocal": "HDF",
+      "primaryColor": "000000",
+      "secondaryColor": "000000",
+      "tertiaryColor": "000000"
+    },
+    {
+      "draw": false,
+      "entityId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "isHome": false,
+      "resultPlace": 2,
+      "score": "68",
+      "nameFullLatin": "Taoyuan Pauian Pilots",
+      "nameFullLocal": "Taoyuan Pauian Pilots",
+      "teamId": "f170040e-5ad9-11ef-b4d4-070129f618c6",
+      "logo": "https://images.dc.connect.sportradar.com/b1e0z/613ec1e996cc4dde9890b18646d74339?size=RAW",
+      "codeLatin": "",
+      "codeLocal": "TPP",
+      "primaryColor": "000000",
+      "secondaryColor": "000000",
+      "tertiaryColor": "000000"
+    }
+  ],
+  "endTimeActualUTC": null,
+  "fixtureId": "bde3aaa1-da50-11ef-97fd-97d4eecf418b",
+  "fixtureNumber": 2425032,
+  "fixtureType": "FINAL",
+  "liveVideoAvailable": false,
+  "nameLatin": null,
+  "nameLocal": null,
+  "poolCode": null,
+  "roundNumber": null,
+  "stage": {},
+  "startTimeActualUTC": null,
+  "startTimeLocal": "2025-03-09T19:10:00",
+  "startTimeUTC": "2025-03-09T11:10:00",
+  "status": "CONFIRMED",
+  "venue": {
+    "abbreviationLatin": null,
+    "abbreviationLocal": null,
+    "alternateNameLatin": null,
+    "alternateNameLocal": null,
+    "countryCode": "MAC",
+    "nameLatin": null,
+    "nameLocal": "Studio City Event Center"
+  },
+  "pool": {
+    "id": null,
+    "name": "Group A",
+    "abb": "A"
+  }
+}

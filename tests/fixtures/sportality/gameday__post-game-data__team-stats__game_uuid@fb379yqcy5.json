@@ -1,0 +1,109 @@
+{
+  "homeTeam": {
+    "name": "BK Amager",
+    "logo": "https://sportality.cdn.s8y.se/team-logos/bka1_bka.svg"
+  },
+  "awayTeam": {
+    "name": "Holbæk-Stenhus",
+    "logo": "https://sportality.cdn.s8y.se/team-logos/hol2_hol.svg"
+  },
+  "stats": [
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 3
+        },
+        "right": {
+          "type": "2PA",
+          "value": 8
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 38
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_2P",
+        "left": {
+          "type": "2PM",
+          "value": 22
+        },
+        "right": {
+          "type": "2PA",
+          "value": 46
+        },
+        "center": {
+          "type": "2PPerc",
+          "value": 48
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 5
+        },
+        "right": {
+          "type": "3PA",
+          "value": 13
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 38
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_3P",
+        "left": {
+          "type": "3PM",
+          "value": 10
+        },
+        "right": {
+          "type": "3PA",
+          "value": 34
+        },
+        "center": {
+          "type": "3PPerc",
+          "value": 29
+        }
+      }
+    },
+    {
+      "homeTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 3
+        },
+        "right": {
+          "type": "FTA",
+          "value": 3
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 100
+        }
+      },
+      "awayTeam": {
+        "sideTranslateKey": "s_FT",
+        "left": {
+          "type": "FTM",
+          "value": 16
+        },
+        "right": {
+          "type": "FTA",
+          "value": 19
+        },
+        "center": {
+          "type": "FTPerc",
+          "value": 84
+        }
+      }
+    }
+  ],
+  "provider": "genius-basketball"
+}

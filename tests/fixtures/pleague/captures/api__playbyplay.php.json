@@ -1,0 +1,91 @@
+{
+  "period_count": 4,
+  "periods": [
+    "Q1",
+    "Q2",
+    "Q3"
+  ],
+  "final_score_away": 94,
+  "final_score_home": 102,
+  "event_count": 630,
+  "events": [
+    {
+      "seq": 3,
+      "period": "Q1",
+      "clock": "11:41",
+      "side": "away",
+      "jersey": "35",
+      "player_zh": "辛巴",
+      "action": "fg2_dunk_made",
+      "action_zh": "灌籃得分",
+      "text_zh": "#35 辛巴 灌籃得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 2,
+      "score_away": 2,
+      "score_home": 0,
+      "x": 91.59,
+      "y": 47.39,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "5d17e839-107a-41f4-abc4-0b5a0e67a301",
+        "synergy_play_id": "042db380-5cea-11ed-8425-e528fba9f5b7",
+        "stat_category": "two_made",
+        "tryspot_player_id": 59476,
+        "created_at": "2022-11-05T09:12:48.556Z"
+      }
+    },
+    {
+      "seq": 5,
+      "period": "Q1",
+      "clock": "11:20",
+      "side": "home",
+      "jersey": "5",
+      "player_zh": "強森",
+      "action": "fg3_made",
+      "action_zh": "三分球得分",
+      "text_zh": "#5 強森 三分球得分",
+      "ft_number": null,
+      "ft_awarded": null,
+      "points": 3,
+      "score_away": 2,
+      "score_home": 3,
+      "x": 29.74,
+      "y": 24.1,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "732a08d7-9128-4e58-8463-592d4f098c55",
+        "synergy_play_id": "1099f020-5cea-11ed-8425-e528fba9f5b7",
+        "stat_category": "three_made",
+        "tryspot_player_id": 150672,
+        "created_at": "2022-11-05T09:13:09.534Z"
+      }
+    },
+    {
+      "seq": 109,
+      "period": "Q1",
+      "clock": "02:21",
+      "side": "home",
+      "jersey": "12",
+      "player_zh": "林志傑",
+      "action": "ft_made",
+      "action_zh": "得到兩次罰球 第一罰 罰進",
+      "text_zh": "#12 林志傑 得到兩次罰球 第一罰 罰進",
+      "ft_number": 1,
+      "ft_awarded": 2,
+      "points": 1,
+      "score_away": 16,
+      "score_home": 24,
+      "x": 9.48,
+      "y": 49.6,
+      "nice_play": false,
+      "video": {
+        "video_uuid": "eeba571f-23c3-428d-9436-f9d402e0e511",
+        "synergy_play_id": "5451fd10-5cec-11ed-8425-e528fba9f5b7",
+        "stat_category": "ft_made",
+        "tryspot_player_id": 57232,
+        "created_at": "2022-11-05T09:29:31.901Z"
+      }
+    }
+  ]
+}

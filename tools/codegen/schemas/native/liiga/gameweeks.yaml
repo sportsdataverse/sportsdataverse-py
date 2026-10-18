@@ -1,0 +1,12 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: serie
+  type: character
+- description: ''
+  name: nb_weeks
+  type: integer
+kind: dataframe
+schema: liiga_gameweeks

@@ -1,0 +1,331 @@
+{
+  "team": {
+    "id": 18,
+    "stage": "regular",
+    "khl_id": 7,
+    "name": "Spartak",
+    "location": "Moscow",
+    "feed_items": [
+      {
+        "type": "News",
+        "date": 1785151800000,
+        "id": 13916631,
+        "title": "Football, goalie of the year and the first warm-up games",
+        "image": "https://www.khl.ru/upload/iblock/924/i426e9n25qaig5jp9l711nc18r0g0lqy/02_20240406_TRA_LKO_KUZ_6.jpg",
+        "body": "<p>\n</p>\n<h5>This week is the last before the KHL’s players return to their clubs. Some have already seen action – Admiral tested its depth in a pre-season game in Minsk, while Alexander Radulov swapp...[truncated 5210 chars]",
+        "body_w_media": "<p>\n</p>\n<h5 style=\"text-align: justify;\">This week is the last before the KHL’s players return to their clubs. Some have already seen action – Admiral tested its depth in a pre-season game in Minsk, ...[truncated 6077 chars]",
+        "outer_url": "http://www.khl.ru/news/2026/7/27/563868.html"
+      },
+      {
+        "type": "News",
+        "date": 1783335600000,
+        "id": 13855927,
+        "title": "Shaping up for summer",
+        "image": "https://www.khl.ru/upload/iblock/cc4/fyiu5seisxbayldrg93plsuzpsb0z9o1/01_20260627_PREPARING_VNB_10.jpg",
+        "body": "<h5>The countdown for the big return to pre-season on Aug. 1 is well underway. Last week brought new imports from Sweden and the USA, plus a fistful of Russians returning from North America. It also s...[truncated 4350 chars]",
+        "body_w_media": "<h5 style=\"text-align: justify;\">The countdown for the big return to pre-season on Aug. 1 is well underway. Last week brought new imports from Sweden and the USA, plus a fistful of Russians returning ...[truncated 5062 chars]",
+        "outer_url": "http://www.khl.ru/news/2026/7/6/563620.html"
+      },
+      {
+        "type": "News",
+        "date": 1782216000000,
+        "id": 13820579,
+        "title": "Traktor signs top goalie, Comtois moves to Spartak. Top transfers",
+        "image": "https://www.khl.ru/upload/iblock/ab6/8f619k3hp71u3o0g0833hwa6dgffnpio/01_20260304_DYN_AVT_VNB_11.jpg",
+        "body": "<h5>\nHenrik Haukeland gives Traktor a new No.1 in goal, Maxime Comtois begins a new chapter with Spartak, the Shanghai Dragons continue to add North American talent ahead of their second season, and T...[truncated 8298 chars]",
+        "body_w_media": "<h5>\nHenrik Haukeland gives Traktor a new No.1 in goal, Maxime Comtois begins a new chapter with Spartak, the Shanghai Dragons continue to add North American talent ahead of their second season, and T...[truncated 8668 chars]",
+        "outer_url": "http://www.khl.ru/news/2026/6/23/563381.html"
+      }
+    ],
+    "arena": {
+      "id": 469,
+      "capacity": 12396,
+      "phone": "+7 (495) 643-1818",
+      "website": "http://www.hockey-palace.ru/",
+      "name": "Megasport Arena",
+      "address": "Khodynsky blvd 3, Moscow, Russia, 125252",
+      "city": "Moscow",
+      "image": "https://www.khl.ru/images/arenas/4/1.jpg",
+      "geo": {
+        "lat": 55.786967,
+        "long": 37.539933
+      }
+    },
+    "arenas": [
+      {
+        "id": 469,
+        "capacity": 12396,
+        "phone": "+7 (495) 643-1818",
+        "website": "http://www.hockey-palace.ru/",
+        "name": "Megasport Arena",
+        "address": "Khodynsky blvd 3, Moscow, Russia, 125252",
+        "city": "Moscow",
+        "image": "https://www.khl.ru/images/arenas/4/1.jpg",
+        "geo": {
+          "lat": 55.786967,
+          "long": 37.539933
+        }
+      }
+    ],
+    "calendar_events": [
+      {
+        "event": {
+          "game_state_key": "finished",
+          "period": -1,
+          "hd": true,
+          "id": 2786714,
+          "stage_id": 370,
+          "type_id": 18,
+          "commentator": true,
+          "likes_enabled": false,
+          "is_vertical_video": false,
+          "khl_id": 898236,
+          "team_a": {
+            "id": 18,
+            "khl_id": 7,
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+            "name": "Spartak",
+            "location": "Moscow"
+          },
+          "team_b": {
+            "id": 36,
+            "khl_id": 71,
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/36/original/neftekhimik_2022__200x200.png",
+            "name": "Neftekhimik",
+            "location": "Nizhnekamsk"
+          },
+          "name": "Spartak - Neftekhimik",
+          "tickets": null,
+          "location": "Moscow",
+          "start_at_day": 1773954000,
+          "start_at": 1774024200000,
+          "event_start_at": 1774023600000,
+          "end_at": 1774033381000,
+          "not_regular": false,
+          "score": "2:3",
+          "scores": {
+            "first_period": "0:0",
+            "second_period": "2:2",
+            "third_period": "0:0",
+            "overtime": "0:0",
+            "bullitt": "0:1"
+          },
+          "sscore": null,
+          "image": "https://thumbs.webcaster.pro/rec-2-5.webcaster.pro/fc/02/thumbnails/events/2786714/10830664815.jpg",
+          "condensed_game_id": null,
+          "highlight_id": null,
+          "infographics": "With scoreboard",
+          "infographics_enabled": true,
+          "has_video": false,
+          "m3u8_url": null,
+          "feed_url": null,
+          "iframe_url": null,
+          "iframe_code": null,
+          "free": false,
+          "yandex_rights": true,
+          "yandex_id": "m730107",
+          "match_id": "898236",
+          "balancer_type": "record",
+          "event_or_quote_type_name": "Архив",
+          "outer_stage_id": 1369,
+          "stage_name": "Regular 2025/2026",
+          "previews": null
+        }
+      }
+    ],
+    "recent_events": [
+      {
+        "event": {
+          "id": 3000619,
+          "score": "0:2",
+          "type_id": 18,
+          "game_state_key": "finished",
+          "period": -1,
+          "khl_id": 902118,
+          "team_a": {
+            "id": 451,
+            "tv_image": "/images/khl_tv/teams/113.png",
+            "name": "HC Sochi",
+            "location": "Sochi",
+            "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/113/original/hc_sochi_2024__200x200_new.png"
+          },
+          "team_b": {
+            "id": 7,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "name": "Spartak",
+            "location": "Moscow",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "name": "HC Sochi - Spartak",
+          "start_at": 1791562800000,
+          "end_at": 1791571759000,
+          "start_at_day": 1791493200,
+          "scores": {
+            "first_period": "0:1",
+            "second_period": "0:0",
+            "third_period": "0:1",
+            "overtime": null,
+            "bullitt": null
+          }
+        }
+      },
+      {
+        "event": {
+          "id": 3000599,
+          "score": "2:5",
+          "type_id": 18,
+          "game_state_key": "finished",
+          "period": -1,
+          "khl_id": 902113,
+          "team_a": {
+            "id": 451,
+            "tv_image": "/images/khl_tv/teams/113.png",
+            "name": "HC Sochi",
+            "location": "Sochi",
+            "image": "https://thumbs.webcaster.pro/rec-1-4.webcaster.pro/fc/sdn/team_pics/113/original/hc_sochi_2024__200x200_new.png"
+          },
+          "team_b": {
+            "id": 7,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "name": "Spartak",
+            "location": "Moscow",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "name": "HC Sochi - Spartak",
+          "start_at": 1791390000000,
+          "end_at": 1791399513000,
+          "start_at_day": 1791320400,
+          "scores": {
+            "first_period": "0:2",
+            "second_period": "0:1",
+            "third_period": "2:2",
+            "overtime": null,
+            "bullitt": null
+          }
+        }
+      },
+      {
+        "event": {
+          "id": 3000547,
+          "score": "3:4",
+          "type_id": 18,
+          "game_state_key": "finished",
+          "period": -1,
+          "khl_id": 902100,
+          "team_a": {
+            "id": 7,
+            "tv_image": "/images/khl_tv/teams/18.png",
+            "name": "Spartak",
+            "location": "Moscow",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png"
+          },
+          "team_b": {
+            "id": 198,
+            "tv_image": "/images/khl_tv/teams/46.png",
+            "name": "Barys",
+            "location": "Astana",
+            "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/46/original/barys_2022_head_only__200x200.png"
+          },
+          "name": "Spartak - Barys",
+          "start_at": 1791121800000,
+          "end_at": 1791132158000,
+          "start_at_day": 1791061200,
+          "scores": {
+            "first_period": "0:0",
+            "second_period": "2:2",
+            "third_period": "1:1",
+            "overtime": "0:0",
+            "bullitt": "0:1"
+          }
+        }
+      }
+    ],
+    "website": "https://www.spartak.ru/",
+    "mail": "sekretar@spartak.ru",
+    "foundation_year": "1946",
+    "photo": "https://img.khl.ru/teamphoto/1436/7/999.jpg",
+    "phone": "+7 (495) 665-96-61",
+    "head_coach": {
+      "photo": "https://img.khl.ru/teamcoaches/15558/1445/320.jpg",
+      "name": "Zhamnov Alexei"
+    },
+    "social_networks": {
+      "tw": "",
+      "vk": "https://vk.com/spartakhc",
+      "ok": "https://ok.ru/hcspartak",
+      "fb": "",
+      "instagram": "https://www.instagram.com/Spartak_HC",
+      "youtube": "",
+      "telegram": "https://t.me/hc_spartak"
+    },
+    "apps": {
+      "ios": "",
+      "android": "",
+      "windows": ""
+    },
+    "address": "Avtozavodskaya st. 23A / 2, Moscow, Russia, 115280",
+    "image": "https://thumbs.webcaster.pro/rec-1-7.webcaster.pro/fc/sdj/team_pics/18/original/spartak_2015__200x200.png",
+    "division": "Bobrov division",
+    "division_key": "bobrov",
+    "conference": "West",
+    "conference_key": "west",
+    "stats": [
+      {
+        "id": "gp",
+        "title": "Games played",
+        "val": 68,
+        "max": 68
+      },
+      {
+        "id": "w",
+        "title": "Wins",
+        "val": 29,
+        "max": 38
+      },
+      {
+        "id": "l",
+        "title": "Losses",
+        "val": 24,
+        "max": 42
+      }
+    ],
+    "players": [
+      {
+        "id": 568,
+        "khl_id": 15299,
+        "image": "https://www.khl.ru/img/teamplayers_db/15558/15299.jpg",
+        "flag_image_url": "https://www.webcaster.pro/images/flags_64x64/RU.png",
+        "g": 3,
+        "a": 13,
+        "role_key": "defensemen",
+        "name": "Vishnevsky Dmitry",
+        "shirt_number": 55,
+        "country": "Russia"
+      },
+      {
+        "id": 1144,
+        "khl_id": 17624,
+        "image": "https://www.khl.ru/img/teamplayers_db/15558/17624.jpg",
+        "flag_image_url": "https://www.webcaster.pro/images/flags_64x64/RU.png",
+        "g": 6,
+        "a": 15,
+        "role_key": "defensemen",
+        "name": "Mironov Andrei A.",
+        "shirt_number": 94,
+        "country": "Russia"
+      },
+      {
+        "id": 1382,
+        "khl_id": 16043,
+        "image": "https://www.khl.ru/img/teamplayers_db/15461/16043.jpg",
+        "flag_image_url": "https://www.webcaster.pro/images/flags_64x64/RU.png",
+        "g": 0,
+        "a": 0,
+        "role_key": "defensemen",
+        "name": "Rukavishnikov Roman",
+        "shirt_number": 5,
+        "country": "Russia"
+      }
+    ]
+  }
+}

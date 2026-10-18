@@ -1,0 +1,286 @@
+{
+  "status": "OK",
+  "data": {
+    "competition": {
+      "id": 579,
+      "name": "Liga OTP banka",
+      "phases": [],
+      "teams": [],
+      "socialMedias": []
+    },
+    "phases": [
+      {
+        "competitionPhase": {
+          "id": 5811,
+          "name": "Redni del",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "type": "GROUP",
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [
+          {
+            "teamId": 17552,
+            "teamName": "Krka",
+            "clubCode": "KRK",
+            "logoUuid": "dbf53462-c87d-496b-a84d-8be542f337aa",
+            "team": {
+              "id": 17552,
+              "clubCode": "KRK",
+              "name": "Krka"
+            },
+            "gamesPlayed": 27,
+            "won": 26,
+            "lost": 1,
+            "ptsPlus": 2547,
+            "ptsMinus": 1892,
+            "homeWon": 13,
+            "homeLost": 1,
+            "awayWon": 13,
+            "awayLost": 0,
+            "points": 53,
+            "draws": 0,
+            "lostPoints": 0,
+            "tieBreakPosition": 1,
+            "ptsDifference": 655
+          },
+          {
+            "teamId": 17551,
+            "teamName": "Perspektiva Ilirija",
+            "clubCode": "ILI",
+            "logoUuid": "f90fe2e9-905d-481c-a7fd-042c0b75530c",
+            "team": {
+              "id": 17551,
+              "clubCode": "ILI",
+              "name": "Perspektiva Ilirija"
+            },
+            "gamesPlayed": 27,
+            "won": 21,
+            "lost": 6,
+            "ptsPlus": 2438,
+            "ptsMinus": 2191,
+            "homeWon": 11,
+            "homeLost": 3,
+            "awayWon": 10,
+            "awayLost": 3,
+            "points": 48,
+            "draws": 0,
+            "lostPoints": 0,
+            "tieBreakPosition": 2,
+            "ptsDifference": 247
+          },
+          {
+            "teamId": 17549,
+            "teamName": "GGD Šenčur",
+            "clubCode": "ŠEN",
+            "logoUuid": "45b0ac2b-351a-40ff-be09-f1ec6fca401d",
+            "team": {
+              "id": 17549,
+              "clubCode": "ŠEN",
+              "name": "GGD Šenčur"
+            },
+            "gamesPlayed": 27,
+            "won": 18,
+            "lost": 9,
+            "ptsPlus": 2346,
+            "ptsMinus": 2165,
+            "homeWon": 9,
+            "homeLost": 5,
+            "awayWon": 9,
+            "awayLost": 4,
+            "points": 45,
+            "draws": 0,
+            "lostPoints": 0,
+            "tieBreakPosition": 3,
+            "ptsDifference": 181
+          }
+        ],
+        "groups": []
+      },
+      {
+        "competitionPhase": {
+          "id": 5889,
+          "name": "Četrtfinale",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "type": "BRACKET_BEST_OF",
+          "winsNeeded": 2,
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [
+          {
+            "teamId": 17551,
+            "teamName": "Perspektiva Ilirija",
+            "clubCode": "ILI",
+            "logoUuid": "f90fe2e9-905d-481c-a7fd-042c0b75530c",
+            "team": {
+              "id": 17551,
+              "clubCode": "ILI",
+              "name": "Perspektiva Ilirija"
+            },
+            "gamesPlayed": 3,
+            "won": 2,
+            "lost": 1,
+            "ptsPlus": 242,
+            "ptsMinus": 220,
+            "homeWon": 1,
+            "homeLost": 1,
+            "awayWon": 1,
+            "awayLost": 0,
+            "points": 5,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 22
+          },
+          {
+            "teamId": 17548,
+            "teamName": "Cedevita Olimpija",
+            "clubCode": "COL",
+            "logoUuid": "4586ff12-6ac5-45f9-b015-5344ddcc8320",
+            "team": {
+              "id": 17548,
+              "clubCode": "COL",
+              "name": "Cedevita Olimpija"
+            },
+            "gamesPlayed": 2,
+            "won": 2,
+            "lost": 0,
+            "ptsPlus": 195,
+            "ptsMinus": 150,
+            "homeWon": 1,
+            "homeLost": 0,
+            "awayWon": 1,
+            "awayLost": 0,
+            "points": 4,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 45
+          },
+          {
+            "teamId": 17552,
+            "teamName": "Krka",
+            "clubCode": "KRK",
+            "logoUuid": "dbf53462-c87d-496b-a84d-8be542f337aa",
+            "team": {
+              "id": 17552,
+              "clubCode": "KRK",
+              "name": "Krka"
+            },
+            "gamesPlayed": 2,
+            "won": 2,
+            "lost": 0,
+            "ptsPlus": 180,
+            "ptsMinus": 138,
+            "homeWon": 1,
+            "homeLost": 0,
+            "awayWon": 1,
+            "awayLost": 0,
+            "points": 4,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 42
+          }
+        ],
+        "groups": []
+      },
+      {
+        "competitionPhase": {
+          "id": 5890,
+          "name": "Polfinale",
+          "competitionId": 0,
+          "groups": [],
+          "gameDays": [],
+          "teams": [],
+          "type": "BRACKET_BEST_OF",
+          "winsNeeded": 2,
+          "transferredFrom": [],
+          "playAgainWithTransferred": false,
+          "countsForPlayersRestrictions": false
+        },
+        "standings": [
+          {
+            "teamId": 17552,
+            "teamName": "Krka",
+            "clubCode": "KRK",
+            "logoUuid": "dbf53462-c87d-496b-a84d-8be542f337aa",
+            "team": {
+              "id": 17552,
+              "clubCode": "KRK",
+              "name": "Krka"
+            },
+            "gamesPlayed": 3,
+            "won": 2,
+            "lost": 1,
+            "ptsPlus": 280,
+            "ptsMinus": 259,
+            "homeWon": 2,
+            "homeLost": 0,
+            "awayWon": 0,
+            "awayLost": 1,
+            "points": 5,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 21
+          },
+          {
+            "teamId": 17548,
+            "teamName": "Cedevita Olimpija",
+            "clubCode": "COL",
+            "logoUuid": "4586ff12-6ac5-45f9-b015-5344ddcc8320",
+            "team": {
+              "id": 17548,
+              "clubCode": "COL",
+              "name": "Cedevita Olimpija"
+            },
+            "gamesPlayed": 2,
+            "won": 2,
+            "lost": 0,
+            "ptsPlus": 180,
+            "ptsMinus": 144,
+            "homeWon": 1,
+            "homeLost": 0,
+            "awayWon": 1,
+            "awayLost": 0,
+            "points": 4,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": 36
+          },
+          {
+            "teamId": 17551,
+            "teamName": "Perspektiva Ilirija",
+            "clubCode": "ILI",
+            "logoUuid": "f90fe2e9-905d-481c-a7fd-042c0b75530c",
+            "team": {
+              "id": 17551,
+              "clubCode": "ILI",
+              "name": "Perspektiva Ilirija"
+            },
+            "gamesPlayed": 3,
+            "won": 1,
+            "lost": 2,
+            "ptsPlus": 259,
+            "ptsMinus": 280,
+            "homeWon": 1,
+            "homeLost": 0,
+            "awayWon": 0,
+            "awayLost": 2,
+            "points": 4,
+            "draws": 0,
+            "lostPoints": 0,
+            "ptsDifference": -21
+          }
+        ],
+        "groups": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "season": "2025-26",
+  "season_sdv": 2026,
+  "last_n": 10,
+  "team_count": 4,
+  "teams": [
+    {
+      "rank": 1,
+      "team_id": 2,
+      "team_zh": "領航猿",
+      "team_logo": "https://photonew.preciser.io/plg/teams/e865bb20-3d88-11ed-a956-7f44ba46b0b1.png",
+      "games_played": 24,
+      "wins": 21,
+      "losses": 3,
+      "win_pct": 88.0,
+      "games_behind": 0.0,
+      "points_for_avg": 104.3,
+      "points_against_avg": 94.5,
+      "point_diff_avg": 9.8,
+      "home_record": "12-0",
+      "away_record": "9-3",
+      "streak": "W4",
+      "last_n_record": "8-2"
+    },
+    {
+      "rank": 2,
+      "team_id": 1,
+      "team_zh": "勇士",
+      "team_logo": "https://photonew.preciser.io/plg/teams/e86394aa-3d88-11ed-8ba8-7f44ba46b0b1.png",
+      "games_played": 24,
+      "wins": 12,
+      "losses": 12,
+      "win_pct": 50.0,
+      "games_behind": 9.0,
+      "points_for_avg": 101.8,
+      "points_against_avg": 98.0,
+      "point_diff_avg": 3.7,
+      "home_record": "7-5",
+      "away_record": "5-7",
+      "streak": "W5",
+      "last_n_record": "7-3"
+    },
+    {
+      "rank": 3,
+      "team_id": 7,
+      "team_zh": "獵鷹",
+      "team_logo": "https://photonew.preciser.io/plg/teams/3c3a601a-358a-11ed-ab92-711c34ed1298.png",
+      "games_played": 24,
+      "wins": 11,
+      "losses": 13,
+      "win_pct": 46.0,
+      "games_behind": 10.0,
+      "points_for_avg": 96.9,
+      "points_against_avg": 96.2,
+      "point_diff_avg": 0.8,
+      "home_record": "6-6",
+      "away_record": "5-7",
+      "streak": "L1",
+      "last_n_record": "3-7"
+    }
+  ]
+}

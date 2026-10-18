@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: team_code
+  type: character
+- description: ''
+  name: team_code_d
+  type: character
+- description: ''
+  name: team_name
+  type: character
+- description: ''
+  name: team_name_full
+  type: character
+- description: ''
+  name: team_name_en
+  type: character
+- description: ''
+  name: team_name_full_en
+  type: character
+kind: dataframe
+schema: kbl_teams

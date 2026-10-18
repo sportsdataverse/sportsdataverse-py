@@ -1,0 +1,145 @@
+{
+  "matches": [
+    {
+      "id": 4389,
+      "start_date": "2026-09-17 19:30:00",
+      "real_end_date": "2026-09-17 21:50:00",
+      "league_id": 1,
+      "league": "DEL",
+      "season": "2026",
+      "round": "﻿1",
+      "home": {
+        "id": 3,
+        "name": "Eisbären Berlin",
+        "shortcut": "EBB"
+      },
+      "guest": {
+        "id": 6,
+        "name": "Straubing Tigers",
+        "shortcut": "STR"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 4,
+            "score_guest": 2
+          },
+          "first_period": {
+            "score_home": 1,
+            "score_guest": 0
+          },
+          "second_period": {
+            "score_home": 2,
+            "score_guest": 0
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 2
+          }
+        }
+      },
+      "actual_time_name": "Ende",
+      "actual_time_alias": "K",
+      "last_event_time": 3600
+    },
+    {
+      "id": 4390,
+      "start_date": "2026-09-18 19:30:00",
+      "real_end_date": "2026-09-18 21:51:00",
+      "league_id": 1,
+      "league": "DEL",
+      "season": "2026",
+      "round": "﻿1",
+      "home": {
+        "id": 11,
+        "name": "Kölner Haie",
+        "shortcut": "KEC"
+      },
+      "guest": {
+        "id": 8,
+        "name": "Grizzlys Wolfsburg",
+        "shortcut": "WOB"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 4,
+            "score_guest": 8
+          },
+          "first_period": {
+            "score_home": 2,
+            "score_guest": 2
+          },
+          "second_period": {
+            "score_home": 1,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 1,
+            "score_guest": 5
+          }
+        }
+      },
+      "actual_time_name": "Ende",
+      "actual_time_alias": "K",
+      "last_event_time": 3600
+    },
+    {
+      "id": 4391,
+      "start_date": "2026-09-18 19:30:00",
+      "real_end_date": "2026-09-18 21:50:00",
+      "league_id": 1,
+      "league": "DEL",
+      "season": "2026",
+      "round": "1",
+      "home": {
+        "id": 14,
+        "name": "Nürnberg Ice Tigers",
+        "shortcut": "NIT"
+      },
+      "guest": {
+        "id": 13,
+        "name": "Augsburger Panther",
+        "shortcut": "AEV"
+      },
+      "status": "AFTER_MATCH",
+      "overtimeCount": null,
+      "results": {
+        "extra_time": false,
+        "shooting": false,
+        "contumacy": false,
+        "score": {
+          "final": {
+            "score_home": 4,
+            "score_guest": 1
+          },
+          "first_period": {
+            "score_home": 0,
+            "score_guest": 0
+          },
+          "second_period": {
+            "score_home": 1,
+            "score_guest": 1
+          },
+          "third_period": {
+            "score_home": 3,
+            "score_guest": 0
+          }
+        }
+      },
+      "actual_time_name": "Ende",
+      "actual_time_alias": "K",
+      "last_event_time": 3600
+    }
+  ]
+}
