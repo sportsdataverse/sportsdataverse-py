@@ -334,17 +334,20 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
 
     What DOES go through the gateway is the *classification* of a failure. When the
     direct read fails we ask ``download`` what the server actually said instead of
-    pattern-matching the reader's exception message:
+    pattern-matching the reader's exception message (:func:`_classify_release_failure`):
 
     * a 404 raises :class:`~sportsdataverse.errors.NoDataError` -- the asset is
       genuinely absent;
-    * any other non-200 -- notably a 403 or a rate limit that outlived the retry
-      budget -- raises :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch
-      that FAILED is never confused with an asset that is ABSENT;
-    * a reachable, readable asset means the failure was a genuine parse/schema error,
-      which is re-raised untouched.
+    * any other non-2xx -- notably a 403 or a rate limit that outlived the retry
+      budget -- and a connection that never answered raise
+      :class:`~sportsdataverse.errors.AssetFetchError`, so a fetch that FAILED is never
+      confused with an asset that is ABSENT;
+    * a reachable asset is read once more: a failure in transit (B-L74) reads cleanly
+      now, and a second failure is the asset's own (a corrupt file, a schema error),
+      re-raised exactly as the reader raised it.
 
-    The extra round trip happens only on the failure path and costs ~0.1s.
+    The classification is a one-byte ranged GET, so it never re-downloads the asset
+    (A-N10), and it runs only on the failure path.
 
     R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
     raw RDS bytes (not UTF-8) -- e.g. a ``glue`` character column. polars' arrow-FFI
@@ -356,8 +359,6 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     Use :func:`_read_release_parquet` instead when a missing season should be skipped
     rather than raised.
     """
-    from sportsdataverse.errors import AssetFetchError
-
     try:
         return pl.read_parquet(url, use_pyarrow=True)
     except Exception as e:  # noqa: BLE001 -- classified below, by the server not the message
@@ -367,12 +368,34 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
             raise  # never swallow KeyboardInterrupt / SystemExit into an HTTP call
         return _read_parquet_stripped_metadata(url)
 
-    resp = download(url)  # raises NoDataError on a 404 -- the "absent" signal
+    _classify_release_failure(url, original)
+    # Reachable (B-L74): a read that failed in transit succeeds now; one that fails again
+    # is the asset's own error and surfaces as the reader raised it.
+    return pl.read_parquet(url, use_pyarrow=True)
 
+
+#: One byte answers "is the asset there?" without re-downloading a 20-59 MB file (A-N10).
+_PROBE_HEADERS = {"Range": "bytes=0-0"}
+
+
+def _classify_release_failure(url: str, original: BaseException) -> None:
+    """Raise what the server says about an asset Arrow failed to read; return when it is reachable.
+
+    A 404 raises :class:`~sportsdataverse.errors.NoDataError` (from ``download``); a dead
+    connection after the retries (A-M9) and any other non-2xx raise
+    :class:`~sportsdataverse.errors.AssetFetchError` chained to ``original``. The release
+    CDN answers the ranged GET 206, a host that ignores ``Range`` 200, and a zero-byte
+    asset 416: all three are reachable, so the caller reads again.
+    """
+    import urllib.error
+
+    if isinstance(original, urllib.error.HTTPError):
+        original.close()  # Arrow's urllib read kept the error response's socket open
+    with _transport_errors(url):
+        resp = download(url, headers=_PROBE_HEADERS)
     status = getattr(resp, "status_code", None)
-    if status is not None and status != 200:
+    if isinstance(status, int) and not (200 <= status < 300 or status == 416):
         raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}") from original
-    raise original
 
 
 def _read_release_parquet(url: str) -> Optional[pl.DataFrame]:
@@ -407,9 +430,8 @@ def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
     import pyarrow as pa
     import pyarrow.parquet as pq
 
-    from sportsdataverse.errors import AssetFetchError
-
-    resp = download(url)
+    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error
+        resp = download(url)
     status = getattr(resp, "status_code", None)
     if status is not None and status != 200:
         raise AssetFetchError(f"release asset fetch failed with HTTP {status}: {url}")
@@ -418,6 +440,28 @@ def _read_parquet_stripped_metadata(url: str) -> pl.DataFrame:
     out = pl.from_arrow(tbl.cast(plain).replace_schema_metadata(None))
     assert isinstance(out, pl.DataFrame)
     return out
+
+
+def _fetch_csv(url: str, **read_csv_kwargs: Any) -> pl.DataFrame:
+    """Read a remote CSV through the HTTP gateway, under the error vocabulary (A-M11).
+
+    A CSV is small, so unlike :func:`_fetch_release_parquet` its bytes go through
+    ``download``, and its 429/5xx backoff and the vocabulary come with them. Handed a
+    URL, polars 2.0's own reader raises a bare ``OSError`` for every HTTP failure, so a
+    missing file, a rate limit and a dead connection were indistinguishable.
+
+    Raises:
+        NoDataError: the host answered 404.
+        ValueError: the host answered 400 / 422.
+        AssetFetchError: any other non-2xx after retries, a connection failure after
+            retries, or a 2xx whose body is empty or a page rather than CSV.
+    """
+    import io
+
+    with _transport_errors(url):
+        resp = download(url)
+    _text_body(resp, url, html=False)
+    return pl.read_csv(io.BytesIO(resp.content), **read_csv_kwargs)
 
 
 def format_nhl_season(season: Any) -> Optional[str]:

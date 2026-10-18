@@ -373,6 +373,12 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
     if response.status_code == 404:
         raise NoDataError(_format_404(response.url))
 
+    # A binary body (a 20-59 MB release parquet) is never an envelope; decoding it as JSON
+    # charset-scans the whole file first (A-L29).
+    headers = getattr(response, "headers", None) or {}
+    if "octet-stream" in str(headers.get("Content-Type", "")).lower():
+        return response
+
     # ESPN's "200-but-empty" envelope is `{"code": 404, ...}`. Other
     # endpoints (e.g. jsonplaceholder.typicode.com/posts, stats.wnba.com
     # paginated payloads) return JSON arrays at the top level, where

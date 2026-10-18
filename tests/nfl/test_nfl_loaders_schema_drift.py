@@ -192,14 +192,27 @@ _read_csv = pl.read_csv
 
 @pytest.fixture()
 def offline_ff_csvs(monkeypatch):
-    """Serve the committed real CSV slices in place of the DynastyProcess URLs."""
+    """Serve the committed real CSV slices in place of the DynastyProcess URLs.
+
+    The CSVs are fetched through the HTTP gateway (A-M11), so the slice is answered
+    at the transport: a real ``requests.Response`` carrying the committed bytes.
+    """
+    import requests
+
+    from sportsdataverse import _codegen_runtime
+
     seen: list = []
 
-    def fake_read_csv(source, **kwargs):
-        seen.append(source)
-        return _read_csv(_FF_SLICES[source], **kwargs)
+    def fake_download(url, **kwargs):
+        seen.append(url)
+        resp = requests.Response()
+        resp.status_code = 200
+        resp.url = url
+        resp.encoding = "utf-8"
+        resp._content = _FF_SLICES[url].read_bytes()
+        return resp
 
-    monkeypatch.setattr(_loaders.pl, "read_csv", fake_read_csv)
+    monkeypatch.setattr(_codegen_runtime, "download", fake_download)
     return seen
 
 
