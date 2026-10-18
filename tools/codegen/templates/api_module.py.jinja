@@ -5,7 +5,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
+{% if runtime_imports %}
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
+{% endif %}
+{% for mod, fn, alias in getter_imports %}
+from {{ mod }} import {{ fn }} as {{ alias }}
+{% endfor %}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
 
@@ -72,13 +77,31 @@ def {{ ep.fn_name }}(
     {{ check }}
 {% endfor %}
     _caller_params = kwargs.pop("params", None) or {}
-    _params = {
+{% if ep.body_declared %}
+    _body = {
 {% for k, v in ep.fixed_params.items() %}
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
-{% for p in ep.query_params %}
-{% if p.transform %}
-        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% for p in ep.body_params %}
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
+{% else %}
+        "{{ p.api }}": {{ p.python_name }},
+{% endif %}
+{% endfor %}
+    }
+    _body.update(_caller_params)
+{% endif %}
+{% if not ep.body_declared or ep.url_params %}
+    _params = {
+{% if not ep.body_declared %}
+{% for k, v in ep.fixed_params.items() %}
+        "{{ k }}": {{ v|py_repr }},
+{% endfor %}
+{% endif %}
+{% for p in ep.url_params %}
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
 {% else %}
         "{{ p.api }}": {{ p.python_name }},
 {% endif %}
@@ -87,16 +110,24 @@ def {{ ep.fn_name }}(
         **{_k: _v for _k, _v in kwargs.items() if _v is not None},
 {% endif %}
     }
+{% if not ep.body_declared %}
     _params.update(_caller_params)
+{% endif %}
+{% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         __url,
 {% else %}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         {{ ep.url_literal }},
 {% endif %}
+{% if not ep.body_declared or ep.url_params %}
         params=_params,
+{% endif %}
+{% if ep.body_declared %}
+        body=_body,
+{% endif %}
 {% if auth %}
         headers=headers,
 {% endif %}

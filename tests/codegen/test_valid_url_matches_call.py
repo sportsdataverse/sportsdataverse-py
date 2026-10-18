@@ -1,7 +1,9 @@
 """The reference docs' "Valid URL" is the URL the documented example call requests.
 
 Offline: each generated wrapper is called with its example args against a stub
-``_get`` that records the URL and params instead of fetching.
+``_get`` that records the URL and params instead of fetching. A ``body:`` (POST) route has no
+GET-shaped "Valid URL": its documented "Example request" is the POST URL and its "Example body"
+the ``body=`` the wrapper hands the getter.
 """
 
 from __future__ import annotations
@@ -33,8 +35,8 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
     # the wire, so the documented URL is compared with the query after the same rewrite.
     build = getattr(importlib.import_module(mod._get.__module__), "_build_query", None)
 
-    def fake_get(url, params=None, **_kw):
-        seen.update(url=url, params=params or {})
+    def fake_get(url, params=None, body=None, **_kw):
+        seen.update(url=url, params=params or {}, body=body)
         return {}
 
     monkeypatch.setattr(mod, "_get", fake_get)
@@ -45,7 +47,8 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
         if v.parser:
             kwargs["return_parsed"] = False
         fn = getattr(mod, v.fn_name)
-        if not v.valid_url:  # only when the example omits a required argument
+        documented = v.example_request_url if v.body_declared else v.valid_url
+        if not documented:  # only when the example omits a required argument
             with pytest.raises(TypeError):
                 fn(**kwargs)
             continue
@@ -56,8 +59,14 @@ def _assert_valid_urls(monkeypatch, views, dotted: str, league: str = "") -> int
             built = build(query)
             query = built[0] if isinstance(built, tuple) else built
         got = seen["url"] + (f"?{urlencode(query, doseq=True)}" if query else "")
-        assert v.valid_url == got, v.fn_name
-        assert f"{v.fn_name}(" in v.example_call and v.valid_url in v.docstring, v.fn_name
+        assert documented == got, v.fn_name
+        assert f"{v.fn_name}(" in v.example_call, v.fn_name
+        if v.body_declared:
+            sent = {k: val for k, val in (seen["body"] or {}).items() if val is not None}
+            assert (generate._render_example_body(sent, v.body_format) if sent else "") == v.example_body, v.fn_name
+            assert f"Example request: POST {documented}" in v.docstring and not v.valid_url, v.fn_name
+        else:
+            assert seen["body"] is None and v.valid_url in v.docstring, v.fn_name
         checked += 1
     return checked
 

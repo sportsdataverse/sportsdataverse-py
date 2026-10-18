@@ -106,12 +106,19 @@ def test_match_day_without_a_season_uses_the_active_ssgt(served):
 
 
 def test_season_game_log_sends_the_start_year(served):
+    """The wrapper declares ``transform: {offset: -1}`` (END -> START); ``_get`` sends the season as given."""
+    from sportsdataverse.hockey.shl import shl_athlete_game_log
+
     routes, calls, _ = served
     routes["/statistics-v2/athlete/playerProfile_seasonGameLog"] = _Resp(
         _load("statistics-v2__athlete__playerProfile_seasonGameLog.json")
     )
-    rt._get(f"{B}/statistics-v2/athlete/playerProfile_seasonGameLog", {"playerUuid": "qQ9-349c7WDv6", "season": 2026})
+    shl_athlete_game_log(athlete_uuid="qQ9-349c7WDv6", season=2026, return_parsed=False)
     assert calls[-1][1]["season"] == 2025
+    shl_athlete_game_log(athlete_uuid="qQ9-349c7WDv6", return_parsed=False)  # None passes through
+    assert "season" not in calls[-1][1]
+    rt._get(f"{B}/statistics-v2/athlete/playerProfile_seasonGameLog", {"playerUuid": "qQ9-349c7WDv6", "season": 2025})
+    assert calls[-1][1]["season"] == 2025  # the runtime no longer subtracts
 
 
 def test_filter_route_season_uuid_passes_through(served):

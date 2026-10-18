@@ -291,7 +291,8 @@ def test_yaml_lists_every_spec_route():
     assert len(paths) == 11 and len(doc["endpoints"]) == 14  # /game/text/ feeds four wrappers
     assert doc["getter_module"] == "sportsdataverse.hockey.khl.khl_runtime" and doc["auth"] is True
     for ep in doc["endpoints"]:
-        assert not {"league", "sport"} & {p["name"] for p in ep.get("extra_params", [])}
+        assert not {"league", "sport"} & {p["name"] for p in ep["body"]}
+        assert (ep["method"], ep["format"]) == ("post", "form") and "extra_params" not in ep
         assert ep["summary"].endswith(".") and not ep["summary"].startswith(("/", "GET ", "POST "))
 
 

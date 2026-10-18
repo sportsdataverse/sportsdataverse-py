@@ -25,30 +25,31 @@ docstring:
     note: SportsDataverse hockey package (R)
     url: https://fastRhockey.sportsdataverse.org
 endpoints:
-- example_args:
-    season: 2026
-  extra_params:
+- body:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). None =
       the site's current season.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_schedule
   path: /calendar/list/
@@ -56,47 +57,49 @@ endpoints:
   short: schedule
   summary: Season schedule and results of a tournament, one row per game (All-Star
     games dropped).
-- example_args:
-    club_id: 7
-  extra_params:
+- body:
   - description: Required. khl.ru CLUB id (7 = Spartak; schedule home_club_id), not
       a team-season id.
+    key: values[club_id]
     name: club_id
-    query_key: values[club_id]
     required: true
     type: int
+  example_args:
+    club_id: 7
   fixed_params:
     page: team
+  format: form
   method: post
   parser: parse_khl_roster
   path: /clubs/team/
   returns_schema: native/khl_rest/roster
   short: roster
   summary: 'Club roster (current season only): one row per player.'
-- example_args:
-    season: 2026
-  extra_params:
+- body:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). None =
       the site's current season.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_stat_filters
   path: /filters/statplayers/
@@ -104,76 +107,78 @@ endpoints:
   short: stat_filters
   summary: 'Stats filter options: seasons, tournaments, position groups and clubs
     (one row per option).'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
   fixed_params:
     page: resume
+  format: form
   method: post
   parser: parse_khl_game_header
   path: /game/header/
   returns_schema: native/khl_rest/game_header
   short: game_header
   summary: 'Game header: status, teams, score, arena (one row).'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_game_protocol
   path: /game/protocol/
@@ -181,74 +186,76 @@ endpoints:
   short: game_protocol
   summary: 'Game protocol: one row per goal with scorer, assistants, strength and
     the jerseys on the ice.'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_game_info
   path: /game/text/
   returns_schema: native/khl_rest/game_info
   short: game_info
   summary: 'Game info: teams, score, arena, officials, starting goalies (one row).'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_player_box
   path: /game/text/
@@ -256,37 +263,38 @@ endpoints:
   short: player_box
   summary: 'Skater box score by period: one row per period, side and jersey, with
     the player id.'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_pbp
   path: /game/text/
@@ -294,37 +302,38 @@ endpoints:
   short: pbp
   summary: 'Play-by-play: shots, faceoffs, hits, blocks, giveaways, takeaways, penalties
     and goals (2008-09 on).'
-- example_args:
-    game_id: 898236
-    season: 2026
-  extra_params:
+- body:
   - description: Required. khl.ru game id (the schedule's game_id; equals webcaster
       event khl_id).
+    key: values[gameid]
     name: game_id
-    query_key: values[gameid]
     required: true
     type: int
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). The game's
       season; required unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    game_id: 898236
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_shots
   path: /game/text/
@@ -332,77 +341,81 @@ endpoints:
   short: shots
   summary: 'Shot map: one row per shot with its x / y on the 1000 x 500 rink grid
     (2024-25 on).'
-- example_args:
-    player_id: 41928
-  extra_params:
+- body:
   - description: Required. khl.ru player id (the box score / roster player_id).
+    key: values[id]
     name: player_id
-    query_key: values[id]
     required: true
     type: int
+  example_args:
+    player_id: 41928
+  format: form
   method: post
   parser: parse_khl_player_profile
   path: /players/profile/
   returns_schema: native/khl_rest/player_profile
   short: player_profile
   summary: 'Player profile: bio, contract, club (one row).'
-- example_args:
-    player_id: 41928
-  extra_params:
+- body:
   - description: Required. khl.ru player id (the box score / roster player_id).
+    key: values[id]
     name: player_id
-    query_key: values[id]
     required: true
     type: int
+  example_args:
+    player_id: 41928
+  format: form
   method: post
   parser: parse_khl_player_career
   path: /players/stats/
   returns_schema: native/khl_rest/player_career
   short: player_career
   summary: 'Player career: one row per season tournament.'
-- example_args:
-    season: 2026
-  extra_params:
+- body:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). Required
       unless tournament_id is given.
+    key: season
     name: season
-    query_key: season
     type: int
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    season: 2026
   fixed_params:
     stage: playoff
     values[type]: playoff
+  format: form
   method: post
   parser: parse_khl_playoff_bracket
   path: /standings/playoff/
   returns_schema: native/khl_rest/playoff_bracket
   short: playoff_bracket
   summary: 'Playoff bracket: one row per team per series.'
-- example_args:
-    season: 2026
-  extra_params:
+- body:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). None =
       the site's current season.
+    key: season
     name: season
-    query_key: season
     type: int
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
+  example_args:
+    season: 2026
   fixed_params:
     values[type]: regular
+  format: form
   method: post
   parser: parse_khl_standings
   path: /standings/regular/
@@ -410,30 +423,27 @@ endpoints:
   short: standings
   summary: 'Regular-season standings: one row per team per table (league, conferences,
     divisions).'
-- example_args:
-    position: forwards
-    season: 2026
-  extra_params:
+- body:
   - description: Season by its END year (2026 = 2025-26), mapped to the KHL tournament
       id (tnId) through the webcaster season table (khl_webcaster_stages). None =
       the site's current season.
+    key: season
     name: season
-    query_key: season
     type: int
   - choices:
     - regular
     - playoff
     default: regular
     description: 'Which stage of the season: regular or playoff.'
+    key: stage
     name: stage
-    query_key: stage
     type: str
   - description: khl.ru tournament id (tnId), sent as is instead of season / stage
       (1369 = 2025-26 regular season, 1370 its playoff; the schedule's tournament_id
       column). The All-Star games have their own.
+    key: values[tournament]
     kw_only: true
     name: tournament_id
-    query_key: values[tournament]
     type: int
   - choices:
     - goalies
@@ -443,26 +453,30 @@ endpoints:
     - all
     description: 'Position group: goalies, defenses, forwards, skaters or all. None
       = the site''s default.'
+    key: values[amplua_full]
     name: position
-    query_key: values[amplua_full]
     type: str
   - description: Club slug (khl_stat_filters, filter clubs_full) or all. None = every
       club.
+    key: values[clubs_full]
     name: club
-    query_key: values[clubs_full]
     type: str
   - default: 1
     description: 1-based page. Loop until a page comes back shorter than per_page.
+    key: nav[page]
     name: page
-    query_key: nav[page]
     type: int
   - default: 20
     description: 'Rows per page: 12, 20, 24 or 36. Keep 20: the site computes page
       counts and ranks for 20.'
+    key: nav[count]
     kw_only: true
     name: per_page
-    query_key: nav[count]
     type: int
+  example_args:
+    position: forwards
+    season: 2026
+  format: form
   method: post
   parser: parse_khl_player_stats
   path: /stat/players/

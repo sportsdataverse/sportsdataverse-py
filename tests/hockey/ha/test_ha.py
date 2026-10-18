@@ -326,8 +326,8 @@ def test_yaml_categories_are_the_probed_sets():
         ("goalie_stats", "/api/all-time-goalkeepers-stats", 5),
         ("team_stats", "/api/all-time-teams-stats", 12),
     ):
-        cat = {p["name"]: p for p in by[short]["extra_params"]}["category"]
-        assert cat["query_key"] == "categories" and tuple(cat["choices"]) == R.CATEGORIES[route]
+        cat = {p["name"]: p for p in by[short]["body"]}["category"]
+        assert cat["key"] == "categories" and tuple(cat["choices"]) == R.CATEGORIES[route]
         assert len(cat["choices"]) == n and cat["default"] == R.BODIES[route]["categories"]
     assert {route: tuple(enum) for route, enum in SNAPSHOT["categories"].items()} == R.CATEGORIES
 
@@ -339,14 +339,15 @@ def test_runtime_default_bodies_are_the_spec_examples():
 
 def test_players_wrapper_requires_a_team():
     by = {e["short"]: e for e in _yaml()["endpoints"]}
-    team = {p["name"]: p for p in by["players"]["extra_params"]}["team"]
-    assert team["query_key"] == "teamShortName" and team["required"] is True
+    team = {p["name"]: p for p in by["players"]["body"]}["team"]
+    assert team["key"] == "teamShortName" and team["required"] is True
 
 
 def test_no_path_token_named_league_or_sport():
     for e in _yaml()["endpoints"]:
         assert not {"league", "sport"} & set(re.findall(r"\{([^}]+)\}", e["path"])), e["path"]
-        assert not {"league", "sport"} & {p["name"] for p in e.get("extra_params", [])}, e["short"]
+        fields = [*e.get("extra_params", []), *e.get("body", [])]
+        assert not {"league", "sport"} & {p["name"] for p in fields}, e["short"]
 
 
 # --- runtime ------------------------------------------------------------------------------------

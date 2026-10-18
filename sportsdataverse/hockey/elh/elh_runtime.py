@@ -161,10 +161,7 @@ def _page_state(root: Any) -> Tuple[bool, Optional[str]]:
 
 def _get_listing(url: str, params: Optional[dict] = None, **kwargs: Any) -> str:
     """GET one ListObjects V1 page as XML text (throttled, error vocabulary, scope-checked)."""
-    clean = {k: v for k, v in (params or {}).items() if v is not None}
-    with _rt._transport_errors(url):
-        resp = _rt.download(url=url, params=clean, **{"session": _ehr.SESSION, **kwargs})
-    text = _rt._text_body(resp, url)
+    text = _ehr.get_text(url, params, **kwargs)
     truncated, last = _page_state(_listing_root(url, text))
     if truncated and last is None:
         raise AssetFetchError(f"{_rt._where(url)}: a truncated listing page carries no key to page on")

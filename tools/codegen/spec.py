@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import yaml
 
@@ -27,10 +28,38 @@ class Param:
     default_from: Optional[str] = None  # use another arg's value when None
     transform: Optional[str] = None  # named runtime transform (e.g. format_nhl_season, _csv)
     description: str = ""  # authored human-readable description for docs
-    choices: List[str] = field(default_factory=list)  # closed value set; the wrapper raises ValueError otherwise
+    # Closed value set; the wrapper raises ValueError otherwise. Typed by ``type`` (see :func:`typed_choices`):
+    # ints for ``int``, ISO-date strings for ``date``, strings for everything else.
+    choices: List[object] = field(default_factory=list)
     # Render after ``*`` so a param added to an existing wrapper never shifts the
     # positional slot of ``headers`` (or any later arg) for existing callers.
     kw_only: bool = False
+    # A request BODY field (``body:`` in the endpoint YAML) rather than a query parameter. Body
+    # fields ride in ``query_params`` (signature, choices, docs rows are shared) and the template
+    # splits them out by this flag.
+    in_body: bool = False
+    # Extra arguments (OTHER params of the same endpoint, by python name) passed after the value to the
+    # named ``transform`` -- ``transform: {fn: shl_ssgt_uuid, with: [game_type]}`` renders
+    # ``shl_ssgt_uuid(season, game_type)``. They are read as the wrapper's variables are at that point.
+    transform_with: Tuple[str, ...] = ()
+    # Declarative ``value + offset`` (``transform: {offset: -1}``: a season END year -> START year), None-safe.
+    transform_offset: Optional[int] = None
+
+    @property
+    def has_transform(self) -> bool:
+        return bool(self.transform) or self.transform_offset is not None
+
+    def transform_call(self, arg: str) -> str:
+        """The wrapper expression applying this param's transform to the variable ``arg``."""
+        if self.transform_offset is not None:
+            sign = "-" if self.transform_offset < 0 else "+"
+            return f"None if {arg} is None else int({arg}) {sign} {abs(self.transform_offset)}"
+        return f"{self.transform}({', '.join((arg, *self.transform_with))})"
+
+
+#: Wire encodings of a POST body (``format:``): ``json`` (default), ``form``
+#: (``application/x-www-form-urlencoded``) or ``text`` (one raw text payload).
+BODY_FORMATS = ("json", "form", "text")
 
 
 @dataclass(frozen=True)
@@ -74,6 +103,28 @@ class Endpoint:
     # family's runtime ``_get`` sends ``params`` as the request body. ``post`` makes
     # the docstring say ``POST`` and call the arguments body fields.
     method: str = "get"
+    # ``body:`` was declared (even as ``[]``): this POST route's body fields are in ``query_params``
+    # flagged ``in_body``, the wrapper builds a ``_body`` and hands it to the getter as ``body=``, and
+    # the docs show a POST request with a body instead of a GET-shaped URL. A ``method: post`` route
+    # WITHOUT ``body:`` keeps the legacy docs-only meaning (cba mixes query and body fields).
+    body_declared: bool = False
+    # How the body is encoded on the wire (see :data:`BODY_FORMATS`); only with ``body:``.
+    format: str = "json"
+    # Per-route getter: the callable this route's wrapper calls instead of the family ``_get``. A bare name
+    # is looked up in the family ``getter_module``; ``pkg.module:name`` imports it from that module (a
+    # multi-host family whose routes need different transports). Its module supplies the route's
+    # ``_build_query`` for the example replay and decides the error-vocabulary docstring; transforms still
+    # come from the family ``getter_module``.
+    getter: Optional[str] = None
+
+    @property
+    def body_params(self) -> List[Param]:
+        return [p for p in self.query_params if p.in_body]
+
+    @property
+    def url_params(self) -> List[Param]:
+        """The query-string params: every query param that is not a body field."""
+        return [p for p in self.query_params if not p.in_body]
 
 
 @dataclass(frozen=True)
@@ -127,6 +178,10 @@ class FlatApi:
     # manual_column_descriptions.yaml is keyed by. Empty = the bare endpoint short; set it when a
     # bare short already names another family's descriptions (sihf: ``standings`` -> ``sihf_standings``).
     schema_prefix: str = ""
+    # No R-package column descriptions for this family's returns tables (player / team AGGREGATES whose
+    # sport's R dictionaries describe play-by-play; On3 recruiting tables that are not cfbfastR's): manual
+    # text only. Replaces a hard-coded list of family names in generate.py.
+    no_r_fallback: bool = False
 
     @property
     def prefix(self) -> str:
@@ -252,6 +307,59 @@ def load_leagues(path: Path) -> LeaguesConfig:
     return LeaguesConfig(hosts=dict(raw["hosts"]), leagues=leagues)
 
 
+def typed_choices(raw: object, ptype: str, where: str) -> List[object]:
+    """A param's ``choices:`` as values of its declared ``type`` (the wrapper compares them as typed).
+
+    * ``int``: ints (a digit string is read as its int); ``True`` / ``2.5`` / ``"x"`` are a spec error.
+    * ``date``: ISO ``YYYY-MM-DD`` strings, each a real calendar date.
+    * anything else (``str``, ``int|str``, ...): strings, as before.
+
+    Raises:
+        SpecError: ``choices`` is not a list, or an entry does not fit the type.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise SpecError(f"{where}: choices must be a list; got {raw!r}")
+    out: List[object] = []
+    for c in raw:
+        if ptype == "int":
+            if isinstance(c, bool) or not (isinstance(c, int) or (isinstance(c, str) and re.fullmatch(r"-?\d+", c))):
+                raise SpecError(f"{where}: choice {c!r} is not an int (the param is type: int)")
+            out.append(int(c))
+        elif ptype == "date":
+            text = str(c)  # YAML reads an unquoted 2026-01-01 as a date; str() is its ISO form
+            try:
+                ok = bool(re.fullmatch(r"\d{4}-\d\d-\d\d", text)) and date.fromisoformat(text).isoformat() == text
+            except ValueError:
+                ok = False
+            if not ok:
+                raise SpecError(f"{where}: choice {c!r} is not an ISO date YYYY-MM-DD (the param is type: date)")
+            out.append(text)
+        else:
+            out.append(str(c))
+    if len(set(out)) != len(out):
+        raise SpecError(f"{where}: choices repeat a value: {raw!r}")
+    return out
+
+
+def _parse_transform(raw: object, where: str) -> dict:
+    """``transform:`` of a param -> ``Param`` kwargs. A bare name is a runtime callable of the value;
+    ``{fn: name, with: [other params]}`` also passes those params; ``{offset: N}`` is ``int(value) + N``."""
+    if raw is None:
+        return {}
+    if isinstance(raw, str):
+        return {"transform": raw}
+    if isinstance(raw, dict):
+        if set(raw) == {"offset"} and isinstance(raw["offset"], int) and not isinstance(raw["offset"], bool):
+            return {"transform_offset": raw["offset"]}
+        if isinstance(raw.get("fn"), str) and set(raw) <= {"fn", "with"}:
+            extra = raw.get("with") or []
+            if isinstance(extra, list) and all(isinstance(x, str) for x in extra):
+                return {"transform": raw["fn"], "transform_with": tuple(extra)}
+    raise SpecError(f"{where}: transform must be a name, {{fn: name, with: [params]}} or {{offset: int}}; got {raw!r}")
+
+
 def _resolve_param(name: str, registry: Dict[str, Param], src: Path) -> Param:
     if name not in registry:
         raise SpecError(f"{src}: endpoint references unknown parameter key {name!r}")
@@ -272,10 +380,28 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 type=extra.get("type", "str"),
                 required=extra.get("required", False),
                 default=extra.get("default"),
-                transform=extra.get("transform"),
                 description=extra.get("description", "") or inherited_desc,
-                choices=[str(c) for c in extra.get("choices") or []],
+                choices=typed_choices(
+                    extra.get("choices"), extra.get("type", "str"), f"{path}: {e.get('short')}.{extra['name']}"
+                ),
                 kw_only=bool(extra.get("kw_only", False)),
+                **_parse_transform(extra.get("transform"), f"{path}: {e.get('short')}.{extra['name']}"),
+            ),
+        )
+    body_declared = e.get("body") is not None
+    for b in e.get("body") or []:
+        qps.append(
+            Param(
+                python_name=b["name"],
+                api=b.get("key", b["name"]),
+                type=b.get("type", "str"),
+                required=b.get("required", False),
+                default=b.get("default"),
+                description=b.get("description", ""),
+                choices=typed_choices(b.get("choices"), b.get("type", "str"), f"{path}: {e.get('short')}.{b['name']}"),
+                kw_only=bool(b.get("kw_only", False)),
+                in_body=True,
+                **_parse_transform(b.get("transform"), f"{path}: {e.get('short')}.{b['name']}"),
             ),
         )
     pps = []
@@ -290,9 +416,11 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
                 is_query=False,
                 optional_segment=pp.get("optional_segment", False),
                 default_from=pp.get("default_from"),
-                transform=pp.get("transform"),
                 description=pp.get("description", ""),
-                choices=[str(c) for c in pp.get("choices") or []],
+                choices=typed_choices(
+                    pp.get("choices"), pp.get("type", "str"), f"{path}: {e.get('short')}.{pp['name']}"
+                ),
+                **_parse_transform(pp.get("transform"), f"{path}: {e.get('short')}.{pp['name']}"),
             ),
         )
     ep = Endpoint(
@@ -314,9 +442,27 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         docstring=dict(e.get("docstring") or {}),
         league_example_args={k: dict(v or {}) for k, v in (e.get("league_example_args") or {}).items()},
         method=str(e.get("method") or "get").lower(),
+        body_declared=body_declared,
+        format=str(e.get("format") or "json").lower(),
+        getter=e.get("getter"),
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
+    if body_declared and ep.method != "post":
+        raise SpecError(f"{path}: endpoint {ep.short!r} declares body: but its method is {ep.method!r}, not post")
+    if ep.format not in BODY_FORMATS or (e.get("format") is not None and not body_declared):
+        raise SpecError(
+            f"{path}: endpoint {ep.short!r} format {e.get('format')!r} must be one of {BODY_FORMATS} and needs body:"
+        )
+    names = [p.python_name for p in (*ep.query_params, *ep.path_params)]
+    if len(names) != len(set(names)):
+        raise SpecError(f"{path}: endpoint {ep.short!r} repeats a parameter name: {sorted(names)}")
+    for p in (*ep.query_params, *ep.path_params):
+        if set(p.transform_with) - set(names):
+            raise SpecError(
+                f"{path}: endpoint {ep.short!r} param {p.python_name!r} transform uses unknown param(s) "
+                f"{sorted(set(p.transform_with) - set(names))}"
+            )
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")
@@ -330,6 +476,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
 
 def load_espn_api(path: Path, registry: Dict[str, Param]) -> EspnApi:
     raw = _read_yaml(path)
+    if any(e.get("getter") for e in raw["endpoints"]):
+        raise SpecError(f"{path}: getter: is for flat APIs; ESPN endpoints share one getter")
     fam = raw.get("fixed_params") or {}
     endpoints = [
         _parse_endpoint({**e, "fixed_params": {**fam, **(e.get("fixed_params") or {})}}, registry, path)
@@ -404,4 +552,5 @@ def load_flat_api(path: Path, registry: Dict[str, Param]) -> FlatApi:
         docstring=dict(raw.get("docstring") or {}),
         parser_columns=bool(raw.get("parser_columns", False)),
         schema_prefix=str(raw.get("schema_prefix") or ""),
+        no_r_fallback=bool(raw.get("no_r_fallback", False)),
     )

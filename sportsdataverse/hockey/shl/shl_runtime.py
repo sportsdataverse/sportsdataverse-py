@@ -9,8 +9,9 @@ The SHL site API is keyless JSON. Its contracts, all from the refs capture
   the pair through ``/statistics-v2/layout-info`` (fetched once per process, cached) to
   ``ssgtUuid`` for ``stats-info``, to ``seasonSeriesGameType`` for the match-day routes, and
   to the three ``seasonUuid`` / ``seriesUuid`` / ``gameTypeUuid`` that ``game-schedule``
-  requires. The athlete season game log takes the START year, so its ``season`` is reduced
-  by one. A season or game type layout-info does not list raises
+  requires. The athlete season game log takes the START year: its wrapper reduces ``season`` by
+  one (``transform: {offset: -1}`` in ``shl.yaml``), so ``_get`` sends that route's ``season`` as
+  given. A season or game type layout-info does not list raises
   :class:`~sportsdataverse.errors.NoDataError`. :func:`shl_ssgt_uuid` exposes the mapping.
 * **stats-info truncates silently.** Without ``count=1000`` it serves 50 rows and its
   ``totalCount`` echoes 50. :func:`_get` always sends ``count=1000`` and raises
@@ -232,9 +233,7 @@ def _map_query(route: str, params: Dict[str, Any]) -> Tuple[Dict[str, Any], Opti
     """Rewrite the wrappers' ``season`` / ``gameType`` into the provider's keys; also return the ssgt."""
     q = dict(params)
     if route == r"/statistics-v2/athlete/playerProfile_seasonGameLog":
-        if q.get("season") is not None:
-            q["season"] = int(q["season"]) - 1  # this route alone takes the START year
-        return q, None
+        return q, None  # its ``season`` is already the START year: the wrapper declares ``transform: {offset: -1}``
     if route not in _SEASON_ROUTES:
         return q, None  # e.g. the filter route, whose ``season`` is a season uuid
     season, gtype = q.pop("season", None), q.pop("gameType", None)

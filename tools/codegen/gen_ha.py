@@ -20,12 +20,11 @@ checkout (``$SDV_INTERNAL_REFS_REPO``, else the sibling checkout) and emits:
 * ``tests/fixtures/ha/spec_snapshot.json`` -- the spec's routes, POST request examples and
   ``categories`` enums, so the tests check the runtime and the YAML without the refs checkout.
 
-**What the flat-API YAML cannot express**, and how this family works around it: an endpoint has
-no HTTP method and no body, so every wrapper renders as ``_get(url, params=...)``. The YAML's
-``extra_params`` carry the wire names of the JSON body fields, and the family runtime
-(``getter_module: sportsdataverse.hockey.ha.ha_runtime``) POSTs them as the body for every
-route but ``/api/game``, and decodes the text/html ``/pages/matcher`` into its embedded game
-list. Nothing in ``generate.py`` changes.
+**How the YAML says POST.** A POST route is ``method: post`` / ``format: json`` with a ``body:`` list (``key`` is
+the wire name of a JSON body field); the wrapper hands the fields to the getter as ``body=``. ``/api/game`` stays
+a GET with ``extra_params`` (its query string). The family runtime
+(``getter_module: sportsdataverse.hockey.ha.ha_runtime``) POSTs the body for every route but ``/api/game``, and
+decodes the text/html ``/pages/matcher`` into its embedded game list.
 
 Run: ``python tools/codegen/gen_ha.py``
 """
@@ -497,15 +496,21 @@ def _endpoint(short: str, entry: Entry) -> Dict[str, Any]:
     names = [p["name"] for p in fields.get("extra_params", [])]
     assert not {"league", "sport"} & set(names), short  # the renderer substitutes those as ESPN slugs
     assert "{" not in path, path
+    fields = copy.deepcopy(fields)  # no shared objects, so the YAML carries no anchors
+    post = path not in ("/api/game", "/pages/matcher")  # the runtime POSTs every route but these two
+    if post:  # the fields are JSON body fields: ``key`` is the wire name
+        fields["body"] = [
+            {**{k: v for k, v in p.items() if k != "query_key"}, "key": p["query_key"]}
+            for p in fields.pop("extra_params", [])
+        ]
     return {
         "short": short,
         "summary": summary,
         "path": path,
         "parser": parser.__name__,
         "returns_schema": f"native/ha/{short}",
-        # The runtime POSTs every route but these two (docstrings say POST / body field).
-        **({} if path in ("/api/game", "/pages/matcher") else {"method": "post"}),
-        **copy.deepcopy(fields),  # no shared objects, so the YAML carries no anchors
+        **({"method": "post", "format": "json"} if post else {}),
+        **fields,
     }
 
 
