@@ -11,7 +11,7 @@ from typing import Dict, Optional, Union  # noqa: F401
 import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, bool_str
+from sportsdataverse._codegen_runtime import _check_kwargs, _get, _path_seg, bool_str
 from sportsdataverse._common_espn_parsers import (
     parse_athlete_gamelog,
     parse_athlete_overview,
@@ -206,6 +206,7 @@ def espn_nfl_scoreboard(
             espn_nfl_scoreboard(dates='20240115')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_scoreboard", kwargs)
     _params = {
         "dates": dates,
         "week": week,
@@ -258,6 +259,7 @@ def espn_nfl_summary(
             espn_nfl_summary()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_summary", kwargs)
     _params = {
         "event": event_id,
     }
@@ -303,6 +305,7 @@ def espn_nfl_calendar(
             espn_nfl_calendar()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_calendar", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -348,6 +351,7 @@ def espn_nfl_news(
             espn_nfl_news()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_news", kwargs)
     _params = {
         "limit": limit,
     }
@@ -393,6 +397,7 @@ def espn_nfl_injuries(
             espn_nfl_injuries()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -438,6 +443,7 @@ def espn_nfl_transactions(
             espn_nfl_transactions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_transactions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -483,6 +489,7 @@ def espn_nfl_conferences(
             espn_nfl_conferences()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_conferences", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -526,6 +533,7 @@ def espn_nfl_statistics_league(
             espn_nfl_statistics_league()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_statistics_league", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -569,6 +577,7 @@ def espn_nfl_draft(
             espn_nfl_draft()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -614,6 +623,7 @@ def espn_nfl_teams_site(
             espn_nfl_teams_site()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_teams_site", kwargs)
     _params = {
         "limit": limit,
     }
@@ -661,10 +671,11 @@ def espn_nfl_team(
             espn_nfl_team(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -708,12 +719,13 @@ def espn_nfl_team_roster(
             espn_nfl_team_roster(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_roster", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/roster",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/roster",
         params=_params,
         **kwargs,
     )
@@ -757,12 +769,13 @@ def espn_nfl_team_schedule(
             espn_nfl_team_schedule(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_schedule", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/schedule",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/schedule",
         params=_params,
         **kwargs,
     )
@@ -804,10 +817,11 @@ def espn_nfl_team_record(
             espn_nfl_team_record(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/record",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/record",
         params=_params,
         **kwargs,
     )
@@ -849,10 +863,11 @@ def espn_nfl_team_depthcharts(
             espn_nfl_team_depthcharts(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_depthcharts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/depthcharts",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/depthcharts",
         params=_params,
         **kwargs,
     )
@@ -894,10 +909,11 @@ def espn_nfl_team_injuries(
             espn_nfl_team_injuries(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/injuries",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -939,10 +955,11 @@ def espn_nfl_team_transactions(
             espn_nfl_team_transactions(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_transactions", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/transactions",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/transactions",
         params=_params,
         **kwargs,
     )
@@ -984,10 +1001,11 @@ def espn_nfl_team_history(
             espn_nfl_team_history(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_history", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/history",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/history",
         params=_params,
         **kwargs,
     )
@@ -1031,12 +1049,13 @@ def espn_nfl_team_news(
             espn_nfl_team_news(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_news", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1078,10 +1097,11 @@ def espn_nfl_team_leaders(
             espn_nfl_team_leaders(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/leaders",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{_path_seg(team_id)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -1123,10 +1143,11 @@ def espn_nfl_player_info(
             espn_nfl_player_info(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{athlete_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -1168,10 +1189,11 @@ def espn_nfl_player_bio(
             espn_nfl_player_bio(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_bio", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{athlete_id}/bio",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{_path_seg(athlete_id)}/bio",
         params=_params,
         **kwargs,
     )
@@ -1213,10 +1235,11 @@ def espn_nfl_player_news(
             espn_nfl_player_news(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_news", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{athlete_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/athletes/{_path_seg(athlete_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1262,6 +1285,7 @@ def espn_nfl_standings(
             espn_nfl_standings()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_standings", kwargs)
     _params = {
         "season": season,
         "group": group,
@@ -1311,10 +1335,11 @@ def espn_nfl_player_overview(
             espn_nfl_player_overview(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_overview", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/overview",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{_path_seg(athlete_id)}/overview",
         params=_params,
         **kwargs,
     )
@@ -1358,12 +1383,13 @@ def espn_nfl_player_stats_v3(
             espn_nfl_player_stats_v3(athlete_id='3139477')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_stats_v3", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/stats",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{_path_seg(athlete_id)}/stats",
         params=_params,
         **kwargs,
     )
@@ -1407,12 +1433,13 @@ def espn_nfl_player_gamelog(
             espn_nfl_player_gamelog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_gamelog", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/gamelog",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{_path_seg(athlete_id)}/gamelog",
         params=_params,
         **kwargs,
     )
@@ -1456,12 +1483,13 @@ def espn_nfl_player_splits(
             espn_nfl_player_splits(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_splits", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{athlete_id}/splits",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/{_path_seg(athlete_id)}/splits",
         params=_params,
         **kwargs,
     )
@@ -1513,6 +1541,7 @@ def espn_nfl_leaders(
             espn_nfl_leaders()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_leaders", kwargs)
     _params = {
         "category": category,
         "season": season,
@@ -1563,6 +1592,7 @@ def espn_nfl_league_root(
             espn_nfl_league_root()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_league_root", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1606,6 +1636,7 @@ def espn_nfl_season_pointer(
             espn_nfl_season_pointer()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_pointer", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1651,6 +1682,7 @@ def espn_nfl_seasons(
             espn_nfl_seasons()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_seasons", kwargs)
     _params = {
         "limit": limit,
     }
@@ -1698,10 +1730,11 @@ def espn_nfl_season_info(
             espn_nfl_season_info(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -1743,10 +1776,11 @@ def espn_nfl_season_types(
             espn_nfl_season_types(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_types", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types",
         params=_params,
         **kwargs,
     )
@@ -1790,10 +1824,11 @@ def espn_nfl_season_type(
             espn_nfl_season_type(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_type", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}",
         params=_params,
         **kwargs,
     )
@@ -1839,10 +1874,11 @@ def espn_nfl_season_group(
             espn_nfl_season_group(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_group", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/groups/{group_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
         params=_params,
         **kwargs,
     )
@@ -1886,10 +1922,11 @@ def espn_nfl_season_groups(
             espn_nfl_season_groups(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_groups", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/groups",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
         params=_params,
         **kwargs,
     )
@@ -1937,12 +1974,13 @@ def espn_nfl_season_group_teams(
             espn_nfl_season_group_teams(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_group_teams", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/teams",
         params=_params,
         **kwargs,
     )
@@ -1990,12 +2028,13 @@ def espn_nfl_season_group_children(
             espn_nfl_season_group_children(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_group_children", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/groups/{group_id}/children",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
         params=_params,
         **kwargs,
     )
@@ -2039,10 +2078,11 @@ def espn_nfl_season_type_leaders(
             espn_nfl_season_type_leaders(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_type_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -2086,10 +2126,11 @@ def espn_nfl_season_type_corrections(
             espn_nfl_season_type_corrections(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_type_corrections", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/corrections",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/corrections",
         params=_params,
         **kwargs,
     )
@@ -2133,10 +2174,11 @@ def espn_nfl_season_weeks(
             espn_nfl_season_weeks(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_weeks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks",
         params=_params,
         **kwargs,
     )
@@ -2182,10 +2224,11 @@ def espn_nfl_season_week(
             espn_nfl_season_week(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_week", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}",
         params=_params,
         **kwargs,
     )
@@ -2233,12 +2276,13 @@ def espn_nfl_season_week_powerindex(
             espn_nfl_season_week_powerindex(season=2024, season_type=2, week=8)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_week_powerindex", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/powerindex",
         params=_params,
         **kwargs,
     )
@@ -2286,12 +2330,13 @@ def espn_nfl_season_week_games(
             espn_nfl_season_week_games(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_week_games", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}/events",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/events",
         params=_params,
         **kwargs,
     )
@@ -2337,13 +2382,14 @@ def espn_nfl_season_teams(
             espn_nfl_season_teams(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_teams", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/teams",
         params=_params,
         **kwargs,
     )
@@ -2387,10 +2433,11 @@ def espn_nfl_season_team(
             espn_nfl_season_team(season=2024, team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -2436,13 +2483,14 @@ def espn_nfl_season_players(
             espn_nfl_season_players(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_players", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -2486,12 +2534,13 @@ def espn_nfl_season_coaches(
             espn_nfl_season_coaches(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_coaches", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/coaches",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/coaches",
         params=_params,
         **kwargs,
     )
@@ -2533,10 +2582,11 @@ def espn_nfl_season_draft(
             espn_nfl_season_draft(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/draft",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/draft",
         params=_params,
         **kwargs,
     )
@@ -2580,10 +2630,11 @@ def espn_nfl_season_draft_round_picks(
             espn_nfl_season_draft_round_picks(season=2024, round_num='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_draft_round_picks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/draft/rounds/{round_num}/picks",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/draft/rounds/{_path_seg(round_num)}/picks",
         params=_params,
         **kwargs,
     )
@@ -2625,10 +2676,11 @@ def espn_nfl_season_futures(
             espn_nfl_season_futures(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_futures", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/futures",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/futures",
         params=_params,
         **kwargs,
     )
@@ -2670,10 +2722,11 @@ def espn_nfl_season_freeagents(
             espn_nfl_season_freeagents(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_freeagents", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/freeagents",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/freeagents",
         params=_params,
         **kwargs,
     )
@@ -2717,10 +2770,14 @@ def espn_nfl_season_powerindex(
             espn_nfl_season_powerindex(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{team_id}" if team_id is not None else ""
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/powerindex" + __seg
+    __seg = f"/{_path_seg(team_id)}" if team_id is not None else ""
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/powerindex"
+        + __seg
+    )
     raw = _get(
         __url,
         params=_params,
@@ -2764,10 +2821,11 @@ def espn_nfl_season_powerindex_leaders(
             espn_nfl_season_powerindex_leaders(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_powerindex_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/powerindex/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/powerindex/leaders",
         params=_params,
         **kwargs,
     )
@@ -2811,12 +2869,13 @@ def espn_nfl_season_awards(
             espn_nfl_season_awards(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_awards", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/awards",
         params=_params,
         **kwargs,
     )
@@ -2862,8 +2921,9 @@ def espn_nfl_players_index(
             espn_nfl_players_index()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_players_index", kwargs)
     _params = {
-        "active": bool_str(active),
+        "active": bool_str(active, name="active"),
         "limit": limit,
         "page": page,
     }
@@ -2911,10 +2971,11 @@ def espn_nfl_player_core(
             espn_nfl_player_core(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -2958,10 +3019,14 @@ def espn_nfl_player_career_stats(
             espn_nfl_player_career_stats(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_career_stats", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{stat_type}" if stat_type is not None else ""
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/statistics" + __seg
+    __seg = f"/{_path_seg(stat_type)}" if stat_type is not None else ""
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/statistics"
+        + __seg
+    )
     raw = _get(
         __url,
         params=_params,
@@ -3005,10 +3070,11 @@ def espn_nfl_player_statisticslog(
             espn_nfl_player_statisticslog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_statisticslog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/statisticslog",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/statisticslog",
         params=_params,
         **kwargs,
     )
@@ -3050,10 +3116,11 @@ def espn_nfl_player_eventlog(
             espn_nfl_player_eventlog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_eventlog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/eventlog",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/eventlog",
         params=_params,
         **kwargs,
     )
@@ -3095,10 +3162,11 @@ def espn_nfl_player_contracts(
             espn_nfl_player_contracts(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_contracts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/contracts",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/contracts",
         params=_params,
         **kwargs,
     )
@@ -3140,10 +3208,11 @@ def espn_nfl_player_awards(
             espn_nfl_player_awards(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_awards", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/awards",
         params=_params,
         **kwargs,
     )
@@ -3185,10 +3254,11 @@ def espn_nfl_player_seasons(
             espn_nfl_player_seasons(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_seasons", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/seasons",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/seasons",
         params=_params,
         **kwargs,
     )
@@ -3230,10 +3300,11 @@ def espn_nfl_player_records(
             espn_nfl_player_records(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_records", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/records",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/records",
         params=_params,
         **kwargs,
     )
@@ -3275,10 +3346,11 @@ def espn_nfl_player_injuries(
             espn_nfl_player_injuries(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/injuries",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -3320,10 +3392,11 @@ def espn_nfl_player_notes(
             espn_nfl_player_notes(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/notes",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/notes",
         params=_params,
         **kwargs,
     )
@@ -3367,10 +3440,11 @@ def espn_nfl_player_vs_player(
             espn_nfl_player_vs_player(athlete_id='4239', opp_id='5')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_player_vs_player", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{athlete_id}/vsathlete/{opp_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/{_path_seg(athlete_id)}/vsathlete/{_path_seg(opp_id)}",
         params=_params,
         **kwargs,
     )
@@ -3414,6 +3488,7 @@ def espn_nfl_games(
             espn_nfl_games()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_games", kwargs)
     _params = {
         "dates": dates,
         "limit": limit,
@@ -3462,10 +3537,11 @@ def espn_nfl_game(
             espn_nfl_game(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}",
         params=_params,
         **kwargs,
     )
@@ -3509,10 +3585,11 @@ def espn_nfl_game_competition(
             espn_nfl_game_competition(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_competition", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}"
     raw = _get(
         __url,
         params=_params,
@@ -3558,10 +3635,11 @@ def espn_nfl_game_teams(
             espn_nfl_game_teams(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_teams", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors"
     raw = _get(
         __url,
         params=_params,
@@ -3609,10 +3687,11 @@ def espn_nfl_game_team(
             espn_nfl_game_team(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -3660,10 +3739,11 @@ def espn_nfl_game_team_roster(
             espn_nfl_game_team_roster(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team_roster", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/roster"
     raw = _get(
         __url,
         params=_params,
@@ -3711,10 +3791,11 @@ def espn_nfl_game_team_linescores(
             espn_nfl_game_team_linescores(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team_linescores", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/linescores"
     raw = _get(
         __url,
         params=_params,
@@ -3762,10 +3843,11 @@ def espn_nfl_game_team_statistics(
             espn_nfl_game_team_statistics(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team_statistics", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/statistics"
     raw = _get(
         __url,
         params=_params,
@@ -3813,10 +3895,11 @@ def espn_nfl_game_team_record(
             espn_nfl_game_team_record(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/record"
     raw = _get(
         __url,
         params=_params,
@@ -3864,10 +3947,11 @@ def espn_nfl_game_team_leaders(
             espn_nfl_game_team_leaders(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -3913,10 +3997,11 @@ def espn_nfl_game_odds(
             espn_nfl_game_odds(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_odds", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/odds"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/odds"
     raw = _get(
         __url,
         params=_params,
@@ -3964,12 +4049,13 @@ def espn_nfl_game_probabilities(
             espn_nfl_game_probabilities(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_probabilities", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/probabilities"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/probabilities"
     raw = _get(
         __url,
         params=_params,
@@ -4017,14 +4103,13 @@ def espn_nfl_game_plays(
             espn_nfl_game_plays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_plays", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/plays"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays"
     raw = _get(
         __url,
         params=_params,
@@ -4072,10 +4157,11 @@ def espn_nfl_game_play(
             espn_nfl_game_play(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_play", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/plays/{play_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4123,10 +4209,11 @@ def espn_nfl_game_play_personnel(
             espn_nfl_game_play_personnel(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_play_personnel", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}/personnel"
     raw = _get(
         __url,
         params=_params,
@@ -4172,10 +4259,11 @@ def espn_nfl_game_situation(
             espn_nfl_game_situation(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_situation", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/situation"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/situation"
     raw = _get(
         __url,
         params=_params,
@@ -4221,12 +4309,11 @@ def espn_nfl_game_status(
             espn_nfl_game_status(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_status", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/status"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/status"
     raw = _get(
         __url,
         params=_params,
@@ -4272,10 +4359,11 @@ def espn_nfl_game_officials(
             espn_nfl_game_officials(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_officials", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/officials"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials"
     raw = _get(
         __url,
         params=_params,
@@ -4321,10 +4409,11 @@ def espn_nfl_game_broadcasts(
             espn_nfl_game_broadcasts(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_broadcasts", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/broadcasts"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/broadcasts"
     raw = _get(
         __url,
         params=_params,
@@ -4370,10 +4459,11 @@ def espn_nfl_game_predictor(
             espn_nfl_game_predictor(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_predictor", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/predictor"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/predictor"
     raw = _get(
         __url,
         params=_params,
@@ -4419,10 +4509,11 @@ def espn_nfl_game_powerindex(
             espn_nfl_game_powerindex(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/powerindex"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/powerindex"
     raw = _get(
         __url,
         params=_params,
@@ -4468,12 +4559,11 @@ def espn_nfl_game_propbets(
             espn_nfl_game_propbets(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_propbets", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/propbets"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/propbets"
     raw = _get(
         __url,
         params=_params,
@@ -4519,12 +4609,11 @@ def espn_nfl_game_leaders(
             espn_nfl_game_leaders(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = (
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/leaders"
-    )
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -4570,10 +4659,11 @@ def espn_nfl_game_scoringplays(
             espn_nfl_game_scoringplays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_scoringplays", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/scoringplays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/scoringplays"
     raw = _get(
         __url,
         params=_params,
@@ -4621,10 +4711,11 @@ def espn_nfl_game_official_detail(
             espn_nfl_game_official_detail(event_id='401584793', official_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_game_official_detail", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{event_id}/competitions/{cid}/officials/{official_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials/{_path_seg(official_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4670,6 +4761,7 @@ def espn_nfl_teams_core(
             espn_nfl_teams_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_teams_core", kwargs)
     _params = {
         "limit": limit,
         "page": page,
@@ -4718,10 +4810,11 @@ def espn_nfl_team_core(
             espn_nfl_team_core(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_team_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -4763,6 +4856,7 @@ def espn_nfl_venues(
             espn_nfl_venues()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_venues", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4810,10 +4904,11 @@ def espn_nfl_venue(
             espn_nfl_venue(venue_id='3663')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_venue", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/{venue_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/{_path_seg(venue_id)}",
         params=_params,
         **kwargs,
     )
@@ -4855,6 +4950,7 @@ def espn_nfl_franchises(
             espn_nfl_franchises()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_franchises", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4902,10 +4998,11 @@ def espn_nfl_franchise(
             espn_nfl_franchise(franchise_id='2')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_franchise", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/franchises/{franchise_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/franchises/{_path_seg(franchise_id)}",
         params=_params,
         **kwargs,
     )
@@ -4947,10 +5044,11 @@ def espn_nfl_coach(
             espn_nfl_coach(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_coach", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{coach_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{_path_seg(coach_id)}",
         params=_params,
         **kwargs,
     )
@@ -4994,10 +5092,11 @@ def espn_nfl_coach_record(
             espn_nfl_coach_record(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_coach_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{coach_id}/record/{record_type}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{_path_seg(coach_id)}/record/{_path_seg(record_type)}",
         params=_params,
         **kwargs,
     )
@@ -5041,10 +5140,11 @@ def espn_nfl_coach_season(
             espn_nfl_coach_season(coach_id='1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_coach_season", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{coach_id}/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/coaches/{_path_seg(coach_id)}/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -5086,6 +5186,7 @@ def espn_nfl_positions(
             espn_nfl_positions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_positions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5133,10 +5234,11 @@ def espn_nfl_position(
             espn_nfl_position(position_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_position", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/{position_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/{_path_seg(position_id)}",
         params=_params,
         **kwargs,
     )
@@ -5178,6 +5280,7 @@ def espn_nfl_tournaments(
             espn_nfl_tournaments()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_tournaments", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5225,6 +5328,7 @@ def espn_nfl_awards(
             espn_nfl_awards()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_awards", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5272,10 +5376,11 @@ def espn_nfl_award(
             espn_nfl_award(award_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_award", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/awards/{award_id}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/awards/{_path_seg(award_id)}",
         params=_params,
         **kwargs,
     )
@@ -5315,6 +5420,7 @@ def espn_nfl_standings_core(
             espn_nfl_standings_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_standings_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5358,6 +5464,7 @@ def espn_nfl_leaders_core(
             espn_nfl_leaders_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_leaders_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5401,6 +5508,7 @@ def espn_nfl_league_notes(
             espn_nfl_league_notes()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_league_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5444,6 +5552,7 @@ def espn_nfl_talentpicks(
             espn_nfl_talentpicks()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_talentpicks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5495,13 +5604,14 @@ def espn_nfl_season_qbr(
             espn_nfl_season_qbr(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_qbr", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/groups/{group_id}" if group_id is not None else ""
+    __seg = f"/groups/{_path_seg(group_id)}" if group_id is not None else ""
     __url = (
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}"
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}"
         + __seg
-        + f"/qbr/{split}"
+        + f"/qbr/{_path_seg(split)}"
     )
     raw = _get(
         __url,
@@ -5552,10 +5662,11 @@ def espn_nfl_season_qbr_week(
             espn_nfl_season_qbr_week(season=2024, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_season_qbr_week", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{season}/types/{season_type}/weeks/{week}/qbr/{split}",
+        f"https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/qbr/{_path_seg(split)}",
         params=_params,
         **kwargs,
     )
@@ -5601,6 +5712,7 @@ def espn_nfl_fpi(
             espn_nfl_fpi(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_fpi", kwargs)
     _params = {
         "season": season,
         "limit": limit,
@@ -5651,6 +5763,7 @@ def espn_nfl_cdn_playbyplay(
             espn_nfl_cdn_playbyplay(game_id='401671881')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_cdn_playbyplay", kwargs)
     _params = {
         "xhr": 1,
         "gameId": game_id,
@@ -5700,6 +5813,7 @@ def espn_nfl_cdn_boxscore(
             espn_nfl_cdn_boxscore(game_id='401671881')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_cdn_boxscore", kwargs)
     _params = {
         "xhr": 1,
         "gameId": game_id,
@@ -5754,6 +5868,7 @@ def espn_nfl_cdn_schedule(
             espn_nfl_cdn_schedule(season=2024, week=5, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_cdn_schedule", kwargs)
     _params = {
         "xhr": 1,
         "date": date,
@@ -5811,6 +5926,7 @@ def espn_nfl_cdn_scoreboard(
             espn_nfl_cdn_scoreboard(season=2024, week=5, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_nfl_cdn_scoreboard", kwargs)
     _params = {
         "xhr": 1,
         "date": date,

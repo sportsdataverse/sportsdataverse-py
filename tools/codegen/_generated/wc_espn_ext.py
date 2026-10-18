@@ -11,7 +11,7 @@ from typing import Dict, Optional, Union  # noqa: F401
 import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, bool_str
+from sportsdataverse._codegen_runtime import _check_kwargs, _get, _path_seg, bool_str
 from sportsdataverse._common_espn_parsers import (
     parse_athlete_gamelog,
     parse_athlete_overview,
@@ -201,6 +201,7 @@ def espn_wc_scoreboard(
             espn_wc_scoreboard(dates='20240115')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_scoreboard", kwargs)
     _params = {
         "dates": dates,
         "week": week,
@@ -253,6 +254,7 @@ def espn_wc_summary(
             espn_wc_summary()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_summary", kwargs)
     _params = {
         "event": event_id,
     }
@@ -298,6 +300,7 @@ def espn_wc_calendar(
             espn_wc_calendar()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_calendar", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -343,6 +346,7 @@ def espn_wc_news(
             espn_wc_news()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_news", kwargs)
     _params = {
         "limit": limit,
     }
@@ -388,6 +392,7 @@ def espn_wc_injuries(
             espn_wc_injuries()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -433,6 +438,7 @@ def espn_wc_transactions(
             espn_wc_transactions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_transactions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -478,6 +484,7 @@ def espn_wc_conferences(
             espn_wc_conferences()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_conferences", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -521,6 +528,7 @@ def espn_wc_statistics_league(
             espn_wc_statistics_league()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_statistics_league", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -564,6 +572,7 @@ def espn_wc_draft(
             espn_wc_draft()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -609,6 +618,7 @@ def espn_wc_teams_site(
             espn_wc_teams_site()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_teams_site", kwargs)
     _params = {
         "limit": limit,
     }
@@ -656,10 +666,11 @@ def espn_wc_team(
             espn_wc_team(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -703,12 +714,13 @@ def espn_wc_team_roster(
             espn_wc_team_roster(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_roster", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/roster",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/roster",
         params=_params,
         **kwargs,
     )
@@ -752,12 +764,13 @@ def espn_wc_team_schedule(
             espn_wc_team_schedule(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_schedule", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/schedule",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/schedule",
         params=_params,
         **kwargs,
     )
@@ -799,10 +812,11 @@ def espn_wc_team_record(
             espn_wc_team_record(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/record",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/record",
         params=_params,
         **kwargs,
     )
@@ -844,10 +858,11 @@ def espn_wc_team_depthcharts(
             espn_wc_team_depthcharts(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_depthcharts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/depthcharts",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/depthcharts",
         params=_params,
         **kwargs,
     )
@@ -889,10 +904,11 @@ def espn_wc_team_injuries(
             espn_wc_team_injuries(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/injuries",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -934,10 +950,11 @@ def espn_wc_team_transactions(
             espn_wc_team_transactions(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_transactions", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/transactions",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/transactions",
         params=_params,
         **kwargs,
     )
@@ -979,10 +996,11 @@ def espn_wc_team_history(
             espn_wc_team_history(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_history", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/history",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/history",
         params=_params,
         **kwargs,
     )
@@ -1026,12 +1044,13 @@ def espn_wc_team_news(
             espn_wc_team_news(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_news", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1073,10 +1092,11 @@ def espn_wc_team_leaders(
             espn_wc_team_leaders(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{team_id}/leaders",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/teams/{_path_seg(team_id)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -1118,10 +1138,11 @@ def espn_wc_player_info(
             espn_wc_player_info(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{athlete_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -1163,10 +1184,11 @@ def espn_wc_player_bio(
             espn_wc_player_bio(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_bio", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{athlete_id}/bio",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/bio",
         params=_params,
         **kwargs,
     )
@@ -1208,10 +1230,11 @@ def espn_wc_player_news(
             espn_wc_player_news(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_news", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{athlete_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1257,6 +1280,7 @@ def espn_wc_standings(
             espn_wc_standings()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_standings", kwargs)
     _params = {
         "season": season,
         "group": group,
@@ -1306,10 +1330,11 @@ def espn_wc_player_overview(
             espn_wc_player_overview(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_overview", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{athlete_id}/overview",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/overview",
         params=_params,
         **kwargs,
     )
@@ -1353,12 +1378,13 @@ def espn_wc_player_stats(
             espn_wc_player_stats(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_stats", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{athlete_id}/stats",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/stats",
         params=_params,
         **kwargs,
     )
@@ -1402,12 +1428,13 @@ def espn_wc_player_gamelog(
             espn_wc_player_gamelog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_gamelog", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{athlete_id}/gamelog",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/gamelog",
         params=_params,
         **kwargs,
     )
@@ -1451,12 +1478,13 @@ def espn_wc_player_splits(
             espn_wc_player_splits(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_splits", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{athlete_id}/splits",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/soccer/fifa.world/athletes/{_path_seg(athlete_id)}/splits",
         params=_params,
         **kwargs,
     )
@@ -1508,6 +1536,7 @@ def espn_wc_leaders(
             espn_wc_leaders()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_leaders", kwargs)
     _params = {
         "category": category,
         "season": season,
@@ -1558,6 +1587,7 @@ def espn_wc_league_root(
             espn_wc_league_root()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_league_root", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1601,6 +1631,7 @@ def espn_wc_season_pointer(
             espn_wc_season_pointer()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_pointer", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1646,6 +1677,7 @@ def espn_wc_seasons(
             espn_wc_seasons()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_seasons", kwargs)
     _params = {
         "limit": limit,
     }
@@ -1693,10 +1725,11 @@ def espn_wc_season_info(
             espn_wc_season_info(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -1738,10 +1771,11 @@ def espn_wc_season_types(
             espn_wc_season_types(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_types", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types",
         params=_params,
         **kwargs,
     )
@@ -1785,10 +1819,11 @@ def espn_wc_season_type(
             espn_wc_season_type(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_type", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}",
         params=_params,
         **kwargs,
     )
@@ -1834,10 +1869,11 @@ def espn_wc_season_group(
             espn_wc_season_group(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_group", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/groups/{group_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
         params=_params,
         **kwargs,
     )
@@ -1881,10 +1917,11 @@ def espn_wc_season_groups(
             espn_wc_season_groups(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_groups", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/groups",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
         params=_params,
         **kwargs,
     )
@@ -1932,12 +1969,13 @@ def espn_wc_season_group_teams(
             espn_wc_season_group_teams(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_group_teams", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/teams",
         params=_params,
         **kwargs,
     )
@@ -1985,12 +2023,13 @@ def espn_wc_season_group_children(
             espn_wc_season_group_children(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_group_children", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/groups/{group_id}/children",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
         params=_params,
         **kwargs,
     )
@@ -2034,10 +2073,11 @@ def espn_wc_season_type_leaders(
             espn_wc_season_type_leaders(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_type_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -2081,10 +2121,11 @@ def espn_wc_season_type_corrections(
             espn_wc_season_type_corrections(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_type_corrections", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/corrections",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/corrections",
         params=_params,
         **kwargs,
     )
@@ -2128,10 +2169,11 @@ def espn_wc_season_weeks(
             espn_wc_season_weeks(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_weeks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/weeks",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks",
         params=_params,
         **kwargs,
     )
@@ -2177,10 +2219,11 @@ def espn_wc_season_week(
             espn_wc_season_week(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_week", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/weeks/{week}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}",
         params=_params,
         **kwargs,
     )
@@ -2228,12 +2271,13 @@ def espn_wc_season_week_powerindex(
             espn_wc_season_week_powerindex(season=2024, season_type=2, week=8)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_week_powerindex", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/powerindex",
         params=_params,
         **kwargs,
     )
@@ -2281,12 +2325,13 @@ def espn_wc_season_week_games(
             espn_wc_season_week_games(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_week_games", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/types/{season_type}/weeks/{week}/events",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/events",
         params=_params,
         **kwargs,
     )
@@ -2332,13 +2377,14 @@ def espn_wc_season_teams(
             espn_wc_season_teams(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_teams", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/teams",
         params=_params,
         **kwargs,
     )
@@ -2382,10 +2428,11 @@ def espn_wc_season_team(
             espn_wc_season_team(season=2024, team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -2431,13 +2478,14 @@ def espn_wc_season_players(
             espn_wc_season_players(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_players", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -2481,12 +2529,13 @@ def espn_wc_season_coaches(
             espn_wc_season_coaches(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_coaches", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/coaches",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/coaches",
         params=_params,
         **kwargs,
     )
@@ -2528,10 +2577,11 @@ def espn_wc_season_draft(
             espn_wc_season_draft(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/draft",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/draft",
         params=_params,
         **kwargs,
     )
@@ -2575,10 +2625,11 @@ def espn_wc_season_draft_round_picks(
             espn_wc_season_draft_round_picks(season=2024, round_num='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_draft_round_picks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/draft/rounds/{round_num}/picks",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/draft/rounds/{_path_seg(round_num)}/picks",
         params=_params,
         **kwargs,
     )
@@ -2620,10 +2671,11 @@ def espn_wc_season_futures(
             espn_wc_season_futures(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_futures", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/futures",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/futures",
         params=_params,
         **kwargs,
     )
@@ -2665,10 +2717,11 @@ def espn_wc_season_freeagents(
             espn_wc_season_freeagents(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_freeagents", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/freeagents",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/freeagents",
         params=_params,
         **kwargs,
     )
@@ -2712,10 +2765,14 @@ def espn_wc_season_powerindex(
             espn_wc_season_powerindex(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{team_id}" if team_id is not None else ""
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/powerindex" + __seg
+    __seg = f"/{_path_seg(team_id)}" if team_id is not None else ""
+    __url = (
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/powerindex"
+        + __seg
+    )
     raw = _get(
         __url,
         params=_params,
@@ -2759,10 +2816,11 @@ def espn_wc_season_powerindex_leaders(
             espn_wc_season_powerindex_leaders(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_powerindex_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/powerindex/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/powerindex/leaders",
         params=_params,
         **kwargs,
     )
@@ -2806,12 +2864,13 @@ def espn_wc_season_awards(
             espn_wc_season_awards(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_season_awards", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{season}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/seasons/{_path_seg(season)}/awards",
         params=_params,
         **kwargs,
     )
@@ -2857,8 +2916,9 @@ def espn_wc_players_index(
             espn_wc_players_index()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_players_index", kwargs)
     _params = {
-        "active": bool_str(active),
+        "active": bool_str(active, name="active"),
         "limit": limit,
         "page": page,
     }
@@ -2906,10 +2966,11 @@ def espn_wc_player_core(
             espn_wc_player_core(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -2953,11 +3014,13 @@ def espn_wc_player_career_stats(
             espn_wc_player_career_stats(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_career_stats", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{stat_type}" if stat_type is not None else ""
+    __seg = f"/{_path_seg(stat_type)}" if stat_type is not None else ""
     __url = (
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/statistics" + __seg
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/statistics"
+        + __seg
     )
     raw = _get(
         __url,
@@ -3002,10 +3065,11 @@ def espn_wc_player_statisticslog(
             espn_wc_player_statisticslog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_statisticslog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/statisticslog",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/statisticslog",
         params=_params,
         **kwargs,
     )
@@ -3047,10 +3111,11 @@ def espn_wc_player_eventlog(
             espn_wc_player_eventlog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_eventlog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/eventlog",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/eventlog",
         params=_params,
         **kwargs,
     )
@@ -3092,10 +3157,11 @@ def espn_wc_player_contracts(
             espn_wc_player_contracts(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_contracts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/contracts",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/contracts",
         params=_params,
         **kwargs,
     )
@@ -3137,10 +3203,11 @@ def espn_wc_player_awards(
             espn_wc_player_awards(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_awards", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/awards",
         params=_params,
         **kwargs,
     )
@@ -3182,10 +3249,11 @@ def espn_wc_player_seasons(
             espn_wc_player_seasons(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_seasons", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/seasons",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/seasons",
         params=_params,
         **kwargs,
     )
@@ -3227,10 +3295,11 @@ def espn_wc_player_records(
             espn_wc_player_records(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_records", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/records",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/records",
         params=_params,
         **kwargs,
     )
@@ -3272,10 +3341,11 @@ def espn_wc_player_injuries(
             espn_wc_player_injuries(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/injuries",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -3317,10 +3387,11 @@ def espn_wc_player_notes(
             espn_wc_player_notes(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/notes",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/notes",
         params=_params,
         **kwargs,
     )
@@ -3364,10 +3435,11 @@ def espn_wc_player_vs_player(
             espn_wc_player_vs_player(athlete_id='4239', opp_id='5')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_player_vs_player", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{athlete_id}/vsathlete/{opp_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/athletes/{_path_seg(athlete_id)}/vsathlete/{_path_seg(opp_id)}",
         params=_params,
         **kwargs,
     )
@@ -3411,6 +3483,7 @@ def espn_wc_games(
             espn_wc_games()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_games", kwargs)
     _params = {
         "dates": dates,
         "limit": limit,
@@ -3459,10 +3532,11 @@ def espn_wc_game(
             espn_wc_game(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}",
         params=_params,
         **kwargs,
     )
@@ -3506,10 +3580,11 @@ def espn_wc_game_competition(
             espn_wc_game_competition(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_competition", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}"
     raw = _get(
         __url,
         params=_params,
@@ -3555,10 +3630,11 @@ def espn_wc_game_teams(
             espn_wc_game_teams(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_teams", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors"
     raw = _get(
         __url,
         params=_params,
@@ -3606,10 +3682,11 @@ def espn_wc_game_team(
             espn_wc_game_team(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -3657,10 +3734,11 @@ def espn_wc_game_team_roster(
             espn_wc_game_team_roster(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team_roster", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/roster"
     raw = _get(
         __url,
         params=_params,
@@ -3708,10 +3786,11 @@ def espn_wc_game_team_linescores(
             espn_wc_game_team_linescores(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team_linescores", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/linescores"
     raw = _get(
         __url,
         params=_params,
@@ -3759,10 +3838,11 @@ def espn_wc_game_team_statistics(
             espn_wc_game_team_statistics(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team_statistics", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/statistics"
     raw = _get(
         __url,
         params=_params,
@@ -3810,10 +3890,11 @@ def espn_wc_game_team_record(
             espn_wc_game_team_record(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/record"
     raw = _get(
         __url,
         params=_params,
@@ -3861,10 +3942,11 @@ def espn_wc_game_team_leaders(
             espn_wc_game_team_leaders(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -3910,10 +3992,11 @@ def espn_wc_game_odds(
             espn_wc_game_odds(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_odds", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/odds"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/odds"
     raw = _get(
         __url,
         params=_params,
@@ -3961,12 +4044,13 @@ def espn_wc_game_probabilities(
             espn_wc_game_probabilities(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_probabilities", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/probabilities"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/probabilities"
     raw = _get(
         __url,
         params=_params,
@@ -4014,12 +4098,13 @@ def espn_wc_game_plays(
             espn_wc_game_plays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_plays", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/plays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays"
     raw = _get(
         __url,
         params=_params,
@@ -4067,10 +4152,11 @@ def espn_wc_game_play(
             espn_wc_game_play(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_play", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/plays/{play_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4118,10 +4204,11 @@ def espn_wc_game_play_personnel(
             espn_wc_game_play_personnel(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_play_personnel", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}/personnel"
     raw = _get(
         __url,
         params=_params,
@@ -4167,10 +4254,11 @@ def espn_wc_game_situation(
             espn_wc_game_situation(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_situation", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/situation"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/situation"
     raw = _get(
         __url,
         params=_params,
@@ -4216,10 +4304,11 @@ def espn_wc_game_status(
             espn_wc_game_status(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_status", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/status"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/status"
     raw = _get(
         __url,
         params=_params,
@@ -4265,10 +4354,11 @@ def espn_wc_game_officials(
             espn_wc_game_officials(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_officials", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/officials"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials"
     raw = _get(
         __url,
         params=_params,
@@ -4314,10 +4404,11 @@ def espn_wc_game_broadcasts(
             espn_wc_game_broadcasts(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_broadcasts", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/broadcasts"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/broadcasts"
     raw = _get(
         __url,
         params=_params,
@@ -4363,10 +4454,11 @@ def espn_wc_game_predictor(
             espn_wc_game_predictor(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_predictor", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/predictor"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/predictor"
     raw = _get(
         __url,
         params=_params,
@@ -4412,10 +4504,11 @@ def espn_wc_game_powerindex(
             espn_wc_game_powerindex(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/powerindex"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/powerindex"
     raw = _get(
         __url,
         params=_params,
@@ -4461,10 +4554,11 @@ def espn_wc_game_propbets(
             espn_wc_game_propbets(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_propbets", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/propbets"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/propbets"
     raw = _get(
         __url,
         params=_params,
@@ -4510,10 +4604,11 @@ def espn_wc_game_leaders(
             espn_wc_game_leaders(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -4559,10 +4654,11 @@ def espn_wc_game_scoringplays(
             espn_wc_game_scoringplays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_scoringplays", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/scoringplays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/scoringplays"
     raw = _get(
         __url,
         params=_params,
@@ -4610,10 +4706,11 @@ def espn_wc_game_official_detail(
             espn_wc_game_official_detail(event_id='401584793', official_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_game_official_detail", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{event_id}/competitions/{cid}/officials/{official_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials/{_path_seg(official_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4659,6 +4756,7 @@ def espn_wc_teams_core(
             espn_wc_teams_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_teams_core", kwargs)
     _params = {
         "limit": limit,
         "page": page,
@@ -4707,10 +4805,11 @@ def espn_wc_team_core(
             espn_wc_team_core(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_team_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -4752,6 +4851,7 @@ def espn_wc_venues(
             espn_wc_venues()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_venues", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4799,10 +4899,11 @@ def espn_wc_venue(
             espn_wc_venue(venue_id='3663')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_venue", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues/{venue_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/venues/{_path_seg(venue_id)}",
         params=_params,
         **kwargs,
     )
@@ -4844,6 +4945,7 @@ def espn_wc_franchises(
             espn_wc_franchises()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_franchises", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4891,10 +4993,11 @@ def espn_wc_franchise(
             espn_wc_franchise(franchise_id='2')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_franchise", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises/{franchise_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/franchises/{_path_seg(franchise_id)}",
         params=_params,
         **kwargs,
     )
@@ -4936,10 +5039,11 @@ def espn_wc_coach(
             espn_wc_coach(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_coach", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{coach_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{_path_seg(coach_id)}",
         params=_params,
         **kwargs,
     )
@@ -4983,10 +5087,11 @@ def espn_wc_coach_record(
             espn_wc_coach_record(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_coach_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{coach_id}/record/{record_type}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{_path_seg(coach_id)}/record/{_path_seg(record_type)}",
         params=_params,
         **kwargs,
     )
@@ -5030,10 +5135,11 @@ def espn_wc_coach_season(
             espn_wc_coach_season(coach_id='1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_coach_season", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{coach_id}/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/coaches/{_path_seg(coach_id)}/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -5075,6 +5181,7 @@ def espn_wc_positions(
             espn_wc_positions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_positions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5122,10 +5229,11 @@ def espn_wc_position(
             espn_wc_position(position_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_position", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions/{position_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/positions/{_path_seg(position_id)}",
         params=_params,
         **kwargs,
     )
@@ -5167,6 +5275,7 @@ def espn_wc_tournaments(
             espn_wc_tournaments()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_tournaments", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5214,6 +5323,7 @@ def espn_wc_awards(
             espn_wc_awards()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_awards", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5261,10 +5371,11 @@ def espn_wc_award(
             espn_wc_award(award_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_award", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards/{award_id}",
+        f"https://sports.core.api.espn.com/v2/sports/soccer/leagues/fifa.world/awards/{_path_seg(award_id)}",
         params=_params,
         **kwargs,
     )
@@ -5304,6 +5415,7 @@ def espn_wc_standings_core(
             espn_wc_standings_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_standings_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5347,6 +5459,7 @@ def espn_wc_leaders_core(
             espn_wc_leaders_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_leaders_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5390,6 +5503,7 @@ def espn_wc_league_notes(
             espn_wc_league_notes()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_league_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5433,6 +5547,7 @@ def espn_wc_talentpicks(
             espn_wc_talentpicks()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_talentpicks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5482,6 +5597,7 @@ def espn_wc_fpi(
             espn_wc_fpi(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_wc_fpi", kwargs)
     _params = {
         "season": season,
         "limit": limit,

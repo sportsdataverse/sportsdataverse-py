@@ -692,7 +692,7 @@ def mls_standings(
     _params = {
         "category": category,
         "type": standings_type,
-        "is_live": bool_str(is_live),
+        "is_live": bool_str(is_live, name="is_live"),
         **{_k: _v for _k, _v in kwargs.items() if _v is not None},
     }
     _params.update(_caller_params)

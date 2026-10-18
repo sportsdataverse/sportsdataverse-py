@@ -2042,7 +2042,7 @@ def fox_api_foxpolls(
     _params = {
         "apikey": apikey,
         "associatedEntityIds": associated_entity_ids,
-        "includeAnswers": bool_str(include_answers),
+        "includeAnswers": bool_str(include_answers, name="include_answers"),
     }
     _params.update(_caller_params)
     raw = _get(
