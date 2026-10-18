@@ -46,7 +46,7 @@ def test_param_mode_scoreboard_url_keeps_runtime_league_token():
     v = _load_apis_and_view("soccer", "soccer", "eng.1", True, "scoreboard")
     # sport is baked, league stays a runtime f-string token, and it's an f-string literal.
     assert v.league_param is True
-    assert "soccer/{league}/scoreboard" in v.url_literal
+    assert "soccer/{_path_seg(league)}/scoreboard" in v.url_literal  # quoted at runtime (A-N2)
     assert v.url_literal.startswith('f"')
 
 
@@ -71,7 +71,7 @@ def test_param_mode_module_source_has_leading_league_param():
     assert "league: str," in head, head
     assert head.index("league: str,") < (head.index("dates") if "dates" in head else len(head))
     # the URL interpolates league at runtime
-    assert "soccer/{league}/scoreboard" in src
+    assert "soccer/{_path_seg(league)}/scoreboard" in src
     # league must NOT be forwarded as a query param
     assert '"league": league' not in src
 
