@@ -7,3 +7,12 @@
   dropped or refused connection) instead of after about three minutes; set `CBA_DIRECT=1` where direct access works
   for the full timeout and retries. A POST route called without `json=` raises `TypeError` (the generated wrappers
   always send it, so their behaviour is unchanged). (#TBD)
+- **CBA numbers:** the display strings the API sends (`'21.6'` per-game averages, `'39.4%'` percentages; about 100
+  columns across the season lists, team tables, advanced box and shot zones) are parsed to Float64. A percent string
+  is stored as a FRACTION 0-1, like the player box percentages and the `*_sort` columns, except where the family
+  already holds the column 0-100 (`turnovers_rate`). `season` and the schedule win/loss counts are Int64; jersey
+  numbers and code-table values stay text. Columns null in every capture take the family's dtype. (#TBD)
+- **VTB Infobasket:** an empty string in an id, rank or number column is null; the roster `rank` (blank in every
+  sample) is documented as unobserved and typed Int64. (#TBD)
+- **Lega Basket:** the play-by-play `side` is documented as what it is, the basket the court zone is measured from
+  (0 = x 0, 1 = x 100), not the home/visitor team (that is `team_side`). (#TBD)

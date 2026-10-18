@@ -802,6 +802,10 @@ for _k, _v in (
         LOCAL[f"{_k}_{_lang_}"] = f"The {_v} in {'English' if _lang_ == 'en' else 'Russian'}."
 
 #: Route-specific overrides (wrapper short -> column -> text).
+_ROSTER_RANK = (
+    "Unobserved: the roster sends an empty string for every player and coach (null here); the field belongs to the "
+    "leader lists (best_players), so its meaning on the roster is unconfirmed."
+)
 ROUTE: Dict[str, Dict[str, str]] = {
     "player_season_stats": {
         "season": "Season END year (2026 = 2025-26). The wire sends it as Season.CompID, a third meaning of CompID.",
@@ -815,6 +819,8 @@ ROUTE: Dict[str, Dict[str, str]] = {
         "game_status": "Game status in the calendar code set: 0 planned, 1 completed, 2 live.",
     },
     "team_games": {"comp_id": _CTX_SEASON_COMP},
+    "roster": {"rank": _ROSTER_RANK},
+    "roster_coaches": {"rank": _ROSTER_RANK},
     "game": {
         "comp_id": "Stage CompID of the game (50720 = the 2025-26 regular season): a stage below the season.",
         "game_id": _CTX_GAME,
