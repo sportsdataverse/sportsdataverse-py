@@ -1,0 +1,213 @@
+[
+  {
+    "season_id": 169,
+    "season_title": "レギュラーシーズン",
+    "league_name": "プレミア",
+    "season_league_name": "プレミア",
+    "season_league_flg": 1,
+    "update_date": "2026年2月8日(日)",
+    "teams": {
+      "1": {
+        "team_id": 13,
+        "season_team_name": "トヨタ自動車 アンテロープス",
+        "season_team_short_name": "トヨタ自動車",
+        "team_entry_flg": 1,
+        "position": "1",
+        "win_lost": "23勝5負",
+        "vs_teams": {
+          "1": {
+            "team_id": 13,
+            "season_team_name": "トヨタ自動車 アンテロープス",
+            "season_team_short_name": "トヨタ自動車",
+            "team_entry_flg": 1,
+            "position": "1",
+            "scores": []
+          },
+          "2": {
+            "team_id": 12,
+            "season_team_name": "デンソー アイリス",
+            "season_team_short_name": "デンソー",
+            "team_entry_flg": 1,
+            "position": "2",
+            "scores": [
+              {
+                "win": "63",
+                "losg": "56",
+                "result": "○ 63-56"
+              },
+              {
+                "win": "66",
+                "losg": "67",
+                "result": "● 66-67"
+              },
+              {
+                "win": "46",
+                "losg": "60",
+                "result": "● 46-60"
+              }
+            ]
+          },
+          "3": {
+            "team_id": 30,
+            "season_team_name": "富士通 レッドウェーブ",
+            "season_team_short_name": "富士通",
+            "team_entry_flg": 1,
+            "position": "3",
+            "scores": [
+              {
+                "win": "20",
+                "losg": "0",
+                "result": "○ 20-0"
+              },
+              {
+                "win": "20",
+                "losg": "0",
+                "result": "○ 20-0"
+              },
+              {
+                "win": "69",
+                "losg": "64",
+                "result": "○ 69-64"
+              }
+            ]
+          }
+        },
+        "season_team_area": null
+      },
+      "2": {
+        "team_id": 12,
+        "season_team_name": "デンソー アイリス",
+        "season_team_short_name": "デンソー",
+        "team_entry_flg": 1,
+        "position": "2",
+        "win_lost": "18勝10負",
+        "vs_teams": {
+          "1": {
+            "team_id": 13,
+            "season_team_name": "トヨタ自動車 アンテロープス",
+            "season_team_short_name": "トヨタ自動車",
+            "team_entry_flg": 1,
+            "position": "1",
+            "scores": [
+              {
+                "win": "56",
+                "losg": "63",
+                "result": "● 56-63"
+              },
+              {
+                "win": "67",
+                "losg": "66",
+                "result": "○ 67-66"
+              },
+              {
+                "win": "60",
+                "losg": "46",
+                "result": "○ 60-46"
+              }
+            ]
+          },
+          "2": {
+            "team_id": 12,
+            "season_team_name": "デンソー アイリス",
+            "season_team_short_name": "デンソー",
+            "team_entry_flg": 1,
+            "position": "2",
+            "scores": []
+          },
+          "3": {
+            "team_id": 30,
+            "season_team_name": "富士通 レッドウェーブ",
+            "season_team_short_name": "富士通",
+            "team_entry_flg": 1,
+            "position": "3",
+            "scores": [
+              {
+                "win": "69",
+                "losg": "80",
+                "result": "● 69-80"
+              },
+              {
+                "win": "68",
+                "losg": "58",
+                "result": "○ 68-58"
+              },
+              {
+                "win": "50",
+                "losg": "57",
+                "result": "● 50-57"
+              }
+            ]
+          }
+        },
+        "season_team_area": null
+      },
+      "3": {
+        "team_id": 30,
+        "season_team_name": "富士通 レッドウェーブ",
+        "season_team_short_name": "富士通",
+        "team_entry_flg": 1,
+        "position": "3",
+        "win_lost": "16勝12負",
+        "vs_teams": {
+          "1": {
+            "team_id": 13,
+            "season_team_name": "トヨタ自動車 アンテロープス",
+            "season_team_short_name": "トヨタ自動車",
+            "team_entry_flg": 1,
+            "position": "1",
+            "scores": [
+              {
+                "win": "0",
+                "losg": "20",
+                "result": "● 0-20"
+              },
+              {
+                "win": "0",
+                "losg": "20",
+                "result": "● 0-20"
+              },
+              {
+                "win": "64",
+                "losg": "69",
+                "result": "● 64-69"
+              }
+            ]
+          },
+          "2": {
+            "team_id": 12,
+            "season_team_name": "デンソー アイリス",
+            "season_team_short_name": "デンソー",
+            "team_entry_flg": 1,
+            "position": "2",
+            "scores": [
+              {
+                "win": "80",
+                "losg": "69",
+                "result": "○ 80-69"
+              },
+              {
+                "win": "58",
+                "losg": "68",
+                "result": "● 58-68"
+              },
+              {
+                "win": "57",
+                "losg": "50",
+                "result": "○ 57-50"
+              }
+            ]
+          },
+          "3": {
+            "team_id": 30,
+            "season_team_name": "富士通 レッドウェーブ",
+            "season_team_short_name": "富士通",
+            "team_entry_flg": 1,
+            "position": "3",
+            "scores": []
+          }
+        },
+        "season_team_area": null
+      }
+    }
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "gameUuid": "fb379yqcy5",
+  "homeTeam": {
+    "gameSourceId": 2683784,
+    "gameId": 2683784,
+    "teamId": "67370",
+    "teamName": "BK Amager",
+    "teamCode": "BKA",
+    "teamNumber": 1,
+    "place": "home",
+    "source": "genius-basketball-stream-reader",
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  "awayTeam": {
+    "gameSourceId": 2683784,
+    "gameId": 2683784,
+    "teamId": "153747",
+    "teamName": "Holbæk-Stenhus",
+    "teamCode": "Hol",
+    "teamNumber": 2,
+    "place": "away",
+    "source": "genius-basketball-stream-reader",
+    "instanceId": "dbl1_dbl",
+    "gameUuid": "fb379yqcy5",
+    "liveState": "decided"
+  },
+  "homeGoals": 96,
+  "awayGoals": 90,
+  "state": "GameEnded",
+  "time": {
+    "0": {
+      "period": 1,
+      "periodTime": "00:00:00"
+    },
+    "gameId": 2683784,
+    "instanceId": "dbl1_dbl",
+    "source": "genius-basketball-stream-reader",
+    "liveState": "decided"
+  }
+}

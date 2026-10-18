@@ -1,0 +1,173 @@
+[
+ {
+  "id": 17244,
+  "gohoops_id": 117929,
+  "gohoops_roster_id": 204097,
+  "gohoops_squad_id": 15540,
+  "gohoops_event_id": 613,
+  "gohoops_season_id": 275,
+  "team": {
+   "id": 4,
+   "gohoops_id": 942,
+   "gohoops_squad_id": 15540,
+   "gohoops_event_id": 613,
+   "gohoops_season_id": 275,
+   "name": "新竹御嵿攻城獅",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/lioneers.webp",
+    "alt_name": "lioneers"
+   },
+   "is_league": false
+  },
+  "name": "王律翔",
+  "number": "8",
+  "registered": true,
+  "is_listing": true,
+  "meta": {
+   "position": "ShootingGuard",
+   "alt_name": "",
+   "birthday": "<redacted>",
+   "height": 184,
+   "weight": 84,
+   "avatar_url": "",
+   "national_identity": "",
+   "national_identity_extra_detail": "",
+   "nationality": ""
+  },
+  "images": [
+   {
+    "id": 3312,
+    "key": "sm",
+    "path": "players/17244/gObH2eMvpFHyFzeHDLvWRzfSoypQTHgLr4W7blON.png",
+    "url": "https://assets.tpbl.basketball/production/players/17244/gObH2eMvpFHyFzeHDLvWRzfSoypQTHgLr4W7blON.png?20261008164250"
+   },
+   {
+    "id": 3313,
+    "key": "md",
+    "path": "players/17244/7c1a1nizX7iCqTyKs0XXF7UHoeO5wPTTlSstsrv7.png",
+    "url": "https://assets.tpbl.basketball/production/players/17244/7c1a1nizX7iCqTyKs0XXF7UHoeO5wPTTlSstsrv7.png?20261008164251"
+   },
+   {
+    "id": 3314,
+    "key": "lg",
+    "path": "players/17244/MhFCDZgUlRjBIzrBXHgceDtCDojCBLs8qnOPgWx8.png",
+    "url": "https://assets.tpbl.basketball/production/players/17244/MhFCDZgUlRjBIzrBXHgceDtCDojCBLs8qnOPgWx8.png?20261008164251"
+   }
+  ]
+ },
+ {
+  "id": 17246,
+  "gohoops_id": 117938,
+  "gohoops_roster_id": 204098,
+  "gohoops_squad_id": 15540,
+  "gohoops_event_id": 613,
+  "gohoops_season_id": 275,
+  "team": {
+   "id": 4,
+   "gohoops_id": 942,
+   "gohoops_squad_id": 15540,
+   "gohoops_event_id": 613,
+   "gohoops_season_id": 275,
+   "name": "新竹御嵿攻城獅",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/lioneers.webp",
+    "alt_name": "lioneers"
+   },
+   "is_league": false
+  },
+  "name": "奧獅頓",
+  "number": "32",
+  "registered": true,
+  "is_listing": true,
+  "meta": {
+   "position": "Center",
+   "alt_name": "",
+   "birthday": "<redacted>",
+   "height": 204,
+   "weight": 104,
+   "avatar_url": "",
+   "national_identity": "",
+   "national_identity_extra_detail": "",
+   "nationality": ""
+  },
+  "images": [
+   {
+    "id": 3320,
+    "key": "sm",
+    "path": "players/17246/U6DhOeILqU6yFUmHyS1molfEuwYcO5PruXet0Jiy.png",
+    "url": "https://assets.tpbl.basketball/production/players/17246/U6DhOeILqU6yFUmHyS1molfEuwYcO5PruXet0Jiy.png?20261008172854"
+   },
+   {
+    "id": 3321,
+    "key": "md",
+    "path": "players/17246/fuLEeYBeuAZfeEI5w2j3lGwOtUywUcoOku6cnd8y.png",
+    "url": "https://assets.tpbl.basketball/production/players/17246/fuLEeYBeuAZfeEI5w2j3lGwOtUywUcoOku6cnd8y.png?20261008172854"
+   },
+   {
+    "id": 3322,
+    "key": "lg",
+    "path": "players/17246/xxQHawdevMxlgntI0tc3p32srjfl7JxUOZ9wiJNo.png",
+    "url": "https://assets.tpbl.basketball/production/players/17246/xxQHawdevMxlgntI0tc3p32srjfl7JxUOZ9wiJNo.png?20261008172854"
+   }
+  ]
+ },
+ {
+  "id": 87,
+  "gohoops_id": 70845,
+  "gohoops_roster_id": 204110,
+  "gohoops_squad_id": 15540,
+  "gohoops_event_id": 613,
+  "gohoops_season_id": 275,
+  "team": {
+   "id": 4,
+   "gohoops_id": 942,
+   "gohoops_squad_id": 15540,
+   "gohoops_event_id": 613,
+   "gohoops_season_id": 275,
+   "name": "新竹御嵿攻城獅",
+   "status": "ACTIVE",
+   "meta": {
+    "logo": "https://assets.tpbl.basketball/logos/lioneers.webp",
+    "alt_name": "lioneers"
+   },
+   "is_league": false
+  },
+  "name": "蔡宸綱",
+  "number": "17",
+  "registered": true,
+  "is_listing": true,
+  "meta": {
+   "position": "PowerForward",
+   "alt_name": "",
+   "birthday": "<redacted>",
+   "height": 197,
+   "weight": 97.7,
+   "avatar_url": "",
+   "national_identity": "",
+   "national_identity_extra_detail": "",
+   "nationality": ""
+  },
+  "images": [
+   {
+    "id": 163,
+    "key": "md",
+    "path": "players/87/99FfRLAiqtql2r7OKyapPQOc8IObOPymEiaA07UZ.png",
+    "url": "https://assets.tpbl.basketball/production/players/87/99FfRLAiqtql2r7OKyapPQOc8IObOPymEiaA07UZ.png?20261008170225"
+   },
+   {
+    "id": 164,
+    "key": "lg",
+    "path": "players/87/ihHjG55gNYERt5z69oVW4W4kbVOs3mgvK3uDcv8t.png",
+    "url": "https://assets.tpbl.basketball/production/players/87/ihHjG55gNYERt5z69oVW4W4kbVOs3mgvK3uDcv8t.png?20261008170225"
+   },
+   {
+    "id": 165,
+    "key": "xl",
+    "path": "players/87/t1DiC6Yyv2TjZtlrOu9AHO8jKqoek5IFkWbRjuW0.png",
+    "url": "https://assets.tpbl.basketball/production/players/87/t1DiC6Yyv2TjZtlrOu9AHO8jKqoek5IFkWbRjuW0.png?20261008170225"
+   }
+  ]
+ }
+]

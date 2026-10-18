@@ -1,0 +1,541 @@
+{
+  "data": {
+    "banner": {
+      "competition": {
+        "id": "00054680-87dd-11eb-8726-4e4c219061a6",
+        "name": "LIGA MAYOR DE BALONCESTO"
+      },
+      "fixture": {
+        "attendance": null,
+        "attendanceLabel": "Asistencia",
+        "broadcasts": [],
+        "competitors": [
+          {
+            "code": "SAL",
+            "colors": {
+              "primary": "fdfdfa",
+              "secondary": "0f0fe4",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "isHome": true,
+            "link": null,
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/1514dc8a8a914f6c96c5e2bf9ed670de?size=400",
+            "name": "SALVADOREÑOS",
+            "resultPlace": 2,
+            "resultStatus": "CONFIRMED",
+            "score": "78",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          },
+          {
+            "code": "STC",
+            "colors": {
+              "primary": "fdfdfa",
+              "secondary": "0f0fe4",
+              "tertiary": "000000"
+            },
+            "draw": false,
+            "entityId": "c6f78253-6005-11ef-bbe4-ad0b9014232b",
+            "isHome": false,
+            "link": null,
+            "logo": "https://images.dc.connect.sportradar.com/b1gak/b36d8f3309eb4aa2aaa8cb5a2c9c12b2?size=400",
+            "name": "SANTA TECLA IMDELS",
+            "resultPlace": 1,
+            "resultStatus": "CONFIRMED",
+            "score": "83",
+            "secondaryScore": null,
+            "shootOutAttempts": ""
+          }
+        ],
+        "fixtureProfile": {
+          "foulsAllowedTechnical": 2,
+          "foulsBeforeBonus": 4,
+          "halfTimeDuration": 10,
+          "maxFoulsPersonal": 5,
+          "maximumPlayersOnCourt": 5,
+          "maximumRosterSize": 16,
+          "numberOfPeriods": 4,
+          "overtimeAllowed": true,
+          "overtimeLength": 5,
+          "periodBreakDuration": 2,
+          "periodLength": 10,
+          "resetFoulsAfterPeriods": [
+            2,
+            3,
+            4
+          ],
+          "resetTimeoutsAfterPeriods": [
+            3,
+            11,
+            12
+          ],
+          "shotClock": 24,
+          "switchPlayingDirection": [
+            1,
+            2,
+            3
+          ]
+        },
+        "id": "53381428-bf5b-11f1-815e-b9dbb8d1422b",
+        "labelShootout": null,
+        "leaderStats": {
+          "leaders": []
+        },
+        "leaderStatsLabel": "Líderes estadísticos",
+        "name": null,
+        "pool": "",
+        "poolName": "",
+        "series": null,
+        "shootout": {},
+        "sport": "basketball",
+        "startDateTime": "2026-10-11T20:00:00",
+        "status": "CONFIRMED",
+        "timesUnconfirmed": false,
+        "venue": "GIM. NAC. \"ADOLFO PINEDA\" 3"
+      },
+      "isPeriodScoresVertical": false,
+      "season": {
+        "id": "3bcb4c99-a03d-11f1-8391-bb3e7d71dc3e",
+        "name": "CLAUSURA 2026"
+      },
+      "showFixtureName": true
+    },
+    "broadcastsLabels": {
+      "allBroadcasters": "All Broadcasters",
+      "watch": "Watch"
+    },
+    "captainLabel": "C",
+    "config": {
+      "currentPage": "fixture_detail",
+      "navigation": {
+        "labels": {
+          "search": "Búsqueda",
+          "searchResults": "Resultados de la búsqueda"
+        },
+        "main": [
+          {
+            "label": "Calendario",
+            "link": "&~w=fl~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "fixtures"
+          },
+          {
+            "label": "Posiciones",
+            "link": "&~w=stn~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "standings"
+          },
+          {
+            "label": "Season Leaders",
+            "link": "&~w=l~eJyrVipWslJQMk5KTjJJtrTUTTQwTtE1NEwz1LUwtjTUTUoyTjVPMTdMSTZOVdJRUMoBKU4t1nUNVqoFAMvLD1A",
+            "value": "statistics_leaders"
+          }
+        ]
+      },
+      "showEntityLogo": true,
+      "sport": "basketball"
+    },
+    "fixture": {
+      "ageGroup": "SENIOR",
+      "attendance": null,
+      "attendanceLabel": "Asistencia",
+      "captains": {
+        "b962370f-6005-11ef-94a6-b7867e4f631b": "0a213b6c-87e0-11eb-9f85-929893079a97",
+        "c6f78253-6005-11ef-bbe4-ad0b9014232b": "a8a34088-87df-11eb-82af-862fe3ef7a94"
+      },
+      "competitionName": "LIGA MAYOR DE BALONCESTO",
+      "competitors": [
+        {
+          "code": "SAL",
+          "colors": {
+            "primary": "fdfdfa",
+            "secondary": "0f0fe4",
+            "tertiary": "000000"
+          },
+          "draw": false,
+          "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+          "isHome": true,
+          "link": null,
+          "logo": "https://images.dc.connect.sportradar.com/b1gak/1514dc8a8a914f6c96c5e2bf9ed670de?size=400",
+          "name": "SALVADOREÑOS",
+          "resultPlace": 2,
+          "resultStatus": "CONFIRMED",
+          "score": "78",
+          "secondaryScore": null,
+          "shootOutAttempts": ""
+        },
+        {
+          "code": "STC",
+          "colors": {
+            "primary": "fdfdfa",
+            "secondary": "0f0fe4",
+            "tertiary": "000000"
+          },
+          "draw": false,
+          "entityId": "c6f78253-6005-11ef-bbe4-ad0b9014232b",
+          "isHome": false,
+          "link": null,
+          "logo": "https://images.dc.connect.sportradar.com/b1gak/b36d8f3309eb4aa2aaa8cb5a2c9c12b2?size=400",
+          "name": "SANTA TECLA IMDELS",
+          "resultPlace": 1,
+          "resultStatus": "CONFIRMED",
+          "score": "83",
+          "secondaryScore": null,
+          "shootOutAttempts": ""
+        }
+      ],
+      "discipline": null,
+      "externalId": null,
+      "fixtureId": "53381428-bf5b-11f1-815e-b9dbb8d1422b",
+      "fixtureType": "REGULAR",
+      "liveDataAvailable": false,
+      "liveVideoAvailable": true,
+      "name": null,
+      "profile": {
+        "foulsAllowedTechnical": 2,
+        "foulsBeforeBonus": 4,
+        "halfTimeDuration": 10,
+        "maxFoulsPersonal": 5,
+        "maximumPlayersOnCourt": 5,
+        "maximumRosterSize": 16,
+        "numberOfPeriods": 4,
+        "overtimeAllowed": true,
+        "overtimeLength": 5,
+        "periodBreakDuration": 2,
+        "periodLength": 10,
+        "resetFoulsAfterPeriods": [
+          2,
+          3,
+          4
+        ],
+        "resetTimeoutsAfterPeriods": [
+          3,
+          11,
+          12
+        ],
+        "shotClock": 24,
+        "switchPlayingDirection": [
+          1,
+          2,
+          3
+        ]
+      },
+      "seasonId": "3bcb4c99-a03d-11f1-8391-bb3e7d71dc3e",
+      "series": null,
+      "startTimeLocal": "2026-10-11T20:00:00",
+      "startTimeUTC": "2026-10-12T02:00:00",
+      "status": "CONFIRMED",
+      "statusLabel": "Final",
+      "timesUnconfirmed": false,
+      "timezone": "America/El_Salvador",
+      "updated": "2026-10-12T04:08:12",
+      "venue": "GIM. NAC. \"ADOLFO PINEDA\" 3",
+      "venueId": "77e29656-87df-11eb-82af-862fe3ef7a94"
+    },
+    "fixtureDetailText": {
+      "ended": "Finalizado",
+      "live": "En vivo",
+      "matchEvents": "Match Events",
+      "startingSoon": "Empezará Pronto",
+      "timeUntilStart": "Tiempo para empezar",
+      "time_score": "Tiempo/Marcador"
+    },
+    "gameStageLabels": {
+      "all": "Todas",
+      "final": "Final"
+    },
+    "labels": {
+      "toBeConfirmed": "Por confirmar",
+      "toBeConfirmedAbbreviation": "Pend."
+    },
+    "locale": "es-ES",
+    "periodData": [
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 0,
+        "ended": true,
+        "events": [
+          {
+            "bib": "21",
+            "clock": "PT10M0S",
+            "desc": "Salto perdido",
+            "entityId": "c6f78253-6005-11ef-bbe4-ad0b9014232b",
+            "eventId": "bbe24370-c5e0-11f1-849e-a76f28900f68",
+            "eventSubType": "lost",
+            "eventType": "jumpBall",
+            "name": "Eliezer Sánchez",
+            "periodId": 1,
+            "personId": "cc19b507-2d52-11f1-a603-77621ea5dbc2",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/11948175a9bc4f72995f1ac861e11af7?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 0,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 0
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "35",
+            "clock": "PT10M0S",
+            "desc": "Salto ganado",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "bbe21c61-c5e0-11f1-849e-a76f28900f68",
+            "eventSubType": "won",
+            "eventType": "jumpBall",
+            "name": "Ibrahin Hechavarría",
+            "periodId": 1,
+            "personId": "99d97817-a8ad-11f1-b4d0-510799cd51a7",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/c113ca22e4124639b677253acbbfa15c?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 0,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 0
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "35",
+            "clock": "PT9M47S",
+            "desc": "2pt Tiro en suspensión",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "c34f5b21-c5e0-11f1-849e-a76f28900f68",
+            "eventSubType": "jumpShot",
+            "eventType": "2pt",
+            "name": "Ibrahin Hechavarría",
+            "periodId": 1,
+            "personId": "99d97817-a8ad-11f1-b4d0-510799cd51a7",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/c113ca22e4124639b677253acbbfa15c?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 2,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 0
+            },
+            "success": true,
+            "successString": "Hecho",
+            "x": 4.66,
+            "y": 84.36
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 1: Fin",
+          "shortLabel": "P1",
+          "start": "Period 1: Comienzo"
+        },
+        "periodId": 1,
+        "started": true,
+        "teamScore": {
+          "b962370f-6005-11ef-94a6-b7867e4f631b": 25,
+          "c6f78253-6005-11ef-bbe4-ad0b9014232b": 22
+        }
+      },
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 10,
+        "ended": true,
+        "events": [
+          {
+            "bib": "5",
+            "clock": "PT10M0S",
+            "desc": "Sustitución - Entra",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "0036b770-c5e3-11f1-849e-a76f28900f68",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Erick Rodríguez",
+            "periodId": 2,
+            "personId": "0a213b6c-87e0-11eb-9f85-929893079a97",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/58567fd08be843bfaf1e5d189ac78db7?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 25,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 22
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "41",
+            "clock": "PT10M0S",
+            "desc": "Sustitución - Sale",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "0036de81-c5e3-11f1-849e-a76f28900f68",
+            "eventSubType": "out",
+            "eventType": "substitution",
+            "name": "William Merino",
+            "periodId": 2,
+            "personId": "246f6be2-87e0-11eb-b6cf-dad5b7024175",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/f598d87252224731b3882066dc1434e1?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 25,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 22
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "35",
+            "clock": "PT10M0S",
+            "desc": "Sustitución - Sale",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "0036de80-c5e3-11f1-849e-a76f28900f68",
+            "eventSubType": "out",
+            "eventType": "substitution",
+            "name": "Ibrahin Hechavarría",
+            "periodId": 2,
+            "personId": "99d97817-a8ad-11f1-b4d0-510799cd51a7",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/c113ca22e4124639b677253acbbfa15c?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 25,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 22
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 2: Fin",
+          "shortLabel": "P2",
+          "start": "Period 2: Comienzo"
+        },
+        "periodId": 2,
+        "started": true,
+        "teamScore": {
+          "b962370f-6005-11ef-94a6-b7867e4f631b": 15,
+          "c6f78253-6005-11ef-bbe4-ad0b9014232b": 17
+        }
+      },
+      {
+        "bannerMatchEvents": [],
+        "bannerTimelineMatchEvents": [],
+        "durationMinutes": 10,
+        "elapsedMinutesBeforePeriod": 20,
+        "ended": true,
+        "events": [
+          {
+            "bib": "23",
+            "clock": "PT10M0S",
+            "desc": "Sustitución - Sale",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "7dbc0f72-c5e7-11f1-b3e9-957716971db2",
+            "eventSubType": "out",
+            "eventType": "substitution",
+            "name": "Marco Rodríguez",
+            "periodId": 3,
+            "personId": "27490d8f-ec6e-11ed-b17b-fd613bfc8285",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/1aefca79e9084f08954ea277f2356bb1?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 40,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 39
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "88",
+            "clock": "PT10M0S",
+            "desc": "Sustitución - Entra",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "7dbc3680-c5e7-11f1-b3e9-957716971db2",
+            "eventSubType": "in",
+            "eventType": "substitution",
+            "name": "Ian Garibo",
+            "periodId": 3,
+            "personId": "6e817e64-800b-11ee-8a0e-d580f8fc7330",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/8e25791a94f84359a06ef45596111813?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 40,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 39
+            },
+            "success": null,
+            "x": null,
+            "y": null
+          },
+          {
+            "bib": "41",
+            "clock": "PT9M50S",
+            "desc": "2pt Bandeja",
+            "entityId": "b962370f-6005-11ef-94a6-b7867e4f631b",
+            "eventId": "8cddf631-c5e7-11f1-b3e9-957716971db2",
+            "eventSubType": "layup",
+            "eventType": "2pt",
+            "name": "William Merino",
+            "periodId": 3,
+            "personId": "246f6be2-87e0-11eb-b6cf-dad5b7024175",
+            "personImage": "https://images.dc.connect.sportradar.com/b1gak/f598d87252224731b3882066dc1434e1?size=400",
+            "scores": {
+              "b962370f-6005-11ef-94a6-b7867e4f631b": 42,
+              "c6f78253-6005-11ef-bbe4-ad0b9014232b": 39
+            },
+            "success": true,
+            "successString": "Hecho",
+            "x": 3.93,
+            "y": 56.18
+          }
+        ],
+        "isOvertime": false,
+        "isShootout": false,
+        "labels": {
+          "end": "Period 3: Fin",
+          "shortLabel": "P3",
+          "start": "Period 3: Comienzo"
+        },
+        "periodId": 3,
+        "started": true,
+        "teamScore": {
+          "b962370f-6005-11ef-94a6-b7867e4f631b": 14,
+          "c6f78253-6005-11ef-bbe4-ad0b9014232b": 29
+        }
+      }
+    ],
+    "reverseTeamOrder": false,
+    "seasonId": "3bcb4c99-a03d-11f1-8391-bb3e7d71dc3e",
+    "showCompetitionName": true,
+    "sub": "pbp",
+    "summary": {},
+    "tabs": [
+      {
+        "label": "Box Score",
+        "link": "&~w=f~eJwtjEEKwzAMBL8SdK6gimJi594X9AVZy4ZAb_KpJX9PBD3O7LA_ctomUlQstRTen2os0oWzFmFA22qrWNVGj4k-ETfn1zvoG-RjH4ePo3qoHiqpZlnmzOgJ_zdJjVEMyHZPM-i8ALkEIBI",
+        "sub": "statistics"
+      },
+      {
+        "active": true,
+        "label": "Play By Play",
+        "link": "&~w=f~eJwtjEEKgDAMBL8iORswpsXWuy_wBW7TnjwI3hT_rgFvM-ywN500d6QoCCVn3gY1FmnCSbMwoHWySaxopb6j3eN68rK6XW4HDufmHFWThDExWsR_I7EysgHJvmkEPS-ipB0J",
+        "sub": "pbp"
+      },
+      {
+        "label": "Tabla de tiros",
+        "link": "&~w=f~eJwtjEEKgzAQRa8is-5AxzGYuO8JPEDxZxJcCAXjSvHu7UCX7_3Hv6jR1JEiY8gp8fJUY5EqHDUJA1pGG8WyFnp0tHlcGr9mp9OprZ_jnddlP1xVV0E1ytBHRg34v0kojGRAtN_Ug-4vsy8f9g",
+        "sub": "shot_chart"
+      }
+    ]
+  },
+  "links": {
+    "self": "https://embed-api.eui.connect.sportradar.com/v1/embed/13/fixture_detail?fixtureId=53381428-bf5b-11f1-815e-b9dbb8d1422b&sub=pbp"
+  },
+  "meta": {
+    "code": 200,
+    "codeVersion": "d6cd1e2bd19e03a81132a23b2025920577f84e37",
+    "count": 16,
+    "fromCache": false,
+    "generated": "2026-10-12T18:17:28.214617+00:00Z",
+    "generationTime": 0.287879,
+    "limit": 0,
+    "offset": 0,
+    "time": "2026-10-12T18:24:38.767361+00:00Z",
+    "version": 1
+  }
+}

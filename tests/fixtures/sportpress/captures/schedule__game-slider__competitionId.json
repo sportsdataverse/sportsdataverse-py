@@ -1,0 +1,241 @@
+{
+  "data": [
+    {
+      "id": 11245,
+      "game_time": "2026-05-29 19:30:00",
+      "status": "finished",
+      "genius_id": 2852146,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 72,
+          "competition_team": {
+            "id": 516,
+            "name": "Landstede Hammers Playoff",
+            "short_name": "ZWO",
+            "ticket_url": "https://shop.ticketing.cm.com/82ab5cc7-f55f-40d1-b9e6-c7d61918aac1/eebd7e65-0414-4f4e-a23b-559e14507dc9",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Landstede Hammers",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/7/i/7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/7/i/small-7iHg8tHuHog4w1gOIigHdERQ51663601291.png",
+                "medium": "https://bnxt.sportpress.info/storage/7/i/medium-7iHg8tHuHog4w1gOIigHdERQ51663601291.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 57,
+          "competition_team": {
+            "id": 526,
+            "name": "Heroes Den Bosch playoff",
+            "short_name": "DBO",
+            "ticket_url": "https://heroes.shop.eventgoose.com",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Heroes Den Bosch",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/U/T/UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/U/T/small-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png",
+                "medium": "https://bnxt.sportpress.info/storage/U/T/medium-UTQctxyY4aYG1hLJgzl2IsiVr1663601593.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        }
+      ],
+      "phase": {
+        "id": 181,
+        "name": "Playoffs Netherlands",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      }
+    },
+    {
+      "id": 11247,
+      "game_time": "2026-05-29 20:00:00",
+      "status": "finished",
+      "genius_id": 2852156,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 91,
+          "competition_team": {
+            "id": 522,
+            "name": "Zorg en Zekerheid Leiden playoff",
+            "short_name": "LEI",
+            "ticket_url": "https://www.eredivisiebasketballleiden.nl/tickets/e-tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "ZZ Leiden 20y Logo",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/D/G/DGiVT2IA5uqOat5ETWZAq8dNn1760009294.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/D/G/small-DGiVT2IA5uqOat5ETWZAq8dNn1760009294.png",
+                "medium": "https://bnxt.sportpress.info/storage/D/G/medium-DGiVT2IA5uqOat5ETWZAq8dNn1760009294.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 71,
+          "competition_team": {
+            "id": 512,
+            "name": "Donar Groningen playoff",
+            "short_name": "GRO",
+            "ticket_url": "https://www.donar.nl/tickets",
+            "club": {
+              "id": 2,
+              "name": "Netherlands"
+            },
+            "team_logo": {
+              "name": "Donar Groningen 75y Logo",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/I/c/IcTJNHFy4nsQcXNFrNeC8pRiM1759761725.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/I/c/small-IcTJNHFy4nsQcXNFrNeC8pRiM1759761725.png",
+                "medium": "https://bnxt.sportpress.info/storage/I/c/medium-IcTJNHFy4nsQcXNFrNeC8pRiM1759761725.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        }
+      ],
+      "phase": {
+        "id": 181,
+        "name": "Playoffs Netherlands",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      }
+    },
+    {
+      "id": 11243,
+      "game_time": "2026-05-29 20:30:00",
+      "status": "finished",
+      "genius_id": 2852147,
+      "video_stream_url": null,
+      "competitors": [
+        {
+          "side": 1,
+          "finalScore": 79,
+          "competition_team": {
+            "id": 510,
+            "name": "Hubo Limburg United playoff",
+            "short_name": "LIM",
+            "ticket_url": "https://shop.twelveticketing.eu/seller/hubo-limburg-united-y42n",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "Hubo Limburg United",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/j/q/jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/j/q/small-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png",
+                "medium": "https://bnxt.sportpress.info/storage/j/q/medium-jqfU8q25EnXTxP2KtLv7Mos3L1663600716.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        },
+        {
+          "side": 2,
+          "finalScore": 91,
+          "competition_team": {
+            "id": 506,
+            "name": "Windrose Giants Antwerp playoff",
+            "short_name": "ANT",
+            "ticket_url": "https://www.ticketmaster.be/artist/telenet-giants-antwerp-tickets/1272224?language=nl-be",
+            "club": {
+              "id": 1,
+              "name": "Belgium"
+            },
+            "team_logo": {
+              "name": "WINDROSE_ANTWERPGIANTS_2024",
+              "description": null,
+              "alt": null,
+              "keywords": null,
+              "public_url": "https://bnxt.sportpress.info/storage/t/U/tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+              "thumbnails": {
+                "small": "https://bnxt.sportpress.info/storage/t/U/small-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png",
+                "medium": "https://bnxt.sportpress.info/storage/t/U/medium-tUC3JzkJ6F9rGYGOsThcfm5g51719833924.png"
+              }
+            },
+            "created_at": "2025-06-25"
+          }
+        }
+      ],
+      "phase": {
+        "id": 179,
+        "name": "Playoffs Belgium",
+        "standings_visible": false
+      },
+      "competition": {
+        "id": 24,
+        "season": 2026,
+        "visible": true,
+        "standings_visible": true,
+        "simple_team_view": false,
+        "summer_season": false,
+        "name": "BNXT League 2025-2026",
+        "logo": null,
+        "ticket_url": null,
+        "video_url": null,
+        "created_at": "2025-06-25"
+      }
+    }
+  ]
+}

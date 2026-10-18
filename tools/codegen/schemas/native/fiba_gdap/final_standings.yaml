@@ -1,0 +1,30 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: final_rank
+  type: integer
+- description: ''
+  name: team_team_id
+  type: integer
+- description: ''
+  name: team_team_code
+  type: character
+- description: ''
+  name: team_short_name
+  type: character
+- description: ''
+  name: team_profile
+  type: character
+- description: ''
+  name: team_status_code
+  type: character
+- description: ''
+  name: team_status_name
+  type: character
+- description: ''
+  name: team_organisation_id
+  type: integer
+kind: dataframe
+schema: fiba_gdap_final_standings

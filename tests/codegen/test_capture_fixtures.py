@@ -167,3 +167,46 @@ def test_a_failure_in_every_league_reports_the_representative_leagues_cause(tmp_
     cf.main(["--api", "espn_core_v2", "--endpoints", "season_group", "--sleep", "0"])
     out = capsys.readouterr().out
     assert "[nba] RuntimeError: boom in nba" in out and "2 more league(s)" in out and "boom in wch" not in out
+
+
+def test_register_native_sees_a_short_already_mapped_under_another_name(tmp_path, monkeypatch):
+    """A short mapped under a different file name, or inside a list value, is not mapped again."""
+    import yaml
+
+    m = tmp_path / "native_fixture_map.yaml"
+    m.write_text(
+        "sihf_api_web:\n"
+        "  table__standing__2026__1.json: standings\n"
+        "  gameoverview__20261105000325.json:\n"
+        "    - pbp\n"
+        "    - game_info\n"
+    )
+    monkeypatch.setattr(cf, "NATIVE_MAP", m)
+    before = m.read_text()
+    cf._register_native("sihf_api_web", "pbp", "pbp.json")  # inside the list value
+    cf._register_native("sihf_api_web", "standings", "standings.json")  # under another file name
+    assert m.read_text() == before
+    cf._register_native("sihf_api_web", "results", "results.json")  # a new short is still added
+    assert yaml.safe_load(m.read_text())["sihf_api_web"]["results.json"] == "results"
+
+
+def test_a_registered_flat_capture_overwrites_the_mapped_file(tmp_path, monkeypatch):
+    """A re-capture lands on the file the map names (also inside a list value), never an orphan."""
+    m = tmp_path / "native_fixture_map.yaml"
+    m.write_text(
+        "sihf_api_web:\n"
+        "  table__standing__2026__1.json: standings\n"
+        "  gameoverview__20261105000325.json:\n"
+        "    - pbp\n"
+        "    - game_info\n"
+    )
+    monkeypatch.setattr(cf, "NATIVE_MAP", m)
+    assert cf.fixture_path("sihf_api_web", "standings").name == "table__standing__2026__1.json"
+    assert cf.fixture_path("sihf_api_web", "game_info").name == "gameoverview__20261105000325.json"
+    assert cf.fixture_path("sihf_api_web", "results").name == "results.json"  # not mapped yet
+    monkeypatch.setattr(cf, "FIXTURES", tmp_path)
+    monkeypatch.setattr(cf, "_call", lambda api, short, league: {"data": [1]})
+    ok, _ = cf.capture("sihf_api_web", "standings")
+    assert ok
+    assert sorted(f.name for f in (tmp_path / "sihf_api_web").iterdir()) == ["table__standing__2026__1.json"]
+    assert m.read_text().count("standings") == 1

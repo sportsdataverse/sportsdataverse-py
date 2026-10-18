@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: competition_id
+  type: integer
+- description: ''
+  name: edition_id
+  type: integer
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: club_id
+  type: integer
+- description: ''
+  name: team
+  type: character
+- description: ''
+  name: team_abbr
+  type: character
+- description: ''
+  name: round_id
+  type: integer
+- description: ''
+  name: round_number
+  type: integer
+- description: ''
+  name: subphase_id
+  type: integer
+- description: ''
+  name: subphase_number
+  type: integer
+- description: ''
+  name: position
+  type: integer
+- description: ''
+  name: match_id
+  type: integer
+kind: dataframe
+schema: acb_standings_rounds

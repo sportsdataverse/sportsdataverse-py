@@ -12239,6 +12239,8 @@ load_mbb_pbp:
   type: String
 - name: media_id
   type: String
+- name: score_source
+  type: String
 - name: pregame_home_prob
   type: Float64
 - name: home_win_prob
@@ -14083,6 +14085,8 @@ load_nba_pbp:
 - name: athlete_name_3
   type: String
 - name: type_abbreviation
+  type: String
+- name: score_source
   type: String
 load_nba_player_boxscore:
 - name: game_id
@@ -29517,6 +29521,8 @@ load_wbb_pbp:
   type: String
 - name: athlete_name_3
   type: String
+- name: score_source
+  type: String
 - name: pregame_home_prob
   type: Float64
 - name: home_win_prob
@@ -30728,6 +30734,8 @@ load_wnba_pbp:
 - name: athlete_name_3
   type: String
 - name: type_abbreviation
+  type: String
+- name: score_source
   type: String
 load_wnba_player_boxscore:
 - name: game_id

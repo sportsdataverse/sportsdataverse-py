@@ -1,0 +1,39 @@
+schema: sihf_game_lineups
+kind: dataframe
+columns:
+- name: game_id
+  type: integer
+  description: ''
+- name: team_side
+  type: character
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: unit
+  type: character
+  description: ''
+- name: slot
+  type: integer
+  description: ''
+- name: player_id
+  type: integer
+  description: ''
+- name: player_name
+  type: character
+  description: ''
+- name: player_jersey
+  type: integer
+  description: ''
+- name: is_captain
+  type: logical
+  description: ''
+- name: is_first_goalkeeper
+  type: logical
+  description: ''
+- name: absence_code
+  type: character
+  description: ''
+- name: absence_reason
+  type: character
+  description: ''

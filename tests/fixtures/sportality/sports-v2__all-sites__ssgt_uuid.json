@@ -1,0 +1,23 @@
+[
+  {
+    "id": "bac1_bac",
+    "instanceId": "bac1_bac",
+    "publicUrl": "http://www.bakkenbears.com/bears-academy/",
+    "name": "Bears Academy",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/bac1_bac.svg"
+  },
+  {
+    "id": "bak1_bak",
+    "instanceId": "bak1_bak",
+    "publicUrl": "http://www.bakkenbears.com",
+    "name": "Bakken Bears",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/bak1_bak.svg"
+  },
+  {
+    "id": "bcc1_bcc",
+    "instanceId": "bcc1_bcc",
+    "publicUrl": "http://bccopenhagen.com",
+    "name": "BC Copenhagen",
+    "icon": "https://sportality.cdn.s8y.se/team-logos/bcc1_bcc.svg"
+  }
+]

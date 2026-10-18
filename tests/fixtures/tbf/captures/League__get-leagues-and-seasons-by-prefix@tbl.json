@@ -1,0 +1,37 @@
+{
+  "data": [
+    {
+      "faaliyet": "TBL 2026-2027",
+      "url": "tbl-2026-2027",
+      "faaliyet_ID": 22215,
+      "sezon_ID": 174,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/tblrenkli.svg",
+      "sezon": "2026-2027",
+      "sezonGorunenAdi": null,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/tblgri.svg"
+    },
+    {
+      "faaliyet": "TBL 2025-2026",
+      "url": "tbl-2025-2026",
+      "faaliyet_ID": 20727,
+      "sezon_ID": 172,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/tbl-renkli.svg",
+      "sezon": "2025-2026",
+      "sezonGorunenAdi": null,
+      "logoGray": "https://tbf.org.tr/assets/images/sites-logo/tbl-gri.svg"
+    },
+    {
+      "faaliyet": "TBL 2024-2025",
+      "url": "tbl-2024-2025",
+      "faaliyet_ID": 19285,
+      "sezon_ID": 170,
+      "logo": "https://tbf.org.tr/assets/images/sites-logo/tbl-landscape-light.png",
+      "sezon": "2024-2025",
+      "sezonGorunenAdi": "2024-2025 İlkan Karaman Sezonu",
+      "logoGray": ""
+    }
+  ],
+  "isSuccess": true,
+  "message": "Success",
+  "problemDetails": null
+}

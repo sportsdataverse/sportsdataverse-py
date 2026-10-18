@@ -1,0 +1,702 @@
+atrium_box_score:
+  active: True when the player is on the court in a live game.
+  assists: Assists (player, this game).
+  bib: Jersey number the player wears, as text.
+  blocks: Shots blocked (player, this game).
+  blocks_received: Own shots blocked by an opponent (LNB only) (player, this game).
+  did_not_play_reason: Reason the player did not play; null in every body seen.
+  efficiency: Efficiency rating, from the site's own formula (player, this game).
+  entity_id: Team UUID the player is rostered with for this game.
+  field_goals_attempted: Field goals attempted (LNBP only) (player, this game).
+  field_goals_made: Field goals made, two- and three-pointers together (LNBP only)
+    (player, this game).
+  field_goals_percentage: Field-goal percentage, 0-100 (LNBP only) (player, this game).
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  fouls_drawn: Fouls drawn (committed against the player or team; LNBP only) (player,
+    this game).
+  fouls_total: Fouls committed (player, this game).
+  free_throws_attempted: Free throws attempted (player, this game).
+  free_throws_made: Free throws made (player, this game).
+  free_throws_percentage: Free-throw percentage, 0-100 (player, this game).
+  minutes: Time played as an ISO 8601 duration (PT7M23S); a team's is the sum over
+    its players (PT200M) (player, this game).
+  participated: True when the player entered the game; false rows have null statistics.
+  person_id: Player UUID (person), shared across seasons and sites.
+  person_name: Player name as the site prints it (upper case on LNBP and NBL1).
+  plus_minus: Plus/minus, the point differential while on court (LNB only; null in
+    some team lines) (player, this game).
+  points: Points scored (player, this game).
+  points_fast_break: Fast-break points (LNBP only) (player, this game).
+  points_three_attempted: Three-point field goals attempted (player, this game).
+  points_three_made: Three-point field goals made (player, this game).
+  points_three_percentage: Three-point percentage, 0-100 (player, this game).
+  points_two_attempted: Two-point field goals attempted (player, this game).
+  points_two_made: Two-point field goals made (player, this game).
+  points_two_percentage: Two-point percentage, 0-100 (player, this game).
+  position: Position code on the roster (LNB, e.g. PG); null on LNBP.
+  rebounds: Total rebounds (player, this game).
+  rebounds_defensive: Defensive rebounds (player, this game).
+  rebounds_offensive: Offensive rebounds (player, this game).
+  season_id: Season UUID of the game.
+  seconds_played: Time played in whole seconds, parsed from minutes (player, this
+    game).
+  side: 'Side of the game the row belongs to: home or away (from the fixture''s isHome
+    flag).'
+  starter: True when the player started the game.
+  steals: Steals (player, this game).
+  turnovers: Turnovers (player, this game).
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_competition_player_stats:
+  entity_id: Team UUID decoded from the widget link (team tables only; player tables
+    name the team but carry no id).
+  entity_name: Team name as the site prints it; for player rows of a stat table it
+    is the player's team.
+  person_id: Player UUID decoded from the widget link beside the name (the tables
+    carry names only); null when the link is missing or undecodable, and always null
+    in team and competition bodies.
+  person_name: Player name as the site prints it; null in team tables.
+  season_id: Season UUID of the table; null for the competition-scoped routes (their
+    bodies carry none).
+  stat_key: Statistic key as the API names it (pointsPerGame, fieldGoalsMade, ...),
+    unchanged from header key.
+  stat_label: Longer statistic label the site shows (code in the API), in the site's
+    language.
+  stat_name: Short column heading the site shows for the statistic (PTS, REB), in
+    the site's language.
+  table_key: 'Statistics table the row is from: averages, shootingstatistics, totals,
+    ... (the set is per site).'
+  table_label: The table's heading in the site's language (e.g. Moyennes).
+  value: Numeric value of the statistic; null when the API sends a duration or text
+    (see value_text).
+  value_text: Non-numeric statistic value, e.g. an ISO 8601 duration such as PT12M2S
+    for minutes per game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_competition_team_stats:
+  entity_id: Team UUID decoded from the widget link (team tables only; player tables
+    name the team but carry no id).
+  entity_name: Team name as the site prints it; for player rows of a stat table it
+    is the player's team.
+  person_id: Player UUID decoded from the widget link beside the name (the tables
+    carry names only); null when the link is missing or undecodable, and always null
+    in team and competition bodies.
+  person_name: Player name as the site prints it; null in team tables.
+  season_id: Season UUID of the table; null for the competition-scoped routes (their
+    bodies carry none).
+  stat_key: Statistic key as the API names it (pointsPerGame, fieldGoalsMade, ...),
+    unchanged from header key.
+  stat_label: Longer statistic label the site shows (code in the API), in the site's
+    language.
+  stat_name: Short column heading the site shows for the statistic (PTS, REB), in
+    the site's language.
+  table_key: 'Statistics table the row is from: averages, shootingstatistics, totals,
+    ... (the set is per site).'
+  table_label: The table's heading in the site's language (e.g. Moyennes).
+  value: Numeric value of the statistic; null when the API sends a duration or text
+    (see value_text).
+  value_text: Non-numeric statistic value, e.g. an ISO 8601 duration such as PT12M2S
+    for minutes per game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_fixture:
+  age_group: Age group of the competition, e.g. SENIOR.
+  attendance: Spectators at the game; null when not reported.
+  away_captain_person_id: Person UUID of the away team's captain; null when the body
+    names none.
+  away_code: Short code of the away team (e.g. PAB).
+  away_entity_id: Team UUID of the away team.
+  away_name: Name of the away team.
+  away_result_status: Result status of the away team's score, e.g. CONFIRMED.
+  away_score: Points scored by the away team (the API sends a string; Int64 here).
+  competition_name: Name of the competition, in the site's language.
+  discipline: Discipline label of the game; null in every body seen.
+  external_id: 'The league''s own match number (LNB: the lnb.fr number); null elsewhere.'
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  fixture_type: 'Kind of game as sent: REGULAR, PLAYOFF, ... (the set is open).'
+  fouls_before_bonus: Team fouls in a period before the bonus applies.
+  home_captain_person_id: Person UUID of the home team's captain; null when the body
+    names none.
+  home_code: Short code of the home team (e.g. PAB).
+  home_entity_id: Team UUID of the home team.
+  home_name: Name of the home team.
+  home_result_status: Result status of the home team's score, e.g. CONFIRMED.
+  home_score: Points scored by the home team (the API sends a string; Int64 here).
+  live_data_available: True when live data feeds are enabled for the game.
+  live_video_available: True when a live video stream is attached.
+  max_fouls_personal: Personal fouls that disqualify a player.
+  maximum_players_on_court: Players a team has on court at once.
+  maximum_roster_size: Largest roster a team may enter for the game.
+  name: Fixture name; null on LNBP.
+  number_of_periods: Regulation periods in the game (4).
+  overtime_allowed: True when the game may go to overtime.
+  overtime_length: Length of an overtime period, in minutes.
+  period_length: Length of a regulation period, in minutes.
+  season_id: Season UUID of the game.
+  series: Playoff series the game belongs to as sent (JSON text when an object); null
+    outside a series.
+  shot_clock: Shot clock length, in seconds.
+  start_time_local: Scheduled start, naive datetime in the venue's local time (timezone
+    gives the zone; no offset sent).
+  start_time_utc: Scheduled start, naive datetime in UTC (the API sends no offset).
+  status: Status code of the game, e.g. CONFIRMED (final), as sent.
+  status_label: Status of the game as the site words it in its own language (e.g.
+    Termine, Final).
+  timezone: IANA time zone of the venue (e.g. Europe/Paris, Mexico/General) that start_time_local
+    is in.
+  updated: When the record was last updated, naive datetime (no offset; zone unverified).
+  venue: Name of the arena where the game is played.
+  venue_id: Venue UUID; joins no other route.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_fixture_periods:
+  away_entity_id: Team UUID of the away team, from the fixture's isHome flag.
+  away_points: Points the away team scored in this period (not the running score).
+  duration_minutes: Length of the period in minutes.
+  elapsed_minutes_before_period: Minutes of game time played before the period starts
+    (40 for the first overtime).
+  ended: True once the period has ended.
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  home_entity_id: Team UUID of the home team, from the fixture's isHome flag.
+  home_points: Points the home team scored in this period (not the running score).
+  is_overtime: True for an overtime period.
+  is_shootout: True for a shootout period.
+  label: Short period label in the site's language (Q1, P1), as sent.
+  period_id: 'Period number: 1-4 regulation, 11, 12, ... overtimes (not 5).'
+  season_id: Season UUID of the game.
+  started: True once the period has started.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_fixtures:
+  attendance: Spectators at the game; null when not reported.
+  away_code: Short code of the away team (e.g. PAB).
+  away_draw: True when the game ended level for the away team.
+  away_entity_id: Team UUID of the away team.
+  away_name: Name of the away team.
+  away_result_place: 'Result place of the away team: 1 for the winner, 2 for the loser.'
+  away_result_status: Result status of the away team's score, e.g. CONFIRMED.
+  away_score: Points scored by the away team (the API sends a string; Int64 here).
+  away_secondary_score: Secondary score of the away team (unused in the samples; shown
+    as text).
+  away_shootout_attempts: Shootout attempts of the away team as sent (an empty string
+    becomes null).
+  competition_id: Competition UUID of the season.
+  competition_name: Competition name in the site's language, e.g. Betclic ELITE or
+    LIGA CALIENTE.MX LNBP.
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  fixture_type: 'Kind of game as sent: REGULAR, PLAYOFF, ... (the set is open).'
+  home_code: Short code of the home team (e.g. PAB).
+  home_draw: True when the game ended level for the home team.
+  home_entity_id: Team UUID of the home team.
+  home_name: Name of the home team.
+  home_result_place: 'Result place of the home team: 1 for the winner, 2 for the loser.'
+  home_result_status: Result status of the home team's score, e.g. CONFIRMED.
+  home_score: Points scored by the home team (the API sends a string; Int64 here).
+  home_secondary_score: Secondary score of the home team (unused in the samples; shown
+    as text).
+  home_shootout_attempts: Shootout attempts of the home team as sent (an empty string
+    becomes null).
+  name: Fixture name as the site prints it (e.g. Paris - Lyon-Villeurbanne); null
+    on LNBP.
+  pool: Pool the game belongs to; null when the competition has none.
+  round: 'Round of the game as the site words it, e.g. Journee: 30.'
+  round_code: Round code; null in every body seen.
+  season_end_year: 'Season END year (the sdv key): the site''s year + 1 on LNB (site
+    12), the calendar year on the other registered sites; null when the site is unregistered,
+    lists no seasons or the body has no season list.'
+  season_id: Season UUID the page is about (the site's default season when none was
+    asked).
+  series: Playoff series the game belongs to as sent (JSON text when an object); null
+    outside a series.
+  stage_code: Opaque 30-hex stage code of the game; null in every body seen.
+  start_time_local: Scheduled start, naive datetime in the venue's local time (timezone
+    gives the zone; no offset sent).
+  start_time_utc: Scheduled start, naive datetime in UTC (the API sends no offset).
+  status: Status code of the game, e.g. CONFIRMED (final), as sent.
+  status_label: Status of the game as the site words it in its own language (e.g.
+    Termine, Final).
+  times_unconfirmed: True while the start time is not final.
+  timezone: IANA time zone of the venue (e.g. Europe/Paris, Mexico/General) that start_time_local
+    is in.
+  venue: Name of the arena where the game is played.
+  venue_id: Venue UUID; joins no other route.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_fixtures_ribbon:
+  away_entity_id: Team UUID of the away team.
+  away_is_leading: True while the away team leads (ribbon rows).
+  away_name: Name of the away team.
+  away_result_status: Result status of the away team's score, e.g. CONFIRMED.
+  away_score: Points scored by the away team (the API sends a string; Int64 here).
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  home_entity_id: Team UUID of the home team.
+  home_is_leading: True while the home team leads (ribbon rows).
+  home_name: Name of the home team.
+  home_result_status: Result status of the home team's score, e.g. CONFIRMED.
+  home_score: Points scored by the home team (the API sends a string; Int64 here).
+  is_final: True when the game is over.
+  is_live: True while the game is being played.
+  season_id: Season UUID of the game.
+  season_name: Name of the season / competition the game belongs to.
+  series: Playoff series the game belongs to as sent (JSON text when an object); null
+    outside a series.
+  stage_name: Name of the stage; null in every body seen.
+  start_time_local: 'The ribbon''s fixture date: a naive local datetime (no offset;
+    the zone is not given).'
+  start_time_utc: Scheduled start, naive datetime in UTC (the API sends no offset).
+  status: Status code of the game, e.g. CONFIRMED.
+  status_label: Status of the game as the site words it in its own language (e.g.
+    Termine, Final).
+  times_unconfirmed: True while the start time is not final.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_leaders:
+  entity_id: Team UUID of the leader's team.
+  entity_name: Name of the leader's team.
+  person_id: Player UUID of the leader.
+  person_name: Name of the leader.
+  rank: Position of the leader within the statistic, 1-based (the API lists the top
+    5).
+  season_id: Season UUID of the leaders.
+  stat_key: Statistic the leader is ranked in (points, pointsPerGame, efficiency,
+    doubleDouble, ...).
+  stat_label: Longer statistic label the site shows (code in the API), in the site's
+    language.
+  stat_name: Short column heading the site shows for the statistic (PTS, REB), in
+    the site's language.
+  value: Numeric value of the statistic; null when the API sends a duration or text
+    (see value_text).
+  value_text: Non-numeric statistic value, e.g. an ISO 8601 duration such as PT12M2S
+    for minutes per game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_pbp:
+  away_score: Away team's running score after the event.
+  bib: Jersey number of the player, as text; null for team events.
+  clock: Time REMAINING in the period as an ISO 8601 duration (PT10M0S at the start).
+  clock_seconds: Seconds remaining in the period, parsed from clock.
+  description: The event's text in the site's language (e.g. Entre-deux remporte).
+  entity_id: Team UUID the event is credited to.
+  event_id: Event UUID, shared with the same event in atrium_shots.
+  event_sub_type: 'Event detail: jumpShot, layup, offensive, defensive, in, out, 1Of2,
+    personal, ...; null when none.'
+  event_type: 'Event type: 2pt, 3pt, freeThrow, rebound, assist, steal, block, turnover,
+    foul, substitution, timeOut, jumpBall, ... (language-independent).'
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  home_score: Home team's running score after the event.
+  period_id: 'Period number: 1-4 regulation, 11, 12, ... overtimes (not 5).'
+  person_id: Player UUID; null for team events (time-outs, team rebounds).
+  person_name: Player the event is credited to; null for team events (time-outs, team
+    rebounds).
+  season_id: Season UUID of the game.
+  sequence: 1-based position of the event in the game (periods in order, events chronological).
+  side: 'Side of the game the row belongs to: home or away (from the fixture''s isHome
+    flag).'
+  success: True when a shot or free throw was made, false when missed; null for other
+    events.
+  success_label: The made / missed label in the site's language; sent on shot events
+    only.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+  x: Shot location along the 28 m court length as percent of the court (0-100, origin
+    at a corner); the home team attacks the low-x basket all game; null for non-shots.
+  y: Shot location across the 15 m width as percent of the court (0-100); which sideline
+    is 0 is unverified; null for non-shots.
+atrium_player:
+  age: Player's age in years, from the card's info items.
+  bib: Jersey number on the card; null when none.
+  date_of_birth: Player's date of birth, from the card's info items.
+  image_url: URL of the Sportradar-hosted image (400 px).
+  name: Player name as the site prints it.
+  nationality: Player's nationality in the site's language, from the card's info items.
+  person_id: Player UUID (person), shared across seasons and sites.
+  points_per_game: Points per game over the season shown on the card.
+  rebounds_defensive_per_game: Defensive rebounds per game over the season shown on
+    the card.
+  rebounds_offensive_per_game: Offensive rebounds per game over the season shown on
+    the card.
+  team_id: Team UUID of the player's current team on the card.
+  team_name: Name of the player's current team on the card.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_player_game_log:
+  assists: Assists (player, that game).
+  blocks: Shots blocked (player, that game).
+  blocks_received: Own shots blocked by an opponent (LNB only) (player, that game).
+  date: Local start of the game, naive datetime (no offset; zone not given).
+  dunks: Dunks (player, that game).
+  efficiency: Efficiency rating, from the site's own formula (player, that game).
+  field_goals_attempted: Field goals attempted (LNBP only) (player, that game).
+  field_goals_made: Field goals made, two- and three-pointers together (LNBP only)
+    (player, that game).
+  field_goals_percentage: Field-goal percentage, 0-100 (LNBP only) (player, that game).
+  fouls_drawn: Fouls drawn (committed against the player or team; LNBP only) (player,
+    that game).
+  fouls_personal: Personal fouls (player, that game).
+  fouls_total: Fouls committed (player, that game).
+  free_throws_attempted: Free throws attempted (player, that game).
+  free_throws_made: Free throws made (player, that game).
+  free_throws_percentage: Free-throw percentage, 0-100 (player, that game).
+  minutes: Time played as an ISO 8601 duration (PT7M23S); a team's is the sum over
+    its players (PT200M) (player, that game).
+  opponent_entity_id: Team UUID of the opponent.
+  opponent_name: Name of the opponent.
+  person_id: Player UUID (person), shared across seasons and sites.
+  plus_minus: Plus/minus, the point differential while on court (LNB only; null in
+    some team lines) (player, that game).
+  points: Points scored (player, that game).
+  points_fast_break: Fast-break points (LNBP only) (player, that game).
+  points_three_attempted: Three-point field goals attempted (player, that game).
+  points_three_made: Three-point field goals made (player, that game).
+  points_three_percentage: Three-point percentage, 0-100 (player, that game).
+  points_two_attempted: Two-point field goals attempted (player, that game).
+  points_two_made: Two-point field goals made (player, that game).
+  points_two_percentage: Two-point percentage, 0-100 (player, that game).
+  rebounds: Total rebounds (player, that game).
+  rebounds_defensive: Defensive rebounds (player, that game).
+  rebounds_offensive: Offensive rebounds (player, that game).
+  result: 'Result for the player''s team: W or L.'
+  result_label: Result label in the site's language (V, D).
+  score: Final score as the site's text (e.g. 88 - 91); which side is listed first
+    is unverified, so it is not split.
+  season_id: Season UUID the log is for (the season asked, else the site's default).
+  seconds_played: Time played in whole seconds, parsed from minutes (player, that
+    game).
+  steals: Steals (player, that game).
+  turnovers: Turnovers (player, that game).
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_player_seasons:
+  assists_per_game: Assists per game (player, that competition-season).
+  blocks_per_game: Blocks per game (player, that competition-season).
+  dunks_per_game: Dunks per game (player, that competition-season).
+  efficiency: Efficiency rating, from the site's own formula (player, that competition-season).
+  fouls_personal_per_game: Personal fouls per game (player, that competition-season).
+  minutes_per_game: Minutes per game as an ISO 8601 duration (player, that competition-season).
+  person_id: Player UUID (person), shared across seasons and sites.
+  points_per_game: Points per game (player, that competition-season).
+  rebounds_defensive_per_game: Defensive rebounds per game (player, that competition-season).
+  rebounds_offensive_per_game: Offensive rebounds per game (player, that competition-season).
+  rebounds_per_game: Rebounds per game (player, that competition-season).
+  season_end_year: Season END year of that season (sdv key); null when the site is
+    unmapped.
+  season_name: Competition-season the line is for, in the site's language (Betclic
+    ELITE - Playoffs 2025).
+  season_year: The site's own year of that season (START year on LNB).
+  steals_per_game: Steals per game (player, that competition-season).
+  team_id: Team UUID the player played for in that season.
+  team_name: Name of the team the player played for in that season.
+  turnovers_per_game: Turnovers per game (player, that competition-season).
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_player_stats:
+  entity_id: Team UUID decoded from the widget link (team tables only; player tables
+    name the team but carry no id).
+  entity_name: Team name as the site prints it; for player rows of a stat table it
+    is the player's team.
+  person_id: Player UUID decoded from the widget link beside the name (the tables
+    carry names only); null when the link is missing or undecodable, and always null
+    in team and competition bodies.
+  person_name: Player name as the site prints it; null in team tables.
+  season_id: Season UUID of the table; null for the competition-scoped routes (their
+    bodies carry none).
+  stat_key: Statistic key as the API names it (pointsPerGame, fieldGoalsMade, ...),
+    unchanged from header key.
+  stat_label: Longer statistic label the site shows (code in the API), in the site's
+    language.
+  stat_name: Short column heading the site shows for the statistic (PTS, REB), in
+    the site's language.
+  table_key: 'Statistics table the row is from: averages, shootingstatistics, totals,
+    ... (the set is per site).'
+  table_label: The table's heading in the site's language (e.g. Moyennes).
+  value: Numeric value of the statistic; null when the API sends a duration or text
+    (see value_text).
+  value_text: Non-numeric statistic value, e.g. an ISO 8601 duration such as PT12M2S
+    for minutes per game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_players:
+  age: Player's age in years when the body was generated.
+  bib: Jersey number, as text.
+  date_of_birth: Player's date of birth.
+  entity_id: Team UUID the player is rostered with that season.
+  height: Height as an integer, centimetres presumed (unit unverified); null when
+    the site gives none.
+  image_url: URL of the Sportradar-hosted image (400 px).
+  name: Player name as the site prints it.
+  nationality: Player's nationality in the site's language (e.g. Belgique).
+  person_id: Player UUID (person), shared across seasons and sites.
+  position_code: Position code (C, PG, SF, ...), language-independent.
+  position_name: Position name in the site's language.
+  season_id: Season UUID of the roster list.
+  status: Player status in the site's language (Actif, Blesse).
+  team_name: Team name in the site's language.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_seasons:
+  abbreviation_local: Local abbreviation of the season; null in every body seen.
+  competition_id: Competition UUID; pass it as competition_id to pick one of several
+    seasons of an END year.
+  competition_name: Competition name in the site's language; the same name can appear
+    for several years.
+  is_default_season: True for the season the body is about (the site's default when
+    none was asked).
+  season_end_year: 'Season END year (the sdv key): the site''s year + 1 on LNB (site
+    12), the calendar year on the other registered sites; null when the site is unregistered,
+    lists no seasons or the body has no season list.'
+  season_id: Season UUID; pass it as season_id to any season-scoped wrapper.
+  season_name: Season name in the site's language, e.g. Betclic ELITE 2025.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+  year: 'The site''s own year of the season: the START year on LNB (site 12), the
+    calendar year elsewhere.'
+atrium_shots:
+  away_score: Away team's running score after the event.
+  bib: Jersey number of the player, as text; null for team events.
+  clock: Time REMAINING in the period as an ISO 8601 duration (PT10M0S at the start).
+  clock_seconds: Seconds remaining in the period, parsed from clock.
+  description: The event's text in the site's language (e.g. Entre-deux remporte).
+  entity_id: Team UUID the event is credited to.
+  event_id: Event UUID of the shot; the same event in atrium_pbp.
+  event_sub_type: 'Event detail: jumpShot, layup, offensive, defensive, in, out, 1Of2,
+    personal, ...; null when none.'
+  event_type: 'Event type: 2pt, 3pt, freeThrow, rebound, assist, steal, block, turnover,
+    foul, substitution, timeOut, jumpBall, ... (language-independent).'
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  home_score: Home team's running score after the event.
+  period_id: 'Period number: 1-4 regulation, 11, 12, ... overtimes (not 5).'
+  person_id: Player UUID of the shooter.
+  person_name: Name of the shooter.
+  season_id: Season UUID of the game.
+  sequence: 1-based position of the shot among the shots of the game (not the pbp
+    sequence).
+  side: 'Side of the game the row belongs to: home or away (from the fixture''s isHome
+    flag).'
+  success: True when the shot was made, false when missed.
+  success_label: The made / missed label in the site's language; sent on shot events
+    only.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+  x: Shot location along the 28 m court length as percent of the court (0-100, origin
+    at a corner); the home team attacks the low-x basket all game; LNBP and NBL1 clamp
+    rim attempts to 5 / 95.
+  y: Shot location across the 15 m width as percent of the court (0-100); which sideline
+    is 0 is unverified.
+atrium_standings:
+  entity_id: Team UUID of the row.
+  group: Label of the table when the standings hold several groups; null for a single
+    table.
+  is_current_team: True for the team the page was opened for (team context); false
+    on a plain standings request.
+  logo_url: URL of the team logo image.
+  losses: Games lost (team, this table).
+  played: Games played (LNBP and the compact standings) (team, this table).
+  point_difference: Point differential over the season (team, this table).
+  point_difference_away: Point differential in away games (team, this table).
+  point_difference_home: Point differential in home games (team, this table).
+  position: League table position (1 = first).
+  result_string_away: Away results as a string of result letters in the site's language,
+    one per game (order and letters per locale; unverified) (team, this table).
+  result_string_home: Home results as a string of result letters in the site's language,
+    one per game (order and letters per locale; unverified) (team, this table).
+  scored_against: Points conceded over the season (team, this table).
+  scored_against_away: Points conceded in away games (team, this table).
+  scored_against_home: Points conceded in home games (team, this table).
+  scored_for: Points scored over the season (team, this table).
+  scored_for_away: Points scored in away games (team, this table).
+  scored_for_home: Points scored in home games (team, this table).
+  season_end_year: 'Season END year (the sdv key): the site''s year + 1 on LNB (site
+    12), the calendar year on the other registered sites; null when the site is unregistered,
+    lists no seasons or the body has no season list.'
+  season_id: Season UUID of the table.
+  standing_points: League table points (LNBP) (team, this table).
+  streak: Length of the current run of results (the win / loss sign convention is
+    unverified) (team, this table).
+  streak_away: Length of the current run of away results (sign convention unverified)
+    (team, this table).
+  streak_home: Length of the current run of home results (sign convention unverified)
+    (team, this table).
+  team_name: Team name as the site prints it.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+  win_percentage: Share of games won as a 0-1 fraction (not 0-100) (team, this table).
+  wins: Games won; -1 for two teams in the 2025-26 LNB table (an administrative ranking,
+    unverified), kept as sent (team, this table).
+atrium_standings_summary:
+  entity_id: Team UUID of the row.
+  group: Label of the table when the standings hold several groups; null for a single
+    table.
+  is_current_team: True for the team the page was opened for (team context); false
+    on a plain standings request.
+  logo_url: URL of the team logo image.
+  losses: Games lost (team, this table).
+  played: Games played (LNBP and the compact standings) (team, this table).
+  point_difference: Point differential over the season (team, this table).
+  point_difference_away: Point differential in away games (team, this table).
+  point_difference_home: Point differential in home games (team, this table).
+  position: League table position (1 = first).
+  result_string_away: Away results as a string of result letters in the site's language,
+    one per game (order and letters per locale; unverified) (team, this table).
+  result_string_home: Home results as a string of result letters in the site's language,
+    one per game (order and letters per locale; unverified) (team, this table).
+  scored_against: Points conceded over the season (team, this table).
+  scored_against_away: Points conceded in away games (team, this table).
+  scored_against_home: Points conceded in home games (team, this table).
+  scored_for: Points scored over the season (team, this table).
+  scored_for_away: Points scored in away games (team, this table).
+  scored_for_home: Points scored in home games (team, this table).
+  season_end_year: 'Season END year (the sdv key): the site''s year + 1 on LNB (site
+    12), the calendar year on the other registered sites; null when the site is unregistered,
+    lists no seasons or the body has no season list.'
+  season_id: Season UUID of the table.
+  standing_points: League table points (LNBP) (team, this table).
+  streak: Length of the current run of results (the win / loss sign convention is
+    unverified) (team, this table).
+  streak_away: Length of the current run of away results (sign convention unverified)
+    (team, this table).
+  streak_home: Length of the current run of home results (sign convention unverified)
+    (team, this table).
+  team_name: Team name as the site prints it.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+  win_percentage: Share of games won as a 0-1 fraction (not 0-100) (team, this table).
+  wins: Games won; -1 for two teams in the 2025-26 LNB table (an administrative ranking,
+    unverified), kept as sent (team, this table).
+atrium_team:
+  color: 'Team colour from the banner, hex string with its #.'
+  entity_id: Team UUID, decoded from the page's tab links (the body does not echo
+    it elsewhere).
+  logo_url: URL of the banner's team logo.
+  name: Team name from the page banner.
+  next_attendance: Spectators at the next scheduled game; null when not reported.
+  next_away_entity_id: Team UUID of the next scheduled game's away team.
+  next_away_name: Name of the next scheduled game's away team.
+  next_away_score: Away team's points in the next scheduled game.
+  next_fixture_id: Game UUID of the next scheduled game shown on the team page.
+  next_home_entity_id: Team UUID of the next scheduled game's home team.
+  next_home_name: Name of the next scheduled game's home team.
+  next_home_score: Home team's points in the next scheduled game.
+  next_round: Round of the next scheduled game as the site words it (e.g. 30).
+  next_start_time_local: Start of the next scheduled game, naive venue-local datetime.
+  next_start_time_utc: Start of the next scheduled game, naive UTC datetime.
+  next_status: Status code of the next scheduled game, e.g. CONFIRMED.
+  next_venue: Arena of the next scheduled game.
+  previous_attendance: Spectators at the last played game; null when not reported.
+  previous_away_entity_id: Team UUID of the last played game's away team.
+  previous_away_name: Name of the last played game's away team.
+  previous_away_score: Away team's points in the last played game.
+  previous_fixture_id: Game UUID of the last played game shown on the team page.
+  previous_home_entity_id: Team UUID of the last played game's home team.
+  previous_home_name: Name of the last played game's home team.
+  previous_home_score: Home team's points in the last played game.
+  previous_round: Round of the last played game as the site words it (e.g. 30).
+  previous_start_time_local: Start of the last played game, naive venue-local datetime.
+  previous_start_time_utc: Start of the last played game, naive UTC datetime.
+  previous_status: Status code of the last played game, e.g. CONFIRMED.
+  previous_venue: Arena of the last played game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_team_box_score:
+  assists: Assists (team, this game).
+  blocks: Shots blocked (team, this game).
+  blocks_received: Own shots blocked by an opponent (LNB only) (team, this game).
+  efficiency: Efficiency rating, from the site's own formula (team, this game).
+  entity_id: Team UUID (from the fixture's isHome flag).
+  extra_fouls_total: Fouls committed (team, credited to the team rather than a player).
+  extra_rebounds: Total rebounds (team, credited to the team rather than a player).
+  extra_rebounds_defensive: Defensive rebounds (team, credited to the team rather
+    than a player).
+  extra_rebounds_offensive: Offensive rebounds (team, credited to the team rather
+    than a player).
+  extra_turnovers: Turnovers (team, credited to the team rather than a player).
+  field_goals_attempted: Field goals attempted (LNBP only) (team, this game).
+  field_goals_made: Field goals made, two- and three-pointers together (LNBP only)
+    (team, this game).
+  field_goals_percentage: Field-goal percentage, 0-100 (LNBP only) (team, this game).
+  fixture_id: Game UUID (fixture); the key of every game frame and of the fixture_detail
+    routes.
+  fouls_drawn: Fouls drawn (committed against the player or team; LNBP only) (team,
+    this game).
+  fouls_total: Fouls committed (team, this game).
+  free_throws_attempted: Free throws attempted (team, this game).
+  free_throws_made: Free throws made (team, this game).
+  free_throws_percentage: Free-throw percentage, 0-100 (team, this game).
+  minutes: Time played as an ISO 8601 duration (PT7M23S); a team's is the sum over
+    its players (PT200M) (team, this game).
+  plus_minus: Plus/minus, the point differential while on court (LNB only; null in
+    some team lines) (team, this game).
+  points: Points scored (team, this game).
+  points_fast_break: Fast-break points (LNBP only) (team, this game).
+  points_three_attempted: Three-point field goals attempted (team, this game).
+  points_three_made: Three-point field goals made (team, this game).
+  points_three_percentage: Three-point percentage, 0-100 (team, this game).
+  points_two_attempted: Two-point field goals attempted (team, this game).
+  points_two_made: Two-point field goals made (team, this game).
+  points_two_percentage: Two-point percentage, 0-100 (team, this game).
+  rebounds: Total rebounds (team, this game).
+  rebounds_defensive: Defensive rebounds (team, this game).
+  rebounds_offensive: Offensive rebounds (team, this game).
+  season_id: Season UUID of the game.
+  seconds_played: Time played in whole seconds, parsed from minutes (team, this game).
+  side: 'Side of the game the row belongs to: home or away (from the fixture''s isHome
+    flag).'
+  steals: Steals (team, this game).
+  total_biggest_lead: Biggest lead of the game, in points (team, game total).
+  total_biggest_scoring_run: Longest unanswered scoring run of the game, in points
+    (team, game total).
+  total_field_goals_percentage: Field-goal percentage, 0-100 (LNBP only) (team, game
+    total).
+  total_free_throws_percentage: Free-throw percentage, 0-100 (team, game total).
+  total_lead_changes: Number of lead changes in the game (team, game total).
+  total_points_fast_break: Fast-break points (LNBP only) (team, game total).
+  total_points_from_bench: Points scored by non-starters (LNBP only) (team, game total).
+  total_points_from_turnover: Points scored off opponent turnovers (LNBP only) (team,
+    game total).
+  total_time_in_lead: Time the team led, as an ISO 8601 duration (PT36M11S) (team,
+    game total).
+  total_time_in_lead_seconds: Time the team led, in whole seconds (team, game total).
+  total_turnovers: Turnovers (team, game total).
+  turnovers: Turnovers (team, this game).
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_team_stats:
+  entity_id: Team UUID decoded from the widget link (team tables only; player tables
+    name the team but carry no id).
+  entity_name: Team name as the site prints it; for player rows of a stat table it
+    is the player's team.
+  person_id: Player UUID decoded from the widget link beside the name (the tables
+    carry names only); null when the link is missing or undecodable, and always null
+    in team and competition bodies.
+  person_name: Player name as the site prints it; null in team tables.
+  season_id: Season UUID of the table; null for the competition-scoped routes (their
+    bodies carry none).
+  stat_key: Statistic key as the API names it (pointsPerGame, fieldGoalsMade, ...),
+    unchanged from header key.
+  stat_label: Longer statistic label the site shows (code in the API), in the site's
+    language.
+  stat_name: Short column heading the site shows for the statistic (PTS, REB), in
+    the site's language.
+  table_key: 'Statistics table the row is from: averages, shootingstatistics, totals,
+    ... (the set is per site).'
+  table_label: The table's heading in the site's language (e.g. Moyennes).
+  value: Numeric value of the statistic; null when the API sends a duration or text
+    (see value_text).
+  value_text: Non-numeric statistic value, e.g. an ISO 8601 duration such as PT12M2S
+    for minutes per game.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.
+atrium_teams:
+  entity_id: 'Team UUID (entity): one id per club across seasons, shared by every
+    site that shows the team.'
+  image_url: URL of the Sportradar-hosted image (400 px).
+  name: Team name in the site's language.
+  season_id: Season UUID of the team list.
+  website_id: Site config id the body came from (12 LNB, 14 LNBP, 3 NBL1, 13 El Salvador,
+    22 Panama, 236 Austria, 326 Montenegro), read from the body's links.self.

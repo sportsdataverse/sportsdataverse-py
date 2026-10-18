@@ -1,0 +1,42 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: competition
+  type: character
+- description: ''
+  name: team_process_id
+  type: integer
+- description: ''
+  name: person_id
+  type: integer
+- description: ''
+  name: first_name
+  type: character
+- description: ''
+  name: last_name
+  type: character
+- description: ''
+  name: nationality
+  type: character
+- description: ''
+  name: height_cm
+  type: integer
+- description: ''
+  name: jersey_number
+  type: character
+- description: ''
+  name: games
+  type: integer
+- description: ''
+  name: seconds_played
+  type: integer
+- description: ''
+  name: points_per_game
+  type: numeric
+- description: ''
+  name: efficiency_per_game
+  type: numeric
+kind: dataframe
+schema: tbf_team_roster

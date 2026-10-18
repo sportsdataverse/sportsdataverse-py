@@ -1,0 +1,36 @@
+columns:
+- description: ''
+  name: season
+  type: integer
+- description: ''
+  name: season_code
+  type: character
+- description: ''
+  name: season_name
+  type: character
+- description: ''
+  name: game_type
+  type: character
+- description: ''
+  name: game_type_name
+  type: character
+- description: ''
+  name: series_code
+  type: character
+- description: ''
+  name: ssgt_uuid
+  type: character
+- description: ''
+  name: state
+  type: character
+- description: ''
+  name: season_uuid
+  type: character
+- description: ''
+  name: series_uuid
+  type: character
+- description: ''
+  name: game_type_uuid
+  type: character
+kind: dataframe
+schema: sportality_layout_info

@@ -1,0 +1,33 @@
+columns:
+- description: ''
+  name: player_id
+  type: integer
+- description: ''
+  name: name
+  type: character
+- description: ''
+  name: jersey
+  type: integer
+- description: ''
+  name: position
+  type: character
+- description: ''
+  name: height_cm
+  type: integer
+- description: ''
+  name: weight_kg
+  type: integer
+- description: ''
+  name: born
+  type: character
+- description: ''
+  name: age
+  type: integer
+- description: ''
+  name: country
+  type: character
+- description: ''
+  name: photo_url
+  type: character
+kind: dataframe
+schema: vhl_player

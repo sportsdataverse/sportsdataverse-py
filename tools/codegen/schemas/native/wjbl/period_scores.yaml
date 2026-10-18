@@ -1,0 +1,21 @@
+columns:
+- description: ''
+  name: play_schedule_id
+  type: integer
+- description: ''
+  name: team_side
+  type: character
+- description: ''
+  name: team_id
+  type: integer
+- description: ''
+  name: period
+  type: integer
+- description: ''
+  name: period_label
+  type: character
+- description: ''
+  name: score
+  type: integer
+kind: dataframe
+schema: wjbl_period_scores
