@@ -1009,6 +1009,19 @@
     A pkg.module:fn route's documented URL must come from that module's _build_query; only
     test_per_route_getter (which callable runs) guarded route_getter before.
 
+- id: codegen-parsed-doc-dict-annotation
+  group: codegen-runtime
+  finding: R891-2
+  file: tools/codegen/generate.py
+  snippet: '            if (self.parsed_doc_md or self.returns_dict)'
+  mutant: '            if self.returns_dict'
+  test: tests/codegen/test_league_param_mode.py::test_generated_wrapper_annotations_resolve
+  expected: kill
+  note: >-
+    A family-level parsed_doc alone (KenPom: a dict of frames, one per HTML table) makes the parsed
+    return a dict; kenpom_win_probability's schema is a single table, so without it that wrapper is
+    annotated as returning one frame. Only --check caught this before.
+
 # --- the three ESPN parsers repaired against their first real captures (fix/espn-parsers-real-payloads,
 # the coverage prerequisite of task 4.1) --------------------------------------------------------------
 - id: athlete-stats-ignores-statistics-rows

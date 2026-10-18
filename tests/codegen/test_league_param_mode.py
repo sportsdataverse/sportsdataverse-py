@@ -160,6 +160,7 @@ def test_generated_wrapper_annotations_resolve(tmp_path):
     import polars as pl
 
     from sportsdataverse.cbs import cbs_napi
+    from sportsdataverse.mbb import kenpom
 
     lg, apis, hosts, _ = _real_league_views("nba")
     path = tmp_path / "_rendered_nba_espn_ext.py"
@@ -172,6 +173,17 @@ def test_generated_wrapper_annotations_resolve(tmp_path):
     assert typing.get_args(summary)[:2] == (typing.Dict[str, pl.DataFrame], typing.Dict[str, pd.DataFrame])
     roster = typing.get_type_hints(nba.espn_nba_team_roster)["return"]
     assert typing.get_args(roster)[:2] == (pl.DataFrame, pd.DataFrame)
-    for mod in (nba, cbs_napi):
+    for mod in (nba, cbs_napi, kenpom):
         for name in mod.__all__:
             typing.get_type_hints(getattr(mod, name))
+
+    # R891-2: the family-level ``parsed_doc`` (KenPom: one frame per HTML table) alone makes the parsed
+    # return a dict of frames. ``kenpom_ratings`` also has a dict-of-frames schema; ``kenpom_win_probability``
+    # has a single-table one, so only ``parsed_doc`` carries it.
+    for name in ("kenpom_ratings", "kenpom_win_probability"):
+        hint = typing.get_type_hints(getattr(kenpom, name))["return"]
+        assert typing.get_args(hint)[:2] == (typing.Dict[str, pl.DataFrame], typing.Dict[str, pd.DataFrame]), name
+    fa = spec.load_flat_api(gen.ENDPOINTS / "kenpom.yaml", spec.load_parameters(gen.ENDPOINTS / "parameters.yaml"))
+    wp = next(v for v in gen._flat_views(fa, league_prefix="mbb") if v.fn_name == "kenpom_win_probability")
+    assert wp.parsed_doc_md and not wp.returns_dict
+    assert wp.parsed_annotation.startswith("Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], ")
