@@ -70,7 +70,7 @@ binds a base wrapper to one competition), plus hand-written wrappers, loaders, a
 | [fiba_elw_standings](additional/fiba-digital-api-and-game-pages-6.md#fiba_elw_standings) | Final standings of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) edition. |
 | [fiba_elw_team_box](additional/fiba-digital-api-and-game-pages-6.md#fiba_elw_team_box) | Team box score of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) game. |
 | [fiba_elw_teams](additional/fiba-digital-api-and-game-pages-6.md#fiba_elw_teams) | Teams of one EuroLeague Women (FIBA Women's European Club Competitions Tier 1) edition. |
-| [fiba_eurobasket_editions](additional/fiba-digital-api-and-game-pages-6.md#fiba_eurobasket_editions) | Every edition of FIBA EuroBasket. |
+| [fiba_eurobasket_editions](additional/fiba-digital-api-and-game-pages-7.md#fiba_eurobasket_editions) | Every edition of FIBA EuroBasket. |
 | [fiba_eurobasket_pbp](additional/fiba-digital-api-and-game-pages-7.md#fiba_eurobasket_pbp) | Play-by-play of one FIBA EuroBasket game. |
 | [fiba_eurobasket_player_box](additional/fiba-digital-api-and-game-pages-7.md#fiba_eurobasket_player_box) | Player box score of one FIBA EuroBasket game. |
 | [fiba_eurobasket_schedule](additional/fiba-digital-api-and-game-pages-7.md#fiba_eurobasket_schedule) | Schedule and results of one FIBA EuroBasket edition, one row per game. |
@@ -97,7 +97,7 @@ binds a base wrapper to one competition), plus hand-written wrappers, loaders, a
 | [fiba_wafrobasket_editions](additional/fiba-digital-api-and-game-pages-9.md#fiba_wafrobasket_editions) | Every edition of FIBA Women's AfroBasket. |
 | [fiba_wafrobasket_pbp](additional/fiba-digital-api-and-game-pages-9.md#fiba_wafrobasket_pbp) | Play-by-play of one FIBA Women's AfroBasket game. |
 | [fiba_wafrobasket_player_box](additional/fiba-digital-api-and-game-pages-9.md#fiba_wafrobasket_player_box) | Player box score of one FIBA Women's AfroBasket game. |
-| [fiba_wafrobasket_schedule](additional/fiba-digital-api-and-game-pages-9.md#fiba_wafrobasket_schedule) | Schedule and results of one FIBA Women's AfroBasket edition, one row per game. |
+| [fiba_wafrobasket_schedule](additional/fiba-digital-api-and-game-pages-10.md#fiba_wafrobasket_schedule) | Schedule and results of one FIBA Women's AfroBasket edition, one row per game. |
 | [fiba_wafrobasket_shots](additional/fiba-digital-api-and-game-pages-10.md#fiba_wafrobasket_shots) | Shot chart of one FIBA Women's AfroBasket game. |
 | [fiba_wafrobasket_standings](additional/fiba-digital-api-and-game-pages-10.md#fiba_wafrobasket_standings) | Final standings of one FIBA Women's AfroBasket edition. |
 | [fiba_wafrobasket_team_box](additional/fiba-digital-api-and-game-pages-10.md#fiba_wafrobasket_team_box) | Team box score of one FIBA Women's AfroBasket game. |
@@ -105,46 +105,46 @@ binds a base wrapper to one competition), plus hand-written wrappers, loaders, a
 | [fiba_wamericup_editions](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_editions) | Every edition of FIBA Women's AmeriCup. |
 | [fiba_wamericup_pbp](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_pbp) | Play-by-play of one FIBA Women's AmeriCup game. |
 | [fiba_wamericup_player_box](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_player_box) | Player box score of one FIBA Women's AmeriCup game. |
-| [fiba_wamericup_schedule](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_schedule) | Schedule and results of one FIBA Women's AmeriCup edition, one row per game. |
-| [fiba_wamericup_shots](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_shots) | Shot chart of one FIBA Women's AmeriCup game. |
-| [fiba_wamericup_standings](additional/fiba-digital-api-and-game-pages-10.md#fiba_wamericup_standings) | Final standings of one FIBA Women's AmeriCup edition. |
+| [fiba_wamericup_schedule](additional/fiba-digital-api-and-game-pages-11.md#fiba_wamericup_schedule) | Schedule and results of one FIBA Women's AmeriCup edition, one row per game. |
+| [fiba_wamericup_shots](additional/fiba-digital-api-and-game-pages-11.md#fiba_wamericup_shots) | Shot chart of one FIBA Women's AmeriCup game. |
+| [fiba_wamericup_standings](additional/fiba-digital-api-and-game-pages-11.md#fiba_wamericup_standings) | Final standings of one FIBA Women's AmeriCup edition. |
 | [fiba_wamericup_team_box](additional/fiba-digital-api-and-game-pages-11.md#fiba_wamericup_team_box) | Team box score of one FIBA Women's AmeriCup game. |
 | [fiba_wamericup_teams](additional/fiba-digital-api-and-game-pages-11.md#fiba_wamericup_teams) | Teams of one FIBA Women's AmeriCup edition. |
 | [fiba_wasiacup_editions](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_editions) | Every edition of FIBA Women's Asia Cup (Division A). |
 | [fiba_wasiacup_pbp](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_pbp) | Play-by-play of one FIBA Women's Asia Cup (Division A) game. |
 | [fiba_wasiacup_player_box](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_player_box) | Player box score of one FIBA Women's Asia Cup (Division A) game. |
-| [fiba_wasiacup_schedule](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_schedule) | Schedule and results of one FIBA Women's Asia Cup (Division A) edition, one row per game. |
-| [fiba_wasiacup_shots](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_shots) | Shot chart of one FIBA Women's Asia Cup (Division A) game. |
-| [fiba_wasiacup_standings](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_standings) | Final standings of one FIBA Women's Asia Cup (Division A) edition. |
-| [fiba_wasiacup_team_box](additional/fiba-digital-api-and-game-pages-11.md#fiba_wasiacup_team_box) | Team box score of one FIBA Women's Asia Cup (Division A) game. |
+| [fiba_wasiacup_schedule](additional/fiba-digital-api-and-game-pages-12.md#fiba_wasiacup_schedule) | Schedule and results of one FIBA Women's Asia Cup (Division A) edition, one row per game. |
+| [fiba_wasiacup_shots](additional/fiba-digital-api-and-game-pages-12.md#fiba_wasiacup_shots) | Shot chart of one FIBA Women's Asia Cup (Division A) game. |
+| [fiba_wasiacup_standings](additional/fiba-digital-api-and-game-pages-12.md#fiba_wasiacup_standings) | Final standings of one FIBA Women's Asia Cup (Division A) edition. |
+| [fiba_wasiacup_team_box](additional/fiba-digital-api-and-game-pages-12.md#fiba_wasiacup_team_box) | Team box score of one FIBA Women's Asia Cup (Division A) game. |
 | [fiba_wasiacup_teams](additional/fiba-digital-api-and-game-pages-12.md#fiba_wasiacup_teams) | Teams of one FIBA Women's Asia Cup (Division A) edition. |
 | [fiba_wc_editions](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_editions) | Every edition of FIBA Basketball World Cup. |
 | [fiba_wc_pbp](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_pbp) | Play-by-play of one FIBA Basketball World Cup game. |
 | [fiba_wc_player_box](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_player_box) | Player box score of one FIBA Basketball World Cup game. |
 | [fiba_wc_schedule](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_schedule) | Schedule and results of one FIBA Basketball World Cup edition, one row per game. |
-| [fiba_wc_shots](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_shots) | Shot chart of one FIBA Basketball World Cup game. |
-| [fiba_wc_standings](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_standings) | Final standings of one FIBA Basketball World Cup edition. |
-| [fiba_wc_team_box](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_team_box) | Team box score of one FIBA Basketball World Cup game. |
-| [fiba_wc_teams](additional/fiba-digital-api-and-game-pages-12.md#fiba_wc_teams) | Teams of one FIBA Basketball World Cup edition. |
-| [fiba_weurobasket_editions](additional/fiba-digital-api-and-game-pages-12.md#fiba_weurobasket_editions) | Every edition of FIBA Women's EuroBasket. |
+| [fiba_wc_shots](additional/fiba-digital-api-and-game-pages-13.md#fiba_wc_shots) | Shot chart of one FIBA Basketball World Cup game. |
+| [fiba_wc_standings](additional/fiba-digital-api-and-game-pages-13.md#fiba_wc_standings) | Final standings of one FIBA Basketball World Cup edition. |
+| [fiba_wc_team_box](additional/fiba-digital-api-and-game-pages-13.md#fiba_wc_team_box) | Team box score of one FIBA Basketball World Cup game. |
+| [fiba_wc_teams](additional/fiba-digital-api-and-game-pages-13.md#fiba_wc_teams) | Teams of one FIBA Basketball World Cup edition. |
+| [fiba_weurobasket_editions](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_editions) | Every edition of FIBA Women's EuroBasket. |
 | [fiba_weurobasket_pbp](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_pbp) | Play-by-play of one FIBA Women's EuroBasket game. |
 | [fiba_weurobasket_player_box](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_player_box) | Player box score of one FIBA Women's EuroBasket game. |
 | [fiba_weurobasket_schedule](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_schedule) | Schedule and results of one FIBA Women's EuroBasket edition, one row per game. |
 | [fiba_weurobasket_shots](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_shots) | Shot chart of one FIBA Women's EuroBasket game. |
 | [fiba_weurobasket_standings](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_standings) | Final standings of one FIBA Women's EuroBasket edition. |
-| [fiba_weurobasket_team_box](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_team_box) | Team box score of one FIBA Women's EuroBasket game. |
-| [fiba_weurobasket_teams](additional/fiba-digital-api-and-game-pages-13.md#fiba_weurobasket_teams) | Teams of one FIBA Women's EuroBasket edition. |
-| [fiba_woly_editions](additional/fiba-digital-api-and-game-pages-13.md#fiba_woly_editions) | Every edition of Women's Olympic Basketball Tournament. |
-| [fiba_woly_pbp](additional/fiba-digital-api-and-game-pages-13.md#fiba_woly_pbp) | Play-by-play of one Women's Olympic Basketball Tournament game. |
+| [fiba_weurobasket_team_box](additional/fiba-digital-api-and-game-pages-14.md#fiba_weurobasket_team_box) | Team box score of one FIBA Women's EuroBasket game. |
+| [fiba_weurobasket_teams](additional/fiba-digital-api-and-game-pages-14.md#fiba_weurobasket_teams) | Teams of one FIBA Women's EuroBasket edition. |
+| [fiba_woly_editions](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_editions) | Every edition of Women's Olympic Basketball Tournament. |
+| [fiba_woly_pbp](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_pbp) | Play-by-play of one Women's Olympic Basketball Tournament game. |
 | [fiba_woly_player_box](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_player_box) | Player box score of one Women's Olympic Basketball Tournament game. |
 | [fiba_woly_schedule](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_schedule) | Schedule and results of one Women's Olympic Basketball Tournament edition, one row per game. |
 | [fiba_woly_shots](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_shots) | Shot chart of one Women's Olympic Basketball Tournament game. |
 | [fiba_woly_standings](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_standings) | Final standings of one Women's Olympic Basketball Tournament edition. |
 | [fiba_woly_team_box](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_team_box) | Team box score of one Women's Olympic Basketball Tournament game. |
-| [fiba_woly_teams](additional/fiba-digital-api-and-game-pages-14.md#fiba_woly_teams) | Teams of one Women's Olympic Basketball Tournament edition. |
-| [fiba_wwc_editions](additional/fiba-digital-api-and-game-pages-14.md#fiba_wwc_editions) | Every edition of FIBA Women's Basketball World Cup. |
-| [fiba_wwc_pbp](additional/fiba-digital-api-and-game-pages-14.md#fiba_wwc_pbp) | Play-by-play of one FIBA Women's Basketball World Cup game. |
-| [fiba_wwc_player_box](additional/fiba-digital-api-and-game-pages-14.md#fiba_wwc_player_box) | Player box score of one FIBA Women's Basketball World Cup game. |
+| [fiba_woly_teams](additional/fiba-digital-api-and-game-pages-15.md#fiba_woly_teams) | Teams of one Women's Olympic Basketball Tournament edition. |
+| [fiba_wwc_editions](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_editions) | Every edition of FIBA Women's Basketball World Cup. |
+| [fiba_wwc_pbp](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_pbp) | Play-by-play of one FIBA Women's Basketball World Cup game. |
+| [fiba_wwc_player_box](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_player_box) | Player box score of one FIBA Women's Basketball World Cup game. |
 | [fiba_wwc_schedule](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_schedule) | Schedule and results of one FIBA Women's Basketball World Cup edition, one row per game. |
 | [fiba_wwc_shots](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_shots) | Shot chart of one FIBA Women's Basketball World Cup game. |
 | [fiba_wwc_standings](additional/fiba-digital-api-and-game-pages-15.md#fiba_wwc_standings) | Final standings of one FIBA Women's Basketball World Cup edition. |
