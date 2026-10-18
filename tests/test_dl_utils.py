@@ -289,6 +289,26 @@ class TestDownload:
         download("https://site.api.espn.com/docache", num_retries=1)
         assert writes == ["https://site.api.espn.com/docache"]  # 200 cached
 
+    @pytest.mark.parametrize("kind", ["data", "json"])
+    def test_download_posts_a_body_and_never_caches_it(self, monkeypatch, kind):
+        """A ``data`` / ``json`` body makes the request a POST; the cache key has no body, so it is skipped."""
+        import sportsdataverse.cache as _cache
+
+        seen, writes = {}, []
+        monkeypatch.setattr(_cache, "get_cache_mode", lambda: "memory")
+        monkeypatch.setattr(_cache, "cache_get", lambda *a, **k: pytest.fail("a POST must not read the cache"))
+        monkeypatch.setattr(_cache, "cache_set", lambda url, params, body, ttl=None: writes.append(url))
+
+        def fake_post(self, url, **kwargs):
+            seen.update(url=url, **kwargs)
+            return types.SimpleNamespace(status_code=200, url=url, reason="OK", headers={}, json=lambda: {})
+
+        monkeypatch.setattr(requests.Session, "get", lambda *a, **k: pytest.fail("a body request must POST"))
+        monkeypatch.setattr(requests.Session, "post", fake_post)
+        download("https://x.test/rows", params={"page": 2}, num_retries=0, **{kind: {"season": 2025}})
+        assert seen[kind] == {"season": 2025} and seen["params"] == {"page": 2}
+        assert writes == []
+
 
 # ---------------------------------------------------------------------------
 # Env-tunable retry budget

@@ -324,3 +324,77 @@ def test_body_needs_post_and_known_kind(tmp_path):
         )
         with pytest.raises(spec.SpecError, match=match):
             spec.load_flat_api(y, {})
+
+
+def _reference_block(view):
+    from tools.codegen import render
+
+    return render.ENV.from_string('{% from "_reference_block.jinja" import block %}{{ block(ep) }}').render(ep=view)
+
+
+def test_reference_block_marks_where_a_body_endpoint_param_travels_and_lists_raises(tmp_path):
+    y = tmp_path / "r.yaml"
+    y.write_text(
+        _BODY_YAML.format(body="json").replace(
+            "runtime_imports: [_get]\n", "runtime_imports: [_get]\ndocstring: {raises: ['ValueError: bad | input']}\n"
+        ),
+        encoding="utf-8",
+    )
+    v = {x.short: x for x in generate._flat_views(spec.load_flat_api(y, {}))}
+    rows = _reference_block(v["rows"])
+    assert "| API Parameter | Python | In | Pattern | Required | Nullable | Description |" in rows
+    assert "| `season` | `season` | body |" in rows and "| `pageNumber` | `page` | query |" in rows
+    plain = _reference_block(v["plain"])
+    assert "| API Parameter | Python | Pattern | Required | Nullable | Description |" in plain  # no body: unchanged
+    assert "| In |" not in plain
+    assert "### Raises {#b_rows-raises}" in rows
+    assert "| `ValueError` | bad \\| input |" in rows  # the YAML line, pipe-escaped
+    assert rows.count("| `ValueError` |") == 1  # the vocabulary line it already names is not repeated
+    assert "| `NoDataError` |" in rows and "| `AssetFetchError` |" in rows
+    assert rows.index("### Raises") < rows.index("### Example")
+
+
+def test_reference_block_has_no_raises_section_without_raises(tmp_path):
+    assert generate._raises_rows(generate._raises_lines({}, vocab_raises=False)) == []
+    y = tmp_path / "n.yaml"
+    y.write_text(_BODY_YAML.format(body="json"), encoding="utf-8")
+    view = generate._flat_views(spec.load_flat_api(y, {}))[1]
+    view.raises_rows = []
+    assert "### Raises" not in _reference_block(view)
+
+
+_BUILDER_RT = (
+    "from sportsdataverse._codegen_runtime import _get  # noqa: F401\n\n\n"
+    "def nest(body):\n    return {'filter': {k: v for k, v in body.items() if v is not None}, 'page': 1}\n"
+)
+
+
+def test_body_builder_turns_the_flat_body_into_the_nested_json(tmp_path, monkeypatch):
+    (tmp_path / "_bb_rt.py").write_text(_BUILDER_RT, encoding="utf-8")
+    monkeypatch.syspath_prepend(str(tmp_path))
+    yaml_text = (
+        _BODY_YAML.format(body="json")
+        .split("  - short: plain")[0]
+        .replace("    body: json\n", "    body: json\n    body_builder: nest\n")
+        + "getter_module: _bb_rt\n"
+    )
+    src, mod = _render_and_load(tmp_path, yaml_text, "_gen_builder")
+    assert "from _bb_rt import _get, nest" in src
+    seen = {}
+    monkeypatch.setattr(mod, "_get", lambda url, **k: seen.update(url=url, **k) or {})
+    mod.b_rows(season=2026, page=2)
+    assert seen["json"] == {"filter": {"kind": "all", "season": 2026}, "page": 1}
+    assert seen["params"] == {"pageNumber": 2}
+    view = generate._flat_views(spec.load_flat_api(tmp_path / "_gen_builder.yaml", {}))[0]
+    assert '-d \'{"filter": {"kind": "all", "season": 2026}, "page": 1}\'' in view.curl_example  # the wire body
+
+
+def test_body_builder_needs_a_body_kind(tmp_path):
+    y = tmp_path / "bb.yaml"
+    y.write_text(
+        "api: z\nhost: 'https://z.test'\nname_pattern: 'z_{short}'\nmodule: z\n"
+        "endpoints:\n  - { short: a, path: '/a', method: post, body_builder: nest }\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(spec.SpecError, match="body_builder"):
+        spec.load_flat_api(y, {})

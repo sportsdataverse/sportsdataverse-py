@@ -85,6 +85,9 @@ class Endpoint:
     body: str = "query"
     # ``fixed_params`` keys that stay in the query string of a body endpoint (CBA ``startNum``).
     fixed_in_query: List[str] = field(default_factory=list)
+    # A body endpoint's runtime callable (a name in the family's ``getter_module``) the wrapper passes
+    # its flat body dict through before sending, e.g. to nest fields into the JSON the API expects.
+    body_builder: Optional[str] = None
 
     @property
     def url_fixed(self) -> Dict[str, object]:
@@ -349,6 +352,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         method=str(e.get("method") or "get").lower(),
         body=body,
         fixed_in_query=list(e.get("fixed_in_query") or []),
+        body_builder=e.get("body_builder"),
     )
     if ep.method not in ("get", "post"):
         raise SpecError(f"{path}: endpoint {ep.short!r} method {ep.method!r} is not get or post")
@@ -359,6 +363,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         raise SpecError(f"{path}: endpoint {ep.short!r} body {ep.body!r} is not query, form or json")
     if ep.body != "query" and ep.method != "post":
         raise SpecError(f"{path}: endpoint {ep.short!r} sets body {ep.body!r} but is not a post")
+    if ep.body_builder and ep.body == "query":
+        raise SpecError(f"{path}: endpoint {ep.short!r} sets body_builder but has no body kind (form or json)")
     # validate path tokens (excluding the {sport}/{league} slugs) have a known param;
     # strip optional-segment brackets first so "[/{token}]" tokens are seen.
     bare_path = ep.path.replace("[", "").replace("]", "")
