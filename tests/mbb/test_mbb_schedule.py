@@ -23,9 +23,17 @@ def _capture(name: str) -> str:
 def _season_route(monkeypatch, fail_day: str = "", fail=(500, "")):
     """Serve the 2023-24 season: the calendar request (``dates=2024``) gets the real season
     scoreboard (its ``leagues[0].calendar`` lists 148 game days), each captured day its real
-    events, ``fail_day`` the ``fail`` answer, every other calendar day an empty slate."""
+    events, ``fail_day`` the ``fail`` answer, every other calendar day an empty slate.
+
+    R855-9: 20231220 also serves a repeat of 20231106's first game (one game listed on two days)
+    and a copy of it filed under season 2023 with id 1; the sweep must drop both. ``days`` (the
+    returned expectation) holds the captures only."""
     calendar = _capture("scoreboard_mbb_dates_2024.json")
     days = json.loads(_capture("mbb_season_days_2024.json"))
+    served = json.loads(_capture("mbb_season_days_2024.json"))
+    first = served["20231106"]["events"][0]
+    other_season = {**first, "id": "1", "season": {**first["season"], "year": 2023}}
+    served["20231220"]["events"] += [first, other_season]
 
     def answer(url: str):
         day = url.split("dates=")[1].split("&")[0]
@@ -33,7 +41,7 @@ def _season_route(monkeypatch, fail_day: str = "", fail=(500, "")):
             return (*fail, "application/json")
         if day == "2024":
             return 200, calendar, "application/json"
-        return 200, json.dumps(days.get(day, {"events": []})), "application/json"
+        return 200, json.dumps(served.get(day, {"events": []})), "application/json"
 
     return _route(monkeypatch, answer), json.loads(calendar), days
 
