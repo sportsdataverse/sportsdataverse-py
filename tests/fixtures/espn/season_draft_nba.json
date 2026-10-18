@@ -1,0 +1,86 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/draft?lang=en&region=us",
+ "athletes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/draft/athletes?lang=en&region=us"
+ },
+ "displayName": "2024 National Basketball Association Draft",
+ "links": [
+  {
+   "href": "https://www.espn.com/nba/draft",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "index",
+    "desktop",
+    "draft"
+   ],
+   "shortText": "NBA Draft",
+   "text": "NBA Draft"
+  }
+ ],
+ "numberOfRounds": 2,
+ "positions": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/1?lang=en&region=us",
+   "abbreviation": "PG",
+   "displayName": "Point Guard",
+   "id": "1",
+   "leaf": true,
+   "name": "Point Guard",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/2?lang=en&region=us",
+   "abbreviation": "SG",
+   "displayName": "Shooting Guard",
+   "id": "2",
+   "leaf": true,
+   "name": "Shooting Guard",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/3?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/5?lang=en&region=us",
+   "abbreviation": "SF",
+   "displayName": "Small Forward",
+   "id": "5",
+   "leaf": true,
+   "name": "Small Forward",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/6?lang=en&region=us",
+   "abbreviation": "PF",
+   "displayName": "Power Forward",
+   "id": "6",
+   "leaf": true,
+   "name": "Power Forward",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/7?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/positions/9?lang=en&region=us",
+   "abbreviation": "C",
+   "displayName": "Center",
+   "id": "9",
+   "leaf": false,
+   "name": "Center"
+  }
+ ],
+ "rounds": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/draft/rounds?lang=en&region=us"
+ },
+ "shortDisplayName": "2024 NBA Draft",
+ "status": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/draft/status?lang=en&region=us"
+ },
+ "uid": "s:40~l:46~e:draft~y:2024",
+ "year": 2024
+}

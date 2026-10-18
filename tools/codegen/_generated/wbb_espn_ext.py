@@ -1382,7 +1382,7 @@ def espn_wbb_player_stats_v3(
     Bound to sport='basketball', league='womens-college-basketball'.
 
     Endpoint: ``GET https://site.web.api.espn.com/apis/common/v3/sports/{sport}/{league}/athletes/{athlete_id}/stats``
-    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4239/stats
+    Example URL: https://site.web.api.espn.com/apis/common/v3/sports/basketball/womens-college-basketball/athletes/4433403/stats
 
     Args:
         athlete_id: athlete_id path parameter.
@@ -1401,7 +1401,7 @@ def espn_wbb_player_stats_v3(
     Example:
         Quick start::
 
-            espn_wbb_player_stats_v3(athlete_id='4239')
+            espn_wbb_player_stats_v3(athlete_id='4433403')
     """
     _caller_params = kwargs.pop("params", None) or {}
     _params = {

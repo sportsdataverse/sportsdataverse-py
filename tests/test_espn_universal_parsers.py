@@ -134,6 +134,97 @@ def test_parse_items_short_page_warning_spares_a_one_page_answer():
         assert parse_items(_load("franchises_nba")).height > 0  # pageCount 1
 
 
+# The three parsers below had never seen a real payload (their schemas said ``unverified``); each test
+# reads the 2026-10-18 capture its fix was made against.
+
+
+def test_athlete_stats_reads_the_web_v3_per_season_rows():
+    """Web v3 keeps the rows under ``categories[].statistics[]``: it parsed to 0 x 0."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    df = parse_athlete_stats(_load("athlete_stats_nba"))
+    assert df.height == 39  # 3 categories x (12 season rows + the Career row)
+    first = df.filter((pl.col("category") == "averages") & (pl.col("split_name") == "2010-11"))
+    assert first.select("season", "team_id", "position", "games_played", "avg_minutes").rows() == [
+        (2011, 20, "G", "78", "23.0")
+    ]
+
+
+@pytest.mark.parametrize("league", ["nba", "wnba", "mbb", "wbb", "nfl", "mlb"])
+def test_athlete_stats_keeps_each_category_career_line(league):
+    """R889-4: each Web v3 category's ``totals`` is the career line; it was dropped."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load(f"athlete_stats_{league}")
+    df = parse_athlete_stats(payload)
+    career = df.filter(pl.col("split_name") == "Career")
+    assert career["category"].to_list() == [c["name"] for c in payload["categories"] if c.get("totals")]
+    assert career.select("season", "team_id", "position").null_count().row(0) == (career.height,) * 3
+
+
+def test_athlete_stats_ids_are_int64_on_both_branches():
+    """R889-2: the pandas branch kept team_id "20" a string, and a null season turned Float64."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    assert {c: str(t) for c, t in parse_athlete_stats(payload).select("season", "team_id").schema.items()} == {
+        "season": "Int64",
+        "team_id": "Int64",
+    }
+    pdf = parse_athlete_stats(payload, return_as_pandas=True)
+    assert (str(pdf["season"].dtype), str(pdf["team_id"].dtype)) == ("Int64", "Int64")
+
+
+def test_athlete_stats_named_splits_carry_no_season_columns():
+    """R889-6: the labels + splits shape (athlete_overview's ``statistics`` block) has no season, team or position."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    df = parse_athlete_stats(_load("athlete_overview_nba")["statistics"])
+    assert df["split_name"].to_list() == ["Career"] and df["category"].to_list() == ["default"]
+    assert not {"season", "team_id", "position"} & set(df.columns)
+
+
+def test_athlete_stats_wrong_typed_containers_never_raise():
+    """R889-5: a non-dict ``season`` or a dict ``statistics`` raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    payload["categories"][0]["statistics"][0]["season"] = "2010-11"
+    payload["categories"][1]["statistics"] = {"season": {}}
+    payload["categories"][2]["statistics"].append(None)  # R889-8: a null row is skipped, not parsed
+    df = parse_athlete_stats(payload)
+    assert df.filter(pl.col("category") == "totals")["split_name"].to_list() == ["Career"]
+    assert df.filter(pl.col("category") == "averages").height == 13
+    assert df.filter(pl.col("category") == "miscellaneous").height == 13  # 12 seasons + Career
+
+
+def test_athlete_stats_empty_totals_add_no_career_row():
+    """R889-9: a category whose ``totals`` is empty has no career line to report."""
+    from sportsdataverse._common_espn_parsers import parse_athlete_stats
+
+    payload = _load("athlete_stats_nba")
+    payload["categories"][0]["totals"] = []
+    career = parse_athlete_stats(payload).filter(pl.col("split_name") == "Career")
+    assert career["category"].to_list() == ["totals", "miscellaneous"]
+
+
+def test_event_competitor_statistics_reads_the_one_split_object():
+    """Core v2 answers ``splits`` as one object: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_event_competitor_statistics
+
+    df = parse_event_competitor_statistics(_load("event_competitor_statistics_nba"))
+    assert df.height == 98 and set(df["category_name"]) == {"defensive", "general", "offensive"}
+    assert df.filter(pl.col("stat_name") == "blocks").select("split_name", "stat_value").rows() == [("All Splits", 7.0)]
+
+
+def test_season_draft_index_parses_to_its_own_row():
+    """The Core v2 season draft's ``rounds`` is a ``$ref``: it raised AttributeError."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+
+    df = parse_draft(_load("season_draft_nba"))
+    assert df.select("year", "number_of_rounds", "short_display_name").rows() == [(2024, 2, "2024 NBA Draft")]
+
+
 # ===========================================================================
 # Empty-payload contract for ALL new parsers
 # ===========================================================================
