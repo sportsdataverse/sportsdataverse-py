@@ -87,6 +87,9 @@ _STALE = {
     ("pff", "player_position_pivot"): "no columns published (note: opaque); the parser emits 3",
     ("pff", "player_seasons"): "no columns published; the parser emits value",
     ("pff_api", "player_offense_pass_blocking"): "20 schema columns are missing from the parse of PFF's spec example",
+    # main 10-17 (#826), measured 2026-10-18 (EX-SYNC-e)
+    ("liiga", "games"): "EX-SYNC-e: the schema names end, play_off_pair, play_off_phase, play_off_req_wins and "
+    "buy_tickets_url, which the parser does not emit on tests/fixtures/liiga/games.json",
 }
 
 
@@ -108,6 +111,17 @@ _NO_COMMITTED_CAPTURE = {
     "uefa",
     "yahoo_shangrila",
 }
+
+# Main's families merged 10-17 (#826, #859, #862): their captures ARE committed, under tests/fixtures/<stem>/
+# (ibba_segev's under tests/fixtures/ibba/), but in layouts the sweep does not read and with no
+# native_fixture_map.yaml entry, so their schemas are not re-derived here (EX-SYNC-f; task 3.9 maps them).
+_UNMAPPED_CAPTURES = {
+    "aba", "acb", "atrium", "bleague", "cba", "cebl", "del_esports", "easl", "eihl_esports", "elh", "feb",
+    "fiba_gamepage", "fiba_gdap", "genius", "ha", "ibba", "ibba_segev", "icehl_esports", "kbl", "khl_rest",
+    "khl_webcaster", "kzs", "legabasket", "lkl", "magnus", "metal_esports", "nationalleague", "nbl_rosetta",
+    "pleague", "pleague_preciser", "scb", "shl", "sportality", "sportpress", "tbf", "tpbl", "vhl",
+    "vtb_infobasket", "vtb_league", "wjbl",
+}  # fmt: skip
 
 
 def _doc_type(dtype: Any) -> str:
@@ -144,7 +158,9 @@ def _load(cap: Path) -> Any:
 
 def test_every_native_stem_is_swept_or_has_no_committed_capture():
     stems = {d.name for d in NATIVE.iterdir() if d.is_dir()}
-    assert {s for s, n in _PER_STEM.items() if n == 0} == _NO_COMMITTED_CAPTURE
+    assert {s for s, n in _PER_STEM.items() if n == 0} == _NO_COMMITTED_CAPTURE | _UNMAPPED_CAPTURES
+    assert [s for s in sorted(_UNMAPPED_CAPTURES - {"ibba_segev"}) if not (FIX / s).is_dir()] == []
+    assert any((FIX / "ibba" / "captures" / "segev").glob("*.json"))  # ibba_segev's captures live under ibba/
     assert stems - _NO_COMMITTED_CAPTURE and len(_CASES) > 500
 
 

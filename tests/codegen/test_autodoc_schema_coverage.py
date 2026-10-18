@@ -40,7 +40,7 @@ def test_every_dataframe_autodoc_function_has_example_args_or_takes_none():
     bad, captured_without_args = [], []
     for scope, fn in generate._autodoc_dataframe_names():
         obj = generate._scope_callable("global" if scope == "global" else scope, fn)
-        if obj is None:
+        if obj is None or hasattr(obj, "__sdv_schema__"):  # a minted wrapper reads its base's schema
             continue
         required = [
             p.name

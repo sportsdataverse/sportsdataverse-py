@@ -131,7 +131,7 @@ moves.filter(pl.col("direction") == "in").group_by("team_id").len()
 
 ### create_drive_summary {#create_drive_summary}
 
-`create_drive_summary(drives: list[dict] | dict, frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, periods: set[int] | str | None = None) -> dict | None`
+`create_drive_summary(drives: 'list[dict] | dict', frame: 'pl.DataFrame', home_id: 'str | int', away_id: 'str | int', periods: 'set[int] | str | None' = None) -> 'dict | None'`
 
 Build the StatBroadcast-style drive summary, chart, and long-play lists.
 
@@ -167,7 +167,7 @@ summary = create_drive_summary(drives, game.plays_frame, "52", "61")
 
 ### create_situational_stats {#create_situational_stats}
 
-`create_situational_stats(frame: polars.dataframe.frame.DataFrame, home_id: str | int, away_id: str | int, window_expr: polars.expr.expr.Expr | None = None) -> dict | None`
+`create_situational_stats(frame: 'pl.DataFrame', home_id: 'str | int', away_id: 'str | int', window_expr: 'pl.Expr | None' = None) -> 'dict | None'`
 
 Build the situational team-stats block from a plays frame.
 

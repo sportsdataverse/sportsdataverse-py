@@ -17,7 +17,7 @@ the extra point and going for two". Enumerates the three point outcomes
 (`0` / `1` / `2`) of the try, scores the opponent's ensuing-drive WP for
 each from the scoring team's perspective, and combines them with the
 two-point conversion probability (bundled CFB model) and the empirical CFB
-extra-point make rate (XP_MAKE_PROB`).
+extra-point make rate (`_XP_MAKE_PROB`).
 
 **Parameters**
 
@@ -570,7 +570,7 @@ through 2011, 75 from 2012); a null season takes the pre-2012 spot (80).
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in PBP_COLS`. |
+| `pbp_df` |  |  | Play-by-play frame (polars or pandas) of fourth-down situations carrying the `start.*` state columns in `_PBP_COLS`. |
 
 **Returns**
 

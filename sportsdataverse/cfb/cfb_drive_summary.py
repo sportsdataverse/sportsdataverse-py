@@ -20,6 +20,8 @@ Known approximation: a drive's time of possession is assigned to the quarter
 it STARTED in (a drive spanning the break books whole to the earlier quarter).
 """
 
+from __future__ import annotations
+
 import re
 
 import polars as pl

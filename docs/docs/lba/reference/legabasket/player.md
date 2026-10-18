@@ -115,7 +115,7 @@ Player bio with current-season totals, highs and averages (one row).
 | `stats_totals_highs_rs_regain_balls_sum` | integer | Current regular-season total of steals. |
 | `stats_totals_highs_rs_assists_sum` | integer | Current regular-season total of assists. |
 | `stats_totals_highs_rs_rating_lega_sum` | integer | Current regular-season total of LBA efficiency rating (`valutazione`). |
-| `stats_totals_highs_rs_rating_oer_sum` | numeric | OER over the regular season (1.04 for 3 games: an average despite sum`; inferred). |
+| `stats_totals_highs_rs_rating_oer_sum` | numeric | OER over the regular season (1.04 for 3 games: an average despite `_sum`; inferred). |
 | `stats_totals_highs_rs_avg_points_sum` | integer | Current regular-season total of plus-minus, despite the name (see the game-log row, where it equals the box score `plus_minus`). |
 | `stats_totals_highs_rs_quintet_max` | integer | Current regular-season single-game high of starts (in the starting five). |
 | `stats_totals_highs_rs_points_max` | integer | Current regular-season single-game high of points. |
@@ -169,7 +169,7 @@ Player bio with current-season totals, highs and averages (one row).
 | `stats_avg_rs_regain_balls_avg` | numeric | Current regular-season per-game average of steals, number sent as a string. |
 | `stats_avg_rs_assists_avg` | numeric | Current regular-season per-game average of assists, number sent as a string. |
 | `stats_avg_rs_rating_lega_avg` | numeric | Current regular-season per-game average of LBA efficiency rating (`valutazione`), number sent as a string. |
-| `stats_avg_rs_rating_oer_avg` | numeric | Per-game average OER (a number, unlike the other avg` values). |
+| `stats_avg_rs_rating_oer_avg` | numeric | Per-game average OER (a number, unlike the other `_avg` values). |
 | `stats_avg_rs_avg_points_avg` | numeric | Current regular-season per-game average of plus-minus, despite the name (see the game-log row, where it equals the box score `plus_minus`), number sent as a string. |
 | `stats_avg_rs_id` | integer | Always null (not a key). |
 
