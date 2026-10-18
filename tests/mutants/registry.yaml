@@ -1192,3 +1192,69 @@
   note: >-
     CodeRabbit thread on #846: an unpublished game_info season is a column-less pl.DataFrame(), and
     selecting game_id from it raised ColumnNotFoundError instead of skipping the season.
+
+# --- C-NF-4 / R841-5: ESPN NHL clocks are elapsed, not remaining (task 2.15) -------------------
+# Killers: tests/nhl/test_nhl_pbp.py on three real ESPN summaries (2024 SCF G7, the 2024 WCF G1
+# double-overtime game, a 2025 regular-season shootout) and the NHL API's goal timeRemaining.
+- id: nhl-espn-clock-elapsed-not-remaining
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '(pl.col("_period_length") - 60 * pl.col("clock.minutes") - pl.col("clock.seconds"))'
+  mutant: '(60 * pl.col("clock.minutes") + pl.col("clock.seconds"))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_decreases_within_period
+  expected: kill
+  note: >-
+    The original: elapsed seconds added to the period base give 2400, 2421, 2431 on the SCF G7
+    capture, rising through every period.
+
+- id: nhl-espn-clock-period-last-row-fill
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '            pl.when(ends_period)'
+  mutant: '            pl.when(pl.lit(False))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_end_not_after_start
+  expected: kill
+  note: >-
+    R841-5: without the period-last-row fill a period's horn row (0 s left) ends at the next
+    period's 1200, end > start.
+
+- id: nhl-espn-clock-playoff-overtime-length
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '| (pl.col("seasonType").cast(pl.Int64, strict=False) == 3)'
+  mutant: '| pl.lit(False)'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    Playoff overtime is 20 minutes (WCF G1 401672983 P4 runs 0:00 -> 20:00); a 300 s length gives
+    negative remaining seconds.
+
+- id: nhl-espn-clock-shootout-no-clock
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: |-
+    .otherwise(pl.lit(0.0))
+                .alias("_period_length"),
+  mutant: |-
+    .otherwise(pl.lit(300.0))
+                .alias("_period_length"),
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    The regular-season shootout (period 5 of 401688272, every clock 0:00) has no clock: 0 s, not
+    another 300 s overtime.
+
+- id: nhl-espn-clock-regulation-game-offset
+  group: nhl-espn-clock
+  finding: C-NF-4
+  file: sportsdataverse/nhl/nhl_pbp.py
+  snippet: '.then(1200.0 * (3 - pl.col("period.number")))'
+  mutant: '.then(1200.0 * (pl.col("period.number") - 1))'
+  test: tests/nhl/test_nhl_pbp.py::test_clock_remaining_is_period_length_less_elapsed
+  expected: kill
+  note: >-
+    Game seconds remaining count down from 3600: period p adds (3 - p) * 1200 to its period clock.
