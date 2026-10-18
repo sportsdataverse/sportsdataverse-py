@@ -106,6 +106,14 @@ A team's games with each team's leaders.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#fiba_gdap_team_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+
 ### Example {#fiba_gdap_team_games-example}
 
 ```python
@@ -201,6 +209,14 @@ Per-game averages of every player of a team at a competition.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#fiba_gdap_team_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+
 ### Example {#fiba_gdap_team_player_stats-example}
 
 ```python
@@ -246,6 +262,14 @@ Coaches of every team of a competition.
 | `final_roster_member_status_code` | character | Roster entry status; always null in the samples, values unverified. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#fiba_gdap_team_staff-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
 
 ### Example {#fiba_gdap_team_staff-example}
 
@@ -351,6 +375,14 @@ A team's per-game averages and totals at a competition, with the bench totals.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#fiba_gdap_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
+
 ### Example {#fiba_gdap_team_stats-example}
 
 ```python
@@ -408,6 +440,14 @@ Teams of a competition with their profile (final ranking, per-game averages).
 | `organisation_id` | integer | Organisation id, stable across competitions and seasons: the national federation for a national team (64 = Germany), the club for a club team (396 = Filou Oostende). Same key space as nationalFederationId, clubId, play-by-play oId and the game page's T_<id>. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#fiba_gdap_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed, or the answer is not about the request (an error envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game). |
+| `ValueError` | HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp. |
 
 ### Example {#fiba_gdap_teams-example}
 

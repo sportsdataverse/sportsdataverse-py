@@ -35,6 +35,13 @@ goalies alike.
 
 polars.DataFrame | pandas.DataFrame: one row per player: `player_id` (isa, `Int64`), `athlete_uuid` (null where SHL has none, common before about 2005), names, birth date, nationality, position, jersey number, height and weight.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | layout-info lists no such ssgt, or the table has no rows. |
+| `AssetFetchError` | the fetch failed or the table came back cut. |
+
 **Example**
 
 ```python
@@ -63,6 +70,14 @@ fetched once per process.
 **Returns**
 
 the ssgt uuid (e.g. `"iuzqg7dqk9"` for the 2025/26 regular season).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | layout-info lists no ssgt for that season and game type. |
+| `ValueError` | `season` is not a year. |
+| `AssetFetchError` | layout-info could not be fetched or read. |
 
 **Example**
 

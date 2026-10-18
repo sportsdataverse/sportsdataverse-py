@@ -34,6 +34,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `stat` | character | Stat. |
 | `value` | character | Numeric or string value field. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -52,6 +59,12 @@ Wraps `wcbk/event/{game_id}/matchup`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -72,6 +85,12 @@ Wraps `wcbk/event/{game_id}/recap`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -90,6 +109,12 @@ Wraps `wcbk/event/{game_id}/standings`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -122,6 +147,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `color` | character | Primary color (hex without leading '#'). |
 | `logo_url` | character | NBA CDN primary logo URL. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -153,6 +184,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `image_alt_text` | character | Alt text Fox attaches to the header image, which reads as the league's display name ('Women's College Basketball' in sampled data). |
 | `rank` | character | Rank. |
 | `details` | character | Details. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -192,6 +229,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `ppg` | character | Points per game. |
 | `pts` | character | Points scored. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -211,6 +255,12 @@ Wraps `wcbk/league/odds`.
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -229,6 +279,12 @@ Wraps `wcbk/league/playernews`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -265,6 +321,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `team` | character | Team-side label or team identifier. |
 | `rank_change` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -295,6 +357,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
 | `group_id` | character | ESPN group id. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -324,6 +392,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `web_url` | character | Site-relative foxsports.com path of the page the selection opens (e.g. '/womens-college-basketball/scores?groupId=top25'). |
 | `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
 | `group_id` | character | ESPN group id. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -360,6 +434,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `entity_id` | character | Fox id of the row's linked team as a string: the trailing number of the row's entityLink contentUri. |
 | `di` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -387,6 +467,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `player` | character | Player name. |
 | `value` | character | Numeric or string value field. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -413,6 +499,13 @@ WBB game odds six-pack (spread / to-win / total per team).
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
 
 No returns table is published for this function: no capture: for this sport Fox sends the odds under sectionList modules rather than the top-level sixPack key the shared parser reads (football and MLB still use sixPack), so it returns an empty frame for every game.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
 
 **Example**
 
@@ -452,6 +545,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `right_score_change` | logical |  |
 | `play_text` | character | Play description text. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -482,6 +582,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `selected` | logical | Fox's default-selection flag: True on the one group filter (a groupList row) Fox pre-selects, and null (never False) on every other row. |
 | `group_id` | character | ESPN group id. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
+
 **Example**
 
 ```python
@@ -501,6 +607,12 @@ Wraps `wcbk/scorechip/{chip_id}`.
 
 The raw JSON `dict`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | transport failures surface from the underlying getter. |
+
 **Example**
 
 ```python
@@ -519,6 +631,12 @@ Wraps `wcbk/league/scores-segment/{segment_id}`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -561,6 +679,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `strk` | character | Current streak. |
 | `entity_id` | character | Composite Yahoo id this editorial row was keyed under, surfaced from the collection map key (e.g., "ncaaf.g.202509200023" for a game, "ncaaf.t.29" for a team); always carried as Utf8. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -597,6 +722,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `stat` | character | Stat. |
 | `value` | character | Numeric or string value field. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -615,6 +747,12 @@ Wraps `wcbk/team/{team_id}/header`.
 **Returns**
 
 A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, or the raw JSON `dict` when `return_parsed=False`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -651,6 +789,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `ht` | character | Listed height. |
 | `athlete_id` | character | Unique athlete identifier (ESPN). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -685,6 +830,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `player` | character | Player name. |
 | `value` | character | Numeric or string value field. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -715,6 +867,12 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `web_url` | character | Site-relative foxsports.com path of the team page (e.g. '/womens-college-basketball/michigan-wolverines-team'). |
 | `color` | character | Primary color (hex without leading '#'). |
 | `logo_url` | character | NBA CDN primary logo URL. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `None` | an empty or malformed payload yields a zero-row frame. |
 
 **Example**
 
@@ -751,6 +909,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -786,6 +951,12 @@ A polars DataFrame (default) or pandas DataFrame, one row per team: `fox_team_id
 | `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). A 404 on an individual candidate id (`NoDataError`) is expected during the scan and is skipped; every other failure propagates rather than silently truncating the directory. |
 
 **Example**
 

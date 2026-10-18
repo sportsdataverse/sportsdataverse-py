@@ -36,6 +36,14 @@ All competitions StatsPerform tracks for NWSL (league + friendlies/cups).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nwsl_competitions-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nwsl_competitions-example}
 
 ```python
@@ -90,6 +98,14 @@ Team lineups (starting XI + bench + staff) for a match.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nwsl_match_lineups-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nwsl_match_lineups-example}
 
 ```python
@@ -133,6 +149,14 @@ Match days (rounds) for a season.
 | `matchday_status` | character | Status of the match day (scheduled, in progress, completed). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nwsl_matchdays-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nwsl_matchdays-example}
 
@@ -215,6 +239,14 @@ Player-stats leaderboard for a season (paginated).
 | `editorial_player_role_within_team` | character | Editorial metadata: editorial description of the player's role in the side. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nwsl_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nwsl_player_stats-example}
 
@@ -360,6 +392,14 @@ Matches across one or more seasons within a US-format date window.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nwsl_season_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nwsl_season_matches-example}
 
 ```python
@@ -391,6 +431,14 @@ Competition stages for a season (may be empty for league play).
 | `name` | character | Stage display name. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nwsl_stages-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nwsl_stages-example}
 
@@ -456,6 +504,14 @@ Overall standings table for a season (table/home/away splits).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nwsl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nwsl_standings-example}
 
 ```python
@@ -519,6 +575,14 @@ Team-stats leaderboard for a season.
 | `editorial_club_text_colour` | character | Editorial metadata: club text colour (hex). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nwsl_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nwsl_team_stats-example}
 
@@ -584,6 +648,14 @@ Teams participating in a season.
 | `editorial_club_text_colour` | character | Editorial metadata: club text colour (hex). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nwsl_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | the SDP host returned 404 (unknown composite id, or an unmapped match sub-resource). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nwsl_teams-example}
 

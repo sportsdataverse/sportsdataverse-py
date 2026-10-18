@@ -25,6 +25,29 @@ toc_max_heading_level: 2
 | [on3_commits_organizations_latest_commits](on3/commits.md#on3_commits_organizations_latest_commits) | GET /rdb/v1/commits/organizations/{orgKey}/latest-commits |
 | [on3_commits_organizations_org_key](on3/commits.md#on3_commits_organizations_org_key) | GET /rdb/v1/commits/organizations/{orgKey} |
 
+## Draft
+
+| Function | Summary |
+|---|---|
+| [on3_draft_organization_rank](on3/draft.md#on3_draft_organization_rank) | GET /rdb/v1/draft-organization-rank |
+| [on3_draft_pick_organization_rank](on3/draft.md#on3_draft_pick_organization_rank) | GET /rdb/v1/draft-pick-organization-rank |
+| [on3_drafts](on3/draft.md#on3_drafts) | GET /rdb/v1/drafts |
+| [on3_drafts_by_stars](on3/draft.md#on3_drafts_by_stars) | GET /rdb/v1/drafts-by-stars |
+| [on3_drafts_by_stars_summary](on3/draft.md#on3_drafts_by_stars_summary) | GET /rdb/v1/drafts-by-stars-summary |
+| [on3_drafts_players](on3/draft.md#on3_drafts_players) | GET /rdb/v1/drafts/{orgKey}/players |
+
+## Filters
+
+| Function | Summary |
+|---|---|
+| [on3_filters_conferences](on3/filters.md#on3_filters_conferences) | GET /rdb/v1/filters/conferences |
+| [on3_filters_draft_rounds](on3/filters.md#on3_filters_draft_rounds) | GET /rdb/v1/filters/draft-rounds |
+| [on3_filters_positions](on3/filters.md#on3_filters_positions) | GET /rdb/v1/filters/positions |
+| [on3_filters_sports](on3/filters.md#on3_filters_sports) | GET /rdb/v1/filters/sports |
+| [on3_filters_status](on3/filters.md#on3_filters_status) | GET /rdb/v1/filters/status |
+| [on3_filters_teams](on3/filters.md#on3_filters_teams) | GET /rdb/v1/filters/teams |
+| [on3_filters_years](on3/filters.md#on3_filters_years) | GET /rdb/v1/filters/years |
+
 ## Nil
 
 | Function | Summary |
@@ -78,7 +101,7 @@ toc_max_heading_level: 2
 | [on3_player_videos](on3/player.md#on3_player_videos) | GET /rdb/v1/player/{personKey}/videos |
 | [on3_player_visit_center](on3/player.md#on3_player_visit_center) | GET /rdb/v1/player/{playerKey}/visit-center |
 | [on3_players_industry_comparision](on3/player.md#on3_players_industry_comparision) | GET /rdb/v1/players/industry-comparision |
-| [on3_players_industry_comparision_list](on3/player.md#on3_players_industry_comparision_list) | GET /rdb/v1/players/industry-comparision-list |
+| [on3_players_industry_comparision_list](on3/player-2.md#on3_players_industry_comparision_list) | GET /rdb/v1/players/industry-comparision-list |
 
 ## Recruitment
 
@@ -114,19 +137,6 @@ toc_max_heading_level: 2
 |---|---|
 | [on3_coaches_history](on3/other.md#on3_coaches_history) | GET /rdb/v1/coaches/{personKey}/history |
 | [on3_coaches_profile](on3/other.md#on3_coaches_profile) | GET /rdb/v1/coaches/{personKey}/profile |
-| [on3_draft_organization_rank](on3/other.md#on3_draft_organization_rank) | GET /rdb/v1/draft-organization-rank |
-| [on3_draft_pick_organization_rank](on3/other.md#on3_draft_pick_organization_rank) | GET /rdb/v1/draft-pick-organization-rank |
-| [on3_drafts](on3/other.md#on3_drafts) | GET /rdb/v1/drafts |
-| [on3_drafts_by_stars](on3/other.md#on3_drafts_by_stars) | GET /rdb/v1/drafts-by-stars |
-| [on3_drafts_by_stars_summary](on3/other.md#on3_drafts_by_stars_summary) | GET /rdb/v1/drafts-by-stars-summary |
-| [on3_drafts_players](on3/other.md#on3_drafts_players) | GET /rdb/v1/drafts/{orgKey}/players |
-| [on3_filters_conferences](on3/other.md#on3_filters_conferences) | GET /rdb/v1/filters/conferences |
-| [on3_filters_draft_rounds](on3/other.md#on3_filters_draft_rounds) | GET /rdb/v1/filters/draft-rounds |
-| [on3_filters_positions](on3/other.md#on3_filters_positions) | GET /rdb/v1/filters/positions |
-| [on3_filters_sports](on3/other.md#on3_filters_sports) | GET /rdb/v1/filters/sports |
-| [on3_filters_status](on3/other.md#on3_filters_status) | GET /rdb/v1/filters/status |
-| [on3_filters_teams](on3/other.md#on3_filters_teams) | GET /rdb/v1/filters/teams |
-| [on3_filters_years](on3/other.md#on3_filters_years) | GET /rdb/v1/filters/years |
 | [on3_person_connections_connection_key](on3/other.md#on3_person_connections_connection_key) | GET /rdb/v1/person-connections/{connectionKey} |
 | [on3_person_primary_recruitment_evaluation](on3/other.md#on3_person_primary_recruitment_evaluation) | GET /rdb/v1/person/{personKey}/primary-recruitment-evaluation |
 | [on3_person_recruitment_evaluations](on3/other.md#on3_person_recruitment_evaluations) | GET /rdb/v1/person/{personKey}/recruitment-evaluations |

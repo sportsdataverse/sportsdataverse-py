@@ -46,6 +46,14 @@ Qualified-player per-game leaders in nine categories (one row per player and cat
 
 **`return_parsed=False`** — the raw body (`dict`): `{'data': ...}` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus `_request` (the season, competition, team, roster or game ids asked for).
 
+### Raises {#sportpress_player_rankings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#sportpress_player_rankings-example}
 
 ```python
@@ -115,6 +123,14 @@ Season-by-season per-game averages of the player of a roster entry.
 | `value` | numeric | Efficiency rating (PIR with fouls drawn): points + rebounds + assists + steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers. Per-game mean over the games played (fractional). |
 
 **`return_parsed=False`** — the raw body (`dict`): `{'data': ...}` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus `_request` (the season, competition, team, roster or game ids asked for).
+
+### Raises {#sportpress_player_career-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_player_career-example}
 
@@ -195,6 +211,14 @@ Game-by-game box lines of a roster entry (including games with 0 minutes).
 | `value` | integer | Efficiency rating (PIR with fouls drawn): points + rebounds + assists + steals + blocks + fouls drawn - missed field goals - missed free throws - turnovers. |
 
 **`return_parsed=False`** — the raw body (`dict`): `{'data': ...}` (the settings object for the site config, the nine-category object for the rankings) with contact fields dropped, plus `_request` (the season, competition, team, roster or game ids asked for).
+
+### Raises {#sportpress_player_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (HTTP 404, an empty `data` list: an unknown id or a season without data, an empty ranking). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key: 'key rotated?', an error or changed envelope, a game that is not finished, a body for another season, competition, team or game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportpress_player_games-example}
 

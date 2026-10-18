@@ -53,6 +53,14 @@ A polars/pandas DataFrame with the `laps_page` columns (`season`, `round`, `race
 | `position` | integer |  |
 | `time` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the Jolpica API returned 404 (unknown season or round). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body), or a page came back empty before `MRData.total` timings were read -- the answer is unknown, not empty. |
+
 **Example**
 
 ```python

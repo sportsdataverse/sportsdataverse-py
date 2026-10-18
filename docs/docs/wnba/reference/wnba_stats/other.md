@@ -444,6 +444,15 @@ GET /stats/drafthistory
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#wnba_stats_drafthistory-raises}
+
+| Exception | Description |
+|---|---|
+| `ImportError` | `curl_cffi` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain `requests`, so the live transport requires it (`pip install curl_cffi`, or `pip install sportsdataverse[all]`). |
+| `NoDataError` | The host answered HTTP 404. |
+| `ValueError` | The host answered HTTP 400 / 422 (it rejected a parameter value). |
+| `AssetFetchError` | Any other non-2xx (401 / 403 / 429 / 5xx; a missing required `Season` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a connection failure (timeout, reset), once `SDV_PY_NBA_STATS_RETRIES` retries are exhausted. |
+
 ### Example {#wnba_stats_drafthistory-example}
 
 ```python

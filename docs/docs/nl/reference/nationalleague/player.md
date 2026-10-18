@@ -66,6 +66,14 @@ One game's player box score: goals, assists, shots, faceoffs, ice time, goaltend
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nl_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#nl_player_box-example}
 
 ```python
@@ -240,6 +248,14 @@ Season stats for every player, with playerId.
 | `team_stats` | character | Per-team split for a player who changed teams; unobserved: null or empty in every sampled row |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nl_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_player_stats-example}
 
@@ -416,6 +432,14 @@ One player's season stats.
 | `team_stats` | character | Per-team split for a player who changed teams; unobserved: null or empty in every sampled row |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nl_player_season-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_player_season-example}
 

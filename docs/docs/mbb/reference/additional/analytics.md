@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Analytics: ConcurrentClump–order_lineup"
-sidebar_label: "Analytics: ConcurrentClump–order_lineup"
+title: "MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb"
+sidebar_label: "Analytics: ConcurrentClump–ncaa_mbb"
 sidebar_position: 12
-description: "MBB — additional Python functions — Analytics: ConcurrentClump–order_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Analytics: ConcurrentClump–order_lineup
+# MBB — additional Python functions — Analytics: ConcurrentClump–ncaa_mbb
 
 ### ConcurrentClump {#ConcurrentClump}
 
@@ -547,6 +547,12 @@ result, matching upstream's "don't bother for all_lineups" comment.
 
 The aggregated team-total `LineupStatSet`, including a nested `all_lineups` key holding the `rapmRemove`-lineups-plus-team-total composite sub-aggregate.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | Propagated from `weighted_avg` / `complete_weighted_avg` if any lineup (or the accumulator) carries a `game_info` key -- see their docstrings. |
+
 **Example**
 
 ```python
@@ -667,6 +673,12 @@ than dividing their own weighted sum.
 **Returns**
 
 None. `mutable_acc` is mutated in place.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | If `mutable_acc` carries a `game_info` key -- that finishing branch is deliberately deferred (see module docstring). Not reachable via `calculate_aggregated_lineup_stats` today since `weighted_avg` already raises before a `game_info` key can land on the accumulator. |
 
 **Example**
 
@@ -950,6 +962,12 @@ input list) is deleted as a side effect while building the roster --
 
 `{"playerMap": {code: id}, "players": [...], "error_code": ...}`. Each entry in `players` is `{"playerId", "playerCode", "teammates", "on", "off", "replacement"}` -- `on`/`off` are finished `LineupStatSet` averages (or, for a player who's always ON, an all-zero `off`); `replacement` is `None` unless `inc_replacement=True`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | Propagated from `weighted_avg` / `complete_weighted_avg` if any lineup carries a `game_info` key -- not exercised by this module's oracle fixtures (see module docstring). |
+
 **Example**
 
 ```python
@@ -1078,6 +1096,12 @@ One row per group: `{group}:Utf8, n_shots:Int64, xppp, actual_ppp, selection_val
 | `actual_ppp` | double |  |
 | `selection_value` | double |  |
 | `selection_value_total` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown `group`. |
 
 **Example**
 
@@ -1350,6 +1374,12 @@ included player on another team would leak that team's lineups in.
 | `time_per_poss` | double |  |
 | `d_time_per_poss` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the players' team cannot be uniquely inferred from the lineups (R's `"ERROR- Player team not found"`). |
+
 **Example**
 
 ```python
@@ -1476,6 +1506,12 @@ which is the only R-reachable behavior.
 | `drb_pct` | double | Defensive rebound percentage. |
 | `time_per_poss` | double |  |
 | `d_time_per_poss` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `n` is not an integer from 1 to 5. |
 
 **Example**
 
@@ -1611,47 +1647,4 @@ df = ncaa_mbb_player_lineups(lineups, included=["A.PLAYER"], excluded=["B.PLAYER
 # Pipeline next step (one line)
 
 on.select(pl.col("mins").sum())
-```
-
-### order_lineup {#order_lineup}
-
-`order_lineup(player_codes_and_ids: 'list[dict[str, str]]', players_by_id: 'dict[str, dict[str, Any]]', team_season: 'str') -> 'list[dict[str, str]]'`
-
-Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order.
-
-Faithful port of `PositionUtils.orderLineup` (`PositionUtils.ts:696-761`).
-Greedily fits each player (in input order) to their best-scoring slot via
-`_fit_player` (dominated by `pos_class_to_score` on the
-player's `posClass`, tie-broken by their raw `posConfidences`),
-evicting and recursively re-fitting any player displaced along the way,
-then applies `apply_relative_positional_overrides` (keyed on
-`team_season`) as a final hand-tuned correction pass.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_codes_and_ids` | `list[dict[str, str]]` |  | The lineup membership, each a `{"code": ..., "id": ...}` dict. Order does not affect the final result (the slot-fitting algorithm is order-invariant by construction -- displaced players are always re-fit). |
-| `players_by_id` | `dict[str, dict[str, Any]]` |  | Per-player positional info keyed by `id`, each a `{"posConfidences": [pg, sg, sf, pf, c], "posClass": "..."}` dict (the tradPosList-ordered raw confidence scores plus the classifier's `ID_TO_POSITION`-keyed class label). |
-| `team_season` | `str` |  | Key into `RELATIVE_POSITION_FIXES` for the final override pass. |
-
-**Returns**
-
-A 5-element list of `{"code": ..., "id": ...}` dicts in PG/SG/SF/PF/C order.
-
-**Example**
-
-```python
-::
-
-from sportsdataverse.mbb.mbb_positions import order_lineup
-players_by_id = {
-    "Cowan, Anthony": {"posConfidences": [60, 40, 10, 0, 0], "posClass": "s-PG"},
-    "Ayala, Eric": {"posConfidences": [40, 60, 10, 0, 0], "posClass": "CG"},
-}
-order_lineup(
-    [{"code": "AnCowan", "id": "Cowan, Anthony"},
-     {"code": "ErAyala", "id": "Ayala, Eric"}],
-    players_by_id, "",
-)
 ```

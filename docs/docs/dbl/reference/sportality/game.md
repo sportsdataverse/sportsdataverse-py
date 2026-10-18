@@ -71,6 +71,14 @@ Game header: Genius match id (extId), arena, state, teams, scores.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sportality_game_header-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#sportality_game_header-example}
 
 ```python
@@ -129,6 +137,14 @@ Score, state, clock and the Genius ids of one game (2023/24 on).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sportality_game_overview-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#sportality_game_overview-example}
 
 ```python
@@ -164,6 +180,14 @@ Points per period, team comparison and best scorers (2023/24 on).
 | `statistics_provider` | character | Stats provider of the data (genius-basketball = Genius Sports LiveStats). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sportality_game_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportality_game_summary-example}
 

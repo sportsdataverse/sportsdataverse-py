@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 9
+sidebar_position: 10
 description: "Package — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Models and calculators
@@ -90,6 +90,12 @@ A `polars.DataFrame` (or pandas) with the documented state schema; a zero-row fr
 | `target` | integer |  |
 | `fmt` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `fmt` is `"test"` (Test deferred) or unknown. |
+
 **Example**
 
 ```python
@@ -133,6 +139,12 @@ The input rows plus `regime:Utf8` (the match's regime id, `~sportsdataverse.cric
 | `proj_final` | double |  |
 | `win_prob_raw` | double |  |
 | `win_prob` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a row's `fmt` is `"test"` (deferred) or unknown. |
 
 **Example**
 
@@ -231,6 +243,12 @@ one row per `(season, team_id)`, sorted by them: `games`, `wins`, `deserved_wins
 | `luck_wins` | double | wins minus deserved_wins; positive means the team won more games than its play deserved. |
 | `luck_z` | double | luck_wins / sqrt(sum(p * (1 - p))) over the team's game shares p: luck in standard deviations of a sum of independent Bernoulli(p) wins; null when that variance is 0. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `games` is missing a needed column. |
+
 **Example**
 
 ```python
@@ -262,6 +280,13 @@ no tie rule, just the model applied to the plays given.
 **Returns**
 
 dict | None: `{"home_share": float, "away_share": float, "margins": {name: float}}` with the eight `MARGINS` from the home side (home minus away; havoc and turnovers signed so positive favors home). `away_share` is `1 - home_share`. None when either side has no usable inputs (no scrimmage snap, no drive id, or no successful play).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | unknown `league`, missing columns, plays from more than one game, or `home_id` and `away_id` naming the same team. |
+| `TypeError` | `pos_team_id` is float. |
 
 **Example**
 
@@ -319,6 +344,13 @@ keyed by `(game_id, team_id)`, sorted by them; `game_id` and `team_id` keep the 
 | `field_position_margin` | double | Expected points of the team's average drive start on the league's bundled EP-by-yardline curve minus the opponent's. |
 | `havoc_margin` | double | Havoc rate the team's defense created (havoc allowed on opponent snaps) minus the havoc rate its offense allowed. |
 | `turnovers_margin` | double | Turnovers the opponent's offense committed minus the team's. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | unknown `league` or missing columns. |
+| `TypeError` | a float id column, or `homeTeamId` / `awayTeamId` typed unlike `pos_team_id` (the join would silently miss). |
 
 **Example**
 

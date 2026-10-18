@@ -35,6 +35,15 @@ List a season's teams, franchise groups and schedule
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_team_list-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_team_list-example}
 
 ```python
@@ -87,6 +96,15 @@ Season-to-date team report, one row per team
 | `wins` | numeric | Games the team won over the covered span. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_team_overview-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_team_overview-example}
 
@@ -144,6 +162,15 @@ Per-game team report for one franchise, one row per game
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_team_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_team_summary-example}
 
 ```python
@@ -182,6 +209,15 @@ The league's teams for a season, with ids, slugs, colours and groups
 | `group_ids` | character | Ids of the conference, division or tier groups the team belongs to, joined with ";" (e.g. "6;10"); they resolve against the groups list in the raw response. Empty string for none. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_team_directory-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_team_directory-example}
 
@@ -476,6 +512,15 @@ Team stats table for one category, every value ranked against the scope
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_team_stats-example}
 
 ```python
@@ -523,6 +568,15 @@ A team's depth-chart roster with grades, ranks and snap counts
 | `snap_pct` | numeric | Player's snap share in percent (e.g. 98.8), PFF's 'Snap %'; null when he played no snaps. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_team_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_team_roster-example}
 
@@ -572,6 +626,15 @@ A team's season schedule, with results and strength of schedule
 | `opponent_elo_rank` | integer | Opponent's rank by PFF Elo within the league (1 = highest Elo). |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_team_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_team_schedule-example}
 

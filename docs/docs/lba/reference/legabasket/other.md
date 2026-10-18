@@ -42,6 +42,14 @@ Championships of a season, one per phase (Regular Season, Play Off); every seaso
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_championships-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_championships-example}
 
 ```python
@@ -109,6 +117,14 @@ Games of one round of a championship: teams, score, venue, referees and broadcas
 | `broadcasters` | character | JSON list of the game's broadcasters (name, logo key); null when the site lists none. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#lba_calendar-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lba_calendar-example}
 
@@ -201,6 +217,14 @@ Game header: teams, venue, quarter scores, coaches, referees and broadcasters.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_game-example}
 
 ```python
@@ -269,6 +293,14 @@ Box score of a final game: one row per player of both teams (Italian-named stat 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_box_score-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_box_score-example}
 
 ```python
@@ -334,6 +366,14 @@ Play-by-play of a final game (2017-18 on), one row per action with x/y; coordina
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_pbp-example}
 
 ```python
@@ -364,6 +404,14 @@ The play-by-play qualifier code table (59 codes) with its Italian labels.
 | `label` | character | Italian label of the qualifier code, as sent (translated in sdv-internal-refs legabasket-returns.md). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#lba_pbp_legend-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lba_pbp_legend-example}
 
@@ -404,6 +452,14 @@ Shooting by court zone per team for a final game (made / attempted aggregates; z
 | `opacity` | integer | Heat-map shading for the site: `perc` floored, minimum 5. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#lba_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lba_shots-example}
 
@@ -492,6 +548,14 @@ Standings of a championship after a round, one row per team.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_standings-example}
 
 ```python
@@ -544,6 +608,14 @@ Players of one team-season with bio, number and role.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#lba_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lba_roster-example}
 
 ```python
@@ -587,6 +659,14 @@ Head coach of one team-season.
 | `team_logo_key` | character | Image key: the image is `{cdn_url}/{key}`, resized copies `{cdn_url}/variants/{key}/thumb` or `/large` (the site's getApiImageUrl). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#lba_roster_coach-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lba_roster_coach-example}
 
@@ -686,6 +766,14 @@ A player's game log for one season, one row per game.
 | `visitor_match_result` | character | `w` / `l` for the away team when the player was on it, else null. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#lba_game_log-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (an unknown season, a play-by-play before 2017-18, standings of a finished championship without a round, no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an unknown id (the site answers HTTP 500), a game that is not final, a truncated page, or a body for another season, championship, game, team or player than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lba_game_log-example}
 

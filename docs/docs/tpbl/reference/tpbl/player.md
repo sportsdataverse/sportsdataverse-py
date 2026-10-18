@@ -35,6 +35,14 @@ Every field-goal attempt of one player in one division with its court position.
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
 
+### Raises {#tpbl_player_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tpbl_player_shots-example}
 
 ```python
@@ -207,6 +215,14 @@ A player's game log in one division: one row per game played, with that game's w
 | `tsp` | numeric | True-shooting percentage, 0-100 (the API's true_shooting_percentage, a one-decimal string). |
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
+
+### Raises {#tpbl_player_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_player_games-example}
 

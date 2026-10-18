@@ -226,6 +226,13 @@ GET /api/secured/stats/fantasy/season — one row per player for the season — 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nfl_pro_fantasy_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
+
 ### Example {#nfl_pro_fantasy_season-example}
 
 ```python
@@ -459,6 +466,13 @@ GET /api/secured/stats/fantasy/game — one row per player-game — fantasy scor
 | `top12_k_wk_ppr` | integer | Whether the player finished the week as a top-12 K by fantasy points, full-PPR scoring (1/0). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nfl_pro_fantasy_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NFLProAuthError` | No user-bound NFL Pro token could be resolved (pass `token=` or `email=`/`password=`, or set `NFLPRO_TOKEN`, or `NFLPRO_EMAIL`/`NFLPRO_PW`), or the resolved token carries no active NFL_PLUS_* plan. |
+| `ValueError` | pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope. |
 
 ### Example {#nfl_pro_fantasy_game-example}
 

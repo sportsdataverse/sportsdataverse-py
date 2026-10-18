@@ -48,6 +48,14 @@ Player leaderboard of a competition for one stat category (total, per-game avera
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kzs_player_leaderboard-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#kzs_player_leaderboard-example}
 
 ```python
@@ -90,6 +98,14 @@ Player profile: names, year of birth, nationality and positions.
 | `positions` | character | Unobserved: null, or an empty array, in every sample, so its type and meaning are unconfirmed. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kzs_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#kzs_player-example}
 
@@ -171,6 +187,14 @@ A player's totals and per-game averages in each competition of one season.
 | `competition_gender` | character | MALE or FEMALE competition. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kzs_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#kzs_player_stats-example}
 

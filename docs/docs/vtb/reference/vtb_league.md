@@ -45,6 +45,14 @@ The leagues served by the API: vtb, vtbyouth, wbc.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#vtb_league_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
+
 ### Example {#vtb_league_leagues-example}
 
 ```python
@@ -78,6 +86,14 @@ The seasons the API serves for one league (new seasons only, from 2024-25).
 | `season_abbrev` | character | Season abbreviation ('25/26'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#vtb_league_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_league_seasons-example}
 
@@ -165,6 +181,14 @@ Every match of one league-season (schedule, scores, quarter points, venue), in o
 | `away_ot` | integer | Points of the away team in all overtimes together (null without overtime). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#vtb_league_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_league_matches-example}
 

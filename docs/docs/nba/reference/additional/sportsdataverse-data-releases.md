@@ -48,6 +48,13 @@ One row per participant; `season` is the asset's END year. An empty frame when n
 | `hand_width` | double | Hand width (span), in inches. |
 | `season` | integer | END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than the `seasons` argument. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is below 2000. |
+| `AssetFetchError` | If a release asset request fails. |
+
 **Example**
 
 ```python
@@ -95,6 +102,13 @@ One row per participant; `season` is the asset's END year. An empty frame when n
 | `three_quarter_sprint` | double | Three-quarter-court sprint time, in seconds. |
 | `bench_press` | character | Repetitions of the 185 lb bench press; null where not tested. |
 | `season` | integer | END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than the `seasons` argument. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is below 2000. |
+| `AssetFetchError` | If a release asset request fails. |
 
 **Example**
 
@@ -162,6 +176,13 @@ One row per participant; `season` is the asset's END year. An empty frame when n
 | `on_move_college_attempt` | integer | Shots attempted in the on-the-move drill at college three-point range; null if not run. |
 | `on_move_college_pct` | double | Shooting percentage (0-1) in the on-the-move drill at college three-point range; null if not run. |
 | `season` | integer | END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than the `seasons` argument. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is below 2000. |
+| `AssetFetchError` | If a release asset request fails. |
 
 **Example**
 
@@ -251,6 +272,13 @@ One row per participant; `season` is the asset's END year. An empty frame when n
 | `nba_corner_right_pct` | character | Shooting percentage (0-1) in the spot-up drill from the right corner at NBA three-point range; null if not run. |
 | `season` | integer | END year of the season the draft class enters (2025 = the May 2024 combine for the 2024 draft) -- one more than the `seasons` argument. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is below 2000. |
+| `AssetFetchError` | If a release asset request fails. |
+
 **Example**
 
 ```python
@@ -333,6 +361,13 @@ One row per participant; `season` is the asset's END year (`2025` for the 2024 c
 | `on_move_fifteen` | character | On-the-move shooting at 15-foot range, as 'made-attempted' text. |
 | `on_move_college` | character | On-the-move shooting at college three-point range, as 'made-attempted' text. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is below 2000. |
+| `AssetFetchError` | If a release asset request fails. |
+
 **Example**
 
 ```python
@@ -403,6 +438,14 @@ One row per player per season type per per mode, with `season` as the END year. 
 | `season_type` | character | Season type of the source file: 'regular-season' or 'playoffs' (the release file-name token). |
 | `per_mode` | character | Aggregation of the source file: 'pergame' (per-game averages) or 'totals' (season totals); stamped from the file name when the rows lack it. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season_type` or `per_mode` is unknown. |
+| `SeasonNotFoundError` | If any requested season is below 2015. |
+| `AssetFetchError` | If a release asset request fails. |
+
 **Example**
 
 ```python
@@ -464,6 +507,14 @@ One row per team per season type per per mode, with `season` as the END year. An
 | `season` | integer | END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the `seasons` argument. |
 | `season_type` | character | Season type of the source file: 'regular-season' or 'playoffs' (the release file-name token). |
 | `per_mode` | character | Aggregation of the source file: 'pergame' (per-game averages) or 'totals' (season totals); stamped from the file name when the rows lack it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season_type` or `per_mode` is unknown. |
+| `SeasonNotFoundError` | If any requested season is below 2015. |
+| `AssetFetchError` | If a release asset request fails. |
 
 **Example**
 
@@ -593,6 +644,14 @@ Polars dataframe with one row per player / team / lineup per requested season fo
 | `season_type` | character | Season type (1=pre-season, 2=regular season, 3=postseason, 4=off-season for ESPN; or string label for WNBA Stats). |
 | `per_mode` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `family` is not one of `NBA_STATS_LEAGUEDASH_FAMILIES`. |
+| `SeasonNotFoundError` | If any requested season is less than 1996. |
+| `AssetFetchError` | If a release asset request fails (a 403 or an exhausted retry budget) -- distinct from an absent season, which is skipped. |
+
 **Example**
 
 ```python
@@ -674,6 +733,14 @@ One row per matchup pair per per mode (about 140,000 per season and per mode). `
 | `per_mode` | character | Aggregation of the source file: 'pergame' (per-game averages) or 'totals' (season totals); stamped from the file name when the rows lack it. |
 | `matchup_time_sec` | double | Time matched up in seconds; present only in early 'totals' files (e.g. 2017-18). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `per_mode` is unknown. |
+| `SeasonNotFoundError` | If any requested season is below 2017. |
+| `AssetFetchError` | If a release asset request fails. |
+
 **Example**
 
 ```python
@@ -738,6 +805,14 @@ One row per defender per position per season type per per mode, with `season` as
 | `season` | integer | END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the `seasons` argument. |
 | `season_type` | character | Season type of the source file: 'regular-season' or 'playoffs' (the release file-name token). |
 | `per_mode` | character | Aggregation of the source file: 'pergame' (per-game averages) or 'totals' (season totals); stamped from the file name when the rows lack it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season_type` or `per_mode` is unknown. |
+| `SeasonNotFoundError` | If any requested season is below 2017. |
+| `AssetFetchError` | If a release asset request fails. |
 
 **Example**
 
@@ -810,6 +885,14 @@ One row per player per play type per type grouping per season type per per mode.
 | `season` | integer | END year of the NBA season (2025 = 2024-25) -- the published asset's own stamp, one more than the `seasons` argument. |
 | `season_type` | character | Season type of the source file: 'regular-season' or 'playoffs' (the release file-name token). |
 | `per_mode` | character | Aggregation of the source file: 'pergame' (per-game averages) or 'totals' (season totals); stamped from the file name when the rows lack it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a filter value is unknown, or if `play_type` and `type_grouping` select no published file (e.g. a defensive `cut`). |
+| `SeasonNotFoundError` | If any requested season is below 2015. |
+| `AssetFetchError` | If a release asset request fails (a 403 or an exhausted retry budget) -- distinct from an absent season, which is skipped. |
 
 **Example**
 

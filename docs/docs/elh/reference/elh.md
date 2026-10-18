@@ -37,6 +37,14 @@ Cumulative shot attempts and shots on goal of one game, per team and game minute
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#elh_events-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#elh_events-example}
 
 ```python
@@ -75,6 +83,14 @@ One page (up to 1,000 keys) of the hokej.cz S3 bucket listing; match keys carry 
 | `size` | integer | Object size in bytes (a few hundred bytes = a file written ahead of the game). |
 
 **`return_parsed=False`** — the raw ListObjects V1 XML page as text (`str`).
+
+### Raises {#elh_list_objects-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#elh_list_objects-example}
 
@@ -145,6 +161,14 @@ Play-by-play commentary of one game, every entry, oldest first: goals and penalt
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#elh_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#elh_pbp-example}
 
 ```python
@@ -191,6 +215,14 @@ Players on the ice at each goal of one game (onlajny ids), one row per player, w
 | `player_name` | character | On-ice player's display name (surname). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#elh_pbp_goals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp_goals-example}
 
@@ -261,6 +293,14 @@ The newest 20 play-by-play entries of one game (same columns as elh_pbp).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#elh_pbp_latest-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#elh_pbp_latest-example}
 
 ```python
@@ -294,6 +334,14 @@ Play-by-play of one game as plain text (no team or player ids), oldest first.
 | `content` | character | Czech commentary text (plain, newline line breaks). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#elh_pbp_mobile-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_pbp_mobile-example}
 
@@ -347,6 +395,14 @@ Extraliga games of one recent day with both id spaces (hokej.cz and onlajny) for
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#elh_scoreboard-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#elh_scoreboard-example}
 
 ```python
@@ -398,6 +454,14 @@ Shot attempts of one game with rink coordinates and result code (hokej.cz ids).
 | `real_date` | character | Wall-clock time of the shot, local YYYY-MM-DD HH:MM:SS. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#elh_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a missing file (404 NoSuchKey), a scoreboard day outside the rolling window, or a stub body (no comments / shots / minutes, no Extraliga game that day). |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope, a body for another game or day, or a broken listing page. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#elh_shots-example}
 

@@ -37,6 +37,14 @@ Every KBL regular season (1997 to the next one) with its competition key and dat
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_seasons-example}
 
 ```python
@@ -100,6 +108,14 @@ Every game (all competitions, KBL and D-League) of a season or of a date window,
 | `challenge_id` | integer | Id of the game in KBL Challenge (the site's prediction game); null when none. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_schedule-example}
 
@@ -170,6 +186,14 @@ Game header of a final game: teams, final score, overtimes, venue, attendance, o
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_game-example}
 
 ```python
@@ -208,6 +232,14 @@ Points by period (quarters and overtimes) and side of a final game, from the gam
 | `score` | integer | Points the side scored in the period. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_period_scores-example}
 
@@ -261,6 +293,14 @@ Play-by-play (the site's text cast) of a final game, one row per event, from 199
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_pbp-example}
 
 ```python
@@ -305,6 +345,14 @@ Shot chart of a final game (2006-07 on): every charted shot with x/y pixels on t
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_shots-example}
 
 ```python
@@ -344,6 +392,14 @@ Lead tracker and score chart of a final game: home margin and both scores at eig
 | `away_score` | integer | Away team points: cumulative at the checkpoint on the score track, the final total (all periods summed) on a game row, the full-time score in the schedule. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_score_track-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_score_track-example}
 
@@ -387,6 +443,14 @@ Each team's leader per category (points, rebounds, assists, steals, blocks) in a
 | `play_sec` | integer | Seconds part of the leader's playing time (0-59). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_game_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_game_leaders-example}
 
@@ -483,6 +547,14 @@ Standings of one competition with each team's season totals.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_standings-example}
 
 ```python
@@ -521,6 +593,14 @@ The season's round calendar (the KBL plays six rounds) with each round's first a
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_rounds-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_rounds-example}
 
 ```python
@@ -556,6 +636,14 @@ The regular-season finish that seeds the playoffs (the top six).
 | `team_name_full` | character | Team full name (Korean). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_playoff_seeds-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_playoff_seeds-example}
 
@@ -596,6 +684,14 @@ The playoff series (quarterfinals, semifinals, final): wins and losses of each t
 | `game_date` | date | Date of a game of the series, KST (which one is unverified); old bracket format only. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_playoff_series-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_playoff_series-example}
 
@@ -641,6 +737,14 @@ The games of the playoff bracket (2024-25 on; the older bracket format lists no 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_playoff_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_playoff_games-example}
 
 ```python
@@ -681,6 +785,14 @@ The round MVPs of a season with their totals over the round.
 | `total_assist` | integer | Assists over the round. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_round_mvps-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_round_mvps-example}
 
@@ -727,6 +839,14 @@ Current standings of the active season (no parameter): record, games behind, str
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#kbl_current_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
+
 ### Example {#kbl_current_standings-example}
 
 ```python
@@ -767,6 +887,14 @@ Current season leaders per category (no parameter): points, rebounds, assists, s
 | `player_flag` | character | Player type (string): '0' domestic, '1' foreign import, '2' Asian-quota player. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#kbl_season_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an empty list, a final game with no box score or shot chart, no playoff bracket, no schedule rows in a window). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown id is the API's HTTP 500), the KBL error envelope, an empty or non-JSON body, a game that is not final, or a body for another game, season or window than the one asked for. |
+| `ValueError` | a malformed gmkey, a season that is not an END year between 1997 and 2027, an unknown division or game_code, or bad schedule dates (raised before any request). |
 
 ### Example {#kbl_season_leaders-example}
 

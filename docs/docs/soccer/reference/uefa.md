@@ -76,6 +76,14 @@ UEFA competitions by id (Champions League 1, Europa League 3, Conference League 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#uefa_competitions-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#uefa_competitions-example}
 
 ```python
@@ -107,6 +115,14 @@ Matches live right now across UEFA competitions.
 | `status` | character | UEFA match status (e.g. 'UPCOMING', 'LIVE', 'FINISHED'). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#uefa_livescore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_livescore-example}
 
@@ -747,6 +763,14 @@ Matches of a UEFA competition season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#uefa_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#uefa_matches-example}
 
 ```python
@@ -859,6 +883,14 @@ Players registered in a UEFA competition season.
 | `translations_national_field_position_ar` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#uefa_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_players-example}
 
@@ -974,6 +1006,14 @@ Group / league-phase standings of a UEFA competition season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#uefa_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#uefa_standings-example}
 
 ```python
@@ -1005,6 +1045,14 @@ Per-team match statistics of one UEFA match (one row per team).
 | `team_id` | character | Club: provider identifier for the entity (Utf8 join key). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#uefa_team_statistics-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_team_statistics-example}
 
@@ -1098,6 +1146,14 @@ Teams entered in a UEFA competition season.
 | `translations_short_name_ar` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#uefa_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The UEFA host answered 404 (unknown id or route). |
+| `ValueError` | The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#uefa_teams-example}
 

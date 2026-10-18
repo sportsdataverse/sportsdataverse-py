@@ -89,6 +89,14 @@ Season team stat table: totals and per-game values, one row per team and stat bl
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#scb_team_statistics-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#scb_team_statistics-example}
 
 ```python
@@ -130,6 +138,14 @@ Club profile: names, code, home page, ticket shop, year joined and honours.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#scb_team-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#scb_team-example}
 
 ```python
@@ -167,6 +183,14 @@ Every season a club played: its name that season and its championship and cup ti
 | `is_cup_winner` | logical | Won the cup that season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#scb_team_seasons-example}
 
@@ -212,6 +236,14 @@ Per club, the current roster, one row per player (BBL only).
 | `is_young` | logical | Young-player flag (German-trained youth rule; inferred). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#scb_team_rosters-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the API has nothing for the request (an unknown id, a game before 2002-03 or not yet started, an empty table, a playoff bracket not yet drawn). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#scb_team_rosters-example}
 

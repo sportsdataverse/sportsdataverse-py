@@ -250,6 +250,12 @@ Build the polars expression mapping a canonical type to its phase family.
 
 A `pl.Expr` aliased `play_type_family`; unmapped values yield null.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | At collection time if `source` is absent from the frame. |
+
 **Example**
 
 ```python

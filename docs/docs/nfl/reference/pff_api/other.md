@@ -37,6 +37,15 @@ List the leagues you can read, with their seasons and weeks
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_ref_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_ref_leagues-example}
 
 ```python
@@ -83,6 +92,15 @@ List game results for a league, season and week
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_ref_games-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_ref_games-example}
 
 ```python
@@ -128,6 +146,15 @@ Search the player directory by name or id
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_ref_players-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_ref_players-example}
 
 ```python
@@ -150,6 +177,15 @@ Show what this API believes about the current credential
 ### Returns {#pff_api_whoami-returns}
 
 Show what this API believes about the current credential
+
+### Raises {#pff_api_whoami-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_whoami-example}
 

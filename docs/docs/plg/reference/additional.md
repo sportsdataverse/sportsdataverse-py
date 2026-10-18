@@ -36,6 +36,12 @@ polars.DataFrame | pandas.DataFrame: eight rows, `team_id` (`Int64`) and `team_u
 | `team_id` | integer | P. LEAGUE+ site team id (1-8), stable across seasons and renames. |
 | `team_uuid` | character | Preciser team uuid of the same club (team_uuid of the pleague_preciser frames). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `Nothing` | the table is a constant, no request is made. |
+
 **Example**
 
 ```python

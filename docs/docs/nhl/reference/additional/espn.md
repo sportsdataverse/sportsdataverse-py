@@ -310,6 +310,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_is_active` | logical |  |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+
 **Example**
 
 ```python

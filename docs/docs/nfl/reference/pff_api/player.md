@@ -32,6 +32,15 @@ List the seasons a player has data for
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_player_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_player_seasons-example}
 
 ```python
@@ -87,6 +96,15 @@ Snap counts for a player, broken out by position
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_player_snaps_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_player_snaps_summary-example}
 
 ```python
@@ -121,6 +139,15 @@ Player snap counts pivoted by position
 | `positions` | character | JSON-encoded list of the group's alignments, each with its per-week snap counts by snap type (PFF has no group rollup row: group totals are summed from these weeks). |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_player_position_pivot-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_position_pivot-example}
 
@@ -193,6 +220,15 @@ Offense summary for one player
 | `season` | integer | Season (starting year) of the report, filled from the report's subject. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_player_offense_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_summary-example}
 
@@ -275,6 +311,15 @@ Blocking report for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_player_offense_blocking-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_player_offense_blocking-example}
 
 ```python
@@ -355,6 +400,15 @@ Pass-blocking report for one player
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_player_offense_pass_blocking-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_player_offense_pass_blocking-example}
 
 ```python
@@ -423,6 +477,15 @@ Run-blocking report for one player
 | `season` | integer | Season (starting year) of the report, filled from the report's subject. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_player_offense_run_blocking-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_offense_run_blocking-example}
 
@@ -521,6 +584,15 @@ Passing summary for one player
 | `season` | integer | Season (starting year) of the report, filled from the report's subject. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_player_passing_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_passing_summary-example}
 
@@ -769,6 +841,15 @@ Passing by play concept for one player
 | `screen_grades_pass_rush_defense` | numeric | PFF pass-rush grade for the player (0-100) on screen passes. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_player_passing_concept-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_player_passing_concept-example}
 

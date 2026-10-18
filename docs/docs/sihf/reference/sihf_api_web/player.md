@@ -47,6 +47,14 @@ Skater season totals: games, goals, assists, points, penalty minutes, plus-minus
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sihf_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#sihf_player_stats-example}
 
 ```python
@@ -102,6 +110,14 @@ Skater goals and assists by situation: even strength, power play, short-handed, 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sihf_player_goals_assists-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#sihf_player_goals_assists-example}
 
 ```python
@@ -155,6 +171,14 @@ Skater shots: on goal (total, slot, shooting percentage), missed, post and block
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sihf_player_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#sihf_player_shots-example}
 
 ```python
@@ -203,6 +227,14 @@ Skater penalties: penalty minutes, 2-, 5- and 10-minute penalties, game miscondu
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sihf_player_penalties-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#sihf_player_penalties-example}
 
 ```python
@@ -249,6 +281,14 @@ Skater shootouts: attempts, goals, misses, percentage and shootout-winning goals
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sihf_player_shootouts-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#sihf_player_shootouts-example}
 
@@ -301,6 +341,14 @@ Skater faceoffs: taken, won, lost, per game, and win percentage overall and by z
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sihf_player_faceoffs-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#sihf_player_faceoffs-example}
 
@@ -356,6 +404,14 @@ Skater faceoffs by zone (offensive, neutral, defensive): taken, won, lost and wi
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#sihf_player_faceoffs_by_zone-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#sihf_player_faceoffs_by_zone-example}
 
 ```python
@@ -406,6 +462,14 @@ Skater faceoffs by zone (offensive, neutral, defensive) per game: taken, won and
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sihf_player_faceoffs_by_zone_per_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#sihf_player_faceoffs_by_zone_per_game-example}
 
@@ -459,6 +523,14 @@ Skater ice time by situation (even strength, power play, penalty kill), totals a
 | `row_type` | character | "data" for a regular row; "average" (league average) or "total" (attendance total) for a summary row SIHF mixes into the table. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sihf_player_time_on_ice-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | SIHF answered 404 (unknown game), or it ignored a requested season / league / phase and served another one. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#sihf_player_time_on_ice-example}
 

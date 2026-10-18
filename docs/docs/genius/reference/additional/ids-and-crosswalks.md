@@ -1,7 +1,7 @@
 ---
 title: "GENIUS — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 6
+sidebar_position: 7
 description: "GENIUS — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # GENIUS — additional Python functions — IDs and crosswalks
@@ -28,6 +28,13 @@ polars.DataFrame | pandas.DataFrame: one row per game with `game_key` (the provi
 |---|---|---|
 | `game_key` | integer / character | Provider's own game key: the BNXT, CEBL, TBF or KZS integer game id, or the Sportality platform game uuid (a string) for source sportality. |
 | `genius_match_id` | integer | Genius Sports LiveStats match id of the same game (the match_id every genius_* wrapper takes). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | unknown `source`, a missing column, or a key that maps to two ids. |
+| `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
 
 **Example**
 
@@ -62,6 +69,13 @@ polars.DataFrame | pandas.DataFrame: `team_uuid` (`Utf8`) and `genius_team_id` (
 |---|---|---|
 | `team_uuid` | character | Sportality platform team uuid. |
 | `genius_team_id` | integer | Genius team id of the same team (home_team_id / away_team_id of the genius schedule frames). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | unknown `source`, a missing column, or a key that maps to two ids. |
+| `TypeError` | `df` is not polars, or an id column has the wrong dtype. |
 
 **Example**
 

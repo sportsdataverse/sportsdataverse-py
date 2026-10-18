@@ -44,8 +44,8 @@ toc_max_heading_level: 2
 | [nhl_edge_skater_skating_speed_detail](nhl_edge/skater.md#nhl_edge_skater_skating_speed_detail) | Pull EDGE skating-speed detail for a single skater. |
 | [nhl_edge_skater_speed_top_10](nhl_edge/skater.md#nhl_edge_skater_speed_top_10) | Pull the EDGE top-10 skaters by skating speed. |
 | [nhl_edge_skater_distance_top_10](nhl_edge/skater.md#nhl_edge_skater_distance_top_10) | Pull the EDGE top-10 skaters by skating distance. |
-| [nhl_edge_skater_zone_time](nhl_edge/skater.md#nhl_edge_skater_zone_time) | Pull EDGE zone-time detail for a single skater. |
-| [nhl_edge_skater_zone_time_top_10](nhl_edge/skater.md#nhl_edge_skater_zone_time_top_10) | Pull the EDGE top-10 skaters by zone time. |
+| [nhl_edge_skater_zone_time](nhl_edge/skater-2.md#nhl_edge_skater_zone_time) | Pull EDGE zone-time detail for a single skater. |
+| [nhl_edge_skater_zone_time_top_10](nhl_edge/skater-2.md#nhl_edge_skater_zone_time_top_10) | Pull the EDGE top-10 skaters by zone time. |
 | [nhl_edge_skater_landing](nhl_edge/skater-2.md#nhl_edge_skater_landing) | Pull the EDGE skater landing page (summary across all skaters). |
 
 ## Team

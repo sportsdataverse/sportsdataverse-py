@@ -337,7 +337,7 @@ not covered by the generated API-endpoint reference above.
 | [strength_of_schedule](additional/analytics.md#strength_of_schedule) | Per-team SoS + Quad 1-4 record + WAB from completed games and ratings. |
 | [test_positional_aware_filter](additional/analytics.md#test_positional_aware_filter) | Check a positional-aware filter (from `build_positional_aware_filter`) |
 | [using_roster_pos](additional/analytics.md#using_roster_pos) | Reconcile a stats-derived position class against roster metadata. |
-| [wbb_bracketology](additional/analytics.md#wbb_bracketology) | Women's projected tournament field for a season. |
+| [wbb_bracketology](additional/analytics-2.md#wbb_bracketology) | Women's projected tournament field for a season. |
 | [wbb_strength_of_schedule](additional/analytics-2.md#wbb_strength_of_schedule) | Women's season-level SoS / Quad / WAB résumé. |
 | [weighted_avg](additional/analytics-2.md#weighted_avg) | Merge `obj` into `mutable_acc` with possession weighting. |
 

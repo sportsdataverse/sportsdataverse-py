@@ -1,7 +1,7 @@
 ---
 title: "TBF — TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL) — Team"
 sidebar_label: "Team"
-sidebar_position: 3
+sidebar_position: 4
 description: "TBF — TBF app API (miniappapi.tbf.org.tr, Turkey: BSL, TBL, KBSL) — Team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -52,7 +52,7 @@ Team totals of a finished game with the team-credited rebounds, turnovers and fo
 | `fouls` | integer | Personal fouls committed (faul). |
 | `fouls_drawn` | integer | Fouls drawn by the team (rivalFoul). |
 | `blocks_received` | integer | Team shots blocked by the opponent. |
-| `efficiency` | numeric | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
+| `efficiency` | integer | Team efficiency rating (verimlilik puani): the players' ratings summed; a number on team rows. |
 | `team_off_rebounds` | integer | Team offensive rebounds not credited to a player (homeTeamStats). |
 | `team_def_rebounds` | integer | Team defensive rebounds not credited to a player. |
 | `team_rebounds` | integer | Team rebounds not credited to a player (offensive + defensive). |
@@ -60,6 +60,14 @@ Team totals of a finished game with the team-credited rebounds, turnovers and fo
 | `team_fouls` | integer | Team fouls not credited to a player (bench / coach technicals); 0 in the samples. |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
+
+### Raises {#tbf_team_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tbf_team_box-example}
 
@@ -99,6 +107,14 @@ Every team registered in one league-season with its team-season id (team_process
 | `season_label` | character | Season label 'YYYY-YYYY' of the league-season. |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
+
+### Raises {#tbf_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tbf_teams-example}
 
@@ -171,6 +187,14 @@ Season player statistics of one team-season: totals, percentages and per-game av
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
+### Raises {#tbf_team_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tbf_team_player_stats-example}
 
 ```python
@@ -223,6 +247,14 @@ Games and results of one team-season, scheduled games included.
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
+### Raises {#tbf_team_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tbf_team_games-example}
 
 ```python
@@ -267,6 +299,14 @@ Roster of one team-season with games, minutes and per-game points and efficiency
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
 
+### Raises {#tbf_team_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tbf_team_roster-example}
 
 ```python
@@ -305,6 +345,14 @@ Coaching and club staff of one team-season.
 | `role_code` | integer | Staff sub-role code (subRolesCode). |
 
 **`return_parsed=False`** — the raw body (`dict`): the TBF envelope `{data, isSuccess, message, problemDetails}` with personal fields redacted, plus `_request` (the season, competition, game and team ids the runtime resolved).
+
+### Raises {#tbf_team_staff-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | TBF has nothing for the request (an unknown game or player, a season the league list lacks, an empty list, a finished game before 2025-26 asked for play-by-play or shots). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (an unfinished game, a body for another game, season, league or team, an error envelope, a redirect, a partial page or a changed capped list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tbf_team_staff-example}
 

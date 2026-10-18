@@ -51,6 +51,14 @@ Game header: tip-off, competition, both teams and the game state (scores are in 
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
 
+### Raises {#ibba_segev_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_segev_game_info-example}
 
 ```python
@@ -90,6 +98,14 @@ Both teams' game rosters with Segev player ids and names in English and Hebrew.
 | `api_id` | integer | External player id as an integer: null or equal to the Segev player_id (both occur within one game); its source is unverified. |
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
+
+### Raises {#ibba_segev_rosters-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_rosters-example}
 
@@ -158,6 +174,14 @@ Per-player box score of a finished game, plus a team-credited line per side.
 | `fta` | integer | Free throws attempted, derived as made + missed. |
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
+
+### Raises {#ibba_segev_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_player_box-example}
 
@@ -232,6 +256,14 @@ Team totals of both sides: final score, timeouts, lead stats, shooting, rebounds
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
 
+### Raises {#ibba_segev_team_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_segev_team_box-example}
 
 ```python
@@ -266,6 +298,14 @@ Points and team fouls in each period of a finished game.
 | `away_fouls` | integer | Team fouls the away side committed in this period. |
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
+
+### Raises {#ibba_segev_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_period_scores-example}
 
@@ -325,6 +365,14 @@ Play-by-play of a finished game: every action with shot coordinates, running sco
 | `player_out_jersey` | character | Substitution: jersey of the player going out; null on the row that records the player coming in. |
 
 **`return_parsed=False`** — the raw JSON-RPC envelope (`dict`): `result` with the method's block plus `_request` (the method and game id sent).
+
+### Raises {#ibba_segev_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Segev has nothing for the request (HTTP 404, 'game not found', a finished game with no actions). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a body for another game, a game that is not final). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_segev_pbp-example}
 

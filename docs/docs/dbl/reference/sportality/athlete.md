@@ -31,11 +31,11 @@ Player career totals, one row per ssgt.
 | `mpg` | numeric | Minutes per game, 'M.m' string. |
 | `ppg` | numeric | Points per game (a number or. |
 | `drpg` | numeric | Defensive rebounds per game. |
-| `orpg` | integer | Offensive rebounds per game. |
+| `orpg` | numeric | Offensive rebounds per game. |
 | `rpg` | numeric | Rebounds per game. |
 | `apg` | numeric | Assists per game. |
 | `stpg` | numeric | Steals per game. |
-| `blkpg` | integer | Blocks per game. |
+| `blkpg` | numeric | Blocks per game. |
 | `pfpg` | numeric | Personal fouls per game. |
 | `2_p_perc` | numeric | Two-point percentage, 0-100. |
 | `3_pm` | integer | Three-pointers made (total). |
@@ -43,7 +43,7 @@ Player career totals, one row per ssgt.
 | `3_p_perc` | numeric | Three-point percentage, 0-100. |
 | `ft_perc` | numeric | Free-throw percentage, 0-100. |
 | `topg` | numeric | Turnovers per game. |
-| `plus_minus_pg` | integer | Plus/minus per game. |
+| `plus_minus_pg` | numeric | Plus/minus per game. |
 | `info_uuid` | character | Athlete uuid on player tables, team uuid on team tables (platform key space). |
 | `info_full_name` | character | Full display name of the player. |
 | `info_first_name` | character | Given (first) name(s) of the player. |
@@ -73,6 +73,14 @@ Player career totals, one row per ssgt.
 | `info_team_id` | integer | Genius team id (Genius key space; an integer here). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sportality_athlete_career-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportality_athlete_career-example}
 
@@ -117,6 +125,14 @@ Player bio plus playerExtIds (the Genius person id).
 | `weight` | integer | Weight of the player in kilograms. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sportality_athlete_details-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportality_athlete_details-example}
 
@@ -180,6 +196,14 @@ Player profile: age, height, position, season and career totals.
 | `media_focal_point` | character | Focal point record (empty). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#sportality_athlete_profile-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site answered 404, an empty body (gameday routes before 2023/24, or an unknown game), a table with no rows, or the season and game type are not in layout-info. |
+| `sportsdataverse.errors.AssetFetchError` | an error envelope or non-JSON 200, another game / team / athlete / ssgt than the one asked for, an unfinished game or truncated play-by-play, a cut stats table, or any other failed fetch (a 500 is the site's answer for an unknown uuid and is not retried). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#sportality_athlete_profile-example}
 

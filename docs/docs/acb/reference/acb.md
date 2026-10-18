@@ -71,10 +71,10 @@ toc_max_heading_level: 2
 | [acb_round_matches](acb/other.md#acb_round_matches) | Games of one round (or week) with scores, status and broadcasters. |
 | [acb_standings](acb/other.md#acb_standings) | League table after a round (default: the current round). |
 | [acb_standings_rounds](acb/other.md#acb_standings_rounds) | Standings history: each team's position after each round, with the round's game. |
-| [acb_bracket](acb/other.md#acb_bracket) | Playoff bracket: one row per series (quarter-final, semifinal, final). |
-| [acb_bracket_games](acb/other.md#acb_bracket_games) | The games of every playoff series of a bracket, one row per game. |
-| [acb_calendar](acb/other.md#acb_calendar) | Every round of a season with its games: one call lists every game id. |
-| [acb_league_zones](acb/other.md#acb_league_zones) | League-wide shooting by court zone for a season. |
+| [acb_bracket](acb/other-2.md#acb_bracket) | Playoff bracket: one row per series (quarter-final, semifinal, final). |
+| [acb_bracket_games](acb/other-2.md#acb_bracket_games) | The games of every playoff series of a bracket, one row per game. |
+| [acb_calendar](acb/other-2.md#acb_calendar) | Every round of a season with its games: one call lists every game id. |
+| [acb_league_zones](acb/other-2.md#acb_league_zones) | League-wide shooting by court zone for a season. |
 | [acb_next_matches](acb/other-2.md#acb_next_matches) | A club's most recent and upcoming games. |
 | [acb_club_data](acb/other-2.md#acb_club_data) | Club profile: arena, contacts and links. |
 | [acb_current_roster](acb/other-2.md#acb_current_roster) | A club's players and staff for an edition (default: the current one). |

@@ -99,6 +99,14 @@ The current season's games (CMS records, decoded from the schedule page): slug, 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_schedule-example}
 
 ```python
@@ -198,6 +206,14 @@ One game's CMS record by slug (2025/26 onward): StatNet game number and team ids
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_game-example}
 
 ```python
@@ -214,13 +230,13 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/play-by-play' -H 'Content-Type: application/json' -d '{"statNetGameNumber": 23401, "homeStatNetId": "AIK", "awayStatNetId": "MODO", "scheduledDateTime": "2026-09-18T17:00:00.000Z"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `statNetGameNumber` | `statnet_game_number` |  | `Y` |  | StatNet game number (statnet_game_number in ha_schedule / ha_game), e.g. 23401. |
-| `homeStatNetId` | `home_statnet_id` |  | `Y` |  | StatNet team id of the home team, e.g. AIK. |
-| `awayStatNetId` | `away_statnet_id` |  | `Y` |  | StatNet team id of the away team, e.g. MODO. |
-| `scheduledDateTime` | `scheduled_date_time` |  | `Y` |  | Scheduled start (scheduled_date_time in ha_schedule), ISO 8601 UTC. Required by the site. |
-| `playedDateTime` | `played_date_time` |  |  | `Y` | Actual start (played_date_time), ISO 8601 UTC. Optional. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `statNetGameNumber` | `statnet_game_number` | body |  | `Y` |  | StatNet game number (statnet_game_number in ha_schedule / ha_game), e.g. 23401. |
+| `homeStatNetId` | `home_statnet_id` | body |  | `Y` |  | StatNet team id of the home team, e.g. AIK. |
+| `awayStatNetId` | `away_statnet_id` | body |  | `Y` |  | StatNet team id of the away team, e.g. MODO. |
+| `scheduledDateTime` | `scheduled_date_time` | body |  | `Y` |  | Scheduled start (scheduled_date_time in ha_schedule), ISO 8601 UTC. Required by the site. |
+| `playedDateTime` | `played_date_time` | body |  |  | `Y` | Actual start (played_date_time), ISO 8601 UTC. Optional. |
 
 ### Returns {#ha_pbp-returns}
 
@@ -256,6 +272,14 @@ One game's events (2025/26 onward): shots with outcome, goals with assists and s
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_pbp-example}
 
 ```python
@@ -272,16 +296,16 @@ Every game of a season, played or scheduled (is_played): date, display team code
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-time-games-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `team_side` | `team_side` |  |  | `Y` | Home / away split. |
-| `team` | `team` |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
-| `against_team` | `against_team` |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
-| `all_results` | `all_results` |  |  | `Y` | Result filter: W win, T tie, L loss. |
-| `game_status` | `game_status` |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
-| `decided_in` | `decided_in` |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `team_side` | `team_side` | body |  |  | `Y` | Home / away split. |
+| `team` | `team` | body |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
+| `against_team` | `against_team` | body |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
+| `all_results` | `all_results` | body |  |  | `Y` | Result filter: W win, T tie, L loss. |
+| `game_status` | `game_status` | body |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
+| `decided_in` | `decided_in` | body |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
 
 ### Returns {#ha_games-returns}
 
@@ -318,6 +342,14 @@ Every game of a season, played or scheduled (is_played): date, display team code
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_games-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_games-example}
 
 ```python
@@ -334,11 +366,11 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/league-standings-all-time' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "location": "all"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `location` | `location` |  |  | `Y` | Home / away standings split. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `location` | `location` | body |  |  | `Y` | Home / away standings split. |
 
 ### Returns {#ha_standings-returns}
 
@@ -367,6 +399,14 @@ Standings of a season. Wins and losses are REGULATION only; overtime counts incl
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_standings-example}
 
 ```python
@@ -383,19 +423,19 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-time-skaters-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "position": "all", "ages": "all", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `categories` | `category` |  |  | `Y` | Stats category (column set), one of summary, points, goals, time_on_ice, power_play, penalty_kill, equal_strength, penalties, plus_minus, faceoffs, offensive, defensive, shootouts, corsi_fenwick_pdo. Anything else answers zero rows. |
-| `position` | `position` |  |  | `Y` | Position filter (back = defence). |
-| `ages` | `ages` |  |  | `Y` | Age-group filter. |
-| `team_side` | `team_side` |  |  | `Y` | Home / away split. |
-| `team` | `team` |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
-| `against_team` | `against_team` |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
-| `all_results` | `all_results` |  |  | `Y` | Result filter: W win, T tie, L loss. |
-| `game_status` | `game_status` |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
-| `decided_in` | `decided_in` |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `categories` | `category` | body |  |  | `Y` | Stats category (column set), one of summary, points, goals, time_on_ice, power_play, penalty_kill, equal_strength, penalties, plus_minus, faceoffs, offensive, defensive, shootouts, corsi_fenwick_pdo. Anything else answers zero rows. |
+| `position` | `position` | body |  |  | `Y` | Position filter (back = defence). |
+| `ages` | `ages` | body |  |  | `Y` | Age-group filter. |
+| `team_side` | `team_side` | body |  |  | `Y` | Home / away split. |
+| `team` | `team` | body |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
+| `against_team` | `against_team` | body |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
+| `all_results` | `all_results` | body |  |  | `Y` | Result filter: W win, T tie, L loss. |
+| `game_status` | `game_status` | body |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
+| `decided_in` | `decided_in` | body |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
 
 ### Returns {#ha_skater_stats-returns}
 
@@ -425,6 +465,14 @@ Skater stats of a season, one category (column set) per call. Names and StatNet 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_skater_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_skater_stats-example}
 
 ```python
@@ -441,17 +489,17 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "summary", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `categories` | `category` |  |  | `Y` | Stats category (column set), one of summary, results, game_strength, defensive, shootouts. Anything else answers zero rows. |
-| `team_side` | `team_side` |  |  | `Y` | Home / away split. |
-| `team` | `team` |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
-| `against_team` | `against_team` |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
-| `all_results` | `all_results` |  |  | `Y` | Result filter: W win, T tie, L loss. |
-| `game_status` | `game_status` |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
-| `decided_in` | `decided_in` |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `categories` | `category` | body |  |  | `Y` | Stats category (column set), one of summary, results, game_strength, defensive, shootouts. Anything else answers zero rows. |
+| `team_side` | `team_side` | body |  |  | `Y` | Home / away split. |
+| `team` | `team` | body |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
+| `against_team` | `against_team` | body |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
+| `all_results` | `all_results` | body |  |  | `Y` | Result filter: W win, T tie, L loss. |
+| `game_status` | `game_status` | body |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
+| `decided_in` | `decided_in` | body |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
 
 ### Returns {#ha_goalie_stats-returns}
 
@@ -478,6 +526,14 @@ Goalkeeper stats of a season, one category per call. Names and StatNet team ids,
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_goalie_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_goalie_stats-example}
 
 ```python
@@ -494,17 +550,17 @@ Team stats of a season, one category per call. W / L are totals including overti
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-time-teams-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA", "categories": "results", "team_side": "all", "team": "all", "against_team": "all", "all_results": "all", "game_status": "all", "decided_in": "all"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `categories` | `category` |  |  | `Y` | Stats category (column set), one of results, goals, power_play, penalty_kill, penalties, offensive, defensive, faceoffs, shootouts, corsi_fenwick_pdo, stoppage_reasons, attendance. Anything else answers zero rows. |
-| `team_side` | `team_side` |  |  | `Y` | Home / away split. |
-| `team` | `team` |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
-| `against_team` | `against_team` |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
-| `all_results` | `all_results` |  |  | `Y` | Result filter: W win, T tie, L loss. |
-| `game_status` | `game_status` |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
-| `decided_in` | `decided_in` |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `categories` | `category` | body |  |  | `Y` | Stats category (column set), one of results, goals, power_play, penalty_kill, penalties, offensive, defensive, faceoffs, shootouts, corsi_fenwick_pdo, stoppage_reasons, attendance. Anything else answers zero rows. |
+| `team_side` | `team_side` | body |  |  | `Y` | Home / away split. |
+| `team` | `team` | body |  |  | `Y` | Team filter: all, or one team of the site's filter list (values not probed). |
+| `against_team` | `against_team` | body |  |  | `Y` | Opponent filter: all, or one team (values not probed). |
+| `all_results` | `all_results` | body |  |  | `Y` | Result filter: W win, T tie, L loss. |
+| `game_status` | `game_status` | body |  |  | `Y` | Game status filter: played drops the season's unplayed games. |
+| `decided_in` | `decided_in` | body |  |  | `Y` | How the game was decided: ft full time, ot overtime, so shootout, wo walkover. |
 
 ### Returns {#ha_team_stats-returns}
 
@@ -534,6 +590,14 @@ Team stats of a season, one category per call. W / L are totals including overti
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_team_stats-example}
 
 ```python
@@ -550,10 +614,10 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-time-goalkeepers-stats' -H 'Content-Type: application/json' -d '{"season": "2025", "phase": "HA"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `season` | `season` | body |  |  | `Y` | Season END year (2026 = 2025/26); the site's START-year key is sent as season - 1. Omitted = the season in progress. Stats and standings start in 2005/06 (2006). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
 
 ### Returns {#ha_teams-returns}
 
@@ -574,6 +638,14 @@ Teams of a season with both team keys: StatNet team id <-> display code (from th
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_teams-example}
 
 ```python
@@ -590,12 +662,12 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/player-leaderboard' -H 'Content-Type: application/json' -d '{"metric": "TP", "phase": "HA"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `metric` | `metric` |  | `Y` |  | Leaderboard metric. Seen on the site: TP, G, A, PlusMinus, Hits, FOPerc, TOI/GP (skaters). |
-| `phase` | `phase` |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
-| `team` | `team` |  |  | `Y` | Team filter; omitted = the whole league (values not probed). |
-| `isGoalkeeper` | `is_goalkeeper` |  |  | `Y` | True for a goalkeeper metric. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `metric` | `metric` | body |  | `Y` |  | Leaderboard metric. Seen on the site: TP, G, A, PlusMinus, Hits, FOPerc, TOI/GP (skaters). |
+| `phase` | `phase` | body |  |  | `Y` | Game type: HA regular season, HAPlayoff playoffs, HAkval playout (relegation series). |
+| `team` | `team` | body |  |  | `Y` | Team filter; omitted = the whole league (values not probed). |
+| `isGoalkeeper` | `is_goalkeeper` | body |  |  | `Y` | True for a goalkeeper metric. |
 
 ### Returns {#ha_leaders-returns}
 
@@ -624,6 +696,14 @@ Current-season top 25 of one metric, with the StatNet player id (the only stats 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#ha_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#ha_leaders-example}
 
 ```python
@@ -640,11 +720,11 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 
 **Example request:** `curl -X POST 'https://hockeyallsvenskan.se/api/all-players' -H 'Content-Type: application/json' -d '{"teamShortName": "AIK", "orderBy": "familyName"}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `teamShortName` | `team` |  | `Y` |  | Team display code (CMS short name: AIK, MORA, ÖIK, ...). Required: the directory pages unreliably league-wide. |
-| `orderBy` | `order_by` |  |  | `Y` | Sort: familyName or firstName. |
-| `searchQuery` | `search_query` |  |  | `Y` | Free-text name search; omitted = everyone. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `teamShortName` | `team` | body |  | `Y` |  | Team display code (CMS short name: AIK, MORA, ÖIK, ...). Required: the directory pages unreliably league-wide. |
+| `orderBy` | `order_by` | body |  |  | `Y` | Sort: familyName or firstName. |
+| `searchQuery` | `search_query` | body |  |  | `Y` | Free-text name search; omitted = everyone. |
 
 ### Returns {#ha_players-returns}
 
@@ -680,6 +760,14 @@ One team's players from the CMS directory: CMS ids, position, jersey, birth date
 | `team_logo_url` | character | Logo URL of the team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#ha_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played). |
+| `ValueError` | a value outside its enumerated set, or a field the site requires is missing. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#ha_players-example}
 

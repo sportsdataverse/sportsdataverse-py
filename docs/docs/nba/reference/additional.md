@@ -183,7 +183,7 @@ not covered by the generated API-endpoint reference above.
 | [nba_decay_rapm](additional/models-and-calculators.md#nba_decay_rapm) | Time-decay RAPM: ridge weighted by `0.5 ** (days_ago / half_life_days)`. |
 | [nba_draft_model](additional/models-and-calculators.md#nba_draft_model) | Project prospect career value + draft probability from combine measurements. |
 | [nba_expected_turnovers](additional/models-and-calculators.md#nba_expected_turnovers) | Expected TOV + residual ball-security skill from Synergy play-type mix. |
-| [nba_four_factor_rapm](additional/models-and-calculators.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
+| [nba_four_factor_rapm](additional/models-and-calculators-2.md#nba_four_factor_rapm) | Four-factor RAPM: four independent ridge fits (efg/ftr/orbd/tov) on the SAME design. |
 | [nba_in_game_win_prob](additional/models-and-calculators-2.md#nba_in_game_win_prob) | Per-play home win probability from the bundled in-game model. |
 | [nba_la_rapm](additional/models-and-calculators-2.md#nba_la_rapm) | Luck-adjusted RAPM: ridge on an expected-points response (high-variance shooting regressed). |
 | [nba_matchup_drapm](additional/models-and-calculators-2.md#nba_matchup_drapm) | Matchup-based defensive RAPM (offense-quality-controlled). |
@@ -237,7 +237,7 @@ not covered by the generated API-endpoint reference above.
 | [nba_playtype_ratings](additional/analytics.md#nba_playtype_ratings) | Season play-type-adjusted offensive/defensive team ratings. |
 | [nba_ratings_panel](additional/analytics.md#nba_ratings_panel) | Player-ratings-through-date long panel: one row per (player_id, date). |
 | [nba_raw_store_season_frame](additional/analytics.md#nba_raw_store_season_frame) | Read a committed SEASON-LEVEL capture from the raw store, parsed to a frame. |
-| [nba_referee_assignments](additional/analytics.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
+| [nba_referee_assignments](additional/analytics-2.md#nba_referee_assignments) | Fetch and parse NBA referee assignments for a given date from official.nba.com. |
 | [nba_shot_value](additional/analytics-2.md#nba_shot_value) | One-call shot-value spine: fetch, score, and run all five models. |
 | [nba_shot_value_lineups](additional/analytics-2.md#nba_shot_value_lineups) | Scored per-shot frame for one 5-man lineup (`shotchartlineupdetail`). |
 | [nba_team_clutch](additional/analytics-2.md#nba_team_clutch) | Opponent-agnostic clutch skill (shrunk clutch net-rating delta) per team. |

@@ -60,6 +60,14 @@ Schedule and results of one season and stage (pre-season, regular season, playof
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_schedule-example}
 
 ```python
@@ -106,6 +114,14 @@ Header of one finished game: date, venue, both clubs with their score and the Pr
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_game-example}
 
 ```python
@@ -140,6 +156,14 @@ Points each team scored in each quarter and overtime of one finished game.
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_periods-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_periods-example}
 
 ```python
@@ -173,6 +197,14 @@ The referee and the two umpires printed under the header of one finished game (n
 | `name_zh` | character | Official's name in Traditional Chinese. Names only: the page carries no ids or contact data. |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
+
+### Raises {#pleague_officials-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_officials-example}
 
@@ -250,6 +282,14 @@ Player box score of one finished game: minutes, points, shooting splits, rebound
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_box_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_box_players-example}
 
 ```python
@@ -301,6 +341,14 @@ Team totals of one finished game: the box score's total row, home then away.
 | `plus_minus` | integer | Sum of the players' plus/minus (2020-21 and 2021-22 only; null from 2022-23). |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
+
+### Raises {#pleague_box_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_box_teams-example}
 
@@ -357,6 +405,14 @@ Play-by-play of one finished game (2022-23 on) in game order, with shot x / y an
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_pbp-example}
 
 ```python
@@ -405,6 +461,14 @@ Regular-season standings of one season: record, scoring averages, home / away an
 | `last_n_record` | character | Record 'W-L' over the last last_n games (近N場比賽). |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
+
+### Raises {#pleague_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_standings-example}
 
@@ -480,6 +544,14 @@ Player season averages and totals of one season and stage: shooting, rebounds, a
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
 
+### Raises {#pleague_stat_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_stat_player-example}
 
 ```python
@@ -523,6 +595,14 @@ One player's profile: names, club, jersey, position, height, weight and birthpla
 | `education` | character | Education lines (學歷) as printed, joined with '; '. |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
+
+### Raises {#pleague_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_player-example}
 
@@ -575,6 +655,14 @@ One player's season totals and per-game averages, league and East Asia Super Lea
 | `ft_pct` | numeric | Free-throw percentage 0-100. |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape), the box body as the site sends it, or the parsed play-by-play record, plus `_request` (kind and the season, stage, game or player asked for).
+
+### Raises {#pleague_player_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_player_seasons-example}
 

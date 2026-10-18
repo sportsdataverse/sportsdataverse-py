@@ -1,10 +1,10 @@
 ---
-title: "GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_schedule"
-sidebar_label: "Genius Sports LiveStats: esake_team–lnbm_schedule"
+title: "GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_pbp"
+sidebar_label: "Genius Sports LiveStats: esake_team–lnbm_pbp"
 sidebar_position: 2
-description: "GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_schedule — function reference in sdv-py, the SportsDataverse Python package."
+description: "GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_pbp — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_schedule
+# GENIUS — additional Python functions — Genius Sports LiveStats: esake_team–lnbm_pbp
 
 ### esake_team_box {#esake_team_box}
 
@@ -17,7 +17,7 @@ Greek Basket League (ESAKE) (men's); season rule: END year; Genius year + 1 (202
 Convenience wrapper: a thin binding of `genius_team_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/ESAKE/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_team_box(match_id=...) reads any game unchecked.
 
 **Parameters**
 
@@ -99,6 +99,15 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `rebounds_team_offensive` | integer | Team total: team offensive rebounds |
 | `turnovers_team` | integer | Team total: team turnovers (credited to no player, e.g. shot clock) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of ESAKE). |
+
 **Example**
 
 ```python
@@ -142,6 +151,14 @@ A polars/pandas DataFrame by default; the chooser page record (`dict`): the sdv-
 | `season_rule` | character | Which rule produced season: 'label span', 'genius year + 1 (split)', 'genius year (calendar)', 'label year (calendar)' or 'unknown'. |
 | `selected` | logical | True for the competition the hosted chooser pre-selects (the org's default, not always the newest). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -160,7 +177,7 @@ Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius
 Convenience wrapper: a thin binding of `genius_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/FFBB/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_pbp(match_id=...) reads any game unchecked. Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -202,6 +219,15 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `score_2` | integer | Team 2 score after the action, always an integer (the feed sends a string in most games). |
 | `lead` | integer | Score margin after the action, team 1 minus team 2 (negative when team 2 leads) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FFBB). |
+
 **Example**
 
 ```python
@@ -221,7 +247,7 @@ Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius
 Convenience wrapper: a thin binding of `genius_player_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/FFBB/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_player_box(match_id=...) reads any game unchecked. Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -288,6 +314,15 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `eff_5` | integer | Genius efficiency formula 5. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
 | `eff_6` | integer | Genius efficiency formula 6. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
 | `eff_7` | integer | Genius efficiency formula 7. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site. Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FFBB). |
 
 **Example**
 
@@ -343,6 +378,16 @@ A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv
 | `away_team_code` | character | Away team code (local script possible) |
 | `away_score` | integer | Away points; null before tip-off (typed integer only on a route whose 3 sampled rows were all played) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `ValueError` | The season matches several competitions (pass `comp_id`). |
+| `NoDataError` | The org lists no matching competition. |
+
 **Example**
 
 ```python
@@ -361,7 +406,7 @@ Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius
 Convenience wrapper: a thin binding of `genius_shots` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/FFBB/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_shots(match_id=...) reads any game unchecked. Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -391,6 +436,15 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `player` | character | Shooter's display name as the org enters it, in the local script when it uses one. |
 | `shirt_number` | character | Shooter's shirt number (string) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FFBB). |
+
 **Example**
 
 ```python
@@ -410,7 +464,7 @@ Ligue Feminine de Basket (France, FFBB) (women's); season rule: END year; Genius
 Convenience wrapper: a thin binding of `genius_team_box` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule. Women's competition data: flagged for the wehoop mirror (Phase C).
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/FFBB/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_team_box(match_id=...) reads any game unchecked. Women's competition data: flagged for the wehoop mirror (Phase C).
 
 **Parameters**
 
@@ -492,6 +546,15 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `rebounds_team_offensive` | integer | Team total: team offensive rebounds |
 | `turnovers_team` | integer | Team total: team turnovers (credited to no player, e.g. shot clock) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FFBB). |
+
 **Example**
 
 ```python
@@ -535,6 +598,14 @@ A polars/pandas DataFrame by default; the chooser page record (`dict`): the sdv-
 | `season_rule` | character | Which rule produced season: 'label span', 'genius year + 1 (split)', 'genius year (calendar)', 'label year (calendar)' or 'unknown'. |
 | `selected` | logical | True for the competition the hosted chooser pre-selects (the org's default, not always the newest). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 **Example**
 
 ```python
@@ -553,7 +624,7 @@ Liga Nationala de Baschet Masculin (Romania) (men's); season rule: END year; Gen
 Convenience wrapper: a thin binding of `genius_pbp` to this competition, minted from the
 competition registry (`tools/codegen/basketball_competitions.yaml`).
 
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
+Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer, and data.json names no competition, so the id is checked on the game's LiveStats shell (/u/FRB/<match_id>/: one extra request per game, cached per process): its competition name must pass the label rule. genius_pbp(match_id=...) reads any game unchecked.
 
 **Parameters**
 
@@ -595,150 +666,19 @@ A polars/pandas DataFrame by default; the body or page record (`dict` / `list`):
 | `score_2` | integer | Team 2 score after the action, always an integer (the feed sends a string in most games). |
 | `lead` | integer | Score margin after the action, team 1 minus team 2 (negative when team 2 leads) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Genius has nothing for the request (an unknown match id or ORG, an org without hosted pages, a competition with no games). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed (the CloudFront block, a rate limit, a 5xx), the game is not finished, or the body is for another match, competition or ORG. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The match is not a game of this competition (another org's game, or a cup or play-off of FRB). |
+
 **Example**
 
 ```python
 from sportsdataverse.basketball.genius import lnbm_schedule, lnbm_pbp
 games = lnbm_schedule()
 lnbm_pbp(match_id=int(games['match_id'][0]))
-```
-
-### lnbm_player_box {#lnbm_player_box}
-
-`lnbm_player_box(match_id: 'int', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Player box score of a finished Liga Nationala de Baschet Masculin (Romania) game.
-
-Liga Nationala de Baschet Masculin (Romania) (men's); season rule: END year; Genius year + 1 (2016-17 = 2017).
-
-Convenience wrapper: a thin binding of `genius_player_box` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. Genius match ids are one global sequence shared by every customer: the id alone identifies the game and is NOT checked against this competition, so pass an id from this competition's schedule.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `match_id` | `int` |  | Genius match id (match_id in the schedule) of a game of this competition. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the body or page record (`dict` / `list`): `data.json` as served plus `_request` (the match id asked for), or the sdv-internal-refs capture shape of a page when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `match_id` | integer | Genius match id of the game. data.json does not carry it: it is the match_id asked for, stamped by the runtime (the global match sequence shared by every Genius customer). |
-| `tno` | integer | Team number within this game: 1 = the team listed first (home on the hosted schedule and widget), 2 = the other, 0 = no team. In-game only: not a team id. |
-| `pno` | integer | Player number within this game, the key of the team's player map; 0 = no player. In-game only: not a person id and not the shirt number. |
-| `name` | character | Display name ('T. Nichols') |
-| `first_name` | character | Given name in the competition's own script and spelling (Greek, Hebrew, Czech, ... as entered) |
-| `family_name` | character | Family name in the competition's own script |
-| `international_first_name` | character | Given name in Latin script |
-| `international_family_name` | character | Family name in Latin script (often upper case) |
-| `scoreboard_name` | character | Short display name ('T. Nichols'), in the local script when the org enters one |
-| `shirt_number` | character | Shirt number as a string ('0' and '00' differ) |
-| `playing_position` | character | Playing position code (PG, SG, SF, PF, C, G, F, ...); empty string when not entered |
-| `starter` | integer | 1 when the player started the game, else 0 |
-| `captain` | integer | 1 for the team captain, else 0; absent in some orgs |
-| `active` | integer | 1 when the player is on court now (at game end: on court at the final whistle), else 0 |
-| `minutes` | character | Minutes as the feed prints them, an 'mm:ss' text (can exceed 59 for a team; '199:60' happens); the text of an integer when the feed sends one. |
-| `seconds_played` | integer | Seconds played parsed from the printed mm:ss text as minutes * 60 + seconds (so '224:60' gives 13500); null when the feed sent an integer, whose unit is unknown. |
-| `field_goals_made` | integer | Field goals the player made in the game (two- and three-pointers together; a count). |
-| `field_goals_attempted` | integer | Field goals the player attempted in the game (two- and three-pointers together; a count). |
-| `field_goals_percentage` | numeric | Field-goal percentage, 0-100, rounded to an integer by the feed |
-| `three_pointers_made` | integer | Three-pointers made |
-| `three_pointers_attempted` | integer | Three-pointers attempted |
-| `three_pointers_percentage` | numeric | Three-point percentage, 0-100, rounded to an integer |
-| `two_pointers_made` | integer | Two-pointers made |
-| `two_pointers_attempted` | integer | Two-pointers attempted |
-| `two_pointers_percentage` | numeric | Two-point percentage, 0-100, rounded to an integer |
-| `free_throws_made` | integer | Free throws the player made in the game (a count). |
-| `free_throws_attempted` | integer | Free throws the player attempted in the game (a count). |
-| `free_throws_percentage` | numeric | Free-throw percentage, 0-100, rounded to an integer |
-| `rebounds_defensive` | integer | Defensive rebounds |
-| `rebounds_offensive` | integer | Offensive rebounds |
-| `rebounds_total` | integer | Total rebounds (offensive plus defensive) the player collected in the game. |
-| `assists` | integer | Assists credited to the player in the game. |
-| `turnovers` | integer | Turnovers committed by the player in the game. |
-| `steals` | integer | Steals credited to the player in the game. |
-| `blocks` | integer | Shots the player blocked in the game (blocks made, not received). |
-| `blocks_received` | integer | Own shots blocked by an opponent |
-| `fouls_personal` | integer | Personal fouls committed |
-| `fouls_on` | integer | Fouls drawn: personal fouls committed against the player in the game. |
-| `points` | integer | Points the player scored in the game, free throws included. |
-| `points_from_turnovers` | integer | Points off turnovers |
-| `points_second_chance` | integer | Second-chance points |
-| `points_fast_break` | integer | Fast-break points |
-| `points_in_the_paint` | integer | Points the player scored in the paint in the game (the feed's sPointsInThePaint). |
-| `plus_minus_points` | integer | Plus/minus: team point margin while the player was on court |
-| `eff_1` | integer | Genius efficiency formula 1. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_2` | integer | Genius efficiency formula 2. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_3` | numeric | Genius efficiency formula 3. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_4` | numeric | Genius efficiency formula 4. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_5` | integer | Genius efficiency formula 5. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_6` | integer | Genius efficiency formula 6. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site |
-| `eff_7` | integer | Genius efficiency formula 7. The feed carries seven formulas (eff_1..eff_7) with no labels; the definitions are not published. In samples eff_1/eff_6/eff_7 often agree (an index-rating style total), eff_3/eff_4 are decimals. Unverified: do not treat any as PIR/EFF without checking against a league site. Absent in the 2014-15 era sample (WBBL 12248), which carries eff_1..eff_6 on players and no team tot_eff_* |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.genius import lnbm_schedule, lnbm_player_box
-games = lnbm_schedule()
-lnbm_player_box(match_id=int(games['match_id'][0]))
-```
-
-### lnbm_schedule {#lnbm_schedule}
-
-`lnbm_schedule(season: 'Optional[int]' = None, comp_id: 'Optional[int]' = None, round_number: 'Optional[int]' = -1, *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'Union[pl.DataFrame, pd.DataFrame, Dict]'`
-
-Every match of one Liga Nationala de Baschet Masculin (Romania) season (hosted WebStats): ids, status, venue, teams and scores.
-
-Liga Nationala de Baschet Masculin (Romania) (men's); season rule: END year; Genius year + 1 (2016-17 = 2017).
-
-Convenience wrapper: a thin binding of `genius_schedule` to this competition, minted from the
-competition registry (`tools/codegen/basketball_competitions.yaml`).
-
-Read before use: Access (sdv-internal-refs/genius-livestats/README.md): the Genius hosts publish no robots.txt and no terms. CloudFront refuses datacenter IPs on the LiveStats and hosted hosts: from a server set the optional `GENIUS_PROXY` environment variable to an http(s) proxy URL (it is never logged or printed). The wrappers space requests at least one second apart and read only the Genius hosts; keep crawls slow and incremental. Some league sites (the NZ NBL) forbid AI crawlers in their own robots.txt, which does not cover these hosts. The competition is picked from FRB's chooser by the label rule include='lnbm|liga nationala de baschet masculin' exclude='^$'; cups and play-offs have their own comp_id.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | END-year season (see the season rule above). Omitted = the newest season the org lists. |
-| `comp_id` | `Optional[int]` | `None` | Genius competition id; skips the season lookup (needed when the label rule matches several competitions). |
-| `round_number` | `Optional[int]` | `-1` | Round to list; -1 (default) lists every round. |
-| `return_parsed` | `bool` | `True` | parse into a polars DataFrame (default True); False returns the raw body. |
-| `return_as_pandas` | `bool` | `False` | with return_parsed, return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-A polars/pandas DataFrame by default; the schedule page record (`dict`): the sdv-internal-refs capture shape of the page when `return_parsed=False`.
-
-| col_name | type | description |
-|---|---|---|
-| `match_id` | integer | From the block id extfix_<id>. Genius match id: the {matchId} of data.json and /u/; one global sequence across every Genius customer (~0.3 M in 2016, ~2.9 M in Oct 2026) |
-| `link_match_id` | integer | Match id of the block's /match/<id>/summary link; equals match_id (the capture refuses a page where it does not); null when the org hides match pages (FFBB) |
-| `comp_id` | integer | CompId of the match link, or of the team links when the org hides match pages (FFBB); equals the {compId} asked for |
-| `org` | character | ORG code of the match link (or the team links, as comp_id) |
-| `status` | character | Status from the block class STATUS_*: COMPLETE, SCHEDULED, POSTPONED, ... |
-| `date_time` | character | Tip-off as displayed, 'Mon D, YYYY, h:mm AM' (local time, zone not stated); null when unscheduled |
-| `venue_id` | integer | Genius venue id (the /venue/{id} of hosted pages); null when the venue is plain text (FFBB) |
-| `venue_name` | character | Venue name as entered (local script) |
-| `home_team_id` | integer | Home team: Genius team id (warehouse key space, global across orgs and seasons; the /team/{id} of hosted pages, the tid of the widget, the teamId of data/competition). data.json carries no team id: join on name/code |
-| `home_team_name` | character | Home team full name |
-| `home_team_code` | character | Home team code (local script possible) |
-| `home_score` | integer | Home points; null before tip-off (typed integer only on a route whose 3 sampled rows were all played) |
-| `away_team_id` | integer | Away team: Genius team id (warehouse key space, global across orgs and seasons; the /team/{id} of hosted pages, the tid of the widget, the teamId of data/competition). data.json carries no team id: join on name/code |
-| `away_team_name` | character | Away team full name |
-| `away_team_code` | character | Away team code (local script possible) |
-| `away_score` | integer | Away points; null before tip-off (typed integer only on a route whose 3 sampled rows were all played) |
-
-**Example**
-
-```python
-from sportsdataverse.basketball.genius import lnbm_schedule
-lnbm_schedule(season=2026)
 ```

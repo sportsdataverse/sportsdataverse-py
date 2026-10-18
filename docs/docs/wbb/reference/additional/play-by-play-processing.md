@@ -419,3 +419,9 @@ Read a saved ESPN WBB play-by-play payload from disk.
 **Returns**
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wbb_pbp`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |

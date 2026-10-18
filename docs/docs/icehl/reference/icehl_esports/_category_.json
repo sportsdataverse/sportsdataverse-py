@@ -1,0 +1,6 @@
+{
+  "label": "ICE Hockey League data feed (eSports hokejovyzapis S3 bucket, Austria)",
+  "position": 10,
+  "collapsed": true,
+  "link": {"type": "doc", "id": "icehl/reference/icehl_esports"}
+}

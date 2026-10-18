@@ -53,6 +53,14 @@ Schedule and results of one season stage: every game with its club ids, score an
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_schedule-example}
 
 ```python
@@ -116,6 +124,14 @@ Game header of a report: date, attendance, score by period, teams, coaches and o
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_game_info-example}
 
 ```python
@@ -172,6 +188,14 @@ Goals of a game with scorer, assists, strength and the jerseys on ice for both t
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_goals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_goals-example}
 
 ```python
@@ -215,6 +239,14 @@ Penalties of a game: team, time, player, minutes and infraction.
 | `infraction` | character | Infraction in English ('hooking'); null when the site leaves it blank. |
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
+
+### Raises {#vhl_penalties-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_penalties-example}
 
@@ -280,6 +312,14 @@ Skater box score of a game: scoring, shots, faceoffs, time on ice, hits and bloc
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_player_box-example}
 
 ```python
@@ -335,6 +375,14 @@ Goalie box score of a game: shots against, saves, save percentage and time on ic
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_goalie_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_goalie_box-example}
 
 ```python
@@ -382,6 +430,14 @@ Text broadcast of a game (online.vhlru.ru, Russian text): goals, penalties, shoo
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_pbp-example}
 
 ```python
@@ -426,6 +482,14 @@ League standings of one regular season (/standings/league/; /standings/regular/ 
 | `points` | integer | Points (PTS): 2 per win of any kind, 1 per OT or SO loss. |
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
+
+### Raises {#vhl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_standings-example}
 
@@ -489,6 +553,14 @@ Season stats of every defenseman and forward of one season stage.
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_skater_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_skater_stats-example}
 
 ```python
@@ -540,6 +612,14 @@ Season stats of every goalie of one season stage.
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_goalie_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_goalie_stats-example}
 
 ```python
@@ -578,6 +658,14 @@ Player card: position, height, weight, birth date, age, country and photo.
 | `photo_url` | character | Photo URL on img.khl.ru, /teamplayers/{team_season_id}/{player_id}/320.jpg. The team-season id is the one the photo was filed under, not the current team: 34526's photo uses 15424 = Magnitka in tn 1375 (25/26 playoffs, verified on /en/stats/players/1375/) while his newest row is 15516 (Dynamo-Altai, 1430). |
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
+
+### Raises {#vhl_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_player-example}
 
@@ -647,6 +735,14 @@ Player career by season stage and team (skater and goalie columns in one frame).
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
 
+### Raises {#vhl_player_career-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#vhl_player_career-example}
 
 ```python
@@ -686,6 +782,14 @@ CURRENT roster of a team page (player names in Cyrillic even on /en/).
 | `country` | character | Citizenship (English). |
 
 **`return_parsed=False`** — the page's parsed record (`dict`): the sdv-internal-refs capture shape, plus `_request` (season, stage, tn and the ids asked for).
+
+### Raises {#vhl_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page). |
+| `sportsdataverse.errors.AssetFetchError` | the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#vhl_roster-example}
 

@@ -55,6 +55,14 @@ All seasons of one 'extra' league (BRA, ARG, USA, ...).
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
 
+### Raises {#football_data_extra_league-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#football_data_extra_league-example}
 
 ```python
@@ -176,6 +184,14 @@ Upcoming fixtures with odds.
 | `bfecaha` | character |  |
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
+
+### Raises {#football_data_fixtures-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#football_data_fixtures-example}
 
@@ -338,6 +354,14 @@ One league-season of results + closing odds (main leagues).
 | `bfecaha` | numeric |  |
 
 **`return_parsed=False`** — the raw CSV response body (`str`).
+
+### Raises {#football_data_league_season-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | football-data.co.uk answered 404 (no file for that season or division). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#football_data_league_season-example}
 

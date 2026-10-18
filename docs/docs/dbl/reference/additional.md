@@ -34,6 +34,13 @@ keyed by Genius id and carries each player's uuid.
 
 polars.DataFrame | pandas.DataFrame: one row per player: `player_id` (Genius, `Int64`), `athlete_uuid` (null where the site has none, common before about 2005), names, nationality, gender, position, jersey number, height and weight. Birth dates are dropped.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | layout-info lists no such ssgt, or the table has no rows. |
+| `AssetFetchError` | the fetch failed or the table came back cut. |
+
 **Example**
 
 ```python
@@ -62,6 +69,14 @@ Use it for the routes that take an ssgt uuid directly (`sportality_standings`,
 **Returns**
 
 the ssgt uuid (e.g. `"qzw34da6jg"` for the 2025/26 regular season).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | layout-info lists no ssgt for that season and game type. |
+| `ValueError` | `season` is not a year. |
+| `AssetFetchError` | layout-info could not be fetched or read. |
 
 **Example**
 

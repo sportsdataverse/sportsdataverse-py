@@ -1,7 +1,7 @@
 ---
 title: "VTB — VTB United League Infobasket (Russia) — Player"
 sidebar_label: "Player"
-sidebar_position: 1
+sidebar_position: 2
 description: "VTB — VTB United League Infobasket (Russia) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -36,7 +36,7 @@ Player profile: names, birth date, height, weight, position.
 | `person_height` | integer | Height in centimetres. |
 | `person_weight` | integer | Weight in kilograms. |
 | `person_status` | integer | Person record status (1 active, 0 otherwise); meaning unverified. |
-| `player_position` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
+| `player_position` | integer | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
 | `player_hand` | character | Unobserved: null in every sample, so its type and meaning are unconfirmed. |
 | `is_naturalized` | logical | True for naturalised players. |
 | `position_id` | integer | Position id of the player (PosID), with its names in position_name_ru / position_name_en. |
@@ -44,6 +44,14 @@ Player profile: names, birth date, height, weight, position.
 | `position_name_en` | character | Position name in English. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#vtb_infobasket_player-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_infobasket_player-example}
 
@@ -123,6 +131,14 @@ A player's season-by-season totals in the competition tag.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#vtb_infobasket_player_season_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
+
 ### Example {#vtb_infobasket_player_season_stats-example}
 
 ```python
@@ -191,6 +207,14 @@ A player's career totals in the competition tag.
 | `plus_minus` | integer | Plus-minus: point differential while on the court. Null where the host sends none. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#vtb_infobasket_player_career_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_infobasket_player_career_stats-example}
 
@@ -277,6 +301,14 @@ A player's game log for one season and one team, one row per game.
 | `kpi` | integer | Efficiency index (KPI, the platform's 'КПИ'); formula unverified. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#vtb_infobasket_player_game_log-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the host has nothing for the request (an empty list, a league the API does not know, a season with no rows). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: an error envelope or string (HTTP 200), a game that is not final, a partial or possibly truncated page, or a body for another game, person, team, competition, league or season than the one asked for. |
+| `ValueError` | a season the competition tag does not have, or an argument that is not an integer id. |
 
 ### Example {#vtb_infobasket_player_game_log-example}
 

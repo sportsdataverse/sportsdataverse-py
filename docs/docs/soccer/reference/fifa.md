@@ -132,6 +132,14 @@ Match calendar of a competition season (first page; results and fixtures).
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
+### Raises {#fifa_calendar_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fifa_calendar_matches-example}
 
 ```python
@@ -175,6 +183,14 @@ One competition by id.
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
+### Raises {#fifa_competition-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fifa_competition-example}
 
 ```python
@@ -217,6 +233,14 @@ All FIFA competitions (first page).
 | `properties_id_stats_perform` | character | Stats Perform (Opta) id of the record (Utf8 cross-reference). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
+
+### Raises {#fifa_competitions-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fifa_competitions-example}
 
@@ -351,6 +375,14 @@ Matches live right now across FIFA competitions.
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
+### Raises {#fifa_live_football-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fifa_live_football-example}
 
 ```python
@@ -404,6 +436,14 @@ Players matching a name (first page).
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
+### Raises {#fifa_players_search-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fifa_players_search-example}
 
 ```python
@@ -451,6 +491,14 @@ Seasons of a competition (first page).
 | `properties_providers` | character | Data-provider tag of the record. |
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
+
+### Raises {#fifa_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fifa_seasons-example}
 
@@ -504,6 +552,14 @@ Stadiums (first page).
 | `properties_id_ifes` | character | IFES cross-reference id (Utf8). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
+
+### Raises {#fifa_stadiums-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fifa_stadiums-example}
 
@@ -565,6 +621,14 @@ One team by id.
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
 
+### Raises {#fifa_team-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#fifa_team-example}
 
 ```python
@@ -624,6 +688,14 @@ Teams matching a name (first page).
 | `properties_id_stats_perform` | character | Stats Perform (Opta) id of the record (Utf8 cross-reference). |
 
 **`return_parsed=False`** — the raw JSON `Dict` (paginated routes return the first page; the API's paging request parameter is undocumented, see the spec's x-pagination).
+
+### Raises {#fifa_teams_search-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the FIFA API returned 404 (unknown competition or team id). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#fifa_teams_search-example}
 

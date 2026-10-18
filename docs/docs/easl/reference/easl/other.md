@@ -30,6 +30,14 @@ Liveness probe of the unofficial sync server: status, message and the server's o
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#easl_health-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+
 ### Example {#easl_health-example}
 
 ```python
@@ -77,6 +85,14 @@ Every configured EASL season (the four editions 2023-24 to 2026-27) with its Dat
 | `updated_at` | character | When the sync server last synced the row, ISO 8601 with milliseconds and Z (UTC). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#easl_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_seasons-example}
 
@@ -151,6 +167,14 @@ Every fixture of one season: status, tip-off, stage, pool, venue and both teams 
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#easl_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+
 ### Example {#easl_schedule-example}
 
 ```python
@@ -224,6 +248,14 @@ Header of one finished fixture: teams, final score, status, stage, pool, venue a
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#easl_game-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+
 ### Example {#easl_game-example}
 
 ```python
@@ -272,6 +304,14 @@ Play-by-play of a finished game in delivered order, with the running score and t
 | `team2_score` | integer | Running score of team2_id as of this event. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#easl_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_pbp-example}
 
@@ -338,6 +378,14 @@ Group-stage standings of one season: rank within the pool, record, splits, point
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#easl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
+
 ### Example {#easl_standings-example}
 
 ```python
@@ -382,6 +430,14 @@ Tournament top-5 player leaders in nine categories (points, rebounds, assists, s
 | `team_code_local` | character | Alternative three-letter club code (for example TPP); null for most clubs. A club may have only one of codeLatin / codeLocal. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#easl_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the server has nothing for the request (an empty list or leaders object, a team or player without games, a 404). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is unknown or partial: any non-2xx (an unknown fixture is the server's HTTP 500), an error envelope, a game that is not finished or whose box score or play-by-play is incomplete, a stalled sync on the active season, or a body for another game, season, team or player than the one asked for. |
+| `ValueError` | a malformed id or a season that is not one of the server's END years (raised before the request that would use it). |
 
 ### Example {#easl_leaders-example}
 

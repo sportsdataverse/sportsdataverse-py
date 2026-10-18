@@ -58,6 +58,14 @@ Team totals of a game per period: everything the team did, and the part credited
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_team_box-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_team_box-example}
 
 ```python
@@ -98,6 +106,14 @@ Team-versus-team comparison bars of a game per period.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_team_comparison-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_team_comparison-example}
 
 ```python
@@ -136,6 +152,14 @@ Teams entered in a competition edition.
 | `latest_team` | character | The club's most recent team name. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_teams-example}
 
@@ -198,6 +222,14 @@ A club's games in a competition edition.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_team_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_team_matches-example}
 
 ```python
@@ -243,6 +275,14 @@ A club's statistical leaders for an edition and all-time.
 | `game_role` | character | Position or staff role, in Spanish: Base (point guard), Escolta (shooting guard), Alero (small forward), Ala-pivot (power forward), Pivot (centre); Entrenador (head coach), Segundo Entrenador / Entrenador Ayudante (assistant coach). Null or '' in many rows |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_team_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_team_leaders-example}
 
@@ -372,6 +412,14 @@ A club's player season statistics for an edition: totals, averages and per-40 si
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_team_stats-example}
 
 ```python
@@ -494,6 +542,14 @@ A club's team season totals, averages and per-40 values for an edition.
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
 
+### Raises {#acb_team_totals-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
+
 ### Example {#acb_team_totals-example}
 
 ```python
@@ -541,6 +597,14 @@ A club's single-game records (best performance per statistic).
 | `visitor_team_abbr` | character | Away team abbreviation in the record game. |
 
 **`return_parsed=False`** — the raw body (`dict`): the route's JSON plus `_request` (the ids asked for, in snake_case, with `season` the END year).
+
+### Raises {#acb_team_records-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | the ACB has nothing for the request (an unknown id, a game outside a playoff series, play-by-play or shots before 2016-17, a club with no games that season). |
+| `sportsdataverse.errors.AssetFetchError` | the fetch failed or the answer is not the one asked for (a rejected key, an error envelope or stub, a body for another season, round, club or player, a game that is not finished). |
+| `ValueError` | a missing or non-integer id, or a season before 1984 (raised before any request), or the API's HTTP 400 / 422. |
 
 ### Example {#acb_team_records-example}
 

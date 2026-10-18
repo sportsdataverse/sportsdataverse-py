@@ -58,6 +58,14 @@ One team's games for one season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nl_team_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#nl_team_schedule-example}
 
 ```python
@@ -126,6 +134,14 @@ One game's team totals: shots by period, faceoffs by zone, power play and penalt
 | `faceoffs_percentage` | numeric | Faceoff win percentage (upstream `foPercentage`); -1 without faceoffs. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nl_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_team_stats-example}
 
@@ -303,6 +319,14 @@ Season stats for one team's players.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nl_team_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#nl_team_player_stats-example}
 
 ```python
@@ -358,6 +382,14 @@ Club CMS record: names, logo, website, ticket links.
 | `fields_api_name` | character | Club key in the app's backend (e.g. 'evz') |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nl_team_info-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | a 404, or an empty answer (no games or rows for that season, team or phase). |
+| `sportsdataverse.errors.AssetFetchError` | a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#nl_team_info-example}
 

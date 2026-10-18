@@ -1,11 +1,81 @@
 ---
-title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: punting–special"
-sidebar_label: "Facet: punting–special"
+title: "NFL — PFF Developer API (api.pff.com, API key) — Facet: kickoff–special"
+sidebar_label: "Facet: kickoff–special"
 sidebar_position: 7
-description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: punting–special — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — PFF Developer API (api.pff.com, API key) — Facet: kickoff–special — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — PFF Developer API (api.pff.com, API key) — Facet: punting–special
+# NFL — PFF Developer API (api.pff.com, API key) — Facet: kickoff–special
+
+## pff_api_facet_kickoff_summary
+
+League-wide kickoff leaderboard
+
+**Endpoint URL:** `GET https://api.pff.com/v1/facet/kickoff/summary`
+
+**Valid URL:** [https://api.pff.com/v1/facet/kickoff/summary?league=nfl&season=2022](https://api.pff.com/v1/facet/kickoff/summary?league=nfl&season=2022)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `league` | `league` |  |  | `Y` | League slug for the leaderboard commands — exactly nfl, ncaa, hs, aaf and ufl are recognised; anything else is rejected. |
+| `season` | `season` |  |  | `Y` | Season for the leaderboard commands. |
+| `week` | `week` |  |  | `Y` | Week filter. |
+| `franchise_id` | `franchise_id` |  |  | `Y` | Franchise (team) id. |
+| `game_id` | `game_id` |  |  | `Y` | Single-game filter, facet family only, forwarded uncoerced. |
+| `division` | `division` |  |  | `Y` | NCAA division fan-out, facet family only, and **only honoured when league=ncaa** — for any other league it is ignored entirely. |
+
+### Returns {#pff_api_facet_kickoff_summary-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `attempts` | numeric | Kickoffs by the player. |
+| `attempts_with_hangtime` | numeric | Kickoffs with a PFF-recorded hangtime. |
+| `average_distance` | numeric | Average kickoff distance in yards. |
+| `average_hangtime` | numeric | Average kickoff hangtime in seconds. |
+| `average_starting_field_position` | numeric | Average opponent starting field position following the player's kickoffs. |
+| `average_yards_per_return` | numeric | Average return yards allowed per kickoff returned. |
+| `declined_penalties` | numeric | Penalties committed by the player that were declined. |
+| `draft_season` | numeric | Season of the player's NFL draft class, per PFF. |
+| `eligible_season` | numeric | Season of the player's NFL draft eligibility, per PFF. |
+| `fair_catches` | numeric | Kickoffs fair-caught by the return team. |
+| `franchise_id` | numeric | PFF franchise (team) id (integer join key). |
+| `grades_kickoff_kicker` | numeric | PFF kickoff kicking grade, 0-100. |
+| `jersey_number` | character | Jersey number (string; zero-padded, e.g. "09"). |
+| `kicked_yards` | numeric | Total kickoff yards. |
+| `kicks_returned` | numeric | Kickoffs returned by the opponent. |
+| `onside_kicks` | numeric | Onside kicks attempted. |
+| `penalties` | numeric | Penalties charged to the player over the covered span. |
+| `percent_returned` | numeric | Percentage of the player's kickoffs that were returned. |
+| `player` | character | Player's display name as PFF lists it. |
+| `player_game_count` | numeric | Number of games the player appeared in over the covered span. |
+| `player_id` | numeric | PFF player id (integer; matches the /players id and every player_id join key). |
+| `position` | character | PFF position code the player is listed at (e.g. QB, HB, FB, WR, TE, T, G, C, ED, DI, LB, CB, S, K, P). |
+| `return_yards` | numeric | Return yards gained by the return team on the player's kickoffs. |
+| `team` | character | Team abbreviation the player is credited to for the range. |
+| `team_name` | character | Team abbreviation the player is credited to for the range. |
+| `total_hangtime` | numeric | Total kickoff hangtime in seconds. |
+| `touchbacks` | numeric | Kickoffs resulting in touchbacks. |
+
+**`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_kickoff_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
+### Example {#pff_api_facet_kickoff_summary-example}
+
+```python
+pff_api_facet_kickoff_summary(league='nfl', season='2022')
+```
+
+_Last validated n/a._
 
 ## pff_api_facet_punting_summary
 
@@ -65,6 +135,15 @@ League-wide punting leaderboard
 | `snaps` | numeric | Punting snaps played. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_punting_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_punting_summary-example}
 
@@ -130,6 +209,15 @@ League-wide return leaderboard
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
 
+### Raises {#pff_api_facet_return_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
+
 ### Example {#pff_api_facet_return_summary-example}
 
 ```python
@@ -194,6 +282,15 @@ League-wide special-teams leaderboard
 | `grades_punt_return` | numeric | PFF punt-return grade, 0-100. |
 
 **`return_parsed=False`** — The decoded JSON body. /v1 routes return the Premium Stats envelope (`{report_slug: rows}`); /v2 routes return `{..meta.., columns, rows}`..
+
+### Raises {#pff_api_facet_special_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | No PFF API key (pass `api_key=` or set `PFF_API_KEY`). |
+| `NoDataError` | PFF answered 404 (no such route, report or team). |
+| `AssetFetchError` | The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame. |
+| `ValueError` | PFF rejected the parameters (400 `invalid_parameter` / 422). |
 
 ### Example {#pff_api_facet_special_summary-example}
 

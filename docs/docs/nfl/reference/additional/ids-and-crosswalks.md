@@ -60,6 +60,13 @@ A one-row-per-player `DataFrame` with the documented schema (`espn_id`, `full_na
 | `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
 | `college` | character | Official college (usually the last one attended) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | An athletes index page failed after retries (a 403, 429 or 5xx, an empty or non-JSON 200, or a connection failure). |
+| `CrosswalkSourceError` | Every athlete detail fetch failed; isolated failures are skipped and logged instead. |
+
 **Example**
 
 ```python
