@@ -27,6 +27,16 @@ from sportsdataverse.basketball.fiba_hub.fiba_gamepage_parsers import *  # noqa:
 from sportsdataverse.basketball.fiba_hub.fiba_gdap import *  # noqa: F401,F403
 from sportsdataverse.basketball.fiba_hub.fiba_gdap_parsers import *  # noqa: F401,F403
 
+# The per-competition families (fiba_wc_*, fiba_bcl_*, ...), minted from the competition registry.
+from sportsdataverse.basketball.fiba_hub import fiba_competitions_runtime as _competitions
+from sportsdataverse.basketball.fiba_hub.fiba_competitions_runtime import *  # noqa: F401,F403
+
 # Explicit, so ``from sportsdataverse.basketball.fiba_hub import *`` (the top-level package does it)
 # exports the wrappers and parsers and never the submodule objects.
-__all__ = [*_gdap.__all__, *_gdap_parsers.__all__, *_gamepage.__all__, *_gamepage_parsers.__all__]
+__all__ = [
+    *_gdap.__all__,
+    *_gdap_parsers.__all__,
+    *_gamepage.__all__,
+    *_gamepage_parsers.__all__,
+    *_competitions.__all__,
+]

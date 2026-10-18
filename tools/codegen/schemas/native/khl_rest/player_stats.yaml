@@ -107,5 +107,32 @@ columns:
 - description: ''
   name: bls
   type: integer
+- description: ''
+  name: w
+  type: integer
+- description: ''
+  name: l
+  type: integer
+- description: ''
+  name: sop
+  type: integer
+- description: ''
+  name: ga
+  type: integer
+- description: ''
+  name: sv
+  type: integer
+- description: ''
+  name: sv_pct
+  type: numeric
+- description: ''
+  name: gaa
+  type: numeric
+- description: ''
+  name: so
+  type: integer
+- description: ''
+  name: toi
+  type: character
 kind: dataframe
 schema: khl_player_stats

@@ -296,11 +296,13 @@ def _scope_error(route: str, body: Any, sid: int, info: Dict[str, Any]) -> Optio
     return None
 
 
-def _checked(route: str, sid: int, fields: Dict[str, Any], path_id: Optional[str] = None) -> Any:
+def _checked(
+    route: str, sid: int, fields: Dict[str, Any], path_id: Optional[str] = None, qkeys: frozenset = _QUERY_KEYS
+) -> Any:
     """Fetch a game route (after the finished-game check) and refuse a body that is not this game's."""
     info = _info(sid)
-    query = {k: v for k, v in fields.items() if k in _QUERY_KEYS}
-    body = fields if route not in _POST else {k: v for k, v in fields.items() if k not in _QUERY_KEYS}
+    query = {k: v for k, v in fields.items() if k in qkeys}
+    body = fields if route not in _POST else {k: v for k, v in fields.items() if k not in qkeys}
     full = f"{route}/{path_id}" if path_id is not None else route
     got = _fetch(full, query if route in _POST else fields, body if route in _POST else None)
     why = _scope_error(route, got, sid, info)
@@ -363,15 +365,17 @@ def _split(url: str) -> Tuple[str, Optional[str]]:
     return path, None
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET or POST a CBA route, decrypt it, refuse every wrong answer, return the JSON with the request stamped.
 
     Args:
         url: the URL a generated wrapper built (``data-server.cbaleague.com/api/<route>``; a game id in the path for
             the GET game routes).
-        params: wire keys. ``pageNumber`` / ``pageSize`` / ``startNum`` go in the query string of a POST route, every
-            other key in its JSON body (``scheduleId`` as a string). ``season`` is the END year and is sent as the
-            START year on the routes that take one. ``None`` values are dropped.
+        params: wire keys for the query string (``pageNumber`` / ``pageSize`` / ``startNum`` on a POST route; every key
+            on a GET route). ``season`` is the END year and is sent as the START year on the routes that take one.
+            ``None`` values are dropped.
+        json: the JSON body fields of a POST route (``scheduleId`` as a string). When it is ``None`` (a direct call
+            that predates the split) a POST route's paging keys are picked out of ``params`` and the rest is its body.
         **kwargs: accepted from the generated wrappers; none is supported, so any raises.
 
     Returns:
@@ -387,7 +391,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     if kwargs:
         raise TypeError(f"unsupported argument(s) for a CBA request: {sorted(kwargs)}")
     route, path_id = _split(url)
-    q = {k: v for k, v in (params or {}).items() if v is not None}
+    q = {k: v for k, v in {**(params or {}), **(json or {})}.items() if v is not None}
+    qkeys = frozenset(k for k, v in (params or {}).items() if v is not None) if json is not None else _QUERY_KEYS
     if route in _SEASON_ROUTES and "season" in q:
         q["season"] = wire_season(q["season"])
     sid: Optional[int] = None
@@ -402,10 +407,10 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         quarter = _int_arg(q["quarterNum"], "quarter_num") if q.get("quarterNum") is not None else None
         out = _pbp(sid, quarter)  # type: ignore[arg-type]
     elif sid is not None:
-        out = _checked(route, sid, q, path_id)
+        out = _checked(route, sid, q, path_id, qkeys)
     else:
         if route in _POST:
-            query = {k: v for k, v in q.items() if k in _QUERY_KEYS}
+            query = {k: v for k, v in q.items() if k in qkeys}
             out = _fetch(route, query, {k: v for k, v in q.items() if k not in query})
         else:
             out = _fetch(route, q, None)
