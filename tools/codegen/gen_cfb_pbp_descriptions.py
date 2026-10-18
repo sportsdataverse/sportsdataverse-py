@@ -109,6 +109,9 @@ STATIC: dict[str, str] = {
     "gameSpread": "Point spread used as an input to the win-probability model.",
     "gameSpreadAvailable": "True when a spread was available for the game.",
     "overUnder": "Over/under total used as a model input.",
+    "overUnderAvailable": (
+        "False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed."
+    ),
     "homeFavorite": "True when the home team was favoured by the spread.",
     # --- game / clock metadata --------------------------------------------
     "playType": "ESPN's play-type label for the play.",

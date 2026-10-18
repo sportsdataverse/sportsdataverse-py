@@ -462,6 +462,21 @@ def _warn_default_odds(game_id, odds_source, spread, total) -> None:
 #: The total every odds path falls back to when no provider has one (the pickcenter path used 55.0, R828-3).
 _DEFAULT_TOTAL = 55.5
 
+_FLAG_TEXT = {"true": True, "1": True, "false": False, "0": False}
+
+
+def _optional_flag(value: object, key: str) -> bool | None:
+    """A tri-state ``odds_override`` flag: a bool, ``"true"``/``"false"``/``"1"``/``"0"``, or None (unknown).
+
+    ``bool("False")`` is True, so a string flag is read by its text; anything else raises (R895-5).
+    """
+    if value is None or isinstance(value, bool):
+        return value
+    flag = _FLAG_TEXT.get(str(value).strip().lower())
+    if flag is None:
+        raise ValueError(f"odds_override[{key!r}] must be True/False, 'true'/'false'/'1'/'0' or None; got {value!r}")
+    return flag
+
 
 def _warn_default_total(game_id, odds_source, total) -> None:
     """Warn that a game with a market spread has no market total (R828-3): the total is a default.
@@ -2478,10 +2493,13 @@ class CFBPlayProcess(object):
                 odds_source="injected") so offline rebuilds never hit the live
                 core-odds endpoint or fall back to defaults. Validated + coerced here.
                 An optional ``overUnderAvailable`` key says whether ``overUnder`` is a
-                market total; it defaults to ``gameSpreadAvailable`` (every adapter
-                that marks a spread available also has a total), so a payload persisted
-                before the key existed rebuilds as it did. A rebuild of a game whose
-                total was defaulted passes ``overUnderAvailable=False`` and warns.
+                market total (True/False, ``"true"``/``"false"``/``"1"``/``"0"``, or
+                None; anything else raises ``ValueError``). A missing key means UNKNOWN:
+                the payload value and the play column are null, never a guess, because a
+                producer that filled 55.5 itself cannot say so without the key. EPA / WP
+                are unchanged by the flag. External overrides should carry it; a rebuild
+                of a game whose total was defaulted passes ``overUnderAvailable=False``
+                and warns.
             game_roster: optional pre-fetched game roster (the list of athlete
                 records from :func:`~sportsdataverse.cfb.cfb_game_rosters.espn_cfb_game_rosters`,
                 or the ``{"data": [...]}`` wrapper). Used by ``__attach_player_ids``
@@ -2504,7 +2522,8 @@ class CFBPlayProcess(object):
             odds_source: provenance of the resolved spread —
                 "summary_pickcenter" | "core_odds_api" | "default" | "injected".
             overUnderAvailable: False when ``overUnder`` is the 55.5 default rather than a
-                market total (also a payload key and a play column, R837-2).
+                market total, None when an ``odds_override`` did not say (also a payload
+                key and a play column, R837-2, R895-1).
         """
         if odds_override is not None:
             if not isinstance(odds_override, dict):
@@ -2520,9 +2539,7 @@ class CFBPlayProcess(object):
                 "overUnder": float(odds_override["overUnder"]),
                 "homeFavorite": bool(odds_override["homeFavorite"]),
                 "gameSpreadAvailable": bool(odds_override["gameSpreadAvailable"]),
-                "overUnderAvailable": bool(
-                    odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])
-                ),
+                "overUnderAvailable": _optional_flag(odds_override.get("overUnderAvailable"), "overUnderAvailable"),
             }
         self.gameId = int(gameId)
         # self.logger = logger
@@ -4023,8 +4040,9 @@ class CFBPlayProcess(object):
             if not self.gameSpreadAvailable:
                 # a rebuild of a default-odds game is still a default-odds game (R828-2)
                 _warn_default_odds(self.gameId, self.odds_source, self.gameSpread, self.overUnder)
-            elif not self.overUnderAvailable:
-                # and a rebuild of a defaulted total is still a defaulted total (R837-2)
+            elif self.overUnderAvailable is False:
+                # and a rebuild of a defaulted total is still a defaulted total (R837-2); None (an
+                # override that does not say) is unknown, not a default (R895-1)
                 _warn_default_total(self.gameId, self.odds_source, self.overUnder)
             return {
                 "gameSpread": self.gameSpread,

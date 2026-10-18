@@ -213,6 +213,7 @@ Release: [espn_cfb_pbp](https://github.com/sportsdataverse/sportsdataverse-data/
 | `homeFavorite` | Boolean | True when the home team was favoured by the spread. |
 | `gameSpreadAvailable` | Boolean | True when a spread was available for the game. |
 | `overUnder` | Float64 | Over/under total used as a model input. |
+| `overUnderAvailable` | Boolean | False when overUnder is the 55.5 default (the line had a spread and no total), True for a market total; null when an odds_override did not say. Absent from releases built before the column existed. |
 | `homeTeamSpread` | Float64 | ESPN's home-team Spread for the game, stamped on every play. |
 | `clock.minutes` | Int64 | Minutes remaining on the game clock at the play. |
 | `clock.seconds` | Int64 | Seconds component of the game clock at the play. |

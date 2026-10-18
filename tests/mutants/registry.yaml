@@ -1681,21 +1681,71 @@
   group: cfb-total-provenance
   finding: R837-2
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
-  mutant: 'odds_override["gameSpreadAvailable"]'
+  snippet: '_optional_flag(odds_override.get("overUnderAvailable"), "overUnderAvailable")'
+  mutant: 'None'
   test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
   expected: kill
   note: the persisted overUnderAvailable False would be dropped on the rebuild
 
-- id: cfb-ou-available-override-legacy-default
+- id: cfb-ou-available-missing-is-unknown
   group: cfb-total-provenance
-  finding: R837-2
+  finding: R895-1
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
-  mutant: 'odds_override.get("overUnderAvailable", True)'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "legacy_default_odds_override"
+  snippet: 'odds_override.get("overUnderAvailable")'
+  mutant: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "override_without_the_flag_is_unknown"
   expected: kill
-  note: a legacy four-key default-odds override (no spread, 55.5) would claim a market total
+  note: the cfb-raw / cfb-data overrides fill 55.5 and keep gameSpreadAvailable True; a guess marks 400869817's default total as a market one
+
+- id: cfb-ou-available-unknown-does-not-warn
+  group: cfb-total-provenance
+  finding: R895-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'elif self.overUnderAvailable is False:'
+  mutant: 'elif not self.overUnderAvailable:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "override_without_the_flag_is_unknown"
+  expected: kill
+  note: an override that does not say (None) is unknown, not a defaulted total; it must not warn
+
+- id: cfb-ou-available-strict-text
+  group: cfb-total-provenance
+  finding: R895-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'flag = _FLAG_TEXT.get(str(value).strip().lower())'
+  mutant: 'flag = bool(value)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "flag_is_read_strictly"
+  expected: kill
+  note: bool("False") is True
+
+- id: cfb-ou-available-core-api-fetch-failed
+  group: cfb-total-provenance
+  finding: R895-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |2-
+                return (2.5, _DEFAULT_TOTAL, True, False, False)
+
+            items = odds.get("items", []) if isinstance(odds, dict) else []
+  mutant: |2-
+                return (2.5, _DEFAULT_TOTAL, True, False, True)
+
+            items = odds.get("items", []) if isinstance(odds, dict) else []
+  test: tests/cfb/test_cfb_pbp_offline.py -k "failed_core_odds_fetch"
+  expected: kill
+  note: a failed core-odds fetch would flag its default total as a market one
+
+- id: cfb-ou-available-core-api-no-items
+  group: cfb-total-provenance
+  finding: R895-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |2-
+            if not items:
+                return (2.5, _DEFAULT_TOTAL, True, False, False)
+  mutant: |2-
+            if not items:
+                return (2.5, _DEFAULT_TOTAL, True, False, True)
+  test: tests/cfb/test_cfb_pbp_offline.py -k "empty_core_odds_collection"
+  expected: kill
+  note: an empty odds collection would flag its default total as a market one
 
 - id: cfb-pbp-root-logger
   group: cfb-total-provenance

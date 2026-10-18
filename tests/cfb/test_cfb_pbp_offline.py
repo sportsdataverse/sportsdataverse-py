@@ -10,9 +10,10 @@ from pathlib import Path
 
 import polars as pl
 import pytest
+from polars.testing import assert_frame_equal
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess, _drop_espn_play_copies
-from sportsdataverse.errors import DefaultOddsWarning, PlayOrderWarning
+from sportsdataverse.errors import AssetFetchError, DefaultOddsWarning, PlayOrderWarning
 
 # the default-odds captures processed here warn incidentally; test_default_odds_warn asserts it;
 # 401628439 warns PlayOrderWarning, asserted by
@@ -222,28 +223,90 @@ def test_a_defaulted_total_is_flagged_and_survives_the_rebuild():
     assert again.plays_frame["EPA"].equals(proc.plays_frame["EPA"])
 
 
-def test_a_market_total_is_flagged_available_and_a_legacy_override_keeps_it():
-    """401301042's pickcenter carries a total: ``overUnderAvailable`` True, no warning. A payload
-    persisted before the key existed (the four legacy keys) rebuilds the same: the flag defaults to
-    ``gameSpreadAvailable``, which every adapter sets only when it also has a total."""
+def test_a_market_total_is_flagged_available():
+    """401301042's pickcenter carries a total: ``overUnderAvailable`` True, no warning."""
     proc = _processed(401301042)
     assert proc.json["overUnderAvailable"] is True
     assert proc.plays_frame["overUnderAvailable"].unique().to_list() == [True]
-    legacy = json.loads(json.dumps({k: proc.json[k] for k in _ODDS_KEYS}))
-    again = _processed(401301042, legacy)
-    assert again.json["overUnderAvailable"] is True
-    assert again.plays_frame["overUnderAvailable"].dtype == pl.Boolean
 
 
-def test_a_legacy_default_odds_override_is_no_market_total():
-    """A legacy four-key override with ``gameSpreadAvailable`` False is the default pair: no market total."""
+@pytest.mark.parametrize("game_id", [400869817, 401301042])
+def test_an_override_without_the_flag_is_unknown_and_changes_nothing_else(game_id):
+    """R895-1: an ``odds_override`` without ``overUnderAvailable`` (every payload persisted before the key,
+    and the cfb-raw / cfb-data producers, which fill 55.5 themselves and keep ``gameSpreadAvailable``
+    True) is UNKNOWN: a null payload value and a null Boolean column, no warning, never a guess. On
+    400869817, the R837-2 game, a guess of True would mark its default total as a market one. Every
+    other column of the rebuild equals the original run's, EPA and WP included."""
+    first = _processed(game_id, match=None if game_id == 401301042 else _DEFAULT_TOTAL_WARNING.format(game_id, ".*"))
+    legacy = json.loads(json.dumps({k: first.json[k] for k in _ODDS_KEYS}))
+    again = _processed(game_id, legacy)
+    assert again.json["odds_source"] == "injected"
+    assert again.json["overUnderAvailable"] is None
+    flag = again.plays_frame["overUnderAvailable"]
+    assert flag.dtype == pl.Boolean
+    assert flag.null_count() == again.plays_frame.height
+    assert_frame_equal(again.plays_frame.drop("overUnderAvailable"), first.plays_frame.drop("overUnderAvailable"))
+
+
+def test_a_legacy_default_odds_override_is_unknown_total():
+    """A legacy four-key override with ``gameSpreadAvailable`` False still warns the default spread; its
+    total's provenance is unknown (None), not inferred from the spread flag."""
     proc = CFBPlayProcess(
         gameId=401628455,
         odds_override={"gameSpread": 2.5, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": False},
     )
     with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("injected")):
         init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
-    assert init["overUnderAvailable"] is False
+    assert init["overUnderAvailable"] is None
+
+
+_LEGACY = {"gameSpread": 7.0, "overUnder": 55.5, "homeFavorite": True, "gameSpreadAvailable": True}
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        (True, True),
+        (False, False),
+        (None, None),
+        ("False", False),
+        ("true", True),
+        ("0", False),
+        ("1", True),
+        (0, False),
+    ],
+)
+def test_the_override_flag_is_read_strictly(value, expected):
+    """R895-5: ``bool("False")`` is True; the new key reads a string flag by its text."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+    assert proc.odds_override["overUnderAvailable"] is expected
+
+
+@pytest.mark.parametrize("value", ["no", "", 2, 0.5])
+def test_the_override_flag_rejects_anything_else(value):
+    with pytest.raises(ValueError, match="overUnderAvailable"):
+        CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+
+
+def _core_odds_init(monkeypatch, getter):
+    monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp._download_json", getter)
+    proc = CFBPlayProcess(gameId=401628455, join_participants=False)
+    with pytest.warns(DefaultOddsWarning, match=_DEFAULT_ODDS_WARNING.format("default")):
+        return proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+
+
+def test_a_failed_core_odds_fetch_has_no_market_total(monkeypatch):
+    """R895-2: the core odds endpoint raising falls back to the default pair, total included."""
+
+    def _boom(*a, **k):
+        raise AssetFetchError("core odds unavailable")
+
+    assert _core_odds_init(monkeypatch, _boom)["overUnderAvailable"] is False
+
+
+def test_an_empty_core_odds_collection_has_no_market_total(monkeypatch):
+    """R895-2: an odds collection with no items falls back to the default pair, total included."""
+    assert _core_odds_init(monkeypatch, lambda *a, **k: {"items": []})["overUnderAvailable"] is False
 
 
 def test_processing_leaves_the_root_logger_alone():
