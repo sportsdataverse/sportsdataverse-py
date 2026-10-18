@@ -214,9 +214,10 @@ def _plus1(season_id: Any) -> Optional[int]:
 
 
 def _join(v: Any) -> Optional[str]:
-    """A list of strings as ``"a,b"``; a string as it is."""
+    """A list of strings as ``"a,b"``; a string as it is. Objects (``tvChannel``) join their ``name``; nulls skip."""
     if isinstance(v, list):
-        return ",".join(str(x) for x in v) or None
+        parts = (x.get("name") if isinstance(x, dict) else x for x in v)
+        return ",".join(str(x) for x in parts if x is not None) or None
     return _s(v)
 
 
