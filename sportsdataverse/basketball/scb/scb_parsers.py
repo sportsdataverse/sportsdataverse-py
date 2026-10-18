@@ -102,7 +102,7 @@ _FLOAT = re.compile(r"percent|ratio|per_game|average|height|(^|_)value$")
 _STR = re.compile(
     r"(^|_)(name|url|time|tlc|type|status|progress|function|position|stage|competition|bucket|side|scope|stat|"
     r"direction|round|streak|channel|address|nationalities|teams|ids|qualifiers|identifier|date|achievements|"
-    r"outcomes|corrections|info|mascot|aggregation|short|reference)$"
+    r"outcomes|corrections|info|mascot|aggregation|short|reference|shirt_number)$"
 )
 _BOOL = re.compile(r"^(is|has)_|^overall$|_recomputed$")
 _NUM = re.compile(r"^-?\d+(\.\d+)?$")

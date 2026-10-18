@@ -165,7 +165,7 @@ matching `parse_*` function for NHL / MLB sibling APIs. See
 | [Ligue Magnus](magnus/) | `sportsdataverse.hockey.magnus` | Ligue Magnus (11) |
 | [KHL](khl/) | `sportsdataverse.hockey.khl` | KHL (site REST + webcaster API) (25) |
 | [VHL](vhl/) | `sportsdataverse.hockey.vhl` | VHL (13) |
-| [FIBA (digital API and game pages)](fiba_hub/) | `sportsdataverse.basketball.fiba_hub` | FIBA digital API and game pages (101) |
+| [FIBA (digital API and game pages)](fiba_hub/) | `sportsdataverse.basketball.fiba_hub` | FIBA digital API and game pages (173) |
 | [Genius Sports LiveStats](genius/) | `sportsdataverse.basketball.genius` | Genius Sports LiveStats (59) |
 | [Sportradar Atrium](atrium/) | `sportsdataverse.basketball.atrium` | Sportradar Atrium embed API (62) |
 | [NBL Australia (Rosetta)](nbl_au/) | `sportsdataverse.basketball.nbl_au` | NBL Rosetta proxy (NBL, WNBL, NBL1) (22) |

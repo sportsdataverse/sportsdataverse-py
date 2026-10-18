@@ -64,6 +64,13 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_game_shifts {#pwhl_game_shifts}
 
 `pwhl_game_shifts(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -117,6 +124,13 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 
 `game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_leaders {#pwhl_leaders}
 
 `pwhl_leaders(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -156,6 +170,13 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 | `photo_small` | character | URL of the small-format headshot image for the PWHL leader-board player. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_pbp {#pwhl_pbp}
 
@@ -301,6 +322,13 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 | `on_ice_home` | character | Comma-joined sorted player_ids on ice for the home team. |
 | `on_ice_away` | character | Comma-joined sorted player_ids on ice for the away team. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_player_box {#pwhl_player_box}
 
 `pwhl_player_box(game_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -321,6 +349,13 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 
 A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_player_game_log {#pwhl_player_game_log}
 
 `pwhl_player_game_log(player_id: 'int', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -337,6 +372,13 @@ PWHL player game-by-game log.
 **Returns**
 
 One row per game played: `id` (the game id), `date_played`, `home_team_code` / `visiting_team_code` and names, `player_team`, `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes`, `ice_time_minutes_seconds`, faceoff, power-play, short-handed and shootout counts. Counts arrive as strings except `points` and the percentages (Int64). A pandas DataFrame when `return_as_pandas` is True; a zero-row frame for a player with no games.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_player_info {#pwhl_player_info}
 
@@ -357,6 +399,13 @@ NOTE: returns an empty frame pending a captured fixture + correct endpoint wirin
 **Returns**
 
 A zero-row frame today -- the `statviewfeed` reply is not a `SiteKit` envelope, so there is nothing to parse (see the note above). A pandas DataFrame when `return_as_pandas` is True.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_player_search {#pwhl_player_search}
 
@@ -405,6 +454,13 @@ One row per matching player (String): `person_id`, `player_id`, `first_name` / `
 | `profile_image` | character | File name of the player's profile photo, not a URL (e.g. '7dea378a91cedc9d5d14b1222802322c.jpg'). |
 | `score` | character | Search relevance score of the match as a decimal string (e.g. '5.911529541015625'), not a game score. |
 | `last_active_date` | character | Date (YYYY-MM-DD) the feed reports the person as last active; for the active players captured it equals the capture date, so it is not the date of the player's last game. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_player_stats {#pwhl_player_stats}
 
@@ -476,6 +532,13 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_player_toi {#pwhl_player_toi}
 
 `pwhl_player_toi(game_id: 'int', return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, pd.DataFrame]'"`
@@ -526,6 +589,13 @@ the newest season overall is usually still before its playoffs, with no bracket.
 
 One row per playoff series: `round` / `round_name` / `round_type_name`, `series_letter` / `series_name`, `team1` / `team2` (team ids), `team1_wins` / `team2_wins` (Int64), `winner` (the winning team id, but the feed often leaves it empty even after a series ends, so read the result from the win counts), `feeder_series1` / `feeder_series2`, and `games` (a list of structs, one per game: ids, both teams, goal counts, status, date). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The seasons feed lists no playoff season, or the feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_schedule {#pwhl_schedule}
 
 `pwhl_schedule(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -558,6 +628,14 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 | `venue` | character | Venue where the game was played. |
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404, or, with no season given, the seasons feed lists no regular season. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+| `ValueError` | No season matches `season`. |
 
 ### pwhl_scorebar {#pwhl_scorebar}
 
@@ -642,6 +720,13 @@ One row per game in the window, as the feed ships it (String): `id`, `season_id`
 | `visitor_logo` | character | URL of the logo image for the visiting team. |
 | `flo_hockey_url` | character | URL to the FloHockey streaming page for this PWHL game. |
 | `combined_client_code` | character | Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_skater_rapm {#pwhl_skater_rapm}
 
@@ -769,6 +854,13 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `team` | character | Team name. |
 | `wins` | integer | Wins. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_stats {#pwhl_stats}
 
 `pwhl_stats(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, position: 'str' = 'skaters', return_as_pandas: 'bool' = False) -> 'Any'`
@@ -879,6 +971,13 @@ One row per player for that season and position, as the feed ships it (String, ~
 | `team_breakdown` | integer | Per-team statistical breakdown. |
 | `is_total` | double | Whether the row is a season total. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_streaks {#pwhl_streaks}
 
 `pwhl_streaks(return_as_pandas: 'bool' = False) -> 'Any'`
@@ -962,6 +1061,13 @@ One row per rostered player: `player_id`, `person_id`, names (`first_name`, `las
 | `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
 | `catches` | character | Catching hand (goalies). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_teams {#pwhl_teams}
 
 `pwhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
@@ -990,6 +1096,13 @@ One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_la
 | `division` | character | Division identifier. |
 | `team_logo` | character | URL to the team logo image. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 ### pwhl_transactions {#pwhl_transactions}
 
 `pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'`
@@ -1005,6 +1118,13 @@ PWHL roster transactions.
 **Returns**
 
 One row per transaction on the feed's current page (the newest 20): `transaction_date` / `transaction_time`, `transaction_type` / `ttype_text`, `title`, `detail`, `player_id` / `player_name` / `position`, and `team_id` / `team_name` / `team_code` / `team_city` (String). A pandas DataFrame when `return_as_pandas` is True.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 ### pwhl_unit_ratings {#pwhl_unit_ratings}
 

@@ -20,7 +20,7 @@ import yaml
 # where sys.path[0] is this file's dir rather than the repo root.
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tools.codegen import render, spec  # noqa: E402
+from tools.codegen import render, render_notebooks, spec  # noqa: E402
 from tools.hooks import sync_docs_changelog  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -83,7 +83,10 @@ def _transform(name: str, module: str = "sportsdataverse._codegen_runtime"):
 
     found = getattr(importlib.import_module(module), name, None)
     # ponytail: nfl_api_runtime._bool_str is a copy of the shared bool_str.
-    return found or getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name))
+    found = found or getattr(_codegen_runtime, {"_bool_str": "bool_str"}.get(name, name), None)
+    if found is None:
+        raise ValueError(f"runtime name {name!r} is in neither {module} nor sportsdataverse._codegen_runtime")
+    return found
 
 
 def _apply_transform(p: spec.Param, value: object, vals: dict, getter_module: str) -> object:
@@ -174,7 +177,9 @@ def _example_url(
 
 
 def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
-    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint."""
+    """The body :func:`_example_url` leaves out: ``in_body`` params + ``fixed_params`` of a body endpoint,
+    passed through the endpoint's ``body_builder`` when it declares one (as the wrapper does).
+    Only top-level None values are dropped; a builder owns None handling inside what it nests."""
     body = {**ep.body_fixed}
     vals = {p.python_name: ep.example_args.get(p.python_name, p.default) for p in (*ep.path_params, *ep.query_params)}
     for p in ep.query_params:
@@ -183,6 +188,8 @@ def _example_body(ep: spec.Endpoint, getter_module: str) -> dict:
             body[p.api] = _apply_transform(p, v, vals, getter_module) if p.has_transform else v
             if p.wire_transform and body[p.api] is not None:  # what the runtime really sends
                 body[p.api] = _transform(p.wire_transform, getter_module)(body[p.api])
+    if ep.body_builder:
+        body = _transform(ep.body_builder, getter_module)(body)
     return {k: v for k, v in body.items() if v is not None}
 
 
@@ -209,8 +216,7 @@ def _returns_dict(schema_doc: dict) -> bool:
 # Getters that raise the package error vocabulary (sportsdataverse/errors.py): a 404 is
 # ``NoDataError``, a 400/422 is ``ValueError``, any other failed fetch is ``AssetFetchError``
 # -- never ``{}``. Every generated wrapper on one of them names all three in ``Raises:``. Absent on purpose:
-# nba_stats / wnba_stats still answer a failed fetch with ``{}`` (PR #693), nflpro
-# raises its own types.
+# nflpro raises its own types.
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
@@ -256,6 +262,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.hockey.shl.shl_runtime",
         "sportsdataverse.hockey.vhl.vhl_runtime",
         "sportsdataverse.thesportsdb.thesportsdb_runtime",
+        "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.soccer.football_data_runtime",
         "sportsdataverse.soccer.uefa_runtime",
         "sportsdataverse.cfb.on3_runtime",
@@ -264,6 +271,7 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.mbb.kenpom_runtime",
         "sportsdataverse.mbb.torvik_runtime",
         "sportsdataverse.mlb.mlb_statcast_runtime",
+        "sportsdataverse.nba.nba_stats_runtime",
         "sportsdataverse.nfl.nfl_api_runtime",
         "sportsdataverse.nfl.pff_api_runtime",
         "sportsdataverse.nfl.pff_runtime",
@@ -331,7 +339,8 @@ def _build_docstring(
     ``returns_frames`` marks a ``kind: frames`` returns schema (a dict of frames) whose
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
-    ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name.
+    ``NoDataError`` / ``ValueError`` / ``AssetFetchError`` lines, merged with any ``raises:``
+    line naming the same error (see :func:`_raises_lines`).
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -407,10 +416,7 @@ def _build_docstring(
         )
     else:
         lines.append(f"    {raw_doc.capitalize() if raw_doc else 'The raw JSON ``Dict``'}.")
-    raises = list(extras.get("raises") or [])
-    if vocab_raises:
-        named = " ".join(raises)
-        raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
+    raises = _raises_lines(extras, vocab_raises)
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -442,6 +448,70 @@ def _build_docstring(
         lines += [f"    * {n}" for n in notes]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _raises_lines(extras: dict, vocab_raises: bool) -> list[str]:
+    """The ``Raises:`` lines of a generated wrapper: the YAML ``raises:`` merged with the vocabulary.
+
+    A vocabulary error the YAML also names keeps both: the standard meaning, then the YAML
+    qualifier, in one line (see :func:`_merge_raises`)."""
+    rows = [_raises_row(str(r)) for r in extras.get("raises") or []]
+    if vocab_raises:
+        for names, line in _VOCAB_RAISES:
+            at = next((i for i, r in enumerate(rows) if r["exc"].rsplit(".", 1)[-1] in names), len(rows))
+            rows.insert(at, _raises_row(line))
+    return [f"{r['exc']}: {r['description']}" for r in _merge_raises(rows)]
+
+
+def _raises_row(line: str) -> dict:
+    exc, _, desc = line.partition(":")
+    return {"exc": exc.strip(), "description": " ".join(desc.split())}
+
+
+# A sentence break: end punctuation, then a capital / code span / paren (``e.g. 401`` stays whole).
+_SENTENCE_BREAK = re.compile(r"(?<=[.!?])\s+(?=[A-Z`(])")
+
+
+#: Alias class name -> the class it is (``errors.NoESPNDataError is errors.NoDataError``), from ``_VOCAB_RAISES``.
+_RAISES_ALIAS = {alias: names[0] for names, _line in _VOCAB_RAISES for alias in names[1:]}
+
+
+def _merge_raises(rows: list[dict]) -> list[dict]:
+    """One row per exception (keyed on the bare class name, an alias on its class), texts joined, repeats dropped.
+
+    Each text gets a leading capital; a ``None`` entry (a docstring saying what happens
+    instead of raising) is not an exception and is skipped."""
+    merged: dict[str, dict] = {}
+    for r in rows:
+        exc = r["exc"].strip()
+        if not exc or exc == "None":
+            continue
+        desc = r["description"].strip()
+        bare = exc.rsplit(".", 1)[-1]
+        key = _RAISES_ALIAS.get(bare, bare)
+        row = merged.setdefault(key, {"exc": exc, "parts": []})
+        if bare != key:  # an alias (NoESPNDataError) names the class more specifically than the vocabulary line
+            row["exc"] = exc
+        parts = row["parts"]
+        for s in _SENTENCE_BREAK.split(desc[:1].upper() + desc[1:]):
+            if s and s not in parts:
+                parts.append(s)
+    out = []
+    for m in merged.values():
+        text = m["parts"][0] if m["parts"] else ""
+        for s in m["parts"][1:]:
+            text += ("" if text[-1] in ".!?" else ".") + " " + s
+        out.append({"exc": m["exc"], "description": text})
+    return out
+
+
+def _raises_rows(lines: list[str]) -> list[dict]:
+    """``[{exc, description}]`` table rows (pipe-escaped markdown) from ``"Exc: description"`` lines."""
+    rows = []
+    for line in lines:
+        exc, _, desc = line.partition(":")
+        rows.append({"exc": exc.strip(), "description": _normalize_rst(" ".join(desc.split())).replace("|", "\\|")})
+    return rows
 
 
 @functools.lru_cache(maxsize=None)
@@ -486,7 +556,8 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
     3. Empty string (silent fallback).
 
     Pipe characters in descriptions are escaped so they don't break the markdown
-    table renderer.
+    table renderer. ``where`` is ``path`` / ``query`` / ``body``: the reference block of a
+    body endpoint (``body: form|json``) shows it as an ``In`` column.
     """
     doc_descs: dict[str, str] = {}
     if league_prefix and fn_name:
@@ -506,6 +577,7 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
                 "required": p.required,
                 "nullable": not p.required,
                 "description": desc,
+                "where": "body" if p.in_body else ("query" if p.is_query else "path"),
             },
         )
     return rows
@@ -1232,6 +1304,7 @@ class _EndpointView:
         self.body_params = ep.body_params
         self.url_fixed = ep.url_fixed
         self.body_fixed = ep.body_fixed
+        self.body_builder = ep.body_builder or ""
         self.curl_example = ""
         if ep.body != "query":
             if self.example_url:
@@ -1261,6 +1334,7 @@ class _EndpointView:
         self.http_method = ep.method.upper()
         self.valid_url = self.example_url  # empty for a body endpoint (a GET would 405): its docs show the curl request
         self.param_rows = _param_rows(ep, league.prefix, fn_name)
+        self.raises_rows = _raises_rows(_raises_lines(doc_extras or {}, getter_module in _VOCAB_GETTERS))
         self.return_table = _return_table(ep.returns_schema, league.prefix)
         schema_doc = _schema_doc(ep.returns_schema, league.prefix)
         self.return_frames = schema_doc.get("kind") == "frames"
@@ -1642,11 +1716,15 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
             for rt in api.runtime_imports:
                 if rt != "_get" and rt in v.path_build_expr:
                     transforms.add(rt)
-    # The family getters the routes call (``_get`` first), then the transforms actually used. A route's
-    # ``pkg.module:fn`` getter is its own import line instead.
+        if v.body_builder:
+            transforms.add(v.body_builder)
+    # The family getters the routes call (``_get`` first), then the transforms and body builders actually
+    # used, split by the module that defines them. A route's ``pkg.module:fn`` getter is its own import line.
     routes = [_route_getter(ep, api) for ep in api.endpoints]
     getters = {name for _, name, imp in routes if imp is None}
-    runtime_imports = list(dict.fromkeys([*sorted(getters, key=lambda n: (n != "_get", n)), *sorted(transforms)]))
+    runtime_imports, shared_imports = _split_runtime_imports(
+        [*sorted(getters, key=lambda n: (n != "_get", n)), *sorted(transforms)], api.getter_module
+    )
     getter_imports = sorted({imp for _, _, imp in routes if imp is not None})
     template = render.ENV.get_template("api_module.py.jinja")
     return template.render(
@@ -1657,12 +1735,39 @@ def render_flat_module(api: spec.FlatApi, league_prefix: str = "") -> str:
         endpoints=views,
         parser_imports=sorted(parser_imports),
         runtime_imports=runtime_imports,
+        shared_imports=shared_imports,
         getter_imports=getter_imports,
         passthrough_query=api.passthrough_query,
         getter_module=api.getter_module,
         auth=api.auth,
         parser_columns=api.parser_columns,
     )
+
+
+def _split_runtime_imports(names: list[str], getter_module: str) -> tuple[list[str], list[str]]:
+    """``(from getter_module, from _codegen_runtime)`` import names, as :func:`_transform` resolves them.
+
+    A transform or ``body_builder`` the family's getter module lacks resolves from the shared
+    runtime, so the generated module must import it from there; an ``import ... as`` alias covers
+    :func:`_transform`'s renamed fallback. A name neither module defines fails here, at generate
+    time, not when the generated module is imported."""
+    import importlib
+
+    from sportsdataverse import _codegen_runtime
+
+    own = importlib.import_module(getter_module)
+    local, shared = [], []
+    for name in dict.fromkeys(names):
+        if hasattr(own, name):
+            local.append(name)
+            continue
+        alias = {"_bool_str": "bool_str"}.get(name, name)
+        if not hasattr(_codegen_runtime, alias):
+            raise ValueError(
+                f"runtime name {name!r} is in neither {getter_module} nor sportsdataverse._codegen_runtime"
+            )
+        shared.append(name if alias == name else f"{alias} as {name}")
+    return local, shared
 
 
 def _assert_declared_types_are_strings(schemas: dict) -> None:
@@ -4445,11 +4550,20 @@ def _doc_view(obj) -> dict:
     if not raw_example and fb["example"]:
         raw_example = fb["example"]
     example = _clean_example(raw_example)
+    # ponytail: strict-parser Raises only; a docstring the strict parser drops renders none
+    raises = _merge_raises(
+        [
+            {"exc": r.type_name, "description": _normalize_rst(" ".join((r.description or "").split()))}
+            for r in (ds.raises if ds is not None else [])
+            if r.type_name
+        ]
+    )
     result = {
         "short": _normalize_rst((ds_short or "").strip()),
         "long": long,
         "params": params,
         "returns": returns,
+        "raises": raises,
         "example": example,
         "methods": [],
     }
@@ -4531,11 +4645,15 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         for p in view["params"]:
             for k in ("type", "default", "description"):
                 p[k] = p[k].replace("|", "\\|")
+        for r in view["raises"]:
+            r["description"] = r["description"].replace("|", "\\|")
         # Class methods (classes only): escape each method's param cells too.
         for m in view.get("methods", []):
             for p in m["params"]:
                 for k in ("type", "default", "description"):
                     p[k] = p[k].replace("|", "\\|")
+            for r in m["raises"]:
+                r["description"] = r["description"].replace("|", "\\|")
         # Returns column table from the committed autodoc schema (offline read);
         # empty list -> the template falls back to the docstring Returns prose.
         # Blank description cells are backfilled from the mined SDV R-package dict
@@ -4555,6 +4673,7 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 "signature": _autodoc_signature(obj),
                 "return_columns": return_columns,
                 "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                "minted": hasattr(obj, "__sdv_base__"),
                 **view,
             },
         )
@@ -4588,8 +4707,9 @@ def render_autodoc_page(prefix: str | None, corpus: str) -> str | None:
     else:
         title = f"{_doc_display_name(prefix)} — additional Python functions"
         module = _home_module(prefix)
+    minted = any(fn.get("minted") for g in groups for fn in g["functions"])
     template = render.ENV.get_template("autodoc_page.md.jinja")
-    return template.render(title=title, module=module, sidebar_position=50, groups=groups)
+    return template.render(title=title, module=module, sidebar_position=50, groups=groups, minted=minted)
 
 
 def _autodoc_names_by_scope() -> dict[str | None, list[str]]:
@@ -5064,6 +5184,13 @@ def _pack_families(
                 part, used, n_part = [], 0, n_part + 1
             part.append(n)
             used += s
+        # A family's last page never holds one function alone when the page before can spare one
+        # and the two still fit the budget (a single function over the budget keeps its own page).
+        if n_part > 1 and len(part) == 1 and len(pages[-1][3]) > 2:
+            prev = pages[-1][3]
+            moved = dict(families[k])[prev[-1]]
+            if used + moved <= _PAGE_MD_BUDGET:
+                part.insert(0, prev.pop())
         pages.append((_slugify(k) + ("" if n_part == 1 else f"-{n_part}"), label[k], n_part, part))
     return pages
 
@@ -5510,6 +5637,9 @@ def _render_docs_all() -> dict[str, str]:
         out[f"reference/{_AUTODOC_GLOBAL_PAGE}"] = global_autodoc
     _split_family_pages(out, None, anchor_map)
     out[_ANCHOR_MAP_REL] = json.dumps(anchor_map, indent=1, sort_keys=True)
+    # The tutorial pages (rendered by render_notebooks.py) deep-link functions; relink them against THIS
+    # anchor map, so a function the splitter just moved never strands a link and --check covers them.
+    out.update(render_notebooks.relinked_pages(anchor_map))
     out[_LEAGUES_JSON_REL] = render_leagues_json()
     try:
         pages = sync_docs_changelog.render((ROOT / "CHANGELOG.md").read_text(encoding="utf-8"))

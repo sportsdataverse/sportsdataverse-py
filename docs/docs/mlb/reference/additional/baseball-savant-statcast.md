@@ -460,6 +460,12 @@ A polars (or pandas) DataFrame, one row per pitch. A window with no games return
 | `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
 | `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
+
 **Example**
 
 ```python
@@ -615,6 +621,12 @@ A polars (or pandas) DataFrame, one row per minor-league pitch. A window with no
 | `swing_path_tilt` | double | Vertical tilt of the swing path (degrees). |
 | `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
 | `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
 
 **Example**
 
@@ -772,6 +784,12 @@ A polars (or pandas) DataFrame, one row per WBC pitch. A window with no games re
 | `swing_path_tilt` | double | Vertical tilt of the swing path (degrees). |
 | `intercept_ball_minus_batter_pos_x_inches` | double | Horizontal offset of ball-bat intercept from batter position (inches). |
 | `intercept_ball_minus_batter_pos_y_inches` | double | Depth offset of ball-bat intercept from batter position (inches). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | When Savant answers an error status for a chunk after `download`'s retries; an outage is never reported as an empty window. |
 
 **Example**
 

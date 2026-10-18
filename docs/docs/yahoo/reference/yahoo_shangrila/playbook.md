@@ -1,11 +1,11 @@
 ---
-title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook"
-sidebar_label: "Playbook"
+title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team"
+sidebar_label: "Playbook: boxscore–team"
 sidebar_position: 5
-description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook — function reference in sdv-py, the SportsDataverse Python package."
+description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook
+# YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Playbook: boxscore–team
 
 ## yahoo_playbook_boxscore
 
@@ -201,6 +201,14 @@ Yahoo shangrila persisted query `playbookBoxscore` -> tables: football_positions
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_boxscore-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_boxscore-example}
 
 ```python
@@ -365,6 +373,14 @@ Yahoo shangrila persisted query `playbookBoxscorePoll` -> tables: football_posit
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_boxscore_poll-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_boxscore_poll-example}
 
 ```python
@@ -408,6 +424,14 @@ Yahoo shangrila persisted query `playbookBoxscoreSocialShare` -> one row per `ga
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_boxscore_social_share-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_boxscore_social_share-example}
 
 ```python
@@ -436,6 +460,14 @@ Yahoo shangrila persisted query `playbookCombatMatch` -> one row per `games` ent
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_playbook_combat_match-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_playbook_combat_match-example}
 
@@ -552,6 +584,14 @@ Yahoo shangrila persisted query `playbookGame` -> one row per `games` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_game-example}
 
 ```python
@@ -585,6 +625,14 @@ Yahoo shangrila persisted query `playbookGameOddsPoll` -> one row per `games` en
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_game_odds_poll-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_game_odds_poll-example}
 
 ```python
@@ -613,6 +661,14 @@ Yahoo shangrila persisted query `playbookGolfTournament` (response body not capt
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_playbook_golf_tournament-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_playbook_golf_tournament-example}
 
@@ -649,6 +705,14 @@ Yahoo shangrila persisted query `playbookLeagueOdds` -> one row per `leagues` en
 | `conferences` | character | JSON-encoded list of the league's conference nodes, each carrying an id, a name and its member teams. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_playbook_league_odds-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_playbook_league_odds-example}
 
@@ -727,6 +791,14 @@ Yahoo shangrila persisted query `playbookPlayer` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_player-example}
 
 ```python
@@ -762,6 +834,14 @@ Yahoo shangrila persisted query `playbookPlayerSocialShare` -> one row per `play
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_player_social_share-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_player_social_share-example}
 
 ```python
@@ -788,6 +868,14 @@ Yahoo shangrila persisted query `playbookRace` -> one row per `games` entry
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_playbook_race-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_playbook_race-example}
 
@@ -871,6 +959,14 @@ Yahoo shangrila persisted query `playbookTeam` -> tables: teams, leagues
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_team-example}
 
 ```python
@@ -941,70 +1037,18 @@ Yahoo shangrila persisted query `playbookTeamBasic` -> one row per `teams` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_playbook_team_basic-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_playbook_team_basic-example}
 
 ```python
 yahoo_playbook_team_basic()
-```
-
-_Last validated n/a._
-
-## yahoo_playbook_team_social_share
-
-Yahoo shangrila persisted query `playbookTeamSocialShare` -> one row per `teams` entry
-
-**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare`
-
-**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTeamSocialShare)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `teamId` | `team_id` |  |  | `Y` | teamId query parameter. |
-
-### Returns {#yahoo_playbook_team_social_share-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `sport_sport_id` | character | Yahoo identifier of the sport the league belongs to. |
-| `sport_name` | character |  |
-| `team_id` | character |  |
-| `primary_color` | character |  |
-| `team_logo_url` | character | Absolute URL of the team's standard logo image on Yahoo's image CDN. |
-| `team_logo_white_url` | character | Absolute URL of the team's white knockout logo, the variant used on dark backgrounds. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#yahoo_playbook_team_social_share-example}
-
-```python
-yahoo_playbook_team_social_share()
-```
-
-_Last validated n/a._
-
-## yahoo_playbook_tennis_match
-
-Yahoo shangrila persisted query `playbookTennisMatch` -> one row per `events` entry
-
-**Endpoint URL:** `GET https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch`
-
-**Valid URL:** [https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch](https://graphite-secure.sports.yahoo.com/v1/query/shangrila/playbookTennisMatch)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `gameId` | `game_id` |  |  | `Y` | gameId query parameter. |
-
-### Returns {#yahoo_playbook_tennis_match-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_yahoo_shangrila`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#yahoo_playbook_tennis_match-example}
-
-```python
-yahoo_playbook_tennis_match()
 ```
 
 _Last validated n/a._

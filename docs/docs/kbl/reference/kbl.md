@@ -27,6 +27,14 @@ toc_max_heading_level: 2
 | [kbl_player_totals](kbl/player.md#kbl_player_totals) | Season player totals of one competition (every player with at least one game). |
 | [kbl_players](kbl/player.md#kbl_players) | The site's player directory (current and former players) with their current or last team. |
 
+## Playoff
+
+| Function | Summary |
+|---|---|
+| [kbl_playoff_seeds](kbl/playoff.md#kbl_playoff_seeds) | The regular-season finish that seeds the playoffs (the top six). |
+| [kbl_playoff_series](kbl/playoff.md#kbl_playoff_series) | The playoff series (quarterfinals, semifinals, final): wins and losses of each team in each series. |
+| [kbl_playoff_games](kbl/playoff.md#kbl_playoff_games) | The games of the playoff bracket (2024-25 on; the older bracket format lists no games). |
+
 ## Team
 
 | Function | Summary |
@@ -49,9 +57,6 @@ toc_max_heading_level: 2
 | [kbl_game_leaders](kbl/other.md#kbl_game_leaders) | Each team's leader per category (points, rebounds, assists, steals, blocks) in a final game. |
 | [kbl_standings](kbl/other.md#kbl_standings) | Standings of one competition with each team's season totals. |
 | [kbl_rounds](kbl/other.md#kbl_rounds) | The season's round calendar (the KBL plays six rounds) with each round's first and last date. |
-| [kbl_playoff_seeds](kbl/other.md#kbl_playoff_seeds) | The regular-season finish that seeds the playoffs (the top six). |
-| [kbl_playoff_series](kbl/other.md#kbl_playoff_series) | The playoff series (quarterfinals, semifinals, final): wins and losses of each team in each series. |
-| [kbl_playoff_games](kbl/other.md#kbl_playoff_games) | The games of the playoff bracket (2024-25 on; the older bracket format lists no games). |
 | [kbl_round_mvps](kbl/other.md#kbl_round_mvps) | The round MVPs of a season with their totals over the round. |
 | [kbl_current_standings](kbl/other.md#kbl_current_standings) | Current standings of the active season (no parameter): record, games behind, streaks, splits. |
 | [kbl_season_leaders](kbl/other.md#kbl_season_leaders) | Current season leaders per category (no parameter): points, rebounds, assists, steals, blocks, shooting. |

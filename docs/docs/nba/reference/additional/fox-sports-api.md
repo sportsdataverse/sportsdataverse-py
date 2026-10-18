@@ -729,6 +729,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python

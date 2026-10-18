@@ -20,10 +20,17 @@
 **R equivalent:** {% for pkg, fn in ep.r_equivalent.items() %}`{{ pkg }}::{{ fn }}()`{% if not loop.last %}, {% endif %}{% endfor %}
 {% endif %}
 
+{% if ep.body_kind != "query" %}
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+{% for r in ep.param_rows %}| `{{ r.api }}` | `{{ r.python }}` | {{ r.where }} | {% if r.pattern %}`{{ r.pattern }}`{% endif %} | {% if r.required %}`Y`{% endif %} | {% if r.nullable %}`Y`{% endif %} | {{ r.description }} |
+{% endfor %}
+{% else %}
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 {% for r in ep.param_rows %}| `{{ r.api }}` | `{{ r.python }}` | {% if r.pattern %}`{{ r.pattern }}`{% endif %} | {% if r.required %}`Y`{% endif %} | {% if r.nullable %}`Y`{% endif %} | {{ r.description }} |
 {% endfor %}
+{% endif %}
 
 ### Returns {{ "{#" ~ ep.fn_name ~ "-returns}" }}
 
@@ -39,6 +46,15 @@ No returns table is published for this endpoint: {{ ep.unverified }}.
 {% endif %}
 **`return_parsed=False`** — {{ ep.raw_doc_md or "the raw JSON `Dict` payload, unparsed" }}.
 {% else %}{{ ep.returns_prose or "Raw JSON `Dict` (no parser available)." }}
+{% endif %}
+{% if ep.raises_rows %}
+
+### Raises {{ "{#" ~ ep.fn_name ~ "-raises}" }}
+
+| Exception | Description |
+|---|---|
+{% for r in ep.raises_rows %}| `{{ r.exc }}` | {{ r.description }} |
+{% endfor %}
 {% endif %}
 
 ### Example {{ "{#" ~ ep.fn_name ~ "-example}" }}

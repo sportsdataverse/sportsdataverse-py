@@ -347,6 +347,12 @@ A polars (or pandas) DataFrame in the published `load_nfl_player_stats` schema. 
 | `fantasy_points` | double | Standard fantasy points. |
 | `fantasy_points_ppr` | double | PPR fantasy points. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_level` is not `"week"`/`"season"` or `season_type` is not `"REG"`/`"POST"`/`"REG+POST"`. |
+
 **Example**
 
 ```python
@@ -604,6 +610,12 @@ A one-row-per-player season-roster `DataFrame` with the documented schema. An em
 | `ngs_position` | character | Primary position as reported by the NextGen stats API. |
 | `entry_year` | integer | The year a player first became eligible to play in the NFL. |
 | `rookie_year` | integer | The year a player lost their rookie eligibility. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `seasons` is not an `int` or an iterable of `int`. |
 
 **Example**
 
