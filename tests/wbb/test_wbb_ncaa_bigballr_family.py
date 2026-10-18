@@ -316,3 +316,17 @@ def test_ncaa_wbb_game_pbp_float_season_pins_halves() -> None:
     got = ncaa_wbb_game_pbp(HALVES_GAME, season=2015.0, fetcher=FakePbpFetcher())
     assert got.height == expected.height > 0
     assert got.equals(expected)
+
+
+@pytest.mark.parametrize("season", [float("nan"), ""])
+def test_ncaa_wbb_game_pbp_missing_season_infers_the_era(season: object) -> None:
+    """A NaN / blank season is no season: infer the era from the page, as ``None`` does (R853-7).
+
+    It used to bind the quarters model, so the halves-era page parsed to 0 rows.
+    """
+    from sportsdataverse.mbb.mbb_ncaa_game_pbp import parse_ncaa_bb_game_pbp
+
+    expected = parse_ncaa_bb_game_pbp(_html(HALVES_GAME), HALVES_GAME, period_model=(2, 1200, 300))
+    got = ncaa_wbb_game_pbp(HALVES_GAME, season=season, fetcher=FakePbpFetcher())
+    assert got.height == expected.height > 0
+    assert got.equals(expected)

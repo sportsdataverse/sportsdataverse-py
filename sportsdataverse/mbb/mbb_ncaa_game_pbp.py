@@ -649,6 +649,18 @@ def _assemble(
     return pl.DataFrame(data, schema=PBP_SCHEMA)
 
 
+def _unsupported_layout(tables: "list[list[list[str]]]", n_reg: int) -> Optional[str]:
+    """The page's format when the guard rejects it (tables, but no line score in the second), else None."""
+    if len(tables) < 3 + n_reg or tables[1]:
+        return None
+    top_row = tables[0][0] if tables[0] else []
+    return (
+        "a 2018-format stats.ncaa.org play-by-play page (line score first, headed 'Total')"
+        if top_row and top_row[-1] == "Total"
+        else "an unrecognised stats.ncaa.org play-by-play layout (no line score in the second table)"
+    )
+
+
 def parse_ncaa_bb_game_pbp(
     html: str,
     game_id: str,
@@ -721,14 +733,8 @@ def parse_ncaa_bb_game_pbp(
         return _empty_pbp()
 
     # -- line score / metadata (R :94, :141-147) -----------------------------
-    line_score = tables[1]
-    if not line_score:
-        top_row = tables[0][0] if tables[0] else []
-        fmt = (
-            "a 2018-format stats.ncaa.org play-by-play page (line score first, headed 'Total')"
-            if top_row and top_row[-1] == "Total"
-            else "an unrecognised stats.ncaa.org play-by-play layout (no line score in the second table)"
-        )
+    fmt = _unsupported_layout(tables, n_reg)
+    if fmt is not None:
         warnings.warn(
             f"parse_ncaa_bb_game_pbp: game {game_id} is {fmt}, which this parser does not read; "
             "returning the zero-row frame.",
@@ -736,6 +742,7 @@ def parse_ncaa_bb_game_pbp(
             stacklevel=2,
         )
         return _empty_pbp()
+    line_score = tables[1]
     # R: ncol(half_scores) == 4 -> 0 OTs, else length - 4 (:106-110);
     # generalized: columns = Team + n_reg + n_OT + Total.
     n_ot = max(0, len(line_score[0]) - (2 + n_reg))
@@ -1152,17 +1159,25 @@ def _fetch_and_parse(
     fetcher: _SupportsFetchGamePbp,
     game_id: str,
     period_model: PeriodModel,
-) -> pl.DataFrame:
+) -> "tuple[pl.DataFrame, bool]":
+    """One game's frame, and whether an empty one may be retried (R :1873-1878).
+
+    A page the format guard rejected is not: its layout cannot change on a
+    re-fetch, which would only spend a second stats.ncaa.org request and warn
+    twice (R853-8).
+    """
     try:
         html = fetcher.fetch_game_pbp(game_id)
-        return parse_ncaa_bb_game_pbp(html, game_id, period_model=_resolve_period_model(period_model, html))
+        model = _resolve_period_model(period_model, html)
+        df = parse_ncaa_bb_game_pbp(html, game_id, period_model=model)
+        return df, df.height > 0 or _unsupported_layout(_extract_tables(html), model[0]) is None
     except UnsupportedPageFormatWarning:
         # escalated by the caller (warnings "error" filter): a page we cannot read is
         # not a failed scrape, so it must neither be swallowed nor re-fetched
         raise
     except Exception:  # noqa: BLE001 — R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
-        return _empty_pbp()
+        return _empty_pbp(), True
 
 
 def _ncaa_bb_game_pbp(
@@ -1200,10 +1215,10 @@ def _ncaa_bb_play_by_play(
         frames: "list[pl.DataFrame]" = []
         removed: "list[str]" = []
         for gid in ids:
-            df = _fetch_and_parse(f, gid, period_model)
-            if df.height == 0:
+            df, retry = _fetch_and_parse(f, gid, period_model)
+            if df.height == 0 and retry:
                 # retry a NULL/empty scrape once (R :1873-1878)
-                df = _fetch_and_parse(f, gid, period_model)
+                df, _ = _fetch_and_parse(f, gid, period_model)
             if df.height == 0:
                 removed.append(str(gid))
             else:
@@ -1324,8 +1339,9 @@ def ncaa_mbb_play_by_play(
     """Scrape many MBB games' play-by-play (bigballR ``get_play_by_play``).
 
     Ports ``bigballR/R/all_functions.R:1857-1897``: drops missing ids, shares
-    one fetcher session across games, retries each empty/failed game once,
-    row-binds the survivors, and logs the removed ids.
+    one fetcher session across games, retries each empty/failed game once
+    (except a page the format guard rejected: its layout cannot change on a
+    re-fetch), row-binds the survivors, and logs the removed ids.
 
     Args:
         game_ids: NCAA contest ids; ``None``/NaN entries and non-integral
@@ -1338,6 +1354,11 @@ def ncaa_mbb_play_by_play(
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Warns:
+        UnsupportedPageFormatWarning: Once per game whose page is in a layout
+            the parser does not read (the 2018 format); that game is not
+            re-fetched. Escalated to an error, it propagates instead.
 
     Example:
         Quick start::

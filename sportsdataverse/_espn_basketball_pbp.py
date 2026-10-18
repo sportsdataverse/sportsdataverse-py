@@ -111,7 +111,8 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
     Port of the ``helper_espn_<lg>_pbp`` block in hoopR (``espn_nba_data.R``, ``espn_mbb_data.R``)
     and wehoop (``espn_wnba_data.R``, ``espn_wbb_data.R``), the convention the published
     basketball pbp files carry. ESPN reports feet with the hoop at ``(25, 0)``. A free throw is
-    pinned to ``(25, 13.75)``, the line 13.75 feet from the hoop, in the raw pair as well. Then
+    pinned to ``(25, 13.75)``, the line 13.75 feet from the hoop: in the raw pair only on R's
+    case-sensitive ``"Free Throw"`` match, in the transformed pair on any free throw (below). Then
     ``coordinate.x = y - 41.75`` and ``coordinate.y = x - 25``, both negated on the home team's
     plays, so the two teams shoot at opposite ends of one full court. A play with no ``team.id``
     is not flipped (R's ``case_when`` reads ``NA == id`` as false).

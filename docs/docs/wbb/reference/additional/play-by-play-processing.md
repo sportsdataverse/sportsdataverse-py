@@ -229,7 +229,7 @@ quarters from 2015-16 (see the module docstring).
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_id` | `object` |  | NCAA contest id (e.g. `"5722355"`). |
-| `season` | `Optional[object]` | `None` | Season as an ending year (`2015`) or span (`"2014-15"`). When omitted the era is inferred from the page's first-period clock (`infer_wbb_period_model`). |
+| `season` | `Optional[object]` | `None` | Season as an ending year (`2015`) or span (`"2014-15"`). When omitted, NaN or blank, the era is inferred from the page's first-period clock (`infer_wbb_period_model`). |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp` (for tests/offline use). Defaults to a fresh `NcaaFetcher.with_browser()` context per call. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 
@@ -294,7 +294,8 @@ df = ncaa_wbb_game_pbp("1613299", season=2015)
 Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware).
 
 Same driver as `sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-(drop missing ids, shared fetcher session, one retry per empty scrape) with
+(drop missing ids, shared fetcher session, one retry per empty or failed scrape
+except a page the format guard rejected) with
 the WBB period model for each game's era bound.
 
 **Parameters**
@@ -302,7 +303,7 @@ the WBB period model for each game's era bound.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries and non-integral floats (`5722355.5`) are dropped, an integral float (`5722355.0`) is read as `"5722355"`. |
-| `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
+| `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted, NaN or blank, each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
 

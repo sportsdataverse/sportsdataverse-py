@@ -67,6 +67,36 @@ def test_format_guard_escalated_warning_propagates_from_driver(driver: Any) -> N
     assert f.calls == ["123"]
 
 
+@pytest.mark.parametrize("driver", [ncaa_mbb_play_by_play, ncaa_wbb_play_by_play])
+def test_format_guard_unsupported_page_is_not_refetched(driver: Any) -> None:
+    """The guard's verdict is about the page: one fetch, one warning, no empty-result retry (R853-8)."""
+    f = _Fetcher(PAGE_2018)
+    with pytest.warns(UnsupportedPageFormatWarning, match=r"game 123 is a 2018-format") as record:
+        got = driver(["123"], fetcher=f)
+    assert f.calls == ["123"]
+    assert len([w for w in record if issubclass(w.category, UnsupportedPageFormatWarning)]) == 1
+    assert got.height == 0
+
+
+class _FlakyFetcher(_Fetcher):
+    """Raises on the first fetch, then serves the real page."""
+
+    def fetch_game_pbp(self, game_id: object) -> str:
+        self.calls.append(game_id)
+        if len(self.calls) == 1:
+            raise ConnectionError("stats.ncaa.org dropped the connection")
+        return self.html
+
+
+@pytest.mark.parametrize("driver", [ncaa_mbb_play_by_play, ncaa_wbb_play_by_play])
+def test_failed_scrape_is_retried_once(driver: Any) -> None:
+    """A fetch that raises is retried once, as R's tryCatch -> NULL retry does (:1870-1878)."""
+    f = _FlakyFetcher()
+    got = driver(["6470186"], fetcher=f)
+    assert f.calls == ["6470186", "6470186"]
+    assert got.height > 0
+
+
 def test_float_contest_id_is_an_integer_string() -> None:
     f = _Fetcher()
     df = ncaa_mbb_game_pbp(6470186.0, fetcher=f)

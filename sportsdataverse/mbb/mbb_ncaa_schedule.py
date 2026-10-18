@@ -235,7 +235,7 @@ def parse_ncaa_bb_team_schedule(html: str, team_id: int, *, league: str = "mbb")
     if data_rows and not any("underline_rows" in (tr.get("class") or []) for tr in data_rows):
         warnings.warn(
             f"parse_ncaa_bb_team_schedule: team {team_id} is the older stats.ncaa.org team-page layout "
-            "(one row per game, no 'underline_rows' rows or Attendance column, as served for 2016), "
+            "(one row per game, no 'underline_rows' rows or Attendance column, as served for 2016 baseball), "
             "which this parser does not read; returning the zero-row frame.",
             UnsupportedPageFormatWarning,
             stacklevel=2,

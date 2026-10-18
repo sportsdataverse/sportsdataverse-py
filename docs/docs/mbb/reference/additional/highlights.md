@@ -533,8 +533,9 @@ sched = espn_mbb_schedule(dates=season)
 Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
 
 Ports `bigballR/R/all_functions.R:1857-1897`: drops missing ids, shares
-one fetcher session across games, retries each empty/failed game once,
-row-binds the survivors, and logs the removed ids.
+one fetcher session across games, retries each empty/failed game once
+(except a page the format guard rejected: its layout cannot change on a
+re-fetch), row-binds the survivors, and logs the removed ids.
 
 **Parameters**
 

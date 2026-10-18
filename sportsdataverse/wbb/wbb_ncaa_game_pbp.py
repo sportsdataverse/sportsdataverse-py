@@ -85,8 +85,10 @@ def infer_wbb_period_model(html: str) -> "tuple[int, int, int]":
 
 
 def _period_model_for(season: Optional[object]) -> PeriodModel:
-    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters)
-    return infer_wbb_period_model if season is None else wbb_period_model(_utf8_id(season))
+    # _utf8_id, never str(): season=2015.0 must read "2015" (halves), not "2015.0" (quarters);
+    # a NaN / "" season is no season, so it infers the era like None (R853-7)
+    sid = _utf8_id(season)
+    return infer_wbb_period_model if sid is None else wbb_period_model(sid)
 
 
 def ncaa_wbb_game_pbp(
@@ -105,7 +107,7 @@ def ncaa_wbb_game_pbp(
     Args:
         game_id: NCAA contest id (e.g. ``"5722355"``).
         season: Season as an ending year (``2015``) or span (``"2014-15"``).
-            When omitted the era is inferred from the page's first-period clock
+            When omitted, NaN or blank, the era is inferred from the page's first-period clock
             (:func:`infer_wbb_period_model`).
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp`` (for
             tests/offline use). Defaults to a fresh
@@ -148,7 +150,8 @@ def ncaa_wbb_play_by_play(
     """Scrape many WBB games' play-by-play (wbigballR ``get_play_by_play``, era-aware).
 
     Same driver as :func:`sportsdataverse.mbb.mbb_ncaa_game_pbp.ncaa_mbb_play_by_play`
-    (drop missing ids, shared fetcher session, one retry per empty scrape) with
+    (drop missing ids, shared fetcher session, one retry per empty or failed scrape
+    except a page the format guard rejected) with
     the WBB period model for each game's era bound.
 
     Args:
@@ -156,7 +159,7 @@ def ncaa_wbb_play_by_play(
             floats (``5722355.5``) are dropped, an integral float
             (``5722355.0``) is read as ``"5722355"``.
         season: Season shared by every id, as an ending year or span. When
-            omitted each page's era is inferred from its first-period clock, so
+            omitted, NaN or blank, each page's era is inferred from its first-period clock, so
             ids from both eras may be mixed.
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
@@ -165,6 +168,11 @@ def ncaa_wbb_play_by_play(
     Returns:
         Row-bound play-by-play for every game that scraped successfully
         (zero-row contract frame when none did).
+
+    Warns:
+        UnsupportedPageFormatWarning: Once per game whose page is in a layout
+            the parser does not read (the 2018 format); that game is not
+            re-fetched. Escalated to an error, it propagates instead.
 
     Example:
         Quick start::

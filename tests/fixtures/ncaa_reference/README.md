@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [ncaa_reference fixtures](#ncaa_reference-fixtures)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # ncaa_reference fixtures
 
 Real stats.ncaa.org reference pages for the sport-generic parsers in
@@ -10,3 +18,4 @@ patchright browser transport (Decodo US residential).
 | `mba_team_page_614839.html` | `/teams/614839` (A&M-Corpus Christi 2026) | 51-game schedule incl. doubleheaders (`02/14/2026(1)`/`(2)` -> game_number) | stats.ncaa.org |
 | `mba_team_page_2016_85309.html` | `/teams/85309` (Coastal Carolina 2016, 55-18) | older layout: a "Schedule/Results" title row before the `<th>` header row, results printed `W 17 - 2`; 73 games, 72 contest links. Captured 2026-09-25 by the baseballr-data 2016 backfill (stage 01), copied byte-for-byte | stats.ncaa.org |
 | `mba_roster_614839.html` | `/teams/614839/roster` | 40-player roster, header-keyed columns | stats.ncaa.org |
+| `mbb_team_page_2016_21731.html` | `/teams/21731` (Abilene Christian MBB 2015-16) | a 2016-season BASKETBALL team page is served in the current layout (`underline_rows`, Attendance), unlike baseball's: 31 games, 31 contest links; the schedule guard must stay silent. Captured by the ncaa-mbb-hoops-raw discover stage, committed there 2026-08-01 (`9e72c21964`, `mbb/schedules/html/2016/21731.html`); identical to the committed copy | stats.ncaa.org |
