@@ -222,7 +222,7 @@ def _rel_bool(x: object) -> bool | None:
 
 
 # R as.logical() reads exactly these spellings; any other string is NA (B-GB-20: bool("false") was True).
-_R_LOGICAL = {s: True for s in ("T", "TRUE", "true", "True")} | {s: False for s in ("F", "FALSE", "false", "False")}
+_R_LOGICAL = dict.fromkeys(("T", "TRUE", "true", "True"), True) | dict.fromkeys(("F", "FALSE", "false", "False"), False)
 
 
 _GAME_ROSTER_COLS = (
