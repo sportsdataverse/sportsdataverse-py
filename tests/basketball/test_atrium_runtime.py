@@ -56,6 +56,11 @@ def season_list_body(site: int = 12, name: str = "12__fixtures.json") -> dict:
     return b
 
 
+def site_seasons(site: int) -> dict:
+    """The site's committed season list (LNB's full one; the others' default ``fixtures`` page)."""
+    return body("12__fixtures.json" if site == 12 else f"{site}__fixtures__default.json")
+
+
 # --- seasons -----------------------------------------------------------------------------------------
 
 
@@ -167,7 +172,15 @@ def test_season_and_season_id_together_are_refused(wire):
 
 
 def serve(b):
-    return lambda url, p: b
+    """Answer ``b``; the season-list lookup a game page triggers gets the site's own committed list."""
+
+    def answer(url, p):
+        self_link = str(b.get("links", {}).get("self", "")) if isinstance(b, dict) else ""
+        if url.endswith("/fixtures") and "/fixture_detail" in self_link:
+            return site_seasons(int(url.rsplit("/", 2)[-2]))
+        return b
+
+    return answer
 
 
 def pbp_request():
@@ -202,6 +215,72 @@ def test_wrong_scope_error_and_stub_bodies_are_asset_fetch_errors(wire, mutate, 
     wire(serve(mutate(real) if callable(mutate) else mutate))
     with pytest.raises(AssetFetchError, match=match):
         rt._get(*pbp_request())
+
+
+@pytest.mark.parametrize(
+    "name",
+    ["14__fixture_detail__pbp.json", "14__fixture_detail__statistics.json", "12__fixture_detail__statistics.json",
+     "12__fixture_detail__pbp.json", "13__fixture_detail__pbp.json", "326__fixture_detail__pbp.json"],
+)  # fmt: skip
+def test_a_game_of_the_asked_site_passes_its_season_check(wire, name):
+    b = body(name)
+    site, fixture = int(name.split("__")[0]), b["data"]["fixture"]["fixtureId"]
+    calls = wire(serve(b))
+    assert rt._get(f"{BASE}/{site}/fixture_detail", {"fixtureId": fixture, "sub": b["data"]["sub"]}) is b
+    assert [u for u, _ in calls] == [f"{BASE}/{site}/fixture_detail", f"{BASE}/{site}/fixtures"]
+
+
+def test_the_site_check_reuses_the_cached_season_list(wire):
+    calls = wire(serve(body("14__fixture_detail__pbp.json")))
+    for _ in range(3):
+        rt._get(*pbp_request())
+    assert [u for u, _ in calls].count(f"{BASE}/14/fixtures") == 1
+
+
+def _relabelled(name: str, site: int) -> dict:
+    """A real game of another site, served under ``site`` (the API answers any fixture under any websiteId)."""
+    b = copy.deepcopy(body(name))
+    b["links"]["self"] = b["links"]["self"].replace(f"/embed/{name.split('__')[0]}/", f"/embed/{site}/")
+    return b
+
+
+@pytest.mark.parametrize("sub", ["pbp", "statistics", "shot_chart"])
+def test_a_game_of_another_site_is_a_wrong_scope_asset_fetch_error(wire, sub):
+    b = _relabelled(f"12__fixture_detail__{sub}.json", 14)  # an LNB game asked as an LNBP one
+    wire(serve(b))
+    with pytest.raises(AssetFetchError, match="not one of site 14's seasons"):
+        rt._get(f"{BASE}/14/fixture_detail", {"fixtureId": F12, "sub": sub})
+
+
+def test_another_sites_game_without_rows_is_still_wrong_scope_not_no_data(wire):
+    b = _relabelled("12__fixture_detail__pbp.json", 14)
+    for period in b["data"]["periodData"]:
+        period["events"] = []
+    wire(serve(b))
+    with pytest.raises(AssetFetchError, match="wrong scope"):
+        rt._get(f"{BASE}/14/fixture_detail", {"fixtureId": F12, "sub": "pbp"})
+
+
+def test_a_game_without_a_season_id_is_refused(wire):
+    b = copy.deepcopy(body("14__fixture_detail__pbp.json"))
+    b["data"]["fixture"].pop("seasonId")
+    b["data"].pop("seasonId", None)
+    wire(serve(b))
+    with pytest.raises(AssetFetchError, match="season None"):
+        rt._get(*pbp_request())
+
+
+def test_a_site_without_a_season_list_is_not_site_checked(wire):
+    b = _relabelled("14__fixture_detail__pbp.json", 236)
+    wire(serve(b))
+    assert rt._get(f"{BASE}/236/fixture_detail", {"fixtureId": F14, "sub": "pbp"}) is b
+
+
+def test_an_unknown_game_id_stays_no_data(transport):
+    transport["install"](Resp(404, {"error": "not found"}))
+    with pytest.raises(NoDataError):
+        rt._get(*pbp_request())
+    assert [u.rsplit("/", 1)[1] for u, _ in transport["sent"]] == ["fixture_detail"]
 
 
 def test_a_summary_body_for_an_unknown_sub_is_not_mistaken_for_a_box_score(wire):
