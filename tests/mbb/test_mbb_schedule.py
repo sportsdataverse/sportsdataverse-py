@@ -78,6 +78,16 @@ def test_mbb_season_sweep_failed_day_raises(monkeypatch, fail):
         espn_mbb_schedule(dates=2024)
 
 
+def test_mbb_season_sweep_skips_an_event_with_a_non_mapping_season(monkeypatch):
+    """PR #855 review: ``{"season": "2024"}`` is dropped like a missing season, not an AttributeError."""
+    day = json.loads(_capture("mbb_season_days_2024.json"))["20240210"]
+    bad = {**day, "events": [{"id": "1", "date": "2024-02-10T00:00Z", "season": "2024"}, *day["events"]]}
+    _season_route(monkeypatch, fail_day="20240210", fail=(200, json.dumps(bad)))
+    with_bad = espn_mbb_schedule(dates=2024)["game_id"].to_list()
+    _season_route(monkeypatch)
+    assert with_bad == espn_mbb_schedule(dates=2024)["game_id"].to_list()
+
+
 def test_mbb_calendar_season_is_an_int(monkeypatch):
     """B-L9: ``season=None`` means the current season and ``2024.0`` is requested as ``2024``."""
     calls = _route(monkeypatch, lambda url: (200, _capture("scoreboard_mbb.json"), "application/json"))

@@ -101,7 +101,8 @@ def _season_events(season: int, url: str, params: dict, **kwargs) -> list:
     seen: set = set()
     keep = []
     for e in events:
-        if isinstance(e, dict) and (e.get("season") or {}).get("year") == season and e.get("id") not in seen:
+        s = e.get("season") if isinstance(e, dict) else None
+        if isinstance(s, dict) and s.get("year") == season and e.get("id") not in seen:
             seen.add(e.get("id"))
             keep.append(e)
     return sorted(keep, key=lambda e: e.get("date") or "")
