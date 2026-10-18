@@ -41,7 +41,6 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from gen_soccer_common import (
     ROOT,
-    _query_params,
     columns_from_frame,
     load_spec,
     markdown_descriptions,
@@ -51,6 +50,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.euroleague import euroleague_parsers

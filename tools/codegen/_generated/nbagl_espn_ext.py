@@ -4,7 +4,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, Optional, Union  # noqa: F401
+from typing import Dict, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse._codegen_runtime import _get, bool_str
 from sportsdataverse._common_espn_parsers import (
@@ -34,10 +39,6 @@ from sportsdataverse._common_espn_parsers import (
     parse_transactions,
     parse_weekly_powerindex,
 )
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "espn_nbagl_scoreboard",
@@ -220,7 +221,7 @@ def espn_nbagl_summary(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """
 
     Bound to sport='basketball', league='nba-development'.
