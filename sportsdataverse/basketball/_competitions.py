@@ -24,7 +24,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.basketball._competitions_registry import REGISTRY
-from sportsdataverse.errors import NoDataError
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 Entry = Dict[str, Any]
 
@@ -156,8 +156,16 @@ def _finish(fn: Callable[..., Any], name: str, module: str, doc: str) -> Callabl
 def _fiba_comp(family_id: int, season: Optional[int], comp: Optional[int], label: str, **kw: Any) -> int:
     """The GDAP competition id of one edition: ``comp`` as given, else the family's edition of ``season`` (newest started one if None)."""
     from sportsdataverse.basketball.fiba_hub import fiba_gdap as gdap
+    from sportsdataverse.basketball.fiba_hub import fiba_runtime
 
     if comp is not None:
+        # the family of an edition is in its getGdapCompetitionById record, which the runtime caches per process
+        # and the game page needs anyway (its URL is built from the family): no extra request for a game
+        fam = int(fiba_runtime._competition_slug(int(comp)).split("-", 1)[0])
+        if fam != family_id:
+            raise AssetFetchError(
+                f"FIBA competition {comp} is an edition of family {fam}, not of {label} (family {family_id})"
+            )
         return int(comp)
     ed = _cached(
         ("fiba", family_id, season),
@@ -187,7 +195,9 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
     season_arg = (
         "season: Edition season key (see the season rule above). Omitted = the newest edition that has started.\n"
         "comp: FIBA competition id (one per edition); skips the edition lookup. Needed when a season lists several editions.\n"
+        "    Checked to be an edition of this competition (one cached getGdapCompetitionById request).\n"
     )
+    wrong_comp = "AssetFetchError: ``comp`` is an edition of another competition family.\n"
     out: Dict[str, Callable[..., Any]] = {}
 
     def editions(
@@ -251,7 +261,8 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 what,
                 season_arg + _FLAGS + _PANDAS + _KW,
                 f"from sportsdataverse.basketball.fiba_hub import {p}_{suffix}\n{p}_{suffix}(season={entry['example_season']})\n",
-                "ValueError: The season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n",
+                "ValueError: The season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n"
+                + wrong_comp,
             ),
         )
 
@@ -299,7 +310,8 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                     else f"games = {p}_schedule(season={entry['example_season']})\n"
                     f"{p}_{suffix}(game_id=int(games['game_id'][0]), season={entry['example_season']})\n"
                 ),
-                "ValueError: Neither ``season`` nor ``comp`` is given, or the season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n",
+                "ValueError: Neither ``season`` nor ``comp`` is given, or the season lists several editions (pass ``comp``).\nNoDataError: FIBA lists no edition for the season.\n"
+                + wrong_comp,
             ),
         )
 
@@ -313,6 +325,41 @@ def mint_fiba(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
 # ------------------------------------------------------------------------------------------------ Genius
 
 
+def _label_rule(entry: Entry) -> pl.Expr:
+    """The entry's label rule over a ``label`` column: matches ``label_include`` and not ``label_exclude`` (any case)."""
+    label = pl.col("label").fill_null("")
+    return label.str.contains("(?i)" + entry["label_include"]) & (
+        label.str.contains("(?i)" + entry["label_exclude"]) == False  # noqa: E712
+    )
+
+
+def _genius_check(entry: Entry, match_id: int, base_name: str, **kw: Any) -> None:
+    """Refuse a match of another competition: ``data.json`` names none, so read the game's ``/u/`` shell.
+
+    One request per match (cached per process, so the four game frames share it). The shell exists only under
+    the game's own LiveStats ORG, and its competition name must pass the entry's label rule.
+    """
+    from sportsdataverse.basketball.genius import genius as g
+
+    org, label = entry["live_org"], entry["label"]
+    try:
+        rec = _cached(
+            ("genius-u", org, int(match_id)),
+            lambda: g.genius_match_competition(org=org, match_id=match_id, return_parsed=False, **kw),
+        )
+    except NoDataError:
+        raise AssetFetchError(
+            f"match {match_id} is not a {label} game: Genius has no /u/{org}/{match_id}/ shell "
+            f"(another org's game); read it with {base_name}(match_id=...)"
+        ) from None
+    name = rec.get("competition_name")
+    if not pl.DataFrame({"label": [name]}, schema={"label": pl.Utf8}).filter(_label_rule(entry)).height:
+        raise AssetFetchError(
+            f"match {match_id} belongs to {name!r} (comp_id {rec.get('comp_id')}), not to {label}; "
+            f"read it with {base_name}(match_id=...)"
+        )
+
+
 def _genius_comp(entry: Entry, season: Optional[int], comp_id: Optional[int], **kw: Any) -> int:
     """The Genius competition id of ``season``: ``comp_id`` as given, else the org competition whose label matches the entry."""
     from sportsdataverse.basketball.genius import genius as g
@@ -320,11 +367,7 @@ def _genius_comp(entry: Entry, season: Optional[int], comp_id: Optional[int], **
     if comp_id is not None:
         return int(comp_id)
     frame = _cached(("genius", entry["org"]), lambda: g.genius_competitions(org=entry["org"], **kw))
-    label = pl.col("label").fill_null("")
-    hit = frame.filter(
-        label.str.contains("(?i)" + entry["label_include"])
-        & (label.str.contains("(?i)" + entry["label_exclude"]) == False)  # noqa: E712
-    )
+    hit = frame.filter(_label_rule(entry))
     if season is None:
         hit = hit.filter(pl.col("season") == hit["season"].max()) if hit.height else hit
     else:
@@ -410,9 +453,11 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
         def fn(
             match_id: int, *, return_parsed: bool = True, return_as_pandas: bool = False, **kwargs: Any
         ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-            return getattr(g, base_name)(
+            res = getattr(g, base_name)(
                 match_id=match_id, return_parsed=return_parsed, return_as_pandas=return_as_pandas, **kwargs
             )
+            _genius_check(entry, match_id, base_name, **kwargs)
+            return res
 
         out[f"{p}_{suffix}"] = _finish(
             fn,
@@ -429,8 +474,12 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 f"from sportsdataverse.basketball.genius import {p}_schedule, {p}_{suffix}\n"
                 f"games = {p}_schedule()\n"
                 f"{p}_{suffix}(match_id=int(games['match_id'][0]))\n",
-                notes_extra="Genius match ids are one global sequence shared by every customer: the id alone identifies the game "
-                "and is NOT checked against this competition, so pass an id from this competition's schedule.\n",
+                f"AssetFetchError: The match is not a game of this competition (another org's game, or a cup or "
+                f"play-off of {org}).\n",
+                notes_extra="Genius match ids are one global sequence shared by every customer, and data.json names no "
+                f"competition, so the id is checked on the game's LiveStats shell (/u/{entry['live_org']}/<match_id>/: one "
+                f"extra request per game, cached per process): its competition name must pass the label rule. "
+                f"{base_name}(match_id=...) reads any game unchecked.\n",
             ),
         )
 
@@ -442,6 +491,25 @@ def mint_genius(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
 
 
 # ------------------------------------------------------------------------------------------------ Atrium
+
+
+def _atrium_check(site: int, label: str, res: Any, **kw: Any) -> None:
+    """Refuse a game of another site: its ``seasonId`` (in the body and every game frame) must be one of the site's.
+
+    Atrium seasonIds are never shared across sites (sdv-internal-refs atrium-embed/README.md), and a cache sits in
+    front of the API, so the game routes' ``links.self`` echo alone does not prove the site.
+    """
+    from sportsdataverse.basketball.atrium import atrium_runtime
+
+    if isinstance(res, dict):
+        raw = [(res.get("data") or {}).get("seasonId")]
+    else:
+        raw = list(res["season_id"]) if "season_id" in res.columns else []
+    got = {s for s in raw if isinstance(s, str)}
+    listed = {r.get("season_id") for r in atrium_runtime._fetch_seasons(site, **kw)}
+    stray = sorted(got - listed)
+    if listed and stray:
+        raise AssetFetchError(f"Atrium site {site}: season {stray[0]} is not a {label} season (a game of another site)")
 
 
 def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
@@ -528,7 +596,7 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
             return_as_pandas: bool = False,
             **kwargs: Any,
         ) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
-            return getattr(a, base_name)(
+            res = getattr(a, base_name)(
                 website_id=site,
                 fixture_id=fixture_id,
                 locale=locale,
@@ -536,6 +604,8 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 return_as_pandas=return_as_pandas,
                 **kwargs,
             )
+            _atrium_check(site, label, res, **kwargs)
+            return res
 
         out[f"{p}_{suffix}"] = _finish(
             fn,
@@ -552,6 +622,9 @@ def mint_atrium(entry: Entry, module: str) -> Dict[str, Callable[..., Any]]:
                 f"from sportsdataverse.basketball.atrium import {p}_schedule, {p}_{suffix}\n"
                 f"games = {p}_schedule()\n"
                 f"{p}_{suffix}(fixture_id=games['fixture_id'][0])\n",
+                "AssetFetchError: The game's season is not one of this site's seasons (a fixture of another site).\n",
+                notes_extra="The game is checked against this site: its seasonId must be in the site's season list "
+                "(one request per site, cached for an hour, the same list the season lookup reads).\n",
             ),
         )
 
