@@ -221,7 +221,7 @@ def _check_ajax(url: str, body: Any, params: Mapping[str, Any]) -> Any:
         if not isinstance(meta, dict):
             raise AssetFetchError(f"{where} ({action}): no paging meta, so the list cannot be verified complete")
         last_page, total = meta.get("last_page"), meta.get("total")
-        # type-strict: a bool, a float or a digit string is not a page count (True == 1 in Python).
+        # strict types: a bool, a float or a digit string is not a page count (True == 1 in Python).
         if not (type(last_page) is int and last_page == 1 and type(total) is int and total == len(rows)):
             raise AssetFetchError(
                 f"{where} ({action}): page {meta.get('current_page')}/{meta.get('last_page')} of "
@@ -250,9 +250,7 @@ def _extract_game_sheet(page: str) -> Optional[Dict[str, Any]]:
 def _game_sheet(url: str, game_id: str, **kwargs: Any) -> Dict[str, Any]:
     """Fetch ``/rencontre/{id}/`` and return its checked game sheet (see the module docstring)."""
     where = _rt._where(url)
-    with _rt._transport_errors(url):
-        resp = _rt.download(url=url, **{"session": _eh.SESSION, **kwargs})
-    sheet = _extract_game_sheet(_rt._text_body(resp, url))
+    sheet = _extract_game_sheet(_eh.get_text(url, **kwargs))
     if sheet is None:
         raise AssetFetchError(f"{where}: no <live-rencontre-container :data> game sheet in the page")
     if (sheet and set(sheet) <= _ERROR_KEYS) or "evenements" not in sheet:

@@ -52,9 +52,8 @@ from __future__ import annotations
 import functools
 import re
 import threading
-import time
 from typing import Any, Dict, Optional, Tuple
-from urllib.parse import urlencode, urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
@@ -74,10 +73,7 @@ REQUEST_KEY = "_request"
 #: Season stages, as the wrappers name them.
 STAGES = ("regular", "playoff")
 _STAGE_LABEL = {"regular": "Regular Season", "playoff": "Playoffs"}
-RETRY_STATUSES = frozenset({429, 500, 502, 503, 504})
-ATTEMPTS = 3
 TIMEOUT = 90
-_MAX_RETRY_AFTER = 120.0
 
 #: (host, path pattern) -> page kind. The number is the season (END year) on tn routes.
 _ROUTES: Tuple[Tuple[str, "re.Pattern[str]", str], ...] = (
@@ -110,65 +106,17 @@ def _transport(url: str) -> Any:
     return creq.get(url, impersonate="chrome", timeout=TIMEOUT, curl_options=opts)
 
 
-def _retry_after(resp: Any) -> float:
-    try:
-        return min(float((getattr(resp, "headers", None) or {}).get("retry-after", 0)), _MAX_RETRY_AFTER)
-    except (TypeError, ValueError):  # an HTTP-date Retry-After falls back to the exponential delay
-        return 0.0
-
-
-def _decode(url: str, content: bytes, content_type: str) -> str:
-    """Body bytes -> text, STRICTLY in the declared charset (UTF-8 when none is declared)."""
-    m = re.search(r"charset=[\"']?([\w.:-]+)", content_type or "", re.I)
-    charset = m.group(1) if m else "utf-8"
-    try:
-        text = (content or b"").decode(charset)
-    except (LookupError, UnicodeDecodeError) as exc:
-        raise AssetFetchError(f"{_rt._where(url)}: body is not valid {charset!r} ({type(exc).__name__})") from None
-    if "�" in text:
-        raise AssetFetchError(f"{_rt._where(url)}: replacement characters in the body (charset mismatch)")
-    return text
+def _is_missing_page(final: str) -> bool:
+    """True for the site's "no such page" redirect targets: ``/404.php`` and the online index."""
+    target = urlsplit(final)
+    return target.path == "/404.php" or (target.hostname == "online.vhlru.ru" and target.path in ("", "/", "/online/"))
 
 
 def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> str:
-    """The HTML text of ``url`` (+ ``params``), or the error the answer calls for."""
-    full = url + ("?" + urlencode(params) if params else "")
-    where = _rt._where(url)
-    resp: Any = None
-    for attempt in range(ATTEMPTS):
-        euro_hockey_runtime._polite_wait(url)
-        delay = 2.0 * 2**attempt
-        try:
-            resp = _transport(full)
-        except OSError as exc:  # curl_cffi's RequestException subclasses OSError
-            if attempt == ATTEMPTS - 1:
-                raise AssetFetchError(f"{where}: fetch failed after {ATTEMPTS} attempts: {type(exc).__name__}") from exc
-        else:
-            status = getattr(resp, "status_code", None)
-            if status not in RETRY_STATUSES or attempt == ATTEMPTS - 1:
-                break
-            if status in (429, 503):  # 429 and 503 may both send Retry-After
-                delay = max(delay, _retry_after(resp))
-        time.sleep(delay)
-    headers = getattr(resp, "headers", None) or {}
-    ctype = headers.get("content-type", "") or ""
-    content = getattr(resp, "content", b"") or b""
-    status = getattr(resp, "status_code", None)
-    if status != 200:
-        _rt._check_status(url, status, content[:400].decode("utf-8", "replace"))  # raises unless 2xx
-        raise AssetFetchError(f"{where} answered HTTP {status}, not 200")
-    if "html" not in ctype.lower():
-        raise AssetFetchError(f"{where} answered a non-HTML body ({ctype or 'no content type'})")
-    text = _decode(url, content, ctype)
-    if not text.strip():
-        raise AssetFetchError(f"{where} answered HTTP 200 with an empty body")
-    final = getattr(resp, "url", None) or ""
-    if final.rstrip("/") != full.rstrip("/"):
-        target = urlsplit(final)
-        if target.path == "/404.php" or (target.hostname == "online.vhlru.ru" and target.path in ("", "/", "/online/")):
-            raise NoDataError(f"{where}: no such page (redirected to {_rt._where(final)})")
-        raise AssetFetchError(f"{where}: redirected to {_rt._where(final) if final else 'an unknown URL'}")
-    return text
+    """The HTML text of ``url`` (+ ``params``), or the error the answer calls for (see ``get_text``)."""
+    return euro_hockey_runtime.get_text(
+        url, params, transport=lambda full: _transport(full), expect="html", is_missing=_is_missing_page
+    )
 
 
 def _page(kind: str, url: str, params: Optional[Dict[str, Any]], want: Optional[Dict[str, Any]]) -> Dict[str, Any]:
