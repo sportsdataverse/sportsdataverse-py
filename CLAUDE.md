@@ -13,7 +13,7 @@
   - [Parser Layer (0.0.51+)](#parser-layer-0051)
     - [`return_parsed` parameter](#return_parsed-parameter)
     - [Summary dispatcher (21 sub-frames)](#summary-dispatcher-21-sub-frames)
-    - [Test fixtures (3,365 fixture files across 142 directories)](#test-fixtures-3365-fixture-files-across-142-directories)
+    - [Test fixtures (3,400 fixture files across 147 directories)](#test-fixtures-3400-fixture-files-across-147-directories)
     - [Test infrastructure summary](#test-infrastructure-summary)
   - [Key Coding Conventions](#key-coding-conventions)
     - [Module pattern (NEW modules)](#module-pattern-new-modules)
@@ -368,10 +368,10 @@ Cross-league shape divergences captured by tests:
 - NCAA W basketball `officials` sometimes ships < 3 rows; CFB
   national championship shipped 0 officials.
 
-### Test fixtures (3,365 fixture files across 142 directories)
+### Test fixtures (3,400 fixture files across 147 directories)
 
 Captured fixtures live under `tests/fixtures/{espn,mlb_api,nhl_api_web,
-nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 142 directories
+nhl_edge,nhl_stats_rest,nhl_records,kloppy,socceraction}/` (and more; 147 directories
 in all). Each directory has a
 `README.md` documenting provenance (URL + capture date). See
 each fixture directory's own `README.md` for provenance (URL + capture date).
@@ -782,8 +782,8 @@ from sportsdataverse.hockey.bchl import bchl_pbp   # per-league module
 - **The European leagues nest the same way** (`generate._EURO_HOCKEY_HOMES` -> `_NESTED_HOMES`):
   `sportsdataverse.hockey.<lg>` for `icehl`, `eihl`, `metal`, `elh`, `liiga`, `shl`, `ha`, `nl`,
   `magnus`, `khl`, `vhl`. DEL's docs prefix is `del` but its package is `hockey.del_`: `del` is a
-  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime spaces
-  requests at least 1 s apart through `hockey/euro_hockey_runtime.py`, and takes the season as the
+  Python keyword, so `import sportsdataverse.hockey.del` would not parse. Every runtime leaves
+  at least 1 s from one answer to the next request to a host through `hockey/euro_hockey_runtime.py`, and takes the season as the
   END year, mapping it to the provider's key at the boundary.
 - **The international basketball families nest the same way** (`generate._BASKETBALL_HOMES` ->
   `_NESTED_HOMES`): `sportsdataverse.basketball.<home>`. `basketball/` is a generated container (like

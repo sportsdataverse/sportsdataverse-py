@@ -25,6 +25,6 @@ columns:
   type: integer
 - description: ''
   name: game_ids
-  type: character
+  type: list
 kind: dataframe
 schema: khl_playoff_bracket

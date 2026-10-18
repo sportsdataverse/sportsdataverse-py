@@ -88,7 +88,7 @@ Per-skater EDGE skating-value composite (z-score or percentile blend).
 |---|---|---|---|
 | `season` | `int` |  | Season end-year (e.g. `2024` for 2023-24). |
 | `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"`. PWHL short-circuits to a zero-row frame (no EDGE feed) BEFORE any network access. |
-| `detail_frames` | `DataFrame \| None` | `None` | Pre-parsed EDGE aggregate (one row per skater with the COMPONENTS` columns) for offline use. When `None` on the NHL path, the live per-skater `nhl_edge_skater_*_detail` fetch would run -- not implemented offline; supply `detail_frames`. |
+| `detail_frames` | `DataFrame \| None` | `None` | Pre-parsed EDGE aggregate (one row per skater with the `_COMPONENTS` columns) for offline use. When `None` on the NHL path, the live per-skater `nhl_edge_skater_*_detail` fetch would run -- not implemented offline; supply `detail_frames`. |
 | `method` | `Literal['zscore', 'percentile']` | `'zscore'` | `"zscore"` (default, original composite) or `"percentile"` -- see the module docstring's flesh-out note. |
 | `include_zone_balance` | `bool` | `False` | add the derived `oz_dz_time_balance` component when `dz_time_pct` is present in `detail_frames` (default `False` -- preserves the original 4-component output). |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
@@ -388,7 +388,7 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 | `pbp` | `DataFrame` |  | a `load_nhl_pbp_full`-shaped frame. |
 | `shifts` | `DataFrame` |  | a `load_nhl_shifts`-shaped frame. |
 | `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
-| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/pk` via `LEAGUE_CONSTANTS`. |
+| `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/`_pk` via `LEAGUE_CONSTANTS`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 | `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |

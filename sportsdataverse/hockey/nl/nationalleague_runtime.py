@@ -1,8 +1,8 @@
 """Runtime for the generated ``nationalleague`` wrappers (``www.nationalleague.ch/api``).
 
 **Owner ruling.** ``www.nationalleague.ch/robots.txt`` disallows ``/api``. The owner approved
-building on it on 2026-10-12, for polite, incremental use only: at least 1 s between requests
-(:func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`), one worker, and no bulk
+building on it on 2026-10-12, for polite, incremental use only: at least 1 s from one answer to the next request
+(:func:`sportsdataverse.hockey.euro_hockey_runtime._polite`), one worker, and no bulk
 backfill or published mirror without asking again. Fetch a finished game once, discover new
 games from one ``/games`` call per run, and treat season tables as game-day snapshots.
 
@@ -153,6 +153,6 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         AssetFetchError: any other failed fetch, an error envelope, a malformed body, or an
             answer for another season, team, game or player.
     """
-    body = _euro._get(url, params, **kwargs)  # _polite_wait, then the shared getter
+    body = _euro._get(url, params, **kwargs)  # _polite, then the shared getter
     _check(url, params, body)
     return _scrub(body)

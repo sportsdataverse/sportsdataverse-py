@@ -342,3 +342,69 @@ def test_download_offmode_does_not_consult_cache(monkeypatch):
     with pytest.raises(RuntimeError, match="would have hit network"):
         dl_utils.download("https://api.example.com/teams", num_retries=0)
     assert called["hit"], "download should hit network when mode=off"
+
+
+# ---------------------------------------------------------------------------
+# Credentials are scrubbed before the entry is stored
+# ---------------------------------------------------------------------------
+
+_KEY = "abcd1234efgh5678"
+
+
+@pytest.mark.parametrize("mode", ["memory", "filesystem"])
+def test_cache_set_scrubs_credentials_before_storing(mode, tmp_cache_dir, reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode(mode)
+    url = f"https://x.example/feed?apiKey={_KEY}&season=2025"
+    body = {
+        "self": f"https://x.example/feed?apiKey={_KEY}",
+        "echo": {"note": f"called with {_KEY}"},
+        "rows": [{"key": "regular-season-rank", "n": 3}],
+    }
+    cache.cache_set(url, None, body)
+    stored = cache._MEMORY_CACHE if mode == "memory" else {p.name: p.read_text() for p in tmp_cache_dir.glob("*.json")}
+    assert _KEY not in repr(stored)
+    out = cache.cache_get(url)  # read-through still keyed on the real URL
+    assert out["self"] == "https://x.example/feed?apiKey=REDACTED"
+    assert out["echo"]["note"] == "called with REDACTED"
+    assert out["rows"] == [{"key": "regular-season-rank", "n": 3}]  # ordinary data untouched
+    assert body["self"].endswith(_KEY)  # the live body is not mutated
+
+
+def test_cache_set_scrubs_path_key_url(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    cache.cache_set(f"https://x.example/api/v1/json/{_KEY}/teams.php", None, {"ok": 1})
+    assert _KEY not in repr(cache._MEMORY_CACHE)
+
+
+def test_cache_set_clean_body_unchanged(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    body = {"events": [{"id": "1", "name": "A at B", "link": "https://x.example/e?id=1&k=v"}], "n": 2, "x": None}
+    cache.cache_set("https://x.example/clean", {"dates": 2025}, body)
+    assert cache.cache_get("https://x.example/clean", {"dates": 2025}) == body
+    (entry,) = cache._MEMORY_CACHE.values()
+    assert entry["url"] == "https://x.example/clean"
+
+
+def test_cache_set_scrubs_a_key_sent_as_a_param(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    params = {"apiKey": _KEY, "regions": "us"}
+    cache.cache_set("https://x.example/odds", params, {"echo": {"apiKey": _KEY}, "regions": "us"})
+    assert _KEY not in repr(cache._MEMORY_CACHE)
+    assert cache.cache_get("https://x.example/odds", params) == {"echo": {"apiKey": "REDACTED"}, "regions": "us"}
+
+
+def test_cache_hit_equals_live_body_for_credential_like_text(reset_cache):
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    body = {"note": "key: 1234 token=abc", "title": "password=reset day"}
+    cache.cache_set("https://x.example/text", None, body)
+    assert cache.cache_get("https://x.example/text") == body  # only URL-like strings are pattern-redacted

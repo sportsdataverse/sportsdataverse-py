@@ -628,10 +628,10 @@ out_pwhl = nhl_expected_assists(pwhl_pbp, league="pwhl")
 Per-goalie goals-saved-above-expected (GSAx) for the games in `pbp`.
 
 Scores every unblocked shot via `nhl_xg`, attributes each shot to the defending
-goalie (attribute_goalie`), and aggregates `xga = sum(xg)`, `ga =
+goalie (`_attribute_goalie`), and aggregates `xga = sum(xg)`, `ga =
 count(goals)`, `gsax = xga - ga`. `gsax_per_60` uses an on-ice-seconds proxy
 derived from the pbp event span each goalie is credited on (see
-toi_seconds_by_goalie`) -- `shifts` is accepted for interface parity with the
+`_toi_seconds_by_goalie`) -- `shifts` is accepted for interface parity with the
 rest of the player-impact spine but is not currently required for TOI.
 
 **Parameters**
@@ -826,7 +826,7 @@ Per on-ice skater combination: observed xGF/xGA + shrinkage-blended summed RAPM.
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 | `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
-| `_rapm` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built skater-RAPM frame (paired with stints`; both must be given together to bypass real computation). |
+| `_rapm` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built skater-RAPM frame (paired with `_stints`; both must be given together to bypass real computation). |
 
 **Returns**
 
