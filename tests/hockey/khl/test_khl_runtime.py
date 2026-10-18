@@ -79,7 +79,7 @@ class _Http:
 def _offline(monkeypatch: pytest.MonkeyPatch) -> List[str]:
     """No sleeping, a fresh session table, and a season table from the committed full ``data.json``."""
     waits: List[str] = []
-    monkeypatch.setattr(R, "_polite_wait", waits.append)
+    monkeypatch.setattr(euro_hockey_runtime, "_polite_wait", lambda url, *a: waits.append(url))
     monkeypatch.setattr(R.time, "sleep", lambda s: waits.append(f"sleep {s:g}"))
     monkeypatch.setattr(R, "_sessions", {})
     W.season_table.cache_clear()

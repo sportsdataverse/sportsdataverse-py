@@ -38,8 +38,8 @@ case costs no request; an unseeded season triggers one lookup per process. Cover
 2020-21 (season 2021): an earlier season raises :class:`NoDataError` before any request.
 
 Every request, each retry included, goes through
-:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, whose every attempt waits for
-:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait` (at least 1 s per host).
+:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, whose every attempt runs inside
+:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite` (at least 1 s after the host's last answer).
 Everything else is the package error vocabulary of the shared getter: 404 ->
 :class:`NoDataError`, 400 / 422 (an unknown ``action`` answers 400 ``0``) -> :class:`ValueError`,
 any other non-2xx, an empty or non-JSON 200 or a dead connection -> :class:`AssetFetchError`.

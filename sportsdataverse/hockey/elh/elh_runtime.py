@@ -1,8 +1,8 @@
 """Runtime for the Czech Extraliga (``elh``) wrappers: hokej.cz's S3 bucket + the eSports Media scoreboard.
 
 Two keyless hosts, both throttled to one request a second per host: every request, each retry
-included, goes through :data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which calls
-:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite_wait` before every attempt:
+included, goes through :data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which runs every
+attempt inside :func:`~sportsdataverse.hockey.euro_hockey_runtime._polite` (>= 1 s after the last answer):
 
 * ``s3-eu-west-1.amazonaws.com/hokej.cz`` -- a public, listable S3 bucket. ``/`` answers a
   ListObjects V1 **XML** page (returned as text); ``match/{season}/{full,short,mobile}/{id}.json``

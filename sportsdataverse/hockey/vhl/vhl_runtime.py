@@ -43,8 +43,8 @@ the record (or the page's HTML) into frames. Measured against the live site (sdv
   charset, any other redirect, and a page for another scope or with a missing table, header
   drift, zero rows or a row of the wrong width.
 
-Every request waits for :func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`
-(at least 1 s per host).
+Every request runs inside :func:`sportsdataverse.hockey.euro_hockey_runtime._polite`
+(it starts at least 1 s after the host's previous answer finished).
 """
 
 from __future__ import annotations

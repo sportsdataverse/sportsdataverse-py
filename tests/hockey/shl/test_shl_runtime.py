@@ -285,7 +285,7 @@ def test_every_attempt_retries_included_waits_its_turn(monkeypatch: pytest.Monke
     team = json.dumps(_load("sports-v2__teams__team_uuid.json")).encode()
     answers = iter([_Wire(503, b"{}"), _Wire(200, team)])
     waits: List[str] = []
-    monkeypatch.setattr(ehr, "_polite_wait", waits.append)
+    monkeypatch.setattr(ehr, "_polite_wait", lambda url, *a: waits.append(url))
     monkeypatch.setattr(dl_utils.time, "sleep", lambda s: None)
     monkeypatch.setattr(ehr.requests.Session, "request", lambda self, method, url, *a, **k: next(answers))
     assert rt._get(f"{B}/sports-v2/teams/087a-087aTQv9u")["uuid"] == "087a-087aTQv9u"

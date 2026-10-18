@@ -24,8 +24,8 @@ The webcaster API is keyless JSON (``GET <route>.json?locale=en``). On top of th
 
 Everything else is the package error vocabulary of the shared getter (404 -> ``NoDataError``,
 400/422 -> ``ValueError``, any other failure -> ``AssetFetchError``), through
-:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`: every attempt, retries included, waits at
-least one second after the host's last request.
+:data:`sportsdataverse.hockey.euro_hockey_runtime.SESSION`: every attempt, retries included, starts at
+least one second after the host's last answer finished.
 """
 
 from __future__ import annotations

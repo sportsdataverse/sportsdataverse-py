@@ -12,8 +12,8 @@ YAML names (``getter_module``); it dispatches on the route:
   fields; they are laid over the route's default body (:data:`BODIES`, the bodies the refs
   capture sends), so a ``None`` keeps the default.
 
-Every request waits on :func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`
-(at least 1 s per host) and goes through the ``_codegen_runtime`` decoders, so the error
+Every request runs inside :func:`sportsdataverse.hockey.euro_hockey_runtime._polite`
+(at least 1 s after the host's last answer) and goes through the ``_codegen_runtime`` decoders, so the error
 vocabulary holds: 404 -> ``NoDataError`` (an unknown play-by-play game), 400 / 422 ->
 ``ValueError`` (a missing required field: the site answers ``{"error": "..."}`` with 400),
 any other non-2xx, a dead connection, or an empty / non-JSON / truncated 200 ->
@@ -286,16 +286,16 @@ def _get_page(url: str, **kwargs: Any) -> Dict[str, Any]:
 def _post(url: str, json: Any = None, timeout: float = 30, attempts: int = 3, **_: Any) -> Any:
     """POST ``json`` with retries (2 s, 4 s) on :data:`RETRY_STATUSES` and transport errors.
 
-    Each attempt waits on the shared throttle. A ``Retry-After`` header on a retried status
+    Each attempt runs inside the shared throttle (:func:`~sportsdataverse.hockey.euro_hockey_runtime._polite`). A ``Retry-After`` header on a retried status
     (429 and 503 alike) lengthens the wait to what the server asks, capped at
     ``dl_utils._MAX_RETRY_AFTER``. Any other status returns at once (the caller decodes it
     under the error vocabulary); the last transport error is re-raised.
     """
     for i in range(attempts):
-        euro_hockey_runtime._polite_wait(url)
         retry_after = None
         try:
-            resp = _SESSION.post(url, json=json, headers=_HEADERS, timeout=timeout)
+            with euro_hockey_runtime._polite(url):  # starts >= 1 s after the host's last answer finished
+                resp = _SESSION.post(url, json=json, headers=_HEADERS, timeout=timeout)
         except OSError:  # requests.RequestException
             if i == attempts - 1:
                 raise

@@ -11,8 +11,9 @@ that client. Measured live (2026-10-12, ``sdv-internal-refs/khl``):
   fields, with ``X-Requested-With: XMLHttpRequest`` and ``Origin`` / ``Referer`` set to the site.
   The generated wrappers hand those fields over as ``params``: the codegen calls every getter
   ``_get(url, params=...)``, so this ``_get`` sends ``params`` as the POST form, not a query string.
-* **Retries.** Every attempt (the priming GET and the POST alike) waits for its host slot first
-  (:func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`). A dead connection, a 429 or a
+* **Retries.** Every attempt (the priming GET and the POST alike) runs inside
+  :func:`sportsdataverse.hockey.euro_hockey_runtime._polite`: it starts at least one second after the
+  host's previous answer finished. A dead connection, a 429 or a
   5xx is retried up to :data:`ATTEMPTS` times in all, with an exponential back-off that honours a
   ``Retry-After`` header (capped at two minutes); the last failure raises
   :class:`~sportsdataverse.errors.AssetFetchError`.
@@ -37,8 +38,8 @@ that client. Measured live (2026-10-12, ``sdv-internal-refs/khl``):
 
 Status and decoding go through the shared vocabulary (404 -> ``NoDataError``, 400/422 ->
 ``ValueError``, any other non-2xx, a non-JSON body or a dead connection -> ``AssetFetchError``), with
-at least one second between two requests to the host
-(:func:`sportsdataverse.hockey.euro_hockey_runtime._polite_wait`).
+at least one second from the end of one answer to the start of the next request to the host
+(:func:`sportsdataverse.hockey.euro_hockey_runtime._polite`).
 """
 
 from __future__ import annotations
@@ -51,7 +52,7 @@ from urllib.parse import urlsplit
 
 from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.errors import AssetFetchError, NoDataError
-from sportsdataverse.hockey.euro_hockey_runtime import _polite_wait
+from sportsdataverse.hockey import euro_hockey_runtime as _eh
 from sportsdataverse.hockey.khl import khl_webcaster_runtime as _wc
 
 __all__: List[str] = []
@@ -124,10 +125,10 @@ def _send(url: str, call: Callable[[], Any]) -> Any:
     fails every attempt raises :class:`~sportsdataverse.errors.AssetFetchError`.
     """
     for attempt in range(ATTEMPTS):
-        _polite_wait(url)
         delay = 2.0 * 2**attempt
         try:
-            resp = call()
+            with _eh._polite(url):  # starts >= 1 s after the host's last answer finished
+                resp = call()
         except OSError as exc:  # curl_cffi's RequestException subclasses OSError
             if attempt == ATTEMPTS - 1:
                 raise AssetFetchError(
@@ -286,7 +287,7 @@ def _get(
             if getattr(resp, "status_code", None) == 307:
                 if attempt:
                     raise AssetFetchError(f"{_rt._where(url)} answered 307 again after re-priming the session")
-                session[1] = _prime(http, site, timeout)  # its _polite_wait keeps >= 1 s after the 307
+                session[1] = _prime(http, site, timeout)  # its _polite starts >= 1 s after the 307 answered
                 continue
             raw = _rt._json_text(url, getattr(resp, "status_code", None), getattr(resp, "text", "") or "")
             if not (isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors"))):

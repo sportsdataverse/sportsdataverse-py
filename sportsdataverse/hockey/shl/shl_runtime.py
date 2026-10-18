@@ -29,8 +29,8 @@ The SHL site API is keyless JSON. Its contracts, all from the refs capture
   as text/html; anything else there (the SPA shell) raises ``AssetFetchError``.
 
 Every attempt, retries included, goes through
-:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which waits for ``_polite_wait``
-(at least 1 s between two requests to the host). Status codes follow the package vocabulary
+:data:`~sportsdataverse.hockey.euro_hockey_runtime.SESSION`, which runs it inside ``_polite``
+(at least 1 s from the host's last answer to the next request). Status codes follow the package vocabulary
 through :mod:`sportsdataverse._codegen_runtime`: 404 -> ``NoDataError``, 400 / 422 ->
 ``ValueError``, any other non-2xx or a dead connection -> ``AssetFetchError``.
 """
