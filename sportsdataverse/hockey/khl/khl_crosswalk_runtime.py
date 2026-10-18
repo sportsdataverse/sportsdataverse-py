@@ -47,6 +47,13 @@ def khl_club_crosswalk_from_frames(*frames: Any, return_as_pandas: bool = False)
 
             from sportsdataverse.hockey.khl import khl_club_crosswalk_from_frames, khl_game_header
             khl_club_crosswalk_from_frames(khl_game_header(898236, season=2026))
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rows: Set[tuple] = set()
     for frame in frames:
@@ -114,6 +121,13 @@ def khl_club_crosswalk(
             from sportsdataverse.hockey.khl import khl_club_crosswalk
             xw = khl_club_crosswalk(season=2026)
             xw.filter(xw["club_id"] == 7)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     from sportsdataverse.hockey.khl.khl_rest import khl_game_header, khl_schedule
 

@@ -177,6 +177,12 @@ def vhl_tn(season: int, stage: str = "regular") -> int:
             from sportsdataverse.hockey.vhl import vhl_tn
             vhl_tn(2026)              # 1374
             vhl_tn(2026, "playoff")   # 1375
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     season, stage = _season(season), _stage(stage)
     table = _tournaments()

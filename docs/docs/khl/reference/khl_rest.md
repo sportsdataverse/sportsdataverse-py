@@ -521,8 +521,8 @@ Shot map: one row per shot with its x / y on the 1000 x 500 rink grid (2024-25 o
 | `jn` | integer | Jersey number (not an id; 0 on a team event) |
 | `player_id` | integer | khl.ru player id; equals webcaster player khl_id |
 | `shot_type` | integer | 1 = goal, 2 = saved (inferred upstream; unverified) |
-| `x` | integer | Shot x on the site's 1000-wide rink grid (indent_left = x/10 %); whether shots are normalised to one attacking direction is UNVERIFIED |
-| `y` | integer | Shot y on the site's 500-high rink grid (indent_top = y/5 %); orientation UNVERIFIED |
+| `x` | integer | Shot x on the site's 1000 x 500 rink grid, origin top-left (indent_left = x/10 %); goal lines near x = 55 and 945. Team A (home) attacks +x and team B -x in every period, overtime included |
+| `y` | integer | Shot y on the site's 1000 x 500 grid, origin top-left, increasing downward (indent_top = y/5 %); the grid is stretched in y, about 1.18x against a 200 x 85 ft rink |
 | `indent_left` | numeric | Shot position as percent from the left edge |
 | `indent_top` | numeric | Shot position as percent from the top edge |
 | `indent_right` | numeric | Shot position as percent from the right edge |

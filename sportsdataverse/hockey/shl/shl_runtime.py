@@ -225,6 +225,12 @@ def shl_ssgt_uuid(season: int, game_type: str = "regular") -> str:
             from sportsdataverse.hockey.shl import shl_ssgt_uuid
             shl_ssgt_uuid(2026)              # 2025/26 regular season
             shl_ssgt_uuid(2025, "playoff")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     return _resolve(season, game_type)["ssgt"]
 
@@ -364,6 +370,12 @@ def shl_player_crosswalk(season: int, game_type: str = "regular", *, return_as_p
             from sportsdataverse.hockey.shl import shl_player_crosswalk
             xw = shl_player_crosswalk(2026)
             xw.filter(xw["player_id"] == 2427)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_crosswalk_runtime.ha_player_crosswalk` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     raw = _get(f"{BASE}/statistics-v2/stats-info/players_summary", {"season": season, "gameType": game_type})
     return parse_shl_player_crosswalk(raw, return_as_pandas=return_as_pandas)

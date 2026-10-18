@@ -398,6 +398,12 @@ def parse_khl_game_header(raw: Any, *, return_as_pandas: bool = False, columns: 
         Next step::
 
             df.select("game_id", "home_score", "away_score", "ots")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_header` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_game_header")
     return _out(_conform(_game_frame(_game_row(_game(raw)), columns), columns), return_as_pandas)
@@ -433,6 +439,12 @@ def parse_khl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Co
         Next step::
 
             df.select("game_id", "gk_a_player_id", "gk_b_player_id")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_info` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_game_info")
     game = _game(raw)
@@ -505,6 +517,12 @@ def parse_khl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: C
         Next step::
 
             df.filter(pl.col("period") == 0).sort("g", descending=True)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_box` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -589,6 +607,12 @@ def parse_khl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Columns 
         Next step::
 
             df.filter(pl.col("event_type") == "goal")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_pbp` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -663,8 +687,11 @@ _SHOTS_SCHEMA = {
 def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Columns = None) -> Frame:
     """``/game/text/`` -> shot map: one row per shot of ``tab_shotsmap.shots`` (2024/25 on).
 
-    ``x`` / ``y`` are on the site's 1000 x 500 rink grid (``indent_*`` the same point as percent offsets
-    from each edge); the direction normalisation is unverified. ``shot_type`` 1 = goal, 2 = saved is
+    ``x`` / ``y`` are on the site's 1000 x 500 rink grid, origin top-left (``indent_left`` = x / 10,
+    ``indent_top`` = y / 5: the same point as percent offsets from each edge). The grid is stretched in y
+    (about 1.18x against a 200 x 85 ft rink); the goal lines sit near x = 55 and x = 945. Team A (home)
+    attacks +x and team B -x in every period, overtime included (verified on the committed fixtures).
+    ``shot_type`` 1 = goal, 2 = saved is
     inferred (unverified upstream). ``time_seconds`` is game-elapsed seconds; ``jn`` is resolved to
     ``player_id`` through ``players``. Earlier seasons have no shot map: zero rows.
 
@@ -692,6 +719,12 @@ def parse_khl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Column
         Next step::
 
             df.group_by("team_side", "shot_type").len()
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_shots` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     game = _game(raw)
     ids = _ids(game)
@@ -780,6 +813,12 @@ def parse_khl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Col
         Next step::
 
             df.filter(pl.col("decision") == "SO").select("game_id", "home_name", "away_name")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     games = [
@@ -871,6 +910,12 @@ def parse_khl_game_protocol(raw: Any, *, return_as_pandas: bool = False, columns
         Next step::
 
             df.select("period", "time", "scorer_player_id", "strength")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_game_protocol` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     ids: Dict[str, Optional[int]] = {"tournament_id": None, "game_id": None}
@@ -963,6 +1008,12 @@ def parse_khl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Co
         Next step::
 
             df.filter(pl.col("table") == "league").select("rank", "name", "pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_standings` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     tables = _obj(_data(raw).get("json"))
     rows = []
@@ -1033,6 +1084,12 @@ def parse_khl_playoff_bracket(raw: Any, *, return_as_pandas: bool = False, colum
         Next step::
 
             df.filter(pl.col("round") == 1)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_playoff_bracket` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     data = _data(raw)
     clubs = _obj(data.get("CLUBS"))
@@ -1093,6 +1150,12 @@ def parse_khl_player_stats(raw: Any, *, return_as_pandas: bool = False, columns:
         Next step::
 
             df.sort("pts", descending=True).head()
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_stats` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_stats")
     rows = []
@@ -1147,6 +1210,12 @@ def parse_khl_player_profile(raw: Any, *, return_as_pandas: bool = False, column
         Next step::
 
             df.select("player_id", "summary_stats_gp", "summary_stats_pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_profile` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_profile")
     person = _obj(_data(raw).get("DATA"))
@@ -1188,6 +1257,12 @@ def parse_khl_player_career(raw: Any, *, return_as_pandas: bool = False, columns
         Next step::
 
             df.select("season_label", "tournament_id", "gp", "pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_player_career` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_player_career")
     data = _data(raw)
@@ -1246,6 +1321,12 @@ def parse_khl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Colum
         Next step::
 
             df.filter(pl.col("group") == "goalkeepers")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_roster` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_roster")
     rows = [
@@ -1287,6 +1368,12 @@ def parse_khl_stat_filters(raw: Any, *, return_as_pandas: bool = False, columns:
         Next step::
 
             df.filter(pl.col("filter") == "season")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_stat_filters` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_stat_filters")
     rows = [

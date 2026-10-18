@@ -71,6 +71,12 @@ def elh_start_year(season: Any) -> int:
 
     Raises:
         ValueError: ``season`` is not a year.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.elh.elh_list_objects` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     try:
         end = int(season)

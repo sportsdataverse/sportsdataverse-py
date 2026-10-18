@@ -1401,6 +1401,12 @@ def parse_vhl_schedule(raw: Any, *, return_as_pandas: bool = False, columns: Opt
 
             with open("calendar_1374.html", encoding="utf-8") as fh:
                 games = parse_vhl_schedule(fh.read())
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "calendar", "games")
     if rec is None:
@@ -1477,6 +1483,12 @@ def parse_vhl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             raw = vhl_game_info(season=2026, game_id=899223, return_parsed=False)
             info = parse_vhl_game_info(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_game_info` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "report", "game")
     g = rec.get("game") if rec is not None else None
@@ -1531,6 +1543,12 @@ def parse_vhl_goals(raw: Any, *, return_as_pandas: bool = False, columns: Option
         Power-play goals::
 
             goals.filter(pl.col("strength") == "ppg")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_goals` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "report", "goals")
     if rec is None:
@@ -1576,6 +1594,12 @@ def parse_vhl_penalties(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             raw = vhl_penalties(season=2026, game_id=899223, return_parsed=False)
             penalties = parse_vhl_penalties(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_penalties` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "report", "penalties")
     rows = _side_rows(rec, "penalties") if rec is not None else []
@@ -1609,6 +1633,12 @@ def parse_vhl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
         The same report, more frames (one fetch)::
 
             goalies = parse_vhl_goalie_box(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_player_box` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "report", "skaters")
     rows = _side_rows(rec, "skaters") if rec is not None else []
@@ -1634,6 +1664,12 @@ def parse_vhl_goalie_box(raw: Any, *, return_as_pandas: bool = False, columns: O
 
             raw = vhl_goalie_box(season=2026, game_id=899223, return_parsed=False)
             goalies = parse_vhl_goalie_box(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_box` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "report", "goalies")
     rows = _side_rows(rec, "goalies") if rec is not None else []
@@ -1686,6 +1722,12 @@ def parse_vhl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         Goals only::
 
             events.filter(pl.col("kind") == "goal")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_pbp` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "online", "events")
     if rec is None:
@@ -1727,6 +1769,12 @@ def parse_vhl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
             raw = vhl_standings(season=2026, return_parsed=False)
             table = parse_vhl_standings(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_standings` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "standings", "rows")
     if rec is None:
@@ -1765,6 +1813,12 @@ def parse_vhl_skater_stats(
         The same page holds the goalies::
 
             goalies = parse_vhl_goalie_stats(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_skater_stats` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "stats_players", "forwards")
     if rec is None:
@@ -1799,6 +1853,12 @@ def parse_vhl_goalie_stats(
 
             raw = vhl_goalie_stats(season=2026, stage="playoff", return_parsed=False)
             goalies = parse_vhl_goalie_stats(raw, return_as_pandas=True)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_goalie_stats` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "stats_players", "goalies")
     if rec is None:
@@ -1841,6 +1901,12 @@ def parse_vhl_player(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             raw = vhl_player(player_id=34526, return_parsed=False)
             card = parse_vhl_player(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_player` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "player", "player_id")
     rows = [rec] if rec is not None else []
@@ -1873,6 +1939,12 @@ def parse_vhl_player_career(
 
             raw = vhl_player_career(player_id=34526, return_parsed=False)
             career = parse_vhl_player_career(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_player_career` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "player", "seasons")
     if rec is None:
@@ -1914,6 +1986,12 @@ def parse_vhl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optio
 
             raw = vhl_roster(team_page_id=390, return_parsed=False)
             roster = parse_vhl_roster(raw)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.vhl.vhl_roster` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     rec = _record(raw, "team", "roster")
     if rec is None:

@@ -91,6 +91,15 @@ def parse_khl_webcaster(raw: Any, *, return_as_pandas: bool = False, columns: Co
         Next step::
 
             df.select("id", "khl_id", "team_a_name", "team_b_name")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_event` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_events` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players` - the route this works on.
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_players_light` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     if isinstance(raw, list):
         rows = [_unwrap(item) for item in raw]
@@ -151,6 +160,12 @@ def parse_khl_webcaster_stages(raw: Any, *, return_as_pandas: bool = False, colu
         Next step::
 
             df.filter(pl.col("season") == 2026)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_stages` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     stages = _list(_obj(raw).get("stages_v2"))
     rows: List[Dict[str, Any]] = [
@@ -199,6 +214,12 @@ def parse_khl_webcaster_leaders(raw: Any, *, return_as_pandas: bool = False, col
         Next step::
 
             df.filter(pl.col("rank") == 1)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_leaders` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_webcaster_leaders")
     rows = [
@@ -246,6 +267,12 @@ def parse_khl_webcaster_tables(raw: Any, *, return_as_pandas: bool = False, colu
         Next step::
 
             df.filter(pl.col("season") == 2026).select("rank", "name", "pts")
+
+    See Also:
+        * :func:`sportsdataverse.hockey.khl.khl_webcaster_tables` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     columns = _columns(columns, "khl_webcaster_tables")
     rows = [

@@ -61,6 +61,11 @@ class PoliteSession(requests.Session):
 
     ``dl_utils.download()`` retries inside one call; handing it this session spaces every
     attempt (and records it in the per-host clock), not just the first one.
+
+    See Also:
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
 
     def request(self, method: str | bytes, url: str | bytes, *args: Any, **kwargs: Any) -> requests.Response:
@@ -185,6 +190,11 @@ def get_text(
         AssetFetchError: any other non-200 (after the retries), a dead connection, a body of the wrong
             content type, bytes that do not decode in the declared charset (or decode to replacement
             characters), an empty body, or any other redirect.
+
+    See Also:
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     where = _rt._where(url)
     clean = {k: v for k, v in (params or {}).items() if v is not None}

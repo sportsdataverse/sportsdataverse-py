@@ -61,6 +61,13 @@ def ha_player_crosswalk(
 
             from sportsdataverse.hockey.ha import ha_leaders, ha_player_crosswalk
             ha_player_crosswalk(ha_leaders(), season=2026)
+
+    See Also:
+        * :func:`sportsdataverse.hockey.shl.shl_player_crosswalk` - the route this works on.
+        * :func:`sportsdataverse.hockey.ha.ha_players` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     if isinstance(players, pd.DataFrame):
         players = pl.from_pandas(players)

@@ -191,6 +191,12 @@ def body_season(season: Optional[int], today: Optional[date] = None) -> Tuple[in
     Raises:
         NoDataError: the season is before 2005/06 (:data:`FIRST_SEASON`); nothing is sent.
         ValueError: ``season`` is not an integer year.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     end = current_season(today) if season is None else season
     if isinstance(end, bool) or not isinstance(end, int):
@@ -216,6 +222,12 @@ def flight_text(page: str) -> str:
 
     Raises:
         AssetFetchError: no flight data, or a chunk that is not a JSON string literal.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     out = []
     for lit in _PUSH.findall(page):
@@ -237,6 +249,12 @@ def extract_game_list(page: str) -> Dict[str, Any]:
     Raises:
         AssetFetchError: the page has no such element, or its props are not an object with a
             ``games`` list.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_schedule` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     text = flight_text(page)
     m = _GAME_LIST_KEY.search(text)
@@ -299,6 +317,12 @@ def build_body(path: str, params: Optional[Mapping[str, Any]], today: Optional[d
         ValueError: an unknown route, ``categories`` / ``phase`` outside its list, a leaderboard
             without a ``metric``, or an ``/api/all-players`` call without ``teamShortName``.
         NoDataError: a season before 2005/06.
+
+    See Also:
+        * :func:`sportsdataverse.hockey.ha.ha_standings` - the route this works on.
+        * `fastRhockey`_ - SportsDataverse hockey package (R).
+
+    .. _fastRhockey: https://fastRhockey.sportsdataverse.org
     """
     if path not in BODIES:
         raise ValueError(f"not a HockeyAllsvenskan POST route: {path!r}")
