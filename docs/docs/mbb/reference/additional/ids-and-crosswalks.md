@@ -70,7 +70,7 @@ Precomputed box-score lookup tables + resolution cache for
 |---|---|---|---|
 | `box_lineup` | `LineupEvent` |  | The box-score lineup event this context resolves names against. |
 | `all_players_map` | `dict[str, str]` |  | Player code -> full name, for every player in `box_lineup.players`. |
-| `alt_all_players_map` | `dict[str, list[str]]` |  | Truncated player code (see truncate_code_1` / truncate_code_2`) -> the list of full names sharing that truncation -- used when the exact code doesn't match but a unique truncated one does. |
+| `alt_all_players_map` | `dict[str, list[str]]` |  | Truncated player code (see `_truncate_code_1` / `_truncate_code_2`) -> the list of full names sharing that truncation -- used when the exact code doesn't match but a unique truncated one does. |
 | `resolution_cache` | `dict[str, str]` | `<factory>` | Memoizes prior `tidy_player` resolutions. See the module docstring's "Behavioral quirk" note -- this is read by the raw input name but written by the corrected name, faithfully reproducing the upstream asymmetry. |
 
 ### WeakSurnameMatch {#WeakSurnameMatch}

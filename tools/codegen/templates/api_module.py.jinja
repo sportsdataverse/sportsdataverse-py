@@ -5,7 +5,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
 
+{% if runtime_imports %}
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
+{% endif %}
+{% for mod, fn, alias in getter_imports %}
+from {{ mod }} import {{ fn }} as {{ alias }}
+{% endfor %}
 {% if parser_imports %}
 from sportsdataverse.{{ parser_module }} import {{ parser_imports|join(", ") }}
 
@@ -73,12 +78,12 @@ def {{ ep.fn_name }}(
 {% endfor %}
     _caller_params = kwargs.pop("params", None) or {}
     _params = {
-{% for k, v in ep.fixed_params.items() %}
+{% for k, v in ep.url_fixed.items() %}
         "{{ k }}": {{ v|py_repr }},
 {% endfor %}
-{% for p in ep.query_params %}
-{% if p.transform %}
-        "{{ p.api }}": {{ p.transform }}({{ p.python_name }}),
+{% for p in ep.url_params %}
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
 {% else %}
         "{{ p.api }}": {{ p.python_name }},
 {% endif %}
@@ -88,15 +93,34 @@ def {{ ep.fn_name }}(
 {% endif %}
     }
     _params.update(_caller_params)
+{% if ep.body_kind != "query" %}
+    _body = {
+{% for k, v in ep.body_fixed.items() %}
+        "{{ k }}": {{ v|py_repr }},
+{% endfor %}
+{% for p in ep.body_params %}
+{% if p.has_transform %}
+        "{{ p.api }}": {{ p.transform_call(p.python_name) }},
+{% else %}
+        "{{ p.api }}": {{ p.python_name }},
+{% endif %}
+{% endfor %}
+    }
+    for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
+        _body[_k] = _params.pop(_k)
+{% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         __url,
 {% else %}
-    raw = _get(
+    raw = {{ ep.getter_name }}(
         {{ ep.url_literal }},
 {% endif %}
         params=_params,
+{% if ep.body_kind != "query" %}
+        {{ "data" if ep.body_kind == "form" else "json" }}=_body,
+{% endif %}
 {% if auth %}
         headers=headers,
 {% endif %}

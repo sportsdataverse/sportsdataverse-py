@@ -13,7 +13,7 @@ Player box score of a finished game, both sides, plus a team rebounds/turnovers 
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-match-datas/data-count`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-match-datas/data-count?scheduleId=100105799](https://data-server.cbaleague.com/api/player-match-datas/data-count?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-match-datas/data-count' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -68,7 +68,7 @@ Advanced player box of a finished game (usage, true shooting, rebound/steal/bloc
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-match-datas/advance-count`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-match-datas/advance-count?scheduleId=100105799](https://data-server.cbaleague.com/api/player-match-datas/advance-count?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-match-datas/advance-count' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -139,7 +139,7 @@ Fast-break points, dunk points and paint points per player of a finished game, o
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-match-datas/schedule-other-data`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-match-datas/schedule-other-data?scheduleId=100105799](https://data-server.cbaleague.com/api/player-match-datas/schedule-other-data?scheduleId=100105799)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-match-datas/schedule-other-data' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -178,7 +178,7 @@ Season player box (one page of the season player table).
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-base-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-base-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/player-base-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-base-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -257,7 +257,7 @@ Season player offensive rates (one page).
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-offensive-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-offensive-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/player-offensive-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-offensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -330,7 +330,7 @@ Season player defensive rates (one page).
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-defensive-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-defensive-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/player-defensive-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-defensive-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
@@ -398,7 +398,7 @@ Season player shot-zone profile (one page).
 
 **Endpoint URL:** `POST https://data-server.cbaleague.com/api/player-shoot-list`
 
-**Valid URL:** [https://data-server.cbaleague.com/api/player-shoot-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100](https://data-server.cbaleague.com/api/player-shoot-list?season=2026&matchTypeId=1&countRanger=1&playerRanger=1&teamId=29128&sort=3&rank=1&pageNumber=1&pageSize=100)
+**Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/player-shoot-list?pageNumber=1&pageSize=100' -H 'Content-Type: application/json' -d '{"season": 2025, "matchTypeId": 1, "countRanger": 1, "playerRanger": 1, "teamId": 29128, "sort": 3, "rank": 1}'`
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|

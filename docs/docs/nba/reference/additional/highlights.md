@@ -150,7 +150,7 @@ Team season statistics from the league season page.
 Port of hoopR's `bref_teams_stats()` (NBA) and wehoop's
 `bref_wnba_team_stats()` (WNBA). Every team table lives on the one season
 page and all but the first are comment-hidden, which is why the table `id`
-selection in bref_table` matters here.
+selection in `_bref_table` matters here.
 
 **Parameters**
 
@@ -222,7 +222,7 @@ df.sort("pts_per_g", descending=True).head()
 Compile a full season's possession stint matrix (cached + resumable + throttled).
 
 Discovers game ids, dedupes, then per game loads the cached parquet if present
-(`resume`), else fetches via fetch_possessions`, caches it, and sleeps
+(`resume`), else fetches via `_fetch_possessions`, caches it, and sleeps
 `delay_s` (throttle; only on live fetches). A game that errors or returns no
 possessions is logged and skipped (best-effort — a per-game failure never
 raises; see `Raises` for the game_date integrity error). The assembled

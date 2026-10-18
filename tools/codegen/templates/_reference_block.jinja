@@ -11,6 +11,10 @@
 
 **Valid URL:** [{{ ep.valid_url }}]({{ ep.valid_url }})
 {% endif %}
+{% if ep.curl_example %}
+
+**Example request:** `{{ ep.curl_example }}`
+{% endif %}
 {% if ep.r_equivalent %}
 
 **R equivalent:** {% for pkg, fn in ep.r_equivalent.items() %}`{{ pkg }}::{{ fn }}()`{% if not loop.last %}, {% endif %}{% endfor %}

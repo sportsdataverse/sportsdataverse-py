@@ -312,6 +312,8 @@ files = [
     "sportsdataverse/hockey/sihf/sihf_runtime.py",
     "sportsdataverse/hockey/euro_hockey_runtime.py",
     "sportsdataverse/basketball/basketball_runtime.py",
+    "sportsdataverse/basketball/_competitions.py",
+    "sportsdataverse/basketball/basketball_crosswalk.py",
     "sportsdataverse/basketball/aba/aba_parsers.py",
     "sportsdataverse/basketball/aba/aba_runtime.py",
     "sportsdataverse/basketball/acb/acb_codes.py",
