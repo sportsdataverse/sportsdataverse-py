@@ -1294,3 +1294,106 @@
   test: tests/test_runtime_body_vocabulary.py -k never_cached
   expected: kill
   note: R880-6b, a JSON string from any other route is refused and must not be cached
+
+# --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
+- id: release-classify-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    with _transport_errors(url):
+            resp = download(url, headers=_PROBE_HEADERS)
+  mutant: |-
+    if True:
+            resp = download(url, headers=_PROBE_HEADERS)
+  test: tests/codegen/test_runtime_release.py -k connection_error_is_asset
+  expected: kill
+  note: a dead connection leaked requests.ConnectionError from every release loader
+
+- id: release-panic-refetch-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error'
+  mutant: '    if True:'
+  test: tests/codegen/test_runtime_release.py -k panic_refetch_is_asset
+  expected: kill
+  note: the metadata-stripped refetch issues its own request
+
+- id: release-probe-downloads-the-whole-asset
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_PROBE_HEADERS = {"Range": "bytes=0-0"}'
+  mutant: '_PROBE_HEADERS = {}'
+  test: tests/codegen/test_runtime_release.py -k one_byte
+  expected: kill
+  note: the failure classification re-downloaded a 20-59 MB asset
+
+- id: release-transient-read-reraises
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    # is the asset's own error and surfaces as the reader raised it.
+        return pl.read_parquet(url, use_pyarrow=True)
+  mutant: |-
+    # is the asset's own error and surfaces as the reader raised it.
+        raise original
+  test: tests/codegen/test_runtime_release.py -k one_byte
+  expected: kill
+  note: a reachable asset whose read failed in transit re-raised the raw reader error
+
+- id: fetch-csv-accepts-a-page
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    _text_body(resp, url, html=False)'
+  mutant: '    _text_body(resp, url)'
+  test: tests/codegen/test_runtime_release.py -k challenge_page
+  expected: kill
+  note: a challenge page parsed as a one-column CSV
+
+- id: nfl-teams-csv-read-by-polars
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    data = _fetch_csv(NFL_TEAM_LOGO_URL)'
+  mutant: '    data = pl.read_csv(NFL_TEAM_LOGO_URL)'
+  test: tests/codegen/test_runtime_release.py -k teams_404
+  expected: kill
+  note: on polars 2.0 pl.read_csv(url) answers a 404 with a bare OSError
+
+- id: no-espn-data-decodes-binary
+  group: codegen-runtime
+  finding: A-L29
+  file: sportsdataverse/errors.py
+  snippet: '    if "octet-stream" in str(headers.get("Content-Type", "")).lower():'
+  mutant: '    if False:'
+  test: tests/codegen/test_runtime_release.py -k binary_body
+  expected: kill
+  note: every 2xx release asset was charset-scanned as JSON
+
+- id: nfl-schedule-empty-seasons-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: |-
+    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
+        if "season" in data.columns and season_list is not None:
+  mutant: |-
+    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
+        if "season" in data.columns and season_list:
+  test: tests/codegen/test_runtime_release.py -k seasons_empty_schedule
+  expected: kill
+  note: seasons=[] returned every season since 1999
+
+- id: nfl-implicit-seasons-skip-any-gap
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '            if not implicit or season != season_list[-1]:'
+  mutant: '            if not implicit:'
+  test: tests/codegen/test_runtime_release.py -k gap_before_the_current
+  expected: kill
+  note: seasons=None skips only the unpublished current season; a hole in history still raises

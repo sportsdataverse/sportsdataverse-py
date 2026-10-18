@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Callable, List
+from collections.abc import Callable
+from typing import List
 
 import polars as pl
 from tqdm import tqdm
@@ -63,7 +64,7 @@ from sportsdataverse.nfl.cache import cached_loader
 from sportsdataverse.nfl.utils_date import get_current_nfl_season
 
 
-def _nfl_season_list(seasons, floor: int) -> List[int] | None:
+def _nfl_season_list(seasons, floor: int) -> list[int] | None:
     """The requested seasons, each checked against ``floor`` before any request (B-GB-14).
 
     ``None`` stays ``None``: every season. ``[]`` stays ``[]``: no season, so the caller
@@ -80,7 +81,7 @@ def _nfl_season_list(seasons, floor: int) -> List[int] | None:
     return season_list
 
 
-def _fetch_nfl_seasons(seasons, floor: int, url: Callable[[int], str]) -> List[pl.DataFrame]:
+def _fetch_nfl_seasons(seasons, floor: int, url: Callable[[int], str]) -> list[pl.DataFrame]:
     """One release frame per requested season, read from ``url(season)`` (B-GB-14).
 
     ``None`` reads every season from ``floor`` through the current one, of which only
@@ -92,7 +93,7 @@ def _fetch_nfl_seasons(seasons, floor: int, url: Callable[[int], str]) -> List[p
     implicit = season_list is None
     if season_list is None:
         season_list = list(range(floor, get_current_nfl_season() + 1))
-    frames: List[pl.DataFrame] = []
+    frames: list[pl.DataFrame] = []
     for season in tqdm(season_list):
         try:
             frames.append(_fetch_release_parquet(url(season)))
@@ -102,7 +103,7 @@ def _fetch_nfl_seasons(seasons, floor: int, url: Callable[[int], str]) -> List[p
     return frames
 
 
-def _concat_seasons(frames: List[pl.DataFrame]) -> pl.DataFrame:
+def _concat_seasons(frames: list[pl.DataFrame]) -> pl.DataFrame:
     # diagonal_relaxed: per-season release schemas drift (columns added or
     # dropped, and dtypes widened) -- union columns, null-fill gaps.
     return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
