@@ -218,6 +218,19 @@ def test_roster_keeps_player_bio_but_never_coach_bio():
     assert players["team_id"].unique().to_list() == [2650] and players.schema["height"] == pl.Int64
 
 
+def test_an_empty_string_in_an_id_rank_or_number_column_is_null():
+    # the roster sends Rank "" for every player and coach (the field belongs to the leader lists): null, typed Int64
+    r = body("vtb_infobasket", "full/roster_2650_50714.json", {"season": 2026})
+    for frame in (vtb.parse_vtb_infobasket_roster(r), vtb.parse_vtb_infobasket_roster_coaches(r)):
+        assert frame.schema["rank"] == pl.Int64 and frame["rank"].null_count() == frame.height
+    assert F.flat({"Rank": "", "LiveID": "", "PlayerNumber": "", "Name": ""}) == {
+        "rank": None,
+        "live_id": None,
+        "player_number": None,
+        "name": "",
+    }
+
+
 def test_player_routes():
     log = vtb.parse_vtb_infobasket_player_game_log(
         body("vtb_infobasket", "full/player_game_log_423011_50714.json.gz", {"person_id": 423011, "team_id": 2650})

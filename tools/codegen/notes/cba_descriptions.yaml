@@ -10,7 +10,8 @@ cba_best_player:
     on some rows (the short name is in playerNameStr).'
   player_name_str: 'Short display name (Chinese surname form: 桑普森).'
   points: Points scored by the player in this game.
-  real_point_rate: 真实命中率 true-shooting percentage as a whole-percent string ('74%').
+  real_point_rate: 真实命中率 true-shooting percentage. A FRACTION 0-1 (the API sends a
+    percent string such as '39.4%').
   rebounds: Total rebounds by the player in this game.
   schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
     across seasons and match types; the {scheduleId} of every game route). Stamped
@@ -19,8 +20,8 @@ cba_best_player:
     or away (guest / visiting block).'
   steals: Steals by the player in this game.
   three_points_str: Three-point field goals as the string 'made/attempted'.
-  turn_share: 回合占有率 possession share (see advance-count turnShare) as a whole-percent
-    string ('16%').
+  turn_share: 回合占有率 possession share (see advance-count turnShare). A FRACTION 0-1
+    (the API sends a percent string such as '39.4%').
   turnovers: Turnovers by the player in this game.
   two_points_str: Two-point field goals as the string 'made/attempted' ('3/5').
 cba_best_stats:
@@ -164,16 +165,17 @@ cba_game_team_four:
     number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
     possessions (offensive rating).'
   rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数).'
-  rhythm_num: Pace as a STRING with one decimal ('96.3'); same value as rhythm.
+  rhythm_num: Pace; same value as rhythm. A number (the API sends it as display text,
+    such as '21.6').
   rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
     per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
     每48分钟回合数).'
   schedule_season: 'Season START year (2025 = the 2025-26 season). The sdv season
     key is the END year = season + 1; map at the boundary. The season of this table:
     one before the game''s season (2025 game -> 2024).'
-  season: 'Season of the table as a STRING (''2024'' = the START year of 2024-25;
-    sdv END year = value + 1); equals scheduleSeason. NOT the season of the game:
-    the table is the PREVIOUS season''s.'
+  season: 'Season of the table (''2024'' = the START year of 2024-25; sdv END year
+    = value + 1); equals scheduleSeason. NOT the season of the game: the table is
+    the PREVIOUS season''s. An integer (the API sends it as digit text).'
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
     clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
     club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
@@ -196,15 +198,18 @@ cba_game_team_four:
   wine_average: League-average wins (field name sic); 0.0 in every sample.
 cba_game_team_shots:
   bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
-    points allowed per 100 possessions).'
+    points allowed per 100 possessions). A number (the API sends it as display text,
+    such as ''21.6'').'
   bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
-    per 100 possessions).'
+    per 100 possessions). A number (the API sends it as display text, such as ''21.6'').'
   bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
-    百回合净胜分 net points per 100 possessions).'
+    百回合净胜分 net points per 100 possessions). A number (the API sends it as display
+    text, such as ''21.6'').'
   guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
     at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
     against this team (守, defence; the ''guard'' prefix is inferred from the site''s
-    攻/防 offence/defence toggle). A string percent (''36.3%'').'
+    攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such
+    as ''39.4%''; the _sort column holds the same fraction).'
   guard_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
     of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
@@ -217,7 +222,8 @@ cba_game_team_shots:
     攻/防 offence/defence toggle).'
   guard_hit_at_rim_made_rate: 篮下命中率 at-rim shooting percentage, for the shots of the
     OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the
-    site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+    site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string
+    such as '39.4%'; the _sort column holds the same fraction).
   guard_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
     for the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
@@ -228,7 +234,8 @@ cba_game_team_shots:
     from the site''s 攻/防 offence/defence toggle).'
   guard_hit_middle_rate: 中距离命中率 mid-range shooting percentage, for the shots of the
     OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the
-    site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+    site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string
+    such as '39.4%'; the _sort column holds the same fraction).
   guard_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
     percentage, for the shots of the OPPONENTS against this team (守, defence; the
@@ -240,7 +247,8 @@ cba_game_team_shots:
   guard_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts that
     are two-pointers outside the restricted area, for the shots of the OPPONENTS against
     this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
-    toggle). A string percent (''36.3%'').'
+    toggle). A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the
+    _sort column holds the same fraction).'
   guard_middle_rate_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of
     field-goal attempts that are two-pointers outside the restricted area, for the
@@ -254,7 +262,8 @@ cba_game_team_shots:
   guard_real_point: 有效命中率 effective field-goal percentage (all field goals counted
     as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
     the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A
-    string percent ('36.3%').
+    FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column
+    holds the same fraction).
   guard_real_point_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage
     (all field goals counted as two-point attempts), for the shots of the OPPONENTS
@@ -266,7 +275,8 @@ cba_game_team_shots:
     the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
   guard_three_goals_rate: 三分命中率 three-point shooting percentage, for the shots of
     the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from
-    the site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+    the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent
+    string such as '39.4%'; the _sort column holds the same fraction).
   guard_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
     percentage, for the shots of the OPPONENTS against this team (守, defence; the
@@ -278,7 +288,8 @@ cba_game_team_shots:
   guard_three_rate: '三分占比 three-point share: the share of field-goal attempts that
     are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
     the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).
-    A string percent (''36.3%'').'
+    A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the _sort column
+    holds the same fraction).'
   guard_three_rate_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 三分占比 three-point share: the share
     of field-goal attempts that are three-pointers, for the shots of the OPPONENTS
@@ -294,7 +305,8 @@ cba_game_team_shots:
     as float.
   offensive_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts
     taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
-    (攻, offence). A string percent (''36.3%'').'
+    (攻, offence). A FRACTION 0-1 (the API sends a percent string such as ''39.4%'';
+    the _sort column holds the same fraction).'
   offensive_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
     of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
@@ -304,7 +316,8 @@ cba_game_team_shots:
     taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
     (攻, offence).'
   offensive_hit_at_rim_made_rate: 篮下命中率 at-rim shooting percentage, for the team's
-    own shots (攻, offence). A string percent ('36.3%').
+    own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as
+    '39.4%'; the _sort column holds the same fraction).
   offensive_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
     for the team''s own shots (攻, offence).'
@@ -312,7 +325,8 @@ cba_game_team_shots:
     string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the team''s
     own shots (攻, offence).'
   offensive_hit_middle_rate: 中距离命中率 mid-range shooting percentage, for the team's
-    own shots (攻, offence). A string percent ('36.3%').
+    own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as
+    '39.4%'; the _sort column holds the same fraction).
   offensive_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
     percentage, for the team''s own shots (攻, offence).'
@@ -321,7 +335,8 @@ cba_game_team_shots:
     shots (攻, offence).'
   offensive_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts
     that are two-pointers outside the restricted area, for the team''s own shots (攻,
-    offence). A string percent (''36.3%'').'
+    offence). A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the
+    _sort column holds the same fraction).'
   offensive_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the
     share of field-goal attempts that are two-pointers outside the restricted area,
@@ -331,8 +346,9 @@ cba_game_team_shots:
     that are two-pointers outside the restricted area, for the team''s own shots (攻,
     offence).'
   offensive_real_point: 有效命中率 effective field-goal percentage (all field goals counted
-    as two-point attempts), for the team's own shots (攻, offence). A string percent
-    ('36.3%').
+    as two-point attempts), for the team's own shots (攻, offence). A FRACTION 0-1
+    (the API sends a percent string such as '39.4%'; the _sort column holds the same
+    fraction).
   offensive_real_point_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 有效命中率 effective field-goal
     percentage (all field goals counted as two-point attempts), for the team''s own
@@ -341,7 +357,8 @@ cba_game_team_shots:
     of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals
     counted as two-point attempts), for the team''s own shots (攻, offence).'
   offensive_three_goals_rate: 三分命中率 three-point shooting percentage, for the team's
-    own shots (攻, offence). A string percent ('36.3%').
+    own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as
+    '39.4%'; the _sort column holds the same fraction).
   offensive_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
     percentage, for the team''s own shots (攻, offence).'
@@ -349,8 +366,9 @@ cba_game_team_shots:
     string of the metric. Metric: 三分命中率 three-point shooting percentage, for the team''s
     own shots (攻, offence).'
   offensive_three_rate: '三分占比 three-point share: the share of field-goal attempts
-    that are three-pointers, for the team''s own shots (攻, offence). A string percent
-    (''36.3%'').'
+    that are three-pointers, for the team''s own shots (攻, offence). A FRACTION 0-1
+    (the API sends a percent string such as ''39.4%''; the _sort column holds the
+    same fraction).'
   offensive_three_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分占比 three-point share: the
     share of field-goal attempts that are three-pointers, for the team''s own shots
@@ -425,7 +443,9 @@ cba_period_scores:
     or away (guest / visiting block).'
 cba_player_advanced:
   assists_percentage: '助攻率 assist rate: the share of teammates'' made field goals
-    the player assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例).'
+    the player assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例).
+    A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the _sort column
+    holds the same fraction).'
   assists_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -438,7 +458,9 @@ cba_player_advanced:
     the table. Metric: 助攻率 assist rate: the share of teammates'' made field goals
     the player assisted while on the court (site definition: 球员在场时队友受其助攻命中数占所有命中数的比例).'
   blocked_percentage: '盖帽率 block rate: blocks as a share of the opponent''s two-point
-    attempts while the player is on the court (site definition).'
+    attempts while the player is on the court (site definition). A FRACTION 0-1 (the
+    API sends a percent string such as ''39.4%''; the _sort column holds the same
+    fraction).'
   blocked_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -498,7 +520,8 @@ cba_player_advanced:
     得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫 = 控球后卫/得分后卫.'
   rebounds_defensive_percentage: '防守篮板率 defensive-rebound rate: the player''s defensive
     rebounds as a share of the defensive rebounds available while he is on the court
-    (site definition).'
+    (site definition). A FRACTION 0-1 (the API sends a percent string such as ''39.4%'';
+    the _sort column holds the same fraction).'
   rebounds_defensive_percentage_rank: 'Colour rank for the metric, a fraction 0-1
     (1 = best, inverted for ''bad'' statistics such as turnovers) that the site uses
     to colour the cell (inferred from the sample values; the base population is not
@@ -514,7 +537,8 @@ cba_player_advanced:
     (site definition).'
   rebounds_offensive_percentage: '进攻篮板率 offensive-rebound rate: the player''s offensive
     rebounds as a share of the offensive rebounds available while he is on the court
-    (site definition).'
+    (site definition). A FRACTION 0-1 (the API sends a percent string such as ''39.4%'';
+    the _sort column holds the same fraction).'
   rebounds_offensive_percentage_rank: 'Colour rank for the metric, a fraction 0-1
     (1 = best, inverted for ''bad'' statistics such as turnovers) that the site uses
     to colour the cell (inferred from the sample values; the base population is not
@@ -534,7 +558,8 @@ cba_player_advanced:
   side: 'Side of the game the row belongs to: home (the API''s host / home block)
     or away (guest / visiting block).'
   steals_percentage: '抢断率 steal rate: steals as a share of the opponent''s possessions
-    while the player is on the court (site definition).'
+    while the player is on the court (site definition). A FRACTION 0-1 (the API sends
+    a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   steals_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -553,7 +578,8 @@ cba_player_advanced:
     and the team and player routes. Not a player or schedule id.'
   true_shooting_percentage: '真实命中率 true-shooting percentage: scoring efficiency counting
     field goals and free throws, all attempts converted to two-point attempts (site
-    definition: 球员运动战出手和罚球出手都折算为两分出手时的命中率).'
+    definition: 球员运动战出手和罚球出手都折算为两分出手时的命中率). A FRACTION 0-1 (the API sends a percent
+    string such as ''39.4%''; the _sort column holds the same fraction).'
   true_shooting_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 =
     best, inverted for ''bad'' statistics such as turnovers) that the site uses to
     colour the cell (inferred from the sample values; the base population is not documented).
@@ -568,7 +594,9 @@ cba_player_advanced:
     field goals and free throws, all attempts converted to two-point attempts (site
     definition: 球员运动战出手和罚球出手都折算为两分出手时的命中率).'
   turn_share: '回合占有率 ''possession share'': the share of the team''s possessions the
-    player ends while on the court (site definition: 球员在场时终结回合占球队总回合的比例).'
+    player ends while on the court (site definition: 球员在场时终结回合占球队总回合的比例). A FRACTION
+    0-1 (the API sends a percent string such as ''39.4%''; the _sort column holds
+    the same fraction).'
   turn_share_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -581,7 +609,9 @@ cba_player_advanced:
     回合占有率 ''possession share'': the share of the team''s possessions the player ends
     while on the court (site definition: 球员在场时终结回合占球队总回合的比例).'
   turnovers_percentage: '失误率 turnover rate: the share of the player''s possession-ending
-    plays that are turnovers (site definition: 球员以失误终结的回合占他所有终结回合的比例).'
+    plays that are turnovers (site definition: 球员以失误终结的回合占他所有终结回合的比例). A FRACTION
+    0-1 (the API sends a percent string such as ''39.4%''; the _sort column holds
+    the same fraction).'
   turnovers_percentage_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -598,37 +628,41 @@ cba_player_advanced:
   up_time: Time on court in SECONDS (1692 = 28:12).
 cba_player_base:
   age: Age in years in that season.
-  assists: Assists per game, as a decimal STRING ('1.2') when countRanger is 1.
+  assists: Assists per game when countRanger is 1. A number (the API sends it as display
+    text, such as '21.6').
   birth_date: Date of birth 'YYYY-MM-DD' (a public player bio field; midnight-suffixed
     'YYYY-MM-DD 00:00:00' on player-base-list).
-  blocked: Blocks per game, as a decimal STRING ('1.2') when countRanger is 1.
+  blocked: Blocks per game when countRanger is 1. A number (the API sends it as display
+    text, such as '21.6').
   cn_alias: Player name (Chinese). Names change with the sponsor, the id does not;
     teamId -> English glossary in cba_glossary.yaml.
-  field_goals: Field goals made per game, as a decimal STRING ('1.2') when countRanger
-    is 1.
+  field_goals: Field goals made per game when countRanger is 1. A number (the API
+    sends it as display text, such as '21.6').
   field_goals_at_rim_attempted: At-the-rim (inside the restricted area) field goals
     attempted in the season (total), a float.
   field_goals_at_rim_made: At-the-rim field goals made in the season (total), a float.
-  field_goals_attempted: Field goals attempted per game, as a decimal STRING ('1.2')
-    when countRanger is 1.
+  field_goals_attempted: Field goals attempted per game when countRanger is 1. A number
+    (the API sends it as display text, such as '21.6').
   field_goals_mid_range_attempted: Mid-range (two-point shots outside the restricted
     area) field goals attempted in the season (total), a float.
   field_goals_mid_range_made: Mid-range field goals made in the season (total), a
     float.
-  field_goals_percentage: Field-goal percentage as a percent string ('64.9%').
+  field_goals_percentage: Field-goal percentage. A FRACTION 0-1 (the API sends a percent
+    string such as '39.4%'; the _sort column holds the same fraction).
   field_goals_percentage_sort: Field-goal percentage as a FRACTION 0-1 for sorting.
-  fouls: Personal fouls per game, as a decimal STRING ('1.2') when countRanger is
-    1.
+  fouls: Personal fouls per game when countRanger is 1. A number (the API sends it
+    as display text, such as '21.6').
   fouls_defensive: Defensive personal fouls in the season (total), a float.
-  free_throws: Free throws made per game, as a decimal STRING ('1.2') when countRanger
-    is 1.
-  free_throws_attempted: Free throws attempted per game, as a decimal STRING ('1.2')
-    when countRanger is 1.
-  free_throws_percentage: Free-throw percentage as a percent string.
+  free_throws: Free throws made per game when countRanger is 1. A number (the API
+    sends it as display text, such as '21.6').
+  free_throws_attempted: Free throws attempted per game when countRanger is 1. A number
+    (the API sends it as display text, such as '21.6').
+  free_throws_percentage: Free-throw percentage. A FRACTION 0-1 (the API sends a percent
+    string such as '39.4%'; the _sort column holds the same fraction).
   free_throws_percentage_sort: Free-throw percentage as a FRACTION 0-1 for sorting.
   game_start_num: Games started (首发).
-  minutes: 'Minutes: per game as a decimal STRING (''25.9'') on player-base-list;
-    a whole-season total integer on the offensive/defensive/shot lists (827).'
+  minutes: 'Minutes: per game; a whole-season total integer on the offensive/defensive/shot
+    lists (827). A number (the API sends it as display text, such as ''21.6'').'
   nationality: 'Nationality (Chinese country name; see the nationality code table
     for every value seen and its English name). Chinese country names seen: 中国 = China;
     美国 = United States; 加拿大 = Canada; 法国 = France; 中国台湾 = Chinese Taipei; 伊朗 = Iran;
@@ -640,9 +674,9 @@ cba_player_base:
     a team id.'
   player_times: Games played (场数), a float (39.0).
   player_times2: 'Unobserved: null in every sample.'
-  points: Points per game, as a decimal STRING ('16.8') when countRanger is 1 (the
-    request value); other countRanger values change the unit (2 total, 3 per 36 minutes,
-    4 per 100 possessions).
+  points: Points per game when countRanger is 1 (the request value); other countRanger
+    values change the unit (2 total, 3 per 36 minutes, 4 per 100 possessions). A number
+    (the API sends it as display text, such as '21.6').
   position: 'Position label (Chinese). Eras differ: coarse 后卫 (guard) / 前锋 (forward)
     / 中锋 (center) in older seasons, five-way 控球后卫 (point guard) / 得分后卫 (shooting guard)
     / 小前锋 (small forward) / 大前锋 (power forward) / 中锋 (center) in newer ones; dual
@@ -656,20 +690,21 @@ cba_player_base:
     forward, 4 power forward, 5 center); a fraction such as 4.5 averages a dual position;
     typed as float.
   rank_sort: 'Unobserved: null in every sample.'
-  rebounds: Total rebounds per game, as a decimal STRING ('1.2') when countRanger
-    is 1.
-  rebounds_defensive: Defensive rebounds per game, as a decimal STRING ('1.2') when
-    countRanger is 1.
-  rebounds_offensive: Offensive rebounds per game, as a decimal STRING ('1.2') when
-    countRanger is 1.
+  rebounds: Total rebounds per game when countRanger is 1. A number (the API sends
+    it as display text, such as '21.6').
+  rebounds_defensive: Defensive rebounds per game when countRanger is 1. A number
+    (the API sends it as display text, such as '21.6').
+  rebounds_offensive: Offensive rebounds per game when countRanger is 1. A number
+    (the API sends it as display text, such as '21.6').
   schedule_id: 'CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx
     across seasons and match types; the {scheduleId} of every game route). Stamped
     by the runtime from the request; null on a body parsed without it.'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
-  seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
-    total integer elsewhere.'
-  steals: Steals per game, as a decimal STRING ('1.2') when countRanger is 1.
+  seconds: 'Seconds: per-game average; a whole-season total integer elsewhere. A number
+    (the API sends it as display text, such as ''21.6'').'
+  steals: Steals per game when countRanger is 1. A number (the API sends it as display
+    text, such as '21.6').
   team_cn_alias: Team short name (Chinese) in that season. Names change with the sponsor,
     the id does not; teamId -> English glossary in cba_glossary.yaml.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
@@ -677,13 +712,15 @@ cba_player_base:
     club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
-  three_point_attempted: Three-pointers attempted per game, as a decimal STRING ('1.2')
-    when countRanger is 1.
-  three_point_goals: Three-pointers made per game, as a decimal STRING ('1.2') when
-    countRanger is 1.
-  three_point_percentage: Three-point percentage as a percent string.
+  three_point_attempted: Three-pointers attempted per game when countRanger is 1.
+    A number (the API sends it as display text, such as '21.6').
+  three_point_goals: Three-pointers made per game when countRanger is 1. A number
+    (the API sends it as display text, such as '21.6').
+  three_point_percentage: Three-point percentage. A FRACTION 0-1 (the API sends a
+    percent string such as '39.4%'; the _sort column holds the same fraction).
   three_point_percentage_sort: Three-point percentage as a FRACTION 0-1 for sorting.
-  turnovers: Turnovers per game, as a decimal STRING ('1.2') when countRanger is 1.
+  turnovers: Turnovers per game when countRanger is 1. A number (the API sends it
+    as display text, such as '21.6').
 cba_player_box:
   assists: Assists in this game (integer). Null on the team row (the 团队篮板/失误 rebounds/turnovers
     row).
@@ -740,7 +777,9 @@ cba_player_box:
   up_time: Time on court in SECONDS (1692 = 28:12). Null on the team row.
 cba_player_defensive:
   age: Age in years in that season.
-  blocked_rate: 盖帽率 block rate (site definition, as blockedPercentage).
+  blocked_rate: 盖帽率 block rate (site definition, as blockedPercentage). A FRACTION
+    0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the
+    same fraction).
   blocked_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -756,7 +795,8 @@ cba_player_defensive:
     小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
     = 控球后卫/得分后卫.'
   fouls_rate: '犯规率 foul rate: defensive fouls per 100 possessions (site definition:
-    每百回合防守犯规数).'
+    每百回合防守犯规数). A FRACTION 0-1 (the API sends a percent string such as ''39.4%'';
+    the _sort column holds the same fraction).'
   fouls_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -794,6 +834,8 @@ cba_player_defensive:
   rank: 'Unobserved: null in every sample (a row-rank slot; the site numbers rows
     itself).'
   rebounds_defensive_rate: 防守篮板率 defensive-rebound rate (site definition, as reboundsDefensivePercentage).
+    A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column
+    holds the same fraction).
   rebounds_defensive_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -802,6 +844,8 @@ cba_player_defensive:
     of the same metric (a fraction 0-1 for percentages), used by the site to sort
     the table. Metric: 防守篮板率 defensive-rebound rate (site definition, as reboundsDefensivePercentage).'
   rebounds_offensive_rate: 进攻篮板率 offensive-rebound rate (site definition, as reboundsOffensivePercentage).
+    A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column
+    holds the same fraction).
   rebounds_offensive_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -813,7 +857,9 @@ cba_player_defensive:
     END year = season + 1; map at the boundary.
   seconds: 'Seconds: per-game average as a decimal STRING on player-base-list; a whole-season
     total integer elsewhere.'
-  steals_rate: 抢断率 steal rate (site definition, as stealsPercentage).
+  steals_rate: 抢断率 steal rate (site definition, as stealsPercentage). A FRACTION 0-1
+    (the API sends a percent string such as '39.4%'; the _sort column holds the same
+    fraction).
   steals_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -850,7 +896,9 @@ cba_player_extras:
 cba_player_offensive:
   age: Age in years in that season.
   assists: Assists in the season (total, integer).
-  assists_rate: 助攻率 assist rate (site definition, as assistsPercentage).
+  assists_rate: 助攻率 assist rate (site definition, as assistsPercentage). A FRACTION
+    0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the
+    same fraction).
   assists_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -859,7 +907,8 @@ cba_player_offensive:
     same metric (a fraction 0-1 for percentages), used by the site to sort the table.
     Metric: 助攻率 assist rate (site definition, as assistsPercentage).'
   assists_round_rate: '助攻率/回合占有率 assist rate divided by possession share (site definition:
-    球员助攻率和回合占有率的比值).'
+    球员助攻率和回合占有率的比值). A FRACTION 0-1 (the API sends a percent string such as ''39.4%'';
+    the _sort column holds the same fraction).'
   assists_round_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -908,6 +957,8 @@ cba_player_offensive:
   rank: 'Unobserved: null in every sample (a row-rank slot; the site numbers rows
     itself).'
   real_rate: 真实命中率 true-shooting percentage (site definition, as trueShootingPercentage).
+    A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column
+    holds the same fraction).
   real_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -916,7 +967,8 @@ cba_player_offensive:
     metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
     真实命中率 true-shooting percentage (site definition, as trueShootingPercentage).'
   round_rate: '回合占有率 ''possession share'': the share of the team''s possessions the
-    player ends while on the court (site definition).'
+    player ends while on the court (site definition). A FRACTION 0-1 (the API sends
+    a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   round_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -939,7 +991,8 @@ cba_player_offensive:
   turnovers: Turnovers in the season (total, integer).
   turnovers_rate: '失误率 turnover rate: for a player, the share of his possession-ending
     plays that are turnovers; for a team, the share of the team''s possessions ending
-    in a turnover (site definitions).'
+    in a turnover (site definitions). 0-100 like the family''s numeric column of this
+    name (the API sends ''15.3%''; the % is dropped).'
   turnovers_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -954,7 +1007,8 @@ cba_player_offensive:
 cba_player_shots:
   age: Age in years in that season.
   at_rim_made_rate: '篮下频率 at-rim frequency: restricted-area attempts per 100 possessions
-    (site definition: 每百回合合理冲撞区内的出手数).'
+    (site definition: 每百回合合理冲撞区内的出手数). A number (the API sends it as display text,
+    such as ''21.6'').'
   at_rim_made_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -972,7 +1026,7 @@ cba_player_shots:
     小前锋; 小前锋/大前锋 = 小前锋/大前锋; 小前锋/得分后卫 = 小前锋/得分后卫; 得分后卫 = 得分后卫; 控球后卫 = 控球后卫; 控球后卫/得分后卫
     = 控球后卫/得分后卫.'
   free_rate: '罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site
-    definition).'
+    definition). A number (the API sends it as display text, such as ''21.6'').'
   free_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -981,7 +1035,8 @@ cba_player_shots:
     metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
     罚球频率 free-throw frequency: free-throw attempts per 100 possessions (site definition).'
   hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage: restricted-area field-goal
-    percentage (site definition).'
+    percentage (site definition). A FRACTION 0-1 (the API sends a percent string such
+    as ''39.4%''; the _sort column holds the same fraction).'
   hit_at_rim_made_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best,
     inverted for ''bad'' statistics such as turnovers) that the site uses to colour
     the cell (inferred from the sample values; the base population is not documented).
@@ -991,7 +1046,8 @@ cba_player_shots:
     of the same metric (a fraction 0-1 for percentages), used by the site to sort
     the table. Metric: 篮下命中率 at-rim shooting percentage: restricted-area field-goal
     percentage (site definition).'
-  hit_free_rate: 罚球命中率 free-throw percentage.
+  hit_free_rate: 罚球命中率 free-throw percentage. A FRACTION 0-1 (the API sends a percent
+    string such as '39.4%'; the _sort column holds the same fraction).
   hit_free_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1000,7 +1056,8 @@ cba_player_shots:
     same metric (a fraction 0-1 for percentages), used by the site to sort the table.
     Metric: 罚球命中率 free-throw percentage.'
   hit_middle_rate: '中距离命中率 mid-range shooting percentage: percentage on two-point
-    attempts outside the restricted area (site definition).'
+    attempts outside the restricted area (site definition). A FRACTION 0-1 (the API
+    sends a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   hit_middle_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1011,7 +1068,9 @@ cba_player_shots:
     table. Metric: 中距离命中率 mid-range shooting percentage: percentage on two-point attempts
     outside the restricted area (site definition).'
   hit_rate: '有效命中率 effective field-goal percentage: all field-goal attempts converted
-    to two-point attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率).'
+    to two-point attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率). A FRACTION 0-1
+    (the API sends a percent string such as ''39.4%''; the _sort column holds the
+    same fraction).'
   hit_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted for
     ''bad'' statistics such as turnovers) that the site uses to colour the cell (inferred
     from the sample values; the base population is not documented). Metric: 有效命中率
@@ -1021,7 +1080,8 @@ cba_player_shots:
     metric (a fraction 0-1 for percentages), used by the site to sort the table. Metric:
     有效命中率 effective field-goal percentage: all field-goal attempts converted to two-point
     attempts (site definition: 球员所有运动战出手都折算为两分出手时的命中率).'
-  hit_three_rate: 三分命中率 three-point shooting percentage.
+  hit_three_rate: 三分命中率 three-point shooting percentage. A FRACTION 0-1 (the API sends
+    a percent string such as '39.4%'; the _sort column holds the same fraction).
   hit_three_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1032,7 +1092,8 @@ cba_player_shots:
   is_color: Highlight flag, 1 or 2 (unverified meaning; the site uses it to colour
     the row).
   middle_rate: '中距离频率 mid-range frequency: two-point attempts outside the restricted
-    area per 100 possessions (site definition).'
+    area per 100 possessions (site definition). A number (the API sends it as display
+    text, such as ''21.6'').'
   middle_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1080,7 +1141,7 @@ cba_player_shots:
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
   three_rate: '三分频率 three-point frequency: three-point attempts per 100 possessions
-    (site definition).'
+    (site definition). A number (the API sends it as display text, such as ''21.6'').'
   three_rate_rank: 'Colour rank for the metric, a fraction 0-1 (1 = best, inverted
     for ''bad'' statistics such as turnovers) that the site uses to colour the cell
     (inferred from the sample values; the base population is not documented). Metric:
@@ -1179,14 +1240,15 @@ cba_schedule_day:
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
   home_team_logo: Absolute URL of the home team logo (300x300 png).
-  home_team_lose: Home team's cumulative losses after this game, as a STRING.
+  home_team_lose: Home team's cumulative losses after this game. An integer (the API
+    sends it as digit text).
   home_team_name: Home team name (Chinese) as of the game's season; changes with the
     sponsor. Names change with the sponsor, the id does not; teamId -> English glossary
     in cba_glossary.yaml.
   home_team_score: Home team final points (a game not yet played has no score; a scheduled
     2026-27 game outside the samples showed null).
-  home_team_win: Home team's cumulative wins after this game in the match type, as
-    a STRING ('1').
+  home_team_win: Home team's cumulative wins after this game in the match type. An
+    integer (the API sends it as digit text).
   is_events: 'Play-by-play flag: 1 = play-by-play exists (2017-18 and later in the
     samples), 2 = none (the 2009-10 sample answers empty pages).'
   is_report: 'Game-report flag: 1 = a game report page exists (every sample).'
@@ -1203,13 +1265,13 @@ cba_schedule_day:
     across seasons and match types; the {scheduleId} of every game route). Stamped
     by the runtime from the request; null on a body parsed without it.'
   schedule_num: 'Unobserved: null in every sample on this route (the game count is
-    filled on schedules/month).'
+    filled on schedules/month). An integer (the API sends it as digit text).'
   schedule_time: Tip-off as 'YYYY-MM-DD HH:MM:SS' (China local time, no zone).
   schedule_type_name: Round label (Chinese), e.g. 常规赛第1轮 = regular season, round 1.
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary.
   seconds: 'Unobserved: null in every sample (the clock seconds of a live game, by
-    its name).'
+    its name). A number (the API sends it as display text, such as ''21.6'').'
   status: 'Game status: 4 = finished (every sampled game). 1 = not started and 2 =
     in progress are inferred from the site''s polling logic; 3 is unobserved. See
     the code table.'
@@ -1219,12 +1281,14 @@ cba_schedule_day:
     Guangsha'' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList
     and the team and player routes. Not a player or schedule id.'
   visiting_team_logo: Absolute URL of the visiting team logo (300x300 png).
-  visiting_team_lose: Visiting team's cumulative losses after this game, as a STRING.
+  visiting_team_lose: Visiting team's cumulative losses after this game. An integer
+    (the API sends it as digit text).
   visiting_team_name: Visiting team name (Chinese) as of the game's season; changes
     with the sponsor. Names change with the sponsor, the id does not; teamId -> English
     glossary in cba_glossary.yaml.
   visiting_team_score: Visiting team final points.
-  visiting_team_win: Visiting team's cumulative wins after this game, as a STRING.
+  visiting_team_win: Visiting team's cumulative wins after this game. An integer (the
+    API sends it as digit text).
 cba_schedule_month:
   schedule_num: Number of games scheduled on that day (0 = none).
   schedule_time: The day as 'YYYY-MM-DD 00:00:00' (China local time, no zone); one
@@ -1239,29 +1303,37 @@ cba_seasons:
     END year = season + 1; map at the boundary. String of digits ('2025'); the value
     every season parameter takes.
 cba_team_basic:
-  assists: Assists, formatted by statisticalDimension, as a STRING.
-  blocked: Blocks, formatted by statisticalDimension, as a STRING.
+  assists: Assists, formatted by statisticalDimension. A number (the API sends it
+    as display text, such as '21.6').
+  blocked: Blocks, formatted by statisticalDimension. A number (the API sends it as
+    display text, such as '21.6').
   cba_rank: 'Unobserved: null in every sample (a league-rank slot).'
-  field_goals: Field goals made, formatted by statisticalDimension, as a STRING.
-  field_goals_attempted: Field goals attempted, formatted by statisticalDimension,
-    as a STRING.
-  field_goals_percentage_rate: Field-goal percentage as a percent string ('46.0%').
-  fouls: Personal fouls, formatted by statisticalDimension, as a STRING.
-  free_throws: Free throws made, formatted by statisticalDimension, as a STRING.
-  free_throws_attempted: Free throws attempted, formatted by statisticalDimension,
-    as a STRING.
-  free_throws_percentage_rate: Free-throw percentage as a percent string.
+  field_goals: Field goals made, formatted by statisticalDimension. A number (the
+    API sends it as display text, such as '21.6').
+  field_goals_attempted: Field goals attempted, formatted by statisticalDimension.
+    A number (the API sends it as display text, such as '21.6').
+  field_goals_percentage_rate: Field-goal percentage. A FRACTION 0-1 (the API sends
+    a percent string such as '39.4%').
+  fouls: Personal fouls, formatted by statisticalDimension. A number (the API sends
+    it as display text, such as '21.6').
+  free_throws: Free throws made, formatted by statisticalDimension. A number (the
+    API sends it as display text, such as '21.6').
+  free_throws_attempted: Free throws attempted, formatted by statisticalDimension.
+    A number (the API sends it as display text, such as '21.6').
+  free_throws_percentage_rate: Free-throw percentage. A FRACTION 0-1 (the API sends
+    a percent string such as '39.4%').
   losses_number: Losses (负场). (as the API names it)
   points: 'Points, formatted by statisticalDimension (1 per-game average, 2 season
-    total, 3 and 4 per 100 possessions: both give the same values, 120.1 = boutPoints),
-    as a STRING (''104.5'').'
+    total, 3 and 4 per 100 possessions: both give the same values, 120.1 = boutPoints).
+    A number (the API sends it as display text, such as ''21.6'').'
   real_player_times: Games counted for the averages (实际场数 by its name); equals scheduleNumber
     in the sample except in short seasons (unverified).
-  rebounds: Total rebounds, formatted by statisticalDimension, as a STRING.
-  rebounds_defensive: Defensive rebounds, formatted by statisticalDimension, as a
-    STRING.
-  rebounds_offensive: Offensive rebounds, formatted by statisticalDimension, as a
-    STRING.
+  rebounds: Total rebounds, formatted by statisticalDimension. A number (the API sends
+    it as display text, such as '21.6').
+  rebounds_defensive: Defensive rebounds, formatted by statisticalDimension. A number
+    (the API sends it as display text, such as '21.6').
+  rebounds_offensive: Offensive rebounds, formatted by statisticalDimension. A number
+    (the API sends it as display text, such as '21.6').
   round: Possessions in the season (回合数) as a float (4074.09); identical for statisticalDimension
     1-4.
   schedule_number: Games played in that season and match type (场数).
@@ -1269,7 +1341,8 @@ cba_team_basic:
     is the END year = season + 1; map at the boundary. One row per season of the team.
   season: Season label 'YYYY-YYYY' as a string ('2024-2025' = start year - end year;
     the sdv END year is the second one); scheduleSeason is the numeric START year.
-  steals: Steals, formatted by statisticalDimension, as a STRING.
+  steals: Steals, formatted by statisticalDimension. A number (the API sends it as
+    display text, such as '21.6').
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
     clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and
     club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 ''Zhejiang
@@ -1278,16 +1351,19 @@ cba_team_basic:
   team_name: Team name (Chinese) in that season; changes with the sponsor (the sampled
     team 29128 has 9 different names across 20 seasons). Names change with the sponsor,
     the id does not; teamId -> English glossary in cba_glossary.yaml.
-  three_point_attempted: Three-pointers attempted, formatted by statisticalDimension,
-    as a STRING.
-  three_point_goals: Three-pointers made, formatted by statisticalDimension, as a
-    STRING.
-  three_point_percentage_rate: Three-point percentage as a percent string.
-  time: Team minutes per game (statisticalDimension 1) or in total (2), as a STRING
-    ('48.1').
-  turnovers: Turnovers, formatted by statisticalDimension, as a STRING.
+  three_point_attempted: Three-pointers attempted, formatted by statisticalDimension.
+    A number (the API sends it as display text, such as '21.6').
+  three_point_goals: Three-pointers made, formatted by statisticalDimension. A number
+    (the API sends it as display text, such as '21.6').
+  three_point_percentage_rate: Three-point percentage. A FRACTION 0-1 (the API sends
+    a percent string such as '39.4%').
+  time: Team minutes per game (statisticalDimension 1) or in total (2). A number (the
+    API sends it as display text, such as '21.6').
+  turnovers: Turnovers, formatted by statisticalDimension. A number (the API sends
+    it as display text, such as '21.6').
   win_number: Wins (胜场). (as the API names it)
-  win_rate: Win rate (胜率) as a percent string ('84.8%').
+  win_rate: Win rate (胜率). A FRACTION 0-1 (the API sends a percent string such as
+    '39.4%').
 cba_team_counts:
   key: Match type id as a string ('1' regular season, '2' playoffs); see getMatchType.
   value: 'Number of teams in that match type in the requested season (inferred: 20
@@ -1401,9 +1477,10 @@ cba_team_four:
   points_hundred_round_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 百回合得分 points scored per 100
     possessions (offensive rating).'
-  rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数).'
-  rhythm_num: 'Unobserved: null in every sample (a string form of the pace; the schedule-four-elements
-    route fills it).'
+  rhythm: '节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数). A number
+    (the API sends it as display text, such as ''21.6'').'
+  rhythm_num: 'Unobserved: null in every sample ( form of the pace; the schedule-four-elements
+    route fills it). A number (the API sends it as display text, such as ''21.6'').'
   rhythm_rank: 'Rank among the teams of that season (integer-valued number; direction
     per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition:
     每48分钟回合数).'
@@ -1412,8 +1489,8 @@ cba_team_four:
     equals round in the sample (unverified difference).
   schedule_season: Season START year (2025 = the 2025-26 season). The sdv season key
     is the END year = season + 1; map at the boundary. One row per season of the team.
-  season: Season of the row as a STRING ('2025' = the START year of 2025-26; sdv END
-    year = value + 1); equals scheduleSeason.
+  season: Season of the row ('2025' = the START year of 2025-26; sdv END year = value
+    + 1); equals scheduleSeason. An integer (the API sends it as digit text).
   self_rebounds_defensive: Defensive rebounds by the team in the season (sum).
   self_rebounds_offensive: Offensive rebounds by the team in the season (sum).
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
@@ -1476,9 +1553,10 @@ cba_team_overview:
     average, unobserved).'
   loss_num: Losses in that season, a float.
   player_times: Games played, a float (42.0).
-  rhythm: '节奏 pace as a STRING: possessions per 48 minutes (''75.7''; site definition:
-    每48分钟回合数).'
-  rhythm_rank: 'Unobserved: null in every sample (a rank slot for pace).'
+  rhythm: '节奏 pace: possessions per 48 minutes (''75.7''; site definition: 每48分钟回合数).
+    A number (the API sends it as display text, such as ''21.6'').'
+  rhythm_rank: 'Unobserved: null in every sample (a rank slot for pace). A number
+    (the API sends it as display text, such as ''21.6'').'
   season: Season START year (2025 = the 2025-26 season). The sdv season key is the
     END year = season + 1; map at the boundary. One row per season of the team.
   team_id: 'teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing
@@ -1490,20 +1568,22 @@ cba_team_overview:
     with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml.
   win_num: Wins in that season (match type of the request), a number typed as float
     (33.0).
-  win_rate: Win rate as a percent string ('78.6%').
+  win_rate: Win rate. A FRACTION 0-1 (the API sends a percent string such as '39.4%').
 cba_team_shots:
   bout_no_points_sort: 'Unobserved: null in every sample (numeric value behind 百回合失分
-    points allowed per 100 possessions).'
+    points allowed per 100 possessions). A number (the API sends it as display text,
+    such as ''21.6'').'
   bout_point_sort: 'Unobserved: null in every sample (numeric value behind 百回合得分 points
-    per 100 possessions).'
+    per 100 possessions). A number (the API sends it as display text, such as ''21.6'').'
   bout_subtract_points_sort: 'Unobserved: null in every sample (numeric value behind
-    百回合净胜分 net points per 100 possessions).'
+    百回合净胜分 net points per 100 possessions). A number (the API sends it as display
+    text, such as ''21.6'').'
   guard_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts taken
     at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS
     against this team (守, defence; the ''guard'' prefix is inferred from the site''s
-    攻/防 offence/defence toggle). A string percent (''36.3%''). Null for the seasons
-    2006-2016 (sampled team 29128): the at-rim and mid-range zone splits start with
-    2017-18.'
+    攻/防 offence/defence toggle).. Null for the seasons 2006-2016 (sampled team 29128):
+    the at-rim and mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API
+    sends a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   guard_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
     of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
@@ -1519,9 +1599,10 @@ cba_team_shots:
     the at-rim and mid-range zone splits start with 2017-18.'
   guard_hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage, for the shots of
     the OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred
-    from the site''s 攻/防 offence/defence toggle). A string percent (''36.3%''). Null
-    for the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range zone
-    splits start with 2017-18.'
+    from the site''s 攻/防 offence/defence toggle).. Null for the seasons 2006-2016
+    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.
+    A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the _sort column
+    holds the same fraction).'
   guard_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
     for the shots of the OPPONENTS against this team (守, defence; the ''guard'' prefix
@@ -1535,9 +1616,10 @@ cba_team_shots:
     team 29128): the at-rim and mid-range zone splits start with 2017-18.'
   guard_hit_middle_rate: '中距离命中率 mid-range shooting percentage, for the shots of the
     OPPONENTS against this team (守, defence; the ''guard'' prefix is inferred from
-    the site''s 攻/防 offence/defence toggle). A string percent (''36.3%''). Null for
-    the seasons 2006-2016 (sampled team 29128): the at-rim and mid-range zone splits
-    start with 2017-18.'
+    the site''s 攻/防 offence/defence toggle).. Null for the seasons 2006-2016 (sampled
+    team 29128): the at-rim and mid-range zone splits start with 2017-18. A FRACTION
+    0-1 (the API sends a percent string such as ''39.4%''; the _sort column holds
+    the same fraction).'
   guard_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
     percentage, for the shots of the OPPONENTS against this team (守, defence; the
@@ -1552,8 +1634,9 @@ cba_team_shots:
   guard_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts that
     are two-pointers outside the restricted area, for the shots of the OPPONENTS against
     this team (守, defence; the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence
-    toggle). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
-    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+    toggle).. Null for the seasons 2006-2016 (sampled team 29128): the at-rim and
+    mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API sends a percent
+    string such as ''39.4%''; the _sort column holds the same fraction).'
   guard_middle_rate_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of
     field-goal attempts that are two-pointers outside the restricted area, for the
@@ -1569,7 +1652,8 @@ cba_team_shots:
   guard_real_point: 有效命中率 effective field-goal percentage (all field goals counted
     as two-point attempts), for the shots of the OPPONENTS against this team (守, defence;
     the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A
-    string percent ('36.3%').
+    FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column
+    holds the same fraction).
   guard_real_point_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage
     (all field goals counted as two-point attempts), for the shots of the OPPONENTS
@@ -1581,7 +1665,8 @@ cba_team_shots:
     the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).'
   guard_three_goals_rate: 三分命中率 three-point shooting percentage, for the shots of
     the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from
-    the site's 攻/防 offence/defence toggle). A string percent ('36.3%').
+    the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent
+    string such as '39.4%'; the _sort column holds the same fraction).
   guard_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
     percentage, for the shots of the OPPONENTS against this team (守, defence; the
@@ -1593,7 +1678,8 @@ cba_team_shots:
   guard_three_rate: '三分占比 three-point share: the share of field-goal attempts that
     are three-pointers, for the shots of the OPPONENTS against this team (守, defence;
     the ''guard'' prefix is inferred from the site''s 攻/防 offence/defence toggle).
-    A string percent (''36.3%'').'
+    A FRACTION 0-1 (the API sends a percent string such as ''39.4%''; the _sort column
+    holds the same fraction).'
   guard_three_rate_rank: 'Rank among the teams of that season (integer-valued number;
     direction per metric undocumented). Metric: 三分占比 three-point share: the share
     of field-goal attempts that are three-pointers, for the shots of the OPPONENTS
@@ -1609,8 +1695,9 @@ cba_team_shots:
     as float.
   offensive_field_goals_at_rim: '篮下占比 at-rim share: the share of field-goal attempts
     taken at the rim (inside the restricted area 合理冲撞区), for the team''s own shots
-    (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
-    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+    (攻, offence).. Null for the seasons 2006-2016 (sampled team 29128): the at-rim
+    and mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API sends a
+    percent string such as ''39.4%''; the _sort column holds the same fraction).'
   offensive_field_goals_at_rim_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share
     of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for
@@ -1622,8 +1709,9 @@ cba_team_shots:
     (攻, offence). Null for the seasons 2006-2016 (sampled team 29128): the at-rim
     and mid-range zone splits start with 2017-18.'
   offensive_hit_at_rim_made_rate: '篮下命中率 at-rim shooting percentage, for the team''s
-    own shots (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016
-    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+    own shots (攻, offence).. Null for the seasons 2006-2016 (sampled team 29128):
+    the at-rim and mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API
+    sends a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   offensive_hit_at_rim_made_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage,
     for the team''s own shots (攻, offence). Null for the seasons 2006-2016 (sampled
@@ -1633,8 +1721,9 @@ cba_team_shots:
     own shots (攻, offence). Null for the seasons 2006-2016 (sampled team 29128): the
     at-rim and mid-range zone splits start with 2017-18.'
   offensive_hit_middle_rate: '中距离命中率 mid-range shooting percentage, for the team''s
-    own shots (攻, offence). A string percent (''36.3%''). Null for the seasons 2006-2016
-    (sampled team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+    own shots (攻, offence).. Null for the seasons 2006-2016 (sampled team 29128):
+    the at-rim and mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API
+    sends a percent string such as ''39.4%''; the _sort column holds the same fraction).'
   offensive_hit_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting
     percentage, for the team''s own shots (攻, offence). Null for the seasons 2006-2016
@@ -1645,8 +1734,9 @@ cba_team_shots:
     and mid-range zone splits start with 2017-18.'
   offensive_middle_rate: '中距离占比 mid-range share: the share of field-goal attempts
     that are two-pointers outside the restricted area, for the team''s own shots (攻,
-    offence). A string percent (''36.3%''). Null for the seasons 2006-2016 (sampled
-    team 29128): the at-rim and mid-range zone splits start with 2017-18.'
+    offence).. Null for the seasons 2006-2016 (sampled team 29128): the at-rim and
+    mid-range zone splits start with 2017-18. A FRACTION 0-1 (the API sends a percent
+    string such as ''39.4%''; the _sort column holds the same fraction).'
   offensive_middle_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the
     share of field-goal attempts that are two-pointers outside the restricted area,
@@ -1658,8 +1748,9 @@ cba_team_shots:
     offence). Null for the seasons 2006-2016 (sampled team 29128): the at-rim and
     mid-range zone splits start with 2017-18.'
   offensive_real_point: 有效命中率 effective field-goal percentage (all field goals counted
-    as two-point attempts), for the team's own shots (攻, offence). A string percent
-    ('36.3%').
+    as two-point attempts), for the team's own shots (攻, offence). A FRACTION 0-1
+    (the API sends a percent string such as '39.4%'; the _sort column holds the same
+    fraction).
   offensive_real_point_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 有效命中率 effective field-goal
     percentage (all field goals counted as two-point attempts), for the team''s own
@@ -1668,7 +1759,8 @@ cba_team_shots:
     of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals
     counted as two-point attempts), for the team''s own shots (攻, offence).'
   offensive_three_goals_rate: 三分命中率 three-point shooting percentage, for the team's
-    own shots (攻, offence). A string percent ('36.3%').
+    own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as
+    '39.4%'; the _sort column holds the same fraction).
   offensive_three_goals_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分命中率 three-point shooting
     percentage, for the team''s own shots (攻, offence).'
@@ -1676,8 +1768,9 @@ cba_team_shots:
     string of the metric. Metric: 三分命中率 three-point shooting percentage, for the team''s
     own shots (攻, offence).'
   offensive_three_rate: '三分占比 three-point share: the share of field-goal attempts
-    that are three-pointers, for the team''s own shots (攻, offence). A string percent
-    (''36.3%'').'
+    that are three-pointers, for the team''s own shots (攻, offence). A FRACTION 0-1
+    (the API sends a percent string such as ''39.4%''; the _sort column holds the
+    same fraction).'
   offensive_three_rate_rank: 'Rank among the teams of that season (integer-valued
     number; direction per metric undocumented). Metric: 三分占比 three-point share: the
     share of field-goal attempts that are three-pointers, for the team''s own shots

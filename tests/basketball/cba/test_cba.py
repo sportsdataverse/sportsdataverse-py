@@ -89,11 +89,52 @@ def test_every_parser_gives_a_typed_non_empty_frame(short):
     assert isinstance(df, pl.DataFrame) and df.height > 0
     assert all(SNAKE.match(c) for c in df.columns), df.columns
     for col, code in DTYPES[short].items():
-        assert df.schema[col] == {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}[code], (short, col)
+        assert (
+            df.schema[col] == {"i": pl.Int64, "f": pl.Float64, "p": pl.Float64, "b": pl.Boolean, "s": pl.String}[code]
+        ), (short, col)
     for c in df.columns:
         if re.search(r"(^|_)id$", c):
             assert df.schema[c] == pl.Int64, (short, c)
     assert "created_by" not in df.columns and "last_modified_by" not in df.columns
+
+
+_NUMERIC_TEXT = re.compile(r"^-?\d+(\.\d+)?%?$")
+#: String columns whose digit text is a label, not a measurement: jersey numbers (``00``) and code-table keys.
+_TEXT_DIGITS = {"number", "player_no", "value", "key", "cvalue"}
+
+
+@pytest.mark.parametrize("short", sorted(P.ROUTES))
+def test_display_strings_are_parsed_to_numbers(short):
+    df = ALL_PARSERS[short](_fixture(short))
+    left = [
+        c
+        for c, t in df.schema.items()
+        if t == pl.String
+        and c not in _TEXT_DIGITS
+        and df[c].drop_nulls().len()
+        and all(_NUMERIC_TEXT.match(v) for v in df[c].drop_nulls().to_list())
+    ]
+    assert left == [], left
+
+
+def test_season_averages_and_percent_strings_match_the_box_conventions():
+    base = ALL_PARSERS["player_base"](_fixture("player_base"))
+    row = base.row(0, named=True)  # the body sends points '21.6', fieldGoalsPercentage '39.4%' (sort 0.3944)
+    assert base.schema["points"] == pl.Float64 and row["points"] == 21.6 and row["seconds"] == 1501.3
+    for pct in ("field_goals_percentage", "three_point_percentage", "free_throws_percentage"):
+        assert base.schema[pct] == pl.Float64  # a FRACTION 0-1 like player_box and the *_sort companion
+        assert (base[pct] - base[f"{pct}_sort"]).abs().max() < 0.0006
+    box = ALL_PARSERS["player_box"](_fixture("player_box"))
+    assert box["field_goals_percentage"].max() <= 1.0
+    team = ALL_PARSERS["team_basic"](_fixture("team_basic"))
+    assert team.schema["points"] == pl.Float64 and team["win_rate"][0] == pytest.approx(0.848)
+    assert team.schema["season"] == pl.String  # '2024-2025', a label
+    offensive, four = (
+        ALL_PARSERS["player_offensive"](_fixture("player_offensive")),
+        ALL_PARSERS["team_four"](_fixture("team_four")),
+    )
+    assert offensive["turnovers_rate"].max() > 1.0 and four["turnovers_rate"].max() > 1.0  # 0-100 like team_four
+    assert ALL_PARSERS["team_four"](_fixture("team_four")).schema["season"] == pl.Int64
 
 
 @pytest.mark.parametrize("short", sorted(P.ROUTES))

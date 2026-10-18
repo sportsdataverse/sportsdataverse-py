@@ -44,7 +44,7 @@ except ImportError:  # pragma: no cover -- first run of the generator
 
 Frame = Union[pl.DataFrame, pd.DataFrame]
 REQUEST_KEY = "_request"
-_CODES = {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}
+_CODES = {"i": pl.Int64, "f": pl.Float64, "p": pl.Float64, "b": pl.Boolean, "s": pl.String}
 #: Wire keys never output (operator ids, one holds a mobile phone number).
 JUNK = frozenset({"createdBy", "lastModifiedBy"})
 _SIDES_HOME_AWAY = ("home", "away")
@@ -85,7 +85,11 @@ _PERIODS = ("oneScore", "twoScore", "threeScore", "fourScore", "fiveScore", "six
 
 
 def _cast(value: Any, code: str) -> Any:
-    """``value`` as the dtype ``code`` (``i`` / ``f`` / ``b`` / ``s``); ``None`` when it does not convert."""
+    """``value`` as the dtype ``code`` (``i`` / ``f`` / ``p`` / ``b`` / ``s``); ``None`` when it does not convert.
+
+    Display text of a number is parsed: ``'21.6'`` -> 21.6 (``f``), ``'15.3%'`` -> 15.3 (``f``) and, for ``p``, a
+    percent string is a FRACTION: ``'39.4%'`` -> 0.394 (a bare number under ``p`` is taken as already a fraction).
+    """
     if value is None:
         return None
     if code == "s":
@@ -96,12 +100,15 @@ def _cast(value: Any, code: str) -> Any:
         return value if isinstance(value, bool) else None
     if isinstance(value, bool):
         return None
+    pct = isinstance(value, str) and value.strip().endswith("%")
+    if isinstance(value, str):
+        value = value.strip().rstrip("%")
     try:
         if code == "i":
             if isinstance(value, float):
                 return int(value) if value == int(value) else None
             return int(value)
-        return float(value)
+        return round(float(value) / 100, 6) if code == "p" and pct else float(value)
     except (TypeError, ValueError):
         return None
 
