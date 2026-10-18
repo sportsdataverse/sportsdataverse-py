@@ -971,6 +971,18 @@
   note: >-
     R's case-sensitive str_detect(., "Free Throw"): MBB / WBB "MadeFreeThrow" rows stay at ESPN's
     coordinates (the published files' shape) instead of on the line (owner ruling R844-3).
+- id: basketball-coords-raw-pair-pinned-on-ci-match
+  group: basketball-coordinates
+  finding: R844-3
+  file: sportsdataverse/_espn_basketball_pbp.py
+  snippet: '        (ft & ~pl.col("type.text").str.contains("Free Throw", literal=True)).fill_null(False)'
+  mutant: '        pl.lit(False)'
+  test: tests/validation/test_basketball_coordinates.py -k "published_rows and mbb"
+  expected: kill
+  note: >-
+    The raw pair pinned on the case-insensitive match too: MBB / WBB "MadeFreeThrow" raw columns read
+    (25, 13.75) instead of ESPN's rim value, so they depart from the published raw pair (R844-3 moves
+    only the transformed pair; main #848's college free-throw test reads the raw pair).
 - id: basketball-coords-home-flip-dropped
   group: basketball-coordinates
   finding: C-M20

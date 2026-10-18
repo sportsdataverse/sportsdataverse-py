@@ -120,7 +120,8 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
     ``(?i)free ?throw``. From 2014 through 2026 ESPN types every MBB / WBB free throw, made or
     missed, "MadeFreeThrow"; R's case-sensitive ``str_detect(., "Free Throw")`` never matches
     it, so those published free throws keep ESPN's coordinates (the earlier "Free Throw 1 of 1"
-    types were pinned). Here they sit on the line like NBA / WNBA's (owner ruling R844-3).
+    types were pinned). Here they sit on the line like NBA / WNBA's (owner ruling R844-3) in the
+    transformed pair only: their raw pair keeps ESPN's values, as R's and the published files' do.
 
     ESPN marks a play it did not locate with a large negative sentinel (about -2.1e8 in either
     raw column). The transform carries it through, so ``coordinate.x`` / ``coordinate.y`` read
@@ -140,7 +141,8 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
     Returns:
         ``df`` with ``coordinate.x`` / ``coordinate.y`` transformed (Float64, full-court frame,
         home plays negated) and ``coordinate.x.raw`` / ``coordinate.y.raw`` holding ESPN's
-        values with free throws pinned to ``(25, 13.75)`` (Float64).
+        values with R's free throws (``"Free Throw"``, case-sensitive) pinned to ``(25, 13.75)``
+        (Float64).
     """
     if "coordinate.x" not in df.columns or "coordinate.y" not in df.columns:
         return df
@@ -149,13 +151,22 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
             {"coordinate.x.raw": "coordinate.x", "coordinate.y.raw": "coordinate.y"}
         )
     ft = pl.col("type.text").str.contains(FREE_THROW) if "type.text" in df.columns else pl.lit(False)
+    # R844-3 moves only the transformed pair: a free throw hoopR's case-sensitive "Free Throw" misses
+    # ("MadeFreeThrow") keeps ESPN's values in the raw pair, as the published files do
+    keep_espn = (
+        (ft & ~pl.col("type.text").str.contains("Free Throw", literal=True)).fill_null(False)
+        if "type.text" in df.columns
+        else pl.lit(False)
+    )
     df = df.with_columns(
         pl.when(ft).then(pl.lit(25.0)).otherwise(pl.col("coordinate.x").cast(pl.Float64)).alias("coordinate.x"),
         pl.when(ft).then(pl.lit(13.75)).otherwise(pl.col("coordinate.y").cast(pl.Float64)).alias("coordinate.y"),
+        pl.col("coordinate.x").cast(pl.Float64).alias("_espn_x"),
+        pl.col("coordinate.y").cast(pl.Float64).alias("_espn_y"),
     )
     team = pl.col("team.id").cast(pl.Int64, strict=False) if "team.id" in df.columns else pl.lit(None, dtype=pl.Int64)
     is_home = pl.lit(False) if home_team_id is None else (team == home_team_id).fill_null(False)
-    return df.with_columns(
+    df = df.with_columns(
         pl.when(is_home)
         .then(-1 * (pl.col("coordinate.y") - 41.75))
         .otherwise(pl.col("coordinate.y") - 41.75)
@@ -172,3 +183,7 @@ def hoopr_coordinates(df: pl.DataFrame, home_team_id: int | None) -> pl.DataFram
             "coordinate_y_transformed": "coordinate.y",
         }
     )
+    return df.with_columns(
+        pl.when(keep_espn).then(pl.col("_espn_x")).otherwise(pl.col("coordinate.x.raw")).alias("coordinate.x.raw"),
+        pl.when(keep_espn).then(pl.col("_espn_y")).otherwise(pl.col("coordinate.y.raw")).alias("coordinate.y.raw"),
+    ).drop("_espn_x", "_espn_y")

@@ -127,13 +127,13 @@ Player game log of one season.
 
 **Endpoint URL:** `GET https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog`
 
-**Valid URL:** [https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2026](https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2026)
+**Valid URL:** [https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2025](https://www.shl.se/api/statistics-v2/athlete/playerProfile_seasonGameLog?playerUuid=qQ9-349c7WDv6&masterSiteInstanceId=shl1_shl&season=2025)
 
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 | `playerUuid` | `athlete_uuid` |  | `Y` |  | Required. Athlete uuid. |
 | `masterSiteInstanceId` | `master_site_instance_id` |  |  | `Y` | Site instance (shl1_shl). No effect in the drop-one probe. |
-| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the runtime sends the START year this route takes. None = the player's default (shorter) log. |
+| `season` | `season` |  |  | `Y` | Season END year (2026 = 2025/26); the wrapper sends the START year this route takes (season - 1). None = the player's default (shorter) log. |
 
 ### Returns {#shl_athlete_game_log-returns}
 

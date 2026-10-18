@@ -77,6 +77,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   fixed_params:
     type: 2
   parser: parse_cba_team_options
@@ -139,7 +140,8 @@ endpoints:
   returns_schema: native/cba/game_info
   short: game_info
   summary: 'Game report header: both teams, score, tip-off time and colours.'
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -148,6 +150,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_box
   path: /player-match-datas/data-count
@@ -155,7 +158,8 @@ endpoints:
   short: player_box
   summary: Player box score of a finished game, both sides, plus a team rebounds/turnovers
     row per side (null player_id).
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -164,6 +168,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_period_scores
   path: /schedule-quarters/getQuarterInfo
@@ -171,7 +176,8 @@ endpoints:
   short: period_scores
   summary: Points each side scored in each period of a finished game (up to seven
     periods).
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -180,6 +186,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_game_team_shots
   path: /team-match-datas/schedule-shoot-list
@@ -187,7 +194,8 @@ endpoints:
   short: game_team_shots
   summary: 'Shot-zone profile of the two teams of a game. NOT game data: the teams''
     current season table.'
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -196,6 +204,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_advanced
   path: /player-match-datas/advance-count
@@ -203,7 +212,8 @@ endpoints:
   short: player_advanced
   summary: Advanced player box of a finished game (usage, true shooting, rebound/steal/block
     rates, zone splits), one row per player.
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -212,6 +222,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_extras
   path: /player-match-datas/schedule-other-data
@@ -219,7 +230,8 @@ endpoints:
   short: player_extras
   summary: Fast-break points, dunk points and paint points per player of a finished
     game, one row per player.
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -228,6 +240,7 @@ endpoints:
     query_key: scheduleId
     required: true
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_game_team_four
   path: /teams/schedule-four-elements
@@ -288,7 +301,8 @@ endpoints:
   returns_schema: native/cba/report_status
   short: report_status
   summary: Whether the game report page exists for the game.
-- example_args:
+- body: json
+  example_args:
     schedule_id: 100105799
   extra_params:
   - description: Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx
@@ -302,6 +316,8 @@ endpoints:
     name: quarter_num
     query_key: quarterNum
     type: int
+  fixed_in_query:
+  - startNum
   fixed_params:
     startNum: 0
   method: post
@@ -320,12 +336,14 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   parser: parse_cba_team_counts
   path: /team-count/season
   returns_schema: native/cba/team_counts
   short: team_counts
   summary: Team counts of one season, keyed by match type.
-- example_args:
+- body: json
+  example_args:
     team_id: 29128
   extra_params:
   - description: Required. CBA team id (clubs, stable across seasons and renames).
@@ -350,13 +368,15 @@ endpoints:
     name: self_or_other
     query_key: selfOrOther
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_team_basic
   path: /teams/basic-data
   returns_schema: native/cba/team_basic
   short: team_basic
   summary: A team's per-game averages or totals, one row per season of the team.
-- example_args:
+- body: json
+  example_args:
     team_id: 29128
   extra_params:
   - description: Required. CBA team id (clubs, stable across seasons and renames).
@@ -370,13 +390,15 @@ endpoints:
     name: match_type_id
     query_key: matchTypeId
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_team_four
   path: /teams/four-elements
   returns_schema: native/cba/team_four
   short: team_four
   summary: A team's four-factors table, one row per season of the team.
-- example_args:
+- body: json
+  example_args:
     team_id: 29128
   extra_params:
   - description: Required. CBA team id (clubs, stable across seasons and renames).
@@ -392,14 +414,17 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_team_overview
   path: /team-match-datas/team-entirety-list
@@ -407,7 +432,8 @@ endpoints:
   short: team_overview
   summary: A team's overview table (record, pace, per-100 ratings), one row per season
     of the team.
-- example_args:
+- body: json
+  example_args:
     team_id: 29128
   extra_params:
   - description: Required. CBA team id (clubs, stable across seasons and renames).
@@ -423,14 +449,17 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_team_shots
   path: /team-match-datas/team-shoot-list
@@ -438,7 +467,8 @@ endpoints:
   short: team_shots
   summary: A team's shot-zone profile, one row per season of the team (zone splits
     from 2017-18).
-- example_args:
+- body: json
+  example_args:
     season: 2026
     team_id: 29128
   extra_params:
@@ -448,6 +478,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -473,21 +504,25 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_base
   path: /player-base-list
   returns_schema: native/cba/player_base
   short: player_base
   summary: Season player box (one page of the season player table).
-- example_args:
+- body: json
+  example_args:
     season: 2026
     team_id: 29128
   extra_params:
@@ -497,6 +532,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -534,21 +570,25 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_offensive
   path: /player-offensive-list
   returns_schema: native/cba/player_offensive
   short: player_offensive
   summary: Season player offensive rates (one page).
-- example_args:
+- body: json
+  example_args:
     season: 2026
     team_id: 29128
   extra_params:
@@ -558,6 +598,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -595,21 +636,25 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_defensive
   path: /player-defensive-list
   returns_schema: native/cba/player_defensive
   short: player_defensive
   summary: Season player defensive rates (one page).
-- example_args:
+- body: json
+  example_args:
     season: 2026
     team_id: 29128
   extra_params:
@@ -619,6 +664,7 @@ endpoints:
     query_key: season
     required: true
     type: int
+    wire_transform: wire_season
   - default: 1
     description: 'Match type id: 1 regular season (default), 2 playoffs, 3 preseason,
       4 all-star, 9 relegation play-off (cba_match_types).'
@@ -656,14 +702,17 @@ endpoints:
     type: int
   - default: 1
     description: Page number of the paged list, from 1.
+    in: query
     name: page_number
     query_key: pageNumber
     type: int
   - default: 100
     description: Rows per page (the site uses 100).
+    in: query
     name: page_size
     query_key: pageSize
     type: int
+  fixed_in_query: []
   method: post
   parser: parse_cba_player_shots
   path: /player-shoot-list

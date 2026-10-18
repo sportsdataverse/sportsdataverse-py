@@ -36,6 +36,7 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+import polars as pl
 import yaml
 
 from gen_soccer_common import ROOT, columns_from_frame, load_spec, refs_dir, rewrite_schema_dir, write_yaml
@@ -45,6 +46,11 @@ from sportsdataverse.hockey.khl import khl_rest_parsers as rest
 from sportsdataverse.hockey.khl import khl_webcaster_parsers as wc
 
 FIXTURES = ROOT / "tests" / "fixtures"
+REST_WIRE = (
+    "The documented curl request is schematic: the runtime primes a session (adds the form field ``sessid``), "
+    "maps ``season`` / ``stage`` to the form field ``values[tournament]`` (the tournament id) and sends the "
+    "X-Requested-With, Origin and Referer headers."
+)
 SANCTIONS = (
     "Owner flag (sdv-internal-refs/khl/README.md): the KHL and its webcaster platform are run by Russian "
     "operators, some clubs by sanctioned state companies. Fetching on your own machine is fine; any "
@@ -206,7 +212,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
         (
             "player_stats",
             "parse_khl_player_stats",
-            "League player stats of a tournament, one page (one row per player).",
+            "League player stats of a tournament, one page (goalies: every page) (one row per player).",
             [
                 *SEASON_PARAMS,
                 {
@@ -214,7 +220,12 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "query_key": "values[amplua_full]",
                     "type": "str",
                     "choices": ["goalies", "defenses", "forwards", "skaters", "all"],
-                    "description": "Position group: goalies, defenses, forwards, skaters or all. None = the site's default.",
+                    "description": (
+                        "Position group: goalies, defenses, forwards, skaters or all. None = the site's default. "
+                        "goalies fetches every page and returns one list sorted by games played, then wins "
+                        "(both descending), then name; page is ignored for it. A partial list raises "
+                        "AssetFetchError."
+                    ),
                 },
                 {
                     "name": "club",
@@ -227,7 +238,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
                     "query_key": "nav[page]",
                     "type": "int",
                     "default": 1,
-                    "description": "1-based page. Loop until a page comes back shorter than per_page.",
+                    "description": "1-based page (skaters); ignored for goalies. Loop until a page comes back shorter than per_page.",
                 },
                 {
                     "name": "per_page",
@@ -240,7 +251,7 @@ REST: Dict[str, List[Tuple[str, str, str, List[Dict[str, Any]], Dict[str, Any], 
             ],
             {},
             {"season": 2026, "position": "forwards"},
-            "stat__players.json",
+            ("stat__players.json", "stat__players_goalies.json"),  # skater + goalie columns
         )
     ],
     "/players/profile/": [
@@ -525,7 +536,7 @@ DERIVED = {
     "conference": "Conference (west / east)",
     "seed": "Conference seed",
     "series_wins": "Wins in the series so far",
-    "game_ids": "khl.ru game ids of the series, comma-joined",
+    "game_ids": "khl.ru game ids of the series games",
     "group": "List the row comes from (position group / roster section)",
     "season_label": "Season label as sent (26/27, 2025/2026)",
     "team_season_id": "Team-season id (tid; one per tournament; joins nothing in the webcaster API)",
@@ -576,24 +587,36 @@ def returns_descriptions(path: Path) -> Dict[str, Dict[str, str]]:
 
 
 def _schema(
-    fixture: Path, parser: Callable[..., Any], key: str, route_docs: Dict[str, str], notes: Dict[str, Dict[str, str]]
+    fixture: Path | tuple[Path, ...],
+    parser: Callable[..., Any],
+    key: str,
+    route_docs: Dict[str, str],
+    notes: Dict[str, Dict[str, str]],
 ) -> Dict[str, Any]:
-    frame = parser(json.loads(fixture.read_text(encoding="utf-8")))
-    assert frame.height, f"{fixture.name}: {parser.__name__} parsed no rows"
+    """A returns schema from the parsed fixture(s); several fixtures declare the union of their columns."""
+    frames = []
+    for path in fixture if isinstance(fixture, tuple) else (fixture,):
+        frame = parser(json.loads(path.read_text(encoding="utf-8")))
+        assert frame.height, f"{path.name}: {parser.__name__} parsed no rows"
+        frames.append(frame)
+    frame = frames[0] if len(frames) == 1 else pl.concat(frames, how="diagonal_relaxed")
     cols = columns_from_frame(frame, [], leaf_fallback=False)
+    for col, dtype in zip(cols, frame.dtypes):
+        if isinstance(dtype, pl.List):
+            col["type"] = "list"
     descs = {c["name"]: DERIVED.get(c["name"]) or route_docs.get(c["name"], "") for c in cols}
     notes[key] = {k: v for k, v in descs.items() if _useful(k, v)}
     return {"schema": key, "kind": "dataframe", "columns": cols}
 
 
 SCHEMA_MODULE = ROOT / "sportsdataverse" / "hockey" / "khl" / "khl_schemas.py"
-_TYPE_CODE = {"integer": "i", "numeric": "f", "character": "s", "logical": "b"}
+_TYPE_CODE = {"integer": "i", "numeric": "f", "character": "s", "logical": "b", "list": "l"}
 
 
 def write_schema_module() -> None:
     """``khl_schemas.py``: every returns schema as ``"col:code ..."`` (codes i / f / s / b)."""
     out = [
-        '"""KHL returns schemas as ``"column:code"`` specs (i Int64, f Float64, s Utf8, b Boolean).',
+        '"""KHL returns schemas as ``"column:code"`` specs (i Int64, f Float64, s Utf8, b Boolean, l List(Int64)).',
         "",
         "Generated by ``tools/codegen/gen_khl.py`` from ``tools/codegen/schemas/native/khl_*``; do not edit.",
         "The parsers type zero-row frames and backfilled columns from these, so an empty answer concatenates",
@@ -629,13 +652,13 @@ def write_spec_routes(family: str, spec: dict) -> None:
     path.write_text(json.dumps(sorted(spec["paths"]), indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
-def _docstring(raw_doc: str, raises: List[str], headers_doc: str = "") -> Dict[str, Any]:
+def _docstring(raw_doc: str, raises: List[str], headers_doc: str = "", extra_notes: tuple = ()) -> Dict[str, Any]:
     doc: Dict[str, Any] = {
         "example_import": True,
         "raw_doc": raw_doc,
         "raises": raises,
         "see_also": SEE_ALSO,
-        "notes": [SANCTIONS],
+        "notes": [SANCTIONS, *extra_notes],
     }
     if headers_doc:
         doc["headers_doc"] = headers_doc
@@ -668,7 +691,8 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
                 "path": path,
                 "parser": parser,
                 "returns_schema": f"native/khl_rest/{short}",
-                "method": "post",  # khl_runtime._get POSTs params as the form
+                "method": "post",
+                "body": "form",  # khl_runtime._get POSTs ``data=`` as the form
                 "example_args": example,
             }
             if params:
@@ -679,7 +703,11 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
             write_yaml(
                 schema_dir / f"{short}.yaml",
                 _schema(
-                    FIXTURES / "khl_rest" / fixture, getattr(rest, parser), f"khl_{short}", docs.get(path, {}), notes
+                    tuple(FIXTURES / "khl_rest" / f for f in ((fixture,) if isinstance(fixture, str) else fixture)),
+                    getattr(rest, parser),
+                    f"khl_{short}",
+                    docs.get(path, {}),
+                    notes,
                 ),
             )
     doc = {
@@ -705,6 +733,7 @@ def build_rest(refs: Path, docs: Dict[str, Dict[str, str]], notes: Dict[str, Dic
             ],
             "extra request headers merged over the defaults (X-Requested-With, Origin, Referer); the session "
             "cookie jar and sessid are kept in-process, so nothing needs reusing across calls.",
+            extra_notes=(REST_WIRE,),
         ),
         "endpoints": endpoints,
     }
