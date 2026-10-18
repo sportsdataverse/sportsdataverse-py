@@ -222,9 +222,10 @@ html[data-theme='light'] .navbar__title {
  * the drawer takes over. In this band the 640px mega-menu, hung from a toggle in the left half, ran past the
  * right edge, and a hidden Docusaurus dropdown still takes layout space, so every page scrolled sideways. The
  * crowded bar also cut the site title to an ellipsis and wrapped "SDV" under its caret.
- * The menu is pinned to the viewport's right edge; while it is open a transparent strip, under the menu, spans
- * the navbar's lower edge and the first rows so the pointer never crosses a gap that closes it. The range syntax
- * (996px < width) leaves no sub-pixel gap with Docusaurus's own (max-width: 996px).
+ * In this band the menu spans the navbar's width, so every straight path from the toggle lands in it, and while it
+ * is open a transparent strip bridges the navbar's lower edge to the menu's first rows. Every other navbar item is
+ * raised above that strip, so the strip never takes a click meant for a link, the search box or a toggle. The
+ * range syntax (996px < width) leaves no sub-pixel gap with Docusaurus's own (max-width: 996px).
  */
 @media (996px < width < 1200px) {
   .navbar__brand,
@@ -242,8 +243,9 @@ html[data-theme='light'] .navbar__title {
   .dropdown:has(> .sdv-packages-dropdown) > .dropdown__menu {
     position: fixed;
     top: calc(var(--ifm-navbar-height) - 8px);
+    left: 1rem;
     right: 1rem;
-    left: auto;
+    width: auto;
     z-index: 2;
   }
   .dropdown:has(> .sdv-packages-dropdown):is(:hover, .dropdown--show)::after {
@@ -254,6 +256,11 @@ html[data-theme='light'] .navbar__title {
     right: 0;
     top: calc(var(--ifm-navbar-height) - 26px);
     height: 48px;
+  }
+  .navbar__brand,
+  .navbar__items > :not(.dropdown:has(> .sdv-packages-dropdown)) {
+    position: relative;
+    z-index: 3;
   }
 }
 
