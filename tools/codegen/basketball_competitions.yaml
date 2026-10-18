@@ -29,7 +29,10 @@
 #   schedules parse (176 and 168 matches), lfb_pbp(1148688) (2019 final) passes its /u/ check, and /u/FFBB/869758/
 #   names 'LIGUE FEMININE' (comp 18540). The oldest chooser season of ESAKE (5426), FRB (11929) and FUBB (21546) has no
 #   such slot; the WBBL, SLB, BAL and NZNBL hosted schedules (oldest and current, plain and embednf) answered HTTP 500
-#   'A website error has occurred' that day, a host-side failure the scope rule cannot change.
+#   'A website error has occurred' that day, a host-side failure the scope rule cannot change. It is intermittent and
+#   not org-specific: later on 2026-10-18 (32 requests) those same plain URLs (WBBL 2121 and 41751, SLB 41897, BAL
+#   33096, NZNBL 8192, all ?roundNumber=-1) and the WBBL 2121 embednf URL answered 200, while one ESAKE URL answered
+#   the same 500 four times over two minutes. No URL, header, cookie or comp-id change was needed.
 # atrium: website_id = the embed site config id (one site carries many competitions).
 #
 # Left out on purpose (already have a dedicated home, so a second prefix would only duplicate it):

@@ -25,10 +25,9 @@ host (an org without hosted pages, or an unknown ORG), a recent-games window wit
 with no matches. ``ValueError``: HTTP 400 / 422, a URL that is not a Genius route. ``AssetFetchError``: every other
 failure, which means the answer is unknown, not empty:
 
-* a non-200 (429 / 5xx after three attempts, honouring ``Retry-After``; an HTTP 500 "A website error has occurred"
-  page from an org with no plain hosted site, which names ``genius_schedule_embed``), the CloudFront block, a dead
-  connection. A dead connection and a 429 / 5xx other than that page carry ``transient = True``; every other
-  ``AssetFetchError`` is a definitive refusal;
+* a non-200 (429 / 5xx after three attempts, honouring ``Retry-After``; the HTTP 500 "A website error has occurred"
+  page, an intermittent host-side failure), the CloudFront block, a dead connection. A dead connection and a 429 /
+  5xx carry ``transient = True``; every other ``AssetFetchError`` is a definitive refusal;
 * an error envelope or a body of the wrong kind (not JSON, an HTML page where JSON was asked, a page cut off before
   ``</html>``, a truncated ``data.json``);
 * **a body for another scope than the one asked for**: a recent-games window of another competition, a ``/u/``
@@ -65,8 +64,10 @@ PROXY_ENV = "GENIUS_PROXY"
 LIVE = "fibalivestats.dcd.shared.geniussports.com"
 HOSTED = "hosted.dcd.shared.geniussports.com"
 WIDGET = "widget.wh.geniussports.com"
-#: 403 is NOT retried: the two Genius 403s are definitive answers. Neither is 500: the "website error" page is
-#: deterministic (see the HTTP 500 policy in ``basketball_runtime``).
+#: 403 is NOT retried: the two Genius 403s are definitive answers. Neither is 500: the "website error" page is an
+#: intermittent origin failure that sticks to a URL for minutes (2026-10-18: one ESAKE URL failed four times over
+#: two minutes while the WBBL/SLB/BAL/NZNBL URLs that failed earlier that day answered 200), so an immediate
+#: retry only adds load; the error is marked transient so a caller retries later.
 RETRY_STATUSES = frozenset({408, 429, 502, 503, 504})
 ATTEMPTS = 3
 #: Public site-widget keys (embedded in each league site's page) -> the webcast ORG their games carry.
@@ -146,9 +147,12 @@ def _fetch(url: str, params: Optional[Dict[str, Any]]) -> str:
             f"{where}: no such object (S3 AccessDenied: a wrong id or ORG, or a game from before data.json)"
         )
     if status == 500 and "website error" in low:
-        raise AssetFetchError(
-            f"{where} answered HTTP 500 'A website error has occurred': the org has no plain hosted site (try genius_schedule_embed)"
+        err = AssetFetchError(
+            f"{where} answered HTTP 500 'A website error has occurred': an intermittent Genius host-side failure "
+            "(it sticks to a URL for minutes; retry later)"
         )
+        err.transient = True
+        raise err
     try:
         _rt._check_status(url, status, text)  # 404 -> NoDataError, 400/422 -> ValueError, else AssetFetchError
     except AssetFetchError as exc:
