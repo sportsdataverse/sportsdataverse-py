@@ -236,6 +236,7 @@ def _odds_override_from_row(row: dict | None) -> dict | None:
         "overUnder": float(row["total_line"]),
         "homeFavorite": spread > 0,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,  # None is returned above without a total_line
     }
 
 

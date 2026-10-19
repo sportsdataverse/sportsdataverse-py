@@ -225,6 +225,7 @@ def test_stored_closing_line_becomes_odds_override(nfl_summary, fast_processor):
         "overUnder": 40.5,
         "homeFavorite": True,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
     }
     assert out.provenance["odds"]["from_idmap"] is True
     # an explicit odds_override wins over the stored line

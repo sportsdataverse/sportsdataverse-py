@@ -912,7 +912,8 @@ def test_shared_column_dtypes_match_nfl():
 
 # --- C-M19: the pickcenter odds round trip ----------------------------------------------------------
 
-_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+# the five keys the payload carries; a four-key override rebuilds with a null overUnderAvailable (unknown, R895-1)
+_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable", "overUnderAvailable")
 
 
 @pytest.mark.xdist_group("cfb-oracle-401301042")
@@ -925,7 +926,13 @@ def test_pickcenter_odds_round_trip_rebuilds_the_frame_401301042():
     # the oracle: ESPN's pickcenter in the capture (both providers carry -4.0 / 58.5 / home favored)
     espn = _load(PATHS[401301042])["pickcenter"]
     assert {(p["spread"], p["overUnder"], p["homeTeamOdds"]["favorite"]) for p in espn} == {(-4.0, 58.5, True)}
-    assert persisted == {"gameSpread": -4.0, "overUnder": 58.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert persisted == {
+        "gameSpread": -4.0,
+        "overUnder": 58.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
+    }
     again = CFBPlayProcess(gameId=401301042, join_participants=False, odds_override=persisted)
     again.espn_cfb_pbp(summary=_load(PATHS[401301042]))
     again.run_processing_pipeline()

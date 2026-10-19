@@ -9575,6 +9575,8 @@ load_cfb_pbp:
   opportunity_run: True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15
     definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag.
   overUnder: Over/under total used as a model input.
+  overUnderAvailable: False when overUnder is the 55.5 default (the line had a spread and no total), True for a market
+    total; null when an odds_override did not say. Absent from releases built before the column existed.
   pass_breakup: True when a defender broke up the pass.
   pass_breakup_team: Team id credited with the pass breakup (the defense).
   pass_depth: Thrown-pass depth parsed from ESPN play text ("short" or "deep"); null when the text omits it (sacks, screens,

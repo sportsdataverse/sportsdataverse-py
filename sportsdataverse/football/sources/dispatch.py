@@ -62,7 +62,7 @@ class SourceContext:
         | idmap_row | dict or None | the game's id-map row (``idmap._lookup``): native game + team ids |
         | payload | Any | the source's native payload, injected for offline runs (ESPN: the summary dict); None = fetch |
         | participants | polars.DataFrame or None | pre-shaped ``participants=`` frame to hand the processor |
-        | odds_override | dict or None | ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` for sources without odds |
+        | odds_override | dict or None | ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` for sources without odds |
     """
 
     idmap_row: dict | None = None

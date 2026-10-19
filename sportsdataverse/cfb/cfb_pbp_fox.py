@@ -60,12 +60,14 @@ from sportsdataverse.football.fox_common import _has_pbp, _pos
 __all__ = ["fox_cfb_play_process", "fox_to_espn_summary"]
 
 # Neutral spread used when the caller supplies no odds. EPA is unaffected; the
-# WP model just sees a pick'em line (gameSpreadAvailable=False).
+# WP model just sees a pick'em line (gameSpreadAvailable=False); 55.5 is the default total,
+# not a market one (overUnderAvailable=False).
 _NEUTRAL_ODDS = {
     "gameSpread": 0.0,
     "overUnder": 55.5,
     "homeFavorite": True,
     "gameSpreadAvailable": False,
+    "overUnderAvailable": False,
 }
 
 
@@ -462,7 +464,7 @@ def fox_cfb_play_process(
     Args:
         event_id: FoxSports CFB event id (e.g. ``41616``).
         odds_override: Optional ``{gameSpread, overUnder, homeFavorite,
-            gameSpreadAvailable}`` dict. Fox does not expose a clean pre-game
+            gameSpreadAvailable, overUnderAvailable}`` dict. Fox does not expose a clean pre-game
             spread, so when omitted a neutral pick'em line is used (EPA is
             unaffected; only the WP model's spread term is neutralized).
         process: If ``True`` (default) run the full
