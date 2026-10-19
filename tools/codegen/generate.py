@@ -506,23 +506,18 @@ def _docstring_param_descs(league_prefix: str, fn_name: str) -> dict[str, str]:
     directly from ``sportsdataverse.{league_prefix}`` for flat-API wrappers) and
     delegates to :func:`_doc_view` to extract the per-param descriptions.
 
-    Returns an empty dict when the function is not importable (stub / not yet
-    wired) so callers always get a safe fallback.  Results are cached per
+    Returns an empty dict when the league package does not exist yet or the function is not
+    defined there (stub / not yet wired); any other import failure raises (A-L11).  Results are cached per
     ``(league_prefix, fn_name)`` so repeated endpoint views inside the same
     codegen run share one import + parse.
     """
-    import importlib
-
-    try:
-        mod = importlib.import_module(f"sportsdataverse.{_league_module(league_prefix)}") if league_prefix else None
-    except Exception:  # noqa: BLE001
-        return {}
+    mod = _import_league_package(league_prefix) if league_prefix else None
     fn = getattr(mod, fn_name, None) if mod is not None else None
     if fn is None or not callable(fn):
         return {}
     try:
         view = _doc_view(fn)
-    except Exception:  # noqa: BLE001
+    except (TypeError, ValueError):  # inspect.signature has no signature for this callable
         return {}
     return {p["name"]: p["description"] for p in view["params"]}
 
@@ -1397,16 +1392,25 @@ class _EndpointView:
         return "\n    ".join(lines)
 
 
+def _ruff_format(*paths: Path) -> None:
+    """``ruff format`` the given files / directories; raise when ruff fails (A-L9).
+
+    ruff exits non-zero when a rendered file is not valid Python (or ruff itself is missing).
+    Ignoring that wrote the file unformatted and let ``--check`` compare invalid output with
+    invalid output, so the error surfaced only later as an import failure.
+    """
+    proc = subprocess.run([*_RUFF, "format", *map(str, paths)], capture_output=True, text=True, check=False)
+    if proc.returncode != 0:
+        raise RuntimeError(f"ruff format failed (exit {proc.returncode}): {(proc.stderr or proc.stdout).strip()}")
+
+
 def _ruff_format_dir(path: Path) -> None:
     """Format every ``.py`` under ``path`` with ruff *file-based*, so the repo's
     ``[tool.ruff.format]`` config (line-length=120, etc.) is discovered and applied --
     byte-for-byte identical to the pre-commit ruff hook. (Stdin formatting ignores the
-    per-directory config and diverges from the hook.) No-op if ruff isn't installed.
+    per-directory config and diverges from the hook.) Raises when ruff fails.
     """
-    try:
-        subprocess.run([*_RUFF, "format", str(path)], capture_output=True, text=True, check=False)
-    except FileNotFoundError:
-        pass
+    _ruff_format(path)
 
 
 _ESPN_RENAME_FILE = ROOT / "tools" / "codegen" / "espn_rename_map.yaml"
@@ -1525,24 +1529,34 @@ def _versioned_on_collision(short: str, prefix: str) -> str | None:
     return f"espn_{prefix}_{suffix}" if suffix else None
 
 
+def _import_league_package(prefix: str):
+    """``sportsdataverse.<league module>``, or ``None`` only when that package does not exist yet.
+
+    Bootstrapping a new league is the one import failure that means "no names here". Any other
+    failure (a syntax error mid-edit, a missing optional dependency, a module the package imports
+    that is gone) re-raises: an empty answer would quietly change public names (undo the B-M31
+    renames, R903-3) or drop documented parameters on a local regen (A-L11).
+    """
+    import importlib
+
+    target = f"sportsdataverse.{_league_module(prefix)}"
+    try:
+        return importlib.import_module(target)
+    except ModuleNotFoundError as e:
+        if e.name and (target == e.name or target.startswith(f"{e.name}.")):
+            return None
+        raise
+
+
 def _handwritten_espn_names(prefix: str) -> set[str]:
     """``espn_<prefix>_*`` public names NOT provided by the generated *_espn_ext module.
 
     Resolves each public name on the package and keeps those whose ``__module__`` is
     a sibling (or unknown, e.g. decorated/partial) -- robust to decorators that the
     per-module ``vars()`` scan misses (e.g. cached ``espn_cfb_teams``)."""
-    import importlib
-
-    target = f"sportsdataverse.{_league_module(prefix)}"
-    try:
-        pkg = importlib.import_module(target)
-    except ModuleNotFoundError as e:
-        # Only a league package that does not exist yet (bootstrapping a new league) has no
-        # hand-written names. Any other failure re-raises: returning an empty set would quietly
-        # undo the B-M31 renames on a local regen (R903-3).
-        if e.name and (target == e.name or target.startswith(f"{e.name}.")):
-            return set()
-        raise
+    pkg = _import_league_package(prefix)
+    if pkg is None:
+        return set()
     out: set[str] = set()
     for n in dir(pkg):
         if not n.startswith(f"espn_{prefix}_"):
@@ -1686,11 +1700,8 @@ def reserved_names(prefix: str, exclude_modules: tuple[str, ...] = ()) -> set[st
     ``exclude_modules`` drops names whose ``__module__`` ends with one of the
     given module names -- used so a flat module being regenerated does not treat
     its own (about-to-be-replaced) names as reserved (the bootstrapping case)."""
-    import importlib
-
-    try:
-        mod = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
-    except Exception:
+    mod = _import_league_package(prefix)
+    if mod is None:
         return set()
     out: set[str] = set()
     for n in dir(mod):
@@ -2022,7 +2033,7 @@ def build_loaders_live() -> list[Path]:
             init.write_text(init.read_text(encoding="utf-8").rstrip() + "\n" + line, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
@@ -2316,18 +2327,20 @@ def _refresh_sport_specific_return_schemas() -> int:
     return written
 
 
-def _write_native_schemas(nat: dict) -> int:
+def _write_native_schemas(nat: dict) -> tuple[int, list[str]]:
     """Introspect each flat-API parser on its captured fixture -> ``schemas/native/<api>/<short>.yaml``.
 
     ``nat`` is ``native_fixture_map.yaml``: ``{api: {fixture file: short}}``. A value may also be
     a list of shorts, for one capture that several endpoints parse (the SIHF game page feeds six
-    parsers). Returns the number of schemas written."""
+    parsers). Returns ``(schemas written, failures)``: a parser that crashes on its own committed
+    capture is a failure ``--schemas`` exits 1 on, never a quiet skip that leaves a stale schema
+    behind (A-N14)."""
     import importlib
     import json
 
     import yaml
 
-    written = 0
+    written, failed = 0, []
     params = spec.load_parameters(ENDPOINTS / "parameters.yaml")
     for api, files in nat.items():
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
@@ -2351,15 +2364,15 @@ def _write_native_schemas(nat: dict) -> int:
                         }
                     else:
                         doc = {"schema": key, "kind": "dataframe", "columns": _cols_from_frame(df, {})}
-                except Exception as e:  # noqa: BLE001
-                    print(f"  native skip {api}/{short} ({fname}): {e}")
+                except Exception as e:  # noqa: BLE001 -- any parser crash is collected; --schemas exits 1 on it
+                    failed.append(f"{api}/{short} ({fname}): {type(e).__name__}: {e}")
                     continue
                 outdir.mkdir(parents=True, exist_ok=True)
                 (outdir / f"{short}.yaml").write_text(
                     yaml.safe_dump(doc, sort_keys=False, width=120), encoding="utf-8", newline="\n"
                 )
                 written += 1
-    return written
+    return written, failed
 
 
 def refresh_return_schemas() -> int:
@@ -2407,14 +2420,17 @@ def refresh_return_schemas() -> int:
 
     # --- natives ---
     nat = yaml.safe_load((ROOT / "tools" / "codegen" / "native_fixture_map.yaml").read_text("utf-8")) or {}
-    written += _write_native_schemas(nat)
+    native_written, native_failed = _write_native_schemas(nat)
+    written += native_written
 
     # --- sport-specific ESPN parsers (soccer/cricket) ---
     sport_written = _refresh_sport_specific_return_schemas()
     written += sport_written
 
     print(f"return schemas: {written} written ({sport_written} sport-specific), {skipped} skipped (no fixture)")
-    return 0
+    for failure in native_failed:
+        print(f"  native parser failed on its capture: {failure}", file=sys.stderr)
+    return 1 if native_failed else 0
 
 
 def _remote_parquet_schema(url: str):
@@ -2439,8 +2455,9 @@ def refresh_loader_schemas() -> int:
     import yaml
 
     rel = _releases_cfg()
+    prev = _loader_schemas()  # a loader whose footers could not be read keeps its committed schema
     out: dict = {}
-    failed = []
+    failed, errors = [], []
     for ld in rel.loaders:
         if ld.stub:
             continue
@@ -2453,14 +2470,20 @@ def refresh_loader_schemas() -> int:
         # NOT unioned: test_declared_schema_matches_the_published_parquet
         # asserts the declared schema equals ONE published season's columns, so
         # a union would document a shape no single asset has. min_season is the
-        # last resort; a season whose footer read raises is skipped.
+        # last resort; a season that is not published (404) is skipped. Any other failed
+        # read (403, rate limit, 5xx, a dead connection) is unknown, not absent: the
+        # loader keeps its committed schema and the run exits 1 (A-L11).
         seasons = [2026, 2025, 2024, 2023, 2022, ld.min_season or 2024]
         got = None
         for s in dict.fromkeys(seasons):
             try:
                 sch = _remote_parquet_schema(spec.fill_season(f"{rel.bases[ld.base]}{ld.url}", s))
-            except Exception:  # noqa: BLE001
+            except FileNotFoundError:  # fsspec's HTTP 404: this season is not published
                 continue
+            except Exception as e:  # noqa: BLE001 -- any failed read is reported and the run exits 1
+                errors.append(f"{ld.fn} {s}: {type(e).__name__}: {e}")
+                got = None
+                break
             if got is None or len(sch) > len(got):
                 got = [{"name": k, "type": str(v)} for k, v in sch.items()]
         # id_int64 columns are cast at the loader boundary AFTER read, so the
@@ -2472,6 +2495,8 @@ def refresh_loader_schemas() -> int:
                     entry["type"] = "Int64"
         if got is None:
             failed.append(ld.fn)
+            if ld.fn in prev:
+                out[ld.fn] = prev[ld.fn]
         else:
             out[ld.fn] = got
     dest = ENDPOINTS.parent / "schemas" / "loader_schemas.yaml"
@@ -2479,7 +2504,9 @@ def refresh_loader_schemas() -> int:
     dest.write_text(yaml.safe_dump(out, sort_keys=True, width=120), encoding="utf-8", newline="\n")
     _loader_schemas.cache_clear()
     print(f"loader schemas: {len(out)} introspected" + (f"; {len(failed)} failed: {failed}" if failed else ""))
-    return 0
+    for error in errors:
+        print(f"  footer read failed: {error}", file=sys.stderr)
+    return 1 if errors else 0
 
 
 def audit_releases() -> int:
@@ -2496,7 +2523,7 @@ def audit_releases() -> int:
     manifest = {ld.tag for ld in rel.loaders if ld.base == "sdv_releases"}
     try:
         live = {t for t in gh_release_tags() if _is_loader_tag(t)}
-    except Exception as e:  # noqa: BLE001
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:  # gh failed, or is not installed
         print(f"--audit-releases: could not query gh release list ({e})", file=sys.stderr)
         return 2
     missing = sorted(live - manifest)
@@ -2582,7 +2609,7 @@ def build_parsed_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
@@ -2727,7 +2754,7 @@ def build_flat_live() -> list[Path]:
         dest.write_text(src, encoding="utf-8", newline="\n")
         written.append(dest)
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
@@ -2940,7 +2967,7 @@ def build_live() -> list[Path]:
         body = _container_init_body(group, members, has_ext)
         (container / "__init__.py").write_text(body, encoding="utf-8", newline="\n")
     if written:
-        subprocess.run([*_RUFF, "format", *[str(p) for p in written]], capture_output=True, text=True, check=False)
+        _ruff_format(*written)
     return sorted(written)
 
 
@@ -4213,81 +4240,79 @@ def _fallback_doc_sections(raw: str) -> dict:
     Returns ``{"params": [...], "returns": str, "example": str}`` where each
     param is ``{"arg_name", "type_name", "description"}``. Continuation lines
     (lines that do NOT open a new ``name (...):`` / ``name:`` entry) are
-    space-joined onto the previous param's description. Never raises; returns
-    empty pieces when it cannot parse."""
+    space-joined onto the previous param's description. Returns empty pieces when
+    it finds no section; it is plain string work, so an exception here is a bug and
+    propagates (A-L11) instead of silently dropping a page's Args/Returns."""
     out = {"params": [], "returns": "", "example": ""}
     if not raw:
         return out
-    try:
-        lines = raw.splitlines()
-        # Group lines into sections keyed by header name. Anything before the
-        # first header is preamble (short/long description) and ignored here.
-        sections: dict[str, list[str]] = {}
-        current: str | None = None
-        for ln in lines:
-            m = _FALLBACK_HEADER_RE.match(ln)
-            if m:
-                current = m.group(1).strip().lower()
-                sections.setdefault(current, [])
-                trailing = m.group(2).strip()
-                if trailing:
-                    sections[current].append("    " + trailing)
-                continue
-            if current is not None:
-                sections[current].append(ln)
+    lines = raw.splitlines()
+    # Group lines into sections keyed by header name. Anything before the
+    # first header is preamble (short/long description) and ignored here.
+    sections: dict[str, list[str]] = {}
+    current: str | None = None
+    for ln in lines:
+        m = _FALLBACK_HEADER_RE.match(ln)
+        if m:
+            current = m.group(1).strip().lower()
+            sections.setdefault(current, [])
+            trailing = m.group(2).strip()
+            if trailing:
+                sections[current].append("    " + trailing)
+            continue
+        if current is not None:
+            sections[current].append(ln)
 
-        def section(*keys: str) -> list[str]:
-            for k in keys:
-                if k in sections:
-                    return sections[k]
-            return []
+    def section(*keys: str) -> list[str]:
+        for k in keys:
+            if k in sections:
+                return sections[k]
+        return []
 
-        # --- Args / Parameters ---------------------------------------------
-        arg_lines = section("args", "arguments", "parameters", "param")
-        params: list[dict] = []
-        for raw_line in arg_lines:
-            s = raw_line.strip()
-            if not s:
-                continue
-            am = _ARG_LINE_RE.match(s)
-            if am and (am.group("type") is not None or " " not in am.group("name")):
-                # New entry. Guard: a continuation line like "4 for all-star: x"
-                # would falsely match name="4"? No -- name must be an identifier
-                # (\w starting with a letter/underscore), so leading-digit
-                # continuations are treated as continuations below.
-                params.append(
-                    {
-                        "arg_name": am.group("name"),
-                        "type_name": (am.group("type") or "").strip(),
-                        "description": am.group("desc").strip(),
-                    },
-                )
-            elif params:
-                # Continuation of the previous param's description.
-                joined = (params[-1]["description"] + " " + s).strip()
-                params[-1]["description"] = joined
-            # else: stray line before any param -- ignore.
-        for p in params:
-            p["description"] = _normalize_rst(" ".join(p["description"].split()))
-        out["params"] = params
+    # --- Args / Parameters ---------------------------------------------
+    arg_lines = section("args", "arguments", "parameters", "param")
+    params: list[dict] = []
+    for raw_line in arg_lines:
+        s = raw_line.strip()
+        if not s:
+            continue
+        am = _ARG_LINE_RE.match(s)
+        if am and (am.group("type") is not None or " " not in am.group("name")):
+            # New entry. Guard: a continuation line like "4 for all-star: x"
+            # would falsely match name="4"? No -- name must be an identifier
+            # (\w starting with a letter/underscore), so leading-digit
+            # continuations are treated as continuations below.
+            params.append(
+                {
+                    "arg_name": am.group("name"),
+                    "type_name": (am.group("type") or "").strip(),
+                    "description": am.group("desc").strip(),
+                },
+            )
+        elif params:
+            # Continuation of the previous param's description.
+            joined = (params[-1]["description"] + " " + s).strip()
+            params[-1]["description"] = joined
+        # else: stray line before any param -- ignore.
+    for p in params:
+        p["description"] = _normalize_rst(" ".join(p["description"].split()))
+    out["params"] = params
 
-        # --- Returns / Yields ----------------------------------------------
-        ret_lines = section("returns", "return", "yields", "yield")
-        if ret_lines:
-            ret = textwrap_dedent_join(ret_lines)
-            ret = " ".join(ret.split())
-            # Strip a leading ``pl.DataFrame:`` / ``type:`` prefix if present.
-            rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
-            if rm and rm.group(1):
-                ret = rm.group(1).strip()
-            out["returns"] = _normalize_rst(ret)
+    # --- Returns / Yields ----------------------------------------------
+    ret_lines = section("returns", "return", "yields", "yield")
+    if ret_lines:
+        ret = textwrap_dedent_join(ret_lines)
+        ret = " ".join(ret.split())
+        # Strip a leading ``pl.DataFrame:`` / ``type:`` prefix if present.
+        rm = re.match(r"^[A-Za-z_][\w.\[\], |]*\s*:\s*(.*)$", ret)
+        if rm and rm.group(1):
+            ret = rm.group(1).strip()
+        out["returns"] = _normalize_rst(ret)
 
-        # --- Example / Examples --------------------------------------------
-        ex_lines = section("examples", "example")
-        if ex_lines:
-            out["example"] = textwrap_dedent_join(ex_lines).strip()
-    except Exception:  # noqa: BLE001 -- never raise on odd docstrings.
-        return {"params": [], "returns": "", "example": ""}
+    # --- Example / Examples --------------------------------------------
+    ex_lines = section("examples", "example")
+    if ex_lines:
+        out["example"] = textwrap_dedent_join(ex_lines).strip()
     return out
 
 
@@ -4418,12 +4443,12 @@ def _parse_doc_params(raw: str) -> dict:
     Strict ``docstring_parser`` first; the lenient ``_fallback_doc_sections``
     recovery only when the strict parse yields no params (wrapped multi-line
     Google ``Args`` defeat the strict parser)."""
-    from docstring_parser import parse
+    from docstring_parser import ParseError, parse
 
     raw = raw or ""
     try:
         ds = parse(raw)
-    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+    except ParseError:  # a malformed section: _fallback_doc_sections recovers it below
         ds = None
     out: dict[str, dict] = {}
     ds_params = list(ds.params) if ds is not None else []
@@ -4500,12 +4525,12 @@ def _doc_view(obj) -> dict:
     empty ``methods`` list."""
     import inspect
 
-    from docstring_parser import parse
+    from docstring_parser import ParseError, parse
 
     raw = inspect.getdoc(obj) or ""
     try:
         ds = parse(raw)
-    except Exception:  # noqa: BLE001 -- AUTO parse can raise on malformed sections.
+    except ParseError:  # a malformed section: _fallback_doc_sections recovers it below
         ds = None
 
     # Lenient recovery for docstrings the strict parser drops (wrapped multi-line
@@ -4941,7 +4966,7 @@ def refresh_autodoc_schemas() -> int:
                 df = _call_with_timeout(
                     lambda: obj(**{k: _resolve_autodoc_arg(v, memo) for k, v in kwargs.items()}), timeout
                 )
-            except (Exception, _CallTimeout) as e:  # noqa: BLE001
+            except (Exception, _CallTimeout) as e:  # noqa: BLE001 -- a live call of any public fn; every skip is reported
                 msg = str(e).splitlines()[0][:120] if str(e) else type(e).__name__
                 print(f"  autodoc skip {scope_key}.{fn}: {msg}")
                 skip_reasons.append(f"{scope_key}.{fn}: {msg}")
