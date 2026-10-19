@@ -67,6 +67,7 @@ import hashlib
 import json
 import os
 import re
+import warnings
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
@@ -480,10 +481,20 @@ def clear_cache(
 
 
 def _remove(path: Path) -> bool:
-    """Delete one cache file; ``False`` when it is already gone or locked (a Windows handle), never a raise."""
+    """Delete one cache file; ``False`` when it is already gone or locked (a Windows handle), never a raise.
+
+    A locked entry warns: the caller asked for it to be gone, and it is still served.
+    """
     try:
         path.unlink()
-    except (FileNotFoundError, PermissionError):
+    except FileNotFoundError:
+        return False
+    except PermissionError:
+        warnings.warn(
+            f"clear_cache: {path} is in use by another process and was not deleted; it stays cached",
+            RuntimeWarning,
+            stacklevel=3,
+        )
         return False
     return True
 

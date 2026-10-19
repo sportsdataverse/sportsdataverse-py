@@ -400,7 +400,8 @@ def test_corrupt_parquet_with_a_locked_file_still_returns_data(tmp_path, fake_lo
 
 
 def test_clear_cache_skips_a_locked_key_named_entry(tmp_path, monkeypatch):
-    """A cache entry another process holds open (Windows) is skipped; clear_cache never crashes."""
+    """A cache entry another process holds open (Windows) is skipped and named in a warning: the next call
+    gets the old entry, not the fresh fetch clear_cache promises."""
     update_config(cache_mode="filesystem", cache_dir=tmp_path)
     locked, other = tmp_path / ("a" * 64 + ".parquet"), tmp_path / ("b" * 64 + ".parquet")
     for path in (locked, other):
@@ -413,5 +414,6 @@ def test_clear_cache_skips_a_locked_key_named_entry(tmp_path, monkeypatch):
         return real_unlink(self, missing_ok=missing_ok)
 
     monkeypatch.setattr(Path, "unlink", unlink)
-    clear_cache()
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        clear_cache()
     assert locked.exists() and not other.exists()

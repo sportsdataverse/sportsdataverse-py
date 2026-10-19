@@ -1107,14 +1107,12 @@ def get_4th_down_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFr
       punt_wp))`` in percentage points (a NaN ``punt_wp`` is treated as 0).
     * ``fourth_down_recommendation`` -- the max-WP choice among ``{go, punt,
       field_goal}`` (NaN options are excluded).
-    * ``go_wp_diff`` / ``punt_wp_diff`` / ``fg_wp_diff`` -- each option's WP minus
-      the recommended option's WP (the recommended option's diff is 0, the others
-      <= 0).  NaN where the option WP is NaN.
+    * ``go_wp_diff`` / ``punt_wp_diff`` / ``fg_wp_diff`` -- each option's WP minus the recommended option's WP
+      (0 for the recommended option, <= 0 for the others; NaN where the option WP is NaN).
 
     Args:
-        pbp_df: Play-by-play frame (polars or pandas) of fourth-down situations
-            (the nflverse-shape output of :func:`load_nfl_pbp`; see module
-            docstring for required columns).
+        pbp_df: Play-by-play frame (polars or pandas) of fourth-down situations (the nflverse-shape output of
+            :func:`load_nfl_pbp`; see module docstring for required columns).
 
     Returns:
         A pandas copy of ``pbp_df`` with the decision columns added.  Empty input
@@ -1122,6 +1120,8 @@ def get_4th_down_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFr
 
     Raises:
         FileNotFoundError: in strict mode, for a missing nfl4th model (warns otherwise; see :func:`get_go_wp`).
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::

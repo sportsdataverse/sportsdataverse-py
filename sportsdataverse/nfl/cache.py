@@ -27,6 +27,7 @@ import inspect
 import json
 import re
 import time
+import warnings
 from functools import lru_cache, wraps
 from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar
@@ -330,6 +331,15 @@ def clear_cache() -> None:
             # Only the files this cache names: a key-named parquet. ``models/`` and any
             # file or directory the cache did not write are left alone.
             if child.is_file() and _ENTRY_NAME.fullmatch(child.name):
-                # Gone already, or locked by another process (Windows): skip it rather than crash.
-                with contextlib.suppress(FileNotFoundError, PermissionError):
+                # Gone already: nothing to do. Locked by another process (Windows): skip it, but say so,
+                # because the next call is then served the old entry, not a fresh fetch.
+                try:
                     child.unlink()
+                except FileNotFoundError:
+                    pass
+                except PermissionError:
+                    warnings.warn(
+                        f"clear_cache: {child} is in use by another process and was not deleted; it stays cached",
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )

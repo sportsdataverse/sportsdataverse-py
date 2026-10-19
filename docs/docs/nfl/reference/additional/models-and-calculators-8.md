@@ -19,9 +19,8 @@ fourth-down rows and adds the combined option columns plus:
   punt_wp))` in percentage points (a NaN `punt_wp` is treated as 0).
 * `fourth_down_recommendation` -- the max-WP choice among `{go, punt,
   field_goal}` (NaN options are excluded).
-* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus
-  the recommended option's WP (the recommended option's diff is 0, the others
-  <= 0).  NaN where the option WP is NaN.
+* `go_wp_diff` / `punt_wp_diff` / `fg_wp_diff` -- each option's WP minus the recommended option's WP
+  (0 for the recommended option, <= 0 for the others; NaN where the option WP is NaN).
 
 **Parameters**
 

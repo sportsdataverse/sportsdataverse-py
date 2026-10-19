@@ -1893,8 +1893,8 @@
   group: codegen-runtime
   finding: C-M24
   file: sportsdataverse/cache.py
-  snippet: '    except (FileNotFoundError, PermissionError):'
-  mutant: '    except FileNotFoundError:'
+  snippet: '    except PermissionError:'
+  mutant: '    except IsADirectoryError:'
   test: tests/test_cache.py -k skips_a_locked_entry
   expected: kill
   note: R899-11, a file another process holds open crashed clear_cache
@@ -1903,8 +1903,28 @@
   group: codegen-runtime
   finding: C-M24
   file: sportsdataverse/nfl/cache.py
-  snippet: 'with contextlib.suppress(FileNotFoundError, PermissionError):'
-  mutant: 'with contextlib.suppress(FileNotFoundError):'
+  snippet: '                except PermissionError:'
+  mutant: '                except IsADirectoryError:'
   test: tests/nfl/test_nfl_cache.py -k skips_a_locked_key_named_entry
   expected: kill
   note: R899-11, a file another process holds open crashed clear_cache
+
+- id: http-clear-cache-locked-entry-warns
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: "        warnings.warn(\n            f\"clear_cache: {path} is in use"
+  mutant: "        (lambda *a, **k: None)(\n            f\"clear_cache: {path} is in use"
+  test: tests/test_cache.py -k skips_a_locked_entry
+  expected: kill
+  note: R899-16, a locked entry stays cached, so clear_cache says so
+
+- id: nfl-clear-cache-locked-entry-warns
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/nfl/cache.py
+  snippet: "                    warnings.warn(\n                        f\"clear_cache: {child} is in use"
+  mutant: "                    (lambda *a, **k: None)(\n                        f\"clear_cache: {child} is in use"
+  test: tests/nfl/test_nfl_cache.py -k skips_a_locked_key_named_entry
+  expected: kill
+  note: R899-16, clear_cache promises a fresh fetch; a locked entry breaks that, so it warns

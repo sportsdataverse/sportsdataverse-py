@@ -651,7 +651,7 @@ def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monk
 
 
 def test_filesystem_clear_cache_skips_a_locked_entry(reset_cache, monkeypatch, tmp_path):
-    """A file another process holds open (Windows) is skipped and not counted; clear never crashes."""
+    """A file another process holds open (Windows) is skipped, not counted, and named in a warning."""
     from pathlib import Path
 
     from sportsdataverse import cache
@@ -669,7 +669,9 @@ def test_filesystem_clear_cache_skips_a_locked_entry(reset_cache, monkeypatch, t
         return real_unlink(self, missing_ok=missing_ok)
 
     monkeypatch.setattr(Path, "unlink", unlink)
-    assert cache.clear_cache(url="https://x.example/1") == 0
-    assert cache.clear_cache() == 2
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache(url="https://x.example/1") == 0
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache() == 2
     assert [p.name for p in tmp_path.glob("*.json")] == [locked.name]
     assert cache.clear_cache(url="https://x.example/0") == 0  # already gone
