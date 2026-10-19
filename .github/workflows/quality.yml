@@ -182,15 +182,17 @@ jobs:
     # held 191 rows (211 with #898) and 6-shard jobs hit the timeout again (R898-19). Measured on run
     # 39195638017 (191 rows, 6 shards): 4240 s of rows serially, 22.2 s/row mean, a heavy tail (max
     # 113 s), ~25 s setup per job, slowest shard 14m22s. Replaying those per-row times through the
-    # round-robin split at 211 rows: N=9 -> slowest shard 11.2 min, N=10 -> 10.2, N=11 -> 8.7 (avg 7.5;
-    # ~9.8 at 250 rows), so 11. Add a shard when one nears ~10 min.
+    # round-robin split, N=8 puts the slowest shard at 12.1 min at 211 rows (avg 10.2) and 13.6 min at
+    # 250 rows (avg 12.0); N=11 would give 8.7. The owner chose 8 shards with a 20-min timeout: fewer
+    # runners held at once over the fastest feedback. Add a shard or raise the timeout when the slowest
+    # shard nears ~16 min.
     name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v5
         with:

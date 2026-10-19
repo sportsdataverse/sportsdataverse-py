@@ -193,7 +193,7 @@ def test_utf8_output_from_the_child_pytest_is_classified_not_crashed_on(tree, ca
     assert (root / "mod.py").read_bytes() == SOURCE.encode("utf-8")
 
 
-@pytest.mark.parametrize("n", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+@pytest.mark.parametrize("n", [1, 2, 3, 4, 5, 6, 7, 8])
 def test_shards_partition_the_real_registry_exactly(n):
     """CI runs `--shard i/N` per matrix job: every row must land in exactly one shard, none dropped."""
     rows = rm.load_registry(rm.REGISTRY)

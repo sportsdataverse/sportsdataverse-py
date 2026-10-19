@@ -28,7 +28,7 @@ Usage::
 
     uv run --frozen python tools/run_mutants.py            # run every row
     uv run --frozen python tools/run_mutants.py --only ratings-level   # one group / finding / id
-    uv run --frozen python tools/run_mutants.py --shard 2/11  # rows 1, 12, 23, ... (0-based) of N CI shards (the matrix width)
+    uv run --frozen python tools/run_mutants.py --shard 2/8  # rows 1, 9, 17, ... (0-based) of N CI shards (the matrix width)
     uv run --frozen python tools/run_mutants.py --list     # print the rows, run nothing
     uv run --frozen python tools/run_mutants.py --dry-run  # validate snippets + tests, run nothing
 """
