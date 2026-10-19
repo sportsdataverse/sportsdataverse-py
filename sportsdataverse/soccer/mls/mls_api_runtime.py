@@ -26,7 +26,7 @@ _UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like
 __all__ = ["REFERER", "_get", "bool_str"]
 
 
-def bool_str(value: Any) -> Optional[str]:
+def bool_str(value: Any, name: str = "value") -> Optional[str]:
     """Coerce a truthy/falsey value to the lowercase ``"true"``/``"false"`` the API expects.
 
     Re-exported from the shared runtime so the generated module can import every
@@ -34,10 +34,14 @@ def bool_str(value: Any) -> Optional[str]:
     strips it.
 
     Args:
-        value: any truthy/falsey value, or ``None``.
+        value: any truthy/falsey value, ``"true"``/``"false"``/``"1"``/``"0"``, or ``None``.
+        name: the parameter, named by the ``ValueError``.
 
     Returns:
         ``"true"`` / ``"false"``, or ``None`` when ``value`` is ``None``.
+
+    Raises:
+        ValueError: ``value`` is any other string.
 
     Example:
         Basic use::
@@ -49,7 +53,7 @@ def bool_str(value: Any) -> Optional[str]:
     """
     from sportsdataverse._codegen_runtime import bool_str as _shared
 
-    return _shared(value)
+    return _shared(value, name)
 
 
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Union[Dict, list]:

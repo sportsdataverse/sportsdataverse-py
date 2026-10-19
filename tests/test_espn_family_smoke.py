@@ -50,8 +50,9 @@ def test_espn_team_roster_parses_offline(lg, monkeypatch):
     fixture = load_fixture("espn", f"team_roster_{lg}")
     monkeypatch.setattr(ext, "_get", lambda *a, **k: fixture)
 
-    df = fn(event_id="401", team_id="4")
+    # team_roster takes no event_id: an unknown kwarg now raises naming the wrapper (A-N3)
+    df = fn(team_id="4")
     assert isinstance(df, pl.DataFrame)
 
-    raw = fn(event_id="401", team_id="4", return_parsed=False)
+    raw = fn(team_id="4", return_parsed=False)
     assert raw is fixture  # return_parsed=False returns the raw payload unchanged
