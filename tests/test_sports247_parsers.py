@@ -296,3 +296,45 @@ def test_positions_wrapper_routes_through_generic_parser(monkeypatch):
 
     raw = s247.sports247_positions(sport_key=1, return_parsed=False)
     assert isinstance(raw, list)
+
+
+def test_concurrent_jwt_misses_mint_once(monkeypatch):
+    """A-L71: threads that find no guest JWT share one mint (a module global, now locked)."""
+    import threading
+    import time
+
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    minted = []
+
+    def slow_mint():
+        minted.append(1)
+        time.sleep(0.2)  # the other threads arrive while this mint is in flight
+        return "stub-jwt"
+
+    monkeypatch.setattr(rt, "_mint_guest_jwt", slow_mint)
+    seen = []
+
+    def fake(url, params, headers, proxy_url):
+        seen.append(headers.get("Authorization"))
+        return 200, '{"players": []}'
+
+    threads = [
+        threading.Thread(target=lambda: rt._get("https://ipa.247sports.com/rdb/v1/recruits/", transport=fake))
+        for _ in range(3)
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(minted) == 1 and seen == ["Bearer stub-jwt"] * 3
+
+
+def test_a_401_after_another_thread_reminted_reuses_its_token(monkeypatch):
+    import sportsdataverse.cfb.sports247_runtime as rt
+
+    tokens = iter(["expired", "fresh", "unused"])
+    monkeypatch.setattr(rt, "_mint_guest_jwt", lambda: next(tokens))
+    assert rt._guest_jwt() == "expired"
+    assert rt._guest_jwt("expired", refresh=True) == "fresh"  # this thread re-mints ...
+    assert rt._guest_jwt("expired", refresh=True) == "fresh"  # ... a second one reuses it

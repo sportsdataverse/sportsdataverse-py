@@ -218,11 +218,18 @@ def set_default_ttl(ttl: Optional[Union[timedelta, int]]) -> None:
 
 def _resolve_ttl(
     url: str,
-    override: Optional[timedelta] = None,
+    override: timedelta | float | None = None,
     *,
     params: Optional[Dict[str, Any]] = None,
 ) -> timedelta:
-    """Apply override → default-override → tier-rule fallback chain."""
+    """Apply override → default-override → tier-rule fallback chain.
+
+    ``override`` is a ``timedelta`` or seconds: the runtimes spell "never cache" as
+    ``cache_ttl=0``, which reached ``.total_seconds()`` on an ``int`` and raised whenever a
+    cache mode was on.
+    """
+    if isinstance(override, (int, float)) and not isinstance(override, bool):
+        return timedelta(seconds=override)
     if override is not None:
         return override
     if params:
@@ -310,7 +317,7 @@ def cache_get(
     url: str,
     params: Optional[Dict[str, Any]] = None,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: timedelta | float | None = None,
 ) -> Optional[Dict[str, Any]]:
     """Fetch a cached body. Returns ``None`` on miss / expiry / mode=off."""
     if _MODE == "off":
@@ -347,20 +354,18 @@ def cache_get(
 
 
 def _scrub_body(node: Any, secrets: "list[str]") -> Any:
-    """Copy of ``node`` with credentials removed (the live response is left untouched).
+    """Copy of ``node`` with the request's own credentials removed (the live response is untouched).
 
     Every string leaf has each collected credential value (:func:`_request_secrets`) replaced
-    exactly; only URL-like leaves (``http...``) also go through ``_redact_secrets``, for echoed
-    ``?apiKey=...`` links. Ordinary text (``"key: 1234"``) is never pattern-matched, dict keys
-    and non-string leaves are never rewritten, so a cache hit equals a live call for any body
-    that does not carry the request's own credential.
+    exactly. Nothing is pattern-matched: a signed media URL in the body (``Signature=``,
+    ``X-Amz-Signature=``) is data the caller needs, and a pattern pass came back ``REDACTED`` on a
+    cache hit (R897-4). Dict keys and non-string leaves are never rewritten, so a cache hit equals
+    a live call for any body that does not carry the request's own credential.
     """
-    from sportsdataverse.errors import _redact_secrets
-
     if isinstance(node, str):
         for sec in secrets:
             node = node.replace(sec, "REDACTED")
-        return _redact_secrets(node) if node.lstrip().lower().startswith("http") else node
+        return node
     if isinstance(node, dict):
         return {k: _scrub_body(v, secrets) for k, v in node.items()}
     if isinstance(node, list):
@@ -370,13 +375,20 @@ def _scrub_body(node: Any, secrets: "list[str]") -> Any:
 
 def _request_secrets(url: str, params: Optional[Dict[str, Any]] = None) -> "list[str]":
     """The credential values a request carried: URL query pairs, key-as-path-segment, and
-    ``params`` entries whose NAME is a credential name (``apiKey``, ``token``, ...)."""
+    ``params`` entries whose NAME ends in a credential name (``apiKey``, ``api_token``,
+    ``user_key``, ...)."""
     from sportsdataverse.errors import _PATH_KEY, _SECRET_PAIR
 
     found = [m.group(3).rstrip(",;)]}") for m in _SECRET_PAIR.finditer(url)]
     found += [m.group(0)[len(m.group(1)) :] for m in _PATH_KEY.finditer(url)]
     for k, v in (params or {}).items():
-        if isinstance(v, (str, int)) and not isinstance(v, bool) and _SECRET_PAIR.fullmatch(f"{k}={v}"):
+        if not isinstance(v, (str, int)) or isinstance(v, bool):
+            continue
+        # The name matches when a credential name ends exactly where ``k`` does (``api_token``,
+        # ``user_key``); a fullmatch missed every prefixed name (R897-5).
+        probe = f"?{k}=x"
+        m = _SECRET_PAIR.search(probe)
+        if m is not None and m.end() == len(probe):
             found.append(str(v))
     return [v for v in dict.fromkeys(found) if len(v) >= 8]  # a short value would shred ordinary text
 
@@ -386,7 +398,7 @@ def cache_set(
     params: Optional[Dict[str, Any]],
     body: Any,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: timedelta | float | None = None,
 ) -> None:
     """Persist a body to the cache. No-op when mode=off or TTL=LIVE."""
     if _MODE == "off":
