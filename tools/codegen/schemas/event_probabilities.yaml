@@ -49,3 +49,9 @@ columns:
 - name: source_state
   type: character
   description: ''
+- name: count
+  type: integer
+  description: ''
+- name: page_count
+  type: integer
+  description: ''
