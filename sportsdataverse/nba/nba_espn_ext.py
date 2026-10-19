@@ -46,7 +46,7 @@ from sportsdataverse._common_espn_parsers import (
 __all__ = [
     "espn_nba_scoreboard",
     "espn_nba_summary",
-    "espn_nba_calendar",
+    "espn_nba_calendar_site",
     "espn_nba_news",
     "espn_nba_injuries",
     "espn_nba_transactions",
@@ -274,7 +274,7 @@ def espn_nba_summary(
     return raw
 
 
-def espn_nba_calendar(
+def espn_nba_calendar_site(
     *,
     return_parsed: bool = True,
     return_as_pandas: bool = False,
@@ -290,6 +290,7 @@ def espn_nba_calendar(
     Args:
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -303,10 +304,13 @@ def espn_nba_calendar(
     Example:
         Quick start::
 
-            espn_nba_calendar()
+            espn_nba_calendar_site()
+
+    Notes:
+        * ``sportsdataverse.nba.espn_nba_calendar`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``nba_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
-    _check_kwargs("espn_nba_calendar", kwargs)
+    _check_kwargs("espn_nba_calendar_site", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5947,3 +5951,25 @@ def espn_nba_cdn_scoreboard(
     if return_parsed:
         return parse_cdn_scoreboard(raw, return_as_pandas=return_as_pandas)
     return raw
+
+
+# Old name -> new name for wrappers renamed because a hand-written function holds the old name
+# at package level (B-M31). Importing the old name from this module still works for one release.
+_RENAMED = {
+    "espn_nba_calendar": "espn_nba_calendar_site",
+}
+
+
+def __getattr__(name: str):
+    new = _RENAMED.get(name)
+    if new is None:
+        raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+    import warnings
+
+    warnings.warn(
+        f"{__name__}.{name} is deprecated and will be removed in the next release; use {new} "
+        f"({__name__.rsplit('.', 1)[0]}.{name} is a hand-written function, not this wrapper).",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return globals()[new]

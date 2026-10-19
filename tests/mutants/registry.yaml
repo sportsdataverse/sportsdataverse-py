@@ -1970,9 +1970,9 @@
   file: tools/codegen/generate.py
   snippet: '    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]'
   mutant: '    return _espn_league_views(league, apis, hosts)'
-  test: tests/codegen/test_docs.py::test_the_espn_reference_pages_document_only_the_wrappers_their_names_run
+  test: tests/codegen/test_docs.py::test_a_shadowed_espn_view_is_kept_off_the_reference_page
   expected: kill
-  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function
+  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function; after 3.9 PR4 nothing is shadowed, so the test undoes the calendar rename (R903-1)
 
 - id: codegen-autodoc-dict-of-frames-tables
   group: codegen-runtime
@@ -2084,6 +2084,76 @@
   expected: kill
   note: R901-2, atrium_end_year is user-facing and must get a reference block, not an allowlist entry
 
+# codegen 3.9 PR4
+- id: codegen-espn-shadowed-view-renamed
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        if fn_name in handwritten:'
+  mutant: '        if False:'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_the_generator_renames_exactly_the_twelve_shadowed_views
+  expected: kill
+  note: a generated view whose package name a hand-written function holds must be version-qualified
+
+- id: codegen-espn-collision-calendar-site
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '    "calendar": "calendar_site",'
+  mutant: '    "calendar_": "calendar_site",'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_the_generator_renames_exactly_the_twelve_shadowed_views
+  expected: kill
+  note: without the collision entry the 7 shadowed calendars keep their unreachable bare name
+
+- id: codegen-espn-ext-rename-shim-map
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        renamed={v.renamed_from: v.fn_name for v in views if v.renamed_from},'
+  mutant: '        renamed={},'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_freshly_rendered_ext_module_carries_the_deprecation_shim
+  expected: kill
+  note: the old ext-module import must keep working for one release
+
+- id: codegen-espn-ext-rename-shim-warns
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: '        DeprecationWarning,'
+  mutant: '        FutureWarning,'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_freshly_rendered_ext_module_carries_the_deprecation_shim
+  expected: kill
+  note: the old ext-module name warns DeprecationWarning naming the new name
+
+- id: sources-handwritten-wnba-standings-rule
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/sources.yaml
+  snippet: '      - sportsdataverse.wnba.wnba_standings'
+  mutant: '      - sportsdataverse.wnba.wnba_standings_gone'
+  test: tests/codegen/test_source_gate.py::test_no_public_function_is_unmapped_or_ambiguous
+  expected: kill
+  note: hand-written espn_wnba_standings resolved through the generated name; after the rename it needs its own rule
+
+- id: codegen-espn-shadowed-view-keeps-bare-name
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '                renamed_from, fn_name = fn_name, versioned'
+  mutant: '                renamed_from = fn_name'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_no_generated_view_is_shadowed_by_a_hand_written_function_in_any_league
+  expected: kill
+  note: R903-2, no generated view may keep a name a hand-written function holds at package level
+
+- id: codegen-handwritten-names-import-failure-raises
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        if e.name and (target == e.name or target.startswith(f"{e.name}.")):'
+  mutant: '        if True:'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_league_package_that_fails_to_import_is_an_error_not_an_empty_set
+  expected: kill
+  note: R903-3, a failed league import returned an empty set and quietly undid the renames on a local regen
 # --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
 - id: release-classify-outside-transport-errors
   group: codegen-runtime

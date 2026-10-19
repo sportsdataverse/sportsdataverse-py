@@ -25,6 +25,7 @@ warnings.warn(
 
 from sportsdataverse.mbb import espn_mbb_award as _raw_espn_mbb_award
 from sportsdataverse.mbb import espn_mbb_awards as _raw_espn_mbb_awards
+from sportsdataverse.mbb import espn_mbb_calendar_site as _raw_espn_mbb_calendar_site
 from sportsdataverse.mbb import espn_mbb_cdn_boxscore as _raw_espn_mbb_cdn_boxscore
 from sportsdataverse.mbb import espn_mbb_cdn_playbyplay as _raw_espn_mbb_cdn_playbyplay
 from sportsdataverse.mbb import espn_mbb_cdn_schedule as _raw_espn_mbb_cdn_schedule
@@ -796,6 +797,7 @@ __all__ = [
     "espn_mbb_award",
     "espn_mbb_awards",
     "espn_mbb_calendar",
+    "espn_mbb_calendar_site",
     "espn_mbb_cdn_boxscore",
     "espn_mbb_cdn_playbyplay",
     "espn_mbb_cdn_schedule",
@@ -1284,6 +1286,20 @@ def espn_mbb_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_mbb_awards(*args, **kwargs)
+
+
+def espn_mbb_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``mbb.espn_mbb_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.mbb.espn_mbb_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.mbb.espn_mbb_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_mbb_calendar_site(*args, **kwargs)
 
 
 def espn_mbb_cdn_boxscore(*args, **kwargs):

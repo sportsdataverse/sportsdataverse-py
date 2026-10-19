@@ -18,7 +18,7 @@ drift gate, but they are not the same pipeline — see
 | the five ESPN YAMLs in `generate.ESPN_APIS` | `espn_site_v2`, `espn_web_v3`, `espn_core_v2`, `espn_fitt_v3`, `espn_cdn` |
 | the 78 flat-API YAMLs in `generate.FLAT_APIS` | one live API family each (NHL ×4, MLB ×2, NFL ×5 including both PFF APIs and Sleeper, F1, basketball, soccer, recruiting, prediction markets, TheSportsDB, ESPN content, Swiss hockey (SIHF), the European hockey leagues (DEL, ICEHL, EIHL, Metal Ligaen, Czech Extraliga, Liiga, SHL, HockeyAllsvenskan, National League, Ligue Magnus, KHL ×2, VHL), the international basketball leagues (FIBA, Genius, Atrium, NBL, FEB, BBL/DBBL, Lega Basket, ACB, IBBA, W League, VTB, KBL, B.LEAGUE, KZS, LKL, TBF, CEBL, ABA League, EASL, BNXT, TPBL, P. LEAGUE+, CBA, Basketligaen), the vendor networks) |
 | `endpoints/releases.yaml` | every dataset loader, its release `base`, tag and asset URL |
-| `espn_rename_map.yaml` | the ESPN short-name renames |
+| `espn_rename_map.yaml` | the ESPN short-name renames. A generated name a hand-written function already holds is version-qualified by `generate._ESPN_COLLISION_VERSIONED` (`player_stats_v3`, `calendar_site`, ...) |
 | `sources.yaml` | provider / category registry: which source each public function belongs to |
 | `schemas/<name>.yaml`, `schemas/<name>/<league>.yaml`, `schemas/native/<stem>/`, `schemas/autodoc/<league>/` | the returns tables, in four shapes |
 | `manual_column_descriptions.yaml`, `r_column_descriptions.yaml` | column descriptions (captured → manual → R, in that precedence) |
