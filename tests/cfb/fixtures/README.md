@@ -203,6 +203,7 @@ oracle does not pick them up.
 | 400547866 | 2014 | Kansas Jayhawks @ West Virginia Mountaineers | 4 | trimmed | `summary_400547866_trimmed.json.gz` | `190438a6b2` 2026-09-30 #641 |
 | 400547980 | 2014 | Northwestern Wildcats @ Notre Dame Fighting Irish | 5 | trimmed | `summary_400547980_trimmed.json.gz` | `c146e82803` 2026-09-26 #585 |
 | 400548023 | 2014 | Rice Owls @ Texas A&M Aggies | 4 | trimmed | `summary_400548023_trimmed.json.gz` | `190438a6b2` 2026-09-30 #641 |
+| 400548110 | 2014 | Western Michigan Broncos @ Idaho Vandals | 4 | trimmed | `summary_400548110_trimmed.json.gz` | cfb 3.4 R837-1, 2026-10-19, from `cfbfastR-cfb-raw` `ee755dc65a` |
 | 400548134 | 2014 | Army Black Knights @ Kent State Golden Flashes | 4 | trimmed | `summary_400548134_trimmed.json.gz` | `46b754c9fb` 2026-09-30 #637 |
 | 400548250 | 2014 | Utah State Aggies @ Boise State Broncos | 4 | trimmed | `summary_400548250_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
 | 400548425 | 2014 | Idaho Vandals @ Georgia Southern Eagles | 4 | trimmed | `summary_400548425_trimmed.json.gz` | `ffa116cd09` 2026-09-26 #586 |
@@ -230,6 +231,7 @@ oracle does not pick them up.
 | 401309854 | 2021 | Arizona State Sun Devils @ BYU Cougars | 4 | raw allowlist | `summary_401309854.json` | `3173503f76` 2026-06-08 #92 |
 | 401403886 | 2022 | Ole Miss Rebels @ Georgia Tech Yellow Jackets | 4 | trimmed | `summary_401403886_trimmed.json.gz` | `99484724be` 2026-10-01 #651 |
 | 401411109 | 2022 | Florida State Seminoles @ Louisville Cardinals | 4 | trimmed | `summary_401411109_trimmed.json.gz` | `12ddb2ad28` 2026-09-22 #567 |
+| 401420836 | 2022 | Drake Bulldogs @ North Dakota State Bison | 4 | trimmed | `summary_401420836_trimmed.json.gz` | cfb 3.4 R837-1, 2026-10-19, from `cfbfastR-cfb-raw` `882a510899` |
 | 401424416 | 2022 | Albany Great Danes @ Baylor Bears | 4 | full summary | `summary_401424416.json` | `a0c17d9a5e` 2026-08-29 |
 | 401425418 | 2022 | Grambling Tigers @ Arkansas State Red Wolves | 4 | full summary | `summary_401425418.json` | `4b2d0b4676` 2026-08-29 |
 | 401520349 | 2023 | Massachusetts Minutemen @ Army Black Knights | 4 | trimmed | `summary_401520349_trimmed.json.gz` | `d7ba21f92e` 2026-09-27 #596 |
