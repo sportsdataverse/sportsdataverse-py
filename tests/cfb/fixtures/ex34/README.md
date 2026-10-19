@@ -8,7 +8,7 @@
 
 # EX-3.4-a guard captures
 
-Six ESPN college-football summary payloads for the quality program's task 3.4 follow-ups (EX-3.4-a, and the review of #905); the first two are for
+Seven ESPN college-football summary payloads for the quality program's task 3.4 follow-ups (EX-3.4-a, and the review of #905); the first two are for
 `tests/cfb/test_cfb_end_state_ex34.py::test_mirror_repair_across_an_admin_row_needs_the_stated_yardage`.
 
 - **Source:** `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=<game_id>`,
@@ -26,7 +26,9 @@ Six ESPN college-football summary payloads for the quality program's task 3.4 fo
 - **R905-1** (review of #905), same source and form: 401760417 (Utah State @ Fresno State, 2025). Its "Br. Barnes run
   for 0 yds" (401760417125) is a ghost 4th & 1 record with a degenerate end block, sharing sequenceNumber 28 with the
   real 4th & 1 snap by the same team that follows; the test is
-  `test_cfb_end_state_ex34.py::test_fourth_down_short_degenerate_end_is_left_alone`.
+  `test_cfb_end_state_ex34.py::test_fourth_down_short_degenerate_end_is_left_alone`, which also reads 401760407
+  (UNLV @ Colorado State, 2025): "L. Avant run for 0 yds" (401760407697), the same ghost shape before the same
+  team's 4th & 1 punt.
 - **R905-3**, same source and form: 401752832 (USC @ Purdue, 2025), whose "pass intercepted ... PENALTY USC ..."
   (401752832104944503) is an interception a flag wiped out, with a degenerate end block, before the same team's
   1st & 10 at the 14; and 400548284 (Utah @ Oregon State, 2014), whose OT1 "run for 4 yds to the OrgSt 19"

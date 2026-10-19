@@ -195,3 +195,35 @@ def test_degenerate_end_on_a_kick_is_left_alone():
     row = _frame(401752915, "ex34/401752915_trimmed.json.gz").filter(pl.col("id") == 401752915563).row(0, named=True)
     assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (0, 10, 80), row["end.down"]
     assert abs(row["EPA"] - 2.5122759342193604) <= 1e-5, row["EPA"]
+
+
+#: play id -> (game id, capture, end.yardsToEndzone, EPA) on origin/devel-cfb dd424de3e2 (base) and on this branch
+FOURTH_DOWN_SHORT = {
+    401760417125: (401760417, "ex34/401760417_trimmed.json.gz", 66, -1.0722192525863647),  # "Br. Barnes run for 0 yds"
+    401760407697: (401760407, "ex34/401760407_trimmed.json.gz", 73, 0.22707229852676392),  # "L. Avant run for 0 yds"
+}
+
+
+@pytest.mark.parametrize(
+    "play_id",
+    [
+        pytest.param(p, marks=pytest.mark.xdist_group(f"cfb-ex34-{v[0]}"), id=str(p))
+        for p, v in FOURTH_DOWN_SHORT.items()
+    ],
+)
+def test_fourth_down_short_degenerate_end_is_left_alone(play_id):
+    """R905-1: a 4th-down play short of the line to gain is not EX-3.4-c's, so EP_end is read from one side.
+
+    Each row is a ghost record on 4th & 1 ("run for 0 yds", degenerate end) sharing its sequenceNumber with the
+    same team's real 4th & 1 snap (a rush; a punt) that follows. ``downs_turnover`` reads it from its start and
+    statYardage (a turnover on downs) and flips the end margin; with EX-3.4-c's end (that same-team snap) the row
+    was scored from two sides (401760417125: EPA +0.82, 401760407697: +1.30). The rows keep base's values (end
+    down 0, downs_turnover, EPA): a byte-stability pin, NOT an oracle. Making downs_turnover False whenever the
+    same team snaps next was measured and rejected: it moved 287 rows over the sweep, 164 of them stating
+    "turnover on downs" in their own text (2001-2005 feeds file the next row under the same team). The skip also
+    covers a 4th-and-short row whose flag converts (penalty_1st_conv True): it keeps base's end, which is safe.
+    """
+    game_id, name, ytez, epa = FOURTH_DOWN_SHORT[play_id]
+    row = _frame(game_id, name).filter(pl.col("id") == play_id).row(0, named=True)
+    assert (row["end.down"], row["end.yardsToEndzone"], row["downs_turnover"]) == (0, ytez, True), row["end.down"]
+    assert abs(row["EPA"] - epa) <= 1e-5, row["EPA"]
