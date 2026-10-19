@@ -6,11 +6,10 @@ Every credential below is a fake. The shapes the earlier pass already covered ar
 
 from __future__ import annotations
 
-import time
-
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, _redact_secrets
+from tests.test_credential_redaction import assert_redaction_linear
 
 
 @pytest.mark.parametrize(
@@ -65,24 +64,20 @@ def test_redact_error_message_carries_no_proxy_password():
     assert "203.0.113.7:8080" in str(err)
 
 
-_ADVERSARIAL = {  # ~100 KB each
-    "userinfo_starts": "://x:" * 25_000,
-    "userinfo_no_at": "://" + "a:" * 50_000,
-    "bearers": "bearer " * 15_000,
-    "auth_pairs": "auth=" * 20_000,
-    "sig_names": "sig" * 34_000,
-    "cookie_lines": "cookie: a\n" * 10_000,
-    "basics": "basic " * 16_000,
+_ADVERSARIAL = {  # each builds a string of about n characters
+    "userinfo_starts": lambda n: "://x:" * (n // 5),
+    "userinfo_no_at": lambda n: "://" + "a:" * (n // 2),
+    "bearers": lambda n: "bearer " * (n // 7),
+    "auth_pairs": lambda n: "auth=" * (n // 5),
+    "sig_names": lambda n: "sig" * (n // 3),
+    "cookie_lines": lambda n: "cookie: a\n" * (n // 10),
+    "basics": lambda n: "basic " * (n // 6),
 }
 
 
 @pytest.mark.parametrize("shape", _ADVERSARIAL)
 def test_redact_secrets_new_shapes_stay_linear(shape):
-    start = time.perf_counter()
-    _redact_secrets(_ADVERSARIAL[shape])
-    # A quadratic scan of ~100 KB takes many seconds; 0.5 s leaves a slow CI runner ~30x headroom
-    # over the ~15 ms these take locally, so the bound cannot flake yet still catches a blow-up.
-    assert time.perf_counter() - start < 0.5
+    assert_redaction_linear(_ADVERSARIAL[shape])
 
 
 def test_redact_exception_drops_every_credential_header():

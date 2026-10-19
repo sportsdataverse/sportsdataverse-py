@@ -1587,6 +1587,27 @@
   expected: kill
   note: R896-3, a bool in a list-valued param went to the wire as "True" rather than "true"
 
+# --- R896-11: redaction linearity is a size ratio, not a wall-clock budget -----------------------------
+- id: redact-pair-separator-quadratic
+  group: codegen-runtime
+  finding: R896-11
+  file: sportsdataverse/errors.py
+  snippet: 'r"[\"'']?\s*(?:[:=]|%3[AD])'
+  mutant: 'r"[\"'']?.*?(?:[:=]|%3[AD])'
+  test: tests/test_credential_redaction.py -k is_linear
+  expected: kill
+  note: an unbounded lazy repeat before the separator rescans the rest of the line from every name, so 4x the input costs ~16x
+
+- id: redact-userinfo-quadratic
+  group: codegen-runtime
+  finding: R896-11
+  file: sportsdataverse/errors.py
+  snippet: '_USERINFO = _re.compile(r"(://[^\s/?#@:\"'']*:)'
+  mutant: '_USERINFO = _re.compile(r"(://.*?:)'
+  test: tests/test_errors.py -k stay_linear
+  expected: kill
+  note: a userinfo user part that may cross colons rescans the rest of the text from every ://, so 4x the input costs ~16x
+
 # --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
 - id: release-classify-outside-transport-errors
   group: codegen-runtime
