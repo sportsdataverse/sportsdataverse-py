@@ -10,13 +10,14 @@ from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from urllib.parse import urlsplit
 from itertools import chain, starmap
+from typing import Any
 
 import numpy as np
 import polars as pl
 import requests
 from requests.adapters import HTTPAdapter
 
-from sportsdataverse.errors import NoDataError, _is_data_body, _redact_secrets, no_espn_data
+from sportsdataverse.errors import NoDataError, _is_data_body, _may_be_json, _redact_secrets, no_espn_data
 
 logger = logging.getLogger("sdv.dl_utils")
 logger.addHandler(logging.NullHandler())
@@ -44,8 +45,27 @@ _URLLIB3_LOGGERS = ("urllib3.connectionpool", "urllib3.connection", "urllib3.uti
 for _urllib3_logger in _URLLIB3_LOGGERS:
     logging.getLogger(_urllib3_logger).addFilter(_RedactSecretsFilter())
 
-# Request headers that carry a credential; dropped from an exception's request.
-_SECRET_HEADERS = frozenset({"authorization", "proxy-authorization", "cookie"})
+# A request header that carries a credential (``Authorization``, ``Cookie``, ``X-Api-Key``,
+# ``x-api-secret``, ``X-Authorization``, ...): dropped from an exception's request, and a
+# request that sends one is never cached. ponytail: name-based; a credential under an unrelated
+# header name would still be cached -- add the name here.
+_SECRET_HEADER = re.compile(r"auth|cookie|key|secret|token|password", re.IGNORECASE)
+
+
+def _carries_credential(headers: Any, session: Any) -> bool:
+    """True when the request authenticates outside its URL: a credential header, or a caller's
+    own session holding cookies, ``auth`` or a credential header.
+
+    The cache key is the URL and params only, so such a body would be served to a different
+    credential in the same process or cache dir (A-M8), and keying on the credential would store
+    it. A key in the URL is part of the key already (and scrubbed from the entry).
+    """
+    names = [str(h) for h in (headers or {})]
+    if session is not None:  # the caller's own; the shared session holds no credential of ours
+        if getattr(session, "auth", None) or getattr(session, "cookies", None):
+            return True
+        names += [str(h) for h in (getattr(session, "headers", None) or {})]
+    return any(_SECRET_HEADER.search(n) for n in names)
 
 
 def _redact_exception(exc: BaseException) -> None:
@@ -88,7 +108,7 @@ def _redact_exception(exc: BaseException) -> None:
         headers = getattr(request, "headers", None)
         if headers is not None:
             try:
-                for name in [h for h in headers if str(h).lower() in _SECRET_HEADERS]:
+                for name in [h for h in headers if _SECRET_HEADER.search(str(h))]:
                     del headers[name]
             except (AttributeError, TypeError):
                 pass
@@ -298,6 +318,12 @@ def download(
             when you need isolation (separate cookies / auth / proxy lifecycle).
         logger: Optional ``logging.Logger``. Defaults to the package
             logger ``"sdv.dl_utils"``.
+        cache_ttl: Response-cache lifetime (``timedelta`` or seconds; ``0`` never
+            caches); ``None`` uses the URL's tier. A request that authenticates
+            outside its URL -- a credential header (``Authorization``, ``Cookie``,
+            ``X-Api-Key``, ...) or a ``session`` holding cookies or ``auth`` -- is never
+            cached, whatever this says: the cache key holds no credential, so the body
+            would be served to another one.
         retry_statuses: Iterable of HTTP status codes to retry (with the same
             ``Retry-After``-aware backoff as connection failures). Defaults to
             :data:`_RETRYABLE_STATUS` (403/408/429/500/502/503/504). Pass a
@@ -385,6 +411,9 @@ def download(
         # is accepted; it takes nothing away.
         num_retries = _env_int(_ENV_RETRIES, _DEFAULT_RETRIES)
 
+    # An authenticated request is never cached (A-M8): checked before the shared session
+    # stands in for a missing one.
+    credentialed = _carries_credential(headers, session)
     session, params, logger = init_request_settings(params, session, logger)
 
     # Cache lookup (mode=off → no-op; LIVE-tier URLs → no-op).
@@ -393,20 +422,25 @@ def download(
     # downstream works unchanged.
     from sportsdataverse.cache import (
         CachedResponse,
+        _resolve_ttl,
         cache_get,
         cache_set,
         get_cache_mode,
     )
 
-    if get_cache_mode() != "off":
-        # Build a hashable params dict (drop None values + ignore the
-        # batters_lookup[] convention which is request-shaped)
-        _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
+    # Decided once: a body is decoded for the cache only when it could be stored -- a cache mode
+    # is on, the URL's TTL (or ``cache_ttl``) is not zero, and the request carries no credential.
+    # Otherwise every 2xx body (a multi-MB binary asset included) was JSON-decoded for nothing.
+    _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
+    cacheable = (
+        get_cache_mode() != "off"
+        and not credentialed
+        and _resolve_ttl(url, cache_ttl, params=_cache_params).total_seconds() > 0
+    )
+    if cacheable:
         cached = cache_get(url, _cache_params, ttl=cache_ttl)
         if cached is not None:
             return CachedResponse(cached, url=url, status_code=200, from_cache=True)
-    else:
-        _cache_params = None
 
     # Iterative retry loop. Defensive `response = None` so the exception
     # handler can log without UnboundLocalError when `session.get()` itself
@@ -472,7 +506,7 @@ def download(
             # Persist only successful (2xx) responses to the cache — never cache a
             # 429/5xx body. Catches any body-parse error so a cache write never
             # breaks the call.
-            if get_cache_mode() != "off" and status is not None and 200 <= status < 300:
+            if cacheable and status is not None and 200 <= status < 300 and _may_be_json(response):
                 try:
                     body = response.json()
                     # A 2xx error envelope or JSON scalar is a failed fetch the chokepoint raises on; cached,
