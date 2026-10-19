@@ -11,7 +11,7 @@ from typing import Dict, Optional, Union  # noqa: F401
 import pandas as pd  # noqa: F401
 import polars as pl  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _get, bool_str
+from sportsdataverse._codegen_runtime import _check_kwargs, _get, _path_seg, bool_str
 from sportsdataverse._common_espn_parsers import (
     parse_athlete_gamelog,
     parse_athlete_overview,
@@ -202,6 +202,7 @@ def espn_college_softball_scoreboard(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -209,6 +210,7 @@ def espn_college_softball_scoreboard(
             espn_college_softball_scoreboard(dates='20240115')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_scoreboard", kwargs)
     _params = {
         "dates": dates,
         "week": week,
@@ -254,6 +256,7 @@ def espn_college_softball_summary(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -261,6 +264,7 @@ def espn_college_softball_summary(
             espn_college_softball_summary()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_summary", kwargs)
     _params = {
         "event": event_id,
     }
@@ -299,6 +303,7 @@ def espn_college_softball_calendar(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -306,6 +311,7 @@ def espn_college_softball_calendar(
             espn_college_softball_calendar()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_calendar", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -344,6 +350,7 @@ def espn_college_softball_news(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -351,6 +358,7 @@ def espn_college_softball_news(
             espn_college_softball_news()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_news", kwargs)
     _params = {
         "limit": limit,
     }
@@ -389,6 +397,7 @@ def espn_college_softball_injuries(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -396,6 +405,7 @@ def espn_college_softball_injuries(
             espn_college_softball_injuries()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -434,6 +444,7 @@ def espn_college_softball_transactions(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -441,6 +452,7 @@ def espn_college_softball_transactions(
             espn_college_softball_transactions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_transactions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -479,6 +491,7 @@ def espn_college_softball_conferences(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -486,6 +499,7 @@ def espn_college_softball_conferences(
             espn_college_softball_conferences()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_conferences", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -522,6 +536,7 @@ def espn_college_softball_statistics_league(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -529,6 +544,7 @@ def espn_college_softball_statistics_league(
             espn_college_softball_statistics_league()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_statistics_league", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -565,6 +581,7 @@ def espn_college_softball_draft(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -572,6 +589,7 @@ def espn_college_softball_draft(
             espn_college_softball_draft()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -610,6 +628,7 @@ def espn_college_softball_teams_site(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -617,6 +636,7 @@ def espn_college_softball_teams_site(
             espn_college_softball_teams_site()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_teams_site", kwargs)
     _params = {
         "limit": limit,
     }
@@ -655,8 +675,9 @@ def espn_college_softball_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -664,10 +685,11 @@ def espn_college_softball_team(
             espn_college_softball_team(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -702,8 +724,9 @@ def espn_college_softball_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -711,12 +734,13 @@ def espn_college_softball_team_roster(
             espn_college_softball_team_roster(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_roster", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/roster",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/roster",
         params=_params,
         **kwargs,
     )
@@ -751,8 +775,9 @@ def espn_college_softball_team_schedule(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -760,12 +785,13 @@ def espn_college_softball_team_schedule(
             espn_college_softball_team_schedule(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_schedule", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/schedule",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/schedule",
         params=_params,
         **kwargs,
     )
@@ -798,8 +824,9 @@ def espn_college_softball_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -807,10 +834,11 @@ def espn_college_softball_team_record(
             espn_college_softball_team_record(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/record",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/record",
         params=_params,
         **kwargs,
     )
@@ -843,8 +871,9 @@ def espn_college_softball_team_depthcharts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -852,10 +881,11 @@ def espn_college_softball_team_depthcharts(
             espn_college_softball_team_depthcharts(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_depthcharts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/depthcharts",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/depthcharts",
         params=_params,
         **kwargs,
     )
@@ -888,8 +918,9 @@ def espn_college_softball_team_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -897,10 +928,11 @@ def espn_college_softball_team_injuries(
             espn_college_softball_team_injuries(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/injuries",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -933,8 +965,9 @@ def espn_college_softball_team_transactions(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -942,10 +975,11 @@ def espn_college_softball_team_transactions(
             espn_college_softball_team_transactions(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_transactions", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/transactions",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/transactions",
         params=_params,
         **kwargs,
     )
@@ -978,8 +1012,9 @@ def espn_college_softball_team_history(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -987,10 +1022,11 @@ def espn_college_softball_team_history(
             espn_college_softball_team_history(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_history", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/history",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/history",
         params=_params,
         **kwargs,
     )
@@ -1025,8 +1061,9 @@ def espn_college_softball_team_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1034,12 +1071,13 @@ def espn_college_softball_team_news(
             espn_college_softball_team_news(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_news", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1072,8 +1110,9 @@ def espn_college_softball_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1081,10 +1120,11 @@ def espn_college_softball_team_leaders(
             espn_college_softball_team_leaders(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{team_id}/leaders",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/teams/{_path_seg(team_id)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -1117,8 +1157,9 @@ def espn_college_softball_player_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1126,10 +1167,11 @@ def espn_college_softball_player_info(
             espn_college_softball_player_info(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{athlete_id}",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -1162,8 +1204,9 @@ def espn_college_softball_player_bio(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1171,10 +1214,11 @@ def espn_college_softball_player_bio(
             espn_college_softball_player_bio(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_bio", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{athlete_id}/bio",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/bio",
         params=_params,
         **kwargs,
     )
@@ -1207,8 +1251,9 @@ def espn_college_softball_player_news(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1216,10 +1261,11 @@ def espn_college_softball_player_news(
             espn_college_softball_player_news(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_news", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{athlete_id}/news",
+        f"https://site.api.espn.com/apis/site/v2/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/news",
         params=_params,
         **kwargs,
     )
@@ -1258,6 +1304,7 @@ def espn_college_softball_standings(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1265,6 +1312,7 @@ def espn_college_softball_standings(
             espn_college_softball_standings()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_standings", kwargs)
     _params = {
         "season": season,
         "group": group,
@@ -1305,6 +1353,7 @@ def espn_college_softball_rankings(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1312,6 +1361,7 @@ def espn_college_softball_rankings(
             espn_college_softball_rankings()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_rankings", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1348,8 +1398,9 @@ def espn_college_softball_player_overview(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1357,10 +1408,11 @@ def espn_college_softball_player_overview(
             espn_college_softball_player_overview(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_overview", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{athlete_id}/overview",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/overview",
         params=_params,
         **kwargs,
     )
@@ -1395,8 +1447,9 @@ def espn_college_softball_player_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1404,12 +1457,13 @@ def espn_college_softball_player_stats(
             espn_college_softball_player_stats(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_stats", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{athlete_id}/stats",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/stats",
         params=_params,
         **kwargs,
     )
@@ -1444,8 +1498,9 @@ def espn_college_softball_player_gamelog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1453,12 +1508,13 @@ def espn_college_softball_player_gamelog(
             espn_college_softball_player_gamelog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_gamelog", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{athlete_id}/gamelog",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/gamelog",
         params=_params,
         **kwargs,
     )
@@ -1493,8 +1549,9 @@ def espn_college_softball_player_splits(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1502,12 +1559,13 @@ def espn_college_softball_player_splits(
             espn_college_softball_player_splits(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_splits", kwargs)
     _params = {
         "season": season,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{athlete_id}/splits",
+        f"https://site.web.api.espn.com/apis/common/v3/sports/baseball/college-softball/athletes/{_path_seg(athlete_id)}/splits",
         params=_params,
         **kwargs,
     )
@@ -1552,6 +1610,7 @@ def espn_college_softball_leaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1559,6 +1618,7 @@ def espn_college_softball_leaders(
             espn_college_softball_leaders()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_leaders", kwargs)
     _params = {
         "category": category,
         "season": season,
@@ -1602,6 +1662,7 @@ def espn_college_softball_league_root(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1609,6 +1670,7 @@ def espn_college_softball_league_root(
             espn_college_softball_league_root()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_league_root", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1645,6 +1707,7 @@ def espn_college_softball_season_pointer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1652,6 +1715,7 @@ def espn_college_softball_season_pointer(
             espn_college_softball_season_pointer()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_pointer", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -1690,6 +1754,7 @@ def espn_college_softball_seasons(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1697,6 +1762,7 @@ def espn_college_softball_seasons(
             espn_college_softball_seasons()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_seasons", kwargs)
     _params = {
         "limit": limit,
     }
@@ -1735,8 +1801,9 @@ def espn_college_softball_season_info(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1744,10 +1811,11 @@ def espn_college_softball_season_info(
             espn_college_softball_season_info(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_info", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -1780,8 +1848,9 @@ def espn_college_softball_season_types(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1789,10 +1858,11 @@ def espn_college_softball_season_types(
             espn_college_softball_season_types(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_types", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types",
         params=_params,
         **kwargs,
     )
@@ -1827,8 +1897,9 @@ def espn_college_softball_season_type(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1836,10 +1907,11 @@ def espn_college_softball_season_type(
             espn_college_softball_season_type(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_type", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}",
         params=_params,
         **kwargs,
     )
@@ -1876,8 +1948,9 @@ def espn_college_softball_season_group(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1885,10 +1958,11 @@ def espn_college_softball_season_group(
             espn_college_softball_season_group(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_group", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/groups/{group_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}",
         params=_params,
         **kwargs,
     )
@@ -1923,8 +1997,9 @@ def espn_college_softball_season_groups(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1932,10 +2007,11 @@ def espn_college_softball_season_groups(
             espn_college_softball_season_groups(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_groups", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/groups",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups",
         params=_params,
         **kwargs,
     )
@@ -1974,8 +2050,9 @@ def espn_college_softball_season_group_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -1983,12 +2060,13 @@ def espn_college_softball_season_group_teams(
             espn_college_softball_season_group_teams(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_group_teams", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/groups/{group_id}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/teams",
         params=_params,
         **kwargs,
     )
@@ -2027,8 +2105,9 @@ def espn_college_softball_season_group_children(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2036,12 +2115,13 @@ def espn_college_softball_season_group_children(
             espn_college_softball_season_group_children(season=2024, season_type=2, group_id=80)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_group_children", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/groups/{group_id}/children",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/groups/{_path_seg(group_id)}/children",
         params=_params,
         **kwargs,
     )
@@ -2076,8 +2156,9 @@ def espn_college_softball_season_type_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2085,10 +2166,11 @@ def espn_college_softball_season_type_leaders(
             espn_college_softball_season_type_leaders(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_type_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/leaders",
         params=_params,
         **kwargs,
     )
@@ -2123,8 +2205,9 @@ def espn_college_softball_season_type_corrections(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2132,10 +2215,11 @@ def espn_college_softball_season_type_corrections(
             espn_college_softball_season_type_corrections(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_type_corrections", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/corrections",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/corrections",
         params=_params,
         **kwargs,
     )
@@ -2170,8 +2254,9 @@ def espn_college_softball_season_weeks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2179,10 +2264,11 @@ def espn_college_softball_season_weeks(
             espn_college_softball_season_weeks(season=2024, season_type=2)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_weeks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/weeks",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks",
         params=_params,
         **kwargs,
     )
@@ -2219,8 +2305,9 @@ def espn_college_softball_season_week(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2228,10 +2315,11 @@ def espn_college_softball_season_week(
             espn_college_softball_season_week(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_week", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/weeks/{week}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}",
         params=_params,
         **kwargs,
     )
@@ -2270,8 +2358,9 @@ def espn_college_softball_season_week_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2279,12 +2368,13 @@ def espn_college_softball_season_week_powerindex(
             espn_college_softball_season_week_powerindex(season=2024, season_type=2, week=8)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_week_powerindex", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/weeks/{week}/powerindex",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/powerindex",
         params=_params,
         **kwargs,
     )
@@ -2323,8 +2413,9 @@ def espn_college_softball_season_week_games(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2332,12 +2423,13 @@ def espn_college_softball_season_week_games(
             espn_college_softball_season_week_games(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_week_games", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/weeks/{week}/events",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/events",
         params=_params,
         **kwargs,
     )
@@ -2374,8 +2466,9 @@ def espn_college_softball_season_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2383,13 +2476,14 @@ def espn_college_softball_season_teams(
             espn_college_softball_season_teams(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_teams", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/teams",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/teams",
         params=_params,
         **kwargs,
     )
@@ -2424,8 +2518,9 @@ def espn_college_softball_season_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2433,10 +2528,11 @@ def espn_college_softball_season_team(
             espn_college_softball_season_team(season=2024, team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -2473,8 +2569,9 @@ def espn_college_softball_season_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2482,13 +2579,14 @@ def espn_college_softball_season_players(
             espn_college_softball_season_players(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_players", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -2523,8 +2621,9 @@ def espn_college_softball_season_coaches(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2532,12 +2631,13 @@ def espn_college_softball_season_coaches(
             espn_college_softball_season_coaches(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_coaches", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/coaches",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/coaches",
         params=_params,
         **kwargs,
     )
@@ -2570,8 +2670,9 @@ def espn_college_softball_season_draft(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2579,10 +2680,11 @@ def espn_college_softball_season_draft(
             espn_college_softball_season_draft(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_draft", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/draft",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/draft",
         params=_params,
         **kwargs,
     )
@@ -2617,8 +2719,9 @@ def espn_college_softball_season_draft_round_picks(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2626,10 +2729,11 @@ def espn_college_softball_season_draft_round_picks(
             espn_college_softball_season_draft_round_picks(season=2024, round_num='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_draft_round_picks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/draft/rounds/{round_num}/picks",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/draft/rounds/{_path_seg(round_num)}/picks",
         params=_params,
         **kwargs,
     )
@@ -2662,8 +2766,9 @@ def espn_college_softball_season_futures(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2671,10 +2776,11 @@ def espn_college_softball_season_futures(
             espn_college_softball_season_futures(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_futures", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/futures",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/futures",
         params=_params,
         **kwargs,
     )
@@ -2707,8 +2813,9 @@ def espn_college_softball_season_freeagents(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2716,10 +2823,11 @@ def espn_college_softball_season_freeagents(
             espn_college_softball_season_freeagents(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_freeagents", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/freeagents",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/freeagents",
         params=_params,
         **kwargs,
     )
@@ -2754,8 +2862,9 @@ def espn_college_softball_season_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2763,11 +2872,12 @@ def espn_college_softball_season_powerindex(
             espn_college_softball_season_powerindex(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{team_id}" if team_id is not None else ""
+    __seg = f"/{_path_seg(team_id)}" if team_id is not None else ""
     __url = (
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/powerindex"
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/powerindex"
         + __seg
     )
     raw = _get(
@@ -2804,8 +2914,9 @@ def espn_college_softball_season_powerindex_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2813,10 +2924,11 @@ def espn_college_softball_season_powerindex_leaders(
             espn_college_softball_season_powerindex_leaders(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_powerindex_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/powerindex/leaders",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/powerindex/leaders",
         params=_params,
         **kwargs,
     )
@@ -2851,8 +2963,9 @@ def espn_college_softball_season_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2860,12 +2973,13 @@ def espn_college_softball_season_awards(
             espn_college_softball_season_awards(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_awards", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/awards",
         params=_params,
         **kwargs,
     )
@@ -2902,8 +3016,9 @@ def espn_college_softball_players_index(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a flag is a string other than 'true'/'false'/'1'/'0'.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2911,8 +3026,9 @@ def espn_college_softball_players_index(
             espn_college_softball_players_index()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_players_index", kwargs)
     _params = {
-        "active": bool_str(active),
+        "active": bool_str(active, name="active"),
         "limit": limit,
         "page": page,
     }
@@ -2951,8 +3067,9 @@ def espn_college_softball_player_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -2960,10 +3077,11 @@ def espn_college_softball_player_core(
             espn_college_softball_player_core(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}",
         params=_params,
         **kwargs,
     )
@@ -2998,8 +3116,9 @@ def espn_college_softball_player_career_stats(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3007,11 +3126,12 @@ def espn_college_softball_player_career_stats(
             espn_college_softball_player_career_stats(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_career_stats", kwargs)
     _params = {}
     _params.update(_caller_params)
-    __seg = f"/{stat_type}" if stat_type is not None else ""
+    __seg = f"/{_path_seg(stat_type)}" if stat_type is not None else ""
     __url = (
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/statistics"
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/statistics"
         + __seg
     )
     raw = _get(
@@ -3048,8 +3168,9 @@ def espn_college_softball_player_statisticslog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3057,10 +3178,11 @@ def espn_college_softball_player_statisticslog(
             espn_college_softball_player_statisticslog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_statisticslog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/statisticslog",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/statisticslog",
         params=_params,
         **kwargs,
     )
@@ -3093,8 +3215,9 @@ def espn_college_softball_player_eventlog(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3102,10 +3225,11 @@ def espn_college_softball_player_eventlog(
             espn_college_softball_player_eventlog(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_eventlog", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/eventlog",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/eventlog",
         params=_params,
         **kwargs,
     )
@@ -3138,8 +3262,9 @@ def espn_college_softball_player_contracts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3147,10 +3272,11 @@ def espn_college_softball_player_contracts(
             espn_college_softball_player_contracts(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_contracts", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/contracts",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/contracts",
         params=_params,
         **kwargs,
     )
@@ -3183,8 +3309,9 @@ def espn_college_softball_player_awards(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3192,10 +3319,11 @@ def espn_college_softball_player_awards(
             espn_college_softball_player_awards(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_awards", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/awards",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/awards",
         params=_params,
         **kwargs,
     )
@@ -3228,8 +3356,9 @@ def espn_college_softball_player_seasons(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3237,10 +3366,11 @@ def espn_college_softball_player_seasons(
             espn_college_softball_player_seasons(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_seasons", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/seasons",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/seasons",
         params=_params,
         **kwargs,
     )
@@ -3273,8 +3403,9 @@ def espn_college_softball_player_records(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3282,10 +3413,11 @@ def espn_college_softball_player_records(
             espn_college_softball_player_records(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_records", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/records",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/records",
         params=_params,
         **kwargs,
     )
@@ -3318,8 +3450,9 @@ def espn_college_softball_player_injuries(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3327,10 +3460,11 @@ def espn_college_softball_player_injuries(
             espn_college_softball_player_injuries(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_injuries", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/injuries",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/injuries",
         params=_params,
         **kwargs,
     )
@@ -3363,8 +3497,9 @@ def espn_college_softball_player_notes(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3372,10 +3507,11 @@ def espn_college_softball_player_notes(
             espn_college_softball_player_notes(athlete_id='4239')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/notes",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/notes",
         params=_params,
         **kwargs,
     )
@@ -3410,8 +3546,9 @@ def espn_college_softball_player_vs_player(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3419,10 +3556,11 @@ def espn_college_softball_player_vs_player(
             espn_college_softball_player_vs_player(athlete_id='4239', opp_id='5')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_player_vs_player", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{athlete_id}/vsathlete/{opp_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/athletes/{_path_seg(athlete_id)}/vsathlete/{_path_seg(opp_id)}",
         params=_params,
         **kwargs,
     )
@@ -3459,6 +3597,7 @@ def espn_college_softball_games(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3466,6 +3605,7 @@ def espn_college_softball_games(
             espn_college_softball_games()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_games", kwargs)
     _params = {
         "dates": dates,
         "limit": limit,
@@ -3505,8 +3645,9 @@ def espn_college_softball_game(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3514,10 +3655,11 @@ def espn_college_softball_game(
             espn_college_softball_game(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}",
         params=_params,
         **kwargs,
     )
@@ -3552,8 +3694,9 @@ def espn_college_softball_game_competition(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3561,10 +3704,11 @@ def espn_college_softball_game_competition(
             espn_college_softball_game_competition(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_competition", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}"
     raw = _get(
         __url,
         params=_params,
@@ -3601,8 +3745,9 @@ def espn_college_softball_game_teams(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3610,10 +3755,11 @@ def espn_college_softball_game_teams(
             espn_college_softball_game_teams(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_teams", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors"
     raw = _get(
         __url,
         params=_params,
@@ -3652,8 +3798,9 @@ def espn_college_softball_game_team(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3661,10 +3808,11 @@ def espn_college_softball_game_team(
             espn_college_softball_game_team(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -3703,8 +3851,9 @@ def espn_college_softball_game_team_roster(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3712,10 +3861,11 @@ def espn_college_softball_game_team_roster(
             espn_college_softball_game_team_roster(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team_roster", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}/roster"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/roster"
     raw = _get(
         __url,
         params=_params,
@@ -3754,8 +3904,9 @@ def espn_college_softball_game_team_linescores(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3763,10 +3914,11 @@ def espn_college_softball_game_team_linescores(
             espn_college_softball_game_team_linescores(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team_linescores", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}/linescores"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/linescores"
     raw = _get(
         __url,
         params=_params,
@@ -3805,8 +3957,9 @@ def espn_college_softball_game_team_statistics(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3814,10 +3967,11 @@ def espn_college_softball_game_team_statistics(
             espn_college_softball_game_team_statistics(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team_statistics", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}/statistics"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/statistics"
     raw = _get(
         __url,
         params=_params,
@@ -3856,8 +4010,9 @@ def espn_college_softball_game_team_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3865,10 +4020,11 @@ def espn_college_softball_game_team_record(
             espn_college_softball_game_team_record(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}/record"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/record"
     raw = _get(
         __url,
         params=_params,
@@ -3907,8 +4063,9 @@ def espn_college_softball_game_team_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3916,10 +4073,11 @@ def espn_college_softball_game_team_leaders(
             espn_college_softball_game_team_leaders(event_id='401584793', team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_team_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/competitors/{team_id}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/competitors/{_path_seg(team_id)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -3956,8 +4114,9 @@ def espn_college_softball_game_odds(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -3965,10 +4124,11 @@ def espn_college_softball_game_odds(
             espn_college_softball_game_odds(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_odds", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/odds"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/odds"
     raw = _get(
         __url,
         params=_params,
@@ -4007,8 +4167,9 @@ def espn_college_softball_game_probabilities(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4016,12 +4177,13 @@ def espn_college_softball_game_probabilities(
             espn_college_softball_game_probabilities(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_probabilities", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/probabilities"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/probabilities"
     raw = _get(
         __url,
         params=_params,
@@ -4060,8 +4222,9 @@ def espn_college_softball_game_plays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4069,12 +4232,13 @@ def espn_college_softball_game_plays(
             espn_college_softball_game_plays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_plays", kwargs)
     _params = {
         "limit": limit,
     }
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/plays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays"
     raw = _get(
         __url,
         params=_params,
@@ -4113,8 +4277,9 @@ def espn_college_softball_game_play(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4122,10 +4287,11 @@ def espn_college_softball_game_play(
             espn_college_softball_game_play(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_play", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/plays/{play_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4164,8 +4330,9 @@ def espn_college_softball_game_play_personnel(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4173,10 +4340,11 @@ def espn_college_softball_game_play_personnel(
             espn_college_softball_game_play_personnel(event_id='401584793', play_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_play_personnel", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/plays/{play_id}/personnel"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/plays/{_path_seg(play_id)}/personnel"
     raw = _get(
         __url,
         params=_params,
@@ -4213,8 +4381,9 @@ def espn_college_softball_game_situation(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4222,10 +4391,11 @@ def espn_college_softball_game_situation(
             espn_college_softball_game_situation(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_situation", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/situation"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/situation"
     raw = _get(
         __url,
         params=_params,
@@ -4262,8 +4432,9 @@ def espn_college_softball_game_status(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4271,10 +4442,11 @@ def espn_college_softball_game_status(
             espn_college_softball_game_status(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_status", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/status"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/status"
     raw = _get(
         __url,
         params=_params,
@@ -4311,8 +4483,9 @@ def espn_college_softball_game_officials(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4320,10 +4493,11 @@ def espn_college_softball_game_officials(
             espn_college_softball_game_officials(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_officials", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/officials"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials"
     raw = _get(
         __url,
         params=_params,
@@ -4360,8 +4534,9 @@ def espn_college_softball_game_broadcasts(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4369,10 +4544,11 @@ def espn_college_softball_game_broadcasts(
             espn_college_softball_game_broadcasts(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_broadcasts", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/broadcasts"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/broadcasts"
     raw = _get(
         __url,
         params=_params,
@@ -4409,8 +4585,9 @@ def espn_college_softball_game_predictor(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4418,10 +4595,11 @@ def espn_college_softball_game_predictor(
             espn_college_softball_game_predictor(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_predictor", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/predictor"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/predictor"
     raw = _get(
         __url,
         params=_params,
@@ -4458,8 +4636,9 @@ def espn_college_softball_game_powerindex(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4467,10 +4646,11 @@ def espn_college_softball_game_powerindex(
             espn_college_softball_game_powerindex(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_powerindex", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/powerindex"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/powerindex"
     raw = _get(
         __url,
         params=_params,
@@ -4507,8 +4687,9 @@ def espn_college_softball_game_propbets(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4516,10 +4697,11 @@ def espn_college_softball_game_propbets(
             espn_college_softball_game_propbets(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_propbets", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/propbets"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/propbets"
     raw = _get(
         __url,
         params=_params,
@@ -4556,8 +4738,9 @@ def espn_college_softball_game_leaders(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4565,10 +4748,11 @@ def espn_college_softball_game_leaders(
             espn_college_softball_game_leaders(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_leaders", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/leaders"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/leaders"
     raw = _get(
         __url,
         params=_params,
@@ -4605,8 +4789,9 @@ def espn_college_softball_game_scoringplays(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4614,10 +4799,11 @@ def espn_college_softball_game_scoringplays(
             espn_college_softball_game_scoringplays(event_id='401584793')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_scoringplays", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/scoringplays"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/scoringplays"
     raw = _get(
         __url,
         params=_params,
@@ -4656,8 +4842,9 @@ def espn_college_softball_game_official_detail(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4665,10 +4852,11 @@ def espn_college_softball_game_official_detail(
             espn_college_softball_game_official_detail(event_id='401584793', official_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_game_official_detail", kwargs)
     _params = {}
     _params.update(_caller_params)
     cid = cid if cid is not None else event_id
-    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{event_id}/competitions/{cid}/officials/{official_id}"
+    __url = f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/events/{_path_seg(event_id)}/competitions/{_path_seg(cid)}/officials/{_path_seg(official_id)}"
     raw = _get(
         __url,
         params=_params,
@@ -4707,6 +4895,7 @@ def espn_college_softball_teams_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4714,6 +4903,7 @@ def espn_college_softball_teams_core(
             espn_college_softball_teams_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_teams_core", kwargs)
     _params = {
         "limit": limit,
         "page": page,
@@ -4753,8 +4943,9 @@ def espn_college_softball_team_core(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4762,10 +4953,11 @@ def espn_college_softball_team_core(
             espn_college_softball_team_core(team_id='4')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_team_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/teams/{team_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/teams/{_path_seg(team_id)}",
         params=_params,
         **kwargs,
     )
@@ -4800,6 +4992,7 @@ def espn_college_softball_venues(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4807,6 +5000,7 @@ def espn_college_softball_venues(
             espn_college_softball_venues()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_venues", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4845,8 +5039,9 @@ def espn_college_softball_venue(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4854,10 +5049,11 @@ def espn_college_softball_venue(
             espn_college_softball_venue(venue_id='3663')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_venue", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/venues/{venue_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/venues/{_path_seg(venue_id)}",
         params=_params,
         **kwargs,
     )
@@ -4892,6 +5088,7 @@ def espn_college_softball_franchises(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4899,6 +5096,7 @@ def espn_college_softball_franchises(
             espn_college_softball_franchises()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_franchises", kwargs)
     _params = {
         "limit": limit,
     }
@@ -4937,8 +5135,9 @@ def espn_college_softball_franchise(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4946,10 +5145,11 @@ def espn_college_softball_franchise(
             espn_college_softball_franchise(franchise_id='2')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_franchise", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/franchises/{franchise_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/franchises/{_path_seg(franchise_id)}",
         params=_params,
         **kwargs,
     )
@@ -4982,8 +5182,9 @@ def espn_college_softball_coach(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -4991,10 +5192,11 @@ def espn_college_softball_coach(
             espn_college_softball_coach(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_coach", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{coach_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{_path_seg(coach_id)}",
         params=_params,
         **kwargs,
     )
@@ -5029,8 +5231,9 @@ def espn_college_softball_coach_record(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5038,10 +5241,11 @@ def espn_college_softball_coach_record(
             espn_college_softball_coach_record(coach_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_coach_record", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{coach_id}/record/{record_type}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{_path_seg(coach_id)}/record/{_path_seg(record_type)}",
         params=_params,
         **kwargs,
     )
@@ -5076,8 +5280,9 @@ def espn_college_softball_coach_season(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5085,10 +5290,11 @@ def espn_college_softball_coach_season(
             espn_college_softball_coach_season(coach_id='1', season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_coach_season", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{coach_id}/seasons/{season}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/coaches/{_path_seg(coach_id)}/seasons/{_path_seg(season)}",
         params=_params,
         **kwargs,
     )
@@ -5123,6 +5329,7 @@ def espn_college_softball_positions(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5130,6 +5337,7 @@ def espn_college_softball_positions(
             espn_college_softball_positions()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_positions", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5168,8 +5376,9 @@ def espn_college_softball_position(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5177,10 +5386,11 @@ def espn_college_softball_position(
             espn_college_softball_position(position_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_position", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/positions/{position_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/positions/{_path_seg(position_id)}",
         params=_params,
         **kwargs,
     )
@@ -5215,6 +5425,7 @@ def espn_college_softball_tournaments(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5222,6 +5433,7 @@ def espn_college_softball_tournaments(
             espn_college_softball_tournaments()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_tournaments", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5262,6 +5474,7 @@ def espn_college_softball_awards(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5269,6 +5482,7 @@ def espn_college_softball_awards(
             espn_college_softball_awards()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_awards", kwargs)
     _params = {
         "limit": limit,
     }
@@ -5307,8 +5521,9 @@ def espn_college_softball_award(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5316,10 +5531,11 @@ def espn_college_softball_award(
             espn_college_softball_award(award_id='1')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_award", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/awards/{award_id}",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/awards/{_path_seg(award_id)}",
         params=_params,
         **kwargs,
     )
@@ -5352,6 +5568,7 @@ def espn_college_softball_standings_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5359,6 +5576,7 @@ def espn_college_softball_standings_core(
             espn_college_softball_standings_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_standings_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5395,6 +5613,7 @@ def espn_college_softball_leaders_core(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5402,6 +5621,7 @@ def espn_college_softball_leaders_core(
             espn_college_softball_leaders_core()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_leaders_core", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5438,6 +5658,7 @@ def espn_college_softball_league_notes(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5445,6 +5666,7 @@ def espn_college_softball_league_notes(
             espn_college_softball_league_notes()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_league_notes", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5481,6 +5703,7 @@ def espn_college_softball_talentpicks(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5488,6 +5711,7 @@ def espn_college_softball_talentpicks(
             espn_college_softball_talentpicks()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_talentpicks", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5528,8 +5752,9 @@ def espn_college_softball_season_recruits(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5537,13 +5762,14 @@ def espn_college_softball_season_recruits(
             espn_college_softball_season_recruits(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_recruits", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/recruits",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/recruits",
         params=_params,
         **kwargs,
     )
@@ -5576,6 +5802,7 @@ def espn_college_softball_recruiting_years(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5583,6 +5810,7 @@ def espn_college_softball_recruiting_years(
             espn_college_softball_recruiting_years()
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_recruiting_years", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
@@ -5623,8 +5851,9 @@ def espn_college_softball_recruiting_players(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5632,13 +5861,14 @@ def espn_college_softball_recruiting_players(
             espn_college_softball_recruiting_players(year=2026)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_recruiting_players", kwargs)
     _params = {
         "limit": limit,
         "page": page,
     }
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{year}/athletes",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{_path_seg(year)}/athletes",
         params=_params,
         **kwargs,
     )
@@ -5671,8 +5901,9 @@ def espn_college_softball_recruiting_rankings(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5680,10 +5911,11 @@ def espn_college_softball_recruiting_rankings(
             espn_college_softball_recruiting_rankings(year=2026)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_recruiting_rankings", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{year}/rankings",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/recruiting/{_path_seg(year)}/rankings",
         params=_params,
         **kwargs,
     )
@@ -5720,8 +5952,9 @@ def espn_college_softball_season_week_rankings(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a path value is a collection.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5729,10 +5962,11 @@ def espn_college_softball_season_week_rankings(
             espn_college_softball_season_week_rankings(season=2024, season_type=2, week=1)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_season_week_rankings", kwargs)
     _params = {}
     _params.update(_caller_params)
     raw = _get(
-        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{season}/types/{season_type}/weeks/{week}/rankings",
+        f"https://sports.core.api.espn.com/v2/sports/baseball/leagues/college-softball/seasons/{_path_seg(season)}/types/{_path_seg(season_type)}/weeks/{_path_seg(week)}/rankings",
         params=_params,
         **kwargs,
     )
@@ -5771,6 +6005,7 @@ def espn_college_softball_fpi(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5778,6 +6013,7 @@ def espn_college_softball_fpi(
             espn_college_softball_fpi(season=2024)
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_fpi", kwargs)
     _params = {
         "season": season,
         "limit": limit,
@@ -5821,6 +6057,7 @@ def espn_college_softball_cdn_playbyplay(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5828,6 +6065,7 @@ def espn_college_softball_cdn_playbyplay(
             espn_college_softball_cdn_playbyplay(game_id='401772530')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_cdn_playbyplay", kwargs)
     _params = {
         "xhr": 1,
         "gameId": game_id,
@@ -5870,6 +6108,7 @@ def espn_college_softball_cdn_boxscore(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5877,6 +6116,7 @@ def espn_college_softball_cdn_boxscore(
             espn_college_softball_cdn_boxscore(game_id='401772530')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_cdn_boxscore", kwargs)
     _params = {
         "xhr": 1,
         "gameId": game_id,
@@ -5924,6 +6164,7 @@ def espn_college_softball_cdn_schedule(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 
     Example:
         Quick start::
@@ -5931,6 +6172,7 @@ def espn_college_softball_cdn_schedule(
             espn_college_softball_cdn_schedule(date='20250315')
     """
     _caller_params = kwargs.pop("params", None) or {}
+    _check_kwargs("espn_college_softball_cdn_schedule", kwargs)
     _params = {
         "xhr": 1,
         "date": date,
