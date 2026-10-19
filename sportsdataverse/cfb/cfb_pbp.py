@@ -8000,8 +8000,8 @@ class CFBPlayProcess(object):
                 # below read it as the own 1 (401856682's Q4 Fumble Recovery (Own): EPA -5.91,
                 # where the next snap, 3rd & 1 at the 1, gives -0.41 and Yahoo/CBS -0.39). When the
                 # ball was kept (change_of_pos_team, right at the source since EX-3.4-b; owner ruling
-                # R834-7: possession, not the fumble attribution, which calls 401856674165, the
-                # retained-fumble companion row of 401856674175, lost) and the same team snaps next,
+                # R834-7: possession, not the fumble attribution, which called 401856674165, the
+                # retained-fumble companion row of 401856674175, lost until EX-3.4-d) and the same team snaps next,
                 # that snap's start IS this play's end (yardLine and yard too). The same-team check is
                 # a defence if change_of_pos_team is wrong at source; no corpus row decides it today
                 # (registry: retired cfb-supp002-no-same-team-check). The next snap must be in the same

@@ -26,8 +26,8 @@ test is `tests/cfb/test_cfb_supp002_degenerate_end.py`, which also reads `../sum
     the 18 games holding the 20 rows the rule moves across all 20,719 cfb-raw games (review PR-834's raw
     scan; 6 Fumble Recovery (Own), 6 Rush, 8 Fumble rows). 401752886 also carries the EX-3.4-b Timeout row
     (a defensive timeout between the moved Rush and the next snap). 401856674165 is the retained-fumble
-    companion record of 401856674175, which the recovery attribution calls lost; it moves under the
-    possession predicate (owner ruling R834-7).
+    companion record of 401856674175, which the recovery attribution called lost until EX-3.4-d; it moves
+    under the possession predicate (owner ruling R834-7).
   - 401778310: an interception return that fumbles, with a degenerate end block, whose next snap is the
     other team's: the case the rule's same-team guard exists for (R834-3).
 - Play ids are ESPN's (10 to 18 digits); the test casts them to Int64.

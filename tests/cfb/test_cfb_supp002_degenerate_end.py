@@ -17,7 +17,7 @@ Candidates (``BASE``): the 20 rule rows; every published ``cfbfastR-cfb-data`` 2
 2026-10-12, 4 of them rule rows); and 401778310647, an interception-return fumble with a degenerate end
 whose next snap is the other team's (R834-3; since R834-7 both its change_of_pos_team and the same-team
 guard keep it from being scored from the wrong side). 401856674165, the retained-fumble companion record of 401856674175 that the recovery
-attribution calls lost, moves only under the possession predicate (R834-7). Fixtures:
+attribution called lost until EX-3.4-d, moves only under the possession predicate (R834-7). Fixtures:
 ``fixtures/supp002/`` (see its README) plus ``fixtures/summary_401856682.json``; every game runs with
 the one closing line ``ODDS``.
 
@@ -138,10 +138,10 @@ pytestmark = [
 
 
 def _summary(game_id: int) -> dict:
-    trimmed = FIX / "supp002" / f"{game_id}_trimmed.json.gz"
-    if trimmed.exists():
-        with gzip.open(trimmed, "rt", encoding="utf-8") as fh:
-            return json.load(fh)
+    for trimmed in (FIX / "supp002" / f"{game_id}_trimmed.json.gz", FIX / f"summary_{game_id}_trimmed.json.gz"):
+        if trimmed.exists():
+            with gzip.open(trimmed, "rt", encoding="utf-8") as fh:
+                return json.load(fh)
     return json.loads((FIX / f"summary_{game_id}.json").read_text(encoding="utf-8"))
 
 
@@ -188,3 +188,36 @@ def test_exactly_the_rule_rows_move():
     assert moved == set(MOVED), f"moved {sorted(moved)}"
     assert 401856797637 not in moved  # the mirrored-ytez row is EX-3.4-a's (tests/cfb/test_cfb_end_state_ex34.py)
     assert 401778310647 not in moved  # the next snap is the other team's (R834-3)
+
+
+@pytest.mark.xdist_group("cfb-supp002")
+def test_retained_fumble_companion_is_not_a_lost_fumble():
+    """EX-3.4-d: ESPN's degenerate end block on 401856674165 names the defense (Alabama, 333) as its team.
+
+    The recovery-less fumble rule read that team as a possession change and charged Kentucky (96) a lost
+    fumble on a play it kept: the companion record 401856674175 ("for a 1ST down") and the next snap
+    (401856674182, Kentucky 1st & 10) both say so. The pair is one fumble, retained.
+    """
+    for pid in (401856674165, 401856674175):
+        row = _row(401856674, pid)
+        assert row["fumbling_team"] == 96, pid
+        got = (row["pos_fumble_lost"], row["def_fumble_lost"], row["is_turnover"], row["turnover_team"])
+        assert got == (False, False, False, None), (pid, got)
+    assert _row(401856674, 401856674182)["pos_team"] == 96
+
+
+@pytest.mark.parametrize(
+    ("game_id", "play_id"),
+    [
+        # fumble-return TD behind a degenerate end block: the "did not score" guard keeps it lost
+        pytest.param(401858213, 401858213660, marks=pytest.mark.xdist_group("cfb-supp002")),
+        # defensive recovery behind a degenerate end block, next snap the defense's: the
+        # change_of_pos_team guard keeps it lost
+        pytest.param(401752946, 401752946641, marks=pytest.mark.xdist_group("cfb-supp002")),
+    ],
+)
+def test_lost_fumbles_behind_a_degenerate_end_stay_lost(game_id, play_id):
+    """EX-3.4-d's clause un-loses only kept, non-scoring rows (review EX34d-1: each guard's killer)."""
+    row = _row(game_id, play_id)
+    assert row["recovery_team"] is None, play_id  # the recovery-less rule decides it
+    assert (row["pos_fumble_lost"], row["is_turnover"], row["turnover_team"]) == (True, True, row["pos_team"]), play_id
