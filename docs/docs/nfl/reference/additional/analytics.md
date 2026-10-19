@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 24
+sidebar_position: 25
 description: "NFL — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Analytics

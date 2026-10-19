@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl"
 sidebar_label: "Play-by-play processing: NFLPlayProcess–build_nfl"
-sidebar_position: 10
+sidebar_position: 11
 description: "NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Play-by-play processing: NFLPlayProcess–build_nfl

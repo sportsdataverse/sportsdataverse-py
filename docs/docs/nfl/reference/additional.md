@@ -72,7 +72,7 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_combine](additional/nflverse-data-releases.md#load_nfl_combine) | Load NFL Combine information |
 | [load_nfl_contracts](additional/nflverse-data-releases.md#load_nfl_contracts) | Load NFL Historical contracts information |
 | [load_nfl_draft_picks](additional/nflverse-data-releases.md#load_nfl_draft_picks) | Load NFL Draft picks information |
-| [load_nfl_espn_qbr](additional/nflverse-data-releases.md#load_nfl_espn_qbr) | Load ESPN Total QBR (Quarterback Rating) data going back to 2006. |
+| [load_nfl_espn_qbr](additional/nflverse-data-releases-2.md#load_nfl_espn_qbr) | Load ESPN Total QBR (Quarterback Rating) data going back to 2006. |
 | [load_nfl_ff_opportunity](additional/nflverse-data-releases-2.md#load_nfl_ff_opportunity) | Load NFL fantasy football opportunity data from ffverse/ffopportunity |
 | [load_nfl_ff_playerids](additional/nflverse-data-releases-2.md#load_nfl_ff_playerids) | Load fantasy football player IDs from DynastyProcess.com |
 | [load_nfl_ff_rankings](additional/nflverse-data-releases-2.md#load_nfl_ff_rankings) | Load fantasy football rankings and projections |
@@ -87,17 +87,17 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_trades](additional/nflverse-data-releases-3.md#load_nfl_trades) | Load NFL trades data |
 | [load_officials](additional/nflverse-data-releases-3.md#load_officials) | Load NFL Officials information |
 | [load_participation](additional/nflverse-data-releases-3.md#load_participation) | Load NFL play-by-play participation data for selected seasons |
-| [load_pbp](additional/nflverse-data-releases-3.md#load_pbp) | Load NFL play by play data going back to 1999 |
+| [load_pbp](additional/nflverse-data-releases-4.md#load_pbp) | Load NFL play by play data going back to 1999 |
 | [load_pfr_advstats](additional/nflverse-data-releases-4.md#load_pfr_advstats) | Load Pro-Football Reference advanced statistics going back to 2018. |
 | [load_player_stats](additional/nflverse-data-releases-4.md#load_player_stats) | Load NFL player stats data |
 | [load_players](additional/nflverse-data-releases-4.md#load_players) | Load the nflverse NFL player-identity master. |
 | [load_rosters](additional/nflverse-data-releases-4.md#load_rosters) | Load NFL season roster data for the requested seasons. |
-| [load_rosters_weekly](additional/nflverse-data-releases-4.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
-| [load_schedules](additional/nflverse-data-releases-4.md#load_schedules) | Load NFL schedule data |
-| [load_snap_counts](additional/nflverse-data-releases-4.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
-| [load_team_stats](additional/nflverse-data-releases-4.md#load_team_stats) | Load NFL team stats data going back to 1999 |
-| [load_teams](additional/nflverse-data-releases-4.md#load_teams) | Load NFL team ID information and logos |
-| [load_trades](additional/nflverse-data-releases-4.md#load_trades) | Load NFL trades data |
+| [load_rosters_weekly](additional/nflverse-data-releases-5.md#load_rosters_weekly) | Load NFL weekly roster data for the requested seasons. |
+| [load_schedules](additional/nflverse-data-releases-5.md#load_schedules) | Load NFL schedule data |
+| [load_snap_counts](additional/nflverse-data-releases-5.md#load_snap_counts) | Load NFL snap counts data for selected seasons |
+| [load_team_stats](additional/nflverse-data-releases-5.md#load_team_stats) | Load NFL team stats data going back to 1999 |
+| [load_teams](additional/nflverse-data-releases-5.md#load_teams) | Load NFL team ID information and logos |
+| [load_trades](additional/nflverse-data-releases-5.md#load_trades) | Load NFL trades data |
 
 ## Fox Sports API
 

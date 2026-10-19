@@ -224,7 +224,10 @@ def build_nfl_season(
         ``field_goal_result``), drive/series (``fixed_drive``,
         ``fixed_drive_result``, ``series``, ``series_result``), schedule fields
         (``roof``, ``spread_line``, ``total_line``) and game outcome
-        (``home_score``, ``away_score``, ``result``).
+        (``home_score``, ``away_score``, ``result``). When no requested season
+        has a regular-season or postseason game in ``raw_dir``, the shield frame
+        is empty with no columns: the column set comes from the games built, so
+        check ``frame.height`` (or ``frame.width``) before selecting columns.
 
     Raises:
         ValueError: If *source* is not one of ``"espn"``, ``"nflverse"``,
