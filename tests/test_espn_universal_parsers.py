@@ -1905,20 +1905,69 @@ if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype c
     _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
-@pytest.mark.parametrize(
-    ("parser", "fixture", "key"),
-    [
-        ("parse_news", "news_nba", "articles"),
-        ("parse_transactions", "transactions_nba", "transactions"),
-        ("parse_items", "season_coaches_nba", "items"),
-    ],
-)
-def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
+def _drift(raw: Any, path: tuple) -> Any:
+    """A deep copy of the real capture whose list at ``path`` holds strings instead of objects."""
+    import copy
+
+    out = copy.deepcopy(raw)
+    node = out
+    for step in path[:-1]:
+        node = node[step]
+    node[path[-1]] = [str(row) for row in node[path[-1]]]
+    return out
+
+
+# (parser, capture, path to the row list that drifts, where the warning names). Each capture parses to rows
+# first, with no warning (pytest.ini makes warnings errors), except where its parser reads no rows from it.
+_ESPN_DRIFT = [
+    ("parse_news", "news_nba", ("articles",), "parse_news: articles"),
+    ("parse_transactions", "transactions_nba", ("transactions",), "parse_transactions: records"),
+    ("parse_items", "season_coaches_nba", ("items",), "parse_items: items"),
+    ("parse_teams", "teams_mbb", ("sports", 0, "leagues", 0, "teams"), "parse_teams: teams"),
+    ("parse_groups", "teams_nba", ("sports",), "parse_groups: sports"),
+    ("parse_coaches", "season_coaches_nba", ("items",), "parse_coaches: items"),
+    ("parse_event_competitor_roster", "event_competitor_roster_nba", ("entries",), "parse_event_competitor_roster"),
+    ("parse_event_plays", "event_plays_nba", ("items",), "parse_event_plays: items"),
+    ("parse_team_schedule", "team_schedule_nba", ("events",), "parse_team_schedule: events"),
+    ("parse_team_roster", "team_roster_nba", ("athletes",), "parse_team_roster: athletes"),
+    ("parse_team_roster", "team_roster_nfl", ("athletes", 0, "items"), r"parse_team_roster: athletes\[\w+\]\.items"),
+    ("parse_injuries", "injuries_nba", ("injuries",), "parse_injuries: teams"),
+    ("parse_summary_plays", "summary_nba", ("plays",), "parse_summary_plays: plays"),
+    ("parse_summary_winprobability", "summary_nba", ("winprobability",), "parse_summary_winprobability: wp"),
+    ("parse_summary_officials", "summary_nba", ("gameInfo", "officials"), "parse_summary_officials: officials"),
+]
+
+
+@pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where):
     """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
     import sportsdataverse._common_espn_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning
 
     parse, raw = getattr(mod, parser), _load(fixture)
-    assert parse(raw).height > 0
-    with pytest.warns(SchemaDriftWarning, match=f"{parser}: "):
-        assert parse({**raw, key: [str(row) for row in raw[key]]}).height == 0
+    if parser != "parse_groups":  # teams_nba carries no groups: only the walk to them is exercised
+        assert parse(raw).height > 0
+    with pytest.warns(SchemaDriftWarning, match=where):
+        assert parse(_drift(raw, path)).height == 0
+
+
+def test_espn_draft_picks_drift_warns():
+    """parse_draft's inline picks shape has no committed capture (its docstring says so): the real 2024 index
+    capture with its ``$ref`` rounds swapped for a picks list that holds strings reaches the same catch."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("season_draft_nba")
+    with pytest.warns(SchemaDriftWarning, match="parse_draft: all_picks"):
+        assert parse_draft({**raw, "rounds": [], "picks": [str(raw["athletes"])]}).height == 0
+
+
+def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():
+    """A position-grouped roster (real NFL capture) whose later group stops being an object: zero rows + warning."""
+    from sportsdataverse._common_espn_parsers import parse_team_roster
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("team_roster_nfl")
+    drifted = {**raw, "athletes": [raw["athletes"][0], *(str(g) for g in raw["athletes"][1:])]}
+    with pytest.warns(SchemaDriftWarning, match="parse_team_roster: athletes: "):
+        assert parse_team_roster(drifted).height == 0

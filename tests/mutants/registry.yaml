@@ -2576,7 +2576,7 @@
   group: codegen-runtime
   finding: MD-4
   file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
-  snippet: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
   mutant: '    except Exception as e:'
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k bug_in_the_release_read
   expected: kill
@@ -2601,3 +2601,44 @@
   test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_items"
   expected: kill
   note: a drifted Core v2 items list read as "no data" with no warning (narrowed after 4.2 merged)
+
+# Task 4.9 review round (R907-1, R907-2, R907-5)
+- id: espn-row-per-item-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift(where, exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_summary_officials"
+  expected: kill
+  note: R907-1, a drifted summary sub-list (officials) read as "no data" with no warning
+
+- id: espn-entries-not-objects-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    bad = next((e for e in entries if not isinstance(e, dict)), None)'
+  mutant: '    bad = None'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and (parse_coaches or parse_event_plays or parse_team_roster)"
+  expected: kill
+  note: R907-1, a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
+
+- id: nba-stats-non-object-result-set-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: '        else:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  mutant: '        elif False:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  test: tests/nba/test_nba_stats_parsers.py -k not_an_object_warns
+  expected: kill
+  note: R907-2, a result set that is not an object was dropped silently
+
+- id: crosswalk-corrupt-asset-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
+  expected: kill
+  note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy

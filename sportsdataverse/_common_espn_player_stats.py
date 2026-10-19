@@ -141,6 +141,8 @@ def _espn_player_stats(
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
         sportsdataverse.errors.NoDataError: ESPN returned 404 for the
             statistics node (no season line for that athlete/season).
+        sportsdataverse.errors.AssetFetchError: the statistics, athlete or team fetch failed (403,
+            429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null.
     """
     st = season_type.strip().lower()
     if st not in ("regular", "postseason"):
@@ -164,7 +166,7 @@ def _espn_player_stats(
         "total": total,
     }
 
-    # Athlete + team metadata are best-effort: failures degrade to nulls.
+    # Athlete + team metadata: a 404 (no such node) degrades to nulls; a failed fetch raises (B-M1).
     athlete_payload = _safe_json(athlete_url, **kwargs)
     row.update(_extract_athlete_meta(athlete_payload))
 

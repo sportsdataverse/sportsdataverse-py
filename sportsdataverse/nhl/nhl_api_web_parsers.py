@@ -112,16 +112,12 @@ def _flatten_rows(items, return_as_pandas: bool, where: str):
     return _to_output(df, return_as_pandas)
 
 
-def _single_row(payload_dict: Dict, return_as_pandas: bool, where: str):
+def _single_row(payload_dict: Dict, return_as_pandas: bool):
     """Flatten a dict to a single-row frame; zero-row on empty/non-dict or an error envelope."""
     payload_dict = _as_dict(payload_dict)
     if not payload_dict:
         return _empty_frame(return_as_pandas)
-    try:
-        df = pd.json_normalize(payload_dict, sep="_")
-    except _SHAPE_ERRORS as exc:
-        _warn_schema_drift(where, exc)
-        return _empty_frame(return_as_pandas)
+    df = pd.json_normalize(payload_dict, sep="_")
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
             df[col] = df[col].apply(lambda v: str(v) if isinstance(v, list) else v)
@@ -180,7 +176,7 @@ def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.D
     scoring / threeStars / penalties — those are stringified to keep the
     output one row per call).
     """
-    return _single_row(payload, return_as_pandas, where="parse_nhl_web_landing: payload")
+    return _single_row(payload, return_as_pandas)
 
 
 def parse_nhl_web_right_rail(
@@ -216,17 +212,13 @@ def parse_nhl_web_right_rail(
         "team_game_stats": lambda p: _flatten_rows(
             p.get("teamGameStats"), return_as_pandas, where="parse_nhl_web_right_rail: teamGameStats"
         ),
-        "game_info": lambda p: _single_row(
-            p.get("gameInfo"), return_as_pandas, where="parse_nhl_web_right_rail: gameInfo"
-        ),
+        "game_info": lambda p: _single_row(p.get("gameInfo"), return_as_pandas),
         "linescore_by_period": lambda p: _flatten_rows(
             ((p.get("linescore") or {}).get("byPeriod")),
             return_as_pandas,
             where="parse_nhl_web_right_rail: linescore.byPeriod",
         ),
-        "season_series_wins": lambda p: _single_row(
-            p.get("seasonSeriesWins"), return_as_pandas, where="parse_nhl_web_right_rail: seasonSeriesWins"
-        ),
+        "season_series_wins": lambda p: _single_row(p.get("seasonSeriesWins"), return_as_pandas),
     }
     payload = payload if isinstance(payload, dict) else {}
     if section is not None:
@@ -402,7 +394,7 @@ def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) 
     profile. Nested ``featuredStats`` / ``careerTotals`` / ``last5Games``
     sub-frames are stringified — call them out separately if needed.
     """
-    return _single_row(payload, return_as_pandas, where="parse_nhl_web_player_landing: payload")
+    return _single_row(payload, return_as_pandas)
 
 
 def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:

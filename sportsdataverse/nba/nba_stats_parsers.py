@@ -388,7 +388,14 @@ def parse_nba_stats_result_sets(
         .. _hoopR: https://hoopR.sportsdataverse.org
         .. _wehoop: https://wehoop.sportsdataverse.org
     """
-    sets = [rs for rs in _result_sets(raw) if isinstance(rs, dict)]
+    sets = []
+    for rs in _result_sets(raw):
+        if isinstance(rs, dict):
+            sets.append(rs)
+        else:  # a result set that is not an object is dropped, but never silently (A-L60)
+            _warn_schema_drift(
+                "parse_nba_stats_result_sets: resultSets[]", TypeError(f"a result set is {type(rs).__name__}")
+            )
     frames: dict[str, pl.DataFrame] = {rs.get("name", f"set_{i}"): _to_frame(rs) for i, rs in enumerate(sets)}
 
     def _maybe_pandas(df: pl.DataFrame) -> Union[pl.DataFrame, "pd.DataFrame"]:

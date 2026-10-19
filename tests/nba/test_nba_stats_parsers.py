@@ -148,3 +148,17 @@ def test_schema_drift_warns_instead_of_reading_as_no_data():
     drifted = {"resultSets": [{**rs, "headers": [rs["headers"][0], *rs["headers"][:-1]]}]}
     with pytest.warns(SchemaDriftWarning, match=f"parse_nba_stats_result_sets: {rs['name']}.rowSet"):
         assert parse_nba_stats_result_sets(drifted, result_set=rs["name"]).height == 0
+
+
+def test_a_result_set_that_is_not_an_object_warns():
+    """R907-2: a non-object entry in resultSets is dropped with a SchemaDriftWarning; the real sets still parse."""
+    import pytest
+
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("cap_leaguedashplayerstats_nba.json")
+    rs = raw["resultSets"][0]
+    want = parse_nba_stats_result_sets(raw, result_set=rs["name"])
+    with pytest.warns(SchemaDriftWarning, match=r"parse_nba_stats_result_sets: resultSets\[\]"):
+        got = parse_nba_stats_result_sets({"resultSets": [str(rs), *raw["resultSets"]]}, result_set=rs["name"])
+    assert got.equals(want)

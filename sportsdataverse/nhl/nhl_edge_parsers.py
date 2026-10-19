@@ -202,11 +202,7 @@ def parse_edge_detail(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     """
     if not payload or not isinstance(payload, dict) or _error_envelope_code(payload) is not None:
         return _empty_frame(return_as_pandas)
-    try:
-        df = pd.json_normalize(payload, sep="_")
-    except _SHAPE_ERRORS as exc:
-        _warn_schema_drift("parse_edge_detail: payload", exc)
-        return _empty_frame(return_as_pandas)
+    df = pd.json_normalize(payload, sep="_")
     # Stringify any leftover list columns so polars can consume the frame.
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
@@ -279,11 +275,12 @@ def parse_edge_shot_location(payload: Dict, return_as_pandas: bool = False) -> p
         if isinstance(zones, list) and zones:
             try:
                 df = pd.json_normalize(zones, sep="_")
-                df = _snake_columns(df)
-                return _to_output(df, return_as_pandas)
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_shot_location: {key}", exc)
                 return _empty_frame(return_as_pandas)
+            else:
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
 
     # Nested shape: dict-of-sections, each containing one of _SHOT_LOCATION_KEYS.
     parts = []
@@ -295,11 +292,12 @@ def parse_edge_shot_location(payload: Dict, return_as_pandas: bool = False) -> p
             if isinstance(zones, list) and zones:
                 try:
                     sub = pd.json_normalize(zones, sep="_")
-                    sub.insert(0, "section", section)
-                    parts.append(sub)
                 except _SHAPE_ERRORS as exc:
                     _warn_schema_drift(f"parse_edge_shot_location: {section}.{key}", exc)
                     continue
+                else:
+                    sub.insert(0, "section", section)
+                    parts.append(sub)
                 break
     if not parts:
         return _empty_frame(return_as_pandas)
@@ -360,23 +358,19 @@ def parse_edge_zone_time(payload: Dict, return_as_pandas: bool = False) -> pl.Da
             # skater-zone-time returns 4 rows keyed by ``strengthCode``).
             try:
                 df = pd.json_normalize(candidate, sep="_")
-                df = _snake_columns(df)
-                return _to_output(df, return_as_pandas)
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_zone_time: {key}", exc)
                 continue
+            else:
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
         if isinstance(candidate, dict) and candidate:
             # Single-row case: flat metric dict (e.g. zoneTimeDetails on
             # skater-detail is a flat dict of offensiveZonePctg,
             # offensiveZonePercentile, offensiveZoneLeagueAvg, etc.;
-            # zoneStarts on skater-zone-time is the same shape).
-            try:
-                df = pd.json_normalize(candidate, sep="_")
-                df = _snake_columns(df)
-                return _to_output(df, return_as_pandas)
-            except _SHAPE_ERRORS as exc:
-                _warn_schema_drift(f"parse_edge_zone_time: {key}", exc)
-                continue
+            # zoneStarts on skater-zone-time is the same shape). A dict always normalizes.
+            df = pd.json_normalize(candidate, sep="_")
+            return _to_output(_snake_columns(df), return_as_pandas)
 
     # No zone-shaped key found — fall back to a single-row flatten.
     return parse_edge_detail(payload, return_as_pandas=return_as_pandas)
@@ -415,11 +409,12 @@ def parse_edge_sog_details(payload: Dict, return_as_pandas: bool = False) -> pl.
         if isinstance(rows, list) and rows:
             try:
                 df = pd.json_normalize(rows, sep="_")
-                df = _snake_columns(df)
-                return _to_output(df, return_as_pandas)
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_sog_details: {key}", exc)
                 return _empty_frame(return_as_pandas)
+            else:
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
     return _empty_frame(return_as_pandas)
 
 
@@ -445,11 +440,12 @@ def parse_edge_sog_summary(payload: Dict, return_as_pandas: bool = False) -> pl.
         if isinstance(rows, list) and rows:
             try:
                 df = pd.json_normalize(rows, sep="_")
-                df = _snake_columns(df)
-                return _to_output(df, return_as_pandas)
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_sog_summary: {key}", exc)
                 return _empty_frame(return_as_pandas)
+            else:
+                df = _snake_columns(df)
+                return _to_output(df, return_as_pandas)
     return _empty_frame(return_as_pandas)
 
 
@@ -516,10 +512,11 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     if best_key is not None:
         try:
             df = pd.json_normalize(payload[best_key], sep="_")
-            df = _snake_columns(df)
-            return _to_output(df, return_as_pandas)
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift(f"parse_edge_payload: {best_key}", exc)
+        else:
+            df = _snake_columns(df)
+            return _to_output(df, return_as_pandas)
 
     # Single-row fallback.
     return parse_edge_detail(payload, return_as_pandas=return_as_pandas)

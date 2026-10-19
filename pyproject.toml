@@ -276,6 +276,8 @@ ignore = [
 # Star-imports + re-exports are intentional in package __init__ files.
 "sportsdataverse/__init__.py" = ["F401", "F403"]
 "sportsdataverse/**/__init__.py" = ["F401", "F403"]
+# Local Claude Code hooks and status line: a hook must never crash the session, so they catch broadly.
+".claude/**" = ["BLE001"]
 # BLE001 ratchet (task 4.9): files whose broad excepts belong to another task's open work. Each owner
 # narrows (or justifies) its sites and deletes its line here; never add a file to this list.
 # providers 4.1b (provider parsers / runtimes):

@@ -8,9 +8,12 @@ its curated alias table live in sdv-reference-data (``sdv_reference/crosswalks/`
 
 from __future__ import annotations
 
+import io
+
 import polars as pl
 import pytest
 
+from sportsdataverse._codegen_runtime import _parse_release
 from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mbb import mbb_ncaa_espn_crosswalk as xw
 from sportsdataverse.mbb import ncaa_espn_team_crosswalk, ncaa_mbb_team_ids
@@ -199,8 +202,10 @@ def test_reads_the_release_first(monkeypatch):
         lambda url: None,
         lambda url: (_ for _ in ()).throw(AssetFetchError("release asset fetch failed with HTTP 403")),
         lambda url: _release_like("mbb").drop("espn_team_id"),  # a drifted asset: the column cast fails
+        # a corrupt / truncated asset, through the real parse (#898's _parse_release): pyarrow's ArrowInvalid
+        lambda url: _parse_release(url, io.BytesIO(b"PAR1 truncated")),
     ],
-    ids=["absent", "fetch-failed", "drifted"],
+    ids=["absent", "fetch-failed", "drifted", "corrupt"],
 )
 def test_falls_back_to_the_bundled_copy(monkeypatch, read):
     monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
