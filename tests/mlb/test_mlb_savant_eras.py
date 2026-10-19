@@ -75,6 +75,23 @@ def test_abs_era_rows_are_excluded_from_the_zone_fit_with_a_warning(pitches_2024
     assert not np.allclose(fitted["coef"], pooled["coef"])
 
 
+def test_an_abs_era_only_frame_is_fit_in_its_own_frame(pitches_2024):
+    # One era means nothing to mix: a 2026 season build must fit its own pitches, not drop
+    # them all and score every pitch 0.5 (which turned framing into a called-strike rate).
+    only_2026 = pitches_2024.with_columns(pl.lit(ABS_SEASON).alias("game_year"))
+    fitted = fit_zone_model(only_2026)  # no warning: nothing is excluded
+    pooled = fit_zone_model(pitches_2024)
+    assert np.allclose(fitted["coef"], pooled["coef"]) and fitted["intercept"] == pytest.approx(pooled["intercept"])
+    probs = mlb_umpire_called_strike_prob(only_2026)
+    assert probs["abs_era"].all() and probs["called_strike_prob"].n_unique() > 1
+
+
+def test_a_degenerate_zone_fit_warns(pitches_2024):
+    with pytest.warns(UserWarning, match="fewer than 2 called pitches"):
+        fitted = fit_zone_model(pitches_2024.head(0))
+    assert fitted["coef"] == [0.0] * 7 and fitted["intercept"] == 0.0
+
+
 def test_every_row_is_still_scored_and_flagged(mixed_eras):
     with pytest.warns(UserWarning, match=ENTRY):
         out = mlb_umpire_called_strike_prob(mixed_eras)

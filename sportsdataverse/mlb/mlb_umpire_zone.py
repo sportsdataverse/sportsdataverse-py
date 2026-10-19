@@ -27,6 +27,7 @@ See Also:
 
 from __future__ import annotations
 
+import warnings
 from typing import Any, Dict, Optional, Union
 
 import numpy as np
@@ -91,10 +92,12 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
 
     Compute-on-demand -- **no artifact is bundled or cached to disk.**
     L2-regularized (``1e-4``) mean log-loss, minimized via
-    ``scipy.optimize.minimize(method="L-BFGS-B")``. Pitches from 2026 on
-    (``game_year`` / ``game_date``) are excluded with a ``UserWarning``: their
-    locations are middle-of-plate against the ABS zone, not the frame the rest
-    of the corpus is in (``rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate``).
+    ``scipy.optimize.minimize(method="L-BFGS-B")``. When the frame spans 2026
+    (``game_year`` / ``game_date``), the 2026+ pitches are excluded with a
+    ``UserWarning``: their locations are middle-of-plate against the ABS zone,
+    not the frame the rest of the corpus is in
+    (``rules/mlb.yaml#mlb-2026-savant-plate-location-middle-of-plate``). A frame
+    entirely from 2026 on is fit on its own pitches.
 
     Args:
         pitches: Frame of pitches with ``description`` (filtered to
@@ -104,8 +107,8 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
 
     Returns:
         dict: ``{"coef": list[float] (7,), "intercept": float, "features": list[str]}``.
-        ``{"coef": [], "intercept": 0.0, "features": [...]}`` if fewer
-        than 2 called pitches are available (degenerate fit).
+        All-zero ``coef`` and ``intercept`` 0.0 (P = 0.5 for every pitch), with a
+        ``UserWarning``, if fewer than 2 called pitches are available (degenerate fit).
 
     Example:
         Quick start::
@@ -116,6 +119,11 @@ def fit_zone_model(pitches: pl.DataFrame) -> Dict[str, Any]:
     feature_names = ["plate_x", "plate_x_sq", "z_norm", "z_norm_sq", "plate_x_z_norm", "abs_plate_x", "abs_z_dev"]
     called = _called_pitches(drop_abs_era_rows(pitches, what="fit_zone_model"))
     if called.height < 2:
+        warnings.warn(
+            f"fit_zone_model: fewer than 2 called pitches ({called.height}); every pitch scores 0.5",
+            UserWarning,
+            stacklevel=2,
+        )
         return {"coef": [0.0] * len(feature_names), "intercept": 0.0, "features": feature_names}
 
     X = _zone_features(called)
