@@ -13,11 +13,15 @@ under ``tests/codegen/``, so the coverage jobs (which skip that directory) count
   season, ``[]`` = an empty frame and no request.
 """
 
+import gc
 import http.server
 import io
 import socket
+import struct
 import threading
 import urllib.error
+import warnings
+from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
@@ -35,6 +39,12 @@ _FIXTURES = Path(__file__).resolve().parent / "fixtures" / "nfl_loaders"
 _CSV = (_FIXTURES / "db_playerids_slice.csv").read_bytes()  # real DynastyProcess rows
 _PARQUET = (_FIXTURES / "games_2023_2024_head3.parquet").read_bytes()  # real nflverse schedule rows
 _OCTET = "application/octet-stream"
+# The same real asset with its footer metadata scrambled (length and magic intact): pyarrow
+# reports it as a plain OSError ("Couldn't deserialize thrift"), not ArrowInvalid.
+_FOOTER_LEN = struct.unpack("<I", _PARQUET[-8:-4])[0]
+_CORRUPT_FOOTER = (
+    _PARQUET[: -8 - _FOOTER_LEN] + bytes(b ^ 0x5A for b in _PARQUET[-8 - _FOOTER_LEN : -8]) + _PARQUET[-8:]
+)
 
 
 class _Handler(http.server.BaseHTTPRequestHandler):
@@ -91,6 +101,8 @@ class _Handler(http.server.BaseHTTPRequestHandler):
             self._parquet(n, rng, second=404)
         elif self.path == "/zero-byte.parquet":
             self._parquet(n, rng, probe=416, second_body=b"")
+        elif self.path == "/corrupt-footer.parquet":
+            self._send(200, _CORRUPT_FOOTER, _OCTET)
         elif self.path == "/corrupt.parquet":
             self._send(200, b"PAR1 this is not a parquet file PAR1", _OCTET)
         elif self.path == "/asset.parquet":
@@ -242,7 +254,7 @@ def test_parse_error_is_not_refetched(server):
 # R898-6: a zero-byte asset answers the probe 416; it is reachable, so the second read's own
 # parse error surfaces, not an AssetFetchError.
 def test_zero_byte_asset_416_probe_is_reachable(server):
-    with pytest.raises(pa.ArrowInvalid):
+    with pytest.raises(pl.exceptions.NoDataError, match="empty data"):  # polars, not sportsdataverse
         rt._fetch_release_parquet(server + "/zero-byte.parquet")
     assert _Handler.ranges == [("/zero-byte.parquet", "bytes=0-0")]
     assert _Handler.hits["/zero-byte.parquet"] == 3
@@ -251,16 +263,38 @@ def test_zero_byte_asset_416_probe_is_reachable(server):
 # R898-1 / A-M10: the second read keeps use_pyarrow=True as well (polars 2.0's own reader asks
 # the release CDN for a suffix range, which it answers 501).
 def test_second_read_goes_through_pyarrow():
-    frame = pl.read_parquet(io.BytesIO(_PARQUET))
+    real = pl.read_parquet
 
     class _Resp:
         status_code = 206
 
-    with patch.object(rt.pl, "read_parquet", side_effect=[urllib.error.URLError("reset"), frame]) as rp:
-        with patch.object(rt, "download", return_value=_Resp()):
-            assert rt._fetch_release_parquet("https://x/flaky.parquet").height == 6
-    assert rp.call_count == 2
+    with patch.object(rt, "_release_bytes", side_effect=[urllib.error.URLError("reset"), _PARQUET]):
+        with patch.object(rt.pl, "read_parquet", side_effect=lambda *a, **k: real(*a, **k)) as rp:
+            with patch.object(rt, "download", return_value=_Resp()):
+                assert rt._fetch_release_parquet("https://x/flaky.parquet").height == 6
+    assert rp.call_count == 1  # only the bytes that arrived are parsed
     assert all(call.kwargs == {"use_pyarrow": True} for call in rp.call_args_list)
+
+
+# R898-9: a corrupt footer is a plain OSError from pyarrow; the fetch and the parse are separate
+# steps, so it is the asset's own error -- one request, no probe, never AssetFetchError.
+def test_corrupt_footer_is_a_parse_error_with_one_request(server):
+    with pytest.raises(OSError, match="deserialize thrift") as exc:
+        rt._fetch_release_parquet(server + "/corrupt-footer.parquet")
+    assert not isinstance(exc.value, AssetFetchError)
+    assert _Handler.hits["/corrupt-footer.parquet"] == 1 and _Handler.ranges == []
+
+
+# R898-13: the first read's HTTP error response is closed before the probe (no leaked socket).
+def test_first_read_http_error_is_closed(server):
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", ResourceWarning)
+        try:
+            rt._fetch_release_parquet(server + "/missing.parquet")
+        except NoDataError:
+            pass
+        gc.collect()
+    assert not [w for w in caught if issubclass(w.category, ResourceWarning)]
 
 
 # A-L29: no_espn_data decoded every 2xx body as JSON, charset-scanning a binary asset first.
@@ -292,7 +326,7 @@ def _games() -> pl.DataFrame:
 def schedule_asset(monkeypatch):
     urls: list = []
     monkeypatch.setattr(nfl_loaders, "_fetch_release_parquet", lambda url: urls.append(url) or _games())
-    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda: 2024)
+    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda roster=False: 2024)
     return urls
 
 
@@ -334,12 +368,12 @@ def participation_asset(monkeypatch):
         return _participation(season)
 
     monkeypatch.setattr(nfl_loaders, "_fetch_release_parquet", fetch)
-    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda: 2024)
+    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda roster=False: 2024)
     return urls
 
 
 def test_seasons_none_per_season_loader_is_the_current_season(server, participation_asset, monkeypatch):
-    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda: 2023)
+    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda roster=False: 2023)
     out = nfl_loaders.load_nfl_pbp_participation(None)
     assert [u.rsplit("_", 1)[1] for u in participation_asset] == ["2023.parquet"]
     assert out.height == 3
@@ -360,6 +394,58 @@ def test_seasons_true_gap_before_the_current_season_raises(server, monkeypatch):
         return _participation(2016)
 
     monkeypatch.setattr(nfl_loaders, "_fetch_release_parquet", fetch)
-    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda: 2024)
+    monkeypatch.setattr(nfl_loaders, "get_current_nfl_season", lambda roster=False: 2024)
     with pytest.raises(NoDataError):
         nfl_loaders.load_nfl_pbp_participation(True)
+
+
+# R898-10: nflreadpy's load_rosters / load_depth_charts take the ROSTER year (it turns on March 15);
+# load_weekly_rosters and the rest keep the season year (it turns after Labor Day).
+class _April1(date):
+    @classmethod
+    def today(cls):
+        return cls(2026, 4, 1)
+
+
+@pytest.fixture()
+def april_1(monkeypatch):
+    from sportsdataverse.nfl import utils_date
+
+    monkeypatch.setattr(utils_date, "date", _April1)
+    urls: list = []
+
+    def fetch(url):
+        urls.append(url)
+        return _participation(2023)
+
+    monkeypatch.setattr(nfl_loaders, "_fetch_release_parquet", fetch)
+    return urls
+
+
+def _years(urls):
+    return [int(u.rsplit("_", 1)[1].split(".")[0]) for u in urls]
+
+
+def test_roster_year_none_is_2026_on_april_1(server, april_1):
+    nfl_loaders.load_nfl_rosters(None)
+    nfl_loaders.load_nfl_depth_charts(None)
+    nfl_loaders.load_nfl_weekly_rosters(None)
+    assert _years(april_1) == [2026, 2026, 2025]
+
+
+def test_roster_year_true_runs_through_2026_on_april_1(server, april_1):
+    nfl_loaders.load_nfl_depth_charts(True)
+    assert _years(april_1) == list(range(2001, 2027))
+
+
+# R898-11: a season the caller mistyped is named, never silently truncated (#896's
+# _as_season_list: 2024.5 used to read as 2024, [True] as season 1).
+@pytest.mark.parametrize("bad", [[2024.5], [True], ["2024x"], 2024.5])
+def test_mistyped_season_raises_naming_seasons(bad, server, schedule_asset):
+    with pytest.raises(ValueError, match="seasons"):
+        nfl_loaders.load_nfl_schedule(bad)
+    assert schedule_asset == []  # raised before any request
+
+
+def test_string_season_is_accepted(server, schedule_asset):
+    assert nfl_loaders.load_nfl_schedule(["2024"]).height == 3

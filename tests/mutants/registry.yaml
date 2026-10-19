@@ -281,8 +281,8 @@
 - id: codegen-runtime-use-pyarrow
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
-  mutant: 'return pl.read_parquet(url)'
+  snippet: 'return pl.read_parquet(io.BytesIO(data), use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(io.BytesIO(data))'
   test: tests/codegen/test_runtime_release.py -k pyarrow
   expected: kill
   note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
@@ -1596,8 +1596,8 @@
   group: codegen-runtime
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'frame = pl.read_parquet(url, use_pyarrow=True)'
-  mutant: 'frame = pl.read_parquet(url)'
+  snippet: '    return _parse_release(url, data)  # the asset, read after the probe'
+  mutant: '    return pl.read_parquet(__import__("io").BytesIO(data))'
   test: tests/test_runtime_release_classify.py -k second_read_goes_through_pyarrow
   expected: kill
   note: R898-1, the read after the probe must keep use_pyarrow too (polars 2.0 suffix range -> 501)
@@ -1626,11 +1626,17 @@
   group: codegen-runtime
   finding: B-L74
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below'
-  mutant: 'except Exception as e:  # a transport failure: classified below'
-  test: tests/test_runtime_release_classify.py -k parse_error_is_not_refetched
+  snippet: |-
+    data = _release_bytes(url)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  mutant: |-
+    data = _release_bytes(url); _parse_release(url, data)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  test: tests/test_runtime_release_classify.py -k "parse_error_is_not_refetched or corrupt_footer"
   expected: kill
-  note: R898-5, a corrupt asset was probed and fetched a second time
+  note: >-
+    R898-5 / R898-9, the parse inside the transport try: pyarrow's corrupt-footer OSError read as a
+    failed fetch, so a corrupt asset was probed, fetched a second time and reported AssetFetchError
 
 - id: release-probe-416-not-reachable
   group: codegen-runtime
@@ -1641,3 +1647,33 @@
   test: tests/test_runtime_release_classify.py -k zero_byte
   expected: kill
   note: R898-6, a zero-byte asset answers the probe 416 and is reachable
+
+- id: roster-calendar-for-rosters
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'lambda s: base_url.format(season=s), roster=True)'
+  mutant: 'lambda s: base_url.format(season=s))'
+  test: tests/test_runtime_release_classify.py -k roster_year_none
+  expected: kill
+  note: R898-10, nflreadpy load_rosters takes the roster year, which turns on March 15
+
+- id: release-first-read-http-error-left-open
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: "        original.close()  # the first read's error response holds its socket open (R898-13)"
+  mutant: '        pass'
+  test: tests/test_runtime_release_classify.py -k first_read_http_error_is_closed
+  expected: kill
+  note: R898-13, an unclosed HTTPError leaks its socket (a ResourceWarning, an error under pytest.ini)
+
+- id: nfl-player-stats-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'for raw in _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  mutant: 'for raw in _fetch_nfl_seasons(True if seasons is None else seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  test: tests/nfl/test_nfl_player_stats_weekly.py -k seasons_none_is_the_current
+  expected: kill
+  note: owner ruling (round 3) -- load_nfl_player_stats() is the current season, not ~28 assets since 1999

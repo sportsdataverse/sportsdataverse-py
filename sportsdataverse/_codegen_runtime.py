@@ -325,11 +325,12 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     """Read a release parquet, RAISING when the asset is missing.
 
     The read stays a direct read, and the bytes deliberately do NOT go through the
-    HTTP gateway: given a URL with ``use_pyarrow=True``, polars fetches the whole body
-    itself (urllib) and hands it to pyarrow, while a trip through ``download`` holds an
-    extra ``requests`` copy of the compressed file and decodes it again. Measured on the 59 MB ``play_by_play_2025.parquet`` (best of
-    3, one read per process, identical imports): direct 1010 MB / 6.0s versus buffered
-    1081 MB / 10.5s -- +7% peak RSS and +75% wall. Routing through a temp file or a
+    HTTP gateway: :func:`_release_bytes` reads the whole body with urllib, as polars'
+    own URL read does, and pyarrow parses it from memory, while a trip through
+    ``download`` holds an extra ``requests`` copy of the compressed file. Measured on the
+    59 MB ``play_by_play_2025.parquet`` (best of 3, one read per process, identical
+    imports): direct 1010 MB / 6.0s versus buffered 1081 MB / 10.5s -- +7% peak RSS and
+    +75% wall. Routing through a temp file or a
     zero-copy ``pa.py_buffer`` was no better. See issue #397.
 
     What DOES go through the gateway is the *classification* of a failure. When the
@@ -367,20 +368,20 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     import http.client
     import urllib.error
 
+    # The fetch and the parse are separate steps: pyarrow reports a corrupt footer as a
+    # plain OSError ("Couldn't deserialize thrift"), which must not read as a failed fetch.
     try:
-        return pl.read_parquet(url, use_pyarrow=True)
+        data = _release_bytes(url)
     except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
         original: BaseException = e
-    except BaseException as e:  # a parse error, or pyo3's PanicException (not an Exception)
-        if type(e).__name__ != "PanicException":
-            raise  # the asset's own error; never turn Ctrl-C / SystemExit into an HTTP call
-        return _read_parquet_stripped_metadata(url)
+    else:
+        return _parse_release(url, data)  # a parse error is the asset's own: raised at once
 
     _classify_release_failure(url, original)
     # Reachable (B-L74): a read that failed in transit succeeds now. A second transport
-    # failure is classified like the first; a parse error surfaces as the reader raised it.
+    # failure is classified like the first.
     try:
-        frame = pl.read_parquet(url, use_pyarrow=True)  # the second read, after the probe
+        data = _release_bytes(url)  # the second read, after the probe
     except urllib.error.HTTPError as e:
         e.close()  # its unread body holds the socket open
         if e.code == 404:
@@ -388,7 +389,27 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
         raise AssetFetchError(f"release asset fetch failed with HTTP {e.code}: {url}") from e
     except (OSError, http.client.HTTPException) as e:
         raise AssetFetchError(f"{_where(url)}: release asset read failed: {type(e).__name__}") from e
-    return frame
+    return _parse_release(url, data)  # the asset, read after the probe
+
+
+def _release_bytes(url: str) -> bytes:
+    """The asset's whole body, read the way polars reads a URL (urllib, no gateway; #397)."""
+    import urllib.request
+
+    with urllib.request.urlopen(url) as f:
+        return f.read()
+
+
+def _parse_release(url: str, data: bytes) -> pl.DataFrame:
+    """Parse release bytes with pyarrow; on pyo3's metadata panic, re-read with the metadata stripped."""
+    import io
+
+    try:
+        return pl.read_parquet(io.BytesIO(data), use_pyarrow=True)
+    except BaseException as e:  # pyo3's PanicException does not subclass Exception
+        if type(e).__name__ != "PanicException":
+            raise  # a parse error is the asset's own; never turn Ctrl-C / SystemExit into an HTTP call
+        return _read_parquet_stripped_metadata(url)
 
 
 #: One byte answers "is the asset there?" without re-downloading a 20-59 MB file (A-N10).
@@ -407,7 +428,7 @@ def _classify_release_failure(url: str, original: BaseException) -> None:
     import urllib.error
 
     if isinstance(original, urllib.error.HTTPError):
-        original.close()  # Arrow's urllib read kept the error response's socket open
+        original.close()  # the first read's error response holds its socket open (R898-13)
     with _transport_errors(url):
         resp = download(url, headers=_PROBE_HEADERS)
     status = getattr(resp, "status_code", None)
