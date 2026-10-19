@@ -2968,7 +2968,7 @@ def espn_nfl_players_index(
 
     Raises:
         NoDataError: The host answered 404 -- the requested resource does not exist.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a flag is not a bool or one of 'true'/'false'/'1'/'0'.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. Also raised before any request when a flag is a string other than 'true'/'false'/'1'/'0'.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
         TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), raised before any request.
 

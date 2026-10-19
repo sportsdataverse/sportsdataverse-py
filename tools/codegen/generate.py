@@ -423,7 +423,7 @@ def _build_docstring(
     if vocab_raises and not flat:  # an ESPN wrapper checks its inputs before the request (A-M17, A-N2, A-N3)
         checks = []
         if any(p.transform == "bool_str" for p in ep.query_params):
-            checks.append("a flag is not a bool or one of 'true'/'false'/'1'/'0'")
+            checks.append("a flag is a string other than 'true'/'false'/'1'/'0'")
         if ep.path_params or league_param:
             checks.append("a path value is a collection")
         if checks:
