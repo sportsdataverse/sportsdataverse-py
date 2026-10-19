@@ -151,6 +151,8 @@ ESPN endpoint.
 | `score_$ref` | character |  |
 | `statistics_$ref` | character |  |
 | `team_$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -565,6 +567,8 @@ ESPN endpoint.
 | `provider_name` | character | Betting provider name (e.g. "ESPN BET"). |
 | `provider_priority` | integer | Provider display priority. |
 | `prop_bets_$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -612,6 +616,8 @@ ESPN endpoint.
 | `source_description` | character |  |
 | `source_id` | character | Data source identifier. |
 | `source_state` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -882,6 +888,8 @@ ESPN endpoint.
 | `position_display_name` | character | Position display name. |
 | `position_id` | character | Official position identifier. |
 | `position_name` | character | Official position name (e.g. "Referee", "Linesman"). |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -933,6 +941,8 @@ ESPN endpoint.
 | `type_long_name` | character | Broadcast type long name (e.g. "Television"). |
 | `type_short_name` | character | Broadcast type short name (e.g. "TV"). |
 | `type_slug` | character | Broadcast type slug. |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

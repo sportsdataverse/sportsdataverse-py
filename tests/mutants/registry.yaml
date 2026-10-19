@@ -2364,3 +2364,24 @@
   test: tests/test_runtime_release_classify.py -k passes_the_http_timeout
   expected: kill
   note: R898-15, a server that accepted and never answered hung the release read
+
+# codegen 4.2: parse_items page envelope columns (A-H1, R-028)
+- id: parse-items-page-columns-dropped
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'for col, key in (("count", "count"), ("page_count", "pageCount")):'
+  mutant: 'for col, key in ():'
+  test: tests/test_espn_universal_parsers.py -k page_envelope
+  expected: kill
+  note: the frame says nothing about count 610 / pageCount 7 on espn_nba_athletes_index's first page
+
+- id: parse-items-page-columns-untyped
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'df[col] = pd.array([value if type(value) is int else None] * len(df), dtype="Int64")'
+  mutant: 'df[col] = [value] * len(df)'
+  test: tests/test_espn_universal_parsers.py -k page_envelope
+  expected: kill
+  note: an untyped column is int64 on pandas and a Null-dtype column on an unpaginated payload
