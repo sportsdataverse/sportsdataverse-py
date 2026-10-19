@@ -10,7 +10,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 131 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com`, `raw.githubusercontent.com` | 74 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 1 | none (Terms gate + rate rotation) |
 | [On3 Recruit Database](#on3-recruit-database) | `api.on3.com` | 82 | API key (ON3_API_KEY) |
@@ -23,7 +23,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN site API (v2)](reference/site) | 25 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 89 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |

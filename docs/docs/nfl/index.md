@@ -9,7 +9,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 124 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 125 | none |
 | [NFL.com Shield API](#nfl-com-shield-api) | `api.nfl.com` | 22 | WEB_DESKTOP bearer token |
 | [NFL Pro](#nfl-pro) | `pro.nfl.com` | 32 | none |
 | [Sleeper fantasy API](#sleeper-fantasy-api) | `api.sleeper.app` | 15 | none |
@@ -24,7 +24,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 23 |
+| [ESPN site API (v2)](reference/site) | 24 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 84 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |

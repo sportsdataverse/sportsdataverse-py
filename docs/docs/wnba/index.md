@@ -9,7 +9,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 127 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 39 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
@@ -19,7 +19,7 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 20 |
+| [ESPN site API (v2)](reference/site) | 24 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 81 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |

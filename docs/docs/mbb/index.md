@@ -10,7 +10,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 9 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 128 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 129 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 120 | none (Terms gate + rate rotation) |
 | [KenPom](#kenpom) | `kenpom.com` | 32 | subscription (KENPOM_EMAIL / KENPOM_PASSWORD) |
@@ -22,7 +22,7 @@ description: "sdv-py MBB: endpoint references, dataset loaders and parsers for M
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN site API (v2)](reference/site) | 25 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 87 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
