@@ -1756,3 +1756,43 @@
   test: tests/cfb/test_cfb_pbp_offline.py -k "root_logger_alone"
   expected: kill
   note: one root-module call runs logging.basicConfig() and installs a stderr handler on the host's root logger
+
+- id: cfb-ou-available-fox-neutral-odds
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: '    "overUnderAvailable": False,'
+  mutant: '    "overUnderAvailable": None,'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py -k "without_odds_has_no_market_total"
+  expected: kill
+  note: the neutral pick'em line's 55.5 is the default total; null would call it unknown
+
+- id: cfb-ou-available-idmap-override
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/football/sources/idmap.py
+  snippet: '"overUnderAvailable": True,  # None is returned above without a total_line'
+  mutant: '"overUnderAvailableX": True,'
+  test: tests/football/sources/test_idmap.py -k "market_total_through_the_processor"
+  expected: kill
+  note: a failover game's stored closing total would rebuild as unknown
+
+- id: cfb-ou-available-fox-common-override
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/football/fox_common.py
+  snippet: '"overUnderAvailable": True,  # None is returned above without a total'
+  mutant: '"overUnderAvailableX": True,'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k "odds_payload_yields_the_closing_line"
+  expected: kill
+  note: Fox's six-pack total would rebuild as unknown
+
+- id: cfb-ou-available-pandas-missing
+  group: cfb-total-provenance
+  finding: R895-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    if pd.api.types.is_scalar(value) and pd.isna(value):'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pandas_missing_override_flag"
+  expected: kill
+  note: an override from a pandas row of older data (NaN / pd.NA for the absent column) would raise

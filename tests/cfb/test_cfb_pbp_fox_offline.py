@@ -61,6 +61,17 @@ def _patch_fetch(monkeypatch, fox):
     monkeypatch.setattr("sportsdataverse.cfb.cfb_pbp_fox._fox_get", lambda *a, **k: fox)
 
 
+def test_fox_without_odds_has_no_market_total(monkeypatch):
+    """R895-6: with no odds the Fox path runs on the neutral pick'em line, whose 55.5 total is the
+    default: ``overUnderAvailable`` False in the payload and on every play, not null (unknown)."""
+    _patch_fetch(monkeypatch, _load_fox())
+    out = fox_cfb_play_process(41616)
+    assert out["gameSpreadAvailable"] is False
+    assert out["overUnderAvailable"] is False
+    flags = pl.DataFrame(out["plays"], infer_schema_length=None)["overUnderAvailable"]
+    assert flags.unique().to_list() == [False]
+
+
 def test_fox_cfb_pbp_full_pipeline(monkeypatch):
     _patch_fetch(monkeypatch, _load_fox())
     out = fox_cfb_play_process(41616)

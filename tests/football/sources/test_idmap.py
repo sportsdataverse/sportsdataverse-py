@@ -113,8 +113,21 @@ def test_odds_override_from_row():
         "overUnder": 40.5,
         "homeFavorite": True,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,
     }
     assert _odds_override_from_row({"spread_line": -3, "total_line": 47})["homeFavorite"] is False
+
+
+def test_a_stored_closing_line_is_a_market_total_through_the_processor():
+    """R895-6: the id-map override returns only with a stored total, so it says so; a four-key override
+    would rebuild the failover game with a null (unknown) ``overUnderAvailable``."""
+    from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
+
+    proc = CFBPlayProcess(
+        gameId=401856682, odds_override=_odds_override_from_row({"spread_line": -1.5, "total_line": 44.5})
+    )
+    init = proc._CFBPlayProcess__helper_cfb_pickcenter({"pickcenter": []})
+    assert init["overUnderAvailable"] is True
 
 
 def test_fetch_idmap_row_reads_the_data_api_route():

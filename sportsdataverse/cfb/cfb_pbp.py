@@ -468,10 +468,13 @@ _FLAG_TEXT = {"true": True, "1": True, "false": False, "0": False}
 def _optional_flag(value: object, key: str) -> bool | None:
     """A tri-state ``odds_override`` flag: a bool, ``"true"``/``"false"``/``"1"``/``"0"``, or None (unknown).
 
-    ``bool("False")`` is True, so a string flag is read by its text; anything else raises (R895-5).
+    ``bool("False")`` is True, so a string flag is read by its text; anything else raises (R895-5). A
+    missing value from a pandas row (NaN, ``pd.NA``, ``NaT``) is unknown, as a missing key is (R895-7).
     """
     if value is None or isinstance(value, bool):
         return value
+    if pd.api.types.is_scalar(value) and pd.isna(value):
+        return None
     flag = _FLAG_TEXT.get(str(value).strip().lower())
     if flag is None:
         raise ValueError(f"odds_override[{key!r}] must be True/False, 'true'/'false'/'1'/'0' or None; got {value!r}")

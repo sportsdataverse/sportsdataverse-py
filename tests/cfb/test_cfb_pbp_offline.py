@@ -8,6 +8,8 @@ import warnings
 from collections import Counter
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
@@ -282,7 +284,15 @@ def test_the_override_flag_is_read_strictly(value, expected):
     assert proc.odds_override["overUnderAvailable"] is expected
 
 
-@pytest.mark.parametrize("value", ["no", "", 2, 0.5])
+@pytest.mark.parametrize("value", [float("nan"), pd.NA, pd.NaT, np.nan])
+def test_a_pandas_missing_override_flag_is_unknown(value):
+    """R895-7: an override built from a pandas row of older data carries NaN / ``pd.NA`` for the absent
+    column; that is unknown, as a missing key is, not an error."""
+    proc = CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})
+    assert proc.odds_override["overUnderAvailable"] is None
+
+
+@pytest.mark.parametrize("value", ["no", "", 2, 0.5, [False]])
 def test_the_override_flag_rejects_anything_else(value):
     with pytest.raises(ValueError, match="overUnderAvailable"):
         CFBPlayProcess(gameId=401628455, odds_override={**_LEGACY, "overUnderAvailable": value})

@@ -235,6 +235,7 @@ def _fox_odds_override(odds: Any, home_full_name: Optional[str]) -> Optional[Dic
         "overUnder": total,
         "homeFavorite": home_favourite,
         "gameSpreadAvailable": True,
+        "overUnderAvailable": True,  # None is returned above without a total
     }
 
 
@@ -740,7 +741,7 @@ def _fox_to_espn_summary(
             it is absent (college football has no such table and falls back to Fox's colours).
         text_aliases: Extra ``play-text club code -> header club code`` fixes for codes Fox's
             text spells differently from its own header (NFL: ``JAC`` for ``JAX``).
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}``; becomes the
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}``; becomes the
             summary's one-provider ``pickcenter``.
 
     Returns:
