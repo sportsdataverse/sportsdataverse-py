@@ -7,6 +7,7 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 from __future__ import annotations
 
 import inspect
+import io
 import json
 import logging
 import numbers
@@ -476,8 +477,9 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     re-raised at once, without a second fetch. The classification is a one-byte ranged
     GET, so it never re-downloads the asset (A-N10).
 
-    polars' URL read sets no socket timeout, so a server that accepts the connection and
-    never answers still hangs the read; ``SDV_PY_HTTP_TIMEOUT`` bounds only the probe.
+    The read honours ``SDV_PY_HTTP_TIMEOUT`` (default 30 s per socket operation), like the
+    rest of the HTTP layer, so a server that accepts the connection and never answers is a
+    failed fetch, not a hang.
 
     R-producer assets can carry an ``arrow.r.vctrs`` field-extension whose metadata is
     raw RDS bytes (not UTF-8) -- e.g. a ``glue`` character column. polars' arrow-FFI
@@ -516,20 +518,24 @@ def _fetch_release_parquet(url: str) -> pl.DataFrame:
     return _parse_release(url, data)  # the asset, read after the probe
 
 
-def _release_bytes(url: str) -> bytes:
-    """The asset's whole body, read the way polars reads a URL (urllib, no gateway; #397)."""
+def _release_bytes(url: str) -> io.BytesIO:
+    """The asset's whole body as a buffer, read the way polars reads a URL (urllib, no gateway; #397).
+
+    Returned as ``io.BytesIO(f.read())`` and handed on as that one object (R898-14): the bytes
+    have no other reference, so polars' ``getbuffer()`` shares them instead of copying the asset.
+    """
     import urllib.request
 
-    with urllib.request.urlopen(url) as f:
-        return f.read()
+    from sportsdataverse.dl_utils import _DEFAULT_TIMEOUT, _ENV_TIMEOUT, _env_int
+
+    with urllib.request.urlopen(url, timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)) as f:
+        return io.BytesIO(f.read())
 
 
-def _parse_release(url: str, data: bytes) -> pl.DataFrame:
-    """Parse release bytes with pyarrow; on pyo3's metadata panic, re-read with the metadata stripped."""
-    import io
-
+def _parse_release(url: str, data: io.BytesIO) -> pl.DataFrame:
+    """Parse a release buffer with pyarrow; on pyo3's metadata panic, re-read with the metadata stripped."""
     try:
-        return pl.read_parquet(io.BytesIO(data), use_pyarrow=True)
+        return pl.read_parquet(data, use_pyarrow=True)
     except BaseException as e:  # pyo3's PanicException does not subclass Exception
         if type(e).__name__ != "PanicException":
             raise  # a parse error is the asset's own; never turn Ctrl-C / SystemExit into an HTTP call
@@ -618,8 +624,6 @@ def _fetch_csv(url: str, **read_csv_kwargs: Any) -> pl.DataFrame:
         AssetFetchError: any other non-2xx after retries, a connection failure after
             retries, or a 2xx whose body is empty or a page rather than CSV.
     """
-    import io
-
     with _transport_errors(url):
         resp = download(url)
     _text_body(resp, url, html=False)

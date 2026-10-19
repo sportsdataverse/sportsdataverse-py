@@ -41,7 +41,7 @@ def _parquet_bytes(df: pl.DataFrame) -> bytes:
 def _offline_bytes():
     """These tests drive the parse step through a ``pl.read_parquet`` mock; the fetch answers
     bytes without a network call (a test that fails the fetch patches ``_release_bytes`` itself)."""
-    with patch.object(rt, "_release_bytes", return_value=b"PAR1"):
+    with patch.object(rt, "_release_bytes", side_effect=lambda url: io.BytesIO(b"PAR1")):
         yield
 
 

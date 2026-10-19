@@ -13,14 +13,12 @@ under ``tests/codegen/``, so the coverage jobs (which skip that directory) count
   season, ``[]`` = an empty frame and no request.
 """
 
-import gc
 import http.server
 import io
 import socket
 import struct
 import threading
 import urllib.error
-import warnings
 from datetime import date
 from pathlib import Path
 from unittest.mock import patch
@@ -153,7 +151,7 @@ def test_connection_error_in_the_panic_refetch_is_asset_fetch_error(dead_url):
 
     _Panic.__name__ = "PanicException"
     # The first fetch delivered the bytes (the panic is in the parse); only the refetch meets the dead port.
-    with patch.object(rt, "_release_bytes", return_value=_PARQUET):
+    with patch.object(rt, "_release_bytes", return_value=io.BytesIO(_PARQUET)):
         with patch.object(rt.pl, "read_parquet", side_effect=_Panic("arrow-ffi metadata panic")):
             with pytest.raises(AssetFetchError, match="ConnectionError"):
                 rt._fetch_release_parquet(dead_url + ".parquet")
@@ -270,7 +268,7 @@ def test_second_read_goes_through_pyarrow():
     class _Resp:
         status_code = 206
 
-    with patch.object(rt, "_release_bytes", side_effect=[urllib.error.URLError("reset"), _PARQUET]):
+    with patch.object(rt, "_release_bytes", side_effect=[urllib.error.URLError("reset"), io.BytesIO(_PARQUET)]):
         with patch.object(rt.pl, "read_parquet", side_effect=lambda *a, **k: real(*a, **k)) as rp:
             with patch.object(rt, "download", return_value=_Resp()):
                 assert rt._fetch_release_parquet("https://x/flaky.parquet").height == 6
@@ -287,16 +285,58 @@ def test_corrupt_footer_is_a_parse_error_with_one_request(server):
     assert _Handler.hits["/corrupt-footer.parquet"] == 1 and _Handler.ranges == []
 
 
-# R898-13: the first read's HTTP error response is closed before the probe (no leaked socket).
-def test_first_read_http_error_is_closed(server):
-    with warnings.catch_warnings(record=True) as caught:
-        warnings.simplefilter("always", ResourceWarning)
-        try:
-            rt._fetch_release_parquet(server + "/missing.parquet")
-        except NoDataError:
-            pass
-        gc.collect()
-    assert not [w for w in caught if issubclass(w.category, ResourceWarning)]
+# R898-13 / R898-17: the first read's HTTP error response is closed before the probe, checked on
+# the error object itself (a GC-timed ResourceWarning only fired on Windows).
+def test_first_read_http_error_is_closed():
+    err = urllib.error.HTTPError("https://x/gone.parquet", 404, "nf", {}, io.BytesIO(b"x"))
+    with patch.object(rt, "_release_bytes", side_effect=err):
+        with patch.object(rt, "download", side_effect=NoDataError("404")):
+            with pytest.raises(NoDataError):
+                rt._fetch_release_parquet("https://x/gone.parquet")
+    assert err.fp.closed
+
+
+# R898-14: the buffer _release_bytes returns is the very object polars reads, so the asset is
+# never held twice (a second reference to the bytes made polars' getbuffer() copy them).
+def test_parse_reads_the_buffer_the_fetch_returned(server):
+    real_fetch, real_read = rt._release_bytes, pl.read_parquet
+    fetched, read = [], []
+
+    def fetch(url):
+        fetched.append(real_fetch(url))
+        return fetched[-1]
+
+    def reader(source, **kw):
+        read.append(source)
+        return real_read(source, **kw)
+
+    with patch.object(rt, "_release_bytes", side_effect=fetch):
+        with patch.object(rt.pl, "read_parquet", side_effect=reader):
+            assert rt._fetch_release_parquet(server + "/asset.parquet").height == 6
+    assert len(fetched) == 1 and len(read) == 1 and read[0] is fetched[0]
+
+
+# R898-15: the release read honours SDV_PY_HTTP_TIMEOUT like the rest of the HTTP layer.
+def test_release_read_passes_the_http_timeout(monkeypatch):
+    import urllib.request
+
+    seen = {}
+
+    class _Body(io.BytesIO):
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+    def fake_urlopen(url, *a, **k):
+        seen.update(k)
+        return _Body(_PARQUET)
+
+    monkeypatch.setenv("SDV_PY_HTTP_TIMEOUT", "7")
+    monkeypatch.setattr(urllib.request, "urlopen", fake_urlopen)
+    assert rt._release_bytes("https://x/a.parquet").getvalue() == _PARQUET
+    assert seen == {"timeout": 7}
 
 
 # A-L29: no_espn_data decoded every 2xx body as JSON, charset-scanning a binary asset first.

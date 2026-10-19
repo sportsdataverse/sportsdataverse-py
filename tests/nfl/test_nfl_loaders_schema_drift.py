@@ -18,6 +18,7 @@ quietly pass against a same-schema pair.
 
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import polars as pl
@@ -85,7 +86,7 @@ def offline_participation(monkeypatch):
     def fake_release_bytes(url):
         for season in (2016, 2023):
             if str(season) in url:
-                return (FIXTURES / f"pbp_participation_{season}_head3.parquet").read_bytes()
+                return io.BytesIO((FIXTURES / f"pbp_participation_{season}_head3.parquet").read_bytes())
         raise AssertionError(f"unexpected release url: {url!r}")
 
     monkeypatch.setattr(_codegen_runtime, "_release_bytes", fake_release_bytes)
@@ -319,7 +320,15 @@ def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, tmp_path, 
     """Early in a season the first 100+ ``rank_delta`` cells are empty. With polars'
     default 100-row inference the column read as String; the whole file is scanned."""
     rows = ["player,rank_delta"] + [f"p{i}," for i in range(120)] + [f"q{i},{i - 5}" for i in range(30)]
-    path = tmp_path / "ff.csv"
-    path.write_text("\n".join(rows) + "\n")
-    monkeypatch.setattr(_loaders.pl, "read_csv", lambda source, **kw: _read_csv(path, **kw))
+    import requests
+
+    from sportsdataverse import _codegen_runtime
+
+    def fake_download(url, **kwargs):  # the CSV is fetched through the gateway (A-M11): stub it there
+        resp = requests.Response()
+        resp.status_code, resp.url, resp.encoding = 200, url, "utf-8"
+        resp._content = ("\n".join(rows) + "\n").encode()
+        return resp
+
+    monkeypatch.setattr(_codegen_runtime, "download", fake_download)
     assert load_nfl_ff_rankings(kind=kind).schema["rank_delta"] == pl.Int64
