@@ -493,7 +493,7 @@ def _remove(path: Path) -> bool:
         warnings.warn(
             f"clear_cache: {path} is in use by another process and was not deleted; it stays cached",
             RuntimeWarning,
-            stacklevel=3,
+            stacklevel=4,  # _remove <- _drop_one/_drop_matching <- clear_cache <- the caller
         )
         return False
     return True
