@@ -275,6 +275,20 @@ def test_the_espn_reference_pages_document_only_the_wrappers_their_names_run():
     assert "## espn_cfb_calendar" not in generate.render_reference_page("cfb", "espn_site_v2").splitlines()
 
 
+def test_a_shadowed_espn_view_is_kept_off_the_reference_page(monkeypatch):
+    """R903-1: after the 3.9 PR4 rename nothing is shadowed, so ``_documented_espn_views``' filter is a
+    backstop. Undo the calendar rename and the shadowed generated ``espn_cfb_calendar`` must still stay
+    off the site page, which documents only what the package name runs."""
+    monkeypatch.delitem(generate._ESPN_COLLISION_VERSIONED, "calendar")
+    cfg = generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
+    params = generate.spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    apis = [generate.spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    cfb = next(lg for lg in cfg.leagues if lg.prefix == "cfb")
+    assert "espn_cfb_calendar" in {v.fn_name for v in generate._espn_league_views(cfb, apis, cfg.hosts)}
+    lines = generate.render_reference_page("cfb", "espn_site_v2").splitlines()
+    assert "## espn_cfb_calendar" not in lines and "## espn_cfb_scoreboard" in lines
+
+
 def test_atrium_end_year_is_documented_not_allowlisted():
     """R901-2: ``atrium_end_year`` is user-facing (every atrium wrapper tells callers to use it), so its
     parser module is exempt from the ``_parsers`` leak rule and it gets an autodoc reference block."""

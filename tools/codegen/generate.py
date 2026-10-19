@@ -1533,10 +1533,16 @@ def _handwritten_espn_names(prefix: str) -> set[str]:
     per-module ``vars()`` scan misses (e.g. cached ``espn_cfb_teams``)."""
     import importlib
 
+    target = f"sportsdataverse.{_league_module(prefix)}"
     try:
-        pkg = importlib.import_module(f"sportsdataverse.{_league_module(prefix)}")
-    except Exception:
-        return set()
+        pkg = importlib.import_module(target)
+    except ModuleNotFoundError as e:
+        # Only a league package that does not exist yet (bootstrapping a new league) has no
+        # hand-written names. Any other failure re-raises: returning an empty set would quietly
+        # undo the B-M31 renames on a local regen (R903-3).
+        if e.name and (target == e.name or target.startswith(f"{e.name}.")):
+            return set()
+        raise
     out: set[str] = set()
     for n in dir(pkg):
         if not n.startswith(f"espn_{prefix}_"):
@@ -1610,7 +1616,16 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         if ep.short in overrides:
             ep = dataclasses.replace(ep, parser=overrides[ep.short])
             schema_league = league.sport
-        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring, schema_league=schema_league)
+        doc_extras = ep.docstring
+        if renamed_from:  # say why two functions exist (R903-5)
+            doc_extras = dict(ep.docstring or {})
+            doc_extras["notes"] = [
+                *(doc_extras.get("notes") or []),
+                f"``sportsdataverse.{_league_module(league.prefix)}.{renamed_from}`` is a different, hand-written "
+                f"function. This generated ESPN wrapper used that name inside ``{league.prefix}_espn_ext``; "
+                "importing it from there under the old name is deprecated.",
+            ]
+        view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=doc_extras, schema_league=schema_league)
         view.api_name = api_name
         view.renamed_from = renamed_from
         views.append(view)

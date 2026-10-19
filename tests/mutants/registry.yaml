@@ -1966,9 +1966,9 @@
   file: tools/codegen/generate.py
   snippet: '    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]'
   mutant: '    return _espn_league_views(league, apis, hosts)'
-  test: tests/codegen/test_docs.py::test_the_espn_reference_pages_document_only_the_wrappers_their_names_run
+  test: tests/codegen/test_docs.py::test_a_shadowed_espn_view_is_kept_off_the_reference_page
   expected: kill
-  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function
+  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function; after 3.9 PR4 nothing is shadowed, so the test undoes the calendar rename (R903-1)
 
 - id: codegen-autodoc-dict-of-frames-tables
   group: codegen-runtime
@@ -2130,3 +2130,23 @@
   test: tests/codegen/test_source_gate.py::test_no_public_function_is_unmapped_or_ambiguous
   expected: kill
   note: hand-written espn_wnba_standings resolved through the generated name; after the rename it needs its own rule
+
+- id: codegen-espn-shadowed-view-keeps-bare-name
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '                renamed_from, fn_name = fn_name, versioned'
+  mutant: '                renamed_from = fn_name'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_no_generated_view_is_shadowed_by_a_hand_written_function_in_any_league
+  expected: kill
+  note: R903-2, no generated view may keep a name a hand-written function holds at package level
+
+- id: codegen-handwritten-names-import-failure-raises
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        if e.name and (target == e.name or target.startswith(f"{e.name}.")):'
+  mutant: '        if True:'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_league_package_that_fails_to_import_is_an_error_not_an_empty_set
+  expected: kill
+  note: R903-3, a failed league import returned an empty set and quietly undid the renames on a local regen

@@ -79,6 +79,8 @@ def test_the_generated_wrapper_is_public_under_its_new_name_and_requests_the_sam
     kwargs = {"team_id": 1} if "team_id" in inspect.signature(fn).parameters else {}
     fn(return_parsed=False, **kwargs)
     assert seen == [url]
+    # R903-5: the docstring says a different, hand-written function holds the bare name
+    assert f"``sportsdataverse.{prefix}.{old}`` is a different, hand-written function" in fn.__doc__
 
 
 @pytest.mark.parametrize(("prefix", "old", "new", "url"), RENAMED, ids=_IDS)
@@ -97,9 +99,9 @@ def test_an_unknown_ext_attribute_still_raises_attribute_error():
 
 
 def test_the_generator_renames_exactly_the_twelve_shadowed_views():
-    """Only views whose package name a hand-written function holds are renamed; the 32 leagues
-    whose generated calendar is the only ``espn_<lg>_calendar`` keep the bare name (33: every league
-    but the seven)."""
+    """Only views whose package name a hand-written function holds are renamed; the 33 leagues
+    whose generated calendar is the only ``espn_<lg>_calendar`` (every league but the seven) keep the
+    bare name."""
     cfg, apis = _espn_inputs()
     renamed = {}
     kept_calendar = []
@@ -140,3 +142,37 @@ def test_no_ext_module_outside_the_seven_leagues_has_a_shim():
         if "_RENAMED" in vars(mod):
             with_shim.add(lg.prefix)
     assert with_shim == {p for p, _, _, _ in RENAMED}
+
+
+def test_no_generated_view_is_shadowed_by_a_hand_written_function_in_any_league():
+    """R903-2: a future hand-written ``espn_<lg>_<short>`` that takes a generated wrapper's name, for a
+    short with no ``_ESPN_COLLISION_VERSIONED`` entry, would make the wrapper unreachable again."""
+    cfg, apis = _espn_inputs()
+    shadowed = {
+        lg.prefix: sorted(
+            {v.fn_name for v in generate._espn_league_views(lg, apis, cfg.hosts)}
+            & generate._handwritten_espn_names(lg.prefix)
+        )
+        for lg in cfg.leagues
+    }
+    assert {k: v for k, v in shadowed.items() if v} == {}
+
+
+def test_a_league_package_that_fails_to_import_is_an_error_not_an_empty_set(monkeypatch):
+    """R903-3: an empty set would quietly undo the renames on a local regen."""
+    real = importlib.import_module
+
+    def boom(name, *a, **k):
+        if name == "sportsdataverse.cfb":
+            raise ImportError("broken cfb")
+        if name == "sportsdataverse.nfl":  # a dependency the league needs is missing
+            raise ModuleNotFoundError("No module named 'some_dep'", name="some_dep")
+        return real(name, *a, **k)
+
+    monkeypatch.setattr(importlib, "import_module", boom)
+    with pytest.raises(ImportError, match="broken cfb"):
+        generate._handwritten_espn_names("cfb")
+    with pytest.raises(ModuleNotFoundError, match="some_dep"):
+        generate._handwritten_espn_names("nfl")
+    # only a league package that does not exist yet (bootstrapping) has no hand-written names
+    assert generate._handwritten_espn_names("zzz_not_a_league") == set()

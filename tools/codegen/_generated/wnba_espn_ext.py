@@ -289,6 +289,7 @@ def espn_wnba_calendar_site(
     Args:
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -303,6 +304,9 @@ def espn_wnba_calendar_site(
         Quick start::
 
             espn_wnba_calendar_site()
+
+    Notes:
+        * ``sportsdataverse.wnba.espn_wnba_calendar`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``wnba_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_wnba_calendar_site", kwargs)
@@ -567,6 +571,7 @@ def espn_wnba_draft_site(
     Args:
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -581,6 +586,9 @@ def espn_wnba_draft_site(
         Quick start::
 
             espn_wnba_draft_site()
+
+    Notes:
+        * ``sportsdataverse.wnba.espn_wnba_draft`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``wnba_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_wnba_draft_site", kwargs)
@@ -712,6 +720,7 @@ def espn_wnba_team_roster_site(
         limit: Maximum number of items to return.
         return_parsed: parse the payload through parse_team_roster -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -726,6 +735,9 @@ def espn_wnba_team_roster_site(
         Quick start::
 
             espn_wnba_team_roster_site(team_id='4')
+
+    Notes:
+        * ``sportsdataverse.wnba.espn_wnba_team_roster`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``wnba_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_wnba_team_roster_site", kwargs)
@@ -1290,6 +1302,7 @@ def espn_wnba_standings_site(
         standings_type: Standings variant (e.g. 'by-division' or 'by-conference').
         return_parsed: parse the payload through parse_standings -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -1304,6 +1317,9 @@ def espn_wnba_standings_site(
         Quick start::
 
             espn_wnba_standings_site()
+
+    Notes:
+        * ``sportsdataverse.wnba.espn_wnba_standings`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``wnba_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_wnba_standings_site", kwargs)

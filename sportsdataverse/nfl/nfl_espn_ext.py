@@ -292,6 +292,7 @@ def espn_nfl_calendar_site(
     Args:
         return_parsed: parse the payload through parse_items -> polars DataFrame (default True). Pass return_parsed=False for the raw JSON Dict.
         return_as_pandas: with return_parsed, return a pandas DataFrame instead of polars.
+        **kwargs: Forwarded to the underlying HTTP getter.
 
     Returns:
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
@@ -306,6 +307,9 @@ def espn_nfl_calendar_site(
         Quick start::
 
             espn_nfl_calendar_site()
+
+    Notes:
+        * ``sportsdataverse.nfl.espn_nfl_calendar`` is a different, hand-written function. This generated ESPN wrapper used that name inside ``nfl_espn_ext``; importing it from there under the old name is deprecated.
     """
     _caller_params = kwargs.pop("params", None) or {}
     _check_kwargs("espn_nfl_calendar_site", kwargs)
