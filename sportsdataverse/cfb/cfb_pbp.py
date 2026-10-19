@@ -2225,7 +2225,7 @@ from sportsdataverse.football.attribution import (  # noqa: E402
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box  # noqa: E402
-from sportsdataverse.football.box import _ordered_rows  # noqa: E402
+from sportsdataverse.football.box import _home_first, _ordered_rows  # noqa: E402
 from sportsdataverse.football.box import _avg_start_ep  # noqa: E402
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box  # noqa: E402
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box  # noqa: E402
@@ -10092,7 +10092,7 @@ class CFBPlayProcess(object):
             lambda left, right: left.join(right, on=["def_pos_team"], how="full", coalesce=True),
             def_data_frames,
         )
-        def_box_json = json.loads(def_box.write_json())
+        def_box_json = json.loads(_home_first(def_box, "def_pos_team", int(self.homeTeamId)).write_json())
 
         # Per-side turnover events. `is_pos_team_turnover` / `is_def_pos_team_turnover` are
         # set PER PLAY and a single play can set BOTH -- e.g. an interception returned and
@@ -10248,13 +10248,13 @@ class CFBPlayProcess(object):
             "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
             "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
             "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
-            "team": json.loads(team_box.write_json()),
-            "situational": json.loads(situation_box.write_json()),
+            "team": json.loads(_home_first(team_box, "pos_team", team_ids[0]).write_json()),
+            "situational": json.loads(_home_first(situation_box, "pos_team", team_ids[0]).write_json()),
             "defensive": def_box_json,
             "defensive_players": defensive_players_json,
             "specialists": specialists_json,
             "turnover": turnover_box_json,
-            "drives": json.loads(drives_data.write_json()),
+            "drives": json.loads(_home_first(drives_data, "pos_team", team_ids[0]).write_json()),
             "espn_team": list(espn_team_box.values()),
             "espn_players": espn_players,
         }
