@@ -1385,8 +1385,11 @@ def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         return_as_pandas: Return ``pandas.DataFrame`` instead of polars.
 
     Returns:
-        ``pl.DataFrame`` (or pandas) with one row per item. Zero rows
-        when no list key resolves.
+        ``pl.DataFrame`` (or pandas) with one row per item, plus two Int64
+        constant columns from the page envelope: ``count`` (items across every
+        page) and ``page_count`` (pages at the requested ``limit``), null when
+        the payload is not paginated. Zero rows (and no columns) when no list
+        key resolves.
 
     Warns:
         UserWarning: the payload is one page of several (``pageCount > 1``), so
@@ -1417,6 +1420,10 @@ def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     except Exception:
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
+    # ponytail: a polars frame has no metadata slot (R-028), so the page envelope rides as two constant columns.
+    for col, key in (("count", "count"), ("page_count", "pageCount")):
+        value = payload.get(key)
+        df[col] = pd.array([value if type(value) is int else None] * len(df), dtype="Int64")
     return _to_output(df, return_as_pandas)
 
 

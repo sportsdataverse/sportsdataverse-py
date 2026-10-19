@@ -148,6 +148,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -270,6 +272,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -303,6 +307,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -336,6 +342,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -402,6 +410,8 @@ ESPN endpoint.
 | `split_stats_id` | character |  |
 | `split_stats_name` | character |  |
 | `team_$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -433,6 +443,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -572,6 +584,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -604,6 +618,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -706,6 +722,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -841,6 +859,8 @@ ESPN endpoint.
 | `id` | integer | Unique play identification number |
 | `name` | character | Display name. |
 | `type` | character | Record type / category. |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -908,6 +928,8 @@ ESPN endpoint.
 | `stats` | character | Stats. |
 | `league_$ref` | character |  |
 | `team_$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -940,6 +962,8 @@ ESPN endpoint.
 | `display_name` | character | Display name. |
 | `leaders` | character |  |
 | `name` | character | Display name. |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -971,6 +995,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1003,6 +1029,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
@@ -1035,6 +1063,8 @@ ESPN endpoint.
 | col_name | type | description |
 |---|---|---|
 | `$ref` | character |  |
+| `count` | integer | Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=). |
+| `page_count` | integer | Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 

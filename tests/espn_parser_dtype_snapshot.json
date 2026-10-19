@@ -1,7 +1,9 @@
 {
  "athlete_contracts_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "athlete_core_nba": {
@@ -128,7 +130,9 @@
  },
  "athlete_seasons_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "athlete_splits_nba": {
@@ -145,7 +149,9 @@
  "athlete_statisticslog_nba": {
   "": {
    "statistics": "String",
-   "season_$ref": "String"
+   "season_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "athlete_stats_mbb": {
@@ -464,7 +470,9 @@
  },
  "athletes_index_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "award_nba": {
@@ -478,7 +486,9 @@
  },
  "awards_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "coach_mlb": {
@@ -541,7 +551,9 @@
    "type_id": "String",
    "type_long_name": "String",
    "type_short_name": "String",
-   "type_slug": "String"
+   "type_slug": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_competition_nba": {
@@ -682,7 +694,9 @@
    "roster_$ref": "String",
    "score_$ref": "String",
    "statistics_$ref": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_nba": {
@@ -878,7 +892,9 @@
    "provider_id": "String",
    "provider_name": "String",
    "provider_priority": "Int64",
-   "prop_bets_$ref": "String"
+   "prop_bets_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_official_detail_nba": {
@@ -906,7 +922,9 @@
    "order": "Int64",
    "position_display_name": "String",
    "position_id": "String",
-   "position_name": "String"
+   "position_name": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_play_nba": {
@@ -1007,7 +1025,9 @@
    "play_$ref": "String",
    "source_description": "String",
    "source_id": "String",
-   "source_state": "String"
+   "source_state": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "event_situation_nba": {
@@ -1045,12 +1065,16 @@
  },
  "events_core_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "events_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "fpi_nba": {
@@ -1126,7 +1150,9 @@
  },
  "franchises_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "injuries_cfb": {
@@ -1760,7 +1786,9 @@
  },
  "positions_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "rankings_cfb": {
@@ -1943,7 +1971,9 @@
    "athlete_weight": "Float64",
    "status_description": "String",
    "status_id": "Int64",
-   "athlete_hometown_zip_code": "String"
+   "athlete_hometown_zip_code": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_athletes_mbb_2026": {
@@ -1980,27 +2010,37 @@
    "athlete_position_id": "String",
    "athlete_position_abbreviation": "String",
    "status_id": "Int64",
-   "status_description": "String"
+   "status_description": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_rankings_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_rankings_mbb_2026": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_years_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "recruiting_years_mbb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "scoreboard_cfb": {
@@ -2545,12 +2585,16 @@
  },
  "season_athletes_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_awards_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_coaches_nba": {
@@ -2596,7 +2640,9 @@
    "futures": "String",
    "id": "Int64",
    "name": "String",
-   "type": "String"
+   "type": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_group_cfb": {
@@ -2619,17 +2665,23 @@
  },
  "season_group_children_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_group_teams_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_groups_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_info_nba": {
@@ -2709,7 +2761,9 @@
   "": {
    "display_name": "String",
    "leaders": "String",
-   "name": "String"
+   "name": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_powerindex_nba": {
@@ -2722,7 +2776,9 @@
    "season_type": "Int64",
    "stats": "String",
    "league_$ref": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_qbr_week_nfl": {
@@ -2733,12 +2789,16 @@
    "splits_categories": "String",
    "splits_id": "String",
    "splits_name": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_recruits_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_team_nba": {
@@ -2787,7 +2847,9 @@
  },
  "season_teams_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_type_corrections_nfl": {
@@ -2798,7 +2860,9 @@
    "split_stats_categories": "String",
    "split_stats_id": "String",
    "split_stats_name": "String",
-   "team_$ref": "String"
+   "team_$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_type_nba": {
@@ -2823,12 +2887,16 @@
  },
  "season_types_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_week_events_nfl": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_week_nba": {
@@ -2884,17 +2952,23 @@
  },
  "season_week_rankings_cfb": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "season_weeks_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "seasons_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "standings_cfb": {
@@ -5297,7 +5371,9 @@
    "pick_person_last_name": "String",
    "week_record_display_value": "String",
    "week_record_season_$ref": "String",
-   "week_record_stats": "String"
+   "week_record_stats": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "team_core_nba": {
@@ -6125,7 +6201,9 @@
  },
  "tournaments_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "transactions_nba": {
@@ -6156,12 +6234,16 @@
  },
  "venues_core_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  },
  "venues_nba": {
   "": {
-   "$ref": "String"
+   "$ref": "String",
+   "count": "Int64",
+   "page_count": "Int64"
   }
  }
 }

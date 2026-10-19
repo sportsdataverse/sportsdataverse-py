@@ -134,6 +134,30 @@ def test_parse_items_short_page_warning_spares_a_one_page_answer():
         assert parse_items(_load("franchises_nba")).height > 0  # pageCount 1
 
 
+@pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
+@pytest.mark.parametrize("as_pandas", [False, True])
+def test_parse_items_page_envelope_rides_as_int64_columns(as_pandas):
+    """A-H1 / R-028: the frame carries ``count`` / ``page_count`` so a short page is visible without the warning."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("athletes_index_nba"), return_as_pandas=as_pandas)  # page 1 of 7, 25 of 610
+    if as_pandas:
+        assert str(df["count"].dtype) == "Int64" and str(df["page_count"].dtype) == "Int64"
+        df = pl.from_pandas(df)
+    assert df.schema["count"] == pl.Int64 and df.schema["page_count"] == pl.Int64
+    assert df["count"].unique().to_list() == [610] and df["page_count"].unique().to_list() == [7]
+    assert df.columns[-2:] == ["count", "page_count"] and df.height == 25
+
+
+def test_parse_items_page_envelope_is_null_on_an_unpaginated_payload():
+    """athlete_statisticslog ships ``entries`` and no count/pageCount: the columns stay, typed, all null."""
+    from sportsdataverse._common_espn_parsers import parse_items
+
+    df = parse_items(_load("athlete_statisticslog_nba"))
+    assert df.height > 0 and df.schema["count"] == pl.Int64 and df.schema["page_count"] == pl.Int64
+    assert df["count"].null_count() == df.height and df["page_count"].null_count() == df.height
+
+
 # The three parsers below had never seen a real payload (their schemas said ``unverified``); each test
 # reads the 2026-10-18 capture its fix was made against.
 
