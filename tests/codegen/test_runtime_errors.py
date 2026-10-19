@@ -767,3 +767,19 @@ def test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises():
     known = {stem for stem, _case in (*_KNOWN, *_SYNC_1018)}
     green = {mod for mod in _RUNTIMES if mod.rsplit(".", 1)[1] not in known}
     assert sorted(green - generate._VOCAB_GETTERS) == []
+
+
+def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
+    """R901-7: the stats.nba.com / stats.wnba.com runtime raises ImportError without curl_cffi; every
+    generated wrapper on it says so, once (drafthistory's YAML ``raises:`` already names it)."""
+    import inspect
+
+    from sportsdataverse.nba import nba_stats
+    from sportsdataverse.wnba import wnba_stats
+
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+        fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
+        assert fns
+        for fn in fns:
+            raises = (fn.__doc__ or "").split("Raises:")[1].split("Example:")[0]
+            assert raises.count("ImportError:") == 1, fn.__name__

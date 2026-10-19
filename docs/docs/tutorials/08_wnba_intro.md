@@ -22,13 +22,13 @@ Every accessor returns a tidy **polars** `DataFrame` by default — pass `return
 | Function | What it gives you | Source |
 |---|---|---|
 | [`espn_wnba_teams`](../wnba/reference/additional/espn.md#espn_wnba_teams) | One row per franchise (grab `team_id`s) | ⭐ ESPN |
-| [`espn_wnba_team_roster`](../wnba/reference/site.md#espn_wnba_team_roster) | A team's active roster for a season | ⭐ ESPN |
+| [`espn_wnba_team_roster`](../wnba/reference/additional/espn.md#espn_wnba_team_roster) | A team's active roster for a season | ⭐ ESPN |
 | [`espn_wnba_schedule`](../wnba/reference/additional/espn.md#espn_wnba_schedule) | Games + results for a date or date range | ⭐ ESPN |
 | [`espn_wnba_pbp`](../wnba/reference/additional.md#play-by-play-schedule--rosters) | Event-level play-by-play for one game | ⭐ ESPN |
 | [`espn_wnba_player_stats`](../wnba/reference/additional/espn.md#espn_wnba_player_stats) | A player's season stat line (wide) | ⭐ ESPN |
 | [`espn_wnba_team_stats`](../wnba/reference/additional/espn.md#espn_wnba_team_stats) | A team's season stats (Averages/Totals/Misc) | ⭐ ESPN |
-| [`espn_wnba_standings`](../wnba/reference/site.md#espn_wnba_standings) | League standings, one row per team | ⭐ ESPN |
-| [`espn_wnba_draft`](../wnba/reference/site.md#espn_wnba_draft) | Every draft pick for a season | ⭐ ESPN |
+| [`espn_wnba_standings`](../wnba/reference/additional/espn.md#espn_wnba_standings) | League standings, one row per team | ⭐ ESPN |
+| [`espn_wnba_draft`](../wnba/reference/additional/espn.md#espn_wnba_draft) | Every draft pick for a season | ⭐ ESPN |
 | [`espn_wnba_game_officials`](../wnba/reference/additional/espn.md#espn_wnba_game_officials) | The refs who worked a game | ⭐ ESPN |
 | [`load_wnba_schedule`](../wnba/reference/loaders/other.md#load_wnba_schedule) | Whole-season schedule (parquet release) | 📦 loader |
 | [`load_wnba_player_boxscore`](../wnba/reference/loaders/player.md#load_wnba_player_boxscore) | Whole-season player box scores | 📦 loader |
@@ -93,7 +93,7 @@ print('shape:', None if teams is None else teams.shape)
 
 ## 👥 Team roster — Las Vegas Aces
 
-[`espn_wnba_team_roster`](../wnba/reference/site.md#espn_wnba_team_roster) lists active players for one team in a season. The back-to-back champion Aces are `team_id=17`. Player columns are unprefixed (`athlete_id`, `full_name`, `jersey`, `position_abbreviation`).
+[`espn_wnba_team_roster`](../wnba/reference/additional/espn.md#espn_wnba_team_roster) lists active players for one team in a season. The back-to-back champion Aces are `team_id=17`. Player columns are unprefixed (`athlete_id`, `full_name`, `jersey`, `position_abbreviation`).
 
 
 ```python
@@ -189,7 +189,7 @@ Now for the fun part. These twelve recipes are the everyday tasks you'll reach f
 
 ### Recipe 1 — Standings table 🏆
 
-[`espn_wnba_standings`](../wnba/reference/site.md#espn_wnba_standings) gives one row per team with wins, losses, win percentage and point differential. Sort by win percentage to get the playoff picture.
+[`espn_wnba_standings`](../wnba/reference/additional/espn.md#espn_wnba_standings) gives one row per team with wins, losses, win percentage and point differential. Sort by win percentage to get the playoff picture.
 
 
 ```python
@@ -203,7 +203,7 @@ standings = safe('2024 standings', lambda: wnba.espn_wnba_standings(season=SEASO
 
 ### Recipe 2 — Draft board 🎓
 
-[`espn_wnba_draft`](../wnba/reference/site.md#espn_wnba_draft) lists every pick for a season. The 2024 draft headlined with Caitlin Clark going first overall to the Indiana Fever.
+[`espn_wnba_draft`](../wnba/reference/additional/espn.md#espn_wnba_draft) lists every pick for a season. The 2024 draft headlined with Caitlin Clark going first overall to the Indiana Fever.
 
 
 ```python

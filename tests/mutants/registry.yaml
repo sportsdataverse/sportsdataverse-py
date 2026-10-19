@@ -1542,11 +1542,11 @@
   group: codegen-runtime
   finding: A-L40
   file: tools/codegen/generate.py
-  snippet: '    return text.replace("\\", "\\\\").replace(''"""'', ''\\"""'')'
-  mutant: '    return text'
+  snippet: '    return re.sub(r''"{3,}'', lambda m: ''\\"'' * len(m.group()), text.replace("\\", "\\\\"))'
+  mutant: '    return text.replace("\\", "\\\\").replace(''"""'', ''\\"""'')'
   test: tests/codegen/test_check.py::test_build_docstring_yaml_text_with_a_backslash_or_triple_quote_compiles_verbatim
   expected: kill
-  note: a backslash in YAML text warned, and a triple quote closed the docstring early
+  note: a backslash in YAML text warned, and a triple quote closed the docstring early; the mutant is the first fix, which a run of four quotes still broke (R901-3)
 
 - id: summary-docstring-section-count
   group: codegen-runtime
@@ -1597,3 +1597,23 @@
   test: tests/fox/test_fox_api.py::test_an_empty_standings_table_is_a_zero_row_frame_not_the_page_nav
   expected: kill
   note: an emptied real standings table returned the page's nav/section lists (11 x 7) through the flattener
+
+- id: fox-dedicated-any-layout-key
+  group: codegen-runtime
+  finding: B-GB-02
+  file: sportsdataverse/fox/fox_api_parsers.py
+  snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
+  mutant: '        if rows or (rows is not None and isinstance(raw, dict) and all(k in raw for k in keys)):'
+  test: tests/fox/test_fox_api.py::test_an_empty_nav_layout_is_a_zero_row_frame
+  expected: kill
+  note: R901-4, the nav parser reads navItems OR groups; conferences carries only groups
+
+- id: codegen-atrium-parsers-autodoc-exception
+  group: codegen-runtime
+  finding: A-M3
+  file: tools/codegen/generate.py
+  snippet: '        "sportsdataverse.basketball.atrium.atrium_parsers",'
+  mutant: '        "sportsdataverse.basketball.atrium.atrium_parsers_",'
+  test: tests/codegen/test_docs.py::test_atrium_end_year_is_documented_not_allowlisted
+  expected: kill
+  note: R901-2, atrium_end_year is user-facing and must get a reference block, not an allowlist entry

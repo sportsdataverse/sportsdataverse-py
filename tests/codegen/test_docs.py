@@ -272,3 +272,11 @@ def test_the_espn_reference_pages_document_only_the_wrappers_their_names_run():
     cfb = next(lg for lg in cfg.leagues if lg.prefix == "cfb")
     assert "espn_cfb_calendar" in {v.fn_name for v in generate._espn_league_views(cfb, apis, cfg.hosts)}
     assert "## espn_cfb_calendar" not in generate.render_reference_page("cfb", "espn_site_v2").splitlines()
+
+
+def test_atrium_end_year_is_documented_not_allowlisted():
+    """R901-2: ``atrium_end_year`` is user-facing (every atrium wrapper tells callers to use it), so its
+    parser module is exempt from the ``_parsers`` leak rule and it gets an autodoc reference block."""
+    assert "atrium_end_year" in generate._autodoc_names("atrium", "")
+    assert "atrium_end_year" not in generate._coverage_allowlist().get("atrium", set())
+    assert generate._is_documented("atrium_end_year", generate._docs_corpus("atrium"))

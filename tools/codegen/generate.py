@@ -277,6 +277,18 @@ _VOCAB_GETTERS = frozenset(
     }
 )
 # (error name, aliases a YAML ``raises:`` line may already use for it, line to add)
+# Errors a getter raises beyond the vocabulary, named in ``Raises:`` the same way (skipped when the YAML
+# ``raises:`` already names them). R901-7: the stats.nba.com / stats.wnba.com runtime imports curl_cffi lazily.
+_GETTER_RAISES: dict[str, tuple] = {
+    m: (
+        (
+            ("ImportError",),
+            "ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain "
+            "``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).",
+        ),
+    )
+    for m in ("sportsdataverse.nba.nba_stats_runtime", "sportsdataverse.wnba.wnba_stats_runtime")
+}
 _VOCAB_RAISES = (
     (
         ("NoDataError", "NoESPNDataError"),
@@ -316,6 +328,7 @@ def _build_docstring(
     import_from: str = "",
     returns_frames: bool = False,
     vocab_raises: bool = False,
+    getter_raises: tuple = (),
     curl_example: str = "",
 ) -> str:
     """Build a function docstring as a 4-space-indented block (precise indentation).
@@ -335,7 +348,8 @@ def _build_docstring(
     ``returns_frames`` marks a ``kind: frames`` returns schema (a dict of frames) whose
     endpoint YAML sets no ``parsed_doc``, so the generic phrases say "dict", not "DataFrame".
     ``vocab_raises`` (the family's getter is in :data:`_VOCAB_GETTERS`) adds the
-    ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name.
+    ``NoDataError`` / ``AssetFetchError`` lines its ``raises:`` does not already name;
+    ``getter_raises`` (:data:`_GETTER_RAISES`) adds the getter's other errors the same way.
     """
     extras = doc_extras or {}
     raw_doc = str(extras.get("raw_doc") or "")
@@ -415,6 +429,8 @@ def _build_docstring(
     if vocab_raises:
         named = " ".join(raises)
         raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
+    named = " ".join(raises)
+    raises += [line for names, line in getter_raises if not any(n in named for n in names)]
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -454,8 +470,9 @@ def _build_docstring(
 
 
 def _docstring_escape(text: str) -> str:
-    """``text`` made safe inside a ``\"\"\"`` string literal (backslashes doubled, ``\"\"\"`` broken up)."""
-    return text.replace("\\", "\\\\").replace('"""', '\\"""')
+    """``text`` made safe inside a ``\"\"\"`` string literal: backslashes doubled, and every quote of a run of
+    three or more escaped (escaping only the first of ``\"\"\"\"`` leaves three bare quotes that close it)."""
+    return re.sub(r'"{3,}', lambda m: '\\"' * len(m.group()), text.replace("\\", "\\\\"))
 
 
 @functools.lru_cache(maxsize=None)
@@ -1278,6 +1295,7 @@ class _EndpointView:
             import_from=_home_module(league.prefix) if league.prefix else "",
             returns_frames=_returns_dict(_schema_doc(ep.returns_schema, schema_key)),
             vocab_raises=route_module in _VOCAB_GETTERS,
+            getter_raises=_GETTER_RAISES.get(route_module, ()),
             curl_example=self.curl_example,
         )
 
@@ -3889,6 +3907,8 @@ _PARSER_SUFFIX_LEAK_EXCEPTIONS = frozenset(
     {
         "sportsdataverse.mbb.mbb_ncaa_team_parsers",
         "sportsdataverse.wbb.wbb_ncaa_team_parsers",
+        # ``atrium_end_year`` is user-facing: every atrium wrapper's docstring tells callers to use it
+        "sportsdataverse.basketball.atrium.atrium_parsers",
     },
 )
 

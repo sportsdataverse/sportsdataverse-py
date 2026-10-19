@@ -4,7 +4,8 @@ Fox's Bifrost API is a layout API (sections -> tables -> rows -> cells), so a
 handful of payload shapes cover the 38 endpoints. The dedicated parsers here are
 thin adapters over the proven row builders in :mod:`sportsdataverse._fox_layout`
 (the hand-written ``fox_<league>_*`` wrappers use the same ones); everything else
-falls through to :func:`parse_fox_api`, a generic "largest record list" flattener.
+falls through to :func:`parse_fox_api`, a generic "largest record list" flattener. A dedicated parser falls
+through only when the body lacks the keys it reads; present but empty is a zero-row frame.
 
 Parser contract: polars by default, pandas via ``return_as_pandas=True``, a
 zero-row frame (never an exception) on empty / malformed input, snake_case
@@ -165,17 +166,29 @@ _roster = _dedicated(_roster_rows, ("groups",))
 
 
 def parse_fox_api_events(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """Scoreboard / schedule / segment payloads -> one row per game (generic fallback for the nav shell)."""
+    """Scoreboard / schedule / segment payloads -> one row per game.
+
+    A body carrying ``sectionList`` with no games is zero rows; only a body without it (the nav shell) goes to
+    :func:`parse_fox_api`, the largest-record-list flattener.
+    """
     return _events(raw, return_as_pandas=return_as_pandas)
 
 
 def parse_fox_api_standings(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """``standingsSections`` tables -> wide rows (one per team), generic fallback otherwise."""
+    """``standingsSections`` tables -> wide rows (one per team).
+
+    Zero rows when ``standingsSections`` is present but its tables are empty; :func:`parse_fox_api` only when the
+    key is absent.
+    """
     return _standings(raw, return_as_pandas=return_as_pandas)
 
 
 def parse_fox_api_polls(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """League poll tables -> one row per ranked team, generic fallback otherwise."""
+    """League poll tables -> one row per ranked team.
+
+    Zero rows when ``standingsSections`` is present but its tables are empty; :func:`parse_fox_api` only when the
+    key is absent.
+    """
     return _polls(raw, return_as_pandas=return_as_pandas)
 
 

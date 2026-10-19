@@ -1,5 +1,5 @@
 - **Docs:** a function counts as documented only by its own reference block, not by a mention in a table or note,
-  so 21 public functions (`load_pbp`, `clear_team_cache`, `shot_value`, ...) now have reference entries.
+  so 19 public functions (`load_pbp`, `atrium_end_year`, `shot_value`, ...) and two classes now have entries.
 - **Docs:** `espn_<lg>_calendar` in seven leagues, and the wbb/wnba `standings` / `team_roster` / `draft`, are
   documented as the hand-written functions those names run, not as the generated wrappers they shadow.
 - **Docs:** `nba_live_boxscore` / `wnba_live_boxscore` document their six returned frames, one table each, and

@@ -421,7 +421,8 @@ def test_build_docstring_yaml_text_with_a_backslash_or_triple_quote_compiles_ver
     import dataclasses
     import warnings
 
-    summary = r'Match r"\d+" ids; a """quoted""" word.'
+    # R901-3: a run of 4+ quotes must not leave three bare quotes after the escape
+    summary = r'Match r"\d+" ids; a """quoted""" word, and """" four.'
     ep = dataclasses.replace(_EP, summary=summary)
     note = r"C:\path\to"
     doc = generate._build_docstring(ep, "basketball", "nba", "https://h", "", "fn()", doc_extras={"notes": [note]})

@@ -10,6 +10,7 @@
 
 # --- ESPN per-league play-by-play / rosters / participants (game-scoped) ---
 cfb:
+  espn_cfb_calendar: {season: 2025}
   blue_chip_ratio: {recruits: {$call: cfb.load_recruit_classes, args: {seasons: [2023, 2024, 2025, 2026]}}}
   espn_cfb_game_rosters: {game_id: 401636892}
   espn_cfb_play_participants: {game_id: 401636892}
@@ -46,6 +47,7 @@ cfb:
   get_2pt_probs: {pbp_df: {$call: cfb.load_cfb_pbp, args: {seasons: 2026}}}  # 67447 rows x 505 cols
 
 nfl:
+  espn_nfl_calendar: {season: 2025}
   espn_nfl_game_rosters: {game_id: 401772940}
   espn_nfl_player_stats: {athlete_id: 2576980, season: 2024}
   espn_nfl_schedule: {}

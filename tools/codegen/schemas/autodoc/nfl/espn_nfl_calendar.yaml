@@ -32,5 +32,5 @@ columns:
   type: character
   description: ''
 - name: season
-  type: character
+  type: integer
   description: ''

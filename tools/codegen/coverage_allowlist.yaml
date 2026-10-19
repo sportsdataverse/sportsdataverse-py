@@ -86,5 +86,3 @@ whl:
   - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
 qmjhl:
   - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
-atrium:
-  - atrium_end_year  # atrium_parsers season-key helper (parser module, never autodoc); named in the page note

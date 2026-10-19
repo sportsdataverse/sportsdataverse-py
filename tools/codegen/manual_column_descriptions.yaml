@@ -70356,7 +70356,8 @@ pleague_team_crosswalk:
   team_id: P. LEAGUE+ site team id (1-8), stable across seasons and renames.
   team_uuid: Preciser team uuid of the same club (team_uuid of the pleague_preciser frames).
 espn_cfb_calendar:
-  week_label: Week label as ESPN's calendar names it, e.g. Week 1 or Bowls.
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
+  week_label: Week label as ESPN's calendar names it, e.g. Week 1.
   week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
   week_detail: Date span of the week as display text, e.g. Aug 22-Sep 7.
   week_start_date: Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z).
@@ -70365,6 +70366,7 @@ espn_cfb_calendar:
   season_type_start_date: Start of that season segment, an ISO 8601 UTC timestamp string.
   season_type_end_date: End of that season segment, an ISO 8601 UTC timestamp string.
 espn_nfl_calendar:
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
   week_label: Week label as ESPN's calendar names it, e.g. Week 1.
   week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
   week_detail: Date span of the week as display text.
