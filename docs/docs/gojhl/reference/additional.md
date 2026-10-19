@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # GOJHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.gojhl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.gojhl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

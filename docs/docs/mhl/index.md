@@ -3,7 +3,7 @@ title: MHL
 sidebar_label: MHL
 description: "sdv-py MHL: endpoint references, dataset loaders and parsers for MHL in the SportsDataverse Python package."
 ---
-# MHL (`sportsdataverse.mhl`)
+# MHL (`sportsdataverse.hockey.mhl`)
 
 ## Data sources
 

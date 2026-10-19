@@ -397,6 +397,7 @@ def iter_schema_columns() -> list[dict]:
                         "league": league,
                         "bucket": bucket,
                         "col": c.get("name", ""),
+                        "section": blk.get("section") or "",
                         "type": c.get("type", ""),
                         "blank": not (c.get("description") or "").strip(),
                         "siblings": [n for n in names if n != c.get("name", "")],
@@ -408,6 +409,10 @@ def iter_schema_columns() -> list[dict]:
 def _uncovered(r: dict) -> bool:
     """A blank column with no manual-dict and no R-dict description."""
     if not r["blank"] or _manual_col_desc(r["schema"], r["col"], r["league"]):
+        return False
+    # A dict-of-frames table may key a column by ``<section>.<col>`` when its meaning differs by
+    # frame (a player's ``game_id`` vs an official's); generate._autodoc_groups reads that key first.
+    if r.get("section") and _manual_col_desc(r["schema"], f"{r['section']}.{r['col']}", r["league"]):
         return False
     # Same gate as render: a family with no R counterpart (``_NO_R_DICT_FAMILIES``) gets no fill.
     key = f"{r['bucket']}/{r['schema']}" if r["bucket"].startswith("native/") else r["schema"]

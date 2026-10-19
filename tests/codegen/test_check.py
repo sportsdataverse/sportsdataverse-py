@@ -157,11 +157,6 @@ def test_red_path_coverage_gaps_lists_an_undocumented_name(monkeypatch):
     assert generate._coverage_gaps() == [("nba", ["zz_never_documented_fn"])]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="A-M3: _is_documented counts any whole-word mention (a returns-table cell) as documented; task 3.9",
-)
 def test_red_path_is_documented_needs_a_reference_block_not_a_word_mention():
     corpus = "| column | type | description |\n|---|---|---|\n| source | str | rows come from load_pbp |\n"
     assert not generate._is_documented("load_pbp", corpus)
@@ -421,6 +416,24 @@ def test_build_docstring_is_an_indented_block_that_compiles():
     assert "        season: The season. Second line." in doc.splitlines()  # an embedded newline is collapsed
 
 
+def test_build_docstring_yaml_text_with_a_backslash_or_triple_quote_compiles_verbatim():
+    """A-L40: YAML text was spliced unescaped, so a backslash warned and a triple quote ended the docstring."""
+    import dataclasses
+    import warnings
+
+    summary = r'Match r"\d+" ids; a """quoted""" word.'
+    ep = dataclasses.replace(_EP, summary=summary)
+    note = r"C:\path\to"
+    doc = generate._build_docstring(ep, "basketball", "nba", "https://h", "", "fn()", doc_extras={"notes": [note]})
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        code = compile("def f():\n" + doc + "\n    pass\n", "<doc>", "exec")
+    ns: dict = {}
+    exec(code, ns)
+    assert ns["f"].__doc__.startswith(summary)
+    assert note in ns["f"].__doc__
+
+
 def test_build_docstring_flags_change_only_what_they_document():
     assert "Bound to sport='basketball', league='nba'." in _doc()
     assert "Bound to sport" not in _doc(flat=True)
@@ -540,7 +553,7 @@ _KEPT_CACHES = {
     "_autodoc_example_args",
     "_autodoc_return_columns",
     "_companions_map",
-    "_corpus_words",
+    "_corpus_headings",
     "_docs_corpus",
     "_docstring_param_descs",
     "_highlights_map",
@@ -616,3 +629,33 @@ def test_red_path_an_unpinned_example_season_depends_on_the_date(monkeypatch):
         for day in (datetime.date(2026, 1, 15), datetime.date(2027, 7, 15))
     )
     assert winter != summer
+
+
+def test_a_full_run_renders_parsed_and_docs_in_a_fresh_interpreter(monkeypatch):
+    """A-L10: one run must converge. The parsed aliases and the docs read the package's live
+    docstrings, which this process imported before the module stages rewrote them, so they run
+    in a child interpreter, after every module stage."""
+    calls: list = []
+    for name in ("build", "build_live", "build_flat_live", "build_loaders_live"):
+        monkeypatch.setattr(generate, name, lambda _n=name: calls.append(_n) or [])
+    for name in ("build_parsed_live", "build_docs"):
+        monkeypatch.setattr(generate, name, lambda _n=name: pytest.fail(f"{_n} ran in the stale process"))
+    monkeypatch.setattr(generate.subprocess, "run", lambda cmd, **kw: calls.append(cmd[1:]))
+    assert generate.main([]) == 0
+    assert calls == [
+        "build",
+        "build_live",
+        "build_flat_live",
+        "build_loaders_live",
+        [str(Path(generate.__file__).resolve()), "--parsed-and-docs"],
+    ]
+
+
+def test_parsed_and_docs_flag_runs_only_those_two_stages(monkeypatch):
+    calls: list = []
+    for name in ("build_parsed_live", "build_docs"):
+        monkeypatch.setattr(generate, name, lambda _n=name: calls.append(_n) or [])
+    for name in ("build", "build_live", "build_flat_live", "build_loaders_live"):
+        monkeypatch.setattr(generate, name, lambda _n=name: pytest.fail(f"{_n} ran"))
+    assert generate.main(["--parsed-and-docs"]) == 0
+    assert calls == ["build_parsed_live", "build_docs"]

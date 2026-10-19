@@ -34,19 +34,23 @@
 #
 global: []          # package-level names (find_*, list_functions, ...) to skip
 nba:
+  - download                 # dl_utils HTTP gateway leaking via import * (named only in a cross-reference, A-M3)
   - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
   - normalize_team_roster_columns  # dl_utils game_rosters team-column helper leaking via import *
   - underscore               # dl_utils string transform leaking via import *
 wnba:
+  - download                 # dl_utils HTTP gateway leaking via import * (named only in a cross-reference, A-M3)
   - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
   - normalize_team_roster_columns  # dl_utils game_rosters team-column helper leaking via import *
   - underscore               # dl_utils string transform leaking via import *
 mbb:
+  - download                 # dl_utils HTTP gateway leaking via import * (named only in a cross-reference, A-M3)
   - SeasonNotFoundError      # errors.py exception class leaking via import *
   - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
   - normalize_team_roster_columns  # dl_utils game_rosters team-column helper leaking via import *
   - underscore               # dl_utils string transform leaking via import *
 wbb:
+  - download                 # dl_utils HTTP gateway leaking via import * (named only in a cross-reference, A-M3)
   - SeasonNotFoundError      # errors.py exception class leaking via import *
   - flatten_json_iterative  # dl_utils HTTP/JSON helper leaking via import *
   - normalize_team_roster_columns  # dl_utils game_rosters team-column helper leaking via import *
@@ -65,6 +69,7 @@ mlb:
   - parser_for_mlb_api  # MLB Stats API parser-dispatch registry; not user-facing
   - underscore        # dl_utils string transform leaking via import *
 nhl:
+  - download                 # dl_utils HTTP gateway leaking via import * (named only in a cross-reference, A-M3)
   - flatten_json_iterative   # dl_utils HTTP/JSON helper leaking via import *
   - key_check                # dl_utils safe dict-key accessor leaking via import *
   - normalize_team_roster_columns  # dl_utils game_rosters team-column helper leaking via import *
@@ -81,3 +86,5 @@ whl:
   - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
 qmjhl:
   - build_family  # HockeyTech factory helper leaking via import *; internal, not user-facing
+atrium:
+  - atrium_end_year  # atrium_parsers season-key helper (parser module, never autodoc); named in the page note

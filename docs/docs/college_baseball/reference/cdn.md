@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # COLLEGE_BASEBALL — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.college_baseball` — 4 endpoints.
+`sportsdataverse.baseball.college_baseball` — 4 endpoints.
 
 ## espn_college_baseball_cdn_playbyplay
 

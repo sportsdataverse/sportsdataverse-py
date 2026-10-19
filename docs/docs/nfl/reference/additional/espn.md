@@ -6,6 +6,53 @@ description: "NFL — additional Python functions — ESPN — function referenc
 ---
 # NFL — additional Python functions — ESPN
 
+### espn_nfl_calendar {#espn_nfl_calendar}
+
+`espn_nfl_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_nfl_calendar - look up the NFL calendar for a given season
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing calendar dates for the requested season.
+
+| col_name | type | description |
+|---|---|---|
+| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1. |
+| `week_alternate_label` | character | Alternate week label ESPN ships next to week_label; usually the same text. |
+| `week_detail` | character | Date span of the week as display text. |
+| `week` | character | Season week. |
+| `week_start_date` | character | Start of the week window, an ISO 8601 UTC timestamp string. |
+| `week_end_date` | character | End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week). |
+| `season_type_label` | character | Name of the season segment the week belongs to, e.g. Regular Season. |
+| `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
+| `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
+| `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
+| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import espn_nfl_calendar
+cal = espn_nfl_calendar(season=2024)
+
+# Fetch the ondays-style flattened schedule URLs
+
+on_days = espn_nfl_calendar(season=2024, ondays=True)
+
+# Pandas round-trip
+
+cal_pd = espn_nfl_calendar(season=2024, return_as_pandas=True)
+```
+
 ### espn_nfl_game_rosters {#espn_nfl_game_rosters}
 
 `espn_nfl_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`

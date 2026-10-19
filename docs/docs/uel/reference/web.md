@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UEL — ESPN web API (v3)
 
-`sportsdataverse.uel` — 5 endpoints.
+`sportsdataverse.soccer.uel` — 5 endpoints.
 
 ## espn_uel_player_overview
 

@@ -1,0 +1,36 @@
+schema: espn_cfb_calendar
+kind: dataframe
+columns:
+- name: week_label
+  type: character
+  description: ''
+- name: week_alternate_label
+  type: character
+  description: ''
+- name: week_detail
+  type: character
+  description: ''
+- name: week
+  type: character
+  description: ''
+- name: week_start_date
+  type: character
+  description: ''
+- name: week_end_date
+  type: character
+  description: ''
+- name: season_type_label
+  type: character
+  description: ''
+- name: season_type
+  type: character
+  description: ''
+- name: season_type_start_date
+  type: character
+  description: ''
+- name: season_type_end_date
+  type: character
+  description: ''
+- name: season
+  type: character
+  description: ''

@@ -19,7 +19,9 @@ def test_every_dataframe_autodoc_function_has_a_schema():
     missing = [
         f"{scope}.{fn}"
         for scope, fn in generate._autodoc_dataframe_names()
-        if not generate._autodoc_return_columns(scope, fn) and not generate._autodoc_unverified(scope, fn)
+        if not generate._autodoc_return_columns(scope, fn)
+        and not generate._autodoc_return_frames(scope, fn)
+        and not generate._autodoc_unverified(scope, fn)
     ]
     assert not missing, f"{len(missing)} autodoc DataFrame functions with no returns table: {missing[:25]}"
 
@@ -65,9 +67,15 @@ def test_a_captured_schema_has_columns_and_no_blank_names(path):
     doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
     if "unverified" in doc:
         pytest.skip("unverified schemas are checked by test_unverified_schemas.py")
-    assert doc.get("kind") == "dataframe"
-    assert doc.get("columns"), f"{path.name} publishes no columns -- it should not exist"
-    assert all(str(c.get("name", "")).strip() for c in doc["columns"])
+    if doc.get("kind") == "frames":  # a dict of frames: one table per key (B-M32)
+        assert doc.get("frames") and "columns" not in doc
+        assert all(str(f.get("section", "")).strip() and f.get("columns") for f in doc["frames"])
+        columns = [c for f in doc["frames"] for c in f["columns"]]
+    else:
+        assert doc.get("kind") == "dataframe"
+        columns = doc.get("columns")
+    assert columns, f"{path.name} publishes no columns -- it should not exist"
+    assert all(str(c.get("name", "")).strip() for c in columns)
 
 
 def test_failed_capture_leaves_prose_and_writes_no_table(tmp_path, monkeypatch):

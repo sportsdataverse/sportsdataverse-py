@@ -210,8 +210,9 @@ def _returns_dict(schema_doc: dict) -> bool:
 # Getters that raise the package error vocabulary (sportsdataverse/errors.py): a 404 is
 # ``NoDataError``, a 400/422 is ``ValueError``, any other failed fetch is ``AssetFetchError``
 # -- never ``{}``. Every generated wrapper on one of them names all three in ``Raises:``. Absent on purpose:
-# nba_stats / wnba_stats still answer a failed fetch with ``{}`` (PR #693), nflpro
-# raises its own types.
+# nflpro raises its own types. tests/codegen/test_runtime_errors.py holds the evidence: a runtime whose
+# vocabulary matrix has no known-failing row must be listed here (A-L13: nba_stats / wnba_stats raised
+# the vocabulary for months while 237 of their 239 wrappers documented no ``Raises:``).
 _VOCAB_GETTERS = frozenset(
     {
         "sportsdataverse._codegen_runtime",
@@ -265,11 +266,13 @@ _VOCAB_GETTERS = frozenset(
         "sportsdataverse.mbb.kenpom_runtime",
         "sportsdataverse.mbb.torvik_runtime",
         "sportsdataverse.mlb.mlb_statcast_runtime",
+        "sportsdataverse.nba.nba_stats_runtime",
         "sportsdataverse.nfl.nfl_api_runtime",
         "sportsdataverse.nfl.pff_api_runtime",
         "sportsdataverse.nfl.pff_runtime",
         "sportsdataverse.soccer.mls.mls_api_runtime",
         "sportsdataverse.soccer.nwsl.nwsl_api_runtime",
+        "sportsdataverse.wnba.wnba_stats_runtime",
         "sportsdataverse.yahoo.yahoo_shangrila_runtime",
     }
 )
@@ -340,7 +343,7 @@ def _build_docstring(
     # parser returns something other than a single DataFrame (e.g. the video
     # endpoints' dict of ``videoUrls``/``playlist`` frames).
     parsed_doc = str(extras.get("parsed_doc") or "")
-    lines = [f'"""{ep.summary}', ""]
+    lines = [ep.summary, ""]
     if not flat:
         if league_param:
             lines.append(f"Bound to sport={sport!r}; ``league`` is a required argument (e.g. {league!r}).")
@@ -441,8 +444,18 @@ def _build_docstring(
         lines.append("")
         lines.append("Notes:")
         lines += [f"    * {n}" for n in notes]
+    # YAML text lands inside a ``"""`` literal: a backslash would be read as an escape (``\d`` is a
+    # SyntaxWarning) and a ``"""`` would close the docstring early (A-L40). Escape both, so the
+    # runtime ``__doc__`` reads exactly what the YAML says.
+    lines = [_docstring_escape(ln) for ln in lines]
+    lines[0] = '"""' + lines[0]
     lines.append('"""')
     return "\n".join(("    " + ln) if ln else "" for ln in lines)
+
+
+def _docstring_escape(text: str) -> str:
+    """``text`` made safe inside a ``\"\"\"`` string literal (backslashes doubled, ``\"\"\"`` broken up)."""
+    return text.replace("\\", "\\\\").replace('"""', '\\"""')
 
 
 @functools.lru_cache(maxsize=None)
@@ -528,6 +541,34 @@ def _param_rows(ep: spec.Endpoint, league_prefix: str = "", fn_name: str = "") -
 
 _R_DICT_FILE = ROOT / "tools" / "codegen" / "r_column_descriptions.yaml"
 
+# The hand-written HockeyTech junior/minor league modules under
+# ``sportsdataverse.hockey.*`` (PWHL is separate — it lives at the top level with a
+# richer loader surface). SINGLE SOURCE OF TRUTH: every codegen list that enumerates
+# these leagues references this, so promoting a league (a hockeytech/_leagues.py entry
+# + a hockey/<lg>/ module) only needs it added HERE — no per-list drift.
+_HOCKEYTECH_MODULE_LEAGUES = [
+    "ahl",
+    "ohl",
+    "whl",
+    "qmjhl",
+    "echl",
+    "sphl",
+    "chl",
+    "ushl",
+    "bchl",
+    "ajhl",
+    "sjhl",
+    "ojhl",
+    "cchl",
+    "gojhl",
+    "mhl",
+    "nojhl",
+    "vijhl",
+    "kijhl",
+    "mjhl",
+]
+
+
 # League prefix -> R package whose column docs describe its columns. nfl maps to
 # nflreadr (canonical nflverse dictionaries); nflfastR's variable list is its
 # sibling (``_R_SIBLING_PACKAGES``). A league absent here gets no R fallback.
@@ -543,32 +584,7 @@ _LEAGUE_R_PACKAGE = {
     # NCAA hoops loaders (``load_ncaa_*``, men's and women's): hoopR, then its sibling wehoop.
     "ncaa": "hoopR",
     # Hockey: the HockeyTech league families, PWHL/PHF and the NHL all read fastRhockey.
-    **{
-        lg: "fastRhockey"
-        for lg in (
-            "ahl",
-            "ohl",
-            "whl",
-            "qmjhl",
-            "pwhl",
-            "phf",
-            "echl",
-            "sphl",
-            "chl",
-            "ushl",
-            "bchl",
-            "ajhl",
-            "sjhl",
-            "ojhl",
-            "cchl",
-            "gojhl",
-            "mhl",
-            "nojhl",
-            "vijhl",
-            "kijhl",
-            "mjhl",
-        )
-    },
+    **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},
 }
 
 # The European hockey league homes (sdv-internal-refs Phase A intake): one docs/registry prefix
@@ -637,8 +653,12 @@ _NESTED_HOMES = {
 
 
 def _home_module(prefix: str) -> str:
-    """The import path the docs and Examples name for ``prefix`` (``sportsdataverse.<prefix>`` unless nested)."""
-    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"
+    """The import path the docs and Examples name for ``prefix``: its home, never a deprecated alias.
+
+    ``_league_module`` resolves a moved name (``mls`` -> ``soccer.mls``, ``ahl`` -> ``hockey.ahl``)
+    and a nested home, so no page title, module line or Example names an import path that warns
+    (A-L42: 21 Examples and 146 pages named ``sportsdataverse.<moved>``)."""
+    return f"sportsdataverse.{_league_module(prefix)}"
 
 
 # Flat-API families with NO R counterpart. Their columns never passed through an R package,
@@ -1527,6 +1547,18 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
         view.api_name = api_name
         views.append(view)
     return views
+
+
+def _documented_espn_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
+    """The ESPN views whose package-level name runs the generated wrapper: what the docs describe.
+
+    Where a hand-written function holds the same name (``espn_cfb_calendar``, ``espn_wbb_standings``,
+    ...), ``sportsdataverse.<lg>.<name>`` resolves to it, so documenting the generated wrapper's
+    signature and table under that name documents a function the name never runs (B-M31). The
+    autodoc page documents the hand-written one instead; the generated wrapper keeps its name in
+    the ``*_espn_ext`` module (renaming it is an owner decision)."""
+    shadowed = _handwritten_espn_names(league.prefix)
+    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]
 
 
 def _league_module_source(league: spec.League, apis, hosts) -> str:
@@ -2764,34 +2796,6 @@ def _container_init_body(group: str, members: list[str], has_ext: bool) -> str:
     return "\n".join(lines)
 
 
-# The hand-written HockeyTech junior/minor league modules under
-# ``sportsdataverse.hockey.*`` (PWHL is separate — it lives at the top level with a
-# richer loader surface). SINGLE SOURCE OF TRUTH: every codegen list that enumerates
-# these leagues references this, so promoting a league (a hockeytech/_leagues.py entry
-# + a hockey/<lg>/ module) only needs it added HERE — no per-list drift.
-_HOCKEYTECH_MODULE_LEAGUES = [
-    "ahl",
-    "ohl",
-    "whl",
-    "qmjhl",
-    "echl",
-    "sphl",
-    "chl",
-    "ushl",
-    "bchl",
-    "ajhl",
-    "sjhl",
-    "ojhl",
-    "cchl",
-    "gojhl",
-    "mhl",
-    "nojhl",
-    "vijhl",
-    "kijhl",
-    "mjhl",
-]
-
-
 def _container_groups(groups_map: dict[str, str]) -> dict[str, list[str]]:
     """Build group → sorted-members mapping from the prefix→group dict.
 
@@ -3054,29 +3058,31 @@ def _docs_corpus(league: str | None) -> str:
     return "\n".join(f.read_text(encoding="utf-8") for f in sorted(base.rglob("*.md")))
 
 
+# A function's reference block opens with a heading that is exactly its name: ``## name``
+# (reference, loader and autodoc pages) or ``### name {#name}`` (family split pages).
+_REFERENCE_HEADING = re.compile(r"^#{2,6}[ \t]+`?([\w.]+)`?(?:[ \t]+\{#[^}\n]*\})?[ \t]*$", re.M)
+
+
 @functools.lru_cache(maxsize=8)
-def _corpus_words(corpus: str) -> frozenset[str]:
-    """Every maximal run of word characters in ``corpus``, computed once per corpus.
+def _corpus_headings(corpus: str) -> frozenset[str]:
+    """Every name that heads a reference block in ``corpus``, computed once per corpus.
 
     A handful of corpora (one per league, the whole tree, the per-league render) are each
     queried thousands of times, so one scan per corpus replaces one regex pass per name.
     The cache is keyed on the string itself: Python caches a str's hash, so a hit on the
     same object costs nothing, and 8 entries bound the memory to 8 corpora."""
-    return frozenset(re.findall(r"\w+", corpus))
+    return frozenset(_REFERENCE_HEADING.findall(corpus))
 
 
 def _is_documented(name: str, corpus: str) -> bool:
-    """True when ``name`` appears as a whole word in ``corpus``.
+    """True when ``name`` has a reference block (a heading that is exactly the name) in ``corpus``.
 
-    A word-boundary match (``_`` counts as a word character) so ``player_stats``
-    is NOT considered documented merely because ``player_stats_v3`` appears, while
-    surrounding punctuation/backticks/whitespace still count as a match. For a name
-    made only of word characters (every Python identifier), ``\\bname\\b`` matches exactly
-    when ``name`` is one of the corpus's maximal word runs, so a set lookup gives the
-    same answer as the regex; any other name keeps the regex."""
-    if re.fullmatch(r"\w+", name) is None:
-        return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None
-    return name in _corpus_words(corpus)
+    A mention is not documentation (A-M3): a returns-table cell, a parity row, a companion
+    note or a cross-reference naming ``load_pbp`` says nothing about where ``load_pbp`` is
+    documented, and counting it left 21 public names with no reference block while the
+    coverage gate stayed green. ``player_stats`` is not documented by a
+    ``## player_stats_v3`` heading either: the heading must be the whole name."""
+    return name in _corpus_headings(corpus)
 
 
 def _coverage_gaps() -> list[tuple[str, list[str]]]:
@@ -3305,14 +3311,14 @@ _FLAT_API_DOC = {
     "mlb_api": "MLB Stats API",
     "mlb_statcast": "MLB Statcast (Baseball Savant)",
     "nfl_api": "NFL.com API",
+    "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",
     "nba_stats": "NBA Stats API (stats.nba.com)",
     "wnba_stats": "WNBA Stats API (stats.wnba.com)",
     "on3": "On3 Recruit Database (api.on3.com)",
     "sports247": "247Sports Recruit Database (ipa.247sports.com)",
     "sports247_site_pages": "247Sports Site Pages (247sports.com)",
-    # keyed twice: "pff" matches the FLAT_APIS stem; "pff_core" matches the rendered
-    # module name the docs renderer looks up (api.module).
-    "pff": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
+    # keyed by the rendered module name the docs renderer looks up (``fa.module``), not the
+    # FLAT_APIS stem: the ``pff`` stem renders module ``pff_core``.
     "pff_core": "PFF Premium Stats -- LEGACY (premium.pff.com, cookie auth; use the PFF Developer API)",
     "pff_api": "PFF Developer API (api.pff.com, API key)",
     "torvik": "Bart Torvik T-Rank (barttorvik.com)",
@@ -3493,7 +3499,7 @@ def _apis_for(prefix: str) -> list[dict]:
     league = next((lg for lg in cfg.leagues if lg.prefix == prefix), None)
     if league is not None:
         espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
-        views = _espn_league_views(league, espn_apis, cfg.hosts)
+        views = _documented_espn_views(league, espn_apis, cfg.hosts)
         for api_obj, name in zip(espn_apis, ESPN_APIS):
             count = sum(1 for v in views if v.api_name == name)
             if count:
@@ -3543,7 +3549,7 @@ def render_reference_page(prefix: str, api: str, position: int = 1) -> str:
         cfg = spec.load_leagues(ENDPOINTS / "leagues.yaml")
         league = next(lg for lg in cfg.leagues if lg.prefix == prefix)
         espn_apis = [spec.load_espn_api(ENDPOINTS / f"{a}.yaml", params) for a in ESPN_APIS]
-        endpoints = [v for v in _espn_league_views(league, espn_apis, cfg.hosts) if v.api_name == api]
+        endpoints = [v for v in _documented_espn_views(league, espn_apis, cfg.hosts) if v.api_name == api]
         _slug, label = _ESPN_API_DOC[api]
     else:
         fa = spec.load_flat_api(ENDPOINTS / f"{api}.yaml", params)
@@ -3848,6 +3854,19 @@ def _autodoc_return_columns(scope: str, fn: str) -> tuple:
 
     d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
     return tuple(d.get("columns", []) or [])
+
+
+def _autodoc_return_frames(scope: str, fn: str) -> list:
+    """``[{section, columns}]`` from a ``kind: frames`` autodoc schema (a function returning a dict of
+    frames, one table per key), else ``[]``. A dict of frames documented as one flat table of
+    ``key.column`` names described a frame the function never returns (B-M32)."""
+    p = _AUTODOC_SCHEMA_DIR / scope / f"{fn}.yaml"
+    if not p.exists():
+        return []
+    import yaml
+
+    d = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+    return list(d.get("frames") or []) if d.get("kind") == "frames" else []
 
 
 def _autodoc_unverified(scope: str, fn: str) -> str:
@@ -4558,11 +4577,19 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
         # (league-aware; ``global`` scope has no R fallback, league=None);
         # a non-empty captured description is preserved.
         return_columns = [dict(c) for c in _autodoc_return_columns(scope, n)]
-        for c in return_columns:
+        return_frames = [
+            {"section": f["section"], "columns": [dict(c) for c in f.get("columns") or []]}
+            for f in _autodoc_return_frames(scope, n)
+        ]
+        cells = [("", c) for c in return_columns] + [(f["section"], c) for f in return_frames for c in f["columns"]]
+        for section, c in cells:
             raw_name = str(c.get("name", ""))
-            c["description"] = _table_cell_desc(
-                str(c.get("description", "")), league, raw_name, getattr(obj, "__sdv_base__", n)
-            )
+            stored, desc_schema = str(c.get("description", "")), getattr(obj, "__sdv_base__", n)
+            # a frame's column reads its ``<section>.<col>`` manual key first: a player's and an
+            # official's ``person_id`` are described differently
+            c["description"] = (
+                section and _table_cell_desc(stored, league, f"{section}.{raw_name}", desc_schema)
+            ) or _table_cell_desc(stored, league, raw_name, desc_schema)
             c["name"] = raw_name.replace("|", "\\|")
             c["type"] = str(c.get("type", "")).replace("|", "\\|")
         by_family.setdefault(_autodoc_family(n, highlighted, module=getattr(obj, "__module__", "")), []).append(
@@ -4570,7 +4597,8 @@ def _autodoc_groups(league: str | None, names: list[str]) -> list[dict]:
                 "name": n,
                 "signature": _autodoc_signature(obj),
                 "return_columns": return_columns,
-                "return_unverified": "" if return_columns else _autodoc_unverified(scope, n),
+                "return_frames": return_frames,
+                "return_unverified": "" if return_columns or return_frames else _autodoc_unverified(scope, n),
                 **view,
             },
         )
@@ -5401,11 +5429,6 @@ _INTRO_MARKERS = (
     "<!-- BEGIN generated: leagues-and-sources -->",
     "<!-- END generated: leagues-and-sources -->",
 )
-# League prefix -> the import path shown in intro.md, where it is not sportsdataverse.<prefix>.
-_INTRO_MODULE = {
-    **{lg: f"sportsdataverse.hockey.{lg}" for lg in _HOCKEYTECH_MODULE_LEAGUES},
-    **{lg: _home_module(lg) for lg in _NESTED_HOMES},
-}
 
 
 def _patch_between_markers(text: str, begin: str, end: str, body: str) -> str:
@@ -5432,7 +5455,7 @@ def render_intro_sources_table(autodoc_by_scope: dict[str | None, list[str]]) ->
         if not rows:
             continue
         cell = ", ".join(f"{r['label']} ({r['count']})" for r in rows)
-        module = _INTRO_MODULE.get(prefix, f"sportsdataverse.{prefix}")
+        module = _home_module(prefix)
         lines.append(f"| [{_LEAGUE_LABELS.get(prefix, prefix.upper())}]({prefix}/) | `{module}` | {cell} |")
     return "\n".join(lines)
 
@@ -5635,7 +5658,12 @@ def main(argv=None) -> int:
         action="store_true",
         help="report user-facing functions that never reach the rendered docs (offline; report-only)",
     )
+    ap.add_argument("--parsed-and-docs", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
+    if args.parsed_and_docs:
+        p, d = len(build_parsed_live()), len(build_docs())
+        print(f"codegen: wrote {p} parsed modules + {d} doc files")
+        return 0
     if args.coverage:
         return coverage_report()
     if args.autodoc_schemas:
@@ -5702,14 +5730,14 @@ def main(argv=None) -> int:
         return rc
     build()
     n = len(build_live())
-    p = len(build_parsed_live())
     f = len(build_flat_live())
     ldr = len(build_loaders_live())
-    d = len(build_docs())
-    print(
-        f"codegen: wrote {n} live + {p} parsed + {f} flat-API + {ldr} loader modules "
-        f"+ {d} doc files + refreshed staging at {OUT}",
-    )
+    print(f"codegen: wrote {n} live + {f} flat-API + {ldr} loader modules + refreshed staging at {OUT}", flush=True)
+    # The parsed aliases and the docs read the package's live signatures and docstrings, and this
+    # process imported the package (and cached what it read) before the stages above rewrote it.
+    # Rendering them here took a second run to converge (A-L10); a fresh interpreter reads what
+    # was just written.
+    subprocess.run([sys.executable, str(Path(__file__).resolve()), "--parsed-and-docs"], check=True)
     return 0
 
 

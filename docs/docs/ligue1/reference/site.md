@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGUE1 — ESPN site API (v2)
 
-`sportsdataverse.ligue1` — 24 endpoints.
+`sportsdataverse.soccer.ligue1` — 24 endpoints.
 
 ## espn_ligue1_scoreboard
 

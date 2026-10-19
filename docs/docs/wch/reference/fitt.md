@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WCH — ESPN FPI API (fitt v3)
 
-`sportsdataverse.wch` — 1 endpoint.
+`sportsdataverse.hockey.wch` — 1 endpoint.
 
 ## espn_wch_fpi
 

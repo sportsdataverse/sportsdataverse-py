@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # EPL — ESPN site API (v2)
 
-`sportsdataverse.epl` — 24 endpoints.
+`sportsdataverse.soccer.epl` — 24 endpoints.
 
 ## espn_epl_scoreboard
 

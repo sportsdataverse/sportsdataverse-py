@@ -1,10 +1,73 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: spearman_corr–win_prob"
-sidebar_label: "Models and calculators: spearman_corr–win_prob"
+title: "MBB — additional Python functions — Models and calculators: simulate_game–win_prob"
+sidebar_label: "Models and calculators: simulate_game–win_prob"
 sidebar_position: 11
-description: "MBB — additional Python functions — Models and calculators: spearman_corr–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: simulate_game–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: spearman_corr–win_prob
+# MBB — additional Python functions — Models and calculators: simulate_game–win_prob
+
+### simulate_game {#simulate_game}
+
+`simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'`
+
+Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `home_em` | `float` |  | Home team's adjusted efficiency margin. |
+| `away_em` | `float` |  | Away team's adjusted efficiency margin. |
+| `neutral` | `bool` |  | True for a neutral-site game. |
+| `rng` | `Generator` |  | A seeded `numpy.random.Generator` (caller owns determinism). |
+| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
+
+**Returns**
+
+True if the home team wins the sampled game.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_season_sim import simulate_game
+simulate_game(20.0, 5.0, False, np.random.default_rng(0))
+```
+
+### slow_regression {#slow_regression}
+
+`slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
+
+Build the Tikhonov (ridge) regression solver matrix.
+
+Faithful port of the private `RapmUtils.slowRegression`
+(`RapmUtils.ts:756-769`): `(XᵀX + ridge_lambda·I)⁻¹Xᵀ`, where `X`
+is `player_weight_matrix` (one row per lineup, one column per player --
+see `calc_player_weights`). See the section banner above for why
+this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, ctx["num_players"])`. |
+| `ridge_lambda` | `float` |  | The Tikhonov regularization strength. |
+| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read (sizes the identity matrix). |
+
+**Returns**
+
+The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
+
+x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
+rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
+```
 
 ### spearman_corr {#spearman_corr}
 

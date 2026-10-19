@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # ECHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.echl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.echl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

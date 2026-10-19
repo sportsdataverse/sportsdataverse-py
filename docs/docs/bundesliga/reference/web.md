@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # BUNDESLIGA — ESPN web API (v3)
 
-`sportsdataverse.bundesliga` — 5 endpoints.
+`sportsdataverse.soccer.bundesliga` — 5 endpoints.
 
 ## espn_bundesliga_player_overview
 

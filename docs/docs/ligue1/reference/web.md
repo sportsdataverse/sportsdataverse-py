@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGUE1 — ESPN web API (v3)
 
-`sportsdataverse.ligue1` — 5 endpoints.
+`sportsdataverse.soccer.ligue1` — 5 endpoints.
 
 ## espn_ligue1_player_overview
 

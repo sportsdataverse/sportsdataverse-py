@@ -757,3 +757,13 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
                 call()
     assert calls, f"{mod}._get never reached the transport"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
+
+
+def test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises():
+    """A-L13: a getter whose every matrix row passes raises the vocabulary, so its generated
+    wrappers must say so (``generate._VOCAB_GETTERS`` adds the ``Raises:`` lines)."""
+    from tools.codegen import generate
+
+    known = {stem for stem, _case in (*_KNOWN, *_SYNC_1018)}
+    green = {mod for mod in _RUNTIMES if mod.rsplit(".", 1)[1] not in known}
+    assert sorted(green - generate._VOCAB_GETTERS) == []

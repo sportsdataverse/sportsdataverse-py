@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # MJHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.mjhl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.mjhl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

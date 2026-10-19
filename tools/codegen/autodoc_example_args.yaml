@@ -10,6 +10,7 @@
 
 # --- ESPN per-league play-by-play / rosters / participants (game-scoped) ---
 cfb:
+  blue_chip_ratio: {recruits: {$call: cfb.load_recruit_classes, args: {seasons: [2023, 2024, 2025, 2026]}}}
   espn_cfb_game_rosters: {game_id: 401636892}
   espn_cfb_play_participants: {game_id: 401636892}
   espn_cfb_player_stats: {athlete_id: 4426335, season: 2024}
@@ -146,6 +147,7 @@ nfl:
   player_usage_efficiency: {player_stats: {$call: nfl.load_nfl_player_stats, args: {seasons: [2023]}}, as_of_week: 10}  # 480 rows x 13 cols
 
 nba:
+  espn_nba_calendar: {season: 2025}
   espn_nba_player_stats: {athlete_id: 3059318, season: 2024}
   espn_nba_schedule: {}
   espn_nba_teams: {}
@@ -241,6 +243,10 @@ nba:
   bref_teams_stats: {season: 2025}  # 2024-25, completed
 
 wnba:
+  espn_wnba_calendar: {season: 2025}
+  espn_wnba_draft: {season: 2025}
+  espn_wnba_standings: {season: 2025}
+  espn_wnba_team_roster: {team_id: 17}
   espn_wnba_game_officials: {game_id: 401620308}
   espn_wnba_player_stats: {athlete_id: 2529137, season: 2024}
   espn_wnba_schedule: {}
@@ -268,6 +274,7 @@ wnba:
   build_wnba_season_wp: {season: 2024}  # 101501 rows x 69 cols
 
 mbb:
+  espn_mbb_calendar: {season: 2025}
   espn_mbb_game_rosters: {game_id: 401715624}
   espn_mbb_player_stats: {athlete_id: 4702553, season: 2024}
   espn_mbb_schedule: {}
@@ -323,6 +330,9 @@ mbb:
   as_of_ratings_split: {results: {$call: mbb.mbb_team_ratings._normalize_schedule, args: {schedule: {$call: mbb.load_mbb_schedule, args: {seasons: 2024}}}}, cutoff_date: 2024-01-15}  # 3278 rows x 83 cols
 
 wbb:
+  espn_wbb_calendar: {season: 2025}
+  espn_wbb_standings: {season: 2025}
+  espn_wbb_team_roster: {team_id: 2579}
   # ncaa_espn_team_crosswalk is shared with mbb and defaults to league="mbb": without this the
   # wbb schema was captured from the MEN'S table (6006 rows vs the women's 5972).
   ncaa_espn_team_crosswalk: {league: wbb}
@@ -372,6 +382,7 @@ wbb:
   ncaa_wbb_join_pbp_shots: {pbp: {$call: wbb.ncaa_wbb_game_pbp, args: {game_id: "5722355"}}, shots: {$call: wbb.ncaa_wbb_shot_locations, args: {game_ids: ["5722355"]}}}  # 460 rows x 40 cols
 
 mlb:
+  x_era: {pitches: {$call: mlb.mlb_statcast_search, args: {start_dt: "2024-07-06", end_dt: "2024-07-06"}}, season: 2024}
   espn_mlb_player_stats: {athlete_id: 42470, season: 2024}
   espn_mlb_schedule: {}
   espn_mlb_teams: {}
@@ -551,3 +562,5 @@ soccer:
   soccer_events_to_frame: {dataset: {$call: soccer.soccer_open_dataset, args: {provider: statsbomb, match_id: 8658}}}  # 3036 rows x 24 cols
   soccer_spadl: {dataset: {$call: soccer.soccer_open_dataset, args: {provider: statsbomb, match_id: 8658}}}  # 1709 rows x 17 cols
   soccer_xthreat_rate: {actions: {$call: soccer.soccer_spadl, args: {dataset: {$call: soccer.soccer_open_dataset, args: {provider: statsbomb, match_id: 8658}}}}}  # 1709 rows x 18 cols
+elh:
+  elh_game_ids: {season: 2025}
