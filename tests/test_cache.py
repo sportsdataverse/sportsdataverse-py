@@ -648,3 +648,28 @@ def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monk
 
     assert sorted(p.name for p in tmp_path.glob("*.json")) == sorted(["notes.json", md5_named.name])
     assert all(p.read_text() == "keep" for p in foreign)
+
+
+def test_filesystem_clear_cache_skips_a_locked_entry(reset_cache, monkeypatch, tmp_path):
+    """A file another process holds open (Windows) is skipped and not counted; clear never crashes."""
+    from pathlib import Path
+
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    locked = tmp_path / f"{cache._cache_key('https://x.example/1', None)}.json"
+    real_unlink = Path.unlink
+
+    def unlink(self, missing_ok=False):
+        if self == locked:
+            raise PermissionError(f"[WinError 32] being used by another process: {self}")
+        return real_unlink(self, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+    assert cache.clear_cache(url="https://x.example/1") == 0
+    assert cache.clear_cache() == 2
+    assert [p.name for p in tmp_path.glob("*.json")] == [locked.name]
+    assert cache.clear_cache(url="https://x.example/0") == 0  # already gone

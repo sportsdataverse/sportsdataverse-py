@@ -479,6 +479,15 @@ def clear_cache(
     return _drop_matching(glob)
 
 
+def _remove(path: Path) -> bool:
+    """Delete one cache file; ``False`` when it is already gone or locked (a Windows handle), never a raise."""
+    try:
+        path.unlink()
+    except (FileNotFoundError, PermissionError):
+        return False
+    return True
+
+
 def _drop_one(key: str) -> int:
     if _MODE == "memory":
         if key in _MEMORY_CACHE:
@@ -486,10 +495,7 @@ def _drop_one(key: str) -> int:
             return 1
         return 0
     if _MODE == "filesystem":
-        path = _cache_dir() / f"{key}.json"
-        if path.exists():
-            path.unlink()
-            return 1
+        return int(_remove(_cache_dir() / f"{key}.json"))
     return 0
 
 
@@ -509,8 +515,7 @@ def _drop_matching(glob: str) -> int:
         count = 0
         for path in cache_dir.glob("*.json"):
             if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):
-                path.unlink()
-                count += 1
+                count += _remove(path)  # a locked entry is skipped, not counted
         return count
     return 0
 

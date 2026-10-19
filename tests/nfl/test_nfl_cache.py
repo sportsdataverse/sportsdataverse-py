@@ -397,3 +397,21 @@ def test_corrupt_parquet_with_a_locked_file_still_returns_data(tmp_path, fake_lo
     monkeypatch.setattr(Path, "unlink", locked)
     out = fn(seasons=[2025])
     assert counter["calls"] == 2 and out.height == 3
+
+
+def test_clear_cache_skips_a_locked_key_named_entry(tmp_path, monkeypatch):
+    """A cache entry another process holds open (Windows) is skipped; clear_cache never crashes."""
+    update_config(cache_mode="filesystem", cache_dir=tmp_path)
+    locked, other = tmp_path / ("a" * 64 + ".parquet"), tmp_path / ("b" * 64 + ".parquet")
+    for path in (locked, other):
+        path.write_bytes(b"entry")
+    real_unlink = Path.unlink
+
+    def unlink(self, missing_ok=False):
+        if self == locked:
+            raise PermissionError(f"[WinError 32] being used by another process: {self}")
+        return real_unlink(self, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+    clear_cache()
+    assert locked.exists() and not other.exists()

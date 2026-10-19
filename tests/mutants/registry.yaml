@@ -1757,3 +1757,54 @@
   test: tests/nfl/test_models_offline.py -k strict_env_raises_on_missing_fourth_down
   expected: kill
   note: R899-3, NFLPlayProcess swallowed the strict raise into a RuntimeWarning
+
+# --- Task 4.6 review round 899b (codegen-runtime) ----------------------------------------------
+- id: enrich-strict-xpass-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: "        if strict:\n            raise\n        import warnings\n\n        warnings.warn(\n            f\"enrich_nfl_pbp: skipping xpass step"
+  mutant: "        if False:\n            raise\n        import warnings\n\n        warnings.warn(\n            f\"enrich_nfl_pbp: skipping xpass step"
+  test: tests/nfl/test_models_offline.py -k missing_xpass_strict_raises
+  expected: kill
+  note: R899-9, strict mode refuses a missing xpass model in enrich_nfl_pbp
+
+- id: enrich-strict-preloads-wp-model
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '        _load_model(_fd._WP_MODEL_FILE)'
+  mutant: '        pass'
+  test: tests/nfl/test_models_offline.py -k names_a_missing_wp_model
+  expected: kill
+  note: R899-9, fd_model resolves but wp_model does not -- strict must still refuse
+
+- id: enrich-strict-fourth-down-scoring-error-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: "        if strict:\n            raise\n        # The 4th-down models"
+  mutant: "        if False:\n            raise\n        # The 4th-down models"
+  test: tests/nfl/test_models_offline.py -k lets_a_scoring_error_through
+  expected: kill
+  note: R899-9, a card mismatch or corrupt booster is not swallowed in strict mode
+
+- id: http-clear-cache-skips-locked-entry
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: '    except (FileNotFoundError, PermissionError):'
+  mutant: '    except FileNotFoundError:'
+  test: tests/test_cache.py -k skips_a_locked_entry
+  expected: kill
+  note: R899-11, a file another process holds open crashed clear_cache
+
+- id: nfl-clear-cache-skips-locked-entry
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/nfl/cache.py
+  snippet: 'with contextlib.suppress(FileNotFoundError, PermissionError):'
+  mutant: 'with contextlib.suppress(FileNotFoundError):'
+  test: tests/nfl/test_nfl_cache.py -k skips_a_locked_key_named_entry
+  expected: kill
+  note: R899-11, a file another process holds open crashed clear_cache

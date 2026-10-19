@@ -168,3 +168,48 @@ def test_espn_path_strict_env_raises_on_missing_xpass_model(offline, monkeypatch
     monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
     with pytest.raises(FileNotFoundError, match="xpass_model.ubj"):
         proc.run_processing_pipeline()
+
+
+def _missing_xpass(*a, **k):
+    raise FileNotFoundError("NFL model 'xpass_model.ubj' not found")
+
+
+def test_enrich_missing_xpass_strict_raises_else_warns_and_nulls(offline, monkeypatch):
+    """The bundled xpass booster cannot go missing in the wheel, so its absence is simulated at the call."""
+    monkeypatch.setattr(ep_wp, "calculate_xpass", _missing_xpass)
+    game = _game().drop(["xpass", "pass_oe"])  # the release frame carries nflverse's own values
+    with pytest.raises(FileNotFoundError, match="xpass_model.ubj"):
+        ep_wp.enrich_nfl_pbp(game, strict=True, add_fourth_down=False)
+    out, messages = _enrich_recording(game)
+    assert len([m for m in messages if "skipping xpass step" in m]) == 1, messages
+    assert out["xpass"].null_count() == out.height and out["pass_oe"].null_count() == out.height
+
+
+def _only_fd_model(name, *a, **k):
+    if name == "fd_model.ubj":
+        return object()
+    raise FileNotFoundError(f"Could not obtain '{name}' (offline test)")
+
+
+def test_strict_fourth_down_names_a_missing_wp_model(offline, monkeypatch):
+    """fd_model resolves but the nfl4th wp_model does not: strict refuses up front, naming wp_model.ubj."""
+    with monkeypatch.context() as m:  # undone before the fixture clears the real loader's cache
+        m.setattr(ep_wp, "_load_model", _only_fd_model)
+        with pytest.raises(FileNotFoundError, match="wp_model.ubj"):
+            ep_wp._add_fourth_down_decisions(_game(), strict=True)
+
+
+def test_strict_fourth_down_lets_a_scoring_error_through(offline, monkeypatch):
+    """Both models resolve but scoring fails (a card mismatch, a corrupt booster): strict raises, else warns."""
+
+    def _card_mismatch(frame):
+        raise ValueError("wp_model.ubj was trained with spread_time_decay_exponent=-3.0")
+
+    with monkeypatch.context() as m:  # undone before the fixture clears the real loader's cache
+        m.setattr(ep_wp, "_load_model", lambda name, *a, **k: object())
+        m.setattr(nfl_fourth_down, "get_4th_down_probs", _card_mismatch)
+        with pytest.raises(ValueError, match="spread_time_decay_exponent"):
+            ep_wp._add_fourth_down_decisions(_game(), strict=True)
+        with pytest.warns(RuntimeWarning, match="skipping 4th-down decision step"):
+            out = ep_wp._add_fourth_down_decisions(_game())
+    assert out["go_wp"].null_count() == out.height

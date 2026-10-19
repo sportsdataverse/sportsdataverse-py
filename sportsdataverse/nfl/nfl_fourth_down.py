@@ -648,6 +648,8 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     Raises:
         FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -712,6 +714,8 @@ def get_2pt_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     Raises:
         FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -772,6 +776,8 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     Raises:
         FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -924,6 +930,8 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     Raises:
         FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::
@@ -1011,6 +1019,8 @@ def get_punt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
 
     Raises:
         FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+        XGBoostError: a cached nfl4th booster is corrupt.
+        ValueError: a model card beside a booster disagrees with the applier's fitted constants.
 
     Example:
         Quick start::

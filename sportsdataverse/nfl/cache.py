@@ -330,4 +330,6 @@ def clear_cache() -> None:
             # Only the files this cache names: a key-named parquet. ``models/`` and any
             # file or directory the cache did not write are left alone.
             if child.is_file() and _ENTRY_NAME.fullmatch(child.name):
-                child.unlink()
+                # Gone already, or locked by another process (Windows): skip it rather than crash.
+                with contextlib.suppress(FileNotFoundError, PermissionError):
+                    child.unlink()

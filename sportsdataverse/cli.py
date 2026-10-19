@@ -295,6 +295,12 @@ def main(argv: Optional[list[str]] = None) -> int:
     runtime failure (``RuntimeError``), a host that answered "nothing there"
     (``NoDataError``) or a fetch that failed (``AssetFetchError``: 403, rate limit,
     5xx). argparse itself exits 2 on a usage error.
+
+    Args:
+        argv: Arguments after the program name; ``None`` reads ``sys.argv[1:]``.
+
+    Returns:
+        int: The exit code above (the console script passes it to ``SystemExit``).
     """
     parser = _build_parser()
     args = parser.parse_args(argv)
