@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # EPL — ESPN web API (v3)
 
-`sportsdataverse.epl` — 5 endpoints.
+`sportsdataverse.soccer.epl` — 5 endpoints.
 
 ## espn_epl_player_overview
 

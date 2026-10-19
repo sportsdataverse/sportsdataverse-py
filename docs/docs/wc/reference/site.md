@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WC — ESPN site API (v2)
 
-`sportsdataverse.wc` — 24 endpoints.
+`sportsdataverse.soccer.wc` — 24 endpoints.
 
 ## espn_wc_scoreboard
 

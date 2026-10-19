@@ -9,15 +9,15 @@ description: "sdv-py ATRIUM: endpoint references, dataset loaders and parsers fo
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [Sportradar Atrium embed API](#sportradar-atrium-embed-api) | `embed-api.eui.connect.sportradar.com` | 62 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 41 | — |
+| [Sportradar Atrium embed API](#sportradar-atrium-embed-api) | `embed-api.eui.connect.sportradar.com` | 63 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 42 | — |
 
 ## Sportradar Atrium embed API {#sportradar-atrium-embed-api}
 
 | Reference | Functions |
 |---|---:|
 | [Sportradar Atrium embed API (embed-api.eui.connect.sportradar.com)](reference/atrium) | 22 |
-| [Hand-written wrappers](reference/additional/sportradar-atrium-embed-api) | 40 |
+| [Hand-written wrappers](reference/additional/sportradar-atrium-embed-api) | 41 |
 ## Tools and helpers
 
 ### Dates and seasons {#dates-and-seasons}

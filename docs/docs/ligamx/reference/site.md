@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGAMX — ESPN site API (v2)
 
-`sportsdataverse.ligamx` — 24 endpoints.
+`sportsdataverse.soccer.ligamx` — 24 endpoints.
 
 ## espn_ligamx_scoreboard
 

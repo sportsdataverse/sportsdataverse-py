@@ -724,8 +724,9 @@ registry-driven league families**:
   `echl_game_shifts`, `echl_player_toi`, `echl_game_corsi`, `echl_season_id`,
   `most_recent_echl_season`. Adding a league is a `LEAGUES` entry + a 4-line
   `sportsdataverse/hockey/<lg>/__init__.py` (calls `build_family`) + 3 wiring
-  lines (`hockey/__init__.py` import, top-level `__init__.py` wildcard, and the
-  `_MOVED` back-compat entry). **No new parser code** — see below.
+  lines (the league in `tools/codegen/generate.py`'s `_HOCKEYTECH_MODULE_LEAGUES`,
+  which renders the generated `hockey/__init__.py`; the top-level `__init__.py`
+  wildcard; and the `_MOVED` back-compat entry). **No new parser code** — see below.
 - **20 leagues wired (all live-verified 2026-07-12):** `pwhl` (flagship, top-level
   `sportsdataverse.pwhl` with a richer surface), `ahl`, `ohl`, `whl`, `qmjhl`, and
   the 15 promoted 2026-07-12 — `echl`, `sphl`, `chl`, `ushl`, `bchl`, `ajhl`,

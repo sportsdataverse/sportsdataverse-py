@@ -3,7 +3,7 @@ title: OHL
 sidebar_label: OHL
 description: "sdv-py OHL: endpoint references, dataset loaders and parsers for OHL in the SportsDataverse Python package."
 ---
-# OHL (`sportsdataverse.ohl`)
+# OHL (`sportsdataverse.hockey.ohl`)
 
 ## Data sources
 
@@ -36,7 +36,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
 
-| `sportsdataverse.ohl` (Python) | `fastRhockey` (R) |
+| `sportsdataverse.hockey.ohl` (Python) | `fastRhockey` (R) |
 |---|---|
 | [`most_recent_ohl_season`](reference/additional#most_recent_ohl_season) | [`most_recent_ohl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_ohl_season.html) |
 | [`ohl_game_corsi`](reference/additional#ohl_game_corsi) | [`ohl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/ohl_game_corsi.html) |

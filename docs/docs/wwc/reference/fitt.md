@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WWC — ESPN FPI API (fitt v3)
 
-`sportsdataverse.wwc` — 1 endpoint.
+`sportsdataverse.soccer.wwc` — 1 endpoint.
 
 ## espn_wwc_fpi
 

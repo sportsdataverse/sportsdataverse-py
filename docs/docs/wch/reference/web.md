@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WCH — ESPN web API (v3)
 
-`sportsdataverse.wch` — 5 endpoints.
+`sportsdataverse.hockey.wch` — 5 endpoints.
 
 ## espn_wch_player_overview
 

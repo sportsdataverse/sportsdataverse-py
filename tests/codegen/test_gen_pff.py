@@ -71,7 +71,7 @@ def test_pff_registered_in_flat_apis():
     import tools.codegen.generate as g
 
     assert ("pff", "nfl") in g.FLAT_APIS
-    assert "premium.pff.com" in g._FLAT_API_DOC["pff"]
+    assert "premium.pff.com" in g._FLAT_API_DOC["pff_core"]
     # native/pff graduated off the deferred-columns backlog (fully backfilled,
     # 2026-09-03) -- assert it stays fully covered rather than merely deferred.
     assert "native/pff" not in x._DEFERRED_BUCKETS

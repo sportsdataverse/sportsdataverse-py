@@ -13,11 +13,14 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [espn_wbb_calendar](additional/espn.md#espn_wbb_calendar) | espn_wbb_calendar - look up the women's college basketball calendar for a given season |
 | [espn_wbb_game_officials](additional/espn.md#espn_wbb_game_officials) | Pull the officials assigned to a women's-college-basketball game. |
 | [espn_wbb_game_rosters](additional/espn.md#espn_wbb_game_rosters) | espn_wbb_game_rosters() - Pull the game by id. |
 | [espn_wbb_pbp](additional/espn.md#espn_wbb_pbp) | espn_wbb_pbp() - Pull the game by id. Data from API endpoints - `womens-college-basketball/playbyplay`, |
 | [espn_wbb_player_stats](additional/espn.md#espn_wbb_player_stats) | Pull a women's-college-basketball athlete's ESPN **season** stat line. |
 | [espn_wbb_schedule](additional/espn.md#espn_wbb_schedule) | espn_wbb_schedule - look up the women's college basketball schedule for a given season |
+| [espn_wbb_standings](additional/espn.md#espn_wbb_standings) | Pull ESPN women's-college-basketball standings for a season. |
+| [espn_wbb_team_roster](additional/espn.md#espn_wbb_team_roster) | Pull the current ESPN team roster for a women's-college-basketball team. |
 | [espn_wbb_team_stats](additional/espn.md#espn_wbb_team_stats) | Pull ESPN team season stats for a women's-college-basketball team. |
 | [espn_wbb_teams](additional/espn.md#espn_wbb_teams) | espn_wbb_teams - look up the women's college basketball teams |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |
@@ -104,6 +107,7 @@ not covered by the generated API-endpoint reference above.
 | [is_gen2](additional/stats-ncaa-org-2.md#is_gen2) | Detect the new/"gen2" NCAA event format (`EventUtils.is_gen2`, |
 | [is_scramble](additional/stats-ncaa-org-2.md#is_scramble) | Figure out if (each event of) the current clump is part of a |
 | [is_team_shooting_left_to_start](additional/stats-ncaa-org-2.md#is_team_shooting_left_to_start) | Infers which side of the SVG court the team under analysis shoots |
+| [is_transition](additional/stats-ncaa-org-2.md#is_transition) | Figure out if the current clump is part of a transition offense |
 | [is_women_game](additional/stats-ncaa-org-2.md#is_women_game) | Infers men's vs. women's game from timing evidence |
 | [jsoup_text](additional/stats-ncaa-org-2.md#jsoup_text) | JSoup `Element.text()`: all descendant text, whitespace-collapsed. |
 | [load_proxybonanza_pool](additional/stats-ncaa-org-2.md#load_proxybonanza_pool) | Resolve a ProxyBonanza package into a list of `http://login:pass@ip:port` URLs. |
@@ -118,7 +122,7 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_wbb_team_roster](additional/stats-ncaa-org-2.md#ncaa_wbb_team_roster) | Scrape a women's team roster from stats.ncaa.org. |
 | [ncaa_wbb_team_schedule](additional/stats-ncaa-org-2.md#ncaa_wbb_team_schedule) | Scrape a women's team's season schedule from stats.ncaa.org. |
 | [ncaa_wbb_team_stats](additional/stats-ncaa-org-2.md#ncaa_wbb_team_stats) | Aggregate WBB play-by-play into per-team game stats (wbigballR `get_team_stats`). |
-| [phase1_shot_event_enrichment](additional/stats-ncaa-org-2.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
+| [phase1_shot_event_enrichment](additional/stats-ncaa-org-3.md#phase1_shot_event_enrichment) | The court-geometry enrichment pass: ascending time, coordinate |
 | [playwright_transport](additional/stats-ncaa-org-3.md#playwright_transport) | Build the **suggested** stats.ncaa.org game-detail scraping transport. |
 | [remove_diacritics](additional/stats-ncaa-org-3.md#remove_diacritics) | Strip diacritical marks, e.g. `"Juhász"` -> `"Juhasz"` |
 | [reorder_and_reverse](additional/stats-ncaa-org-3.md#reorder_and_reverse) | Orders same-minute play-by-play events so subs never enclose the plays |
@@ -129,6 +133,7 @@ not covered by the generated API-endpoint reference above.
 | [select_matching](additional/stats-ncaa-org-3.md#select_matching) | JSoup `root.select(sel + ":matches(regex)")`: candidates whose full |
 | [select_matching_own](additional/stats-ncaa-org-3.md#select_matching_own) | JSoup `root.select(sel + ":matchesOwn(regex)")`: candidates whose |
 | [shot_js_to_html](additional/stats-ncaa-org-3.md#shot_js_to_html) | Converts client-side `addShot(...)` JS calls into parseable |
+| [shot_value](additional/stats-ncaa-org-3.md#shot_value) | Classify a play-by-play event string as a 3, a 2, or an assist |
 | [start_time_from_period](additional/stats-ncaa-org-3.md#start_time_from_period) | The game-clock time (minutes elapsed) a period starts at |
 | [sum_event_stats](additional/stats-ncaa-org-3.md#sum_event_stats) | Field-wise add two :class:`~sportsdataverse.mbb.mbb_ncaa_models |
 | [sum_shot_infos](additional/stats-ncaa-org-3.md#sum_shot_infos) | Field-wise sum a list of :class:`~sportsdataverse.mbb.mbb_ncaa_models |
@@ -225,6 +230,7 @@ not covered by the generated API-endpoint reference above.
 | [RapmProcessingInputs](additional/models-and-calculators.md#RapmProcessingInputs) | Port of `RapmProcessingInputs` (`RapmUtils.ts:196-203`). |
 | [RawGameEvent](additional/models-and-calculators.md#RawGameEvent) | A single NCAA play-by-play event line (`LineupEvent.RawGameEvent`, |
 | [RosterEntry](additional/models-and-calculators.md#RosterEntry) | An entry in an NCAA team roster (`RosterEntry`, ``models/ncaa |
+| [Score](additional/models-and-calculators.md#Score) | Points scored / allowed (`Game.Score`, `Game.scala:22`). |
 | [ScoreInfo](additional/models-and-calculators.md#ScoreInfo) | Score context at the start/end of a lineup event |
 | [ShotClockStats](additional/models-and-calculators.md#ShotClockStats) | Counting stats broken down by shot-clock segment |
 | [ShotEvent](additional/models-and-calculators.md#ShotEvent) | Info about one shot taken during a game, all distances in feet |
@@ -233,6 +239,7 @@ not covered by the generated API-endpoint reference above.
 | [ShotQualityConstants](additional/models-and-calculators.md#ShotQualityConstants) | Per-league rule + fitted constants for the shot-quality spine. |
 | [TeamId](additional/models-and-calculators.md#TeamId) | CBB team identifier (`TeamId`, `TeamId.scala`, `AnyVal`). |
 | [TeamSeasonId](additional/models-and-calculators.md#TeamSeasonId) | A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`). |
+| [Year](additional/models-and-calculators.md#Year) | CBB season, named by the year it ends (`Year`, `Year.scala`). |
 | [adjust_efficiency](additional/models-and-calculators.md#adjust_efficiency) | Iterative opponent-adjusted efficiency -> AdjO / AdjD / AdjEM per team-season. |
 | [adjust_off_rating_stats](additional/models-and-calculators.md#adjust_off_rating_stats) | Apply a missing-possession correction factor to an `ORtgDiagnostics` dict in place. |
 | [adjust_tempo](additional/models-and-calculators.md#adjust_tempo) | Opponent-adjusted tempo (possessions/40) per team-season. |

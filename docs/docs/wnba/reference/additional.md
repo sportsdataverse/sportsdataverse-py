@@ -13,11 +13,15 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [espn_wnba_calendar](additional/espn.md#espn_wnba_calendar) | espn_wnba_calendar - look up the WNBA calendar for a given season |
+| [espn_wnba_draft](additional/espn.md#espn_wnba_draft) | Pull ESPN WNBA draft picks for a season. |
 | [espn_wnba_game_officials](additional/espn.md#espn_wnba_game_officials) | Pull the officials assigned to a WNBA game. |
 | [espn_wnba_game_rosters](additional/espn.md#espn_wnba_game_rosters) | espn_wnba_game_rosters() - Pull the game by id. |
 | [espn_wnba_pbp](additional/espn.md#espn_wnba_pbp) | espn_wnba_pbp() - Pull the game by id. Data from API endpoints - `wnba/playbyplay`, `wnba/summary` |
 | [espn_wnba_player_stats](additional/espn.md#espn_wnba_player_stats) | Pull a WNBA athlete's ESPN **season** stat line. |
 | [espn_wnba_schedule](additional/espn.md#espn_wnba_schedule) | espn_wnba_schedule - look up the WNBA schedule for a given season |
+| [espn_wnba_standings](additional/espn.md#espn_wnba_standings) | Pull ESPN WNBA standings for a season. |
+| [espn_wnba_team_roster](additional/espn.md#espn_wnba_team_roster) | Pull the current ESPN team roster for a WNBA team. |
 | [espn_wnba_team_stats](additional/espn.md#espn_wnba_team_stats) | Pull ESPN team season stats for a WNBA team. |
 | [espn_wnba_teams](additional/espn.md#espn_wnba_teams) | espn_wnba_teams - look up WNBA teams |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Flatten one ESPN scoreboard event for the schedule frame, in place. |

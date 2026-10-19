@@ -6,6 +6,53 @@ description: "WBB — additional Python functions — ESPN — function referenc
 ---
 # WBB — additional Python functions — ESPN
 
+### espn_wbb_calendar {#espn_wbb_calendar}
+
+`espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_wbb_calendar - look up the women's college basketball calendar for a given season
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2001 is the earliest available season. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing calendar dates for the requested season.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+| `datetime` | character | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z). |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `year` | character | 4-digit year. |
+| `month` | character | Month of the calendar day as a two-digit string, e.g. 11. |
+| `day` | character | Day number within the month. |
+| `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
+| `url` | character | RotoWire player page URL. |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import espn_wbb_calendar
+cal = espn_wbb_calendar(season=2024)
+cal.head()
+
+# On-days only (dates with games on the schedule)
+
+ondays = espn_wbb_calendar(season=2024, ondays=True)
+ondays.head()
+
+# Pandas round-trip
+
+cal_pd = espn_wbb_calendar(season=2024, return_as_pandas=True)
+cal_pd.head()
+```
+
 ### espn_wbb_game_officials {#espn_wbb_game_officials}
 
 `espn_wbb_game_officials(game_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
@@ -496,6 +543,160 @@ uconn = season.filter(
 
 season_pd = espn_wbb_schedule(dates=2024, return_as_pandas=True)
 season_pd.head()
+```
+
+### espn_wbb_standings {#espn_wbb_standings}
+
+`espn_wbb_standings(season: 'int', group: 'int' = 50, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+
+Pull ESPN women's-college-basketball standings for a season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season year, forwarded to ESPN as `?season=YYYY`. |
+| `group` | `int` | `50` | ESPN `group` filter. `50` is NCAA Division I women's basketball (the default); `51` is Division II/III. |
+| `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Polars (or pandas) DataFrame with one row per team. Documented columns include `team_id`, `team_uid`, `team_slug`, `team_location`, `team_name`, `team_abbreviation`, `team_display_name`, `team_short_display_name`, `team_color`, `conference_id`, `wins`, `losses`, `win_percent`, `games_back`, `streak`, `points_for`, `points_against`, `point_differential`, `home_wins`, `home_losses`, `road_wins`, `road_losses`, `division_wins`, `division_losses`, `season`. If `raw=True`, returns the raw response dict.
+
+| col_name | type | description |
+|---|---|---|
+| `team_id` | integer | Unique team identifier. |
+| `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+| `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
+| `team_location` | character | Team city or location string. |
+| `team_name` | character | Full team display name (e.g. 'Las Vegas Aces'). |
+| `team_abbreviation` | character | Short team abbreviation (e.g. 'LAS'). |
+| `team_display_name` | character | Full team display name. |
+| `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
+| `team_color` | character | Team primary color (hex without leading '#'). |
+| `conference_id` | integer | Conference identifier. |
+| `conference_name` | character | Full conference name. |
+| `conference_abbreviation` | character | Abbreviation of the team's conference as ESPN's standings name it. |
+| `wins` | integer | Total wins. |
+| `losses` | integer | Total losses. |
+| `win_percent` | double | Win percent. |
+| `games_back` | double | Games behind the conference leader (0 for the leader). |
+| `streak` | character | Current streak (e.g. 'W3' for three-game win streak). |
+| `points_for` | double | Points for. |
+| `points_against` | double | Points allowed. |
+| `point_differential` | double | Point differential. |
+| `avg_points_for` | double | Points the team scored per game. |
+| `avg_points_against` | double | Points the team allowed per game. |
+| `home_wins` | integer | Home team's wins. |
+| `home_losses` | integer | Home team's losses. |
+| `road_wins` | integer | Road wins. |
+| `road_losses` | integer | Road losses. |
+| `division_wins` | integer | Wins against division opponents, as ESPN's standings report them. |
+| `division_losses` | integer | Losses against division opponents, as ESPN's standings report them. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import espn_wbb_standings
+standings = espn_wbb_standings(season=2024, group=50)
+print(standings.shape)
+standings.select(
+    ["team_display_name", "wins", "losses", "win_percent"]
+).head(10)
+
+# Top teams by win percentage
+
+import polars as pl
+top10 = standings.sort("win_percent", descending=True).head(10)
+
+# Pandas round-trip + Division II/III
+
+d2_d3 = espn_wbb_standings(
+    season=2024, group=51, return_as_pandas=True
+)
+d2_d3.head()
+
+# Raw payload (skip the cleaning pipeline)
+
+raw = espn_wbb_standings(season=2024, group=50, raw=True)
+sorted(raw.keys())
+```
+
+### espn_wbb_team_roster {#espn_wbb_team_roster}
+
+`espn_wbb_team_roster(team_id: 'int', season: 'int | None' = None, *, raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> 'pl.DataFrame | pd.DataFrame | dict[str, Any]'`
+
+Pull the current ESPN team roster for a women's-college-basketball team.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `team_id` | `int` |  | ESPN team identifier (e.g. `2509` for UConn). |
+| `season` | `int \| None` | `None` | Season year. Recorded as the `season` column on the output; does NOT alter the request URL because ESPN's `/teams/{id}/roster` endpoint ignores `?season=YYYY`. |
+| `raw` | `bool` | `False` | If True, returns the parsed JSON dict before any flattening. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas DataFrame; otherwise polars. |
+
+**Returns**
+
+Polars (or pandas) DataFrame with one row per athlete: `athlete_id`, `athlete_uid`, `first_name`, `last_name`, `full_name`, `display_name`, `short_name`, `jersey`, `position_id`, `position_name`, `position_abbreviation`, `height`, `display_height`, `weight`, `display_weight`, `age`, `date_of_birth`, `birth_city`, `birth_state`, `headshot_href`, `link_web`, `status_name`, `team_id`, `season`. If `raw=True`, returns the raw response dict.
+
+| col_name | type | description |
+|---|---|---|
+| `athlete_id` | character | Unique athlete identifier (ESPN). |
+| `athlete_uid` | character | ESPN athlete UID (universal identifier). |
+| `first_name` | character | Player's first name. |
+| `last_name` | character | Player's last name. |
+| `full_name` | character | Player's full name. |
+| `display_name` | character | Display name. |
+| `short_name` | character | Short display name. |
+| `jersey` | character | Jersey number worn by the player. |
+| `position_id` | character | Unique position identifier. |
+| `position_name` | character | Listed roster position ('Guard', 'Forward', 'Center'). |
+| `position_abbreviation` | character | Position abbreviation ('G' / 'F' / 'C'). |
+| `height` | double | Player height (string e.g. '6-2' or inches). |
+| `display_height` | character | Player height in display format (e.g. '6-2'). |
+| `weight` | character | Player weight in pounds. |
+| `display_weight` | character | Player weight in display format (e.g. '180 lbs'). |
+| `age` | character | Player age (in years). |
+| `date_of_birth` | character | Date of birth (YYYY-MM-DD). |
+| `birth_city` | character | Birth city. |
+| `birth_state` | character | Birth state / region. |
+| `headshot_href` | character | Headshot image URL. |
+| `link_web` | character | Web link / URL. |
+| `status_name` | character | Status label. |
+| `team_id` | integer | Unique team identifier. |
+| `season` | integer | Season identifier (4-digit year or 'YYYY-YY' string). |
+
+**Example**
+
+```python
+from sportsdataverse.wbb import espn_wbb_team_roster
+roster = espn_wbb_team_roster(team_id=2509, season=2025)
+print(roster.shape)
+roster.select(["full_name", "jersey", "position_abbreviation"]).head()
+
+# Pandas round-trip
+
+roster_pd = espn_wbb_team_roster(team_id=2509, season=2025, return_as_pandas=True)
+roster_pd.head()
+
+# Pipeline next step - join with team metadata
+
+from sportsdataverse.wbb import espn_wbb_teams
+teams = espn_wbb_teams()
+roster.join(
+    teams.select(["team_id", "team_display_name"]),
+    on="team_id",
+    how="left",
+)
+
+# Raw payload (skip the cleaning pipeline)
+
+raw = espn_wbb_team_roster(team_id=2509, season=2025, raw=True)
+sorted(raw.keys())
 ```
 
 ### espn_wbb_team_stats {#espn_wbb_team_stats}

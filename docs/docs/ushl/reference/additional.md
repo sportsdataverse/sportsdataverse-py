@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # USHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.ushl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.ushl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # BCHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.bchl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.bchl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

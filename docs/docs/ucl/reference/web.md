@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UCL — ESPN web API (v3)
 
-`sportsdataverse.ucl` — 5 endpoints.
+`sportsdataverse.soccer.ucl` — 5 endpoints.
 
 ## espn_ucl_player_overview
 

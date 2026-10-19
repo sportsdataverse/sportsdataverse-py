@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CFL — ESPN web API (v3)
 
-`sportsdataverse.cfl` — 5 endpoints.
+`sportsdataverse.football.cfl` — 5 endpoints.
 
 ## espn_cfl_player_overview
 

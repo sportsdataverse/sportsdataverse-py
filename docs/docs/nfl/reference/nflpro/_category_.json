@@ -1,5 +1,5 @@
 {
-  "label": "nflpro",
+  "label": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",
   "position": 11,
   "collapsed": true,
   "link": {"type": "doc", "id": "nfl/reference/nflpro"}

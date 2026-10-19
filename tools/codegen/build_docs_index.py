@@ -143,7 +143,7 @@ def codegen_wrappers(commit: str, rows: Rows) -> dict[str, Wrapper]:
             warnings.filterwarnings(
                 "ignore", message=r"import sportsdataverse\.\w+ is deprecated", category=DeprecationWarning
             )
-            views = G._espn_league_views(lg, list(apis.values()), cfg.hosts)
+            views = G._documented_espn_views(lg, list(apis.values()), cfg.hosts)
         for v in views:
             ep = next(e for e in apis[v.api_name].endpoints if e.short == v.short)
             out.setdefault(
@@ -310,10 +310,16 @@ def python_columns(funcs: dict[str, str], wrappers: dict[str, Wrapper], loaders:
         else:
             for scope in (league, "global"):
                 cols = G._autodoc_return_columns(scope, name)
-                for c in cols:
-                    desc = G._table_cell_desc(c.get("description") or "", league, c["name"], schema=name)
-                    rows.columns.append((name, None, c["name"], c.get("type"), _clean(desc)))
-                if cols:
+                frames = [{"section": None, "columns": cols}] if cols else G._autodoc_return_frames(scope, name)
+                for fr in frames:
+                    sec = fr.get("section")
+                    for c in fr.get("columns") or []:
+                        stored = c.get("description") or ""
+                        desc = (
+                            sec and G._table_cell_desc(stored, league, f"{sec}.{c['name']}", schema=name)
+                        ) or G._table_cell_desc(stored, league, c["name"], schema=name)
+                        rows.columns.append((name, sec, c["name"], c.get("type"), _clean(desc)))
+                if frames:
                     break
 
 

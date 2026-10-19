@@ -36,7 +36,7 @@ _No description available._
 | `{{ p.name }}` | {% if p.type %}`{{ p.type }}`{% endif %} | {% if p.default %}`{{ p.default }}`{% endif %} | {{ p.description }} |
 {% endfor %}
 {% endif %}
-{% if fn.returns or fn.return_columns %}
+{% if fn.returns or fn.return_columns or fn.return_frames %}
 
 **Returns**
 
@@ -49,6 +49,17 @@ _No description available._
 |---|---|---|
 {% for c in fn.return_columns %}
 | `{{ c.name }}` | {{ c.type }} | {{ c.description }} |
+{% endfor %}
+{% elif fn.return_frames %}
+{% for f in fn.return_frames %}
+
+`{{ f.section }}`:
+
+| col_name | type | description |
+|---|---|---|
+{% for c in f.columns %}
+| `{{ c.name }}` | {{ c.type }} | {{ c.description }} |
+{% endfor %}
 {% endfor %}
 {% elif fn.return_unverified %}
 

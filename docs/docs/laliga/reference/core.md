@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LALIGA — ESPN core API (v2)
 
-`sportsdataverse.laliga` — 82 endpoints.
+`sportsdataverse.soccer.laliga` — 82 endpoints.
 
 ## Game
 

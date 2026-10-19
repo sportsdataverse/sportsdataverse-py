@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MLS — MLS official web API (mlssoccer.com)
 
-`sportsdataverse.mls` — 12 endpoints.
+`sportsdataverse.soccer.mls` — 12 endpoints.
 
 ## mls_club
 

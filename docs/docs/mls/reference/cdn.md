@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MLS — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.mls` — 1 endpoint.
+`sportsdataverse.soccer.mls` — 1 endpoint.
 
 ## espn_mls_cdn_scoreboard
 

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WNBA — ESPN site API (v2)
 
-`sportsdataverse.wnba` — 24 endpoints.
+`sportsdataverse.wnba` — 20 endpoints.
 
 ## espn_wnba_scoreboard
 
@@ -377,33 +377,6 @@ espn_wnba_summary()
 
 _Last validated n/a._
 
-## espn_wnba_calendar
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/calendar)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#espn_wnba_calendar-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#espn_wnba_calendar-example}
-
-```python
-espn_wnba_calendar()
-```
-
-_Last validated n/a._
-
 ## espn_wnba_news
 
 ESPN endpoint.
@@ -587,33 +560,6 @@ espn_wnba_statistics_league()
 
 _Last validated n/a._
 
-## espn_wnba_draft
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/draft`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/draft](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/draft)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#espn_wnba_draft-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: parser: parse_items returns no columns on the live payload (nba, nfl, nhl, wnba, 2026-10-07); its rows sit under keys it does not read (top level: breakingNews, broadcasts, displayName, picks, positions, rounds, shortDisplayName, status).
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#espn_wnba_draft-example}
-
-```python
-espn_wnba_draft()
-```
-
-_Last validated n/a._
-
 ## espn_wnba_teams_site
 
 ESPN endpoint.
@@ -723,83 +669,6 @@ ESPN endpoint.
 
 ```python
 espn_wnba_team(team_id='4')
-```
-
-_Last validated n/a._
-
-## espn_wnba_team_roster
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/{team_id}/roster`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams/4/roster?limit=500)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `team_id` | `team_id` |  | `Y` |  | ESPN WNBA team identifier (e.g. `3` for Dallas Wings). |
-| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
-
-### Returns {#espn_wnba_team_roster-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | Id. |
-| `uid` | character | Uid. |
-| `guid` | character | Guid. |
-| `first_name` | character | First name. |
-| `last_name` | character | Last name. |
-| `full_name` | character | Full name. |
-| `display_name` | character | Display name. |
-| `short_name` | character | Short name. |
-| `height` | double | Height. |
-| `display_height` | character | Display height. |
-| `age` | integer | Age. |
-| `date_of_birth` | character | Date of birth. |
-| `links` | character | Links. |
-| `slug` | character | Slug. |
-| `jersey` | character | Jersey. |
-| `injuries` | character | Injuries. |
-| `contracts` | character | Contracts. |
-| `alternate_ids_sdr` | character | Alternate ids sdr. |
-| `birth_place_city` | character | Birth place city. |
-| `birth_place_state` | character | Birth place state. |
-| `birth_place_country` | character | Birth place country. |
-| `headshot_href` | character | Headshot href. |
-| `headshot_alt` | character | Headshot alt. |
-| `position_id` | character | Position id. |
-| `position_name` | character | Position name. |
-| `position_display_name` | character | Position display name. |
-| `position_abbreviation` | character | Position abbreviation. |
-| `position_leaf` | logical | Position leaf. |
-| `experience_years` | integer | Experience years. |
-| `status_id` | character | Status id. |
-| `status_name` | character | Status name. |
-| `status_type` | character | Status type. |
-| `status_abbreviation` | character | Status abbreviation. |
-| `weight` | double | Weight. |
-| `display_weight` | character | Display weight. |
-| `college_id` | character | College id. |
-| `college_guid` | character | College guid. |
-| `college_mascot` | character | College mascot. |
-| `college_name` | character | College name. |
-| `college_short_name` | character | College short name. |
-| `college_abbrev` | character | College abbrev. |
-| `college_logos` | character | College logos. |
-| `hand_type` | character | Hand type. |
-| `hand_abbreviation` | character | Hand abbreviation. |
-| `hand_display_value` | character | Hand display value. |
-| `citizenship` | character | Citizenship. |
-| `teams` | character | Teams. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#espn_wnba_team_roster-example}
-
-```python
-espn_wnba_team_roster(team_id='4')
 ```
 
 _Last validated n/a._
@@ -1170,68 +1039,6 @@ ESPN endpoint.
 
 ```python
 espn_wnba_player_news(athlete_id='4239')
-```
-
-_Last validated n/a._
-
-## espn_wnba_standings
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings`
-
-**Valid URL:** [https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings](https://site.api.espn.com/apis/v2/sports/basketball/wnba/standings)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
-| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
-| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
-
-### Returns {#espn_wnba_standings-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `group_name` | character | Group name. |
-| `group_abbreviation` | character | Group abbreviation. |
-| `team_id` | character | Team id. |
-| `team_name` | character | Team name. |
-| `team_abbreviation` | character | Team abbreviation. |
-| `team_display_name` | character | Team display name. |
-| `team_location` | character | Team location. |
-| `team_logo` | character | Team logo. |
-| `avg_points_against` | double | Avg points against. |
-| `avg_points_for` | double | Avg points for. |
-| `clincher` | double | Clincher. |
-| `differential` | double | Differential. |
-| `division_win_percent` | double | Division win percent. |
-| `games_behind` | double | Games behind. |
-| `league_win_percent` | double | League win percent. |
-| `losses` | double | Losses. |
-| `playoff_seed` | double | Playoff seed. |
-| `point_differential` | double | Point differential. |
-| `points` | double | Points. |
-| `points_against` | double | Points against. |
-| `points_for` | double | Points for. |
-| `streak` | double | Streak. |
-| `win_percent` | double | Win percent. |
-| `wins` | double | Wins. |
-| `games_ahead` | double | Games ahead. |
-| `overall` | character | Overall. |
-| `home` | character | Home. |
-| `road` | character | Road. |
-| `vs. div.` | character | Vs. div.. |
-| `vs. conf.` | character | Vs. conf.. |
-| `last ten games` | character | Last ten games. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#espn_wnba_standings-example}
-
-```python
-espn_wnba_standings()
 ```
 
 _Last validated n/a._

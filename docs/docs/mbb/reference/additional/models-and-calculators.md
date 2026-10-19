@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: AssistEvent–build_priors"
-sidebar_label: "Models and calculators: AssistEvent–build_priors"
+title: "MBB — additional Python functions — Models and calculators: AssistEvent–build_player"
+sidebar_label: "Models and calculators: AssistEvent–build_player"
 sidebar_position: 9
-description: "MBB — additional Python functions — Models and calculators: AssistEvent–build_priors — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: AssistEvent–build_player — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: AssistEvent–build_priors
+# MBB — additional Python functions — Models and calculators: AssistEvent–build_player
 
 ### AssistEvent {#AssistEvent}
 
@@ -534,6 +534,19 @@ populates it.
 | `origin` | `Optional[str]` |  | The player's hometown/prior-school text, if the source table has that column (v1 rosters only). |
 | `role` | `Optional[str]` |  | Reserved for a later phase; always `None` from `parse_roster` (see above). |
 
+### Score {#Score}
+
+`Score(scored: 'int', allowed: 'int') -> None`
+
+Points scored / allowed (`Game.Score`, `Game.scala:22`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `int` |  | Points scored by the team under analysis. |
+| `allowed` | `int` |  | Points scored by the opponent. |
+
 ### ScoreInfo {#ScoreInfo}
 
 `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None`
@@ -694,6 +707,18 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 |---|---|---|---|
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
+
+### Year {#Year}
+
+`Year(value: 'int') -> None`
+
+CBB season, named by the year it ends (`Year`, `Year.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `int` |  | The ending year of the season. |
 
 ### adjust_efficiency {#adjust_efficiency}
 
@@ -1399,39 +1424,4 @@ print(ctx["num_players"], ctx["team_info"]["off_poss"]["value"])
 
 off_lineups = ctx["filtered_lineups"]("off")
 def_lineups = ctx["filtered_lineups"]("def")
-```
-
-### build_priors {#build_priors}
-
-`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
-
-Build strong/weak per-player RAPM priors for every column.
-
-Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
-See the module docstring's landmine list, item 1, for the critical
-Python-vs-JS `{}`-truthiness gotcha this function's implementation
-deliberately avoids.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
-| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
-| `avg_efficiency` | `float` |  | League/context average efficiency. |
-| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
-| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
-| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
-
-**Returns**
-
-A `RapmPriorInfo`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_rapm import build_priors
-
-priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
-print(priors["players_weak"][0])
 ```

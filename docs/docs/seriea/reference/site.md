@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # SERIEA — ESPN site API (v2)
 
-`sportsdataverse.seriea` — 24 endpoints.
+`sportsdataverse.soccer.seriea` — 24 endpoints.
 
 ## espn_seriea_scoreboard
 

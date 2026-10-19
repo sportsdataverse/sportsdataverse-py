@@ -1,10 +1,47 @@
 ---
-title: "CFB — additional Python functions — Models and calculators: cfb_compute–fit_field"
-sidebar_label: "Models and calculators: cfb_compute–fit_field"
+title: "CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field"
+sidebar_label: "Models and calculators: cfb_adjusted–fit_field"
 sidebar_position: 8
-description: "CFB — additional Python functions — Models and calculators: cfb_compute–fit_field — function reference in sdv-py, the SportsDataverse Python package."
+description: "CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# CFB — additional Python functions — Models and calculators: cfb_compute–fit_field
+# CFB — additional Python functions — Models and calculators: cfb_adjusted–fit_field
+
+### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
+
+`cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
+
+Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
+
+For each week `w` the opponent-strength ridge is fit on `_FIT_WP`-band plays
+from **weeks before `w` only**, then that week's games are adjusted with
+those as-of strengths -- so the value uses no future information and is valid
+as an in-season power-rating / model feature. Week 1 (no prior) yields null
+adjustments; not-yet-seen opponents fall back to the league baseline (an
+average team), and teams seen on few plays are shrunk most of the way there.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
+| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
+| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
+
+**Returns**
+
+One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
+
+No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Example**
+
+```python
+import sportsdataverse.cfb as cfb
+pbp = cfb.load_cfb_pbp(seasons=[2023])
+tg = cfb.cfb_adjusted_epa_by_game(pbp)
+tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
+```
 
 ### cfb_compute_results {#cfb_compute_results}
 

@@ -958,6 +958,45 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_team_shooting_left_to_st
 is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
 ```
 
+### is_transition {#is_transition}
+
+`is_transition(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent, bool], bool], str]'`
+
+Figure out if the current clump is part of a transition offense
+
+following opponent offense (or a marked-fastbreak play) (`is_transition`,
+`LineupUtils.scala:668-927`).
+
+Returns a `(predicate, debug_tag)` tuple mirroring `is_scramble`
+-- the oracle asserts the debug tag directly (`"N/A"`/`"0a.X"`/
+`"1a.a"`/`"1a.b"`/`"1b.a"`/`"1b.b"`/`"1b.X"`/`"NOT"`).
+Unlike `is_scramble`'s predicate, this one takes a *second*
+argument -- `is_scramble` -- so **scramble always wins**: an event
+already classified as a scramble is never additionally tagged
+transition (`!is_scramble && is_transition_event`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
+| `prev_clumps` | `list[ConcurrentClump]` |  | Prior merged clumps, most-recent-first. |
+| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking" (and, for this heuristic, "defending"). |
+| `player_version` | `bool` |  | Unused -- see `is_scramble`'s port notes in the module docstring (the Scala's debug-print gate this flag controls is permanently `false` regardless of its value). |
+
+**Returns**
+
+`(predicate, debug_tag)` where `predicate(ev, is_scramble)` reports whether `ev` is part of a transition play, given whether it was already classified as a scramble.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
+
+predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
+[predicate(ev, is_scramble=False) for ev in curr_clump.evs]
+```
+
 ### is_women_game {#is_women_game}
 
 `is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'`
@@ -1599,77 +1638,4 @@ df_pd = ncaa_mbb_player_stats(pbp, multi_games=True, simple=True, return_as_pand
 # Pipeline next step (one line)
 
 season.filter(pl.col("mins") > 50).sort("pts", descending=True).head()
-```
-
-### ncaa_mbb_possessions {#ncaa_mbb_possessions}
-
-`ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Aggregate bigballR-contract play-by-play into one row per possession.
-
-Port of bigballR `get_possessions` (`all_functions.R:3686-3745`).
-Groups by the possession keys stamped upstream by the scrape engine
-(`poss_num`, `poss_team`, the ten on-court lineup columns, plus game
-identity), drops possessions with any missing on-court player, and — in
-the full variant — sorts each row's home/away lineup alphabetically so a
-given lineup always occupies the same columns.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
-| `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
-| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
-| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
-
-**Returns**
-
-`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Unique game identifier. |
-| `game_date` | character | Game date (YYYY-MM-DD). |
-| `home` | character | Home. |
-| `away` | character | Away record. |
-| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
-| `poss_num` | integer |  |
-| `poss_team` | character |  |
-| `home_1` | character |  |
-| `home_2` | character |  |
-| `home_3` | character |  |
-| `home_4` | character |  |
-| `home_5` | character |  |
-| `away_1` | character |  |
-| `away_2` | character |  |
-| `away_3` | character |  |
-| `away_4` | character |  |
-| `away_5` | character |  |
-| `home_score` | integer | Home team score at the time of the play. |
-| `away_score` | integer | Away team score at the time of the play. |
-| `pts` | integer | Points scored. |
-| `is_assisted` | integer |  |
-| `is_transition` | integer |  |
-| `is_garbage_time` | integer |  |
-| `start_event_type` | character |  |
-| `first_shot_time` | integer |  |
-| `first_shot_type` | character |  |
-| `last_event_time` | integer |  |
-| `last_event_type` | character |  |
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
-poss = ncaa_mbb_possessions(pbp)
-print(poss.shape)
-
-# Simple points-per-possession variant
-
-poss_pd = ncaa_mbb_possessions(pbp, simple=True, return_as_pandas=True)
-
-# Pipeline next step (one line)
-
-poss.group_by("poss_team").agg(pl.col("pts").mean())
 ```

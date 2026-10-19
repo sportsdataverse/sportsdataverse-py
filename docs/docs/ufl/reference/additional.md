@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # UFL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.ufl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.football.ufl`
 not covered by the generated API-endpoint reference above.
 
 ## ESPN

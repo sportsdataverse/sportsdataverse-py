@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UCL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.ucl` — 1 endpoint.
+`sportsdataverse.soccer.ucl` — 1 endpoint.
 
 ## espn_ucl_fpi
 
