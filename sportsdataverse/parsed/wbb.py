@@ -26,6 +26,7 @@ warnings.warn(
 from sportsdataverse.wbb import bart_wbb_ratings as _raw_bart_wbb_ratings
 from sportsdataverse.wbb import espn_wbb_award as _raw_espn_wbb_award
 from sportsdataverse.wbb import espn_wbb_awards as _raw_espn_wbb_awards
+from sportsdataverse.wbb import espn_wbb_calendar_site as _raw_espn_wbb_calendar_site
 from sportsdataverse.wbb import espn_wbb_cdn_boxscore as _raw_espn_wbb_cdn_boxscore
 from sportsdataverse.wbb import espn_wbb_cdn_playbyplay as _raw_espn_wbb_cdn_playbyplay
 from sportsdataverse.wbb import espn_wbb_cdn_schedule as _raw_espn_wbb_cdn_schedule
@@ -123,6 +124,7 @@ from sportsdataverse.wbb import espn_wbb_season_week_rankings as _raw_espn_wbb_s
 from sportsdataverse.wbb import espn_wbb_season_weeks as _raw_espn_wbb_season_weeks
 from sportsdataverse.wbb import espn_wbb_seasons as _raw_espn_wbb_seasons
 from sportsdataverse.wbb import espn_wbb_standings_core as _raw_espn_wbb_standings_core
+from sportsdataverse.wbb import espn_wbb_standings_site as _raw_espn_wbb_standings_site
 from sportsdataverse.wbb import espn_wbb_statistics_league as _raw_espn_wbb_statistics_league
 from sportsdataverse.wbb import espn_wbb_summary as _raw_espn_wbb_summary
 from sportsdataverse.wbb import espn_wbb_talentpicks as _raw_espn_wbb_talentpicks
@@ -134,6 +136,7 @@ from sportsdataverse.wbb import espn_wbb_team_injuries as _raw_espn_wbb_team_inj
 from sportsdataverse.wbb import espn_wbb_team_leaders as _raw_espn_wbb_team_leaders
 from sportsdataverse.wbb import espn_wbb_team_news as _raw_espn_wbb_team_news
 from sportsdataverse.wbb import espn_wbb_team_record as _raw_espn_wbb_team_record
+from sportsdataverse.wbb import espn_wbb_team_roster_site as _raw_espn_wbb_team_roster_site
 from sportsdataverse.wbb import espn_wbb_team_schedule as _raw_espn_wbb_team_schedule
 from sportsdataverse.wbb import espn_wbb_team_transactions as _raw_espn_wbb_team_transactions
 from sportsdataverse.wbb import espn_wbb_teams_core as _raw_espn_wbb_teams_core
@@ -737,6 +740,7 @@ __all__ = [
     "espn_wbb_award",
     "espn_wbb_awards",
     "espn_wbb_calendar",
+    "espn_wbb_calendar_site",
     "espn_wbb_cdn_boxscore",
     "espn_wbb_cdn_playbyplay",
     "espn_wbb_cdn_schedule",
@@ -840,6 +844,7 @@ __all__ = [
     "espn_wbb_seasons",
     "espn_wbb_standings",
     "espn_wbb_standings_core",
+    "espn_wbb_standings_site",
     "espn_wbb_statistics_league",
     "espn_wbb_summary",
     "espn_wbb_talentpicks",
@@ -852,6 +857,7 @@ __all__ = [
     "espn_wbb_team_news",
     "espn_wbb_team_record",
     "espn_wbb_team_roster",
+    "espn_wbb_team_roster_site",
     "espn_wbb_team_schedule",
     "espn_wbb_team_stats",
     "espn_wbb_team_transactions",
@@ -1178,6 +1184,20 @@ def espn_wbb_awards(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_awards(*args, **kwargs)
+
+
+def espn_wbb_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_calendar_site(*args, **kwargs)
 
 
 def espn_wbb_cdn_boxscore(*args, **kwargs):
@@ -2538,6 +2558,20 @@ def espn_wbb_standings_core(*args, **kwargs):
     return _raw_espn_wbb_standings_core(*args, **kwargs)
 
 
+def espn_wbb_standings_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_standings_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_standings_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_standings_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_standings_site(*args, **kwargs)
+
+
 def espn_wbb_statistics_league(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_statistics_league``).
 
@@ -2690,6 +2724,20 @@ def espn_wbb_team_record(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wbb_team_record(*args, **kwargs)
+
+
+def espn_wbb_team_roster_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wbb.espn_wbb_team_roster_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wbb.espn_wbb_team_roster_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wbb.espn_wbb_team_roster_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wbb_team_roster_site(*args, **kwargs)
 
 
 def espn_wbb_team_schedule(*args, **kwargs):

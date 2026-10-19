@@ -24,7 +24,8 @@ def test_env_renders_a_trivial_template():
 def test_generated_modules_are_valid_python_with_all_and_defs():
     for name, src in generate._render_all().items():
         tree = ast.parse(src)  # raises SyntaxError if malformed
-        funcs = {n.name for n in tree.body if isinstance(n, ast.FunctionDef)}
+        # public defs only: the B-M31 deprecation shim's module ``__getattr__`` is not exported
+        funcs = {n.name for n in tree.body if isinstance(n, ast.FunctionDef) and not n.name.startswith("_")}
         assert funcs, f"{name} has no functions"
         assert "__all__" in src
         for fn in funcs:

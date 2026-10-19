@@ -270,7 +270,8 @@ def test_the_espn_reference_pages_document_only_the_wrappers_their_names_run():
                 wrong.append(v.fn_name)
     assert wrong == []
     cfb = next(lg for lg in cfg.leagues if lg.prefix == "cfb")
-    assert "espn_cfb_calendar" in {v.fn_name for v in generate._espn_league_views(cfb, apis, cfg.hosts)}
+    names = {v.fn_name for v in generate._espn_league_views(cfb, apis, cfg.hosts)}
+    assert "espn_cfb_calendar_site" in names and "espn_cfb_calendar" not in names  # 3.9 PR4 rename
     assert "## espn_cfb_calendar" not in generate.render_reference_page("cfb", "espn_site_v2").splitlines()
 
 

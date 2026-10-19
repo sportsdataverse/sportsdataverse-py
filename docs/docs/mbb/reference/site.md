@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MBB — ESPN site API (v2)
 
-`sportsdataverse.mbb` — 24 endpoints.
+`sportsdataverse.mbb` — 25 endpoints.
 
 ## espn_mbb_scoreboard
 
@@ -344,6 +344,33 @@ ESPN endpoint.
 
 ```python
 espn_mbb_summary()
+```
+
+_Last validated n/a._
+
+## espn_mbb_calendar_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar](https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/calendar)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_mbb_calendar_site-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_mbb_calendar_site-example}
+
+```python
+espn_mbb_calendar_site()
 ```
 
 _Last validated n/a._

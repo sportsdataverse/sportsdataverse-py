@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WBB — ESPN site API (v2)
 
-`sportsdataverse.wbb` — 22 endpoints.
+`sportsdataverse.wbb` — 25 endpoints.
 
 ## espn_wbb_scoreboard
 
@@ -331,6 +331,33 @@ espn_wbb_summary()
 
 _Last validated n/a._
 
+## espn_wbb_calendar_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/calendar)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+
+### Returns {#espn_wbb_calendar_site-returns}
+
+**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_wbb_calendar_site-example}
+
+```python
+espn_wbb_calendar_site()
+```
+
+_Last validated n/a._
+
 ## espn_wbb_news
 
 ESPN endpoint.
@@ -647,6 +674,78 @@ ESPN endpoint.
 
 ```python
 espn_wbb_team(team_id='4')
+```
+
+_Last validated n/a._
+
+## espn_wbb_team_roster_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/{team_id}/roster`
+
+**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster?limit=500](https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams/4/roster?limit=500)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `team_id` | `team_id` |  | `Y` |  | team_id path parameter. |
+| `limit` | `limit` |  |  | `Y` | Maximum number of items to return. |
+
+### Returns {#espn_wbb_team_roster_site-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `id` | character | Id. |
+| `uid` | character | Uid. |
+| `guid` | character | Guid. |
+| `first_name` | character | First name. |
+| `last_name` | character | Last name. |
+| `full_name` | character | Full name. |
+| `display_name` | character | Display name. |
+| `short_name` | character | Short name. |
+| `height` | double | Height. |
+| `display_height` | character | Display height. |
+| `links` | character | Links. |
+| `slug` | character | Slug. |
+| `jersey` | character | Jersey. |
+| `injuries` | character | Injuries. |
+| `teams` | character | Teams. |
+| `alternate_ids_sdr` | character | Alternate ids sdr. |
+| `birth_place_city` | character | Birth place city. |
+| `birth_place_state` | character | Birth place state. |
+| `birth_place_country` | character | Birth place country. |
+| `birth_place_display_text` | character |  |
+| `birth_country_alternate_id` | character | Alternate identifier for the athlete's country of birth used in ESPN's country-flag reference system. |
+| `birth_country_abbreviation` | character |  |
+| `headshot_href` | character | Headshot href. |
+| `headshot_alt` | character | Headshot alt. |
+| `hand_type` | character | Hand type. |
+| `hand_abbreviation` | character | Hand abbreviation. |
+| `hand_display_value` | character | Hand display value. |
+| `flag_href` | character | URL of the SVG or PNG flag image representing the athlete's country of birth. |
+| `flag_alt` | character | Alt-text string for the athlete's country-of-birth flag image, typically the full country name. |
+| `flag_rel` | character | Relationship descriptor for the athlete's country-of-birth flag link (e.g., "flag"). |
+| `position_id` | character | Position id. |
+| `position_name` | character | Position name. |
+| `position_display_name` | character | Position display name. |
+| `position_abbreviation` | character | Position abbreviation. |
+| `position_leaf` | logical | Position leaf. |
+| `experience_years` | integer | Experience years. |
+| `experience_display_value` | character | Experience display value. |
+| `experience_abbreviation` | character | Experience abbreviation. |
+| `status_id` | character | Status id. |
+| `status_name` | character | Status name. |
+| `status_type` | character | Status type. |
+| `status_abbreviation` | character | Status abbreviation. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_wbb_team_roster_site-example}
+
+```python
+espn_wbb_team_roster_site(team_id='4')
 ```
 
 _Last validated n/a._
@@ -1013,6 +1112,64 @@ ESPN endpoint.
 
 ```python
 espn_wbb_player_news(athlete_id='4239')
+```
+
+_Last validated n/a._
+
+## espn_wbb_standings_site
+
+ESPN endpoint.
+
+**Endpoint URL:** `GET https://site.api.espn.com/apis/v2/sports/basketball/womens-college-basketball/standings`
+
+**Valid URL:** [https://site.api.espn.com/apis/v2/sports/basketball/womens-college-basketball/standings](https://site.api.espn.com/apis/v2/sports/basketball/womens-college-basketball/standings)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `season` | `season` |  |  | `Y` | Season year (e.g. 2024). |
+| `group` | `group` |  |  | `Y` | Conference or group id filter (e.g. an ESPN conference id). |
+| `type` | `standings_type` |  |  | `Y` | Standings variant (e.g. 'by-division' or 'by-conference'). |
+
+### Returns {#espn_wbb_standings_site-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `group_name` | character | Group name. |
+| `group_abbreviation` | character | Group abbreviation. |
+| `team_id` | character | Team id. |
+| `team_name` | character | Team name. |
+| `team_abbreviation` | character | Team abbreviation. |
+| `team_display_name` | character | Team display name. |
+| `team_location` | character | Team location. |
+| `team_logo` | character | Team logo. |
+| `avg_points_against` | double | Avg points against. |
+| `avg_points_for` | double | Avg points for. |
+| `games_behind` | double | Games behind. |
+| `league_win_percent` | double | League win percent. |
+| `losses` | double | Losses. |
+| `playoff_seed` | double | Playoff seed. |
+| `point_differential` | double | Point differential. |
+| `points_against` | double | Points against. |
+| `points_for` | double | Points for. |
+| `streak` | double | Streak. |
+| `win_percent` | double | Win percent. |
+| `wins` | double | Wins. |
+| `games_ahead` | double | Games ahead. |
+| `overall` | character | Overall. |
+| `home` | character | Home. |
+| `road` | character | Road. |
+| `vs ap top 25` | character | The team's win-loss record against opponents ranked in the AP Top 25 poll. |
+| `vs usa ranked teams` | character | The team's win-loss record against opponents ranked in the USA Today Coaches Poll. |
+| `vs. conf.` | character | Vs. conf.. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Example {#espn_wbb_standings_site-example}
+
+```python
+espn_wbb_standings_site()
 ```
 
 _Last validated n/a._

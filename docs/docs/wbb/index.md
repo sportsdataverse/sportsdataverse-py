@@ -9,7 +9,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 129 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 132 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 34 | none |
 | [stats.ncaa.org](#stats-ncaa-org) | `stats.ncaa.org` | 113 | none (Terms gate + rate rotation) |
 | [Bart Torvik Women's T-Rank](#bart-torvik-women-s-t-rank) | `barttorvik.com` | 1 | none |
@@ -21,7 +21,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 22 |
+| [ESPN site API (v2)](reference/site) | 25 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 86 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |

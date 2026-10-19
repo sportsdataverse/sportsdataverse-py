@@ -1477,8 +1477,19 @@ def _convention_rename(short: str) -> str:
 # ``player_stats_v3`` alongside a bare ``player_stats`` -- but only WHEN that bare
 # name is taken. When no bare sibling exists (most leagues) it keeps the bare
 # ``player_stats`` name, so a lone endpoint is never left orphaned as ``*_v3``.
+#
+# The same rule renames a generated wrapper whose bare name a hand-written function already
+# holds at package level (B-M31): ``sportsdataverse.cfb.espn_cfb_calendar`` runs the
+# hand-written calendar, so the site-v2 wrapper becomes ``espn_cfb_calendar_site`` (the
+# ``_site`` qualifier ``teams_site`` already uses). Only the shadowed leagues rename; a league
+# with no hand-written sibling keeps the bare name. The old ext-module import keeps working
+# for one release through the module's ``__getattr__`` and warns (``_RENAMED``).
 _ESPN_COLLISION_VERSIONED: dict[str, str] = {
     "athlete_stats": "player_stats_v3",
+    "calendar": "calendar_site",
+    "draft": "draft_site",
+    "standings": "standings_site",
+    "team_roster": "team_roster_site",
 }
 
 # Per-sport parser-name overrides: when rendering a league of sport S, endpoint short K
@@ -1583,6 +1594,13 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
                     _ESPN_RENAME_SKIPPED[base] = f"{new} (collision)"
             else:
                 fn_name = new
+        renamed_from = None
+        if fn_name in handwritten:
+            # B-M31: the package name runs a hand-written function, so this wrapper was reachable
+            # only through ``*_espn_ext``. Version-qualify it; the old ext import is deprecated.
+            versioned = _versioned_on_collision(ep.short, league.prefix)
+            if versioned and versioned not in base_names and versioned not in handwritten and versioned not in used:
+                renamed_from, fn_name = fn_name, versioned
         used.add(fn_name)
         # The sport parser override is applied BEFORE the view is built: the view renders
         # the docstring and the returns table from ``ep``, so a later swap left 68 soccer and
@@ -1594,6 +1612,7 @@ def _espn_league_views(league: spec.League, apis, hosts) -> list[_EndpointView]:
             schema_league = league.sport
         view = _EndpointView(ep, fn_name, ep_host, league, doc_extras=ep.docstring, schema_league=schema_league)
         view.api_name = api_name
+        view.renamed_from = renamed_from
         views.append(view)
     return views
 
@@ -1637,6 +1656,7 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         sport_parser_imports=sport_parser_imports,
         sport_parser_module=sport_parser_module,
         runtime_imports=runtime_imports,
+        renamed={v.renamed_from: v.fn_name for v in views if v.renamed_from},
     )
 
 
