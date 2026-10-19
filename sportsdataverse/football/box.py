@@ -39,7 +39,7 @@ def _ordered_rows(df: "pl.DataFrame", team: str, name: str, volume: str | None =
     return df.sort(keys, descending=[c == volume for c in keys], nulls_last=True, maintain_order=True)
 
 
-def _home_first(df: "pl.DataFrame", team: str, home: int) -> "pl.DataFrame":
+def _home_first(df: pl.DataFrame, team: str, home: int) -> pl.DataFrame:
     """One-row-per-team table in a total order: the home team, then the rest by team id.
 
     The team tables are built by ``group_by`` + full joins, so without a sort the
