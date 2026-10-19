@@ -251,3 +251,44 @@ def test_top10_parses_the_bare_list_the_live_boards_send(board):
     assert isinstance(raw, list) and raw
     df = parse_edge_top10(raw)
     assert df.height == len(raw) and df.width > 0
+
+
+# ===========================================================================
+# Schema drift warns instead of reading as "no data" (task 4.9, A-L60)
+# ===========================================================================
+
+
+def _drifted(raw, key=None):
+    """The real capture with the row list at ``key`` (or the bare list) turned into a list of strings."""
+    if key is None:
+        return [str(row) for row in raw]
+    return {**raw, key: [str(row) for row in raw[key]]}
+
+
+@pytest.mark.parametrize(
+    ("parser", "fixture", "key", "where"),
+    [
+        ("parse_edge_top10", "skater_speed_top_10", None, "parse_edge_top10: rows"),
+        ("parse_edge_sog_details", "skater_detail", "sogDetails", "parse_edge_sog_details: sogDetails"),
+        ("parse_edge_sog_summary", "skater_detail", "sogSummary", "parse_edge_sog_summary: sogSummary"),
+        ("parse_edge_hardest_shots", "skater_shot_speed", "hardestShots", "parse_edge_hardest_shots: hardestShots"),
+        (
+            "parse_edge_shot_location",
+            "team_shot_loc",
+            "shotLocationDetails",
+            "parse_edge_shot_location: shotLocationDetails",
+        ),
+        ("parse_edge_zone_time", "skater_zone_time", "zoneTimeDetails", "parse_edge_zone_time: zoneTimeDetails"),
+    ],
+)
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, where):
+    """A drifted row list still yields zero rows (the parser contract) but now SAYS so (A-L60)."""
+    import sportsdataverse.nhl.nhl_edge_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    assert parse(raw).height > 0  # the real capture parses to rows, with no warning (pytest.ini: warnings are errors)
+    with pytest.warns(SchemaDriftWarning, match=where):
+        out = parse(_drifted(raw, key))
+    if parser != "parse_edge_zone_time":  # zone_time moves on to the next zone key (zoneStarts) after warning
+        assert out.height == 0

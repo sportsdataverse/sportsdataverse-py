@@ -5,6 +5,7 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 import re as _re
+import warnings as _warnings
 from typing import TYPE_CHECKING, Any
 from urllib.parse import urlsplit
 
@@ -319,6 +320,40 @@ class EraCoverageWarning(UserWarning):
 
             warnings.filterwarnings("ignore", category=EraCoverageWarning)
     """
+
+
+class SchemaDriftWarning(UserWarning):
+    """Warned when a parser meets a payload whose shape it does not recognise and returns zero rows.
+
+    The parser contract keeps a malformed payload from raising: the result is a zero-row
+    frame. Without this warning that frame reads exactly like "the source has no data", so an
+    upstream schema change would pass unnoticed (A-L60). The message names the parser, the
+    payload path it was reading, and the exception the shape caused. Turn it into an error in a
+    pipeline that must never publish a drifted parse with
+    ``warnings.filterwarnings("error", category=SchemaDriftWarning)``.
+
+    Example:
+        Fail a build on drift::
+
+            import warnings
+            from sportsdataverse.errors import SchemaDriftWarning
+            warnings.filterwarnings("error", category=SchemaDriftWarning)
+    """
+
+
+#: What flattening a payload of the wrong shape raises (``pd.json_normalize`` on a list of strings:
+#: ``TypeError`` on pandas 3, ``AttributeError`` on pandas 2; a missing key; an unparseable value).
+#: Parsers catch exactly these, warn :class:`SchemaDriftWarning` and return zero rows.
+_SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
+
+
+def _warn_schema_drift(where: str, exc: BaseException) -> None:
+    """Warn that ``where`` (``"<parser>: <payload path>"``) met an unrecognised shape (A-L60)."""
+    _warnings.warn(
+        f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); returning zero rows",
+        SchemaDriftWarning,
+        stacklevel=3,
+    )
 
 
 def _error_envelope_code(body: Any) -> int | None:

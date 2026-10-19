@@ -324,3 +324,22 @@ def test_parser_for_nhl_api_web_returns_callable_or_none():
     # Unregistered endpoint (e.g. playoff_series, player_spotlight,
     # draft_rankings) — returns None, caller null-checks
     assert parser_for_nhl_api_web("nhl_web_unregistered_endpoint") is None
+
+
+@pytest.mark.parametrize(
+    ("parser", "fixture", "key"),
+    [
+        ("parse_nhl_web_pbp", "pbp_2024_scf_g7", "plays"),
+        ("parse_nhl_web_standings", "standings_now", "standings"),
+        ("parse_nhl_web_player_game_log", "player_mcdavid_gamelog", "gameLog"),
+    ],
+)
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
+    """A row list that stops holding objects gives zero rows AND a SchemaDriftWarning naming the path (A-L60)."""
+    import sportsdataverse.nhl.nhl_api_web_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    assert parse(raw).height > 0
+    with pytest.warns(SchemaDriftWarning, match=f"{parser}: {key}"):
+        assert parse({**raw, key: [str(row) for row in raw[key]]}).height == 0

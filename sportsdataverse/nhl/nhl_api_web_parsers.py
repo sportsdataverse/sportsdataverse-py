@@ -16,6 +16,9 @@ mirrors the design of :mod:`sportsdataverse._common_espn_parsers`:
 * Every parser returns ``polars.DataFrame`` by default; pass
   ``return_as_pandas=True`` for pandas.
 * Empty / malformed payloads return a zero-row frame instead of raising.
+  A row list whose rows are not objects (an upstream schema change) also
+  gives zero rows, and warns :class:`~sportsdataverse.errors.SchemaDriftWarning`
+  naming the payload path, so drift never reads as "no data".
 * Output columns are snake-cased via
   :func:`sportsdataverse.dl_utils.underscore`.
 * List-valued cells are stringified so polars accepts the frame.
@@ -45,6 +48,11 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _warn_schema_drift
+
+# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
+# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
+_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 # ---------------------------------------------------------------------------
 # Helpers (mirror _common_espn_parsers / mlb_api_parsers conventions)
@@ -61,7 +69,9 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return df
     try:
         return pl.from_pandas(df)
-    except Exception:
+    except _FROM_PANDAS_ERRORS:
+        # A mixed-type object column (e.g. ints and strings) fails the Arrow conversion:
+        # stringify the object columns rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
@@ -73,14 +83,27 @@ def _empty_frame(return_as_pandas: bool = False):
     return df if return_as_pandas else pl.DataFrame()
 
 
-def _flatten_rows(items, return_as_pandas: bool):
+def _as_dict(payload) -> dict:
+    """``payload`` when it is a data object; ``{}`` for a non-dict body or an error envelope."""
+    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}
+
+
+def _flatten_rows(items, return_as_pandas: bool, where: str):
     """``pd.json_normalize`` a list of dicts → tidy frame. Zero-row frame
-    on empty input. Stringifies list-valued cells for polars ingestion."""
-    if not isinstance(items, list) or not items:
+    on empty input. Stringifies list-valued cells for polars ingestion.
+
+    ``where`` names the parser and payload path in the :class:`SchemaDriftWarning`
+    raised when the list holds something other than objects (A-L60).
+    """
+    if not isinstance(items, list):
+        return _empty_frame(return_as_pandas)
+    items = [item for item in items if item not in (None, {})]  # an empty object carries no row
+    if not items:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(items, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
@@ -89,13 +112,15 @@ def _flatten_rows(items, return_as_pandas: bool):
     return _to_output(df, return_as_pandas)
 
 
-def _single_row(payload_dict: Dict, return_as_pandas: bool):
-    """Flatten a dict to a single-row frame; zero-row on empty/non-dict."""
-    if not isinstance(payload_dict, dict) or not payload_dict:
+def _single_row(payload_dict: Dict, return_as_pandas: bool, where: str):
+    """Flatten a dict to a single-row frame; zero-row on empty/non-dict or an error envelope."""
+    payload_dict = _as_dict(payload_dict)
+    if not payload_dict:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(payload_dict, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
@@ -117,8 +142,8 @@ def parse_nhl_web_pbp(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     feed identifies plays by ``eventId`` + ``sortOrder`` and keys event
     types via ``typeCode`` / ``typeDescKey``.
     """
-    plays = (payload or {}).get("plays")
-    return _flatten_rows(plays, return_as_pandas)
+    plays = _as_dict(payload).get("plays")
+    return _flatten_rows(plays, return_as_pandas, where="parse_nhl_web_pbp: plays")
 
 
 def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -144,7 +169,7 @@ def parse_nhl_web_boxscore(payload: Dict, return_as_pandas: bool = False) -> pl.
                 for k, v in (player or {}).items():
                     row[k] = v
                 rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_boxscore: rows")
 
 
 def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -155,7 +180,7 @@ def parse_nhl_web_landing(payload: Dict, return_as_pandas: bool = False) -> pl.D
     scoring / threeStars / penalties — those are stringified to keep the
     output one row per call).
     """
-    return _single_row(payload, return_as_pandas)
+    return _single_row(payload, return_as_pandas, where="parse_nhl_web_landing: payload")
 
 
 def parse_nhl_web_right_rail(
@@ -182,12 +207,26 @@ def parse_nhl_web_right_rail(
     one frame.
     """
     sub_parsers = {
-        "season_series": lambda p: _flatten_rows(p.get("seasonSeries"), return_as_pandas),
-        "shots_by_period": lambda p: _flatten_rows(p.get("shotsByPeriod"), return_as_pandas),
-        "team_game_stats": lambda p: _flatten_rows(p.get("teamGameStats"), return_as_pandas),
-        "game_info": lambda p: _single_row(p.get("gameInfo"), return_as_pandas),
-        "linescore_by_period": lambda p: _flatten_rows(((p.get("linescore") or {}).get("byPeriod")), return_as_pandas),
-        "season_series_wins": lambda p: _single_row(p.get("seasonSeriesWins"), return_as_pandas),
+        "season_series": lambda p: _flatten_rows(
+            p.get("seasonSeries"), return_as_pandas, where="parse_nhl_web_right_rail: seasonSeries"
+        ),
+        "shots_by_period": lambda p: _flatten_rows(
+            p.get("shotsByPeriod"), return_as_pandas, where="parse_nhl_web_right_rail: shotsByPeriod"
+        ),
+        "team_game_stats": lambda p: _flatten_rows(
+            p.get("teamGameStats"), return_as_pandas, where="parse_nhl_web_right_rail: teamGameStats"
+        ),
+        "game_info": lambda p: _single_row(
+            p.get("gameInfo"), return_as_pandas, where="parse_nhl_web_right_rail: gameInfo"
+        ),
+        "linescore_by_period": lambda p: _flatten_rows(
+            ((p.get("linescore") or {}).get("byPeriod")),
+            return_as_pandas,
+            where="parse_nhl_web_right_rail: linescore.byPeriod",
+        ),
+        "season_series_wins": lambda p: _single_row(
+            p.get("seasonSeriesWins"), return_as_pandas, where="parse_nhl_web_right_rail: seasonSeriesWins"
+        ),
     }
     payload = payload if isinstance(payload, dict) else {}
     if section is not None:
@@ -224,7 +263,7 @@ def parse_nhl_web_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.
             for k, v in (game or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_schedule: rows")
 
 
 def parse_nhl_web_score(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -233,7 +272,7 @@ def parse_nhl_web_score(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     Shape: ``{currentDate, games: [...], gameWeek: [...]}``.
     Returns the ``games`` array flattened.
     """
-    return _flatten_rows((payload or {}).get("games"), return_as_pandas)
+    return _flatten_rows(_as_dict(payload).get("games"), return_as_pandas, where="parse_nhl_web_score: games")
 
 
 def parse_nhl_web_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -254,7 +293,7 @@ def parse_nhl_web_scoreboard(payload: Dict, return_as_pandas: bool = False) -> p
             for k, v in (game or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_scoreboard: rows")
 
 
 def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -281,7 +320,7 @@ def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -
         for k, v in (game or {}).items():
             row[k] = v
         rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_club_schedule: rows")
 
 
 # ---------------------------------------------------------------------------
@@ -291,12 +330,16 @@ def parse_nhl_web_club_schedule(payload: Dict, return_as_pandas: bool = False) -
 
 def parse_nhl_web_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_standings()`` into one row per team."""
-    return _flatten_rows((payload or {}).get("standings"), return_as_pandas)
+    return _flatten_rows(
+        _as_dict(payload).get("standings"), return_as_pandas, where="parse_nhl_web_standings: standings"
+    )
 
 
 def parse_nhl_web_standings_season(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_standings_season()`` into one row per season."""
-    return _flatten_rows((payload or {}).get("seasons"), return_as_pandas)
+    return _flatten_rows(
+        _as_dict(payload).get("seasons"), return_as_pandas, where="parse_nhl_web_standings_season: seasons"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -319,8 +362,12 @@ def parse_nhl_web_club_stats(
             return _empty_frame(return_as_pandas)
         return {"skaters": _empty_frame(return_as_pandas), "goalies": _empty_frame(return_as_pandas)}
     sub_parsers = {
-        "skaters": lambda: _flatten_rows(payload.get("skaters"), return_as_pandas),
-        "goalies": lambda: _flatten_rows(payload.get("goalies"), return_as_pandas),
+        "skaters": lambda: _flatten_rows(
+            payload.get("skaters"), return_as_pandas, where="parse_nhl_web_club_stats: skaters"
+        ),
+        "goalies": lambda: _flatten_rows(
+            payload.get("goalies"), return_as_pandas, where="parse_nhl_web_club_stats: goalies"
+        ),
     }
     if section is not None:
         if section not in sub_parsers:
@@ -347,7 +394,7 @@ def parse_nhl_web_roster(payload: Dict, return_as_pandas: bool = False) -> pl.Da
             for k, v in (player or {}).items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_roster: rows")
 
 
 def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -355,7 +402,7 @@ def parse_nhl_web_player_landing(payload: Dict, return_as_pandas: bool = False) 
     profile. Nested ``featuredStats`` / ``careerTotals`` / ``last5Games``
     sub-frames are stringified — call them out separately if needed.
     """
-    return _single_row(payload, return_as_pandas)
+    return _single_row(payload, return_as_pandas, where="parse_nhl_web_player_landing: payload")
 
 
 def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -364,7 +411,9 @@ def parse_nhl_web_player_game_log(payload: Dict, return_as_pandas: bool = False)
     Walks ``payload["gameLog"]`` (~76 games per season for a regular
     skater) and flattens.
     """
-    return _flatten_rows((payload or {}).get("gameLog"), return_as_pandas)
+    return _flatten_rows(
+        _as_dict(payload).get("gameLog"), return_as_pandas, where="parse_nhl_web_player_game_log: gameLog"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -395,12 +444,12 @@ def parse_nhl_web_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.D
             for k, v in player.items():
                 row[k] = v
             rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_leaders: rows")
 
 
 def parse_nhl_web_draft_picks(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse ``nhl_web_draft_picks()`` into one row per pick."""
-    return _flatten_rows((payload or {}).get("picks"), return_as_pandas)
+    return _flatten_rows(_as_dict(payload).get("picks"), return_as_pandas, where="parse_nhl_web_draft_picks: picks")
 
 
 def parse_nhl_web_player_spotlight(payload, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -411,7 +460,7 @@ def parse_nhl_web_player_spotlight(payload, return_as_pandas: bool = False) -> p
     """
     if not isinstance(payload, list):
         return _empty_frame(return_as_pandas)
-    return _flatten_rows(payload, return_as_pandas)
+    return _flatten_rows(payload, return_as_pandas, where="parse_nhl_web_player_spotlight: payload")
 
 
 def parse_nhl_web_draft_rankings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -434,7 +483,7 @@ def parse_nhl_web_draft_rankings(payload: Dict, return_as_pandas: bool = False) 
         for k, v in (prospect or {}).items():
             row[k] = v
         rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_draft_rankings: rows")
 
 
 def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -462,7 +511,7 @@ def parse_nhl_web_playoff_series(payload: Dict, return_as_pandas: bool = False) 
         for k, v in (game or {}).items():
             row[k] = v
         rows.append(row)
-    return _flatten_rows(rows, return_as_pandas)
+    return _flatten_rows(rows, return_as_pandas, where="parse_nhl_web_playoff_series: rows")
 
 
 # ---------------------------------------------------------------------------

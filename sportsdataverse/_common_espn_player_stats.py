@@ -29,9 +29,11 @@ wrappers), which returns the richer multi-category payload.
 comprehensive (web-v3). The split matches wehoop/hoopR/cfbfastR.
 
 The statistics call is authoritative: a 404 there means no season line for
-that athlete/season and raises. The athlete + team dereferences are
-best-effort -- a hiccup leaves the corresponding ``*_`` columns null rather
-than failing the whole call.
+that athlete/season and raises. On the athlete + team dereferences only a 404
+(``NoDataError``: the node is not there) leaves the corresponding ``*_``
+columns null; a failed fetch (403, 429, 5xx, a dead connection) raises
+``AssetFetchError`` like the statistics call, so a rate limit never becomes a
+row with a null identity (B-M1).
 """
 
 from __future__ import annotations
@@ -43,6 +45,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download, underscore
+from sportsdataverse.errors import NoDataError
 
 _CORE_V2_HOST: str = "https://sports.core.api.espn.com/v2/sports"
 
@@ -189,12 +192,16 @@ def _espn_player_stats(
 
 
 def _safe_json(url: str | None, **kwargs: Any) -> dict[str, Any] | None:
-    """Best-effort GET + ``.json()``; returns ``None`` on any failure."""
+    """GET + ``.json()`` of an optional node: ``None`` when it is absent (no URL, or a 404).
+
+    Raises:
+        AssetFetchError: the fetch failed (403, 429, 5xx, a dead connection): unknown, not absent.
+    """
     if not url:
         return None
     try:
         return _download_json(download, url, **kwargs)
-    except Exception:
+    except NoDataError:
         return None
 
 
