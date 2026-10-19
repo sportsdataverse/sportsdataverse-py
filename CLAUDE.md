@@ -953,13 +953,13 @@ included). A test asserts they are the same object, so existing
 When a loader reads an optional upstream asset, decide deliberately which of the
 two a missing file is — and never let a 403 take the "absent" branch.
 
-Helpers follow the same split (task 4.6). A helper that consumes a fetch catches
+Helpers follow the same split. A helper that consumes a fetch catches
 `NoDataError` only: `find_athlete` skips a 404 roster but raises on a 403, and
 `nfl_players_crosswalk` returns zero rows for an absent players asset but raises
 `AssetFetchError` on a failed fetch, because zero rows would null every id in a join.
 A fallback to stale or degraded data on a failed fetch (the bundled crosswalk
 when the release read fails, null provider ids when an enrichment source is down)
-is allowed only with a warning that names the failure (MD-4). A missing model
+is allowed only with a warning that names the failure. A missing model
 warns once per artifact and nulls its columns; `SDV_PY_MODELS_STRICT=1` (or
 `enrich_nfl_pbp(strict=True)`) raises instead, for producers that must not publish nulls.
 

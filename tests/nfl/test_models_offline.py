@@ -128,3 +128,43 @@ def test_offline_strict_xyac_names_its_model(offline):
     """Strict mode refuses the xYAC step on its own (the fourth-down step off)."""
     with pytest.raises(FileNotFoundError, match="xyac_model.ubj"):
         ep_wp.enrich_nfl_pbp(_game(), strict=True, add_fourth_down=False)
+
+
+ESPN_SUMMARY = Path(__file__).resolve().parent / "fixtures" / "summary_401872922.json"
+
+
+def _espn_process(monkeypatch):
+    """The ESPN path (``NFLPlayProcess``) on a real committed summary, every request refused."""
+    import json
+
+    import sportsdataverse.nfl.nfl_pbp as nfl_pbp
+
+    def _no_network(*a, **k):
+        raise AssertionError("network call on the offline ESPN path")
+
+    monkeypatch.setattr(nfl_pbp, "download", _no_network)
+    proc = nfl_pbp.NFLPlayProcess(gameId=401872922, join_participants=False)
+    proc.espn_nfl_pbp(summary=json.loads(ESPN_SUMMARY.read_text(encoding="utf-8")))
+    return proc
+
+
+def test_espn_path_strict_env_raises_on_missing_fourth_down_model(offline, monkeypatch):
+    """SDV_PY_MODELS_STRICT=1 reaches NFLPlayProcess: its fourth-down step re-raises instead of nulling."""
+    proc = _espn_process(monkeypatch)
+    monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
+    with pytest.raises(FileNotFoundError, match="fd_model.ubj"):
+        proc.run_processing_pipeline()
+
+
+def test_espn_path_strict_env_raises_on_missing_xpass_model(offline, monkeypatch):
+    """The bundled xpass booster cannot go missing in the wheel, so its absence is simulated at the call."""
+    import sportsdataverse.nfl.nfl_pbp as nfl_pbp
+
+    def _missing(*a, **k):
+        raise FileNotFoundError("NFL model 'xpass_model.ubj' not found")
+
+    proc = _espn_process(monkeypatch)
+    monkeypatch.setattr(nfl_pbp, "calculate_xpass", _missing)
+    monkeypatch.setenv("SDV_PY_MODELS_STRICT", "1")
+    with pytest.raises(FileNotFoundError, match="xpass_model.ubj"):
+        proc.run_processing_pipeline()

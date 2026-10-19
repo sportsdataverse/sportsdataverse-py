@@ -238,6 +238,22 @@ def _resolve_ttl(
 
 #: Stem of every filesystem entry (:func:`_cache_key`); ``clear_cache`` deletes nothing else.
 _ENTRY_STEM = re.compile(r"[0-9a-f]{32}")
+#: How every entry :func:`cache_set` writes begins (``saved_at`` is the first key it dumps).
+_ENTRY_HEAD = b'{"saved_at":'
+
+
+def _is_entry(path: Path) -> bool:
+    """A file this cache wrote: a key-named ``.json`` that opens like a cache entry.
+
+    The content check keeps a user's own md5-named JSON in a shared ``SDV_PY_CACHE_DIR``.
+    """
+    if not _ENTRY_STEM.fullmatch(path.stem):
+        return False
+    try:
+        with path.open("rb") as fh:
+            return fh.read(len(_ENTRY_HEAD)) == _ENTRY_HEAD
+    except OSError:
+        return False
 
 
 def _cache_dir() -> Path:
@@ -347,7 +363,7 @@ def cache_get(
     age = datetime.now(timezone.utc) - saved
     if age > effective_ttl:
         return None
-    # A memory hit is the stored object: copy it, or one caller's edit reaches every later hit (A-M20).
+    # A memory hit is the stored object: copy it, or one caller's edit reaches every later hit.
     return copy.deepcopy(entry.get("body")) if _MODE == "memory" else entry.get("body")
 
 
@@ -477,10 +493,10 @@ def _drop_matching(glob: str) -> int:
             return 0
         # Only the files this cache wrote (``<32-hex key>.json``): ``cache_dir`` defaults to
         # ~/.cache/sportsdataverse, which also holds the NFL cache and its downloaded models,
-        # and an SDV_PY_CACHE_DIR may hold anything. The old "*" path rmtree'd it all (C-M24).
+        # and an SDV_PY_CACHE_DIR may hold anything. Never rmtree it.
         count = 0
         for path in cache_dir.glob("*.json"):
-            if _ENTRY_STEM.fullmatch(path.stem) and fnmatch.fnmatch(path.stem, glob):
+            if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):
                 path.unlink()
                 count += 1
         return count

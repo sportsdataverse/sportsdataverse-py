@@ -799,7 +799,7 @@ def evaluate_box(plays: pl.DataFrame, box: dict[str, Any] | None, league: str = 
         standing = _standing_scrimmage(plays)
     except Exception as exc:  # noqa: BLE001 -- the builder's own guard; reported below, never silent
         # The team-total and drive rules skip without the standing-scrimmage frame, so the
-        # report says why its coverage dropped instead of reading as fewer checks (C-L52).
+        # report says why its coverage dropped instead of reading as fewer checks.
         standing = None
         marker.append(
             RuleResult(

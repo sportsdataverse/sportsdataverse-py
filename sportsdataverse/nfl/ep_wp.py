@@ -265,8 +265,8 @@ _MODEL_URLS: dict[str, str] = {
 }
 
 
-def _models_strict(strict: Optional[bool] = None) -> bool:
-    """Whether a missing model raises instead of warning and nulling its columns (C-M15).
+def _models_strict(strict: bool | None = None) -> bool:
+    """Whether a missing model raises instead of warning and nulling its columns.
 
     An explicit ``strict`` wins; otherwise ``SDV_PY_MODELS_STRICT`` (``1`` / ``true`` / ``yes``).
     """
@@ -4306,7 +4306,7 @@ def enrich_nfl_pbp(
     touchback_yardline: Union[int, None] = None,
     ep_point_values: Union[np.ndarray, None] = None,
     return_as_pandas: bool = False,
-    strict: Optional[bool] = None,
+    strict: bool | None = None,
 ) -> Union[pl.DataFrame, "pd.DataFrame"]:
     """Enrich an nflverse-shape PBP frame with EP/EPA/WP/WPA/CP/CPOE/xYAC.
 

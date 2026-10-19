@@ -130,6 +130,12 @@ def find_team(
         or ``None`` when nothing matches; or a list of all matches when
         ``multi=True``.
 
+    Raises:
+        ValueError: ``league`` is not one of the supported slugs.
+        NoDataError: the teams endpoint answered 404.
+        AssetFetchError: the teams fetch failed (403, rate limit, 5xx, dead
+            connection), so the answer is unknown.
+
     Examples::
 
         find_team("lakers", league="nba")["id"]
@@ -284,6 +290,13 @@ def find_event(
         Single event dict (with the ``id`` you'd pass to
         ``espn_{league}_summary(event_id=...)`` / ``espn_{league}_pbp(game_id=...)``)
         or a list when ``multi=True``.
+
+    Raises:
+        ValueError: ``league`` is not one of the supported slugs, or ``date``
+            is not ``YYYYMMDD`` / ``YYYY-MM-DD``.
+        NoDataError: the scoreboard endpoint answered 404.
+        AssetFetchError: the scoreboard fetch failed (403, rate limit, 5xx,
+            dead connection), so the answer is unknown.
 
     Examples::
 

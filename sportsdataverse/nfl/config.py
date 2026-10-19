@@ -72,7 +72,7 @@ class NflConfig:
     cache_duration: int = 86400  # seconds (24h)
     verbose: bool = True
     timeout: int = 30
-    #: nflreadpy-parity field; no NFL request sends it today (C-L41).
+    #: nflreadpy-parity field; no NFL request sends it today.
     user_agent: str = "sportsdataverse-py-nfl"
 
     def __post_init__(self) -> None:

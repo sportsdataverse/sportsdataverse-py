@@ -1339,8 +1339,8 @@
   group: codegen-runtime
   finding: C-L57
   file: sportsdataverse/cli.py
-  snippet: 'except (ValueError, KeyError, RuntimeError, SportsDataverseError) as e:'
-  mutant: 'except (ValueError, KeyError, RuntimeError) as e:'
+  snippet: 'except (ValueError, RuntimeError, SportsDataverseError) as e:'
+  mutant: 'except (ValueError, RuntimeError) as e:'
   test: tests/test_cli.py -k exit_2
   expected: kill
   note: NoDataError / AssetFetchError gave a traceback and exit 1
@@ -1369,7 +1369,7 @@
   group: codegen-runtime
   finding: C-L56
   file: sportsdataverse/release.py
-  snippet: 'if attempt == max_times or _GH_PERMANENT.search(str(exc)):'
+  snippet: 'if attempt == max_times or _gh_permanent(exc):'
   mutant: 'if attempt == max_times:'
   test: tests/release/test_release_parity.py -k retries_only_transient
   expected: kill
@@ -1479,8 +1479,8 @@
   group: codegen-runtime
   finding: C-L43
   file: sportsdataverse/nfl/cache.py
-  snippet: "                    except OSError:\n                        pass  # a Windows lock"
-  mutant: "                    except ImportError:\n                        pass  # a Windows lock"
+  snippet: '                    with contextlib.suppress(OSError):'
+  mutant: '                    with contextlib.suppress(ImportError):'
   test: tests/nfl/test_nfl_cache.py -k corrupt_parquet_with_a_locked
   expected: kill
   note: a locked corrupt entry escaped as PermissionError
@@ -1499,8 +1499,68 @@
   group: codegen-runtime
   finding: C-M24
   file: sportsdataverse/cache.py
-  snippet: 'if _ENTRY_STEM.fullmatch(path.stem) and fnmatch.fnmatch(path.stem, glob):'
+  snippet: 'if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):'
   mutant: 'if fnmatch.fnmatch(path.stem, glob):'
   test: tests/test_cache.py -k removes_only_key_named
   expected: kill
   note: the bare clear_cache() rmtree'd ~/.cache/sportsdataverse (the NFL cache and its models included)
+
+- id: http-clear-cache-entry-shape
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: 'return fh.read(len(_ENTRY_HEAD)) == _ENTRY_HEAD'
+  mutant: 'return True'
+  test: tests/test_cache.py -k removes_only_key_named
+  expected: kill
+  note: R899-6, a user's md5-named JSON in a shared SDV_PY_CACHE_DIR is not a cache entry
+
+- id: upload-permission-403-is-permanent
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: 'return not re.search(r"rate limit", err, re.IGNORECASE)'
+  mutant: 'return False'
+  test: tests/release/test_release_parity.py -k retries_only_transient
+  expected: kill
+  note: R899-4, "Resource not accessible by integration" retried 20x; a rate-limit 403 still retries
+
+- id: upload-422-already-exists-retries
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: 'return "already_exists" not in err'
+  mutant: 'return True'
+  test: tests/release/test_release_parity.py -k retries_only_transient
+  expected: kill
+  note: R899-4, the clobbering retry is what recovers an asset an earlier attempt landed
+
+- id: upload-classifies-gh-stderr-only
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: '            proc.stderr,'
+  mutant: '            f"{args} {proc.stderr}",'
+  test: tests/release/test_release_parity.py -k carries_stderr
+  expected: kill
+  note: R899-4, a tag or path in the command line must not decide the retry
+
+- id: espn-path-strict-xpass-reraises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing xpass model raises'
+  mutant: 'if False:  # SDV_PY_MODELS_STRICT=1: a missing xpass model raises'
+  test: tests/nfl/test_models_offline.py -k strict_env_raises_on_missing_xpass
+  expected: kill
+  note: R899-3, NFLPlayProcess swallowed the strict raise into a RuntimeWarning
+
+- id: espn-path-strict-fourth-down-reraises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing nfl4th model raises'
+  mutant: 'if False:  # SDV_PY_MODELS_STRICT=1: a missing nfl4th model raises'
+  test: tests/nfl/test_models_offline.py -k strict_env_raises_on_missing_fourth_down
+  expected: kill
+  note: R899-3, NFLPlayProcess swallowed the strict raise into a RuntimeWarning

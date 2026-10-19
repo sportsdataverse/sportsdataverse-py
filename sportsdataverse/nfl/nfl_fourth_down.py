@@ -274,7 +274,7 @@ def _try_load(name: str) -> Optional["Booster"]:
     time — NOT at import time (see :data:`FD_MODEL_AVAILABLE`).
 
     A model that cannot be obtained nulls every column it feeds, so it is never
-    silent (C-M15): the first miss per artifact warns with a ``RuntimeWarning``
+    silent: the first miss per artifact warns with a ``RuntimeWarning``
     naming it, and ``SDV_PY_MODELS_STRICT=1`` raises the ``FileNotFoundError``
     instead (what a producer that must not publish nulls turns on).
     """
@@ -643,6 +643,12 @@ def get_2pt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         A pandas frame with ``go_index``, ``yardline_100`` (always 0) and
         ``wp_td``.  ``wp_td`` is NaN when the WP / 2-pt models are unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+
     Example:
         Quick start::
 
@@ -701,6 +707,12 @@ def get_2pt_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         ``two_pt_wp > xp_wp`` else ``"kick_xp"``) and ``two_pt_wp_diff``
         (``two_pt_wp - xp_wp``). All NaN / null when the models are unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+
     Example:
         Quick start::
 
@@ -754,6 +766,12 @@ def get_go_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         conversion outcomes) and ``wp_fail`` (mean WP over failure outcomes).
         All are NaN when the fourth-down / WP models are unavailable
         (:data:`FD_MODEL_AVAILABLE` / :data:`WP_MODEL_AVAILABLE`).
+
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
 
     Example:
         Quick start::
@@ -901,6 +919,12 @@ def get_fg_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         ``miss_fg_wp`` and ``fg_wp`` (from the kicking team's perspective).  All
         four are NaN when the FG model or WP model is unavailable.
 
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
+
     Example:
         Quick start::
 
@@ -981,6 +1005,12 @@ def get_punt_wp(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFrame:
         the punt distribution has no support for the play's ``yardline_100``
         (inside the punting team's own 31, where the table is empty — matching the
         R reference's left-join NA behavior) or when the WP model is unavailable.
+
+    Warns:
+        RuntimeWarning: once per unobtainable nfl4th model (``fd_model.ubj`` / ``wp_model.ubj``); its columns are NaN.
+
+    Raises:
+        FileNotFoundError: ``SDV_PY_MODELS_STRICT=1`` and an nfl4th model cannot be obtained.
 
     Example:
         Quick start::
@@ -1079,6 +1109,9 @@ def get_4th_down_probs(pbp_df: Union[pl.DataFrame, "pd.DataFrame"]) -> pd.DataFr
     Returns:
         A pandas copy of ``pbp_df`` with the decision columns added.  Empty input
         returns the input plus empty decision columns.
+
+    Raises:
+        FileNotFoundError: in strict mode, for a missing nfl4th model (warns otherwise; see :func:`get_go_wp`).
 
     Example:
         Quick start::

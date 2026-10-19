@@ -113,7 +113,7 @@ Memory: empties the in-process dict.
 Filesystem: removes the entries this cache wrote under `config.cache_dir`
 -- the `<sha256 key>.parquet` files, top level only -- and nothing else,
 so a `cache_dir` pointed at a directory that holds other files never
-loses them (C-M24). The directory itself is preserved so subsequent
+loses them. The directory itself is preserved so subsequent
 writes succeed without needing `mkdir`.
 
 The `models/` subdirectory is **deliberately preserved** — it holds

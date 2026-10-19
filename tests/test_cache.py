@@ -432,12 +432,14 @@ def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monk
     cache.set_cache_mode("filesystem")
     for i in range(3):
         cache.cache_set(f"https://x.example/{i}", None, {"i": i})
-    foreign = [tmp_path / "notes.json", tmp_path / "nfl" / "models" / "xyac_model.ubj", tmp_path / "thesis.docx"]
+    md5_named = tmp_path / ("0" * 32 + ".json")  # a user's own file that happens to look like a key
+    foreign = [tmp_path / "notes.json", md5_named, tmp_path / "nfl" / "models" / "xyac_model.ubj"]
+    foreign.append(tmp_path / "thesis.docx")
     for path in foreign:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("keep")
 
     assert cache.clear_cache() == 3
 
-    assert [p.name for p in tmp_path.glob("*.json")] == ["notes.json"]
+    assert sorted(p.name for p in tmp_path.glob("*.json")) == sorted(["notes.json", md5_named.name])
     assert all(p.read_text() == "keep" for p in foreign)

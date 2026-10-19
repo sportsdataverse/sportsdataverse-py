@@ -21,6 +21,7 @@ stored polars frame.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import inspect
 import json
@@ -96,7 +97,7 @@ def cache_get(key: str) -> pl.DataFrame | None:
         if entry is not None:
             ts, frame = entry
             if not _is_expired(ts):
-                return frame.clone()  # a caller's in-place edit must not reach the next hit (C-M23)
+                return frame.clone()  # a caller's in-place edit must not reach the next hit
             del _MEMORY[key]
     elif cfg.cache_mode == "filesystem":
         path = _filesystem_path(key)
@@ -253,7 +254,7 @@ def cached_loader(func: F) -> F:
                 # Expired — drop and refetch.
                 del _MEMORY[key]
             # Miss — always materialize as polars internally. The caller gets a copy:
-            # the stored frame is never handed out, so no caller can edit it (C-M23).
+            # the stored frame is never handed out, so no caller can edit it.
             frame = func(*inner_args, **inner_kwargs)
             _MEMORY[key] = (time.time(), frame)
             return frame.to_pandas() if return_as_pandas else frame.clone()
@@ -268,10 +269,9 @@ def cached_loader(func: F) -> F:
                     # Corrupt cache file — fall through to refetch and
                     # overwrite. We don't propagate the error because the
                     # cache is opaque infra and the caller asked for data.
-                    try:
+                    # A Windows lock must not escape: the write below replaces it or the next call retries.
+                    with contextlib.suppress(OSError):
                         path.unlink(missing_ok=True)
-                    except OSError:
-                        pass  # a Windows lock; the write below replaces it or the next call retries (C-L43)
             # Miss / expired / corrupt — refetch.
             frame = func(*inner_args, **inner_kwargs)
             cache_dir = cfg.cache_dir
@@ -297,7 +297,7 @@ def clear_cache() -> None:
     Filesystem: removes the entries this cache wrote under ``config.cache_dir``
     -- the ``<sha256 key>.parquet`` files, top level only -- and nothing else,
     so a ``cache_dir`` pointed at a directory that holds other files never
-    loses them (C-M24). The directory itself is preserved so subsequent
+    loses them. The directory itself is preserved so subsequent
     writes succeed without needing ``mkdir``.
 
     The ``models/`` subdirectory is **deliberately preserved** — it holds

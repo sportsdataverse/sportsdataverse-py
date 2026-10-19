@@ -386,7 +386,7 @@ def _ff_provider_ids() -> pl.DataFrame:
     A ``gsis_id`` listed on more than one db_playerids row is an upstream mapping
     error (two players on one id), so those ids are dropped rather than guessed.
     A failed load yields a zero-row frame so the crosswalk still returns, and
-    warns: degraded enrichment is allowed on a failed fetch, a silent one is not (MD-4).
+    warns: degraded enrichment is allowed on a failed fetch, a silent one is not.
     """
     from sportsdataverse.nfl.nfl_loaders import load_nfl_ff_playerids
 

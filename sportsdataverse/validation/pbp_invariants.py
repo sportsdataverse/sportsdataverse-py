@@ -513,7 +513,7 @@ def _score(df: pl.DataFrame, summary: dict[str, Any] | None) -> list[RuleResult 
             "a single play adds 1, 2, 3, 6, 7 or 8 points to one team",
             c("__delta") != 0,
             # Float64 compare: a pandas hop or float parquet makes the scores Float64, and polars 2.0
-            # refuses an Int list against a Float column (C-M9); a fractional delta still fails the rule.
+            # refuses an Int list against a Float column; a fractional delta still fails the rule.
             ~c("__dh").cast(pl.Float64).is_in(_SCORE_DELTAS)
             | ~c("__da").cast(pl.Float64).is_in(_SCORE_DELTAS)
             | ((c("__dh") != 0) & (c("__da") != 0)),
