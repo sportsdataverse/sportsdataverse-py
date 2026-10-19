@@ -1068,7 +1068,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     if payload is None:
         try:
             payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives", "odds"))
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
 
     plays = _napi_list(payload.get("plays"), "plays")

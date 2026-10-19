@@ -140,9 +140,9 @@ def _season_str(season: int, league_id: str) -> str:
 def _load_clutch(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
     """Live clutch net rating (monkeypatched to fixtures in tests); WNBA via league_id=10."""
     if league_id == "10":
-        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamclutch as _clutch  # noqa: PLC0415
+        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamclutch as _clutch
     else:
-        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamclutch as _clutch  # noqa: PLC0415
+        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamclutch as _clutch
 
     raw = _clutch(season=_season_str(season, league_id), measure_type_detailed_defense="Advanced", league_id=league_id)
     if isinstance(raw, dict):
@@ -158,9 +158,9 @@ def _load_clutch(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cov
 def _load_full_game_net(season: int, league_id: str) -> pl.DataFrame:  # pragma: no cover - live network
     """Live full-game net rating baseline (monkeypatched to fixtures in tests); WNBA via league_id=10."""
     if league_id == "10":
-        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamstats as _stats  # noqa: PLC0415
+        from sportsdataverse.wnba.wnba_stats import wnba_stats_leaguedashteamstats as _stats
     else:
-        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamstats as _stats  # noqa: PLC0415
+        from sportsdataverse.nba.nba_stats import nba_stats_leaguedashteamstats as _stats
 
     raw = _stats(season=_season_str(season, league_id), measure_type_detailed_defense="Advanced", league_id=league_id)
     if isinstance(raw, dict):

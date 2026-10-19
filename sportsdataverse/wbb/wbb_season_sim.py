@@ -50,7 +50,7 @@ def simulate_game(home_em: float, away_em: float, neutral: bool, rng: np.random.
             from sportsdataverse.wbb.wbb_season_sim import simulate_game
             simulate_game(20.0, 5.0, False, np.random.default_rng(0))
     """
-    from sportsdataverse.mbb.mbb_season_sim import simulate_game as _core  # noqa: PLC0415
+    from sportsdataverse.mbb.mbb_season_sim import simulate_game as _core
 
     return _core(home_em, away_em, neutral, rng, league="womens")
 

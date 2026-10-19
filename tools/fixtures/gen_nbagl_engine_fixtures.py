@@ -96,7 +96,7 @@ def _call_with_backoff(label: str, fn, *, max_retries: int = 3) -> dict:
             if not raw:
                 raise ValueError(f"{label}: empty payload returned")
             return raw
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 -- live capture: every failure is retried, and the last one re-raised
             last_exc = exc
             print(f"  attempt {attempt} failed: {exc}")
             if attempt < max_retries:
@@ -150,7 +150,7 @@ def discover_candidate_game_ids(season: str = "2024", n: int = MAX_ROTATION_CAND
     Raises:
         RuntimeError: If the game log cannot be fetched or yields no game ids.
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_leaguegamelog
 
     print(f"\n[Step 1] Fetching G-League LeagueGameLog for season={season!r} (league_id='20') ...")
     raw = _call_with_backoff(
@@ -220,7 +220,7 @@ def select_games_with_rotation(
         Tuple of (``chosen_ids``, ``candidates_tried``, ``candidates_with_rotation``).
         ``chosen_ids`` has length ≤ *needed*.
     """
-    from sportsdataverse.nba.nba_stats import nba_stats_gamerotation  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import nba_stats_gamerotation
 
     print(f"\n[Step 2] Scanning up to {len(candidate_ids)} candidate(s) for populated rotation ...")
 
@@ -284,7 +284,7 @@ def capture_game_fixtures(game_id: str, fixture_dir: Path) -> dict[str, dict]:
     Raises:
         RuntimeError: If any endpoint fails all retries.
     """
-    from sportsdataverse.nba.nba_stats import (  # noqa: PLC0415
+    from sportsdataverse.nba.nba_stats import (
         nba_stats_boxscoretraditionalv3,
         nba_stats_gamerotation,
         nba_stats_playbyplayv3,
@@ -456,8 +456,8 @@ def smoke_nba_cores(game_id: str, fixture_dir: Path) -> bool:
     Returns:
         True if all smoke checks pass; False otherwise.
     """
-    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload  # noqa: PLC0415
-    from sportsdataverse.nba.nba_lineups import (  # noqa: PLC0415
+    from sportsdataverse.nba.nba_enhanced_pbp import enhanced_pbp_from_payload
+    from sportsdataverse.nba.nba_lineups import (
         boxscore_home_away,
         parse_rotation_resultsets,
         players_on_court_from_rotation,
@@ -474,7 +474,7 @@ def smoke_nba_cores(game_id: str, fixture_dir: Path) -> bool:
     # enhanced_pbp_from_payload — G-League uses league_id="20"
     try:
         enh = enhanced_pbp_from_payload(pbp_raw, league_id="20")
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 -- a validation step: the failure is printed and the fixture rejected
         print(f"  FAIL enhanced_pbp_from_payload: {exc}")
         return False
 
@@ -487,7 +487,7 @@ def smoke_nba_cores(game_id: str, fixture_dir: Path) -> bool:
     # boxscore_home_away
     try:
         home, away = boxscore_home_away(box_raw)
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 -- a validation step: the failure is printed and the fixture rejected
         print(f"  FAIL boxscore_home_away: {exc}")
         return False
 
@@ -506,7 +506,7 @@ def smoke_nba_cores(game_id: str, fixture_dir: Path) -> bool:
             home_team_id=home,
             away_team_id=away,
         )
-    except Exception as exc:
+    except Exception as exc:  # noqa: BLE001 -- a validation step: the failure is printed and the fixture rejected
         print(f"  FAIL players_on_court_from_rotation: {exc}")
         return False
 
@@ -682,7 +682,7 @@ def main(game_ids: Optional[list[str]] = None, season: str = "2024") -> None:
             chosen_ids, candidates_tried, candidates_with_rotation = select_games_with_rotation(
                 candidate_pool, needed=2
             )
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 -- printed, then the script exits 1
             print(f"\nERROR during rotation scan: {exc}")
             sys.exit(1)
 

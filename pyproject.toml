@@ -256,6 +256,10 @@ exclude = [
 
 [tool.ruff.lint]
 fixable = ["ALL"]
+# BLE001 (task 4.9): a broad `except Exception` hides a failed fetch or a schema change as "no data".
+# Catch the narrow types a failure raises, or justify the catch on its line:
+# `# noqa: BLE001 -- <what is caught and why>`.
+extend-select = ["BLE001"]
 ignore = [
     "E501",  # line too long — long URLs / docstring tables
     "E402",  # module-level imports not at top — sometimes intentional after sys.path setup
@@ -272,6 +276,57 @@ ignore = [
 # Star-imports + re-exports are intentional in package __init__ files.
 "sportsdataverse/__init__.py" = ["F401", "F403"]
 "sportsdataverse/**/__init__.py" = ["F401", "F403"]
+# BLE001 ratchet (task 4.9): files whose broad excepts belong to another task's open work. Each owner
+# narrows (or justifies) its sites and deletes its line here; never add a file to this list.
+# codegen-runtime 4.2 (open PR edits parse_items, the one site left here):
+"sportsdataverse/_common_espn_parsers.py" = ["BLE001"]
+# providers 4.1b (provider parsers / runtimes):
+"sportsdataverse/_crosswalk_basketball_fox_yahoo.py" = ["BLE001"]
+"sportsdataverse/_crosswalk_basketball_sources.py" = ["BLE001"]
+"sportsdataverse/basketball/aba/aba_parsers.py" = ["BLE001"]
+"sportsdataverse/basketball/atrium/atrium_parsers.py" = ["BLE001"]
+"sportsdataverse/basketball/feb/feb_parsers.py" = ["BLE001"]
+"sportsdataverse/basketball/lkl/lkl_parsers.py" = ["BLE001"]
+"sportsdataverse/basketball/plg/pleague_parsers.py" = ["BLE001"]
+"sportsdataverse/cfb/cfb_fox_ext.py" = ["BLE001"]
+"sportsdataverse/cricket/cricket_espn_parsers.py" = ["BLE001"]
+"sportsdataverse/hockey/elh/elh_parsers.py" = ["BLE001"]
+"sportsdataverse/hockey/elh/elh_runtime.py" = ["BLE001"]
+"sportsdataverse/mlb/mlb_statcast_parsers.py" = ["BLE001"]
+"sportsdataverse/nfl/nflpro_runtime.py" = ["BLE001"]
+"sportsdataverse/soccer/football_data_parsers.py" = ["BLE001"]
+"sportsdataverse/soccer/soccer_espn_parsers.py" = ["BLE001"]
+# providers 4.5 (stats.ncaa.org scrape layer):
+"sportsdataverse/mbb/mbb_ncaa_boxscore_parser.py" = ["BLE001"]
+"sportsdataverse/mbb/mbb_ncaa_pbp_parser.py" = ["BLE001"]
+"sportsdataverse/mbb/mbb_ncaa_roster_parser.py" = ["BLE001"]
+"sportsdataverse/mbb/mbb_ncaa_shot_parser.py" = ["BLE001"]
+"sportsdataverse/mbb/mbb_ncaa_team_parsers.py" = ["BLE001"]
+# espn-families 2.9 / 2.10 (hand-written schedule / roster families):
+"sportsdataverse/cfb/cfb_game_rosters.py" = ["BLE001"]
+"sportsdataverse/mbb/mbb_game_rosters.py" = ["BLE001"]
+"sportsdataverse/mlb/mlb_schedule.py" = ["BLE001"]
+"sportsdataverse/nba/nba_game_rosters.py" = ["BLE001"]
+"sportsdataverse/nfl/nfl_game_rosters.py" = ["BLE001"]
+"sportsdataverse/nhl/nhl_game_rosters.py" = ["BLE001"]
+"sportsdataverse/wbb/wbb_game_rosters.py" = ["BLE001"]
+"sportsdataverse/wnba/wnba_game_rosters.py" = ["BLE001"]
+# cfb topic (processor, decision models):
+"sportsdataverse/cfb/cfb_fourth_down.py" = ["BLE001"]
+"sportsdataverse/cfb/cfb_pbp.py" = ["BLE001"]
+"sportsdataverse/cfb/cfb_two_point.py" = ["BLE001"]
+# nfl topic (processor, season build, decision models):
+"sportsdataverse/football/sources/dispatch.py" = ["BLE001"]
+"sportsdataverse/nfl/nfl_build.py" = ["BLE001"]
+"sportsdataverse/nfl/nfl_fourth_down.py" = ["BLE001"]
+"sportsdataverse/nfl/nfl_pbp.py" = ["BLE001"]
+# basketball topic (NBA engine, models, analytics):
+"sportsdataverse/nba/nba_availability.py" = ["BLE001"]
+"sportsdataverse/nba/nba_darko.py" = ["BLE001"]
+"sportsdataverse/nba/nba_draft_model.py" = ["BLE001"]
+"sportsdataverse/nba/nba_possessions.py" = ["BLE001"]
+"sportsdataverse/nba/nba_season_compile.py" = ["BLE001"]
+"sportsdataverse/nba/nba_tracking_value.py" = ["BLE001"]
 
 
 [tool.ruff.format]
