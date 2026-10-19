@@ -10,7 +10,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
 | [Highlights](reference/additional#highlights) | curated "start here" functions | 8 | — |
-| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 122 | none |
+| [ESPN](#espn) | `cdn.espn.com`, `site.api.espn.com`, `site.web.api.espn.com` +1 more | 123 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 53 | none |
 | [NBA Stats API](#nba-stats-api) | `stats.nba.com` | 130 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
@@ -23,7 +23,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 23 |
+| [ESPN site API (v2)](reference/site) | 24 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 82 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |

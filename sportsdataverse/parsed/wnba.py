@@ -25,6 +25,7 @@ warnings.warn(
 
 from sportsdataverse.wnba import espn_wnba_award as _raw_espn_wnba_award
 from sportsdataverse.wnba import espn_wnba_awards as _raw_espn_wnba_awards
+from sportsdataverse.wnba import espn_wnba_calendar_site as _raw_espn_wnba_calendar_site
 from sportsdataverse.wnba import espn_wnba_cdn_boxscore as _raw_espn_wnba_cdn_boxscore
 from sportsdataverse.wnba import espn_wnba_cdn_playbyplay as _raw_espn_wnba_cdn_playbyplay
 from sportsdataverse.wnba import espn_wnba_cdn_schedule as _raw_espn_wnba_cdn_schedule
@@ -33,6 +34,7 @@ from sportsdataverse.wnba import espn_wnba_coach as _raw_espn_wnba_coach
 from sportsdataverse.wnba import espn_wnba_coach_record as _raw_espn_wnba_coach_record
 from sportsdataverse.wnba import espn_wnba_coach_season as _raw_espn_wnba_coach_season
 from sportsdataverse.wnba import espn_wnba_conferences as _raw_espn_wnba_conferences
+from sportsdataverse.wnba import espn_wnba_draft_site as _raw_espn_wnba_draft_site
 from sportsdataverse.wnba import espn_wnba_fpi as _raw_espn_wnba_fpi
 from sportsdataverse.wnba import espn_wnba_franchise as _raw_espn_wnba_franchise
 from sportsdataverse.wnba import espn_wnba_franchises as _raw_espn_wnba_franchises
@@ -115,6 +117,7 @@ from sportsdataverse.wnba import espn_wnba_season_week_powerindex as _raw_espn_w
 from sportsdataverse.wnba import espn_wnba_season_weeks as _raw_espn_wnba_season_weeks
 from sportsdataverse.wnba import espn_wnba_seasons as _raw_espn_wnba_seasons
 from sportsdataverse.wnba import espn_wnba_standings_core as _raw_espn_wnba_standings_core
+from sportsdataverse.wnba import espn_wnba_standings_site as _raw_espn_wnba_standings_site
 from sportsdataverse.wnba import espn_wnba_statistics_league as _raw_espn_wnba_statistics_league
 from sportsdataverse.wnba import espn_wnba_summary as _raw_espn_wnba_summary
 from sportsdataverse.wnba import espn_wnba_talentpicks as _raw_espn_wnba_talentpicks
@@ -126,6 +129,7 @@ from sportsdataverse.wnba import espn_wnba_team_injuries as _raw_espn_wnba_team_
 from sportsdataverse.wnba import espn_wnba_team_leaders as _raw_espn_wnba_team_leaders
 from sportsdataverse.wnba import espn_wnba_team_news as _raw_espn_wnba_team_news
 from sportsdataverse.wnba import espn_wnba_team_record as _raw_espn_wnba_team_record
+from sportsdataverse.wnba import espn_wnba_team_roster_site as _raw_espn_wnba_team_roster_site
 from sportsdataverse.wnba import espn_wnba_team_schedule as _raw_espn_wnba_team_schedule
 from sportsdataverse.wnba import espn_wnba_team_transactions as _raw_espn_wnba_team_transactions
 from sportsdataverse.wnba import espn_wnba_teams_core as _raw_espn_wnba_teams_core
@@ -289,6 +293,7 @@ __all__ = [
     "espn_wnba_award",
     "espn_wnba_awards",
     "espn_wnba_calendar",
+    "espn_wnba_calendar_site",
     "espn_wnba_cdn_boxscore",
     "espn_wnba_cdn_playbyplay",
     "espn_wnba_cdn_schedule",
@@ -298,6 +303,7 @@ __all__ = [
     "espn_wnba_coach_season",
     "espn_wnba_conferences",
     "espn_wnba_draft",
+    "espn_wnba_draft_site",
     "espn_wnba_fpi",
     "espn_wnba_franchise",
     "espn_wnba_franchises",
@@ -386,6 +392,7 @@ __all__ = [
     "espn_wnba_seasons",
     "espn_wnba_standings",
     "espn_wnba_standings_core",
+    "espn_wnba_standings_site",
     "espn_wnba_statistics_league",
     "espn_wnba_summary",
     "espn_wnba_talentpicks",
@@ -398,6 +405,7 @@ __all__ = [
     "espn_wnba_team_news",
     "espn_wnba_team_record",
     "espn_wnba_team_roster",
+    "espn_wnba_team_roster_site",
     "espn_wnba_team_schedule",
     "espn_wnba_team_stats",
     "espn_wnba_team_transactions",
@@ -572,6 +580,20 @@ def espn_wnba_awards(*args, **kwargs):
     return _raw_espn_wnba_awards(*args, **kwargs)
 
 
+def espn_wnba_calendar_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_calendar_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_calendar_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_calendar_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_calendar_site(*args, **kwargs)
+
+
 def espn_wnba_cdn_boxscore(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_cdn_boxscore``).
 
@@ -682,6 +704,20 @@ def espn_wnba_conferences(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_conferences(*args, **kwargs)
+
+
+def espn_wnba_draft_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_draft_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_draft_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_draft_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_draft_site(*args, **kwargs)
 
 
 def espn_wnba_fpi(*args, **kwargs):
@@ -1832,6 +1868,20 @@ def espn_wnba_standings_core(*args, **kwargs):
     return _raw_espn_wnba_standings_core(*args, **kwargs)
 
 
+def espn_wnba_standings_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_standings_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_standings_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_standings_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_standings_site(*args, **kwargs)
+
+
 def espn_wnba_statistics_league(*args, **kwargs):
     """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_statistics_league``).
 
@@ -1984,6 +2034,20 @@ def espn_wnba_team_record(*args, **kwargs):
     """
     kwargs.setdefault("return_parsed", True)
     return _raw_espn_wnba_team_record(*args, **kwargs)
+
+
+def espn_wnba_team_roster_site(*args, **kwargs):
+    """``return_parsed=True`` by default (parsed.* mirror of ``wnba.espn_wnba_team_roster_site``).
+
+    .. deprecated:: 0.0.54
+       Import :func:`sportsdataverse.wnba.espn_wnba_team_roster_site` directly instead;
+       that function now returns a parsed DataFrame by default.
+
+    Pass ``return_parsed=False`` for the raw ``Dict``. See
+    :func:`sportsdataverse.wnba.espn_wnba_team_roster_site` for full documentation.
+    """
+    kwargs.setdefault("return_parsed", True)
+    return _raw_espn_wnba_team_roster_site(*args, **kwargs)
 
 
 def espn_wnba_team_schedule(*args, **kwargs):
