@@ -141,24 +141,23 @@ uconn = safe('UConn roster', lambda: wbb.espn_wbb_team_roster(team_id=2509, seas
 
 
     shape: (12, 6)
-    ┌────────────┬────────────────────┬────────┬─────────────────────┬────────────────┬────────────────┐
-    │ athlete_id ┆ full_name          ┆ jersey ┆ position_abbreviati ┆ display_height ┆ display_weight │
-    │ ---        ┆ ---                ┆ ---    ┆ on                  ┆ ---            ┆ ---            │
-    │ str        ┆ str                ┆ str    ┆ ---                 ┆ str            ┆ str            │
-    │            ┆                    ┆        ┆ str                 ┆                ┆                │
-    ╞════════════╪════════════════════╪════════╪═════════════════════╪════════════════╪════════════════╡
-    │ 5311737    ┆ Carley Barrett     ┆ 24     ┆ G                   ┆ 5' 7"          ┆ null           │
-    │ 5106182    ┆ Tara Daye          ┆ 44     ┆ G                   ┆ 5' 10"         ┆ null           │
-    │ 5107710    ┆ Taylor Feldman     ┆ 5      ┆ G                   ┆ 5' 8"          ┆ null           │
-    │ 5311739    ┆ Avery Gordon       ┆ 55     ┆ F                   ┆ 6' 7"          ┆ null           │
-    │ 5108895    ┆ Taylor Henderson   ┆ 2      ┆ G                   ┆ 5' 11"         ┆ null           │
-    │ …          ┆ …                  ┆ …      ┆ …                   ┆ …              ┆ …              │
-    │ 4433438    ┆ Madison Layden-Zay ┆ 33     ┆ G                   ┆ 6' 1"          ┆ null           │
-    │ 5240041    ┆ Lana McCarthy      ┆ 35     ┆ F                   ┆ 6' 4"          ┆ null           │
-    │ 5240040    ┆ Kendall Puryear    ┆ 22     ┆ F                   ┆ 6' 3"          ┆ null           │
-    │ 5239064    ┆ Kiki Smith         ┆ 23     ┆ G                   ┆ 5' 7"          ┆ null           │
-    │ 5178283    ┆ Saige Stahl        ┆ 13     ┆ F                   ┆ 6' 1"          ┆ null           │
-    └────────────┴────────────────────┴────────┴─────────────────────┴────────────────┴────────────────┘
+    ┌────────────┬────────────────┬────────┬───────────────────────┬────────────────┬────────────────┐
+    │ athlete_id ┆ full_name      ┆ jersey ┆ position_abbreviation ┆ display_height ┆ display_weight │
+    │ ---        ┆ ---            ┆ ---    ┆ ---                   ┆ ---            ┆ ---            │
+    │ str        ┆ str            ┆ str    ┆ str                   ┆ str            ┆ str            │
+    ╞════════════╪════════════════╪════════╪═══════════════════════╪════════════════╪════════════════╡
+    │ 5239976    ┆ Averi Aaron    ┆ 25     ┆ F                     ┆ 6' 1"          ┆ null           │
+    │ 5315054    ┆ Jelena Bulajic ┆ 8      ┆ G                     ┆ 5' 10"         ┆ null           │
+    │ 5456419    ┆ Keona Douwstra ┆ 4      ┆ G                     ┆ 5' 9"          ┆ null           │
+    │ 5456421    ┆ Katka Sediva   ┆ 6      ┆ F                     ┆ 6' 1"          ┆ null           │
+    │ 5311739    ┆ Avery Gordon   ┆ 55     ┆ C                     ┆ 6' 7"          ┆ null           │
+    │ …          ┆ …              ┆ …      ┆ …                     ┆ …              ┆ …              │
+    │ 5175722    ┆ McKenna Layden ┆ 11     ┆ G                     ┆ 6' 2"          ┆ null           │
+    │ 5456422    ┆ Anjela Minja   ┆ 10     ┆ C                     ┆ 6' 5"          ┆ null           │
+    │ 5175419    ┆ Aysia Proctor  ┆ 12     ┆ G                     ┆ 5' 8"          ┆ null           │
+    │ 5178283    ┆ Saige Stahl    ┆ 13     ┆ F                     ┆ 6' 1"          ┆ null           │
+    │ 5456420    ┆ Zoja Stirn     ┆ 5      ┆ G                     ┆ 5' 10"         ┆ null           │
+    └────────────┴────────────────┴────────┴───────────────────────┴────────────────┴────────────────┘
 
 
 
@@ -320,13 +319,61 @@ rankings = safe('rankings (AP/Coaches poll)', wbb.espn_wbb_rankings)
  else 'no poll published right now (offseason) — try during the season')
 ```
 
-    🟡 rankings (AP/Coaches poll) (no rows right now)
+    ✅ rankings (AP/Coaches poll)
 
 
 
 
 
-    'no poll published right now (offseason) — try during the season'
+    shape: (12, 25)
+    ┌─────────┬───────────┬────────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ poll_id ┆ poll_name ┆ poll_short ┆ poll_type ┆ … ┆ team_abbr ┆ team_colo ┆ team_logo ┆ last_upda │
+    │ ---     ┆ ---       ┆ _name      ┆ ---       ┆   ┆ eviation  ┆ r         ┆ ---       ┆ ted       │
+    │ i64     ┆ str       ┆ ---        ┆ str       ┆   ┆ ---       ┆ ---       ┆ str       ┆ ---       │
+    │         ┆           ┆ str        ┆           ┆   ┆ str       ┆ str       ┆           ┆ str       │
+    ╞═════════╪═══════════╪════════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ UCLA      ┆ 2774ae    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ SC        ┆ 73000a    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ CONN      ┆ 0c2340    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ TEX       ┆ af5c37    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ DUKE      ┆ 00539b    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ …       ┆ …         ┆ …          ┆ …         ┆ … ┆ …         ┆ …         ┆ …         ┆ …         │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ LSU       ┆ 461d76    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ ND        ┆ 062340    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ VAN       ┆ 000000    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ LOU       ┆ c9001f    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    │ 1       ┆ AP Top 25 ┆ AP Poll    ┆ ap        ┆ … ┆ OU        ┆ 990000    ┆ https://a ┆ 2026-04-0 │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ .espncdn. ┆ 6T19:29Z  │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ com/i/tea ┆           │
+    │         ┆           ┆            ┆           ┆   ┆           ┆           ┆ mlo…      ┆           │
+    └─────────┴───────────┴────────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
 
 
 
@@ -544,7 +591,7 @@ season_pbp = wbb.load_wbb_pbp(seasons=[2024])
 print('player_box:', player_box.shape, '| team_box:', team_box.shape, '| pbp:', season_pbp.shape)
 ```
 
-    player_box: (167412, 55) | team_box: (11796, 56) | pbp: (1908679, 66)
+    player_box: (167412, 55) | team_box: (11796, 56) | pbp: (1908679, 70)
 
 
 ### Recipe 1 — Win-probability ride of a championship 📈
@@ -658,22 +705,22 @@ top_scorers
 
 
     shape: (10, 6)
-    ┌────────────┬──────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
-    │ athlete_id ┆ athlete_display_name ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
-    │ ---        ┆ ---                  ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
-    │ i32        ┆ str                  ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
-    ╞════════════╪══════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
-    │ 5176850    ┆ Saige Randolph       ┆ Canisius                ┆ 31    ┆ 0            ┆ null │
-    │ 5176125    ┆ Camryn Berry         ┆ South Alabama           ┆ 32    ┆ 0            ┆ null │
-    │ 5108017    ┆ Sheridan Liggett     ┆ Seattle U               ┆ 29    ┆ 0            ┆ null │
-    │ 5108577    ┆ Amani Brown          ┆ UL Monroe               ┆ 35    ┆ 0            ┆ null │
-    │ 4595339    ┆ Keeli Burton-Oliver  ┆ Montana                 ┆ 33    ┆ 0            ┆ null │
-    │ 4704411    ┆ Kayla Pilson         ┆ Air Force               ┆ 32    ┆ 0            ┆ null │
-    │ 5175986    ┆ Madilynn Rendall     ┆ Idaho St                ┆ 30    ┆ 0            ┆ null │
-    │ 4595018    ┆ Jazion Jackson       ┆ Texas Tech              ┆ 33    ┆ 0            ┆ null │
-    │ 4595667    ┆ Sara Bershers        ┆ UAB                     ┆ 32    ┆ 0            ┆ null │
-    │ 4595808    ┆ Zya Nugent           ┆ West Virginia           ┆ 33    ┆ 0            ┆ null │
-    └────────────┴──────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
+    ┌────────────┬────────────────────────┬─────────────────────────┬───────┬──────────────┬──────┐
+    │ athlete_id ┆ athlete_display_name   ┆ team_short_display_name ┆ games ┆ total_points ┆ ppg  │
+    │ ---        ┆ ---                    ┆ ---                     ┆ ---   ┆ ---          ┆ ---  │
+    │ i32        ┆ str                    ┆ str                     ┆ u32   ┆ i32          ┆ f64  │
+    ╞════════════╪════════════════════════╪═════════════════════════╪═══════╪══════════════╪══════╡
+    │ 5107758    ┆ Daysha Reid            ┆ Chicago St              ┆ 27    ┆ 0            ┆ null │
+    │ 4900509    ┆ Jasmine Lindsay-Huskey ┆ Mount St Marys          ┆ 31    ┆ 0            ┆ null │
+    │ 4705357    ┆ Cheyenne McEvans       ┆ Syracuse                ┆ 32    ┆ 0            ┆ null │
+    │ 4898993    ┆ Nadira Eltayeb         ┆ Kansas                  ┆ 33    ┆ 0            ┆ null │
+    │ 5107554    ┆ Ella Okubasu           ┆ Binghamton              ┆ 31    ┆ 0            ┆ null │
+    │ 5175847    ┆ Emma Larios            ┆ High Point              ┆ 32    ┆ 0            ┆ null │
+    │ 4899948    ┆ Joy Watkins            ┆ Delaware St             ┆ 28    ┆ 0            ┆ null │
+    │ 5185123    ┆ Amani Kerney           ┆ Queens                  ┆ 25    ┆ 0            ┆ null │
+    │ 5175992    ┆ Ioana Stefanaki        ┆ Idaho St                ┆ 30    ┆ 0            ┆ null │
+    │ 5174255    ┆ Maryn Archer           ┆ Arkansas                ┆ 33    ┆ 0            ┆ null │
+    └────────────┴────────────────────────┴─────────────────────────┴───────┴──────────────┴──────┘
 
 
 
@@ -737,8 +784,6 @@ out
 ```
 
     ✅ UConn team schedule
-
-
     games on the slate: 29
 
 
@@ -801,8 +846,8 @@ three_pt
     │ 2250    ┆ Gonzaga Bulldogs               ┆ 36    ┆ 336 ┆ 849  ┆ 39.6      │
     │ 2579    ┆ South Carolina Gamecocks       ┆ 38    ┆ 253 ┆ 640  ┆ 39.5      │
     │ 149     ┆ Montana Lady Griz              ┆ 33    ┆ 357 ┆ 927  ┆ 38.5      │
-    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 66      ┆ Iowa State Cyclones            ┆ 33    ┆ 285 ┆ 745  ┆ 38.3      │
+    │ 2086    ┆ Butler Bulldogs                ┆ 32    ┆ 266 ┆ 694  ┆ 38.3      │
     │ 257     ┆ Richmond Spiders               ┆ 35    ┆ 320 ┆ 840  ┆ 38.1      │
     │ 2571    ┆ South Dakota State Jackrabbits ┆ 33    ┆ 223 ┆ 586  ┆ 38.1      │
     │ 2294    ┆ Iowa Hawkeyes                  ┆ 39    ┆ 426 ┆ 1132 ┆ 37.6      │
@@ -944,12 +989,12 @@ dd
     │ 4433402    ┆ Angel Reese          ┆ LSU                     ┆ 27             │
     │ 4705101    ┆ Macy McGlone         ┆ E Illinois              ┆ 26             │
     │ 4433403    ┆ Caitlin Clark        ┆ Iowa                    ┆ 24             │
-    │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4898966    ┆ Adrianna Smith       ┆ Maine                   ┆ 22             │
+    │ 4684384    ┆ Aneesah Morrow       ┆ LSU                     ┆ 22             │
     │ 4899516    ┆ Akasha Davis         ┆ Lamar                   ┆ 20             │
-    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
-    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
     │ 5108550    ┆ Serah Williams       ┆ Wisconsin               ┆ 20             │
+    │ 4898391    ┆ Phillipina Kyei      ┆ Oregon                  ┆ 20             │
+    │ 4433404    ┆ Cameron Brink        ┆ Stanford                ┆ 20             │
     └────────────┴──────────────────────┴─────────────────────────┴────────────────┘
 
 
@@ -992,8 +1037,8 @@ defense
     │ 2603    ┆ Saint Joseph's Hawks      ┆ 34    ┆ 54.5    ┆ 65.3    ┆ 10.8    │
     │ 236     ┆ Chattanooga Mocs          ┆ 33    ┆ 54.5    ┆ 64.2    ┆ 9.7     │
     │ 526     ┆ Florida Gulf Coast Eagles ┆ 34    ┆ 55.0    ┆ 74.9    ┆ 19.9    │
-    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2097    ┆ Campbell Fighting Camels  ┆ 31    ┆ 55.1    ┆ 60.8    ┆ 5.7     │
+    │ 46      ┆ Georgetown Hoyas          ┆ 35    ┆ 55.1    ┆ 57.9    ┆ 2.8     │
     │ 2217    ┆ Fairfield Stags           ┆ 33    ┆ 55.2    ┆ 72.5    ┆ 17.3    │
     └─────────┴───────────────────────────┴───────┴─────────┴─────────┴─────────┘
 
@@ -1097,7 +1142,7 @@ print("team-id crosswalk:", ids.shape)
 ids.filter(pl.col("season") == "2025-26").head()
 ```
 
-    team-id crosswalk: (5972, 4)
+    team-id crosswalk: (6335, 4)
 
 
 
@@ -1153,27 +1198,4 @@ safe("bart_wbb ratings", lambda: bart_wbb_ratings(year=2025))
 
 ```
 
-    ✅ bart_wbb ratings
-
-
-
-
-
-    shape: (362, 45)
-    ┌──────┬────────────────────┬──────┬────────┬───┬────────────┬────────┬────────┬───────────┐
-    │ rank ┆ team               ┆ conf ┆ record ┆ … ┆ wab        ┆ wab_rk ┆ fun_rk ┆ adjt      │
-    │ ---  ┆ ---                ┆ ---  ┆ ---    ┆   ┆ ---        ┆ ---    ┆ ---    ┆ ---       │
-    │ i64  ┆ str                ┆ str  ┆ str    ┆   ┆ f64        ┆ i64    ┆ i64    ┆ f64       │
-    ╞══════╪════════════════════╪══════╪════════╪═══╪════════════╪════════╪════════╪═══════════╡
-    │ 1    ┆ Connecticut        ┆ BE   ┆ 37-3   ┆ … ┆ 11.566487  ┆ 5      ┆ 256    ┆ 68.552774 │
-    │ 2    ┆ South Carolina     ┆ SEC  ┆ 35-4   ┆ … ┆ 17.2473    ┆ 1      ┆ 90     ┆ 69.173225 │
-    │ 3    ┆ Texas              ┆ SEC  ┆ 35-4   ┆ … ┆ 15.012011  ┆ 3      ┆ 55     ┆ 68.634118 │
-    │ 4    ┆ Notre Dame         ┆ ACC  ┆ 28-6   ┆ … ┆ 11.195317  ┆ 7      ┆ 290    ┆ 73.919094 │
-    │ 5    ┆ USC                ┆ B10  ┆ 31-4   ┆ … ┆ 13.855968  ┆ 4      ┆ 63     ┆ 73.837656 │
-    │ …    ┆ …                  ┆ …    ┆ …      ┆ … ┆ …          ┆ …      ┆ …      ┆ …         │
-    │ 358  ┆ UNC Asheville      ┆ BSth ┆ 4-27   ┆ … ┆ -25.72048  ┆ 360    ┆ 326    ┆ 69.580987 │
-    │ 359  ┆ Wagner             ┆ NEC  ┆ 8-21   ┆ … ┆ -19.509705 ┆ 328    ┆ 159    ┆ 67.741526 │
-    │ 360  ┆ LIU                ┆ NEC  ┆ 6-24   ┆ … ┆ -22.176694 ┆ 350    ┆ 146    ┆ 66.789141 │
-    │ 361  ┆ Delaware St.       ┆ MEAC ┆ 5-24   ┆ … ┆ -21.265779 ┆ 344    ┆ 297    ┆ 68.480625 │
-    │ 362  ┆ South Carolina St. ┆ MEAC ┆ 2-29   ┆ … ┆ -26.444429 ┆ 361    ┆ 210    ┆ 67.772086 │
-    └──────┴────────────────────┴──────┴────────┴───┴────────────┴────────┴────────┴───────────┘
+    ⏭️  bart_wbb ratings: AssetFetchError: barttorvik.com/ncaaw/2025_team_results.csv answered HTTP 403: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> <HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1"> <TITLE>ERROR

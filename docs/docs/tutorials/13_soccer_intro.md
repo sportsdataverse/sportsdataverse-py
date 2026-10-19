@@ -103,6 +103,9 @@ from sportsdataverse.soccer import epl, mls, ucl, laliga, bundesliga
 print('polars version:', pl.__version__)
 ```
 
+    polars version: 2.0.0
+
+
 ESPN's live endpoints are seasonal and occasionally rate-limited, so a tiny
 `safe()` helper runs them defensively — you get the frame when the feed is up,
 and a friendly one-liner when it isn't (never a scary traceback). 🛟
@@ -141,6 +144,16 @@ raw_board = safe(
 type(raw_board), list(raw_board.keys()) if isinstance(raw_board, dict) else 'unavailable'
 ```
 
+    ✅ EPL scoreboard (raw)
+
+
+
+
+
+    (polars.dataframe.frame.DataFrame, 'unavailable')
+
+
+
 
 ```python
 # Parsed frame — one row per match.
@@ -161,11 +174,25 @@ else:
 out
 ```
 
+    ✅ EPL scoreboard (parsed)
+
+
+
+
+
+    'no scoreboard data for that date'
+
+
+
 
 ```python
 print('board shape:', getattr(board, 'shape', 'N/A'))
 print('columns:', getattr(board, 'columns', []))
 ```
+
+    board shape: (0, 0)
+    columns: []
+
 
 ## 🏆 Standings
 
@@ -200,6 +227,16 @@ else:
 out
 ```
 
+    ✅ EPL standings
+
+
+
+
+
+    'standings unavailable right now'
+
+
+
 
 ```python
 # MLS standings — multiple groups (Eastern/Western Conference)
@@ -218,6 +255,16 @@ else:
     out = 'MLS standings unavailable right now'
 out
 ```
+
+    ✅ MLS standings
+
+
+
+
+
+    'MLS standings unavailable right now'
+
+
 
 ## 🎬 Match summary — the 11-section dispatcher
 
@@ -260,6 +307,11 @@ else:
     frames = {}
 ```
 
+    ✅ EPL summary event 656009
+    sections parsed: ['header', 'lineups', 'key_events', 'team_stats', 'commentary', 'leaders', 'standings', 'head_to_head', 'last_five', 'game_info', 'shootout']
+    rows per section: {'header': 0, 'lineups': 0, 'key_events': 0, 'team_stats': 0, 'commentary': 0, 'leaders': 0, 'standings': 0, 'head_to_head': 0, 'last_five': 0, 'game_info': 0, 'shootout': 0}
+
+
 ### Section: `header` — match overview
 
 
@@ -276,6 +328,13 @@ else:
 out
 ```
 
+
+
+
+    'header section unavailable'
+
+
+
 ### Section: `lineups` — starting XIs and substitutes
 
 
@@ -290,6 +349,13 @@ else:
     out = 'lineups section unavailable'
 out
 ```
+
+
+
+
+    'lineups section unavailable'
+
+
 
 ### Section: `key_events` — goals, cards, substitutions
 
@@ -306,6 +372,13 @@ else:
 out
 ```
 
+
+
+
+    'key_events section unavailable'
+
+
+
 ### Section: `team_stats` — possession, shots, passes …
 
 
@@ -318,6 +391,13 @@ else:
     out = 'team_stats section unavailable'
 out
 ```
+
+
+
+
+    'team_stats section unavailable'
+
+
 
 ### Section: `commentary` — live match log
 
@@ -332,6 +412,13 @@ else:
     out = 'commentary section unavailable'
 out
 ```
+
+
+
+
+    'commentary section unavailable'
+
+
 
 ### Remaining sections at a glance
 
@@ -349,6 +436,13 @@ for section in ('game_info', 'head_to_head', 'last_five', 'leaders', 'shootout')
         print(f'{section:20s}  not in parsed frames')
 ```
 
+    game_info             shape=(0, 0)  cols=[]
+    head_to_head          shape=(0, 0)  cols=[]
+    last_five             shape=(0, 0)  cols=[]
+    leaders               shape=(0, 0)  cols=[]
+    shootout              shape=(0, 0)  cols=[]
+
+
 ### Requesting a single section
 
 Pass `section="<name>"` to `parse_soccer_summary` when you only need one
@@ -364,6 +458,19 @@ else:
     out = 'summary unavailable'
 out
 ```
+
+    DataFrame (0, 0)
+
+
+
+
+
+    shape: (0, 0)
+    ┌┐
+    ╞╡
+    └┘
+
+
 
 ## 🏟️ Teams — the master lookup
 
@@ -388,6 +495,16 @@ else:
     out = 'teams unavailable right now'
 out
 ```
+
+    ✅ EPL teams
+
+
+
+
+
+    'teams unavailable right now'
+
+
 
 ## 👥 Team roster
 
@@ -415,6 +532,16 @@ else:
 out
 ```
 
+    ✅ Arsenal roster (team_id=359)
+
+
+
+
+
+    'roster unavailable right now'
+
+
+
 ## 📆 Team schedule
 
 [`espn_soccer_team_schedule`](../soccer/reference/site.md#espn_soccer_team_schedule)
@@ -438,6 +565,33 @@ elif team_sched is not None:
 else:
     print('schedule unavailable right now')
 ```
+
+    ✅ Arsenal schedule 2023/24
+    shape: (38, 21)
+    shape: (5, 21)
+    ┌────────┬────────────┬────────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ id     ┆ date       ┆ name       ┆ short_nam ┆ … ┆ league_sh ┆ league_mi ┆ league_sl ┆ league_is │
+    │ ---    ┆ ---        ┆ ---        ┆ e         ┆   ┆ ort_name  ┆ dsize_nam ┆ ug        ┆ _tourname │
+    │ str    ┆ str        ┆ str        ┆ ---       ┆   ┆ ---       ┆ e         ┆ ---       ┆ nt        │
+    │        ┆            ┆            ┆ str       ┆   ┆ str       ┆ ---       ┆ str       ┆ ---       │
+    │        ┆            ┆            ┆           ┆   ┆           ┆ str       ┆           ┆ bool      │
+    ╞════════╪════════════╪════════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ 704656 ┆ 2025-05-25 ┆ Arsenal at ┆ ARS @ SOU ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
+    │        ┆ T15:00Z    ┆ Southampto ┆           ┆   ┆ League    ┆           ┆           ┆           │
+    │        ┆            ┆ n          ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 704639 ┆ 2025-05-18 ┆ Newcastle  ┆ NEW @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
+    │        ┆ T15:30Z    ┆ United at  ┆           ┆   ┆ League    ┆           ┆           ┆           │
+    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 704632 ┆ 2025-05-11 ┆ Arsenal at ┆ ARS @ LIV ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
+    │        ┆ T15:30Z    ┆ Liverpool  ┆           ┆   ┆ League    ┆           ┆           ┆           │
+    │ 704619 ┆ 2025-05-03 ┆ AFC Bourne ┆ BOU @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
+    │        ┆ T16:30Z    ┆ mouth at   ┆           ┆   ┆ League    ┆           ┆           ┆           │
+    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 704618 ┆ 2025-04-23 ┆ Crystal    ┆ CRY @ ARS ┆ … ┆ Premier   ┆ ENG.1     ┆ eng.1     ┆ false     │
+    │        ┆ T19:00Z    ┆ Palace at  ┆           ┆   ┆ League    ┆           ┆           ┆           │
+    │        ┆            ┆ Arsenal    ┆           ┆   ┆           ┆           ┆           ┆           │
+    └────────┴────────────┴────────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
+
 
 ## 🗞️ News & injuries
 
@@ -463,6 +617,10 @@ else:
     print('news unavailable right now')
 ```
 
+    ✅ EPL news
+    news unavailable right now
+
+
 
 ```python
 injuries = safe(
@@ -476,6 +634,10 @@ elif injuries is not None:
 else:
     print('injuries feed unavailable right now')
 ```
+
+    ✅ EPL injuries
+    shape: (0, 0)
+
 
 ## 📊 Stat leaders
 
@@ -500,6 +662,24 @@ elif goal_leaders is not None:
 else:
     print('leaders unavailable right now')
 ```
+
+    ✅ EPL goal leaders 2023/24
+    shape: (1, 9)
+    shape: (1, 9)
+    ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬──────────┐
+    │ current_s ┆ current_s ┆ current_s ┆ current_s ┆ … ┆ current_s ┆ current_s ┆ current_s ┆ current_ │
+    │ eason_yea ┆ eason_dis ┆ eason_sta ┆ eason_end ┆   ┆ eason_typ ┆ eason_typ ┆ eason_typ ┆ season_t │
+    │ r         ┆ play_name ┆ rt_date   ┆ _date     ┆   ┆ e_type    ┆ e_name    ┆ e_start_d ┆ ype_end_ │
+    │ ---       ┆ ---       ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ ate       ┆ date     │
+    │ i64       ┆ str       ┆ str       ┆ str       ┆   ┆ i64       ┆ str       ┆ ---       ┆ ---      │
+    │           ┆           ┆           ┆           ┆   ┆           ┆           ┆ str       ┆ str      │
+    ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪══════════╡
+    │ 2026      ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06-0 ┆ … ┆ 14308     ┆ 2026-27   ┆ 2026-06-0 ┆ 2027-06- │
+    │           ┆ English   ┆ 1T04:00:0 ┆ 1T03:59:0 ┆   ┆           ┆ English   ┆ 1T04:00:0 ┆ 01T03:59 │
+    │           ┆ Premier   ┆ 0.000+00: ┆ 0.000+00: ┆   ┆           ┆ Premier   ┆ 0.000+00: ┆ :00.000+ │
+    │           ┆ League    ┆ 00        ┆ 00        ┆   ┆           ┆ League    ┆ 00        ┆ 00:00    │
+    └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴──────────┘
+
 
 ## 🔗 League aliases — drop the `league=` argument
 
@@ -537,6 +717,16 @@ else:
 out
 ```
 
+    ✅ epl.espn_epl_scoreboard
+
+
+
+
+
+    'EPL alias unavailable'
+
+
+
 
 ```python
 # --- MLS alias: standings ---
@@ -554,6 +744,16 @@ else:
     out = 'MLS alias unavailable'
 out
 ```
+
+    ✅ mls.espn_mls_standings
+
+
+
+
+
+    'MLS alias unavailable'
+
+
 
 
 ```python
@@ -573,6 +773,16 @@ else:
     out = 'UCL alias unavailable'
 out
 ```
+
+    ✅ ucl.espn_ucl_standings
+
+
+
+
+
+    'UCL alias unavailable'
+
+
 
 ## 🍳 Cookbook: common soccer tasks
 
@@ -602,6 +812,13 @@ else:
 out
 ```
 
+
+
+
+    'run the standings cell above first'
+
+
+
 ### Recipe 2 — Starter vs. substitute counts from a lineup 🧮
 
 Count the starters and bench players per team from the `lineups`
@@ -623,6 +840,13 @@ else:
 out
 ```
 
+
+
+
+    'run the match-summary cells above first'
+
+
+
 ### Recipe 3 — Goals, cards, and substitutions in the key-events log 🎯
 
 The `key_events` section has a `type_text` column. Group it to get a
@@ -643,6 +867,13 @@ else:
 out
 ```
 
+
+
+
+    'run the match-summary cells above first'
+
+
+
 ### Recipe 4 — Position breakdown of a squad 🏃
 
 Use the parsed roster to count players by position — a quick depth-chart
@@ -662,6 +893,13 @@ else:
     out = 'run the team-roster cell above first'
 out
 ```
+
+
+
+
+    'run the team-roster cell above first'
+
+
 
 ### Recipe 5 — Multi-league standings in one loop 🌍
 
@@ -695,6 +933,35 @@ for slug, name in leagues.items():
 pl.DataFrame(rows)
 ```
 
+    ✅ Premier League standings
+
+
+    ✅ La Liga standings
+
+
+    ✅ Bundesliga standings
+
+
+    ✅ Serie A standings
+
+
+
+
+
+    shape: (4, 4)
+    ┌────────────────┬───────┬───────┬────────┐
+    │ league         ┆ slug  ┆ teams ┆ groups │
+    │ ---            ┆ ---   ┆ ---   ┆ ---    │
+    │ str            ┆ str   ┆ i64   ┆ i64    │
+    ╞════════════════╪═══════╪═══════╪════════╡
+    │ Premier League ┆ eng.1 ┆ 0     ┆ 0      │
+    │ La Liga        ┆ esp.1 ┆ 0     ┆ 0      │
+    │ Bundesliga     ┆ ger.1 ┆ 0     ┆ 0      │
+    │ Serie A        ┆ ita.1 ┆ 0     ┆ 0      │
+    └────────────────┴───────┴───────┴────────┘
+
+
+
 ### Recipe 6 — Pandas interop 🐼
 
 Every parser accepts `return_as_pandas=True`, and any polars frame
@@ -724,6 +991,16 @@ else:
 out
 ```
 
+    ✅ EPL standings (pandas)
+
+
+
+
+
+    'standings unavailable right now'
+
+
+
 ## 🏅 Champions League deep-dive
 
 A quick tour of the same surface on the UCL — demonstrating that
@@ -747,6 +1024,16 @@ else:
 out
 ```
 
+    ✅ UCL scoreboard
+
+
+
+
+
+    'UCL scoreboard unavailable'
+
+
+
 
 ```python
 # UCL group-stage standings — one row per team per group
@@ -768,6 +1055,13 @@ else:
     out = 'run the UCL standings cell above first'
 out
 ```
+
+
+
+
+    'run the UCL standings cell above first'
+
+
 
 ## 🌸 Women's soccer — NWSL & Women's World Cup
 
@@ -799,6 +1093,16 @@ else:
 out
 ```
 
+    ✅ NWSL standings 2023
+
+
+
+
+
+    'NWSL standings unavailable right now'
+
+
+
 
 ```python
 # Women's World Cup 2023 — group-stage standings
@@ -819,6 +1123,16 @@ else:
     out = 'WWC standings unavailable right now'
 out
 ```
+
+    ✅ WWC 2023 standings
+
+
+
+
+
+    'WWC standings unavailable right now'
+
+
 
 ## 📦 Event data from any provider with kloppy
 
@@ -857,6 +1171,33 @@ else:
 out
 ```
 
+    ✅ StatsBomb open data — 2018 World Cup final (match 8658)
+    events: (3036, 24)
+
+
+
+
+
+    shape: (10, 7)
+    ┌───────────┬───────────────┬─────────┬───────────┬───────────────┬───────────────┬────────────┐
+    │ period_id ┆ timestamp     ┆ team_id ┆ player_id ┆ coordinates_x ┆ coordinates_y ┆ result     │
+    │ ---       ┆ ---           ┆ ---     ┆ ---       ┆ ---           ┆ ---           ┆ ---        │
+    │ i64       ┆ duration[μs]  ┆ str     ┆ str       ┆ f64           ┆ f64           ┆ str        │
+    ╞═══════════╪═══════════════╪═════════╪═══════════╪═══════════════╪═══════════════╪════════════╡
+    │ 1         ┆ 17m 56s 987ms ┆ 785     ┆ 5472      ┆ 7.5           ┆ 41.5          ┆ OWN_GOAL   │
+    │ 1         ┆ 20m 51s 227ms ┆ 785     ┆ 5468      ┆ 111.5         ┆ 48.5          ┆ OFF_TARGET │
+    │ 1         ┆ 23m 34s 907ms ┆ 785     ┆ 5470      ┆ 107.5         ┆ 28.5          ┆ OFF_TARGET │
+    │ 1         ┆ 27m 53s 880ms ┆ 785     ┆ 5474      ┆ 104.5         ┆ 31.5          ┆ GOAL       │
+    │ 1         ┆ 37m 56s 787ms ┆ 771     ┆ 5487      ┆ 107.5         ┆ 39.5          ┆ GOAL       │
+    │ 1         ┆ 39m 25s 267ms ┆ 785     ┆ 5465      ┆ 107.5         ┆ 40.5          ┆ OFF_TARGET │
+    │ 1         ┆ 42m 47s 27ms  ┆ 785     ┆ 5474      ┆ 116.5         ┆ 33.5          ┆ BLOCKED    │
+    │ 1         ┆ 42m 50s 27ms  ┆ 785     ┆ 3471      ┆ 112.5         ┆ 25.5          ┆ BLOCKED    │
+    │ 1         ┆ 45m 17s 307ms ┆ 785     ┆ 5468      ┆ 114.5         ┆ 39.5          ┆ OFF_TARGET │
+    │ 2         ┆ 1m 10s 27ms   ┆ 771     ┆ 5487      ┆ 94.5          ┆ 44.5          ┆ SAVED      │
+    └───────────┴───────────────┴─────────┴───────────┴───────────────┴───────────────┴────────────┘
+
+
+
 Any other provider or file goes through kloppy itself, then
 `soccer_events_to_frame(dataset)` applies the same frame convention:
 
@@ -874,6 +1215,108 @@ pitch in one line (sdvplot is not a dependency, so this is not executed here):
 from sdvplot import pitch_coords
 xy = pitch_coords(events, provider='statsbomb')   # R: sdvplotR::sdv_pitch_coords(events, 'statsbomb')
 ```
+
+## 🧭 SPADL actions
+
+`soccer_spadl(dataset)` converts any kloppy event dataset into
+[SPADL](https://socceraction.readthedocs.io) (Soccer Player Action Description Language): one
+row per on-the-ball action, with every action oriented to attack left to right on a 105 × 68
+pitch. `soccer_open_dataset(...)` is the dataset-returning twin of `soccer_open_events(...)`.
+
+
+```python
+from sportsdataverse.soccer import soccer_open_dataset, soccer_spadl
+
+ds = safe('statsbomb open dataset 8658', lambda: soccer_open_dataset('statsbomb', 8658))
+actions = safe('SPADL actions', lambda: soccer_spadl(ds)) if ds is not None else None
+actions.head() if actions is not None else 'kloppy not installed (pip install "sportsdataverse[soccer]")'
+```
+
+    ✅ statsbomb open dataset 8658
+    ✅ SPADL actions
+
+
+
+
+
+    shape: (5, 17)
+    ┌─────────┬─────────────┬───────────┬───────────┬───┬─────────┬───────────┬───────────┬────────────┐
+    │ game_id ┆ original_ev ┆ action_id ┆ period_id ┆ … ┆ type_id ┆ type_name ┆ result_id ┆ result_nam │
+    │ ---     ┆ ent_id      ┆ ---       ┆ ---       ┆   ┆ ---     ┆ ---       ┆ ---       ┆ e          │
+    │ str     ┆ ---         ┆ i64       ┆ i64       ┆   ┆ i64     ┆ str       ┆ i64       ┆ ---        │
+    │         ┆ str         ┆           ┆           ┆   ┆         ┆           ┆           ┆ str        │
+    ╞═════════╪═════════════╪═══════════╪═══════════╪═══╪═════════╪═══════════╪═══════════╪════════════╡
+    │ 8658    ┆ 6d7450f7-25 ┆ 0         ┆ 1         ┆ … ┆ 0       ┆ pass      ┆ 1         ┆ success    │
+    │         ┆ 90-4b04-a2a ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │         ┆ e-9ed116…   ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │ 8658    ┆ 1eb01089-03 ┆ 1         ┆ 1         ┆ … ┆ 21      ┆ dribble   ┆ 1         ┆ success    │
+    │         ┆ b0-46ac-9c5 ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │         ┆ a-6deeca…   ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │ 8658    ┆ d304b712-3d ┆ 2         ┆ 1         ┆ … ┆ 0       ┆ pass      ┆ 1         ┆ success    │
+    │         ┆ 28-4117-aea ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │         ┆ f-11c15a…   ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │ 8658    ┆ 99ef3a69-f4 ┆ 3         ┆ 1         ┆ … ┆ 21      ┆ dribble   ┆ 1         ┆ success    │
+    │         ┆ 06-45e7-b32 ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │         ┆ a-2f2f00…   ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │ 8658    ┆ a29c5a6c-6b ┆ 4         ┆ 1         ┆ … ┆ 0       ┆ pass      ┆ 1         ┆ success    │
+    │         ┆ 85-409e-a43 ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    │         ┆ b-03f2d6…   ┆           ┆           ┆   ┆         ┆           ┆           ┆            │
+    └─────────┴─────────────┴───────────┴───────────┴───┴─────────┴───────────┴───────────┴────────────┘
+
+
+
+## Valuing actions with Expected Threat
+
+`soccer_xthreat_rate(actions)` appends an `xt_value` column: the change in
+[Expected Threat](https://karun.in/blog/expected-threat.html) from each successful move
+(pass, dribble, cross), using a grid bundled with the package and fit on StatsBomb open data.
+
+SPADL coordinates are already 105 × 68 (origin bottom-left), so pass the `start_x`/`start_y` columns straight to a 105 × 68 pitch -- sdvplot's `pitch_coords` needs no provider conversion.
+
+
+```python
+from sportsdataverse.soccer import soccer_xthreat_rate
+
+rated = safe('xT values', lambda: soccer_xthreat_rate(actions)) if actions is not None else None
+rated.head() if rated is not None else 'kloppy not installed (pip install "sportsdataverse[soccer]")'
+```
+
+    ✅ xT values
+
+
+
+
+
+    shape: (5, 18)
+    ┌─────────┬────────────┬───────────┬───────────┬───┬───────────┬───────────┬───────────┬───────────┐
+    │ game_id ┆ original_e ┆ action_id ┆ period_id ┆ … ┆ type_name ┆ result_id ┆ result_na ┆ xt_value  │
+    │ ---     ┆ vent_id    ┆ ---       ┆ ---       ┆   ┆ ---       ┆ ---       ┆ me        ┆ ---       │
+    │ str     ┆ ---        ┆ i64       ┆ i64       ┆   ┆ str       ┆ i64       ┆ ---       ┆ f64       │
+    │         ┆ str        ┆           ┆           ┆   ┆           ┆           ┆ str       ┆           │
+    ╞═════════╪════════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═══════════╪═══════════╡
+    │ 8658    ┆ 6d7450f7-2 ┆ 0         ┆ 1         ┆ … ┆ pass      ┆ 1         ┆ success   ┆ -0.002215 │
+    │         ┆ 590-4b04-a ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ 2ae-9ed116 ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ …          ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 8658    ┆ 1eb01089-0 ┆ 1         ┆ 1         ┆ … ┆ dribble   ┆ 1         ┆ success   ┆ 0.0       │
+    │         ┆ 3b0-46ac-9 ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ c5a-6deeca ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ …          ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 8658    ┆ d304b712-3 ┆ 2         ┆ 1         ┆ … ┆ pass      ┆ 1         ┆ success   ┆ -0.001096 │
+    │         ┆ d28-4117-a ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ eaf-11c15a ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ …          ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 8658    ┆ 99ef3a69-f ┆ 3         ┆ 1         ┆ … ┆ dribble   ┆ 1         ┆ success   ┆ -0.000256 │
+    │         ┆ 406-45e7-b ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ 32a-2f2f00 ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ …          ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │ 8658    ┆ a29c5a6c-6 ┆ 4         ┆ 1         ┆ … ┆ pass      ┆ 1         ┆ success   ┆ -0.001593 │
+    │         ┆ b85-409e-a ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ 43b-03f2d6 ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    │         ┆ …          ┆           ┆           ┆   ┆           ┆           ┆           ┆           │
+    └─────────┴────────────┴───────────┴───────────┴───┴───────────┴───────────┴───────────┴───────────┘
+
+
 
 ## 🎉 Where to next
 
