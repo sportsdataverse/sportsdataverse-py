@@ -276,3 +276,48 @@ def test_session_is_cached_per_credentials(monkeypatch):
     second = login(KENPOM)
     assert first is second
     assert len(created) == 1  # the second call did not log in again
+
+
+# --- A-L64: the session cache knows the password; concurrent misses log in once ---
+
+
+def test_changed_password_logs_in_again(monkeypatch):
+    created = []
+
+    def _fake_session():
+        created.append(FakeSession())
+        return created[-1]
+
+    monkeypatch.setattr("sportsdataverse._subscription_http.requests.Session", _fake_session)
+    login(KENPOM, "u@example.com", "fake-old-pw")
+    login(KENPOM, "u@example.com", "fake-new-pw")
+    assert len(created) == 2  # the old password's session was not reused for the new one
+    assert created[-1].posted["data"]["password"] == "fake-new-pw"
+    from sportsdataverse import _subscription_http as sh
+
+    assert "fake-new-pw" not in repr(list(sh._sessions))  # keyed on a digest, never the password
+
+
+def test_concurrent_cache_misses_log_in_once(monkeypatch):
+    import threading
+    import time
+
+    created = []
+
+    class SlowLoginSession(FakeSession):
+        def post(self, url, data=None, headers=None, **kwargs):
+            time.sleep(0.2)  # a second thread arrives while this login is in flight
+            return super().post(url, data=data, headers=headers, **kwargs)
+
+    def _fake_session():
+        created.append(SlowLoginSession())
+        return created[-1]
+
+    monkeypatch.setattr("sportsdataverse._subscription_http.requests.Session", _fake_session)
+    got = []
+    threads = [threading.Thread(target=lambda: got.append(login(KENPOM, "u@example.com", "fake-pw"))) for _ in range(3)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(created) == 1 and len(got) == 3 and all(s is got[0] for s in got)
