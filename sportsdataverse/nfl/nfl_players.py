@@ -33,6 +33,7 @@ replicates nflverse's rule and keeps the **highest numeric ``espn_id`` per
 
 from __future__ import annotations
 
+import warnings
 from typing import TYPE_CHECKING, Dict, List, Optional, Union, overload
 
 import polars as pl
@@ -40,6 +41,7 @@ import polars as pl
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse._crosswalk_basketball_sources import FetchTally
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import NoDataError
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only import (PEP 563 defers eval)
     import pandas as pd
@@ -383,14 +385,21 @@ def _ff_provider_ids() -> pl.DataFrame:
 
     A ``gsis_id`` listed on more than one db_playerids row is an upstream mapping
     error (two players on one id), so those ids are dropped rather than guessed.
-    A failed load yields a zero-row frame so the crosswalk still returns.
+    A failed load yields a zero-row frame so the crosswalk still returns, and
+    warns: degraded enrichment is allowed on a failed fetch, a silent one is not.
     """
     from sportsdataverse.nfl.nfl_loaders import load_nfl_ff_playerids
 
     schema = {c: pl.Utf8 for c in ["gsis_id", *_FF_PROVIDER_IDS]}
     try:
         ff = load_nfl_ff_playerids()
-    except Exception:  # noqa: BLE001 -- enrichment only; degrade to null ids
+    except Exception as exc:  # noqa: BLE001 -- enrichment only; degrade to null ids, never silently
+        warnings.warn(
+            f"nfl_players_crosswalk: yahoo_id / cbs_id are null because the DynastyProcess "
+            f"db_playerids load failed ({type(exc).__name__}: {exc})",
+            UserWarning,
+            stacklevel=3,
+        )
         return pl.DataFrame(schema=schema)
     if "gsis_id" not in ff.columns:
         return pl.DataFrame(schema=schema)
@@ -438,9 +447,13 @@ def nfl_players_crosswalk(
     Returns:
         A one-row-per-``gsis_id`` ``DataFrame`` of cross-system IDs (all
         ``Utf8``) + ``full_name`` / ``position``, with ``yahoo_id`` / ``cbs_id``
-        null where DynastyProcess has no unambiguous match (or its load fails).
-        A failed / empty players load yields a zero-row frame carrying the same
-        column set (never a raise).
+        null where DynastyProcess has no unambiguous match (or its load fails,
+        with a ``UserWarning``). An absent (404) or empty players asset yields a
+        zero-row frame carrying the same column set.
+
+    Raises:
+        AssetFetchError: the players master could not be fetched (403, rate
+            limit, 5xx): a zero-row crosswalk would null every id in a join.
 
     Example:
         Quick start::
@@ -467,7 +480,7 @@ def nfl_players_crosswalk(
 
     try:
         players = load_nfl_players()
-    except Exception:  # noqa: BLE001 -- pure consumer; degrade to empty on failure
+    except NoDataError:  # the asset is absent: zero rows. A failed fetch (AssetFetchError) raises.
         players = pl.DataFrame()
 
     if players.is_empty():

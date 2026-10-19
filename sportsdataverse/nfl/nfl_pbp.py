@@ -82,6 +82,7 @@ from sportsdataverse.nfl.ep_wp import (
     _espn_ep_features,
     _espn_wp_features,
     _load_model as _ep_wp_load_model,
+    _models_strict,
     calculate_epa,
     calculate_wpa,
     calculate_xpass,
@@ -5426,6 +5427,8 @@ class NFLPlayProcess(object):
         try:
             scored = calculate_xpass(nflverse_view)
         except FileNotFoundError as exc:
+            if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing xpass model raises
+                raise
             import warnings
 
             warnings.warn(
@@ -5536,6 +5539,8 @@ class NFLPlayProcess(object):
         try:
             probs_pd = _fd.get_4th_down_probs(nflverse_view)
         except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+            if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing nfl4th model raises
+                raise
             import warnings
 
             warnings.warn(
