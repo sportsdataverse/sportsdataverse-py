@@ -1556,11 +1556,11 @@
   group: codegen-runtime
   finding: A-L29
   file: sportsdataverse/errors.py
-  snippet: '    if "octet-stream" in str(headers.get("Content-Type", "")).lower():'
+  snippet: '    if not _may_be_json(response):'
   mutant: '    if False:'
   test: tests/test_runtime_release_classify.py -k binary_body
   expected: kill
-  note: every 2xx release asset was charset-scanned as JSON
+  note: every 2xx release asset was charset-scanned as JSON (the guard is #897's _may_be_json; this row pins it in no_espn_data)
 
 - id: nfl-schedule-empty-seasons-is-every-season
   group: codegen-runtime

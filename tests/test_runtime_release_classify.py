@@ -152,9 +152,11 @@ def test_connection_error_in_the_panic_refetch_is_asset_fetch_error(dead_url):
         pass
 
     _Panic.__name__ = "PanicException"
-    with patch.object(rt.pl, "read_parquet", side_effect=_Panic("arrow-ffi metadata panic")):
-        with pytest.raises(AssetFetchError, match="ConnectionError"):
-            rt._fetch_release_parquet(dead_url + ".parquet")
+    # The first fetch delivered the bytes (the panic is in the parse); only the refetch meets the dead port.
+    with patch.object(rt, "_release_bytes", return_value=_PARQUET):
+        with patch.object(rt.pl, "read_parquet", side_effect=_Panic("arrow-ffi metadata panic")):
+            with pytest.raises(AssetFetchError, match="ConnectionError"):
+                rt._fetch_release_parquet(dead_url + ".parquet")
 
 
 @pytest.mark.parametrize(
