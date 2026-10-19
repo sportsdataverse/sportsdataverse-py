@@ -165,7 +165,7 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             )
         try:
             payload = _fox_event_data("cfb", fox_event_id)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"fox event data fetch failed: {type(exc).__name__}: {exc}") from exc
     if not isinstance(payload, Mapping) or not payload.get("header"):
         raise SourceUnavailable(f"cfb {espn_id}: fox returned no event payload (request failed or bad id)")

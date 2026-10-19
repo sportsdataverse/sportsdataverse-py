@@ -20,6 +20,11 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _SHAPE_ERRORS, _warn_schema_drift
+
+# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
+# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
+_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 
 def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -32,7 +37,8 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool):
         return df
     try:
         return pl.from_pandas(df)
-    except Exception:
+    except _FROM_PANDAS_ERRORS:
+        # A mixed-type object column fails the Arrow conversion: stringify rather than lose the frame.
         df2 = df.copy()
         for col in [c for c in df2.columns if df2[c].dtype == "object"]:
             df2[col] = df2[col].astype(str)
@@ -62,11 +68,13 @@ def parse_nhl_records(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     if not isinstance(payload, dict):
         return _empty_frame(return_as_pandas)
     rows = payload.get("data")
-    if not isinstance(rows, list) or not rows:
+    rows = [row for row in rows if row not in (None, {})] if isinstance(rows, list) else None
+    if not rows:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(rows, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_nhl_records: data", exc)
         return _empty_frame(return_as_pandas)
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():

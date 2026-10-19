@@ -90,6 +90,8 @@ def espn_mlb_player_stats(
     Raises:
         ValueError: ``season_type`` is not ``"regular"``/``"postseason"``.
         sportsdataverse.errors.NoDataError: ESPN returned 404.
+        sportsdataverse.errors.AssetFetchError: the statistics, athlete or team fetch failed (403,
+            429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null.
 
     Example:
         Pull Aaron Judge's 2023 season line as a single wide row::

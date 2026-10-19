@@ -1518,32 +1518,7 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "hockeytech._parsers.parse_streaks": {"list": AttributeError},
     "hockeytech._parsers.parse_teams": {"list": AttributeError},
     "hockeytech._parsers.parse_transactions": {"list": AttributeError},
-    "mlb.mlb_api_parsers.parse_mlb_api_draft_latest": {"error_envelope": AssertionError},
-    "mlb.mlb_api_parsers.parse_mlb_api_team_roster": {"list": AttributeError},
-    "mlb.mlb_api_parsers.parse_mlb_api_teams": {"list": AttributeError},
-    "mlb.mlb_api_parsers.parse_mlb_api_timecodes": {"list": AssertionError},
-    "mlb.mlb_api_parsers.parse_mlb_api_win_probability": {"list": AssertionError},
     "mlb.mlb_statcast_parsers.parse_mlb_statcast_player": {"error_envelope": TypeError, "list": TypeError},
-    "nba.nba_stats_parsers.parse_nba_stats_commonallplayers": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nba.nba_stats_parsers.parse_nba_stats_leaguedashplayerstats": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nba.nba_stats_parsers.parse_nba_stats_playercareerstats": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nba.nba_stats_parsers.parse_nba_stats_result_sets": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
     "nfl.nfl_api_parsers.parse_nfl_combine_profiles": {
         "empty_str": AttributeError,
         "list": AttributeError,
@@ -1603,19 +1578,6 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     },
     "nfl.nflpro_parsers.parse_nfl_pro_stats": {"list": AssertionError},
     "nfl.sleeper_parsers.parse_sleeper": {"error_envelope": AssertionError, "list": AssertionError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_draft_picks": {"list": AttributeError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_landing": {"error_envelope": AssertionError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_pbp": {"list": AttributeError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_player_game_log": {"list": AttributeError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_player_landing": {"error_envelope": AssertionError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_player_spotlight": {"list": AssertionError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_score": {"list": AttributeError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_standings": {"list": AttributeError},
-    "nhl.nhl_api_web_parsers.parse_nhl_web_standings_season": {"list": AttributeError},
-    "nhl.nhl_edge_parsers.parse_edge_detail": {"error_envelope": AssertionError},
-    "nhl.nhl_edge_parsers.parse_edge_payload": {"error_envelope": AssertionError},
-    "nhl.nhl_edge_parsers.parse_edge_top10": {"list": AssertionError},
-    "nhl.nhl_edge_parsers.parse_edge_zone_time": {"error_envelope": AssertionError},
     "odds.kalshi_parsers.parse_kalshi": {"error_envelope": AssertionError, "list": AssertionError},
     "odds.polymarket_parsers.parse_polymarket": {"error_envelope": AssertionError, "list": AssertionError},
     "odds.the_odds_api_parsers.parse_toa_event_odds": {
@@ -1779,14 +1741,23 @@ _HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {
         )
     },
 }
-# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13: none is open above), 4.9 narrows the
-# nhl/mlb/nba parsers' error handling (A-L60), and 4.1b owns every other provider parser (A-L17).
-_TASK_49 = ("nhl.nhl_edge_parsers.", "nhl.nhl_api_web_parsers.", "mlb.mlb_api_parsers.", "nba.nba_stats_parsers.")
+# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13) and 4.9 the nhl/mlb/nba parsers'
+# (A-L60): none of those modules is open above (test_hostile_closed_modules_stay_closed); 4.1b owns every other
+# provider parser (A-L17).
+_CLOSED = (
+    "_common_espn_parsers.",
+    "nhl.nhl_edge_parsers.",
+    "nhl.nhl_api_web_parsers.",
+    "nhl.nhl_records_parsers.",
+    "nhl.nhl_stats_rest_parsers.",
+    "mlb.mlb_api_parsers.",
+    "nba.nba_stats_parsers.",
+)
 
 
 def _open(qual: str, shape: str) -> str:
     """The finding id and fixing task of an open ``(parser, shape)`` case."""
-    task = "4.1" if qual.startswith("_common_espn_parsers.") else "4.9" if qual.startswith(_TASK_49) else "4.1b"
+    task = "4.1b"
     return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
 
 
@@ -1821,6 +1792,12 @@ def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
     else:
         out = parse(_HOSTILE[shape])
     assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
+
+
+def test_hostile_closed_modules_stay_closed():
+    """No case of a module whose contract tasks 4.1 / 4.9 closed may be re-opened as an xfail."""
+    reopened = sorted(q for q in {**_HOSTILE_OPEN, **_HOSTILE_SYNC_1018} if q.startswith(_CLOSED))
+    assert reopened == []
 
 
 def test_hostile_sweep_covers_every_public_parser():
@@ -1926,3 +1903,71 @@ def test_dtype_snapshot_ids_are_never_float(name):
 
 if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change
     _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")
+
+
+def _drift(raw: Any, path: tuple) -> Any:
+    """A deep copy of the real capture whose list at ``path`` holds strings instead of objects."""
+    import copy
+
+    out = copy.deepcopy(raw)
+    node = out
+    for step in path[:-1]:
+        node = node[step]
+    node[path[-1]] = [str(row) for row in node[path[-1]]]
+    return out
+
+
+# (parser, capture, path to the row list that drifts, where the warning names). Each capture parses to rows
+# first, with no warning (pytest.ini makes warnings errors), except where its parser reads no rows from it.
+_ESPN_DRIFT = [
+    ("parse_news", "news_nba", ("articles",), "parse_news: articles"),
+    ("parse_transactions", "transactions_nba", ("transactions",), "parse_transactions: records"),
+    ("parse_items", "season_coaches_nba", ("items",), "parse_items: items"),
+    ("parse_teams", "teams_mbb", ("sports", 0, "leagues", 0, "teams"), "parse_teams: teams"),
+    ("parse_groups", "teams_nba", ("sports",), "parse_groups: sports"),
+    ("parse_coaches", "season_coaches_nba", ("items",), "parse_coaches: items"),
+    ("parse_event_competitor_roster", "event_competitor_roster_nba", ("entries",), "parse_event_competitor_roster"),
+    ("parse_event_plays", "event_plays_nba", ("items",), "parse_event_plays: items"),
+    ("parse_team_schedule", "team_schedule_nba", ("events",), "parse_team_schedule: events"),
+    ("parse_team_roster", "team_roster_nba", ("athletes",), "parse_team_roster: athletes"),
+    ("parse_team_roster", "team_roster_nfl", ("athletes", 0, "items"), r"parse_team_roster: athletes\[\w+\]\.items"),
+    ("parse_injuries", "injuries_nba", ("injuries",), "parse_injuries: teams"),
+    ("parse_summary_plays", "summary_nba", ("plays",), "parse_summary_plays: plays"),
+    ("parse_summary_winprobability", "summary_nba", ("winprobability",), "parse_summary_winprobability: wp"),
+    ("parse_summary_officials", "summary_nba", ("gameInfo", "officials"), "parse_summary_officials: officials"),
+]
+
+
+@pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where):
+    """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
+    import sportsdataverse._common_espn_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    if parser != "parse_groups":  # teams_nba carries no groups: only the walk to them is exercised
+        assert parse(raw).height > 0
+    with pytest.warns(SchemaDriftWarning, match=where):
+        assert parse(_drift(raw, path)).height == 0
+
+
+def test_espn_draft_picks_drift_warns():
+    """parse_draft's inline picks shape has no committed capture (its docstring says so): the real 2024 index
+    capture with its ``$ref`` rounds swapped for a picks list that holds strings reaches the same catch."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("season_draft_nba")
+    with pytest.warns(SchemaDriftWarning, match="parse_draft: all_picks"):
+        assert parse_draft({**raw, "rounds": [], "picks": [str(raw["athletes"])]}).height == 0
+
+
+def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():
+    """A position-grouped roster (real NFL capture) whose later group stops being an object: zero rows + warning."""
+    from sportsdataverse._common_espn_parsers import parse_team_roster
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("team_roster_nfl")
+    drifted = {**raw, "athletes": [raw["athletes"][0], *(str(g) for g in raw["athletes"][1:])]}
+    with pytest.warns(SchemaDriftWarning, match="parse_team_roster: athletes: "):
+        assert parse_team_roster(drifted).height == 0

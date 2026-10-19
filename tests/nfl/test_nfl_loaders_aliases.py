@@ -290,7 +290,7 @@ def test_load_nfl_ff_rankings_kind_returns_same_data_as_type():
     try:
         df_type = load_nfl_ff_rankings(type="draft")
         df_kind = load_nfl_ff_rankings(kind="draft")
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert isinstance(df_type, pl.DataFrame)
@@ -306,7 +306,7 @@ def test_load_nfl_ff_rankings_alias_returns_same_data():
     try:
         df_alias = load_ff_rankings(kind="draft")
         df_canonical = load_nfl_ff_rankings(kind="draft")
-    except Exception as exc:  # noqa: BLE001 - transient upstream errors only; see helper
+    except Exception as exc:  # transient upstream errors only; see helper
         skip_on_transient_network_error(exc)
         raise
     assert df_alias.shape == df_canonical.shape

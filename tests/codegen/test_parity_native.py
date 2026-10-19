@@ -135,7 +135,7 @@ def test_native_generated_matches_handwritten(dotted, prefix, base, name_pattern
             try:
                 want = _cap(lambda: hwfn(**args), hw, "download")
                 got = _cap(lambda: gfn(**args), rt, "download")
-            except Exception as e:  # noqa: BLE001
+            except Exception as e:  # noqa: BLE001 -- every raise is recorded as a mismatch and asserted on
                 mismatches.append(f"{name} (max={maximal}) raised: {e}")
                 continue
             if got.get("url") != want.get("url"):

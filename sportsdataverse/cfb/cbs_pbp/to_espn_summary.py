@@ -1003,7 +1003,7 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         except NoDataError as exc:
             # NAPI's own 404 envelope: CBS states it has no play-by-play for this game.
             raise SourceUnavailable(f"cfb {espn_id}: cbs carries no play-by-play for game {cbs_game_id}") from exc
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
         if not _has_coverage(payload):
             raise SourceUnavailable(f"cfb {espn_id}: cbs carries no play-by-play for game {cbs_game_id}")

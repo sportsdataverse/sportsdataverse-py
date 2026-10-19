@@ -134,3 +134,31 @@ def test_parse_null_prefix_column_keeps_all_rows():
     df = parse_nba_stats_result_sets(raw, result_set="X")
     assert df.height == 151
     assert df["plus_minus"][150] == 3.5
+
+
+def test_schema_drift_warns_instead_of_reading_as_no_data():
+    """Headers polars cannot build a frame from (here a duplicated name) warn instead of reading as no data (A-L60)."""
+    import pytest
+
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("cap_leaguedashplayerstats_nba.json")
+    rs = raw["resultSets"][0]
+    assert parse_nba_stats_result_sets(raw, result_set=rs["name"]).height > 0
+    drifted = {"resultSets": [{**rs, "headers": [rs["headers"][0], *rs["headers"][:-1]]}]}
+    with pytest.warns(SchemaDriftWarning, match=f"parse_nba_stats_result_sets: {rs['name']}.rowSet"):
+        assert parse_nba_stats_result_sets(drifted, result_set=rs["name"]).height == 0
+
+
+def test_a_result_set_that_is_not_an_object_warns():
+    """R907-2: a non-object entry in resultSets is dropped with a SchemaDriftWarning; the real sets still parse."""
+    import pytest
+
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    raw = _load("cap_leaguedashplayerstats_nba.json")
+    rs = raw["resultSets"][0]
+    want = parse_nba_stats_result_sets(raw, result_set=rs["name"])
+    with pytest.warns(SchemaDriftWarning, match=r"parse_nba_stats_result_sets: resultSets\[\]"):
+        got = parse_nba_stats_result_sets({"resultSets": [str(rs), *raw["resultSets"]]}, result_set=rs["name"])
+    assert got.equals(want)

@@ -179,3 +179,16 @@ def test_mlb_api_endpoint_parsers_registry_references_real_wrappers():
     for fn_name in MLB_API_ENDPOINT_PARSERS:
         assert hasattr(mlb, fn_name), f"MLB_API_ENDPOINT_PARSERS references missing wrapper {fn_name!r}"
         assert callable(getattr(mlb, fn_name))
+
+
+def test_schema_drift_warns_instead_of_reading_as_no_data():
+    """Real captures with their row lists drifted: zero rows AND a SchemaDriftWarning naming the path (A-L60)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.mlb.mlb_api_parsers import parse_mlb_api_teams, parse_mlb_api_timecodes
+
+    teams, stamps = _load("teams_2024"), _load("game_timestamps")
+    assert parse_mlb_api_teams(teams).height > 0 and parse_mlb_api_timecodes(stamps).height > 0
+    with pytest.warns(SchemaDriftWarning, match="parse_mlb_api_teams: teams"):
+        assert parse_mlb_api_teams({**teams, "teams": [str(t) for t in teams["teams"]]}).height == 0
+    with pytest.warns(SchemaDriftWarning, match="parse_mlb_api_timecodes"):
+        assert parse_mlb_api_timecodes([{"ts": t} for t in stamps]).height == 0

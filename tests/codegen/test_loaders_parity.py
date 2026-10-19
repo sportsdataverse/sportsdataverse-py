@@ -51,7 +51,7 @@ def _existing_url(fn_name: str, league: str):
         with patch.object(runtime, "download", side_effect=NoDataError("404")):
             try:
                 getattr(mod, fn_name)(seasons=2024)
-            except Exception:  # noqa: BLE001
+            except Exception:  # noqa: BLE001 -- the URL is captured before the stubbed 404; what follows is irrelevant
                 pass
     return box.get("url")
 

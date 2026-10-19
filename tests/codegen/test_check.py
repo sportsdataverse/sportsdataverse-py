@@ -274,13 +274,11 @@ def test_red_path_flat_stale_owns_euroleague_schemas(in_tree):
         assert generate._flat_stale()
 
 
-@pytest.mark.xfail(
-    strict=True, raises=pytest.fail.Exception, reason="A-L9: _ruff_format_dir ignores ruff's exit code; task 4.9"
-)
 def test_red_path_ruff_failure_is_raised(tmp_path):
+    """A-L9: a rendered file ruff cannot parse fails the run instead of being written unformatted."""
     shutil.copy2(ROOT / "pyproject.toml", tmp_path / "pyproject.toml")
     (tmp_path / "broken.py").write_text("def f(:\n    pass\n", encoding="utf-8")
-    with pytest.raises(Exception):  # noqa: B017 -- any loud failure; today it returns None
+    with pytest.raises(RuntimeError, match="ruff format failed"):
         generate._ruff_format_dir(tmp_path)
 
 

@@ -105,15 +105,13 @@ def cache_get(key: str) -> pl.DataFrame | None:
         if path.exists() and not _is_expired(path.stat().st_mtime):
             try:
                 return pl.read_parquet(path)
-            except Exception:
+            except (OSError, pl.exceptions.PolarsError):
                 # Corrupt / unreadable parquet: best-effort cleanup. ``unlink``
                 # can itself raise (permissions, Windows file lock), but
                 # ``cache_get`` is opaque infra and must return ``None`` on any
                 # cache issue rather than propagate.
-                try:
+                with contextlib.suppress(OSError):
                     path.unlink(missing_ok=True)
-                except Exception:
-                    pass
     return None
 
 
@@ -137,7 +135,7 @@ def cache_put(key: str, frame: pl.DataFrame) -> None:
         path = _filesystem_path(key)
         try:
             frame.write_parquet(path)
-        except Exception:
+        except (OSError, pl.exceptions.PolarsError):
             pass  # Cache write failure is non-fatal; data still returned.
 
 
@@ -266,7 +264,7 @@ def cached_loader(func: F) -> F:
                 try:
                     frame = pl.read_parquet(path)
                     return frame.to_pandas() if return_as_pandas else frame
-                except Exception:
+                except (OSError, pl.exceptions.PolarsError):
                     # Corrupt cache file — fall through to refetch and
                     # overwrite. We don't propagate the error because the
                     # cache is opaque infra and the caller asked for data.
@@ -279,7 +277,7 @@ def cached_loader(func: F) -> F:
             cache_dir.mkdir(parents=True, exist_ok=True)
             try:
                 frame.write_parquet(path)
-            except Exception:
+            except (OSError, pl.exceptions.PolarsError):
                 # If writing the cache fails (e.g. read-only fs), still
                 # return the data; the next call will simply refetch.
                 pass

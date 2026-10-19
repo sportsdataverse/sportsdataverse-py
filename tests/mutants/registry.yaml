@@ -2385,3 +2385,260 @@
   test: tests/test_espn_universal_parsers.py -k page_envelope
   expected: kill
   note: an untyped column is int64 on pandas and a Null-dtype column on an unpaginated payload
+
+# Task 4.9 (codegen-runtime): swallowed errors visible, then BLE001
+- id: nhl-edge-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '        _warn_schema_drift("parse_edge_top10: rows", exc)'
+  mutant: '        pass'
+  test: tests/test_nhl_edge_parsers.py -k "schema_drift and top10"
+  expected: kill
+  note: a drifted leaderboard read as "no data" with no warning
+
+- id: nhl-edge-top10-empty-object-is-no-row
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '    rows = [row for row in rows or [] if row not in (None, {})]  # an empty object carries no row'
+  mutant: '    rows = rows or []'
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_edge_top10"
+  expected: kill
+  note: a bare [{}] board parsed to a one-row frame
+
+- id: nhl-web-flatten-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: |-
+    df = pd.json_normalize(items, sep="_")
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    df = pd.json_normalize(items, sep="_")
+        except _SHAPE_ERRORS as exc:
+            pass
+  test: tests/test_nhl_api_web_parsers.py -k schema_drift
+  expected: kill
+  note: a drifted api-web row list read as "no data" with no warning
+
+- id: nhl-web-envelope-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}'
+  mutant: '    return payload if isinstance(payload, dict) else {}'
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_nhl_web_landing"
+  expected: kill
+  note: an error envelope flattened into a one-row game profile
+
+- id: mlb-api-flatten-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/mlb/mlb_api_parsers.py
+  snippet: |-
+    df = pd.json_normalize(items, sep="_")
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    df = pd.json_normalize(items, sep="_")
+        except _SHAPE_ERRORS as exc:
+            pass
+  test: tests/test_mlb_api_parsers.py -k schema_drift
+  expected: kill
+  note: a drifted Stats API row list read as "no data" with no warning
+
+- id: mlb-api-timecodes-non-string-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/mlb/mlb_api_parsers.py
+  snippet: '    if len(codes) < len(payload):'
+  mutant: '    if False:'
+  test: tests/test_mlb_api_parsers.py -k schema_drift
+  expected: kill
+  note: timecodes that stop being strings became rows of objects
+
+- id: nhl-stats-rest-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_stats_rest_parsers.py
+  snippet: '        _warn_schema_drift("parse_nhl_stats_rest: data", exc)'
+  mutant: '        pass'
+  test: tests/test_nhl_aux_parsers.py -k "schema_drift and stats_rest"
+  expected: kill
+  note: a drifted Stats REST data list read as "no data" with no warning
+
+- id: nba-stats-frame-failure-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: "            _warn_schema_drift(f\"parse_nba_stats_result_sets: {rs.get('name', 'resultSet')}.rowSet\", exc)"
+  mutant: '            pass'
+  test: tests/nba/test_nba_stats_parsers.py -k schema_drift
+  expected: kill
+  note: a result set polars could not build read as an empty frame with no warning
+
+- id: nba-stats-non-dict-body-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: |-
+    if not isinstance(raw, dict):
+            return []
+  mutant: |-
+    if raw is None:
+            return []
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_nba_stats_result_sets"
+  expected: kill
+  note: a "" or list body raised AttributeError instead of zero rows
+
+- id: safe-json-failed-fetch-raises
+  group: codegen-runtime
+  finding: B-M1
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: |-
+    except NoDataError:
+            return None
+  mutant: |-
+    except Exception:
+            return None
+  test: tests/test_common_espn_player_stats.py -k safe_json_raises
+  expected: kill
+  note: a 403 / 429 / 5xx / dead connection on the athlete node became a null-identity row
+
+- id: espn-parser-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift("parse_news: articles", exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_news"
+  expected: kill
+  note: a drifted ESPN news list read as "no data" with no warning
+
+- id: espn-parse-teams-non-dict-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |-
+    @_zero_rows_unless_dict
+    def parse_teams(
+  mutant: 'def parse_teams('
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_teams-list"
+  expected: kill
+  note: a list body reached payload.get; the old blind except hid the AttributeError
+
+- id: codegen-league-import-failure-raises
+  group: codegen-runtime
+  finding: A-L11
+  file: tools/codegen/generate.py
+  snippet: |-
+    if e.name and (target == e.name or target.startswith(f"{e.name}.")):
+                return None
+            raise
+  mutant: 'return None'
+  test: tests/codegen/test_generate.py -k league_import_failure
+  expected: kill
+  note: a syntax error or missing optional dependency silently emptied reserved names / param docs
+
+- id: codegen-ruff-exit-code-raises
+  group: codegen-runtime
+  finding: A-L9
+  file: tools/codegen/generate.py
+  snippet: '    if proc.returncode != 0:'
+  mutant: '    if False:'
+  test: tests/codegen/test_check.py -k ruff_failure_is_raised
+  expected: kill
+  note: a rendered file ruff could not parse was written unformatted
+
+- id: codegen-native-schema-crash-reported
+  group: codegen-runtime
+  finding: A-N14
+  file: tools/codegen/generate.py
+  snippet: '                    failed.append(f"{api}/{short} ({fname}): {type(e).__name__}: {e}")'
+  mutant: '                    pass'
+  test: tests/codegen/test_generate.py -k native_schema_parser_crash
+  expected: kill
+  note: a parser crash on its committed capture was a printed skip and --schemas exited 0
+
+- id: codegen-loader-schema-failed-read-not-absent
+  group: codegen-runtime
+  finding: A-L11
+  file: tools/codegen/generate.py
+  snippet: "            except FileNotFoundError:  # fsspec's HTTP 404: this season is not published"
+  mutant: "            except Exception:  # fsspec's HTTP 404: this season is not published"
+  test: tests/codegen/test_generate.py -k failed_read_is_not_an_absent_season
+  expected: kill
+  note: a 403 on a footer read as an unpublished season and rebuilt the schema from an older one
+
+- id: crosswalk-bug-is-not-a-fallback
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  mutant: '    except Exception as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k bug_in_the_release_read
+  expected: kill
+  note: any error, a bug included, fell back to the stale bundled crosswalk
+
+- id: ncaa-box-failed-game-logged
+  group: codegen-runtime
+  finding: B-L41
+  file: sportsdataverse/mbb/mbb_ncaa_box_stats.py
+  snippet: '            logger.warning("Error with game id: %s // %s", gid, exc)'
+  mutant: '            print(f"Error with game id: {gid} // {exc}")'
+  test: tests/mbb/test_mbb_ncaa_box_stats_parity.py -k logged_not_printed
+  expected: kill
+  note: the dropped game went to stdout instead of the module logger
+
+- id: espn-parse-items-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift("parse_items: items", exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_items"
+  expected: kill
+  note: a drifted Core v2 items list read as "no data" with no warning (narrowed after 4.2 merged)
+
+# Task 4.9 review round (R907-1, R907-2, R907-5)
+- id: espn-row-per-item-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift(where, exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_summary_officials"
+  expected: kill
+  note: R907-1, a drifted summary sub-list (officials) read as "no data" with no warning
+
+- id: espn-entries-not-objects-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    bad = next((e for e in entries if not isinstance(e, dict)), None)'
+  mutant: '    bad = None'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and (parse_coaches or parse_event_plays or parse_team_roster)"
+  expected: kill
+  note: R907-1, a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
+
+- id: nba-stats-non-object-result-set-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: '        else:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  mutant: '        elif False:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  test: tests/nba/test_nba_stats_parsers.py -k not_an_object_warns
+  expected: kill
+  note: R907-2, a result set that is not an object was dropped silently
+
+- id: crosswalk-corrupt-asset-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
+  expected: kill
+  note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy

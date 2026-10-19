@@ -273,7 +273,7 @@ def test_parallel_first_use_locate_all_succeed(tmp_path, cache):
     def go():
         try:
             results.append(idx.locate(slow, background=False))
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001 -- the thread's exception is collected and asserted on by the main thread
             results.append(e)
 
     threads = [threading.Thread(target=go) for _ in range(4)]

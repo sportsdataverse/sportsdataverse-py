@@ -162,7 +162,7 @@ def capture_gamerotation(game_id: str, fixture_dir: Path) -> dict:
     Raises:
         RuntimeError: If all retries fail or the response is invalid.
     """
-    from sportsdataverse.nba import nba_stats  # noqa: PLC0415
+    from sportsdataverse.nba import nba_stats
 
     max_retries = 3
     backoff_sec = 5.0
@@ -187,7 +187,7 @@ def capture_gamerotation(game_id: str, fixture_dir: Path) -> dict:
                 team_ids = {s.get("TEAM_ID") for s in stints}
                 print(f"    {team_key}: {len(stints)} stints, team_id(s)={sorted(team_ids)}")
             return raw
-        except Exception as exc:
+        except Exception as exc:  # noqa: BLE001 -- live capture: every failure is retried, and the last one re-raised
             last_exc = exc
             print(f"  attempt {attempt} failed: {exc}")
             if attempt < max_retries:
@@ -204,7 +204,7 @@ def capture_gamerotation(game_id: str, fixture_dir: Path) -> dict:
 
 def capture_v3_payloads(game_id: str) -> tuple[dict, dict]:
     """Fetch playbyplayv3 + boxscoretraditionalv3 via sdv-py's curl_cffi runtime."""
-    from sportsdataverse.nba import nba_stats  # noqa: PLC0415
+    from sportsdataverse.nba import nba_stats
 
     pbp_raw = nba_stats.nba_stats_playbyplayv3(game_id=game_id, return_parsed=False)
     bxs_raw = nba_stats.nba_stats_boxscoretraditionalv3(game_id=game_id, return_parsed=False)
@@ -241,10 +241,10 @@ def run_pbpstats_oracle(game_id: str) -> list[dict]:
     Uses LiveEnhancedPbpWebLoader which fetches from AWS S3 (open — no JA3 block).
     """
     try:
-        from pbpstats.data_loader.live.enhanced_pbp.loader import (  # noqa: PLC0415
+        from pbpstats.data_loader.live.enhanced_pbp.loader import (
             LiveEnhancedPbpLoader,
         )
-        from pbpstats.data_loader.live.enhanced_pbp.web import (  # noqa: PLC0415
+        from pbpstats.data_loader.live.enhanced_pbp.web import (
             LiveEnhancedPbpWebLoader,
         )
     except ImportError as exc:

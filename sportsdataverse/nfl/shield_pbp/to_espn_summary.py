@@ -1112,7 +1112,7 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
         try:
             payload = nfl_game_details_v2(shield_game_id, include_drive_chart=True, return_parsed=False)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"shield gamedetails fetch failed: {type(exc).__name__}: {exc}") from exc
     if row.get("home_espn_team_id") is None or row.get("away_espn_team_id") is None:
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")

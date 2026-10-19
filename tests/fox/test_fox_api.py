@@ -50,7 +50,7 @@ def test_no_public_name_collision() -> None:
             continue
         try:
             m = importlib.import_module(mod.name)
-        except Exception:  # optional-dependency modules
+        except ImportError:  # optional-dependency modules
             continue
         for attr in dir(m):
             if attr.startswith("fox_api") and getattr(m, attr, None) is not getattr(gen, attr, object()):

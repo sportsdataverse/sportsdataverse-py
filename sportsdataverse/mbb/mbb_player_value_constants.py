@@ -116,7 +116,7 @@ def roc_auc(y_true: np.ndarray, score: np.ndarray) -> float:
             from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
             roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
     """
-    from scipy.stats import rankdata  # noqa: PLC0415
+    from scipy.stats import rankdata
 
     y = np.asarray(y_true, float)
     r = rankdata(np.asarray(score, float))
@@ -234,9 +234,9 @@ def player_per100_features(season_stats: pl.DataFrame) -> pl.DataFrame:
 def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
     """Per-season loads + needed-columns select (release schemas drift by year)."""
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as _loader  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_player_boxscore as _loader
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore as _loader  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_player_boxscore as _loader
 
     keep = [
         "athlete_id",
@@ -258,9 +258,9 @@ def _load_player_box(seasons: "list[int]", league: str) -> pl.DataFrame:
 def _load_shots(seasons: "list[int]", league: str) -> pl.DataFrame:
     """Per-season loads + needed-columns select (release schemas drift by year)."""
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_shots as _loader
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_shots as _loader
 
     frames = []
     for season in seasons:
@@ -620,7 +620,7 @@ def save_artifact(name: str, obj: dict) -> None:
 
             save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
     """
-    from pathlib import Path  # noqa: PLC0415
+    from pathlib import Path
 
     path = Path(str(_models_dir_file(name)))
     path.parent.mkdir(parents=True, exist_ok=True)

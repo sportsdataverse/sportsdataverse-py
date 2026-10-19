@@ -4262,7 +4262,7 @@ def _add_fourth_down_decisions(
 
     try:
         probs_pd = _fd.get_4th_down_probs(fourth)
-    except Exception as exc:  # noqa: BLE001 — degrade gracefully on any scoring failure
+    except Exception as exc:  # degrade gracefully on any scoring failure
         if strict:
             raise
         # The 4th-down models (fd_model / wp_model) are download-on-demand and

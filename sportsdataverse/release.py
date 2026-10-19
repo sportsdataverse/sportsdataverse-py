@@ -350,7 +350,7 @@ def _timestamp_now(as_of: datetime | None = None) -> str:
             if as_of.tzinfo is None:
                 as_of = as_of.replace(tzinfo=timezone.utc)
             moment = as_of.astimezone(zone)
-    except Exception:  # ponytail: no tzdata on this box -> local time is fine
+    except (ImportError, KeyError):  # ponytail: no tzdata on this box (ZoneInfoNotFoundError) -> local time is fine
         moment = datetime.now().astimezone() if as_of is None else as_of.astimezone()
     return moment.strftime("%Y-%m-%d %H:%M:%S %Z")
 

@@ -213,7 +213,7 @@ def _measure_directions(frames) -> dict[str, str]:
                 continue
             try:
                 corr = pl.DataFrame(s).select(pl.corr(val, rk)).item()
-            except Exception:
+            except pl.exceptions.PolarsError:  # a non-numeric value column has no rank correlation
                 continue
             if corr is None:
                 continue
@@ -240,7 +240,7 @@ def main() -> None:
     for fn in ("load_wnba_stats_player_season_stats", "load_wnba_stats_team_season_stats"):
         try:
             frames.append(getattr(w, fn)([2024]))
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:  # noqa: BLE001 -- a live probe that only orders rank columns: printed and skipped
             print(f"   (direction probe skipped for {fn}: {type(exc).__name__})")
     direction = _measure_directions(frames)
     print(f"measured rank direction for {len(direction)} columns")

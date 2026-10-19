@@ -34,6 +34,7 @@ Divergences from R (documented):
 
 from __future__ import annotations
 
+import logging
 import math
 import re
 from fractions import Fraction
@@ -49,6 +50,8 @@ if TYPE_CHECKING:
     import pandas as pd
 
 __all__ = ["ncaa_mbb_box_scores", "parse_ncaa_bb_box"]
+
+logger = logging.getLogger(__name__)
 
 # R: gsub("[^[:alnum:] ]", "", x) under a UTF-8 locale keeps unicode letters;
 # \w (unicode) minus underscore is the Python equivalent.
@@ -370,10 +373,10 @@ def _scrape_many(game_ids: "list[str]", fetcher: _SupportsFetchIndividualStats) 
         try:
             frames.append(parse_ncaa_bb_box(fetcher.fetch_game_individual_stats(gid), gid))
         except Exception as exc:  # noqa: BLE001 -- R tryCatch: report and continue
-            print(f"Error with game id: {gid} // {exc}")
+            logger.warning("Error with game id: %s // %s", gid, exc)
             removed.append(gid)
     if removed:
-        print(f"{','.join(removed)} removed")
+        logger.warning("%s removed", ",".join(removed))
     return frames
 
 
