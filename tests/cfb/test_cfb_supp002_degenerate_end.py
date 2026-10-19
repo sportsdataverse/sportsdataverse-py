@@ -76,7 +76,8 @@ BASE = {
     401754614809: (401754614, 4, 14, 99, -4.608710765838623, "game end"),
     401856682824: (401856682, 0, 1, 99, -5.9057087898254395, "MOVED"),
     401856785507: (401856785, 2, 13, 99, -2.5574681758880615, "half end, next snap is a kickoff"),
-    401856797637: (401856797, 2, 1, 99, -4.6233367919921875, "mirrored end {yardLine 1, ytez 99}, not degenerate"),
+    # mirrored end {yardLine 1, ytez 99}, not degenerate; EX-3.4-a re-pinned it (was 99, EPA -4.6233367919921875)
+    401856797637: (401856797, 2, 1, 1, 0.4577484130859375, "mirrored end, fixed by EX-3.4-a"),
     401864518671: (401864518, 0, 20, 99, -2.7226810455322266, "MOVED"),
     401635627103987701: (401635627, 1, 10, 99, -2.3972766399383545, "MOVED"),
     401752791691: (401752791, 0, 10, 99, -3.0535194873809814, "MOVED"),
@@ -95,6 +96,10 @@ BASE = {
     401864443634: (401864443, 0, 24, 99, -0.25454163551330566, "MOVED"),
     401778310647: (401778310, 0, 9, 99, 5.10091495513916, "degenerate end, next snap is the other team's"),
     401856674165: (401856674, 0, 1, 99, -3.1948139667510986, "MOVED"),
+    # kept fumbles whose end ESPN states (the text's spot) while the next snap is a 1st & 10: pinned on
+    # origin/devel-cfb dd424de3e2 so the degenerate-end test has a killer once EX-3.4-a fixed 401856797637
+    401752886558: (401752886, 3, 10, 53, -1.9471211433410645, "stated end, sacked to the WIS47"),
+    40176244395: (401762443, 1, 3, 64, 0.18821382522583008, "stated end, rush to the TULANE36"),
 }
 #: play id -> the ESPN feed's next real snap: (id, start.down, start.distance, start.yardsToEndzone)
 MOVED = {
@@ -181,5 +186,5 @@ def test_moved_rows_take_the_next_snap_and_the_rest_are_byte_stable(game_id):
 def test_exactly_the_rule_rows_move():
     moved = {pid for pid, v in BASE.items() if _moved(pid, _row(v[0], pid))}
     assert moved == set(MOVED), f"moved {sorted(moved)}"
-    assert 401856797637 not in moved  # the mirrored-ytez row is a different defect (EX-3.4-a)
+    assert 401856797637 not in moved  # the mirrored-ytez row is EX-3.4-a's (tests/cfb/test_cfb_end_state_ex34.py)
     assert 401778310647 not in moved  # the next snap is the other team's (R834-3)

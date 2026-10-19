@@ -11,6 +11,7 @@ import re
 import time
 import unicodedata
 import warnings
+from collections.abc import Callable
 from functools import reduce
 from importlib.resources import files as _resource_files
 
@@ -1459,6 +1460,10 @@ def _spot_from_text(txt, row):
 _ADMIN_ROW_RE = r"(?i)^(?:timeout|end period|end of (?:half|game)|official)"
 #: rows that stop the clock without a snap; possession reads across them (EX-3.4-b)
 _STOPPAGE_TYPES = ["Timeout", "End Period", "End of Half"]
+#: EX-3.4-c: the play types whose degenerate end block takes the next snap's start
+_DEGENERATE_END_TYPES_RE = r"^(?:Rush|Pass|Pass Reception|Pass Incompletion|Pass Completion|Sack|Penalty)$"
+#: a row that follows a play without being a scrimmage snap of the team that ran it
+_NOT_A_SNAP_RE = r"(?i)kickoff|onside|extra point|two.point|2pt|coin toss"
 
 #: ESPN's down-and-distance text for a ``start.distance`` of 0 that is not labelled
 #: "Goal", and the "at <spot>" tail both texts share.
@@ -2261,6 +2266,54 @@ def _next_real_play(col: str) -> pl.Expr:
         )
         .otherwise(pl.col(col).shift(-1))
     )
+
+
+def _prev_real_play(col: str) -> pl.Expr:
+    """``col`` on the previous row that is not an administrative row (up to two skipped)."""
+    return (
+        pl.when(pl.col("type.text").shift(1).str.contains(_ADMIN_ROW_RE))
+        .then(
+            pl.when(pl.col("type.text").shift(2).str.contains(_ADMIN_ROW_RE))
+            .then(pl.col(col).shift(3))
+            .otherwise(pl.col(col).shift(2))
+        )
+        .otherwise(pl.col(col).shift(1))
+    )
+
+
+def _in_same_half(other: Callable[[str], pl.Expr]) -> pl.Expr:
+    """The row ``other`` reads is in this row's period, or both are in the same half of regulation (never null).
+
+    Needs ``period.number`` and ``half``. ``half`` is 2 for every period from the third on, so both rows must be in
+    regulation for the half to count: Q4 and an overtime period are not one half (R905-2), and an overtime period
+    hands the ball back to the team that just had it.
+    """
+    return (
+        (other("period.number") == pl.col("period.number"))
+        | ((pl.col("period.number") < 5) & (other("period.number") < 5) & (other("half") == pl.col("half")))
+    ).fill_null(False)
+
+
+def _mirror_next(col: str) -> pl.Expr:
+    """``col`` on the row B3 part (c)'s mirror test compares a play's end with (EX-3.4-a).
+
+    The next row, as before, unless administrative rows sit in between: then the next real play, when it is
+    in the same period or regulation half AND its start is where the play's own ``statYardage`` puts the
+    ball. A snap after a Timeout or a quarter break can carry a mirrored start of its own (252532199's
+    "rush for 47 yards to the LaLaf 28" is followed, across two timeouts, by a snap filed at 72), so the
+    play's stated yardage decides which of the two is the mirror.
+
+    Otherwise a Timeout row still answers with the team ESPN filed it under (its caller): R834-13 made a
+    defensive timeout the offense's, but its start is the caller's stale spot, which no end is a mirror of.
+    """
+    admin_next = pl.col("type.text").shift(-1).str.contains(_ADMIN_ROW_RE).fill_null(False)
+    agrees = (
+        _next_real_play("start.yardsToEndzone") == pl.col("start.yardsToEndzone") - pl.col("statYardage")
+    ).fill_null(False)
+    nxt = pl.col(col).shift(-1)
+    if col == "start.pos_team.id":
+        nxt = pl.when(pl.col("type.text").shift(-1) == "Timeout").then(pl.col("start.team.id").shift(-1)).otherwise(nxt)
+    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)
 
 
 def _derive_special_teams_from_field_position(play_df: pl.DataFrame) -> pl.DataFrame:
@@ -3075,6 +3128,12 @@ class CFBPlayProcess(object):
                         == False
                     )
                 ),
+                # EX-3.4-c: ESPN's degenerate end block, read before the repairs below rewrite
+                # end.yardsToEndzone (a declined penalty's start spot, part (b)'s backfill)
+                _end_degenerate=(pl.col("end.down") == 0)
+                .and_(pl.col("end.yardLine") == 0)
+                .and_(pl.col("end.yardsToEndzone") == 0)
+                .fill_null(False),
             )
             .with_columns(
                 pl.col("end.team.id")
@@ -3115,6 +3174,25 @@ class CFBPlayProcess(object):
                 .when(pl.col("type.text").is_in(kickoff_vec).and_(pl.col("start.team.id") == init["awayTeamId"]))
                 .then(pl.col("homeTeamId"))
                 .otherwise(pl.col("start.team.id"))
+                .alias("start.pos_team.id"),
+            )
+            .with_columns(
+                # R834-13 (owner ruling 2026-10-18; nflfastR's posteam on a timeout row): ESPN
+                # files a Timeout row under the team that CALLED it, so a defensive timeout
+                # read as the defense's possession while its EP (inherited from the play
+                # before, EX-3.4-b) is the offense's, and wp_before added the caller's score
+                # margin to the offense's EP (401864518 "Timeout UNLV" during NDSU's drive:
+                # 0.76 for UNLV where the plays around it give UNLV 0.75 to 0.81, but from
+                # NDSU's EP). When the real plays before and after it, in the same half,
+                # belong to one team, the timeout row is that team's possession.
+                pl.when(
+                    (pl.col("type.text") == "Timeout")
+                    & (_prev_real_play("start.pos_team.id") == _next_real_play("start.pos_team.id"))
+                    & _in_same_half(_prev_real_play)
+                    & _in_same_half(_next_real_play)
+                )
+                .then(_next_real_play("start.pos_team.id"))
+                .otherwise(pl.col("start.pos_team.id"))
                 .alias("start.pos_team.id"),
             )
             .with_columns(
@@ -3407,6 +3485,50 @@ class CFBPlayProcess(object):
             )
             .drop(["_b_zero", "_b_nxt_down", "_b_nxt_dist"])
             .with_columns(
+                # EX-3.4-c: the degenerate end block {down 0, yardLine 0, yardsToEndzone 0} on
+                # a scrimmage play that is not a fumble (supp-002's rule below owns those): a
+                # rush, a pass, a sack or a penalty, accepted or declined. ESPN kept the distance
+                # (or dropped the team), so B13 above does not see it; the down stayed 0 and the
+                # <= 0 clamp stored the own 99 (401754585 "pass incomplete" on 2nd & 5 at the
+                # 70: EPA -1.85, where the next snap, 3rd & 5 at the 70, gives -0.5). When the
+                # same team snaps next in the same period (or regulation half), that snap's
+                # start IS this play's end: an incompletion or a declined flag leaves the spot,
+                # a gain or an enforced flag moves it there. Not a score, a kick, a try or a
+                # fumble (supp-002's rule below); the next row must be a snap, not a kickoff or a
+                # try. An interception the same team snaps after was wiped out by a flag
+                # (401761639's "pass intercepted ... PENALTY", then 2nd & 1 at the 3): the rule
+                # applies (R905-3: 14 such rows in the 2,591-game sweep, 8 with EPA moved).
+                _ex34c=pl.col("_end_degenerate")
+                .and_(pl.col("scoringPlay") == False)
+                .and_(pl.col("type.text").str.contains(_DEGENERATE_END_TYPES_RE))
+                .and_(pl.col("text").str.contains(r"(?i)fumbl") == False)
+                # R905-1: not a 4th-down play short of the line to gain. downs_turnover reads it
+                # as a turnover from the start state and statYardage alone and flips the end
+                # margin, so an end taken from the same team's next snap would be scored from
+                # two sides (401760417's ghost "Br. Barnes run for 0 yds": -1.07 -> +0.82).
+                .and_(
+                    ((pl.col("type.text") != "Penalty") & (pl.col("start.down") == 4))
+                    .and_(pl.col("statYardage") < pl.col("start.distance"))
+                    .fill_null(False)
+                    == False
+                )
+                .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
+                .and_(_next_real_play("start.down").is_between(1, 4))
+                .and_(_next_real_play("type.text").str.contains(_NOT_A_SNAP_RE) == False)
+                .and_(_in_same_half(_next_real_play))
+                .fill_null(False),
+            )
+            .with_columns(
+                *[
+                    pl.when(pl.col("_ex34c"))
+                    .then(_next_real_play(f"start.{c}"))
+                    .otherwise(pl.col(f"end.{c}"))
+                    .alias(f"end.{c}")
+                    for c in ("down", "distance", "yardsToEndzone", "yardLine", "yard")
+                ],
+            )
+            .drop(["_ex34c", "_end_degenerate"])
+            .with_columns(
                 # B3 part (c): the same repair for end states that are PRESENT but
                 # mirrored. ESPN sometimes reports end.yardsToEndzone from the wrong
                 # side of the field while its own end.yardLine and the next play's
@@ -3432,10 +3554,18 @@ class CFBPlayProcess(object):
                 # its own, since both legitimately move the ball between snaps. A
                 # penalty on the NEXT play is fine -- it is enforced from that play's
                 # own result and cannot move its starting spot.
+                #
+                # EX-3.4-a: "next" is the next real play when only administrative rows (a
+                # Timeout, an End Period) sit in between, in the same period or regulation
+                # half, and that play starts where this one's statYardage ends it
+                # (``_mirror_next``). An End Period row repeats the previous play's START, so
+                # the mirror test read the wrong spot: 401856797's Q3-closing "rush for 4 yards
+                # gain to the CIN01" kept end.yardsToEndzone 99 (EPA -4.62) though Q4 opens
+                # 2nd & 1 at 1.
                 pl.when(
                     (pl.col("end.yardsToEndzone").is_null() == False)
-                    .and_(pl.col("start.yardsToEndzone").shift(-1).is_null() == False)
-                    .and_(pl.col("start.pos_team.id").shift(-1) == pl.col("end.pos_team.id"))
+                    .and_(_mirror_next("start.yardsToEndzone").is_null() == False)
+                    .and_(_mirror_next("start.pos_team.id") == pl.col("end.pos_team.id"))
                     .and_(pl.col("start.pos_team.id") == pl.col("end.pos_team.id"))
                     .and_(pl.col("type.text").is_in(kickoff_vec) == False)
                     .and_(
@@ -3463,12 +3593,12 @@ class CFBPlayProcess(object):
                     # counterfactual sign disagreements ("Personal Foul 11 yard from
                     # NEV21 to NEV1" stored as 90). Kicks stay excluded; their end
                     # states are parts (d) and (e).
-                    .and_(pl.col("end.yardsToEndzone") != pl.col("start.yardsToEndzone").shift(-1))
+                    .and_(pl.col("end.yardsToEndzone") != _mirror_next("start.yardsToEndzone"))
                     .and_(
-                        pl.col("end.yardsToEndzone") == (pl.lit(100) - pl.col("start.yardsToEndzone").shift(-1)),
+                        pl.col("end.yardsToEndzone") == (pl.lit(100) - _mirror_next("start.yardsToEndzone")),
                     ),
                 )
-                .then(pl.col("start.yardsToEndzone").shift(-1))
+                .then(_mirror_next("start.yardsToEndzone"))
                 .otherwise(pl.col("end.yardsToEndzone"))
                 .alias("end.yardsToEndzone"),
             )

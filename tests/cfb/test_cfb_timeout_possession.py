@@ -47,7 +47,13 @@ PENALTY_ROWS = {
     40176165681: (401761656, 40176165673, 2.8148951530456543, -1.9001678228378296),
 }
 
-pytestmark = [pytest.mark.whole_game, pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")]
+# 401752886 (a supp002 capture) warns PlayOrderWarning: a period label steps back along the feed's play order.
+# The warning itself is asserted by test_cfb_whole_game_oracle.py::test_period_monotonic_or_the_step_back_warns.
+pytestmark = [
+    pytest.mark.whole_game,
+    pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning"),
+    pytest.mark.filterwarnings(r"ignore:CFB game 401752886\b:sportsdataverse.errors.PlayOrderWarning"),
+]
 
 
 def _summary(game_id: int) -> dict:
@@ -55,6 +61,7 @@ def _summary(game_id: int) -> dict:
         FIX / f"summary_{game_id}.json",
         FIX / f"summary_{game_id}_trimmed.json.gz",
         FIX / "espn_reference" / f"summary_{game_id}.json.gz",
+        FIX / "supp002" / f"{game_id}_trimmed.json.gz",
     ):
         if path.exists():
             if path.suffix == ".gz":
@@ -121,3 +128,57 @@ def test_wp_after_reads_the_next_real_board_across_a_timeout():
     i = real["id"].to_list().index(401856679595)
     second = real.row(i + 2, named=True)
     assert pick["lead_wp_before2"] == second["wp_before"], (pick["lead_wp_before2"], second["id"], second["wp_before"])
+
+
+#: game -> (defensive Timeout rows: the caller is neither side of the plays around it, every other Timeout row
+#: with a known caller and real plays on both sides), counted
+DEFENSIVE_TIMEOUTS = {401754571: (1, 3), 401756960: (3, 6), 401864518: (3, 7), 401752886: (5, 1)}
+
+
+@pytest.mark.parametrize(
+    "game_id", [pytest.param(g, marks=pytest.mark.xdist_group(f"cfb-timeout-{g}")) for g in DEFENSIVE_TIMEOUTS]
+)
+def test_defensive_timeout_row_keeps_the_offense_as_pos_team(game_id):
+    """R834-13 (owner ruling 2026-10-18, nflfastR's posteam): a defensive timeout is the offense's row.
+
+    Oracle: the raw feed's team on each row. ESPN files a Timeout under the team that called it; when the
+    real plays on either side of it (the processor's order, same half, no score or kickoff between) are the
+    other team's, the timeout was called by the defense. On that row ``pos_team`` is the offense, its EP the
+    play before's end (EX-3.4-b), its EPA 0, and its score margin the offense's, so the margin and the EP that
+    ``wp_before`` adds are the same team's. Before the ruling the row read as the caller's possession with the
+    offense's EP (401864518 "Timeout UNLV" in NDSU's drive: wp_before 0.76 for UNLV, from NDSU's EP). Not fixed
+    here: the row's down, distance and spot are still ESPN's stale start in the caller's perspective, which
+    ``wp_before`` also reads (R905-4; 401864518287 reads 1st & 10 at the 66 after NDSU's 2nd & 7 at the 31).
+    """
+    summary = _summary(game_id)
+    raw = {
+        int(p["id"]): int(p["start"]["team"]["id"])
+        for d in (summary.get("drives") or {}).get("previous", [])
+        for p in d.get("plays", [])
+        if ((p.get("start") or {}).get("team") or {}).get("id")
+    }
+    frame = _frame(game_id)
+    admin = frame["type.text"].str.contains(r"(?i)^(?:timeout|end period|end of)")
+    real = frame.filter(admin == False)  # noqa: E712
+    found = kept = 0
+    for t in frame.filter(pl.col("type.text") == "Timeout").iter_rows(named=True):
+        before = real.filter(pl.col("game_play_number") < t["game_play_number"]).tail(1)
+        after = real.filter(pl.col("game_play_number") > t["game_play_number"]).head(1)
+        if before.height == 0 or after.height == 0 or {before["half"][0], after["half"][0]} != {t["half"]}:
+            continue
+        caller, prev_team, next_team = raw.get(t["id"]), raw.get(before["id"][0]), raw.get(after["id"][0])
+        # a score or a kickoff beside it: whose possession the timeout is in is not one team's
+        if None in (caller, prev_team) or before["scoringPlay"][0] or "kickoff" in after["type.text"][0].lower():
+            continue
+        if prev_team != next_team or caller == prev_team:
+            # the offense's own timeout, or one between two possessions: filed under its caller
+            kept += 1
+            # EX-3.4-b: a Timeout row never carries a possession change, whoever called it
+            assert t["pos_team"] == caller and t["change_of_pos_team"] is False, (t["id"], t["pos_team"], caller)
+            continue
+        found += 1
+        prev = before.row(0, named=True)
+        assert t["pos_team"] == prev_team and t["def_pos_team"] == caller, (t["id"], t["pos_team"], caller)
+        assert t["EP_start"] == prev["EP_end"] and t["EPA"] == 0, (t["id"], t["EP_start"], prev["EP_end"])
+        assert t["pos_score_diff_start"] == prev["pos_score_diff_start"], (t["id"], t["pos_score_diff_start"])
+    assert (found, kept) == DEFENSIVE_TIMEOUTS[game_id], (found, kept)
