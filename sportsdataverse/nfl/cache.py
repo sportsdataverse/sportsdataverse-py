@@ -21,11 +21,13 @@ stored polars frame.
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
-import json
-import shutil
 import inspect
+import json
+import re
 import time
+import warnings
 from functools import lru_cache, wraps
 from pathlib import Path
 from typing import Any, Callable, Optional, TypeVar
@@ -55,6 +57,11 @@ def _cache_key(func: Callable[..., Any], args: tuple, kwargs: dict) -> str:
         "kwargs": dict(sorted(kwargs.items())),
     }
     return hashlib.sha256(json.dumps(payload, default=str, sort_keys=True).encode()).hexdigest()
+
+
+#: The file name of every filesystem entry: ``_cache_key`` (sha256 hex), optionally prefixed by a
+#: caller namespace (``nfl_build__``), plus ``.parquet``. ``clear_cache`` deletes nothing else.
+_ENTRY_NAME = re.compile(r"(?:[a-z_]+__)?[0-9a-f]{64}\.parquet")
 
 
 def _filesystem_path(key: str) -> Path:
@@ -91,7 +98,7 @@ def cache_get(key: str) -> pl.DataFrame | None:
         if entry is not None:
             ts, frame = entry
             if not _is_expired(ts):
-                return frame
+                return frame.clone()  # a caller's in-place edit must not reach the next hit
             del _MEMORY[key]
     elif cfg.cache_mode == "filesystem":
         path = _filesystem_path(key)
@@ -123,7 +130,7 @@ def cache_put(key: str, frame: pl.DataFrame) -> None:
     """
     cfg = get_config()
     if cfg.cache_mode == "memory":
-        _MEMORY[key] = (time.time(), frame)
+        _MEMORY[key] = (time.time(), frame.clone())
     elif cfg.cache_mode == "filesystem":
         cache_dir = cfg.cache_dir
         cache_dir.mkdir(parents=True, exist_ok=True)
@@ -161,6 +168,12 @@ def cached_loader(func: F) -> F:
     ``return_as_pandas`` excluded so memory / disk hits work regardless of
     which return shape the caller asked for. The cache always stores the
     polars frame internally and converts to pandas on read when requested.
+    Every memory hit is a copy, so editing a returned frame in place never
+    changes what the next call gets.
+
+    The key does NOT include the URL or the function body: change a loader's
+    URL or resource path without renaming it and callers keep the old frame
+    until the TTL lapses or :func:`clear_cache` runs.
 
     Args:
         func: The ``load_nfl_*`` loader to wrap.
@@ -238,13 +251,14 @@ def cached_loader(func: F) -> F:
             if cached is not None:
                 ts, frame = cached
                 if not _is_expired(ts):
-                    return frame.to_pandas() if return_as_pandas else frame
+                    return frame.to_pandas() if return_as_pandas else frame.clone()
                 # Expired — drop and refetch.
                 del _MEMORY[key]
-            # Miss — always materialize as polars internally.
+            # Miss — always materialize as polars internally. The caller gets a copy:
+            # the stored frame is never handed out, so no caller can edit it.
             frame = func(*inner_args, **inner_kwargs)
             _MEMORY[key] = (time.time(), frame)
-            return frame.to_pandas() if return_as_pandas else frame
+            return frame.to_pandas() if return_as_pandas else frame.clone()
 
         if cfg.cache_mode == "filesystem":
             path = _filesystem_path(key)
@@ -256,7 +270,9 @@ def cached_loader(func: F) -> F:
                     # Corrupt cache file — fall through to refetch and
                     # overwrite. We don't propagate the error because the
                     # cache is opaque infra and the caller asked for data.
-                    path.unlink(missing_ok=True)
+                    # A Windows lock must not escape: the write below replaces it or the next call retries.
+                    with contextlib.suppress(OSError):
+                        path.unlink(missing_ok=True)
             # Miss / expired / corrupt — refetch.
             frame = func(*inner_args, **inner_kwargs)
             cache_dir = cfg.cache_dir
@@ -279,9 +295,11 @@ def clear_cache() -> None:
     """Clear both memory and filesystem caches.
 
     Memory: empties the in-process dict.
-    Filesystem: removes all entries under ``config.cache_dir``. The
-    directory itself is preserved so subsequent writes succeed without
-    needing ``mkdir``.
+    Filesystem: removes the entries this cache wrote under ``config.cache_dir``
+    -- the ``<sha256 key>.parquet`` files, top level only -- and nothing else,
+    so a ``cache_dir`` pointed at a directory that holds other files never
+    loses them. The directory itself is preserved so subsequent
+    writes succeed without needing ``mkdir``.
 
     The ``models/`` subdirectory is **deliberately preserved** — it holds
     download-on-demand model artifacts (e.g. the ~34 MB ``xyac_model.ubj``)
@@ -310,11 +328,18 @@ def clear_cache() -> None:
     cache_dir = get_config().cache_dir
     if cache_dir.exists():
         for child in cache_dir.iterdir():
-            # Preserve the download-on-demand model cache; a data-cache clear
-            # must not force an expensive model re-download.
-            if child.name == "models":
-                continue
-            if child.is_file():
-                child.unlink()
-            elif child.is_dir():
-                shutil.rmtree(child)
+            # Only the files this cache names: a key-named parquet. ``models/`` and any
+            # file or directory the cache did not write are left alone.
+            if child.is_file() and _ENTRY_NAME.fullmatch(child.name):
+                # Gone already: nothing to do. Locked by another process (Windows): skip it, but say so,
+                # because the next call is then served the old entry, not a fresh fetch.
+                try:
+                    child.unlink()
+                except FileNotFoundError:
+                    pass
+                except PermissionError:
+                    warnings.warn(
+                        f"clear_cache: {child} is in use by another process and was not deleted; it stays cached",
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )

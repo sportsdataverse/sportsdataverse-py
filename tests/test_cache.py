@@ -614,3 +614,64 @@ def test_redact_prefixed_credential_params_from_the_filesystem_entry(tmp_cache_d
     cache.cache_set("https://api.example.com/feed", params, body)
     on_disk = "".join(p.read_text(encoding="utf-8") for p in tmp_cache_dir.glob("*.json"))
     assert on_disk and tok not in on_disk and key not in on_disk
+
+
+def test_memory_cache_copy_on_hit(reset_cache):
+    """A-M20: a memory hit returned the stored dict, so one caller's edit reached every later hit."""
+    from sportsdataverse import cache
+
+    cache.set_cache_mode("memory")
+    cache.cache_set("https://x.example/a", None, {"teams": [{"id": 1}]})
+    hit = cache.cache_get("https://x.example/a")
+    hit["teams"].append({"id": "junk"})
+    hit["junk"] = True
+    assert cache.cache_get("https://x.example/a") == {"teams": [{"id": 1}]}
+
+
+def test_filesystem_clear_cache_removes_only_key_named_entries(reset_cache, monkeypatch, tmp_path):
+    """C-M24: the bare clear_cache() rmtree'd cache_dir: ~/.cache/sportsdataverse holds the NFL cache
+    and its downloaded models, and an SDV_PY_CACHE_DIR may hold anything."""
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    md5_named = tmp_path / ("0" * 32 + ".json")  # a user's own file that happens to look like a key
+    foreign = [tmp_path / "notes.json", md5_named, tmp_path / "nfl" / "models" / "xyac_model.ubj"]
+    foreign.append(tmp_path / "thesis.docx")
+    for path in foreign:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("keep")
+
+    assert cache.clear_cache() == 3
+
+    assert sorted(p.name for p in tmp_path.glob("*.json")) == sorted(["notes.json", md5_named.name])
+    assert all(p.read_text() == "keep" for p in foreign)
+
+
+def test_filesystem_clear_cache_skips_a_locked_entry(reset_cache, monkeypatch, tmp_path):
+    """A file another process holds open (Windows) is skipped, not counted, and named in a warning."""
+    from pathlib import Path
+
+    from sportsdataverse import cache
+
+    monkeypatch.setenv("SDV_PY_CACHE_DIR", str(tmp_path))
+    cache.set_cache_mode("filesystem")
+    for i in range(3):
+        cache.cache_set(f"https://x.example/{i}", None, {"i": i})
+    locked = tmp_path / f"{cache._cache_key('https://x.example/1', None)}.json"
+    real_unlink = Path.unlink
+
+    def unlink(self, missing_ok=False):
+        if self == locked:
+            raise PermissionError(f"[WinError 32] being used by another process: {self}")
+        return real_unlink(self, missing_ok=missing_ok)
+
+    monkeypatch.setattr(Path, "unlink", unlink)
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache(url="https://x.example/1") == 0
+    with pytest.warns(RuntimeWarning, match=f"{locked.name} is in use by another process"):
+        assert cache.clear_cache() == 2
+    assert [p.name for p in tmp_path.glob("*.json")] == [locked.name]
+    assert cache.clear_cache(url="https://x.example/0") == 0  # already gone
