@@ -23,11 +23,11 @@ espn_cfb_calendar - look up the men's college football calendar for a given seas
 
 **Returns**
 
-Polars dataframe containing calendar dates for the requested season.
+One row per calendar week of the requested season (`week`, `week_label`, `week_start_date`, `season_type`, ...); `season` is the `season` argument as passed (null when omitted). With `ondays=True` it is a different frame: one row per date with games (`dates`, `dateURL`, `url`).
 
 | col_name | type | description |
 |---|---|---|
-| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1 or Bowls. |
+| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1. |
 | `week_alternate_label` | character | Alternate week label ESPN ships next to week_label; usually the same text. |
 | `week_detail` | character | Date span of the week as display text, e.g. Aug 22-Sep 7. |
 | `week` | character | Game week of the season. |
@@ -37,7 +37,7 @@ Polars dataframe containing calendar dates for the requested season.
 | `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
 | `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
 | `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
-| `season` | character | Season (4-digit year). |
+| `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
 
 **Example**
 

@@ -6,12 +6,14 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
+import inspect
 import json
 import logging
+import numbers
 import time
 from contextlib import contextmanager
 from typing import Any, Callable, Iterator, List, Optional
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 
 import polars as pl
 
@@ -286,32 +288,154 @@ def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
     return _download_json(download, url, params=clean, **kwargs)
 
 
+def _integral(value: Any) -> int | None:
+    """``value`` as an ``int`` when it is a whole number (an int, a numpy integer, ``2024.0``), else ``None``.
+
+    A bool is not a number here: ``True`` as a season or an id is a caller's mistake.
+    """
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, numbers.Integral):
+        return int(value)
+    if isinstance(value, numbers.Real) and float(value).is_integer():
+        return int(float(value))
+    return None
+
+
+def _is_many(value: Any) -> bool:
+    """An iterable of values (list, tuple, set, range, numpy array, polars / pandas Series), not one value."""
+    return not isinstance(value, (str, bytes)) and hasattr(value, "__iter__")
+
+
+def _wire_text(value: Any) -> str:
+    """One query / path value as the text the host receives (A-M16).
+
+    A whole number goes through ``int``, so ``2024.0`` and ``np.int64(2024)`` are
+    ``"2024"``, never ``"2024.0"``; a bool is the lowercase ``"true"``/``"false"``.
+
+    Raises:
+        ValueError: ``value`` is itself a collection.
+    """
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    whole = _integral(value)
+    if whole is not None:
+        return str(whole)
+    if _is_many(value):
+        raise ValueError(f"expected a single value, got {type(value).__name__} {value!r}")
+    return str(value)
+
+
 def _csv(values: Any) -> Optional[str]:
-    """Join an iterable into a comma-separated string; pass scalar / None through."""
+    """Join an iterable into a comma-separated string; pass scalar / None through.
+
+    Any iterable joins (a numpy array, a polars Series and a range included); a set
+    joins sorted, so the request does not depend on hash order. Each item is
+    :func:`_wire_text`.
+    """
     if values is None:
         return None
-    if isinstance(values, (list, tuple, set)):
-        return ",".join(str(v) for v in values)
-    return str(values)
+    if not _is_many(values):
+        return _wire_text(values)
+    items = sorted(values) if isinstance(values, (set, frozenset)) else values
+    return ",".join(_wire_text(v) for v in items)
 
 
-def bool_str(value: Any) -> Optional[str]:
+def _path_seg(value: Any) -> str:
+    """A path parameter as one URL segment: :func:`_wire_text`, percent-quoted (A-N2).
+
+    ``team_id="13/roster"`` is the segment ``13%2Froster``; unquoted, it changed the route.
+    """
+    return quote(_wire_text(value), safe="")
+
+
+#: Keyword arguments a generated ESPN wrapper forwards through ``_get`` to ``download``.
+_GET_KWARGS = frozenset(inspect.signature(download).parameters) - {"url", "params"}
+
+
+def _check_kwargs(fn: str, kwargs: dict) -> None:
+    """Refuse a keyword ``fn`` cannot use before any request (A-N3).
+
+    A misspelled query kwarg (``date=`` for ``dates=``) used to fail inside ``download``
+    as ``download() got an unexpected keyword argument``, naming the wrong function.
+
+    Raises:
+        TypeError: ``kwargs`` holds a name ``download`` does not take.
+    """
+    bad = sorted(set(kwargs) - _GET_KWARGS)
+    if bad:
+        names = ", ".join(repr(k) for k in bad)
+        raise TypeError(
+            f"{fn}() got an unexpected keyword argument {names}; "
+            f"besides its own parameters it accepts {', '.join(sorted(_GET_KWARGS))} and params"
+        )
+
+
+_TRUE_TEXT = frozenset({"true", "1"})
+_FALSE_TEXT = frozenset({"false", "0"})
+
+
+def bool_str(value: Any, name: str = "value") -> Optional[str]:
     """Coerce a truthy/falsey value to the lowercase ``"true"``/``"false"`` ESPN expects.
 
-    Passes ``None`` through unchanged so ``_get`` still strips it.
+    Passes ``None`` through unchanged so ``_get`` still strips it. A string is parsed,
+    not tested for truth: ``"false"`` and ``"0"`` are ``"false"`` (A-M17).
+
+    Args:
+        value: a bool (or anything with a truth value), one of ``"true"`` / ``"false"`` /
+            ``"1"`` / ``"0"`` in any case, or ``None``.
+        name: the parameter ``value`` came from; the ``ValueError`` names it.
+
+    Returns:
+        ``"true"`` / ``"false"``, or ``None`` when ``value`` is ``None``.
+
+    Raises:
+        ValueError: ``value`` is a string other than true / false / 1 / 0 (any case);
+            the message names the parameter ``name``.
+
+    Example:
+        Basic use::
+
+            from sportsdataverse._codegen_runtime import bool_str
+
+            bool_str("False", name="active")
+            # 'false'
     """
     if value is None:
         return None
+    if isinstance(value, str):
+        text = value.strip().lower()
+        if text in _TRUE_TEXT:
+            return "true"
+        if text in _FALSE_TEXT:
+            return "false"
+        raise ValueError(f"{name} must be a bool or one of 'true'/'false'/'1'/'0'; got {value!r}")
     return "true" if value else "false"
 
 
+def _season(value: Any) -> int:
+    """One season as an ``int`` year (see :func:`_as_season_list`)."""
+    whole = _integral(value)
+    if whole is not None:
+        return whole
+    if isinstance(value, str):
+        try:
+            return int(value)
+        except ValueError:
+            pass
+    raise ValueError(f"seasons must be a year or an iterable of years; got {value!r}")
+
+
 def _as_season_list(seasons: Any) -> List[int]:
-    """Normalize an int / iterable of seasons to a list of ints."""
-    if isinstance(seasons, (int,)) and not isinstance(seasons, bool):
-        return [seasons]
-    if isinstance(seasons, str):
-        return [int(seasons)]
-    return [int(s) for s in seasons]
+    """Normalize an int / iterable of seasons to a list of ints (A-M6).
+
+    A numpy integer, ``2024.0``, a numpy array and a polars Series all work; a
+    fractional year, a bool, ``None`` and non-numeric text raise ``ValueError``
+    before any request (``2024.5`` used to truncate to ``2024``).
+    """
+    if _is_many(seasons):
+        return [_season(s) for s in seasons]
+    return [_season(seasons)]
 
 
 def cli_warn(msg: str) -> None:

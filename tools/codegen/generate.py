@@ -47,6 +47,14 @@ def _path_token_first(s: str) -> str:
     return m.group(1) if m else ""
 
 
+def _quote_path_tokens(path: str) -> str:
+    """Each runtime ``{token}`` of a wrapper's URL f-string as ``{_path_seg(token)}`` (A-N2).
+
+    ``_path_seg`` percent-quotes the value, so ``team_id="13/roster"`` stays one segment.
+    """
+    return _PATH_TOKEN.sub(lambda m: "{_path_seg(" + m.group(1) + ")}", path)
+
+
 def _sub_slugs(path: str, sport: str, league: str) -> str:
     """Substitute only the {sport}/{league} slugs, leaving path-param tokens intact.
 
@@ -431,6 +439,21 @@ def _build_docstring(
         raises += [line for names, line in _VOCAB_RAISES if not any(n in named for n in names)]
     named = " ".join(raises)
     raises += [line for names, line in getter_raises if not any(n in named for n in names)]
+    if vocab_raises and not flat:  # an ESPN wrapper checks its inputs before the request (A-M17, A-N2, A-N3)
+        checks = []
+        if any(p.transform == "bool_str" for p in ep.query_params):
+            checks.append("a flag is a string other than 'true'/'false'/'1'/'0'")
+        if ep.path_params or league_param:
+            checks.append("a path value is a collection")
+        if checks:
+            raises = [
+                f"{r} Also raised before any request when {' or '.join(checks)}." if r.startswith("ValueError:") else r
+                for r in raises
+            ]
+        raises.append(
+            "TypeError: A keyword argument the wrapper does not take (a misspelled query parameter, say), "
+            "raised before any request."
+        )
     if raises:
         lines.append("")
         lines.append("Raises:")
@@ -1255,15 +1278,18 @@ class _EndpointView:
             or any(p.has_transform for p in ep.path_params)
         )
         self.has_dynamic_path = needs_build
+        # ESPN wrappers quote every runtime path token (A-N2); the flat families keep their own contract.
+        quote_path = not flat
         if needs_build:
-            self.path_build_expr = self._build_path_expr(ep, ep_host, league)
+            self.path_build_expr = self._build_path_expr(ep, ep_host, league, quote_path)
             self.url_literal = "__url"
         else:
             self.path_build_expr = ""
             # f-string whenever a runtime token is present: an endpoint path param OR
             # (param mode) the {league} token.
             needs_fstring = bool(ep.path_params) or league.league_param
-            self.url_literal = ('f"' + url + '"') if needs_fstring else ('"' + url + '"')
+            literal = _quote_path_tokens(url) if quote_path else url
+            self.url_literal = ('f"' + literal + '"') if needs_fstring else ('"' + url + '"')
 
         # The route's own getter (``getter:``) as (module, call name); default the family's ``_get``.
         route_module, self.getter_name = route_getter or (getter_module, "_get")
@@ -1326,10 +1352,15 @@ class _EndpointView:
         self.api_name = ""  # set by _espn_league_views for per-API docs filtering
 
     @staticmethod
-    def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League) -> str:
+    def _build_path_expr(ep: spec.Endpoint, ep_host: str, league: spec.League, quote_path: bool = False) -> str:
         """Emit Python statements (newline+4-space joined) that assign ``__url``."""
         sport = league.sport
         lg = "{league}" if league.league_param else league.league
+
+        def _sub(path: str) -> str:
+            out = _sub_slugs(path, sport, lg)
+            return _quote_path_tokens(out) if quote_path else out
+
         lines: list[str] = []
         for p in ep.path_params:
             if p.default_from:
@@ -1342,9 +1373,9 @@ class _EndpointView:
             head, rest = ep.path.split("[", 1)
             seg, tail = rest.split("]", 1)  # seg e.g. "/{stat_type}" or "/groups/{group_id}"; tail may be ""
             seg_param = _path_token_first(seg)
-            head_f = _sub_slugs(head, sport, lg)
-            seg_f = _sub_slugs(seg, sport, lg)
-            tail_f = _sub_slugs(tail, sport, lg)
+            head_f = _sub(head)
+            seg_f = _sub(seg)
+            tail_f = _sub(tail)
             lines.append(f'__seg = f"{seg_f}" if {seg_param} is not None else ""')
             url_expr = f'f"{ep_host}{head_f}" + __seg'
             if tail_f:
@@ -1352,8 +1383,8 @@ class _EndpointView:
             lines.append(f"__url = {url_expr}")
         elif ep.now_variant:
             toggle = _now_toggle(ep)
-            now_f = ep_host + _sub_slugs(ep.now_variant, sport, lg)
-            full_f = ep_host + _sub_slugs(ep.path, sport, lg)
+            now_f = ep_host + _sub(ep.now_variant)
+            full_f = ep_host + _sub(ep.path)
             # Emit the now-variant as an f-string only when it still has path-param
             # placeholders to interpolate (e.g. /club-schedule-season/{team}/now);
             # placeholder-free now-variants (e.g. /score/now) stay plain literals so
@@ -1361,7 +1392,7 @@ class _EndpointView:
             now_literal = f'f"{now_f}"' if "{" in now_f else f'"{now_f}"'
             lines.append(f'__url = {now_literal} if {toggle} is None else f"{full_f}"')
         else:
-            full_f = _sub_slugs(ep.path, sport, lg)
+            full_f = _sub(ep.path)
             lines.append(f'__url = f"{ep_host}{full_f}"')
         return "\n    ".join(lines)
 
@@ -1594,7 +1625,8 @@ def _league_module_source(league: spec.League, apis, hosts) -> str:
         for p in (*v.path_params, *v.query_params):
             if p.transform:
                 transforms.add(p.transform)  # a bare ``offset:`` has no name, so imports nothing
-    runtime_imports = ["_get"] + sorted(transforms)
+    uses_path_seg = any("_path_seg(" in f"{v.url_literal}{v.path_build_expr}" for v in views)
+    runtime_imports = ["_check_kwargs", "_get"] + (["_path_seg"] if uses_path_seg else []) + sorted(transforms)
     template = render.ENV.get_template("espn_league_module.py.jinja")
     return template.render(
         prefix=league.prefix,

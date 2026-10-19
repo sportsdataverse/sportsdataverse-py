@@ -160,6 +160,7 @@ def wnba_stats_alltimeleadersgrids(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -216,6 +217,7 @@ def wnba_stats_assistleaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -319,6 +321,7 @@ def wnba_stats_assisttracker(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -402,6 +405,7 @@ def wnba_stats_boxscoreadvancedv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -463,6 +467,7 @@ def wnba_stats_boxscoreadvancedv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -514,6 +519,7 @@ def wnba_stats_boxscoredefensivev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -570,6 +576,7 @@ def wnba_stats_boxscorefourfactorsv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -631,6 +638,7 @@ def wnba_stats_boxscorefourfactorsv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -682,6 +690,7 @@ def wnba_stats_boxscorehustlev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -728,6 +737,7 @@ def wnba_stats_boxscorematchupsv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -784,6 +794,7 @@ def wnba_stats_boxscoremiscv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -845,6 +856,7 @@ def wnba_stats_boxscoremiscv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -896,6 +908,7 @@ def wnba_stats_boxscoreplayertrackv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -952,6 +965,7 @@ def wnba_stats_boxscorescoringv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1013,6 +1027,7 @@ def wnba_stats_boxscorescoringv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1064,6 +1079,7 @@ def wnba_stats_boxscoresummaryv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1110,6 +1126,7 @@ def wnba_stats_boxscoresummaryv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1166,6 +1183,7 @@ def wnba_stats_boxscoretraditionalv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1227,6 +1245,7 @@ def wnba_stats_boxscoretraditionalv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1288,6 +1307,7 @@ def wnba_stats_boxscoreusagev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1349,6 +1369,7 @@ def wnba_stats_boxscoreusagev3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1403,6 +1424,7 @@ def wnba_stats_commonallplayers(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1453,6 +1475,7 @@ def wnba_stats_commonplayerinfo(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1503,6 +1526,7 @@ def wnba_stats_commonplayoffseries(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1555,6 +1579,7 @@ def wnba_stats_commonteamroster(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1602,6 +1627,7 @@ def wnba_stats_commonteamyears(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1656,6 +1682,7 @@ def wnba_stats_cumestatsplayer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1721,6 +1748,7 @@ def wnba_stats_cumestatsplayergames(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1783,6 +1811,7 @@ def wnba_stats_cumestatsteam(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1850,6 +1879,7 @@ def wnba_stats_cumestatsteamgames(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -1906,6 +1936,7 @@ def wnba_stats_draftcombinestats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2066,6 +2097,7 @@ def wnba_stats_fantasywidget(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2130,6 +2162,7 @@ def wnba_stats_franchisehistory(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2177,6 +2210,7 @@ def wnba_stats_franchiseleaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2229,6 +2263,7 @@ def wnba_stats_franchiseleaderswrank(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2283,6 +2318,7 @@ def wnba_stats_franchiseplayers(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2334,6 +2370,7 @@ def wnba_stats_gamerotation(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2393,6 +2430,7 @@ def wnba_stats_homepageleaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2457,6 +2495,7 @@ def wnba_stats_homepagev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2509,6 +2548,7 @@ def wnba_stats_hustlestatsboxscore(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2554,6 +2594,7 @@ def wnba_stats_infographicfanduelplayer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2612,6 +2653,7 @@ def wnba_stats_leaderstiles(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2713,6 +2755,7 @@ def wnba_stats_leaguedashlineups(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2843,6 +2886,7 @@ def wnba_stats_leaguedashplayerbiostats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -2992,6 +3036,7 @@ def wnba_stats_leaguedashplayerclutch(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3144,6 +3189,7 @@ def wnba_stats_leaguedashplayershotlocations(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3294,6 +3340,7 @@ def wnba_stats_leaguedashplayerstats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3434,6 +3481,7 @@ def wnba_stats_leaguedashptdefend(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3571,6 +3619,7 @@ def wnba_stats_leaguedashteamclutch(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3705,6 +3754,7 @@ def wnba_stats_leaguedashteamshotlocations(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -3837,6 +3887,7 @@ def wnba_stats_leaguedashteamstats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4085,6 +4136,7 @@ def wnba_stats_leaguegamefinder(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4233,6 +4285,7 @@ def wnba_stats_leaguegamelog(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4298,6 +4351,7 @@ def wnba_stats_leagueleaders(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4401,6 +4455,7 @@ def wnba_stats_leaguelineupviz(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4512,6 +4567,7 @@ def wnba_stats_leagueplayerondetails(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4591,6 +4647,7 @@ def wnba_stats_leagueseasonmatchups(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4649,6 +4706,7 @@ def wnba_stats_leaguestandingsv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4702,6 +4760,7 @@ def wnba_stats_playbyplayv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4753,6 +4812,7 @@ def wnba_stats_playbyplayv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4800,6 +4860,7 @@ def wnba_stats_playerawards(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4852,6 +4913,7 @@ def wnba_stats_playercareerbycollegerollup(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -4905,6 +4967,7 @@ def wnba_stats_playercareerstats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5001,6 +5064,7 @@ def wnba_stats_playercompare(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5115,6 +5179,7 @@ def wnba_stats_playerdashboardbyclutch(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5227,6 +5292,7 @@ def wnba_stats_playerdashboardbygamesplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5339,6 +5405,7 @@ def wnba_stats_playerdashboardbygeneralsplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5451,6 +5518,7 @@ def wnba_stats_playerdashboardbylastngames(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5563,6 +5631,7 @@ def wnba_stats_playerdashboardbyopponent(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5675,6 +5744,7 @@ def wnba_stats_playerdashboardbyshootingsplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5787,6 +5857,7 @@ def wnba_stats_playerdashboardbyteamperformance(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -5899,6 +5970,7 @@ def wnba_stats_playerdashboardbyyearoveryear(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6000,6 +6072,7 @@ def wnba_stats_playerdashptshotdefend(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6066,6 +6139,7 @@ def wnba_stats_playerestimatedmetrics(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6130,6 +6204,7 @@ def wnba_stats_playerfantasyprofile(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6190,6 +6265,7 @@ def wnba_stats_playerfantasyprofilebargraph(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6248,6 +6324,7 @@ def wnba_stats_playergamelog(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6338,6 +6415,7 @@ def wnba_stats_playergamelogs(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6579,6 +6657,7 @@ def wnba_stats_playergamestreakfinder(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6736,6 +6815,7 @@ def wnba_stats_playerindex(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6801,6 +6881,7 @@ def wnba_stats_playernextngames(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6855,6 +6936,7 @@ def wnba_stats_playerprofilev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -6945,6 +7027,7 @@ def wnba_stats_playervsplayer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7013,6 +7096,7 @@ def wnba_stats_scheduleleaguev2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7061,6 +7145,7 @@ def wnba_stats_scheduleleaguev2int(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7112,6 +7197,7 @@ def wnba_stats_scoreboardv2(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7161,6 +7247,7 @@ def wnba_stats_scoreboardv3(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7268,6 +7355,7 @@ def wnba_stats_shotchartdetail(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7345,6 +7433,7 @@ def wnba_stats_shotchartleaguewide(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7430,6 +7519,7 @@ def wnba_stats_shotchartlineupdetail(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7539,6 +7629,7 @@ def wnba_stats_teamdashboardbyclutch(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7651,6 +7742,7 @@ def wnba_stats_teamdashboardbygamesplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7763,6 +7855,7 @@ def wnba_stats_teamdashboardbygeneralsplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7875,6 +7968,7 @@ def wnba_stats_teamdashboardbylastngames(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -7987,6 +8081,7 @@ def wnba_stats_teamdashboardbyopponent(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8099,6 +8194,7 @@ def wnba_stats_teamdashboardbyshootingsplits(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8211,6 +8307,7 @@ def wnba_stats_teamdashboardbyteamperformance(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8323,6 +8420,7 @@ def wnba_stats_teamdashboardbyyearoveryear(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8439,6 +8537,7 @@ def wnba_stats_teamdashlineups(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8509,6 +8608,7 @@ def wnba_stats_teamdetails(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8558,6 +8658,7 @@ def wnba_stats_teamestimatedmetrics(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8615,6 +8716,7 @@ def wnba_stats_teamgamelog(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8705,6 +8807,7 @@ def wnba_stats_teamgamelogs(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8777,6 +8880,7 @@ def wnba_stats_teaminfocommon(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8870,6 +8974,7 @@ def wnba_stats_teamplayerdashboard(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -8978,6 +9083,7 @@ def wnba_stats_teamplayeronoffdetails(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -9084,6 +9190,7 @@ def wnba_stats_teamplayeronoffsummary(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -9194,6 +9301,7 @@ def wnba_stats_teamvsplayer(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -9267,6 +9375,7 @@ def wnba_stats_teamyearbyyearstats(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::
@@ -9317,6 +9426,7 @@ def wnba_stats_videostatus(
         NoDataError: The host answered 404 -- the requested resource does not exist.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``).
 
     Example:
         Quick start::

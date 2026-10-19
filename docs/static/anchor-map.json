@@ -47,6 +47,7 @@
   "acb_teams": "team"
  },
  "/docs/atrium/reference/additional": {
+  "atrium_end_year": "sportradar-atrium-embed-api",
   "atrium_season_id": "dates-and-seasons",
   "lmb_pbp": "sportradar-atrium-embed-api",
   "lmb_player_box": "sportradar-atrium-embed-api",

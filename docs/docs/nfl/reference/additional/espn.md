@@ -22,7 +22,7 @@ espn_nfl_calendar - look up the NFL calendar for a given season
 
 **Returns**
 
-Polars dataframe containing calendar dates for the requested season.
+One row per calendar week of the requested season (`week`, `week_label`, `week_start_date`, `season_type`, ...); `season` is the `season` argument as passed (null when omitted). With `ondays=True` it is a different frame: one row per date with games (`dates`, `dateURL`, `url`).
 
 | col_name | type | description |
 |---|---|---|
@@ -36,7 +36,7 @@ Polars dataframe containing calendar dates for the requested season.
 | `season_type` | character | REG or POST indicating if the timeframe belongs to regular or post season. |
 | `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
 | `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
-| `season` | character | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
 
 **Example**
 
