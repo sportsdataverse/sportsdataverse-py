@@ -16,7 +16,7 @@ Load NFL fantasy football opportunity data from ffverse/ffopportunity
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'weekly'` | One of "weekly", "pbp_pass", "pbp_rush". Defaults to "weekly". |
 | `model_version` | `str` | `'latest'` | One of "latest", "v1.0.0". Defaults to "latest". |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
@@ -354,7 +354,7 @@ changing call sites.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. |
+| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'passing'` | One of `"passing"`, `"rushing"`, `"receiving"`. Defaults to `"passing"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
@@ -475,7 +475,7 @@ changing call sites.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. |
+| `seasons` | `list[int]` |  | Seasons to load. For `summary_level='week'` this drives the per-season parquet fan-out; for `summary_level='season'` it post-filters the combined parquet by the `season` column. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'pass'` | One of `"pass"`, `"rush"`, `"rec"`, `"def"`. Defaults to `"pass"`. |
 | `summary_level` | `str` | `'week'` | One of `"week"` or `"season"`. Defaults to `"week"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
@@ -768,7 +768,7 @@ Load NFL schedule data
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**

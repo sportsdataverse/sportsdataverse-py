@@ -128,7 +128,7 @@ Load NFL Depth Chart data for selected seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2001 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2001 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -253,7 +253,7 @@ seasons; this loader reads the requested file once and post-filters by
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. |
+| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `summary_type` | `str` | `'season'` | Aggregation level. `"season"` (default) returns one row per quarterback-season; `"week"` returns one row per quarterback-game. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 | `source` | `str` | `'nflverse'` | Which QBR release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse `espn_data` release. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_espn_qbr` release (built by `nfl-data` from ESPN's QBR web endpoint -- the same source nflverse's espnscrapeR uses). Any other value raises `ValueError`. |
@@ -319,7 +319,7 @@ Load NFL fantasy football opportunity data from ffverse/ffopportunity
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'weekly'` | One of "weekly", "pbp_pass", "pbp_rush". Defaults to "weekly". |
 | `model_version` | `str` | `'latest'` | One of "latest", "v1.0.0". Defaults to "latest". |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
@@ -652,7 +652,7 @@ Load NFL FTN charting data going back to 2022
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2022 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2022 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -720,7 +720,7 @@ Load NFL injuries data for selected seasons
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 2009 is the earliest available season. |
+| `seasons` | `list` |  | Used to define different seasons. 2009 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
 **Returns**
@@ -776,7 +776,7 @@ changing call sites.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. |
+| `seasons` | `list[int]` |  | Seasons to filter to. The upstream parquet covers a single combined file per stat type — `seasons` is applied as a post-filter on the `season` column. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `stat_type` | `str` | `'passing'` | One of `"passing"`, `"rushing"`, `"receiving"`. Defaults to `"passing"`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 
@@ -1042,7 +1042,7 @@ seasons; this loader reads the requested file once and post-filters by
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. |
+| `seasons` | `list` |  | Seasons to return. 2006 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
 | `summary_type` | `str` | `'season'` | Aggregation level. `"season"` (default) returns one row per quarterback-season; `"week"` returns one row per quarterback-game. Any other value raises `ValueError`. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 | `source` | `str` | `'nflverse'` | Which QBR release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse `espn_data` release. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_espn_qbr` release (built by `nfl-data` from ESPN's QBR web endpoint -- the same source nflverse's espnscrapeR uses). Any other value raises `ValueError`. |

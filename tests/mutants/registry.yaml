@@ -1306,7 +1306,7 @@
   mutant: |-
     if True:
             resp = download(url, headers=_PROBE_HEADERS)
-  test: tests/codegen/test_runtime_release.py -k connection_error_is_asset
+  test: tests/test_runtime_release_classify.py -k connection_error_is_asset
   expected: kill
   note: a dead connection leaked requests.ConnectionError from every release loader
 
@@ -1316,7 +1316,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: '    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error'
   mutant: '    if True:'
-  test: tests/codegen/test_runtime_release.py -k panic_refetch_is_asset
+  test: tests/test_runtime_release_classify.py -k panic_refetch_is_asset
   expected: kill
   note: the metadata-stripped refetch issues its own request
 
@@ -1326,7 +1326,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: '_PROBE_HEADERS = {"Range": "bytes=0-0"}'
   mutant: '_PROBE_HEADERS = {}'
-  test: tests/codegen/test_runtime_release.py -k one_byte
+  test: tests/test_runtime_release_classify.py -k one_byte
   expected: kill
   note: the failure classification re-downloaded a 20-59 MB asset
 
@@ -1334,13 +1334,9 @@
   group: codegen-runtime
   finding: B-L74
   file: sportsdataverse/_codegen_runtime.py
-  snippet: |-
-    # is the asset's own error and surfaces as the reader raised it.
-        return pl.read_parquet(url, use_pyarrow=True)
-  mutant: |-
-    # is the asset's own error and surfaces as the reader raised it.
-        raise original
-  test: tests/codegen/test_runtime_release.py -k one_byte
+  snippet: '_classify_release_failure(url, original)'
+  mutant: '_classify_release_failure(url, original); raise original'
+  test: tests/test_runtime_release_classify.py -k one_byte
   expected: kill
   note: a reachable asset whose read failed in transit re-raised the raw reader error
 
@@ -1350,7 +1346,7 @@
   file: sportsdataverse/_codegen_runtime.py
   snippet: '    _text_body(resp, url, html=False)'
   mutant: '    _text_body(resp, url)'
-  test: tests/codegen/test_runtime_release.py -k challenge_page
+  test: tests/test_runtime_release_classify.py -k challenge_page
   expected: kill
   note: a challenge page parsed as a one-column CSV
 
@@ -1360,7 +1356,7 @@
   file: sportsdataverse/nfl/nfl_loaders.py
   snippet: '    data = _fetch_csv(NFL_TEAM_LOGO_URL)'
   mutant: '    data = pl.read_csv(NFL_TEAM_LOGO_URL)'
-  test: tests/codegen/test_runtime_release.py -k teams_404
+  test: tests/test_runtime_release_classify.py -k teams_404
   expected: kill
   note: on polars 2.0 pl.read_csv(url) answers a 404 with a bare OSError
 
@@ -1370,7 +1366,7 @@
   file: sportsdataverse/errors.py
   snippet: '    if "octet-stream" in str(headers.get("Content-Type", "")).lower():'
   mutant: '    if False:'
-  test: tests/codegen/test_runtime_release.py -k binary_body
+  test: tests/test_runtime_release_classify.py -k binary_body
   expected: kill
   note: every 2xx release asset was charset-scanned as JSON
 
@@ -1378,22 +1374,78 @@
   group: codegen-runtime
   finding: B-GB-14
   file: sportsdataverse/nfl/nfl_loaders.py
-  snippet: |-
-    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
-        if "season" in data.columns and season_list is not None:
-  mutant: |-
-    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
-        if "season" in data.columns and season_list:
-  test: tests/codegen/test_runtime_release.py -k seasons_empty_schedule
+  snippet: '    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  mutant: '    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  test: tests/test_runtime_release_classify.py -k seasons_empty_schedule
   expected: kill
-  note: seasons=[] returned every season since 1999
+  note: seasons=[] returned every season since 1999; now an empty frame with no request (R898-2)
 
 - id: nfl-implicit-seasons-skip-any-gap
   group: codegen-runtime
   finding: B-GB-14
   file: sportsdataverse/nfl/nfl_loaders.py
-  snippet: '            if not implicit or season != season_list[-1]:'
-  mutant: '            if not implicit:'
-  test: tests/codegen/test_runtime_release.py -k gap_before_the_current
+  snippet: '            if not every or season != season_list[-1]:'
+  mutant: '            if not every:'
+  test: tests/test_runtime_release_classify.py -k gap_before_the_current
   expected: kill
-  note: seasons=None skips only the unpublished current season; a hole in history still raises
+  note: seasons=True skips only the unpublished current season; a hole in history still raises
+
+- id: nfl-seasons-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    if seasons is True:'
+  mutant: '    if seasons is True or seasons is None:'
+  test: tests/test_runtime_release_classify.py -k seasons_none
+  expected: kill
+  note: owner ruling R898-2 (nflreadpy) -- None is the current season, True every season
+
+- id: release-second-read-use-pyarrow
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'frame = pl.read_parquet(url, use_pyarrow=True)'
+  mutant: 'frame = pl.read_parquet(url)'
+  test: tests/test_runtime_release_classify.py -k second_read_goes_through_pyarrow
+  expected: kill
+  note: R898-1, the read after the probe must keep use_pyarrow too (polars 2.0 suffix range -> 501)
+
+- id: release-second-read-http-error-raw
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'raise AssetFetchError(f"release asset fetch failed with HTTP {e.code}: {url}") from e'
+  mutant: 'raise'
+  test: tests/test_runtime_release_classify.py -k second_read_rate_limit
+  expected: kill
+  note: R898-4, a 429 on the second read leaked a raw urllib HTTPError
+
+- id: release-second-read-404-not-no-data
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if e.code == 404:'
+  mutant: '        if False:'
+  test: tests/test_runtime_release_classify.py -k second_read_404
+  expected: kill
+  note: R898-4, a 404 on the second read is still an absent asset
+
+- id: release-parse-error-refetched
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below'
+  mutant: 'except Exception as e:  # a transport failure: classified below'
+  test: tests/test_runtime_release_classify.py -k parse_error_is_not_refetched
+  expected: kill
+  note: R898-5, a corrupt asset was probed and fetched a second time
+
+- id: release-probe-416-not-reachable
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'not (200 <= status < 300 or status == 416)'
+  mutant: 'not (200 <= status < 300)'
+  test: tests/test_runtime_release_classify.py -k zero_byte
+  expected: kill
+  note: R898-6, a zero-byte asset answers the probe 416 and is reachable
