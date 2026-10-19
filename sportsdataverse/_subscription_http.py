@@ -35,6 +35,7 @@ Credentials are never logged, never defaulted, and never bundled.
 
 from __future__ import annotations
 
+import hashlib
 import os
 import re
 import threading
@@ -72,8 +73,9 @@ _SESSION_TTL = 1800.0  # seconds; a subscription cookie outlives this comfortabl
 _SESSION_CACHE_MAX = 8
 # key -> (session, expiry). ponytail: module-global dict + one lock; per-key locks
 # only if a caller ever logs into many sites concurrently (realistic cardinality is 1-2).
-_sessions: Dict[Tuple[str, str, str], Tuple[requests.Session, float]] = {}
+_sessions: dict[tuple[str, str, str, str], tuple[requests.Session, float]] = {}
 _lock = threading.Lock()
+_login_lock = threading.Lock()  # serializes a cache-miss login (see login())
 
 
 @dataclass(frozen=True)
@@ -284,7 +286,7 @@ def login(
     so every later request shares one egress IP -- a site that sees the login and
     the scrape from different addresses will drop the session.
 
-    Successful sessions are cached per ``(site, email, proxy)`` for 30 minutes, so
+    Successful sessions are cached per ``(site, email, password, proxy)`` for 30 minutes, so
     a multi-season pull logs in once rather than once per call (the R wrappers log
     in on every call).
 
@@ -320,14 +322,37 @@ def login(
     """
     resolved_email, resolved_pw = resolve_credentials(site, email, password)
     proxies = resolve_proxy(site, proxy)
-    key = (site.name, resolved_email, repr(sorted((proxies or {}).items())))
+    # The password's digest is in the key, so a changed or wrong password logs in again instead
+    # of reusing the old session; the password itself is never stored.
+    pw_digest = hashlib.sha256(resolved_pw.encode("utf-8")).hexdigest()
+    key = (site.name, resolved_email, pw_digest, repr(sorted((proxies or {}).items())))
 
-    if use_cache and session is None:
+    if not (use_cache and session is None):
+        return _login(site, resolved_email, resolved_pw, proxies, session, timeout)
+    # One login at a time: two threads that miss together would both log in, and a second login
+    # can invalidate the first session. The re-check under the lock reuses the first one's.
+    with _login_lock:
         with _lock:
             cached = _sessions.get(key)
             if cached is not None and time.monotonic() < cached[1]:
                 return cached[0]
+        sess = _login(site, resolved_email, resolved_pw, proxies, None, timeout)
+        with _lock:
+            if key not in _sessions and len(_sessions) >= _SESSION_CACHE_MAX:
+                _sessions.pop(next(iter(_sessions)))  # FIFO-evict the oldest
+            _sessions[key] = (sess, time.monotonic() + _SESSION_TTL)
+        return sess
 
+
+def _login(
+    site: SubscriptionSite,
+    resolved_email: str,
+    resolved_pw: str,
+    proxies: Any,
+    session: requests.Session | None,
+    timeout: float,
+) -> requests.Session:
+    """One login round trip (no cache): GET the form, POST the credentials, check the answer."""
     sess = session or requests.Session()
     sess.headers.update({"User-Agent": USER_AGENT})
     if proxies:
@@ -357,12 +382,6 @@ def login(
             f"login form). Check {' / '.join(site.email_env)} and "
             f"{' / '.join(site.password_env)}, and that the subscription is active."
         )
-
-    if use_cache and session is None:
-        with _lock:
-            if key not in _sessions and len(_sessions) >= _SESSION_CACHE_MAX:
-                _sessions.pop(next(iter(_sessions)))  # FIFO-evict the oldest
-            _sessions[key] = (sess, time.monotonic() + _SESSION_TTL)
     return sess
 
 
