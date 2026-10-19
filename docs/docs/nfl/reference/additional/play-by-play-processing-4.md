@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name"
 sidebar_label: "Play-by-play processing: shield_nfl–team_name"
-sidebar_position: 13
+sidebar_position: 14
 description: "NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Play-by-play processing: shield_nfl–team_name

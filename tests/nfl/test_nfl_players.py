@@ -206,14 +206,14 @@ class _Resp:
 def release_answers(monkeypatch):
     """Run the real ``load_nfl_players`` -> ``_fetch_release_parquet`` path with the cache off.
 
-    Arrow's direct read fails (as it does on any non-200), and the classification request
-    ``download(url)`` answers with the status the test sets.
+    The release fetch (``_release_bytes``) fails, as it does on any non-200, and the
+    classification request ``download(url)`` answers with the status the test sets.
     """
     from sportsdataverse import _codegen_runtime as rt
     from sportsdataverse.nfl.config import get_config
 
-    def arrow_fails(*a, **k):
-        raise OSError("arrow could not open the asset")
+    def fetch_fails(*a, **k):
+        raise OSError("the release fetch failed")
 
     answer: dict[str, object] = {}
 
@@ -223,7 +223,7 @@ def release_answers(monkeypatch):
         return _Resp(answer["status"])
 
     monkeypatch.setattr(get_config(), "cache_mode", "off")
-    monkeypatch.setattr(rt.pl, "read_parquet", arrow_fails)
+    monkeypatch.setattr(rt, "_release_bytes", fetch_fails)  # the transport, before the parse (R898-18)
     monkeypatch.setattr(rt, "download", fake_download)
     return answer
 

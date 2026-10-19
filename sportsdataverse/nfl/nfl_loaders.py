@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from typing import List
 
 import polars as pl
 from tqdm import tqdm
 
-from sportsdataverse._codegen_runtime import _as_season_list, _fetch_release_parquet
+from sportsdataverse._codegen_runtime import _as_season_list, _fetch_csv, _fetch_release_parquet
 from sportsdataverse.config import (
     NFL_BASE_URL,
     NFL_COMBINE_URL,
@@ -63,12 +64,66 @@ from sportsdataverse.nfl.cache import cached_loader
 from sportsdataverse.nfl.utils_date import get_current_nfl_season
 
 
+def _nfl_season_list(seasons, floor: int, *, roster: bool = False) -> list[int] | None:
+    """The requested seasons, each checked against ``floor`` before any request (B-GB-14).
+
+    nflreadpy's contract: ``None`` is the current season; ``True`` is every season, returned
+    as ``None`` so the caller reads (or keeps) all of them; ``[]`` is no season, so the
+    caller returns an empty frame without a request. An int or an iterable becomes a list.
+    ``roster=True`` takes the current season on nflreadpy's roster calendar (the year turns
+    on March 15; ``load_rosters`` / ``load_depth_charts``), not the season calendar.
+
+    Raises:
+        SeasonNotFoundError: a requested season is below ``floor``.
+    """
+    if seasons is True:
+        return None
+    season_list = _as_season_list(get_current_nfl_season(roster=roster) if seasons is None else seasons)
+    for season in season_list:
+        season_not_found_error(season, floor)
+    return season_list
+
+
+def _fetch_nfl_seasons(
+    seasons, floor: int, url: Callable[[int], str], *, progress: bool = True, roster: bool = False
+) -> list[pl.DataFrame]:
+    """One release frame per requested season, read from ``url(season)`` (B-GB-14).
+
+    ``True`` reads every season from ``floor`` through the current one, of which only the
+    current season may be missing (nflverse has not built it yet) and is skipped. ``None``
+    reads the current season and ``[]`` reads nothing. A season the caller named that has
+    no asset raises ``NoDataError``, as does a gap anywhere else. ``progress`` shows a tqdm
+    bar (off for the loaders that never had one, and for no season); ``roster`` is
+    :func:`_nfl_season_list`'s.
+    """
+    season_list = _nfl_season_list(seasons, floor, roster=roster)
+    every = season_list is None
+    if season_list is None:
+        season_list = list(range(floor, get_current_nfl_season(roster=roster) + 1))
+    frames: list[pl.DataFrame] = []
+    for season in tqdm(season_list, disable=not (progress and season_list)):
+        try:
+            frames.append(_fetch_release_parquet(url(season)))
+        except _NoDataError:
+            if not every or season != season_list[-1]:
+                raise
+    return frames
+
+
+def _concat_seasons(frames: list[pl.DataFrame]) -> pl.DataFrame:
+    # diagonal_relaxed: per-season release schemas drift (columns added or
+    # dropped, and dtypes widened) -- union columns, null-fill gaps.
+    return pl.concat(frames, how="diagonal_relaxed") if frames else pl.DataFrame()
+
+
 @cached_loader
 def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "nflverse") -> pl.DataFrame:
     """Load NFL play by play data going back to 1999
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         source (str): Which enriched play-by-play release to read. ``"nflverse"`` (the
             default, also accepts ``None``) returns the nflverse/nflfastR
             ``play_by_play_{season}.parquet`` releases — full history from 1999,
@@ -81,6 +136,8 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
 
     Returns:
         pl.DataFrame: Polars dataframe containing the play-by-plays available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         ValueError: If `season` is less than 1999, or `source` is not one of
@@ -129,15 +186,7 @@ def load_nfl_pbp(seasons: List[int], return_as_pandas=False, *, source: str = "n
         base_url = NFL_MODEL_PBP_URL
     else:
         raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 1999)
-        i_data = _fetch_release_parquet(base_url.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 1999, lambda s: base_url.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -174,10 +223,14 @@ def load_nfl_model_pbp(seasons: List[int], return_as_pandas=False) -> pl.DataFra
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest
             available season; 2000-2002 are published but near-empty (see above).
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing the enriched plays for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If any requested season is less than 1999.
@@ -214,10 +267,14 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing the schedule for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         ValueError: If `season` is less than 1999.
@@ -250,16 +307,13 @@ def load_nfl_schedule(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in seasons:
-        season_not_found_error(int(i), 1999)
+    season_list = _nfl_season_list(seasons, 1999)
     # Upstream (nflverse-data `schedules/games`) is a single combined parquet
-    # covering all seasons (1999-present). Read once and post-filter by season.
-    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
-    if "season" in data.columns and seasons:
-        season_ints = [int(s) for s in seasons]
-        data = data.filter(pl.col("season").is_in(season_ints))
+    # covering all seasons (1999-present). Read once and post-filter by season;
+    # `[]` is an empty frame with no request (B-GB-14, nflreadpy contract).
+    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)
+    if "season" in data.columns and season_list is not None:
+        data = data.filter(pl.col("season").is_in(season_list))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -471,8 +525,9 @@ def load_nfl_player_stats(
 
     Args:
         seasons (list): Seasons to load. 1999 is the earliest available season.
-            ``None`` (the default) loads every season from 1999 through the
-            current one, matching the old whole-file behavior.
+            ``None`` (the default) loads the current season, ``True`` every published
+            season from 1999, and ``[]`` an empty frame (no request); nflreadpy's
+            contract (``None`` used to load every season from 1999).
         kicking (bool): If True, load kicking stats. If False, load all other stats.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
         source (str): Which player-stats release to read.
@@ -486,13 +541,15 @@ def load_nfl_player_stats(
             raises ``ValueError``.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing player stats.
+        pl.DataFrame: Polars dataframe containing player stats. ``seasons=[]`` gives
+        the contracted columns with no rows (nflverse source) or an empty frame with
+        no columns (SDV source).
 
     Raises:
         SeasonNotFoundError: If any requested season is less than 1999.
-        TypeError: If ``seasons`` is a bool -- the first positional argument used
-            to be ``kicking``, so ``load_nfl_player_stats(True)`` is rejected
-            loudly rather than read as "seasons=True".
+        TypeError: If ``seasons`` is ``False`` -- the first positional argument used
+            to be ``kicking``, so ``load_nfl_player_stats(False)`` is rejected loudly.
+            ``True`` is nflreadpy's "every season".
         ValueError: If ``source`` is not one of ``"nflverse"``, ``None``,
             ``"sportsdataverse"``, or ``"sdv"``; or if ``kicking=True`` is
             combined with the SDV source (the SDV play-by-play surface lacks a
@@ -531,17 +588,11 @@ def load_nfl_player_stats(
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    if isinstance(seasons, bool):
+    if seasons is False:
         raise TypeError(
             "load_nfl_player_stats() takes `seasons` first; `kicking` is no longer positional. "
             "Call load_nfl_player_stats(kicking=True) instead."
         )
-    if isinstance(seasons, int):
-        seasons = [seasons]
-    season_list = [int(s) for s in seasons] if seasons is not None else list(range(1999, get_current_nfl_season() + 1))
-    for season in season_list:
-        season_not_found_error(season, 1999)
-
     if source in ("sportsdataverse", "sdv"):
         if kicking is True:
             raise ValueError(
@@ -550,26 +601,18 @@ def load_nfl_player_stats(
                 "rebuilt. Use the default source='nflverse' for kicking stats."
             )
         # One combined parquet with its own (non-legacy) columns -- post-filter.
-        data = _fetch_release_parquet(NFL_SDV_PLAYER_STATS_URL)
-        if "season" in data.columns and seasons is not None:
+        season_list = _nfl_season_list(seasons, 1999)
+        data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_SDV_PLAYER_STATS_URL)
+        if "season" in data.columns and season_list is not None:
             data = data.filter(pl.col("season").is_in(season_list))
         return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
     if source not in ("nflverse", None):
         raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
 
-    frames = []
-    for season in tqdm(season_list):
-        try:
-            raw = _fetch_release_parquet(NFL_PLAYER_STATS_WEEK_URL.format(season=season))
-        except _NoDataError:
-            # An explicitly requested season that has no asset is an error; the
-            # implicit 1999..current range is "everything published", and the
-            # newest season's asset does not exist until nflverse first builds
-            # it, so a gap there is skipped rather than raised.
-            if seasons is not None:
-                raise
-            continue
-        frames.append(_player_stats_to_legacy(raw, kicking=kicking))
+    frames = [
+        _player_stats_to_legacy(raw, kicking=kicking)
+        for raw in _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))
+    ]
     schema = _PLAYER_STATS_KICKING_SCHEMA if kicking else _PLAYER_STATS_SCHEMA
     # Every frame is already at the one contracted schema, so a plain concat is
     # enough -- no diagonal union that could reintroduce an upstream column.
@@ -603,6 +646,8 @@ def load_nfl_nextgen_stats(
         seasons (list[int]): Seasons to filter to. The upstream parquet
             covers a single combined file per stat type — ``seasons`` is
             applied as a post-filter on the ``season`` column.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         stat_type (str): One of ``"passing"``, ``"rushing"``,
             ``"receiving"``. Defaults to ``"passing"``.
         return_as_pandas (bool): If True, returns a pandas dataframe.
@@ -611,9 +656,12 @@ def load_nfl_nextgen_stats(
     Returns:
         pl.DataFrame: Polars dataframe containing NextGen Stats data
             for the requested ``stat_type`` and ``seasons``.
+            ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+            frames come with the dtype contract.
 
     Raises:
         ValueError: If ``stat_type`` is not one of the allowed values.
+        SeasonNotFoundError: If any season is less than 2016.
 
     Example:
         Passing NextGen stats (default)::
@@ -649,17 +697,14 @@ def load_nfl_nextgen_stats(
     if stat_type not in _NFL_NGS_URLS:
         raise ValueError(f"stat_type must be one of {sorted(_NFL_NGS_URLS)}; got {stat_type!r}")
 
-    if isinstance(seasons, int):
-        seasons = [seasons]
-
+    season_list = _nfl_season_list(seasons, 2016)
     url = _NFL_NGS_URLS[stat_type]
     # The upstream NGS parquet is a single combined file per stat type,
     # so the read happens once and we filter by season afterwards.
-    data = _fetch_release_parquet(url)
+    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(url)
 
-    if "season" in data.columns and seasons:
-        season_ints = [int(s) for s in seasons]
-        data = data.filter(pl.col("season").is_in(season_ints))
+    if "season" in data.columns and season_list is not None:
+        data = data.filter(pl.col("season").is_in(season_list))
 
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
@@ -702,6 +747,8 @@ def load_nfl_pfr_advstats(
             this drives the per-season parquet fan-out; for
             ``summary_level='season'`` it post-filters the combined
             parquet by the ``season`` column.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         stat_type (str): One of ``"pass"``, ``"rush"``, ``"rec"``,
             ``"def"``. Defaults to ``"pass"``.
         summary_level (str): One of ``"week"`` or ``"season"``. Defaults
@@ -713,6 +760,8 @@ def load_nfl_pfr_advstats(
         pl.DataFrame: Polars dataframe containing PFR advanced stats
             data for the requested ``stat_type``, ``summary_level``,
             and ``seasons``.
+            ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+            frames come with the dtype contract.
 
     Raises:
         ValueError: If ``stat_type`` or ``summary_level`` are not allowed
@@ -763,41 +812,19 @@ def load_nfl_pfr_advstats(
     if summary_level not in _NFL_PFR_SUMMARY_LEVELS:
         raise ValueError(f"summary_level must be one of {list(_NFL_PFR_SUMMARY_LEVELS)}; got {summary_level!r}")
 
-    if isinstance(seasons, int):
-        seasons = [seasons]
-
     url = _NFL_PFR_URLS[(stat_type, summary_level)]
 
     if summary_level == "season":
         # Single combined parquet per stat type — read once and filter
         # by season afterwards.
-        data = _fetch_release_parquet(url)
-        if "season" in data.columns and seasons:
-            season_ints = [int(s) for s in seasons]
-            for s in season_ints:
-                season_not_found_error(s, 2018)
-            data = data.filter(pl.col("season").is_in(season_ints))
+        season_list = _nfl_season_list(seasons, 2018)
+        data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(url)
+        if "season" in data.columns and season_list is not None:
+            data = data.filter(pl.col("season").is_in(season_list))
         return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
-    # summary_level == "week": per-season parquet fan-out. Adopt the
-    # cleaner concat pattern: collect frames in a list, then concat once
-    # at the end. Avoids the empty-seed-DataFrame schema-conflict gotcha
-    # that ``how="vertical"`` triggers when the seed has no columns.
-    frames: list[pl.DataFrame] = []
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2018)
-        i_data = _fetch_release_parquet(url.format(season=i))
-        frames.append(i_data)
-
-    if not frames:
-        data = pl.DataFrame()
-    elif len(frames) == 1:
-        data = frames[0]
-    else:
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat(frames, how="diagonal_relaxed")
-
+    # summary_level == "week": per-season parquet fan-out.
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 2018, lambda s: url.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -818,6 +845,9 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
         seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2020, 2025)``).
             A single ``int`` is accepted and wrapped. 1920 is the earliest
             available season.
+            ``None`` loads the current roster year (it turns on March 15), ``True`` every
+            published season, and
+            ``[]`` an empty frame (no request).
         source (str): Which roster release to read.
             ``"nflverse"`` (the default, also accepts ``None``) returns the
             nflverse season-roster releases described above -- the full
@@ -839,6 +869,8 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
     Returns:
         pl.DataFrame: Polars dataframe of season rosters for the requested
         seasons (``pandas.DataFrame`` when ``return_as_pandas=True``).
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season precedes the earliest
@@ -883,15 +915,7 @@ def load_nfl_rosters(seasons: List[int], return_as_pandas=False, *, source: str 
         base_url = NFL_SDV_ROSTER_URL
     else:
         raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 1920)
-        i_data = _fetch_release_parquet(base_url.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 1920, lambda s: base_url.format(season=s), roster=True))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -915,12 +939,16 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
         seasons (list): Seasons to load (e.g. ``[2024]`` or ``range(2022, 2025)``).
             A single ``int`` is accepted and wrapped. 2002 is the earliest
             available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe (default).
 
     Returns:
         pl.DataFrame: Polars dataframe of weekly rosters for the requested
         seasons (``pandas.DataFrame`` when ``return_as_pandas=True``).
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season precedes the earliest
@@ -951,15 +979,7 @@ def load_nfl_weekly_rosters(seasons: List[int], return_as_pandas=False) -> pl.Da
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2002)
-        i_data = _fetch_release_parquet(NFL_WEEKLY_ROSTER_URL.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 2002, lambda s: NFL_WEEKLY_ROSTER_URL.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -992,11 +1012,8 @@ def load_nfl_teams(return_as_pandas=False) -> pl.DataFrame:
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    return (
-        pl.read_csv(NFL_TEAM_LOGO_URL).to_pandas(use_pyarrow_extension_array=True)
-        if return_as_pandas
-        else pl.read_csv(NFL_TEAM_LOGO_URL)
-    )
+    data = _fetch_csv(NFL_TEAM_LOGO_URL)
+    return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
 @cached_loader
@@ -1092,10 +1109,14 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
 
     Args:
         seasons (list): Used to define different seasons. 2012 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing snap counts available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Example:
         Single season::
@@ -1118,15 +1139,7 @@ def load_nfl_snap_counts(seasons: List[int], return_as_pandas=False) -> pl.DataF
         .. _Pro Football Reference: https://www.pro-football-reference.com
         .. _nflverse: https://nflverse.nflverse.com
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2012)
-        i_data = _fetch_release_parquet(NFL_SNAP_COUNTS_URL.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 2012, lambda s: NFL_SNAP_COUNTS_URL.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1136,10 +1149,14 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
 
     Args:
         seasons (list): Used to define different seasons. 2016 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing play-by-play participation data available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Example:
         Single season::
@@ -1158,22 +1175,14 @@ def load_nfl_pbp_participation(seasons: List[int], return_as_pandas=False) -> pl
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2016)
-        i_data = _fetch_release_parquet(NFL_PBP_PARTICIPATION_URL.format(season=i))
-        # play_id is a join key against load_nfl_pbp, and the release parquets
-        # ship it as Int32 through 2022 then Float64 from 2023. Pin it to the
-        # pbp dtype HERE rather than letting the diagonal_relaxed supertype
-        # rule decide -- otherwise the column's dtype depends on which seasons
-        # happen to be in the span, and a pre-2023-only load won't join.
-        if i_data.schema.get("play_id") is not None:
-            i_data = i_data.with_columns(pl.col("play_id").cast(pl.Float64))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    frames = _fetch_nfl_seasons(seasons, 2016, lambda s: NFL_PBP_PARTICIPATION_URL.format(season=s))
+    # play_id is a join key against load_nfl_pbp, and the release parquets
+    # ship it as Int32 through 2022 then Float64 from 2023. Pin it to the
+    # pbp dtype HERE rather than letting the diagonal_relaxed supertype
+    # rule decide -- otherwise the column's dtype depends on which seasons
+    # happen to be in the span, and a pre-2023-only load won't join.
+    frames = [f.with_columns(pl.col("play_id").cast(pl.Float64)) if "play_id" in f.columns else f for f in frames]
+    data = _concat_seasons(frames)
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1183,10 +1192,14 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
 
     Args:
         seasons (list): Used to define different seasons. 2009 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing injuries data available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Example:
         Single season::
@@ -1209,15 +1222,7 @@ def load_nfl_injuries(seasons: List[int], return_as_pandas=False) -> pl.DataFram
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2009)
-        i_data = _fetch_release_parquet(NFL_INJURIES_URL.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 2009, lambda s: NFL_INJURIES_URL.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1227,10 +1232,15 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
 
     Args:
         seasons (list): Used to define different seasons. 2001 is the earliest available season.
+            ``None`` loads the current roster year (it turns on March 15), ``True`` every
+            published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing depth chart data available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Example:
         Single season::
@@ -1249,15 +1259,9 @@ def load_nfl_depth_charts(seasons: List[int], return_as_pandas=False) -> pl.Data
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2001)
-        i_data = _fetch_release_parquet(NFL_DEPTH_CHARTS_URL.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(seasons, 2001, lambda s: NFL_DEPTH_CHARTS_URL.format(season=s), roster=True)
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1419,6 +1423,8 @@ def load_nfl_team_stats(
 
     Args:
         seasons (list): Used to define different seasons. 1999 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         summary_level (str): Aggregation level. One of "week", "reg", "post", "reg+post". Defaults to "week".
             Ignored when ``source`` is the SDV-native release (a single week-level
             parquet covering all seasons; filter post-load).
@@ -1432,6 +1438,8 @@ def load_nfl_team_stats(
 
     Returns:
         pl.DataFrame: Polars dataframe containing team stats available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         ValueError: If `season` is less than 1999, if `summary_level` is not one of the
@@ -1459,14 +1467,11 @@ def load_nfl_team_stats(
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflreadpy: https://github.com/nflverse/nflreadpy
     """
-    if type(seasons) is int:
-        seasons = [seasons]
-
     if source in ("sportsdataverse", "sdv"):
-        for i in seasons:
-            season_not_found_error(int(i), 1999)
-        data = _fetch_release_parquet(NFL_SDV_TEAM_STATS_URL)
-        data = data.filter(pl.col("season").is_in([int(i) for i in seasons]))
+        season_list = _nfl_season_list(seasons, 1999)
+        data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_SDV_TEAM_STATS_URL)
+        if "season" in data.columns and season_list is not None:
+            data = data.filter(pl.col("season").is_in(season_list))
         return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
     if source not in ("nflverse", None):
@@ -1477,13 +1482,9 @@ def load_nfl_team_stats(
 
     level_str = summary_level.replace("+", "")  # "reg+post" -> "regpost"
 
-    data = pl.DataFrame()
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 1999)
-        i_data = _fetch_release_parquet(NFL_TEAM_STATS_URL.format(level=level_str, season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_TEAM_STATS_URL.format(level=level_str, season=s))
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1493,10 +1494,14 @@ def load_nfl_ftn_charting(seasons: List[int], return_as_pandas=False) -> pl.Data
 
     Args:
         seasons (list): Used to define different seasons. 2022 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
         pl.DataFrame: Polars dataframe containing FTN charting data available for the requested seasons.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         ValueError: If `season` is less than 2022.
@@ -1526,15 +1531,7 @@ def load_nfl_ftn_charting(seasons: List[int], return_as_pandas=False) -> pl.Data
         .. _FTN Network: https://ftnfantasy.com
         .. _nflverse: https://nflverse.nflverse.com
     """
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2022)
-        i_data = _fetch_release_parquet(NFL_FTN_CHARTING_URL.format(season=i))
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    data = _concat_seasons(_fetch_nfl_seasons(seasons, 2022, lambda s: NFL_FTN_CHARTING_URL.format(season=s)))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1572,26 +1569,6 @@ def load_nfl_trades(return_as_pandas=False) -> pl.DataFrame:
         if return_as_pandas
         else _fetch_release_parquet(NFL_TRADES_URL)
     )
-
-
-def _read_csv_retry(url: str, *, attempts: int = 4, **kwargs) -> pl.DataFrame:
-    """``pl.read_csv`` with exponential backoff on transient upstream errors.
-
-    The DynastyProcess raw-GitHub CSVs rate-limit CI runners (the parallel
-    test matrix triggers HTTP 429); a short backoff clears it. Non-transient
-    errors and the final attempt re-raise unchanged.
-    """
-    import time
-    import urllib.error
-
-    for attempt in range(attempts):
-        try:
-            return pl.read_csv(url, **kwargs)
-        except urllib.error.HTTPError as exc:
-            if exc.code not in (429, 500, 502, 503, 504) or attempt == attempts - 1:
-                raise
-            time.sleep(2.0 * 2**attempt)
-    raise AssertionError("unreachable")
 
 
 # DynastyProcess ships a CSV, so an unpinned id takes whatever dtype the current
@@ -1666,7 +1643,7 @@ def load_nfl_ff_playerids(return_as_pandas=False) -> pl.DataFrame:
         .. _DynastyProcess: https://github.com/dynastyprocess
         .. _nflverse: https://nflverse.nflverse.com
     """
-    data = _read_csv_retry(
+    data = _fetch_csv(
         NFL_FF_PLAYERIDS_URL,
         null_values=["NA", "NULL", ""],
         schema_overrides=_FF_PLAYERIDS_ID_DTYPES,
@@ -1748,14 +1725,14 @@ def load_nfl_ff_rankings(
         raise ValueError("type/kind must be one of 'draft', 'week', 'all'")
 
     if effective == "draft":
-        data = _read_csv_retry(
+        data = _fetch_csv(
             NFL_FF_RANKINGS_DRAFT_URL,
             null_values=["NA", "NULL", ""],
             infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
             schema_overrides=_FF_RANKINGS_ID_DTYPES["draft"],
         )
     elif effective == "week":
-        data = _read_csv_retry(
+        data = _fetch_csv(
             NFL_FF_RANKINGS_WEEK_URL,
             null_values=["NA", "NULL", ""],
             infer_schema_length=None,  # a column empty in the first 100 rows would otherwise read as String
@@ -1778,6 +1755,8 @@ def load_nfl_ff_opportunity(
 
     Args:
         seasons (list): Used to define different seasons. 2006 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         stat_type (str): One of "weekly", "pbp_pass", "pbp_rush". Defaults to "weekly".
         model_version (str): One of "latest", "v1.0.0". Defaults to "latest".
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
@@ -1785,6 +1764,8 @@ def load_nfl_ff_opportunity(
     Returns:
         pl.DataFrame: Polars dataframe containing fantasy football opportunity data
             for the requested seasons.
+            ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+            frames come with the dtype contract.
 
     Raises:
         ValueError: If `season` is less than 2006, or if `stat_type` / `model_version`
@@ -1818,17 +1799,13 @@ def load_nfl_ff_opportunity(
     if model_version not in ("latest", "v1.0.0"):
         raise ValueError("model_version must be one of 'latest', 'v1.0.0'")
 
-    data = pl.DataFrame()
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in tqdm(seasons):
-        season_not_found_error(int(i), 2006)
-        i_data = _fetch_release_parquet(
-            NFL_FF_OPPORTUNITY_URL.format(model_version=model_version, stat_type=stat_type, season=i)
+    data = _concat_seasons(
+        _fetch_nfl_seasons(
+            seasons,
+            2006,
+            lambda s: NFL_FF_OPPORTUNITY_URL.format(model_version=model_version, stat_type=stat_type, season=s),
         )
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat([data, i_data], how="diagonal_relaxed")
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1852,6 +1829,8 @@ def load_nfl_espn_qbr(
 
     Args:
         seasons (list): Seasons to return. 2006 is the earliest available season.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         summary_type (str): Aggregation level. ``"season"`` (default) returns one
             row per quarterback-season; ``"week"`` returns one row per
             quarterback-game. Any other value raises ``ValueError``.
@@ -1867,6 +1846,8 @@ def load_nfl_espn_qbr(
     Returns:
         pl.DataFrame: Polars dataframe containing ESPN Total QBR for the requested
             seasons, summarized per ``summary_type``.
+            ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+            frames come with the dtype contract.
 
     Raises:
         ValueError: If ``summary_type`` is not ``"season"`` / ``"week"``, or if
@@ -1915,16 +1896,12 @@ def load_nfl_espn_qbr(
     else:
         raise ValueError(f"Invalid source {source!r}; expected one of 'nflverse', None, 'sportsdataverse', or 'sdv'.")
 
-    if type(seasons) is int:
-        seasons = [seasons]
-    for i in seasons:
-        season_not_found_error(int(i), 2006)
+    season_list = _nfl_season_list(seasons, 2006)
     # The espn_data release ships ONE combined parquet per summary_type (all
     # seasons, 2006-present). Read once and post-filter by season.
-    data = _fetch_release_parquet(url)
-    if "season" in data.columns and seasons:
-        season_ints = [int(s) for s in seasons]
-        data = data.filter(pl.col("season").is_in(season_ints))
+    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(url)
+    if "season" in data.columns and season_list is not None:
+        data = data.filter(pl.col("season").is_in(season_list))
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -1942,6 +1919,8 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
 
     Args:
         seasons (List[int]): Seasons to load (1999 through the current season).
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
@@ -1950,6 +1929,8 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
         ``adj_st_epa`` / ``adj_net``, ranks, ``net_z``, ``games``) plus
         ``as_of_week`` (Int32). Weeks run 2-21 (2-22 from the 2021
         18-game era); week 1 has no prior games and emits no vintage.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Example:
         Quick start::
@@ -1970,16 +1951,9 @@ def load_nfl_ratings_weekly(seasons: List[int], return_as_pandas: bool = False) 
         .. _nflverse: https://nflverse.nflverse.com
         .. _nflfastR: https://www.nflfastr.com
     """
-    if type(seasons) is int:
-        seasons = [seasons]
-    frames = []
-    for i in seasons:
-        season_not_found_error(int(i), 1999)
-        frames.append(_fetch_release_parquet(NFL_RATINGS_WEEKLY_URL.format(season=i)))
-    # diagonal_relaxed: per-season release schemas drift (columns added or
-    # dropped, and dtypes widened) -- union columns, null-fill gaps.
-    # vertical_relaxed tolerated the dtype half of that but not the columns.
-    data = pl.concat(frames, how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_RATINGS_WEEKLY_URL.format(season=s), progress=False)
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -2075,6 +2049,8 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     Args:
         seasons (List[int]): Seasons to load, as the STARTING calendar year
             (2025 = the 2025-26 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         dataset (str): One of the 16 keys above. Defaults to ``"passing"``.
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
@@ -2082,6 +2058,8 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     Returns:
         pl.DataFrame: The requested dataset for the requested seasons, unioned
         with ``diagonal_relaxed`` (per-season schemas may add columns).
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         ValueError: If ``dataset`` is not one of the 16 keys.
@@ -2124,15 +2102,11 @@ def load_nfl_ngs(seasons: List[int], dataset: str = "passing", return_as_pandas:
     if dataset not in _NFL_NGS_DATASETS:
         raise ValueError(f"dataset must be one of {sorted(_NFL_NGS_DATASETS)}; got {dataset!r}")
     tag, stem, floor = _NFL_NGS_DATASETS[dataset]
-    if isinstance(seasons, int):
-        seasons = [seasons]
-    frames = []
-    for i in seasons:
-        season_not_found_error(int(i), floor)
-        frames.append(_fetch_release_parquet(NFL_NGS_SDV_URL.format(tag=tag, stem=stem, season=int(i))))
-    # diagonal_relaxed: per-season release schemas drift (columns added or
-    # dropped, and dtypes widened) -- union columns, null-fill gaps.
-    data = pl.concat(frames, how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(
+            seasons, floor, lambda s: NFL_NGS_SDV_URL.format(tag=tag, stem=stem, season=s), progress=False
+        )
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -2185,20 +2159,14 @@ def _load_nfl_espn_football(stem: str, seasons, return_as_pandas: bool = False) 
     """
     if stem not in _NFL_ESPN_FOOTBALL_STEMS:
         raise ValueError(f"stem must be one of {list(_NFL_ESPN_FOOTBALL_STEMS)}; got {stem!r}")
-    if isinstance(seasons, int):
-        seasons = [seasons]
-    frames: list[pl.DataFrame] = []
-    for i in seasons:
-        season_not_found_error(int(i), _NFL_ESPN_FOOTBALL_FLOOR)
-        frames.append(_fetch_release_parquet(NFL_ESPN_FOOTBALL_URL.format(stem=stem, season=int(i))))
-    if not frames:
-        data = pl.DataFrame()
-    elif len(frames) == 1:
-        data = frames[0]
-    else:
-        # diagonal_relaxed: per-season release schemas drift (columns added or
-        # dropped, and dtypes widened) -- union columns, null-fill gaps.
-        data = pl.concat(frames, how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(
+            seasons,
+            _NFL_ESPN_FOOTBALL_FLOOR,
+            lambda s: NFL_ESPN_FOOTBALL_URL.format(stem=stem, season=s),
+            progress=False,
+        )
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data
 
 
@@ -2222,6 +2190,8 @@ def load_nfl_usage_players(seasons: List[int], return_as_pandas: bool = False) -
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2229,6 +2199,8 @@ def load_nfl_usage_players(seasons: List[int], return_as_pandas: bool = False) -
         pl.DataFrame: One row per player per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2269,6 +2241,8 @@ def load_nfl_usage_position_groups(seasons: List[int], return_as_pandas: bool = 
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2276,6 +2250,8 @@ def load_nfl_usage_position_groups(seasons: List[int], return_as_pandas: bool = 
         pl.DataFrame: One row per position group per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2307,6 +2283,8 @@ def load_nfl_usage_tackles(seasons: List[int], return_as_pandas: bool = False) -
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2314,6 +2292,8 @@ def load_nfl_usage_tackles(seasons: List[int], return_as_pandas: bool = False) -
         pl.DataFrame: One row per tackler per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2340,6 +2320,8 @@ def load_nfl_usage_position_group_tackles(seasons: List[int], return_as_pandas: 
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2347,6 +2329,8 @@ def load_nfl_usage_position_group_tackles(seasons: List[int], return_as_pandas: 
         pl.DataFrame: One row per position group per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2377,6 +2361,8 @@ def load_nfl_usage_teams(seasons: List[int], return_as_pandas: bool = False) -> 
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2384,6 +2370,8 @@ def load_nfl_usage_teams(seasons: List[int], return_as_pandas: bool = False) -> 
         pl.DataFrame: One row per team per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2413,6 +2401,8 @@ def load_nfl_usage_drive_scripting(seasons: List[int], return_as_pandas: bool = 
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2420,6 +2410,8 @@ def load_nfl_usage_drive_scripting(seasons: List[int], return_as_pandas: bool = 
         pl.DataFrame: One row per (team, script) per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2448,6 +2440,8 @@ def load_nfl_usage_st_kickers(seasons: List[int], return_as_pandas: bool = False
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2455,6 +2449,8 @@ def load_nfl_usage_st_kickers(seasons: List[int], return_as_pandas: bool = False
         pl.DataFrame: One row per kicker per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2483,6 +2479,8 @@ def load_nfl_usage_st_punters(seasons: List[int], return_as_pandas: bool = False
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2490,6 +2488,8 @@ def load_nfl_usage_st_punters(seasons: List[int], return_as_pandas: bool = False
         pl.DataFrame: One row per punter per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2516,6 +2516,8 @@ def load_nfl_usage_st_returners(seasons: List[int], return_as_pandas: bool = Fal
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2523,6 +2525,8 @@ def load_nfl_usage_st_returners(seasons: List[int], return_as_pandas: bool = Fal
         pl.DataFrame: One row per returner per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2549,6 +2553,8 @@ def load_nfl_usage_st_blocks(seasons: List[int], return_as_pandas: bool = False)
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2556,6 +2562,8 @@ def load_nfl_usage_st_blocks(seasons: List[int], return_as_pandas: bool = False)
         pl.DataFrame: One row per blocker per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2584,6 +2592,8 @@ def load_nfl_usage_st_team(seasons: List[int], return_as_pandas: bool = False) -
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2591,6 +2601,8 @@ def load_nfl_usage_st_team(seasons: List[int], return_as_pandas: bool = False) -
         pl.DataFrame: One row per team per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2632,6 +2644,8 @@ def load_nfl_team_tendencies(seasons: List[int], return_as_pandas: bool = False)
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2639,6 +2653,8 @@ def load_nfl_team_tendencies(seasons: List[int], return_as_pandas: bool = False)
         pl.DataFrame: One row per team per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2690,6 +2706,8 @@ def load_nfl_coach_tendencies(seasons: List[int], return_as_pandas: bool = False
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2697,6 +2715,8 @@ def load_nfl_coach_tendencies(seasons: List[int], return_as_pandas: bool = False
         pl.DataFrame: One row per (team, coach) per season, with the summed counts and
         the rates recomputed from the sums (a leaderboard never averages
         averages). Multi-season reads are unioned with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 2002.
@@ -2885,6 +2905,8 @@ def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = Fal
     Args:
         seasons (List[int]): Seasons to load, as the season's starting calendar
             year (2024 = the 2024-25 season). Each season is one release asset.
+            ``None`` loads the current season, ``True`` every published season, and
+            ``[]`` an empty frame (no request).
         return_as_pandas (bool): If True, returns a pandas dataframe. If False,
             returns a polars dataframe.
 
@@ -2894,6 +2916,8 @@ def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = Fal
         (always null for the NFL), ``conference_id``, ``division_id``,
         ``source``, ``sources_agree``, ``notes``. Multi-season reads are unioned
         with ``diagonal_relaxed``.
+        ``seasons=[]`` gives an empty frame with no columns; schema'd empty
+        frames come with the dtype contract.
 
     Raises:
         SeasonNotFoundError: If a requested season is before 1970.
@@ -2910,14 +2934,9 @@ def load_nfl_team_group_seasons(seasons: List[int], return_as_pandas: bool = Fal
             * :func:`load_nfl_group_seasons` -- the groups' names as of each season
             * :func:`load_nfl_teams` -- nflverse team metadata
     """
-    frames: list[pl.DataFrame] = []
-    for i in _as_season_list(seasons):
-        season_not_found_error(i, _NFL_GROUPS_FLOOR)
-        frames.append(_fetch_release_parquet(NFL_TEAM_GROUP_SEASONS_URL.format(season=i)))
-    if not frames:
-        data = pl.DataFrame()
-    elif len(frames) == 1:
-        data = frames[0]
-    else:
-        data = pl.concat(frames, how="diagonal_relaxed")
+    data = _concat_seasons(
+        _fetch_nfl_seasons(
+            seasons, _NFL_GROUPS_FLOOR, lambda s: NFL_TEAM_GROUP_SEASONS_URL.format(season=s), progress=False
+        )
+    )
     return data.to_pandas(use_pyarrow_extension_array=True) if return_as_pandas else data

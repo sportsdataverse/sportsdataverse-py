@@ -277,15 +277,19 @@
     xfail becomes a plain assert: rewrite this row then as snippet `- 3)` / mutant `- 4)`,
     test tests/nfl/test_nfl_whole_game_oracle.py, expected kill.
 
-# --- A-M10: the release read must stay use_pyarrow=True (polars 2.0 suffix-range -> HTTP 501) ----
+# --- A-M10: the release parse stays use_pyarrow=True (pyarrow parses; R898-21) --------------------
 - id: codegen-runtime-use-pyarrow
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
-  mutant: 'return pl.read_parquet(url)'
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(data)'
   test: tests/codegen/test_runtime_release.py -k pyarrow
   expected: kill
-  note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
+  note: >-
+    1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned). Since R898-9 polars
+    gets a BytesIO, never a URL, so the original suffix-range 501 cannot recur; the pin now keeps
+    pyarrow as the parser, the parser the release frames have always come from and the one
+    whose Arrow-FFI import the PanicException (arrow.r.vctrs) fallback is written for
 
 # --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
 - id: ncaa-capture-is-clean-always-true
@@ -2079,3 +2083,214 @@
   test: tests/codegen/test_docs.py::test_atrium_end_year_is_documented_not_allowlisted
   expected: kill
   note: R901-2, atrium_end_year is user-facing and must get a reference block, not an allowlist entry
+
+# --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
+- id: release-classify-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    with _transport_errors(url):
+            resp = download(url, headers=_PROBE_HEADERS)
+  mutant: |-
+    if True:
+            resp = download(url, headers=_PROBE_HEADERS)
+  test: tests/test_runtime_release_classify.py -k connection_error_is_asset
+  expected: kill
+  note: a dead connection leaked requests.ConnectionError from every release loader
+
+- id: release-panic-refetch-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error'
+  mutant: '    if True:'
+  test: tests/test_runtime_release_classify.py -k panic_refetch_is_asset
+  expected: kill
+  note: the metadata-stripped refetch issues its own request
+
+- id: release-probe-downloads-the-whole-asset
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_PROBE_HEADERS = {"Range": "bytes=0-0"}'
+  mutant: '_PROBE_HEADERS = {}'
+  test: tests/test_runtime_release_classify.py -k one_byte
+  expected: kill
+  note: the failure classification re-downloaded a 20-59 MB asset
+
+- id: release-transient-read-reraises
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_classify_release_failure(url, original)'
+  mutant: '_classify_release_failure(url, original); raise original'
+  test: tests/test_runtime_release_classify.py -k one_byte
+  expected: kill
+  note: a reachable asset whose read failed in transit re-raised the raw reader error
+
+- id: fetch-csv-accepts-a-page
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    _text_body(resp, url, html=False)'
+  mutant: '    _text_body(resp, url)'
+  test: tests/test_runtime_release_classify.py -k challenge_page
+  expected: kill
+  note: a challenge page parsed as a one-column CSV
+
+- id: nfl-teams-csv-read-by-polars
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    data = _fetch_csv(NFL_TEAM_LOGO_URL)'
+  mutant: '    data = pl.read_csv(NFL_TEAM_LOGO_URL)'
+  test: tests/test_runtime_release_classify.py -k teams_404
+  expected: kill
+  note: on polars 2.0 pl.read_csv(url) answers a 404 with a bare OSError
+
+- id: no-espn-data-decodes-binary
+  group: codegen-runtime
+  finding: A-L29
+  file: sportsdataverse/errors.py
+  snippet: '    if not _may_be_json(response):'
+  mutant: '    if False:'
+  test: tests/test_runtime_release_classify.py -k binary_body
+  expected: kill
+  note: every 2xx release asset was charset-scanned as JSON (the guard is #897's _may_be_json; this row pins it in no_espn_data)
+
+- id: nfl-schedule-empty-seasons-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  mutant: '    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  test: tests/test_runtime_release_classify.py -k seasons_empty_schedule
+  expected: kill
+  note: seasons=[] returned every season since 1999; now an empty frame with no request (R898-2)
+
+- id: nfl-implicit-seasons-skip-any-gap
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '            if not every or season != season_list[-1]:'
+  mutant: '            if not every:'
+  test: tests/test_runtime_release_classify.py -k gap_before_the_current
+  expected: kill
+  note: seasons=True skips only the unpublished current season; a hole in history still raises
+
+- id: nfl-seasons-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    if seasons is True:'
+  mutant: '    if seasons is True or seasons is None:'
+  test: tests/test_runtime_release_classify.py -k seasons_none
+  expected: kill
+  note: owner ruling R898-2 (nflreadpy) -- None is the current season, True every season
+
+- id: release-second-read-use-pyarrow
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return _parse_release(url, data)  # the asset, read after the probe'
+  mutant: '    return pl.read_parquet(data)'
+  test: tests/test_runtime_release_classify.py -k second_read_goes_through_pyarrow
+  expected: kill
+  note: R898-1 / R898-21, the read after the probe parses with pyarrow too (same parser, same frames, same panic fallback as the first read)
+
+- id: release-second-read-http-error-raw
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'raise AssetFetchError(f"release asset fetch failed with HTTP {e.code}: {url}") from e'
+  mutant: 'raise'
+  test: tests/test_runtime_release_classify.py -k second_read_rate_limit
+  expected: kill
+  note: R898-4, a 429 on the second read leaked a raw urllib HTTPError
+
+- id: release-second-read-404-not-no-data
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if e.code == 404:'
+  mutant: '        if False:'
+  test: tests/test_runtime_release_classify.py -k second_read_404
+  expected: kill
+  note: R898-4, a 404 on the second read is still an absent asset
+
+- id: release-parse-error-refetched
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    data = _release_bytes(url)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  mutant: |-
+    data = _release_bytes(url); _parse_release(url, data)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  test: tests/test_runtime_release_classify.py -k "parse_error_is_not_refetched or corrupt_footer"
+  expected: kill
+  note: >-
+    R898-5 / R898-9, the parse inside the transport try: pyarrow's corrupt-footer OSError read as a
+    failed fetch, so a corrupt asset was probed, fetched a second time and reported AssetFetchError
+
+- id: release-probe-416-not-reachable
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'not (200 <= status < 300 or status == 416)'
+  mutant: 'not (200 <= status < 300)'
+  test: tests/test_runtime_release_classify.py -k zero_byte
+  expected: kill
+  note: R898-6, a zero-byte asset answers the probe 416 and is reachable
+
+- id: roster-calendar-for-rosters
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'lambda s: base_url.format(season=s), roster=True)'
+  mutant: 'lambda s: base_url.format(season=s))'
+  test: tests/test_runtime_release_classify.py -k roster_year_none
+  expected: kill
+  note: R898-10, nflreadpy load_rosters takes the roster year, which turns on March 15
+
+- id: release-first-read-http-error-left-open
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: "        original.close()  # the first read's error response holds its socket open (R898-13)"
+  mutant: '        pass'
+  test: tests/test_runtime_release_classify.py -k first_read_http_error_is_closed
+  expected: kill
+  note: R898-13, an unclosed HTTPError leaks its socket (a ResourceWarning, an error under pytest.ini)
+
+- id: nfl-player-stats-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'for raw in _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  mutant: 'for raw in _fetch_nfl_seasons(True if seasons is None else seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  test: tests/nfl/test_nfl_player_stats_weekly.py -k seasons_none_is_the_current
+  expected: kill
+  note: owner ruling (round 3) -- load_nfl_player_stats() is the current season, not ~28 assets since 1999
+
+- id: release-parse-copies-the-buffer
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(io.BytesIO(data.getvalue()), use_pyarrow=True)'
+  test: tests/test_runtime_release_classify.py -k parse_reads_the_buffer_the_fetch_returned
+  expected: kill
+  note: R898-14, a second reference to the bytes made polars copy the whole asset (+31 MB on play_by_play_2025)
+
+- id: release-read-without-timeout
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'with urllib.request.urlopen(url, timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)) as f:'
+  mutant: 'with urllib.request.urlopen(url) as f:'
+  test: tests/test_runtime_release_classify.py -k passes_the_http_timeout
+  expected: kill
+  note: R898-15, a server that accepted and never answered hung the release read

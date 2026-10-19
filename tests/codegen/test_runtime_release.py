@@ -37,6 +37,14 @@ def _parquet_bytes(df: pl.DataFrame) -> bytes:
     return buf.getvalue()
 
 
+@pytest.fixture(autouse=True)
+def _offline_bytes():
+    """These tests drive the parse step through a ``pl.read_parquet`` mock; the fetch answers
+    bytes without a network call (a test that fails the fetch patches ``_release_bytes`` itself)."""
+    with patch.object(rt, "_release_bytes", side_effect=lambda url: io.BytesIO(b"PAR1")):
+        yield
+
+
 def test_as_season_list_normalizes():
     assert rt._as_season_list(2024) == [2024]
     assert rt._as_season_list(range(2022, 2024)) == [2022, 2023]
@@ -53,14 +61,18 @@ def test_read_release_parquet_returns_df_on_success():
 
 @pytest.mark.parametrize("read", [rt._fetch_release_parquet, rt._read_release_parquet])
 def test_release_read_goes_through_pyarrow(read):
-    """A-M10: polars' own reader asks the release CDN for a suffix range, which it answers 501.
+    """A-M10: the release bytes are parsed by pyarrow (``use_pyarrow=True``).
 
-    Removing ``use_pyarrow=True`` brings that back on every release loader under polars 2.0,
-    so the kwarg itself is the contract (CLAUDE.md "Polars version").
+    Handed a URL, polars 2.0's own reader asked the release CDN for a suffix range, which it
+    answers 501. Since R898-9 polars gets a ``BytesIO`` and never a URL, so that cannot recur;
+    the pin now keeps pyarrow as the parser: the one the release frames have always come
+    from, and the one whose Arrow-FFI import the ``PanicException`` fallback is written for.
     """
     with patch.object(rt.pl, "read_parquet", return_value=pl.DataFrame({"a": [1]})) as rp:
         read("https://github.com/o/r/releases/download/t/x.parquet")
-    rp.assert_called_once_with("https://github.com/o/r/releases/download/t/x.parquet", use_pyarrow=True)
+    # The bytes are fetched by urllib and parsed from memory, never as a URL by polars.
+    rp.assert_called_once()
+    assert isinstance(rp.call_args.args[0], io.BytesIO) and rp.call_args.kwargs == {"use_pyarrow": True}
 
 
 def test_success_path_never_calls_the_transport():
@@ -85,14 +97,14 @@ def test_success_path_never_calls_the_transport():
 
 def test_read_release_parquet_returns_none_on_404():
     """A missing asset is the gateway's typed 404, so the season is skipped."""
-    with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+    with patch.object(rt, "_release_bytes", side_effect=OSError("connection reset")):
         with patch.object(rt, "download", side_effect=NoDataError("404")):
             assert rt._read_release_parquet("https://x/missing.parquet") is None
 
 
 def test_read_release_parquet_raises_on_non_200():
     """A 403 that outlived the retry budget must NOT be masked as "no data"."""
-    with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+    with patch.object(rt, "_release_bytes", side_effect=OSError("connection reset")):
         with patch.object(rt, "download", return_value=_Resp(b"", status_code=403)):
             with pytest.raises(AssetFetchError, match="403"):
                 rt._read_release_parquet("https://x/forbidden.parquet")
@@ -165,7 +177,7 @@ def test_failed_fetch_is_not_a_missing_asset():
 
 def test_fetch_raises_where_read_skips():
     """The same missing asset: one raises, the other returns ``None``."""
-    with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+    with patch.object(rt, "_release_bytes", side_effect=OSError("connection reset")):
         with patch.object(rt, "download", side_effect=NoDataError("404")):
             with pytest.raises(NoDataError):
                 rt._fetch_release_parquet("https://x/missing.parquet")
@@ -180,7 +192,7 @@ def test_both_variants_surface_a_failed_fetch():
     frame -- the exact failure the split exists to prevent.
     """
     for fn in (rt._fetch_release_parquet, rt._read_release_parquet):
-        with patch.object(rt.pl, "read_parquet", side_effect=OSError("arrow could not open")):
+        with patch.object(rt, "_release_bytes", side_effect=OSError("connection reset")):
             with patch.object(rt, "download", return_value=_Resp(b"", status_code=403)):
                 with pytest.raises(AssetFetchError, match="403"):
                     fn("https://x/forbidden.parquet")
