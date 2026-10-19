@@ -91,12 +91,45 @@ sched = safe("AHL schedule", lambda: ahl.ahl_schedule(season=ahl.most_recent_ahl
 sched.shape if sched is not None else None
 ```
 
+    ✅ AHL schedule
+
+
+
+
+
+    (1152, 12)
+
+
+
 
 ```python
 cols = ["game_id", "game_date", "home_team", "away_team", "home_score", "away_score"]
 (sched.select([c for c in cols if c in sched.columns]).head()
  if sched is not None else "schedule unavailable")
 ```
+
+
+
+
+    shape: (5, 6)
+    ┌─────────┬────────────────────┬────────────────────┬────────────────────┬────────────┬────────────┐
+    │ game_id ┆ game_date          ┆ home_team          ┆ away_team          ┆ home_score ┆ away_score │
+    │ ---     ┆ ---                ┆ ---                ┆ ---                ┆ ---        ┆ ---        │
+    │ str     ┆ str                ┆ str                ┆ str                ┆ str        ┆ str        │
+    ╞═════════╪════════════════════╪════════════════════╪════════════════════╪════════════╪════════════╡
+    │ 1029073 ┆ 2026-10-02T19:00:0 ┆ Cleveland Monsters ┆ Grand Rapids       ┆ 2          ┆ 5          │
+    │         ┆ 0-04:00            ┆                    ┆ Griffins           ┆            ┆            │
+    │ 1029071 ┆ 2026-10-02T19:00:0 ┆ Belleville         ┆ Hamilton Hammers   ┆ 2          ┆ 5          │
+    │         ┆ 0-04:00            ┆ Senators           ┆                    ┆            ┆            │
+    │ 1029075 ┆ 2026-10-02T19:00:0 ┆ Laval Rocket       ┆ Syracuse Crunch    ┆ 0          ┆ 2          │
+    │         ┆ 0-04:00            ┆                    ┆                    ┆            ┆            │
+    │ 1029076 ┆ 2026-10-02T19:05:0 ┆ Providence Bruins  ┆ Utica Comets       ┆ 1          ┆ 2          │
+    │         ┆ 0-04:00            ┆                    ┆                    ┆            ┆            │
+    │ 1029077 ┆ 2026-10-02T19:05:0 ┆ Rochester          ┆ Toronto Marlies    ┆ 3          ┆ 1          │
+    │         ┆ 0-04:00            ┆ Americans          ┆                    ┆            ┆            │
+    └─────────┴────────────────────┴────────────────────┴────────────────────┴────────────┴────────────┘
+
+
 
 ## 🍳 Cookbook: common hockey tasks
 
@@ -116,6 +149,30 @@ cols = ["team", "games_played", "wins", "losses", "ot_losses", "points", "goals_
  if standings is not None and standings.height else "standings unavailable")
 ```
 
+    ✅ OHL standings
+
+
+
+
+
+    shape: (5, 8)
+    ┌──────────────────┬──────────────┬──────┬────────┬───────────┬────────┬───────────┬───────────────┐
+    │ team             ┆ games_played ┆ wins ┆ losses ┆ ot_losses ┆ points ┆ goals_for ┆ goals_against │
+    │ ---              ┆ ---          ┆ ---  ┆ ---    ┆ ---       ┆ ---    ┆ ---       ┆ ---           │
+    │ str              ┆ str          ┆ str  ┆ str    ┆ str       ┆ i64    ┆ str       ┆ str           │
+    ╞══════════════════╪══════════════╪══════╪════════╪═══════════╪════════╪═══════════╪═══════════════╡
+    │ Brantford        ┆ 12           ┆ 9    ┆ 2      ┆ 0         ┆ 19     ┆ 51        ┆ 30            │
+    │ Bulldogs         ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Ottawa 67's      ┆ 10           ┆ 7    ┆ 1      ┆ 2         ┆ 16     ┆ 38        ┆ 27            │
+    │ Kingston         ┆ 12           ┆ 7    ┆ 5      ┆ 0         ┆ 14     ┆ 52        ┆ 54            │
+    │ Frontenacs       ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Peterborough     ┆ 12           ┆ 5    ┆ 7      ┆ 0         ┆ 10     ┆ 39        ┆ 41            │
+    │ Petes            ┆              ┆      ┆        ┆           ┆        ┆           ┆               │
+    │ Oshawa Generals  ┆ 12           ┆ 4    ┆ 6      ┆ 2         ┆ 10     ┆ 30        ┆ 39            │
+    └──────────────────┴──────────────┴──────┴────────┴───────────┴────────┴───────────┴───────────────┘
+
+
+
 ### Recipe 2 — A team and its roster 👥
 
 List teams with [`whl_teams`](../ahl/reference/additional.md#ahl_teams), grab a `team_id`, then pull the
@@ -133,6 +190,41 @@ else:
     out = "teams unavailable"
 out
 ```
+
+    ✅ WHL teams
+
+
+    ✅ WHL roster 201
+
+
+
+
+
+    shape: (5, 45)
+    ┌───────┬───────────┬────────┬────────────┬───┬──────────────┬─────────────┬─────────────┬─────────┐
+    │ id    ┆ person_id ┆ active ┆ first_name ┆ … ┆ draft_status ┆ name        ┆ player_imag ┆ catches │
+    │ ---   ┆ ---       ┆ ---    ┆ ---        ┆   ┆ ---          ┆ ---         ┆ e           ┆ ---     │
+    │ str   ┆ str       ┆ str    ┆ str        ┆   ┆ str          ┆ str         ┆ ---         ┆ str     │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ str         ┆         │
+    ╞═══════╪═══════════╪════════╪════════════╪═══╪══════════════╪═════════════╪═════════════╪═════════╡
+    │ 29612 ┆ 10235     ┆ 1      ┆ Cole       ┆ … ┆              ┆ Cole        ┆ https://ass ┆ null    │
+    │       ┆           ┆        ┆            ┆   ┆              ┆ Slobodian   ┆ ets.leagues ┆         │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ tat.com/…   ┆         │
+    │ 29719 ┆ 10362     ┆ 1      ┆ Cameron    ┆ … ┆ 2023 by BDN  ┆ Cameron     ┆ https://ass ┆ null    │
+    │       ┆           ┆        ┆            ┆   ┆              ┆ Allard      ┆ ets.leagues ┆         │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ tat.com/…   ┆         │
+    │ 29601 ┆ 10219     ┆ 1      ┆ Brady      ┆ … ┆ 2025 by ANA, ┆ Brady Turko ┆ https://ass ┆ null    │
+    │       ┆           ┆        ┆            ┆   ┆ 2022 by BDN  ┆             ┆ ets.leagues ┆         │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ tat.com/…   ┆         │
+    │ 30235 ┆ 10956     ┆ 1      ┆ Cruz       ┆ … ┆ 2025 by BDN  ┆ Cruz Jim    ┆ https://ass ┆ null    │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ ets.leagues ┆         │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ tat.com/…   ┆         │
+    │ 29444 ┆ 10016     ┆ 1      ┆ Jaxon      ┆ … ┆ 2023 by BDN  ┆ Jaxon       ┆ https://ass ┆ null    │
+    │       ┆           ┆        ┆            ┆   ┆              ┆ Jacobson    ┆ ets.leagues ┆         │
+    │       ┆           ┆        ┆            ┆   ┆              ┆             ┆ tat.com/…   ┆         │
+    └───────┴───────────┴────────┴────────────┴───┴──────────────┴─────────────┴─────────────┴─────────┘
+
+
 
 ### Recipe 3 — A game's play-by-play + shot attempts 📈
 
@@ -159,6 +251,13 @@ else:
     print("no schedule rows to pick a game_id from")
 ```
 
+    ✅ AHL pbp 1030222
+
+
+    ✅ AHL corsi 1030222
+    pbp rows: 0 | corsi rows: 0
+
+
 ### Recipe 4 — Compare all four leagues at once 🔁
 
 Because the surface is identical, one loop tours every league.
@@ -172,6 +271,47 @@ for lg, mod in LEAGUES.items():
     rows.append({"league": lg.upper(), "season": season, "games": None if sch is None else sch.height})
 pl.DataFrame(rows)
 ```
+
+    ✅ ahl season
+
+
+    ✅ ahl schedule
+
+
+    ✅ ohl season
+
+
+    ✅ ohl schedule
+
+
+    ✅ whl season
+
+
+    ✅ whl schedule
+
+
+    ✅ qmjhl season
+
+
+    ✅ qmjhl schedule
+
+
+
+
+
+    shape: (4, 3)
+    ┌────────┬────────┬───────┐
+    │ league ┆ season ┆ games │
+    │ ---    ┆ ---    ┆ ---   │
+    │ str    ┆ i64    ┆ i64   │
+    ╞════════╪════════╪═══════╡
+    │ AHL    ┆ 2027   ┆ 1152  │
+    │ OHL    ┆ 2027   ┆ 684   │
+    │ WHL    ┆ 2027   ┆ 782   │
+    │ QMJHL  ┆ 2027   ┆ 580   │
+    └────────┴────────┴───────┘
+
+
 
 ### Recipe 5 — The scoring race 🥇
 
@@ -187,6 +327,32 @@ cols = ["rank", "name", "team_code", "position", "stat_formatted", "type_formatt
 (leaders.select([c for c in cols if c in leaders.columns]).head(10)
  if leaders is not None and leaders.height else "leaders unavailable (offseason?)")
 ```
+
+    ✅ QMJHL leaders
+
+
+
+
+
+    shape: (10, 6)
+    ┌──────┬───────────────────┬───────────┬──────────┬────────────────┬────────────────┐
+    │ rank ┆ name              ┆ team_code ┆ position ┆ stat_formatted ┆ type_formatted │
+    │ ---  ┆ ---               ┆ ---       ┆ ---      ┆ ---            ┆ ---            │
+    │ i64  ┆ str               ┆ str       ┆ str      ┆ str            ┆ str            │
+    ╞══════╪═══════════════════╪═══════════╪══════════╪════════════════╪════════════════╡
+    │ 1    ┆ Philippe Veilleux ┆ VdO       ┆ LW       ┆ 27             ┆ Points         │
+    │ 2    ┆ Mathys Dubé       ┆ Rim       ┆ C        ┆ 20             ┆ Points         │
+    │ 3    ┆ James Scantlebury ┆ Que       ┆ C        ┆ 19             ┆ Points         │
+    │ 4    ┆ Chad Lygitsakos   ┆ Sha       ┆ C        ┆ 18             ┆ Points         │
+    │ 5    ┆ Maxime Sauthier   ┆ VdO       ┆ C        ┆ 17             ┆ Points         │
+    │ 1    ┆ Maxime Sauthier   ┆ VdO       ┆ C        ┆ 13             ┆ Goals          │
+    │ 2    ┆ Mathys Dubé       ┆ Rim       ┆ C        ┆ 12             ┆ Goals          │
+    │ 3    ┆ Philippe Veilleux ┆ VdO       ┆ LW       ┆ 10             ┆ Goals          │
+    │ 4    ┆ James Scantlebury ┆ Que       ┆ C        ┆ 9              ┆ Goals          │
+    │ 5    ┆ Niko Tournas      ┆ Mon       ┆ RW       ┆ 9              ┆ Goals          │
+    └──────┴───────────────────┴───────────┴──────────┴────────────────┴────────────────┘
+
+
 
 ### Recipe 6 — Who's hot, who's not 🌡️
 
@@ -213,6 +379,27 @@ else:
 out
 ```
 
+    ✅ AHL standings
+
+
+
+
+
+    shape: (5, 5)
+    ┌───────────────────────┬────────┬───────────┬───────────────┬───────────┐
+    │ team                  ┆ points ┆ goals_for ┆ goals_against ┆ goal_diff │
+    │ ---                   ┆ ---    ┆ ---       ┆ ---           ┆ ---       │
+    │ str                   ┆ i64    ┆ str       ┆ str           ┆ i64       │
+    ╞═══════════════════════╪════════╪═══════════╪═══════════════╪═══════════╡
+    │ Grand Rapids Griffins ┆ 11     ┆ 26        ┆ 16            ┆ 10        │
+    │ Laval Rocket          ┆ 10     ┆ 25        ┆ 11            ┆ 14        │
+    │ Manitoba Moose        ┆ 10     ┆ 29        ┆ 13            ┆ 16        │
+    │ Calgary Wranglers     ┆ 10     ┆ 28        ┆ 22            ┆ 6         │
+    │ Colorado Eagles       ┆ 9      ┆ 16        ┆ 12            ┆ 4         │
+    └───────────────────────┴────────┴───────────┴───────────────┴───────────┘
+
+
+
 ### Recipe 7 — A player's career stat line 📊
 
 Grab any `player_id` (the leaderboard is a handy source) and
@@ -233,6 +420,30 @@ else:
     out = "leaders unavailable to source a player_id"
 out
 ```
+
+    ✅ WHL leaders
+
+
+    ✅ WHL stats for Beckett Hamilton
+
+
+
+
+
+    shape: (5, 7)
+    ┌──────────────────────────┬─────────────────┬──────────────┬───────┬─────────┬────────┬───────────┐
+    │ season_name              ┆ team_name       ┆ games_played ┆ goals ┆ assists ┆ points ┆ stat_type │
+    │ ---                      ┆ ---             ┆ ---          ┆ ---   ┆ ---     ┆ ---    ┆ ---       │
+    │ str                      ┆ str             ┆ str          ┆ str   ┆ str     ┆ str    ┆ str       │
+    ╞══════════════════════════╪═════════════════╪══════════════╪═══════╪═════════╪════════╪═══════════╡
+    │ 2026 - 27 Regular Season ┆ Red Deer Rebels ┆ 9            ┆ 9     ┆ 11      ┆ 20     ┆ regular   │
+    │ 2025 - 26 Regular Season ┆ Red Deer Rebels ┆ 67           ┆ 24    ┆ 38      ┆ 62     ┆ regular   │
+    │ 2024 - 25 Regular Season ┆ Red Deer Rebels ┆ 67           ┆ 14    ┆ 11      ┆ 25     ┆ regular   │
+    │ 2023 - 24 Regular Season ┆ Red Deer Rebels ┆ 3            ┆ 0     ┆ 0       ┆ 0      ┆ regular   │
+    │ Total                    ┆ null            ┆ 146          ┆ 47    ┆ 60      ┆ 107    ┆ regular   │
+    └──────────────────────────┴─────────────────┴──────────────┴───────┴─────────┴────────┴───────────┘
+
+
 
 ### Recipe 8 — The box score: goals & three stars 🌟
 
@@ -259,6 +470,19 @@ else:
 out
 ```
 
+    ✅ OHL schedule
+
+
+    ✅ OHL game summary 29675
+
+
+
+
+
+    'no goals frame'
+
+
+
 And the three-star selections from the same dict — no extra call needed:
 
 
@@ -272,6 +496,16 @@ else:
     out = "summary unavailable"
 out
 ```
+
+
+
+
+    shape: (0, 0)
+    ┌┐
+    ╞╡
+    └┘
+
+
 
 ### Recipe 9 — Slice the play-by-play: just the goals ⛳
 
@@ -295,6 +529,16 @@ else:
 out
 ```
 
+    ✅ AHL pbp 1030222
+
+
+
+
+
+    'play-by-play unavailable'
+
+
+
 ### Recipe 10 — Head-to-head history 🤝
 
 The schedule is just a frame, so a rivalry view is two `str.contains` filters.
@@ -315,6 +559,26 @@ else:
     out = "schedule unavailable"
 out
 ```
+
+    Cleveland Monsters hosting Grand Rapids Griffins:
+
+
+
+
+
+    shape: (4, 5)
+    ┌───────────────────────────┬────────────────────┬───────────────────────┬────────────┬────────────┐
+    │ game_date                 ┆ home_team          ┆ away_team             ┆ home_score ┆ away_score │
+    │ ---                       ┆ ---                ┆ ---                   ┆ ---        ┆ ---        │
+    │ str                       ┆ str                ┆ str                   ┆ str        ┆ str        │
+    ╞═══════════════════════════╪════════════════════╪═══════════════════════╪════════════╪════════════╡
+    │ 2026-10-02T19:00:00-04:00 ┆ Cleveland Monsters ┆ Grand Rapids Griffins ┆ 2          ┆ 5          │
+    │ 2026-10-04T15:00:00-04:00 ┆ Cleveland Monsters ┆ Grand Rapids Griffins ┆ 5          ┆ 4          │
+    │ 2027-01-24T16:00:00-05:00 ┆ Cleveland Monsters ┆ Grand Rapids Griffins ┆ 0          ┆ 0          │
+    │ 2027-02-15T15:00:00-05:00 ┆ Cleveland Monsters ┆ Grand Rapids Griffins ┆ 0          ┆ 0          │
+    └───────────────────────────┴────────────────────┴───────────────────────┴────────────┴────────────┘
+
+
 
 ### Recipe 11 — Scout the roster: shooters & positions 🔍
 
@@ -339,6 +603,27 @@ else:
 out
 ```
 
+    ✅ WHL teams
+
+
+    ✅ WHL roster 201
+
+
+
+
+
+    shape: (2, 2)
+    ┌────────┬─────────┐
+    │ shoots ┆ players │
+    │ ---    ┆ ---     │
+    │ str    ┆ u32     │
+    ╞════════╪═════════╡
+    │ L      ┆ 19      │
+    │ R      ┆ 8       │
+    └────────┴─────────┘
+
+
+
 ### Recipe 12 — Hand off to pandas 🐼
 
 Every accessor takes `return_as_pandas=True`, so the whole toolkit drops
@@ -359,6 +644,22 @@ else:
     out = "season list unavailable"
 out
 ```
+
+    ✅ AHL season_id
+    pandas
+
+
+
+
+
+       season_id               season_name  season_yr game_type_label
+    0         94    2026-27 Regular Season       2027         regular
+    1         92  2026 Calder Cup Playoffs       2026        playoffs
+    2         91   2026 All-Star Challenge       2026         regular
+    3         90    2025-26 Regular Season       2026         regular
+    4         88  2025 Calder Cup Playoffs       2025        playoffs
+
+
 
 ## 🥅 On-ice analytics
 
@@ -423,6 +724,66 @@ for lg in families:
 
 ```
 
+    19 families: ahl, ajhl, bchl, cchl, chl, echl, gojhl, kijhl, mhl, mjhl, nojhl, ohl, ojhl, qmjhl, sjhl, sphl, ushl, vijhl, whl
+
+
+    ✅ ahl_standings
+
+
+    ✅ ajhl_standings
+
+
+    ✅ bchl_standings
+
+
+    ✅ cchl_standings
+
+
+    ✅ chl_standings
+
+
+    ✅ echl_standings
+
+
+    ✅ gojhl_standings
+
+
+    ✅ kijhl_standings
+
+
+    ✅ mhl_standings
+
+
+    ✅ mjhl_standings
+
+
+    ✅ nojhl_standings
+
+
+    ✅ ohl_standings
+
+
+    ✅ ojhl_standings
+
+
+    ✅ qmjhl_standings
+
+
+    ✅ sjhl_standings
+
+
+    ✅ sphl_standings
+
+
+    ✅ ushl_standings
+
+
+    ✅ vijhl_standings
+
+
+    ✅ whl_standings
+
+
 
 ```python
 # The two small-canvas / partial-feed families, called explicitly so the caveat is visible.
@@ -435,3 +796,10 @@ for lg in ("ushl", "mjhl"):
         print(f"  {lg}: {pbp.height} plays, coordinates present: {bool(has_xy)}")
 
 ```
+
+    ✅ ushl_pbp
+      ushl: 20 plays, coordinates present: False
+
+
+    ✅ mjhl_pbp
+      mjhl: 39 plays, coordinates present: False
