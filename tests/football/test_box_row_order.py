@@ -18,7 +18,7 @@ import polars as pl
 import pytest
 
 from sportsdataverse.football.box import _ordered_rows
-from sportsdataverse.football.usage_box import SECTIONS
+from sportsdataverse.football.usage_box import _SUM_KEYS, SECTIONS
 
 # Processing a default-odds capture warns DefaultOddsWarning incidentally;
 # tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
@@ -94,6 +94,51 @@ def test_processed_cfb_game_player_tables_are_ordered(monkeypatch):
     assert _is_ordered(box["receiver"], "pos_team", "receiver_player_name", "Tar")
     assert _is_ordered(box["defensive_players"], "def_pos_team", "player_name")
     assert _is_ordered(box["specialists"], "pos_team", "player_name")
+
+
+#: plain-JSON committed CFB captures (provenance: tests/cfb/fixtures/README.md). A missing sort leaves a
+#: two-row team table home-first by chance in each, so one dropped sort survives all ten 1 time in ~1,000
+_ORDER_CAPTURES = (
+    243040130,
+    252460252,
+    252740026,
+    262660245,
+    302540025,
+    332990030,
+    400869270,
+    401012682,
+    401112081,
+    401754598,
+)
+
+
+def _key_sorted(rows: list[dict], keys: list[str]) -> list[dict]:
+    return sorted(rows, key=lambda r: tuple((r[k] is None, r[k] if r[k] is not None else "") for k in keys))
+
+
+def test_processed_cfb_game_team_and_usage_tables_are_ordered(monkeypatch):
+    """R828-4, in-process: team tables list the home team first; usage / st sections equal themselves key-sorted."""
+    wrong: list[tuple[int, str]] = []
+    for gid in _ORDER_CAPTURES:
+        path = Path(__file__).resolve().parents[1] / "cfb" / "fixtures" / f"summary_{gid}.json"
+        competitors = json.loads(path.read_text(encoding="utf-8"))["header"]["competitions"][0]["competitors"]
+        home = next(int(c["id"]) for c in competitors if c["homeAway"] == "home")
+        box = _box(monkeypatch, gid)
+        for section, team in (
+            ("team", "pos_team"),
+            ("situational", "pos_team"),
+            ("drives", "pos_team"),
+            ("defensive", "def_pos_team"),
+        ):
+            if [r[team] for r in box[section]][:1] != [home]:
+                wrong.append((gid, section))
+        for section in SECTIONS:
+            rows = box[section]
+            keys = [k for k in _SUM_KEYS[section] if rows and k in rows[0]]
+            if rows != _key_sorted(rows, keys):
+                wrong.append((gid, section))
+        assert box["team_usage"] and box["st_kickers"], f"{gid}: the capture must exercise the sorts"
+    assert not wrong, f"(game, section) out of order: {wrong}"
 
 
 #: committed captures whose team / situational / defensive / drives / usage / special-teams tables
