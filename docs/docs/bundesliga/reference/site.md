@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # BUNDESLIGA — ESPN site API (v2)
 
-`sportsdataverse.bundesliga` — 24 endpoints.
+`sportsdataverse.soccer.bundesliga` — 24 endpoints.
 
 ## espn_bundesliga_scoreboard
 

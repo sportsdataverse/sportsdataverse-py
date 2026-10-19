@@ -233,3 +233,50 @@ def test_flat_reference_page_heads_with_the_family_notes():
     head = page.split("\n## ", 1)[0]
     assert "> **Note:**" in head
     assert "> **Note:**" not in _gen.render_reference_page("nhl", "nhl_api_web").split("\n## ", 1)[0]
+
+
+def test_a_dict_of_frames_autodoc_function_renders_one_table_per_frame():
+    """B-M32: the live boxscore returns six frames; its Returns section is six tables, not one flat
+    table of ``game.game_id``-style names."""
+    groups = generate._autodoc_groups("nba", ["nba_live_boxscore"])
+    fn = groups[0]["functions"][0]
+    assert [f["section"] for f in fn["return_frames"]] == [
+        "game",
+        "officials",
+        "home_players",
+        "away_players",
+        "home_team",
+        "away_team",
+    ]
+    assert fn["return_columns"] == [] and fn["return_unverified"] == ""
+    assert not any("." in c["name"] for f in fn["return_frames"] for c in f["columns"])
+
+
+def test_the_espn_reference_pages_document_only_the_wrappers_their_names_run():
+    """B-M31: in seven leagues a hand-written ``espn_<lg>_calendar`` (and wbb/wnba standings, roster,
+    draft) holds the package-level name, so the generated wrapper's block documented a signature and
+    table that name never runs. The reference pages document a view only when the package name
+    resolves to the generated ``*_espn_ext`` wrapper; the autodoc page takes the hand-written one."""
+    import importlib
+
+    cfg = generate.spec.load_leagues(generate.ENDPOINTS / "leagues.yaml")
+    params = generate.spec.load_parameters(generate.ENDPOINTS / "parameters.yaml")
+    apis = [generate.spec.load_espn_api(generate.ENDPOINTS / f"{a}.yaml", params) for a in generate.ESPN_APIS]
+    wrong = []
+    for lg in cfg.leagues:
+        pkg = importlib.import_module(f"sportsdataverse.{generate._league_module(lg.prefix)}")
+        for v in generate._documented_espn_views(lg, apis, cfg.hosts):
+            if not getattr(getattr(pkg, v.fn_name, None), "__module__", "").endswith("_espn_ext"):
+                wrong.append(v.fn_name)
+    assert wrong == []
+    cfb = next(lg for lg in cfg.leagues if lg.prefix == "cfb")
+    assert "espn_cfb_calendar" in {v.fn_name for v in generate._espn_league_views(cfb, apis, cfg.hosts)}
+    assert "## espn_cfb_calendar" not in generate.render_reference_page("cfb", "espn_site_v2").splitlines()
+
+
+def test_atrium_end_year_is_documented_not_allowlisted():
+    """R901-2: ``atrium_end_year`` is user-facing (every atrium wrapper tells callers to use it), so its
+    parser module is exempt from the ``_parsers`` leak rule and it gets an autodoc reference block."""
+    assert "atrium_end_year" in generate._autodoc_names("atrium", "")
+    assert "atrium_end_year" not in generate._coverage_allowlist().get("atrium", set())
+    assert generate._is_documented("atrium_end_year", generate._docs_corpus("atrium"))

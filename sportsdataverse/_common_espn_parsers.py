@@ -2251,7 +2251,7 @@ def parse_summary(payload: Dict, section: str = None, return_as_pandas: bool = F
     """Dispatcher: parse one section of a Site v2 summary payload.
 
     With ``section=None`` (default), returns a ``dict`` of every parsable
-    sub-frame keyed by section name (17 sections currently). Sections
+    sub-frame keyed by section name (21 sections currently). Sections
     that are empty in the payload are still present with zero-row frames
     so downstream code can rely on the key set.
 

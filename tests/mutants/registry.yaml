@@ -281,8 +281,8 @@
 - id: codegen-runtime-use-pyarrow
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'return pl.read_parquet(io.BytesIO(data), use_pyarrow=True)'
-  mutant: 'return pl.read_parquet(io.BytesIO(data))'
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(data)'
   test: tests/codegen/test_runtime_release.py -k pyarrow
   expected: kill
   note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
@@ -1608,6 +1608,137 @@
   expected: kill
   note: a userinfo user part that may cross colons rescans the rest of the text from every ://, so 4x the input costs ~16x
 
+# --- codegen 3.9 PR3: the generator documents what runs (A-M3, B-M31, B-M32, A-L10, A-L13, A-L40-A-L43, A-L45, B-GB-02)
+- id: codegen-is-documented-needs-a-heading
+  group: codegen-runtime
+  finding: A-M3
+  file: tools/codegen/generate.py
+  snippet: '    return name in _corpus_headings(corpus)'
+  mutant: '    return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None'
+  test: tests/codegen/test_is_documented.py tests/codegen/test_check.py -k "heading or reference_block"
+  expected: kill
+  note: a word mention (a returns-table cell, a note) counted as documentation and left 21 public names with no reference block
+
+- id: codegen-docs-skip-shadowed-espn-views
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]'
+  mutant: '    return _espn_league_views(league, apis, hosts)'
+  test: tests/codegen/test_docs.py::test_the_espn_reference_pages_document_only_the_wrappers_their_names_run
+  expected: kill
+  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function
+
+- id: codegen-autodoc-dict-of-frames-tables
+  group: codegen-runtime
+  finding: B-M32
+  file: tools/codegen/generate.py
+  snippet: '    return list(d.get("frames") or []) if d.get("kind") == "frames" else []'
+  mutant: '    return []'
+  test: tests/codegen/test_docs.py::test_a_dict_of_frames_autodoc_function_renders_one_table_per_frame
+  expected: kill
+  note: the live boxscore returns six frames; its Returns section must be six tables
+
+- id: codegen-one-run-converges
+  group: codegen-runtime
+  finding: A-L10
+  file: tools/codegen/generate.py
+  snippet: '    subprocess.run([sys.executable, str(Path(__file__).resolve()), "--parsed-and-docs"], check=True)'
+  mutant: '    main(["--parsed-and-docs"])'
+  test: tests/codegen/test_check.py::test_a_full_run_renders_parsed_and_docs_in_a_fresh_interpreter
+  expected: kill
+  note: rendering parsed/docs in the process that imported the package before rewriting it took a second run
+
+- id: codegen-vocab-getters-nba-stats
+  group: codegen-runtime
+  finding: A-L13
+  file: tools/codegen/generate.py
+  snippet: '        "sportsdataverse.nba.nba_stats_runtime",'
+  mutant: '        "sportsdataverse.nba.nba_stats_runtime_",'
+  test: tests/codegen/test_runtime_errors.py::test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises
+  expected: kill
+  note: 237 of 239 nba_stats / wnba_stats wrappers documented no Raises while their runtime raised the vocabulary
+
+- id: codegen-docstring-escapes-yaml-text
+  group: codegen-runtime
+  finding: A-L40
+  file: tools/codegen/generate.py
+  snippet: '    return re.sub(r''"{3,}'', lambda m: ''\\"'' * len(m.group()), text.replace("\\", "\\\\"))'
+  mutant: '    return text.replace("\\", "\\\\").replace(''"""'', ''\\"""'')'
+  test: tests/codegen/test_check.py::test_build_docstring_yaml_text_with_a_backslash_or_triple_quote_compiles_verbatim
+  expected: kill
+  note: a backslash in YAML text warned, and a triple quote closed the docstring early; the mutant is the first fix, which a run of four quotes still broke (R901-3)
+
+- id: summary-docstring-section-count
+  group: codegen-runtime
+  finding: A-L41
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    sub-frame keyed by section name (21 sections currently). Sections'
+  mutant: '    sub-frame keyed by section name (17 sections currently). Sections'
+  test: tests/test_espn_universal_parsers.py::test_summary_docstring_counts_the_registered_sections
+  expected: kill
+  note: the docstring said 17 sections while SUMMARY_SECTION_PARSERS held 21
+
+- id: codegen-home-module-names-the-home
+  group: codegen-runtime
+  finding: A-L42
+  file: tools/codegen/generate.py
+  snippet: '    return f"sportsdataverse.{_league_module(prefix)}"'
+  mutant: '    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"'
+  test: tests/codegen/test_league_registry.py::test_no_generated_page_or_example_names_a_deprecated_import_path
+  expected: kill
+  note: 21 generated Examples imported, and 146 pages named, a deprecated top-level alias
+
+- id: codegen-flat-api-doc-nflpro-label
+  group: codegen-runtime
+  finding: A-L43
+  file: tools/codegen/generate.py
+  snippet: '    "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",'
+  mutant: '    "nflpro_": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",'
+  test: tests/codegen/test_league_registry.py::test_every_flat_api_page_has_a_label_and_every_label_a_page
+  expected: kill
+  note: the nflpro page was titled "NFL — nflpro"
+
+- id: codegen-hockeytech-one-league-list
+  group: codegen-runtime
+  finding: A-L45
+  file: tools/codegen/generate.py
+  snippet: '    **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},'
+  mutant: '    **{lg: "fastRhockey" for lg in ("pwhl", "phf", "ahl")},'
+  test: tests/codegen/test_league_registry.py::test_hockeytech_module_leagues_are_the_registry_minus_pwhl
+  expected: kill
+  note: the HockeyTech league list was hand-copied twice
+
+- id: fox-empty-dedicated-table-is-zero-rows
+  group: codegen-runtime
+  finding: B-GB-02
+  file: sportsdataverse/fox/fox_api_parsers.py
+  snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
+  mutant: '        if rows:'
+  test: tests/fox/test_fox_api.py::test_an_empty_standings_table_is_a_zero_row_frame_not_the_page_nav
+  expected: kill
+  note: an emptied real standings table returned the page's nav/section lists (11 x 7) through the flattener
+
+- id: fox-dedicated-any-layout-key
+  group: codegen-runtime
+  finding: B-GB-02
+  file: sportsdataverse/fox/fox_api_parsers.py
+  snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
+  mutant: '        if rows or (rows is not None and isinstance(raw, dict) and all(k in raw for k in keys)):'
+  test: tests/fox/test_fox_api.py::test_an_empty_nav_layout_is_a_zero_row_frame
+  expected: kill
+  note: R901-4, the nav parser reads navItems OR groups; conferences carries only groups
+
+- id: codegen-atrium-parsers-autodoc-exception
+  group: codegen-runtime
+  finding: A-M3
+  file: tools/codegen/generate.py
+  snippet: '        "sportsdataverse.basketball.atrium.atrium_parsers",'
+  mutant: '        "sportsdataverse.basketball.atrium.atrium_parsers_",'
+  test: tests/codegen/test_docs.py::test_atrium_end_year_is_documented_not_allowlisted
+  expected: kill
+  note: R901-2, atrium_end_year is user-facing and must get a reference block, not an allowlist entry
+
 # --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
 - id: release-classify-outside-transport-errors
   group: codegen-runtime
@@ -1718,7 +1849,7 @@
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
   snippet: '    return _parse_release(url, data)  # the asset, read after the probe'
-  mutant: '    return pl.read_parquet(__import__("io").BytesIO(data))'
+  mutant: '    return pl.read_parquet(data)'
   test: tests/test_runtime_release_classify.py -k second_read_goes_through_pyarrow
   expected: kill
   note: R898-1, the read after the probe must keep use_pyarrow too (polars 2.0 suffix range -> 501)
@@ -1798,3 +1929,23 @@
   test: tests/nfl/test_nfl_player_stats_weekly.py -k seasons_none_is_the_current
   expected: kill
   note: owner ruling (round 3) -- load_nfl_player_stats() is the current season, not ~28 assets since 1999
+
+- id: release-parse-copies-the-buffer
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(io.BytesIO(data.getvalue()), use_pyarrow=True)'
+  test: tests/test_runtime_release_classify.py -k parse_reads_the_buffer_the_fetch_returned
+  expected: kill
+  note: R898-14, a second reference to the bytes made polars copy the whole asset (+31 MB on play_by_play_2025)
+
+- id: release-read-without-timeout
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'with urllib.request.urlopen(url, timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)) as f:'
+  mutant: 'with urllib.request.urlopen(url) as f:'
+  test: tests/test_runtime_release_classify.py -k passes_the_http_timeout
+  expected: kill
+  note: R898-15, a server that accepted and never answered hung the release read

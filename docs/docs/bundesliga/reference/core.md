@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # BUNDESLIGA — ESPN core API (v2)
 
-`sportsdataverse.bundesliga` — 82 endpoints.
+`sportsdataverse.soccer.bundesliga` — 82 endpoints.
 
 ## Game
 

@@ -6,6 +6,41 @@ description: "MLB — additional Python functions — ESPN — function referenc
 ---
 # MLB — additional Python functions — ESPN
 
+### espn_mlb_calendar {#espn_mlb_calendar}
+
+`espn_mlb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_mlb_calendar - look up the MLB game-day calendar for a season.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Season year (e.g. 2024). |
+| `ondays` | `bool` | `None` | When True, returns the date-only list ESPN exposes; when False, returns a one-row-per-date frame with `eventDate` plus parsed year/month/day. |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. |
+
+**Returns**
+
+Polars dataframe of valid game dates.
+
+| col_name | type | description |
+|---|---|---|
+| `event_date` | character | Event date-time in ISO 8601 (e.g. '2017-07-11T00:00:00Z'). |
+| `year` | integer | Season (4-digit year). |
+| `month` | integer | Month of the game day, as an integer (1-12). |
+| `day` | integer | Day of the month of the game day, as an integer. |
+| `season` | integer | Season year. |
+
+**Example**
+
+```python
+from sportsdataverse.mlb import espn_mlb_calendar
+cal = espn_mlb_calendar(season=2024)
+print(cal.shape)
+cal.head()
+```
+
 ### espn_mlb_game_rosters {#espn_mlb_game_rosters}
 
 `espn_mlb_game_rosters(game_id: 'int', raw: 'bool' = False, return_as_pandas: 'bool' = False, **kwargs)`

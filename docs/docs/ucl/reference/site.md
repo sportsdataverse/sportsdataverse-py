@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UCL — ESPN site API (v2)
 
-`sportsdataverse.ucl` — 24 endpoints.
+`sportsdataverse.soccer.ucl` — 24 endpoints.
 
 ## espn_ucl_scoreboard
 

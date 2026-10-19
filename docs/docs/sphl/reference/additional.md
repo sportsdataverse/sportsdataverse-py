@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # SPHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.sphl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.sphl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

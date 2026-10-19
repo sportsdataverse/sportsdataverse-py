@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UEL — ESPN site API (v2)
 
-`sportsdataverse.uel` — 24 endpoints.
+`sportsdataverse.soccer.uel` — 24 endpoints.
 
 ## espn_uel_scoreboard
 

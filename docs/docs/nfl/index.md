@@ -15,21 +15,21 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | [Sleeper fantasy API](#sleeper-fantasy-api) | `api.sleeper.app` | 15 | none |
 | [PFF Developer API](#pff-developer-api) | `api.pff.com` | 68 | API key (SDV_PY_PFF_API_KEY) |
 | [PFF Premium Stats (LEGACY)](#pff-premium-stats-legacy) | `premium.pff.com` | 46 | cookie (legacy) |
-| [nflverse data releases](#nflverse-data-releases) | `github.com` | 46 | none |
+| [nflverse data releases](#nflverse-data-releases) | `github.com` | 48 | none |
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 21 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 25 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 167 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 170 | — |
 
 ## ESPN {#espn}
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN site API (v2)](reference/site) | 23 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 84 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/espn) | 6 |
+| [Hand-written wrappers](reference/additional/espn) | 7 |
 
 ## NFL.com Shield API {#nfl-com-shield-api}
 
@@ -42,7 +42,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 
 | Reference | Functions |
 |---|---:|
-| [nflpro](reference/nflpro) | 16 |
+| [NFL Pro API (pro.nfl.com, NFL+ Premium account)](reference/nflpro) | 16 |
 | [Hand-written wrappers](reference/additional/nfl-pro) | 16 |
 
 ## Sleeper fantasy API {#sleeper-fantasy-api}
@@ -68,7 +68,7 @@ description: "sdv-py NFL: endpoint references, dataset loaders and parsers for N
 | Reference | Functions |
 |---|---:|
 | [nflverse data releases](reference/loaders) | 8 |
-| [Hand-written wrappers](reference/additional/nflverse-data-releases) | 38 |
+| [Hand-written wrappers](reference/additional/nflverse-data-releases) | 40 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -230,12 +230,14 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_nfl_weekly_rosters`](reference/loaders/other#load_nfl_weekly_rosters) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
 | [`load_officials`](reference/additional/nflverse-data-releases-3#load_officials) | [`load_officials`](https://nflreadr.nflverse.com/reference/load_officials.html) |
 | [`load_participation`](reference/additional/nflverse-data-releases-3#load_participation) | [`load_participation`](https://nflreadr.nflverse.com/reference/load_participation.html) |
-| [`load_pfr_advstats`](reference/additional/nflverse-data-releases-3#load_pfr_advstats) | [`load_pfr_advstats`](https://nflreadr.nflverse.com/reference/load_pfr_advstats.html) |
-| [`load_player_stats`](reference/additional/nflverse-data-releases-3#load_player_stats) | [`load_player_stats`](https://nflreadr.nflverse.com/reference/load_player_stats.html) |
-| [`load_players`](reference/additional/nflverse-data-releases-3#load_players) | [`load_players`](https://nflreadr.nflverse.com/reference/load_players.html) |
-| [`load_rosters_weekly`](reference/additional/nflverse-data-releases-3#load_rosters_weekly) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
-| [`load_schedules`](reference/additional/nflverse-data-releases-3#load_schedules) | [`load_schedules`](https://nflreadr.nflverse.com/reference/load_schedules.html) |
-| [`load_snap_counts`](reference/additional/nflverse-data-releases-3#load_snap_counts) | [`load_snap_counts`](https://nflreadr.nflverse.com/reference/load_snap_counts.html) |
+| [`load_pbp`](reference/additional/nflverse-data-releases-3#load_pbp) | [`load_pbp`](https://nflreadr.nflverse.com/reference/load_pbp.html) |
+| [`load_pfr_advstats`](reference/additional/nflverse-data-releases-4#load_pfr_advstats) | [`load_pfr_advstats`](https://nflreadr.nflverse.com/reference/load_pfr_advstats.html) |
+| [`load_player_stats`](reference/additional/nflverse-data-releases-4#load_player_stats) | [`load_player_stats`](https://nflreadr.nflverse.com/reference/load_player_stats.html) |
+| [`load_players`](reference/additional/nflverse-data-releases-4#load_players) | [`load_players`](https://nflreadr.nflverse.com/reference/load_players.html) |
+| [`load_rosters`](reference/additional/nflverse-data-releases-4#load_rosters) | [`load_rosters`](https://nflreadr.nflverse.com/reference/load_rosters.html) |
+| [`load_rosters_weekly`](reference/additional/nflverse-data-releases-4#load_rosters_weekly) | [`load_rosters_weekly`](https://nflreadr.nflverse.com/reference/load_rosters_weekly.html) |
+| [`load_schedules`](reference/additional/nflverse-data-releases-4#load_schedules) | [`load_schedules`](https://nflreadr.nflverse.com/reference/load_schedules.html) |
+| [`load_snap_counts`](reference/additional/nflverse-data-releases-4#load_snap_counts) | [`load_snap_counts`](https://nflreadr.nflverse.com/reference/load_snap_counts.html) |
 | [`load_team_stats`](reference/additional/nflverse-data-releases-4#load_team_stats) | [`load_team_stats`](https://nflreadr.nflverse.com/reference/load_team_stats.html) |
 | [`load_teams`](reference/additional/nflverse-data-releases-4#load_teams) | [`load_teams`](https://nflreadr.nflverse.com/reference/load_teams.html) |
 | [`load_trades`](reference/additional/nflverse-data-releases-4#load_trades) | [`load_trades`](https://nflreadr.nflverse.com/reference/load_trades.html) |

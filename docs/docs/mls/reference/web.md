@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MLS — ESPN web API (v3)
 
-`sportsdataverse.mls` — 5 endpoints.
+`sportsdataverse.soccer.mls` — 5 endpoints.
 
 ## espn_mls_player_overview
 

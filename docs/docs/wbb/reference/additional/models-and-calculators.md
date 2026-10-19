@@ -546,6 +546,19 @@ populates it.
 | `origin` | `Optional[str]` |  | The player's hometown/prior-school text, if the source table has that column (v1 rosters only). |
 | `role` | `Optional[str]` |  | Reserved for a later phase; always `None` from `parse_roster` (see above). |
 
+### Score {#Score}
+
+`Score(scored: 'int', allowed: 'int') -> None`
+
+Points scored / allowed (`Game.Score`, `Game.scala:22`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `scored` | `int` |  | Points scored by the team under analysis. |
+| `allowed` | `int` |  | Points scored by the opponent. |
+
 ### ScoreInfo {#ScoreInfo}
 
 `ScoreInfo(start: 'Score', end: 'Score', start_diff: 'int', end_diff: 'int') -> None`
@@ -724,6 +737,18 @@ A team's season identifier (`TeamSeasonId`, `TeamSeasonId.scala`).
 |---|---|---|---|
 | `team` | `TeamId` |  | The team playing the season. |
 | `year` | `Year` |  | The year the season ends. |
+
+### Year {#Year}
+
+`Year(value: 'int') -> None`
+
+CBB season, named by the year it ends (`Year`, `Year.scala`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `value` | `int` |  | The ending year of the season. |
 
 ### adjust_efficiency {#adjust_efficiency}
 

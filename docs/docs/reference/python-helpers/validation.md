@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Validation"
 sidebar_label: "Validation"
-sidebar_position: 12
+sidebar_position: 14
 description: "Package — additional Python functions — Validation — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Validation

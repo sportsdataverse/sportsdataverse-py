@@ -585,6 +585,45 @@ ratio = assert_rating_scale(ratings)
 assert ratio < 1.6, "refit the constants before trusting predictions"
 ```
 
+### blue_chip_ratio {#blue_chip_ratio}
+
+`blue_chip_ratio(recruits: 'pl.DataFrame', *, window: 'int' = 4, division: 'str' = 'fbs') -> 'pl.DataFrame'`
+
+Blue-chip ratio per team-season over a trailing window of recruiting classes.
+
+Bud Elliott's blue-chip ratio: the share of a roster's recruits rated at or above
+the division's blue-chip star floor (4+ stars for FBS). Each recruiting class
+contributes to the `window` seasons it is roster-eligible for, so the season-S
+ratio aggregates classes S-window+1 .. S.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `recruits` | `DataFrame` |  | Per-recruit frame from `load_recruit_classes` (`season`, `team_id`, `recruit_id`, `stars`, ...). |
+| `window` | `int` | `4` | Number of trailing recruiting classes eligible per season. |
+| `division` | `str` | `'fbs'` | Division slug for `get_constants` (blue-chip star floor). |
+
+**Returns**
+
+Per `(season, team_id)`: `blue_chip_ratio` (Float64), `n_recruits` (Int64), `n_blue_chip` (Int64). Zero-row (typed) for empty input.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season (4-digit year). |
+| `team_id` | character | ESPN team id. |
+| `blue_chip_ratio` | double | Share of the team's recruits in the trailing window rated at or above the division's blue-chip star floor (4+ stars for FBS). |
+| `n_recruits` | integer | Recruits in the trailing window of classes eligible for this season. |
+| `n_blue_chip` | integer | Recruits in that window rated at or above the blue-chip star floor. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb.cfb_roster_talent import blue_chip_ratio, load_recruit_classes
+bcr = blue_chip_ratio(load_recruit_classes([2020, 2021, 2022, 2023]))
+bcr.filter(pl.col("season") == 2023).sort("blue_chip_ratio", descending=True).head()
+```
+
 ### calculate_completion_probability {#calculate_completion_probability}
 
 `calculate_completion_probability(df, *, season=None, return_as_pandas=False)`
@@ -921,41 +960,4 @@ cfb.cfb_adjusted_epa(pbp).sort("net_adj_epa_rank").head()
 # NFL team summaries (the pre-#598 method; reads wp_before)
 
 cfb.cfb_adjusted_epa(nfl_plays, method="pre598")
-```
-
-### cfb_adjusted_epa_by_game {#cfb_adjusted_epa_by_game}
-
-`cfb_adjusted_epa_by_game(plays: 'pl.DataFrame | pd.DataFrame', *, ridge_lambda: 'float | None' = None, method: "Literal['current', 'pre598']" = 'current', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
-
-Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game.
-
-For each week `w` the opponent-strength ridge is fit on `_FIT_WP`-band plays
-from **weeks before `w` only**, then that week's games are adjusted with
-those as-of strengths -- so the value uses no future information and is valid
-as an in-season power-rating / model feature. Week 1 (no prior) yields null
-adjustments; not-yet-seen opponents fall back to the league baseline (an
-average team), and teams seen on few plays are shrunk most of the way there.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `plays` | `DataFrame \| DataFrame` |  | A cfbfastR-schema play-by-play frame (polars or pandas) with the module-docstring columns **plus** `week`. One season at a time. |
-| `ridge_lambda` | `float \| None` | `None` | Ridge penalty. Under `method="current"` it is per play of a full team season: each team keeps `n / (n + ridge_lambda * 577)` of its own signal for its `n` fit plays and is shrunk toward the league average by the rest (~7% at a full season, most of it on a handful of plays); must be > 0. Under `method="pre598"` it is passed unscaled to the old standardized ridge (the per-observation penalty; no 577 scaling, no positivity check). `None` (default) means 0.075 for `"current"` (the owner's choice, `_ADJ_EPA_LAMBDA`) and 0.035 for `"pre598"`. |
-| `method` | `Literal['current', 'pre598']` | `'current'` | `"current"` (default) or `"pre598"`, the fit this function used before #598 (see `cfb_adjusted_epa`). pre598 also keeps the old week order: it sorts by `week` alone and does not read `seasonType`, so postseason games that restart at week 1 are fit with (and leak into) the regular season, exactly as before. It exists for nfl-data's NFL team summaries, is not validated for NFL either, and is kept only for continuity until NFL is validated. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas `DataFrame` instead of polars. |
-
-**Returns**
-
-One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `team_id`, `opponent_id`, `pos_team`, `raw_off_epa`, `adj_off_epa`, `raw_def_epa`, `adj_def_epa`, `off_strength_faced` (opponent offense), `def_strength_faced` (opponent defense), `net_adj_epa`. The `adj_*` / `net` columns are null for week 1 (and any week with no prior fit).
-
-No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
-
-**Example**
-
-```python
-import sportsdataverse.cfb as cfb
-pbp = cfb.load_cfb_pbp(seasons=[2023])
-tg = cfb.cfb_adjusted_epa_by_game(pbp)
-tg.filter(pl.col("week") >= 5).sort("net_adj_epa", descending=True).head()
 ```

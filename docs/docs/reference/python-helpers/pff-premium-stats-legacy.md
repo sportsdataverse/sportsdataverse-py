@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues"
 sidebar_label: "PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues"
-sidebar_position: 1
+sidebar_position: 2
 description: "Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — PFF Premium Stats (LEGACY): aaf_facet–aaf_leagues

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UFL — ESPN site API (v2)
 
-`sportsdataverse.ufl` — 24 endpoints.
+`sportsdataverse.football.ufl` — 24 endpoints.
 
 ## espn_ufl_scoreboard
 

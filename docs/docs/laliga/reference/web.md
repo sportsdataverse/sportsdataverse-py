@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LALIGA — ESPN web API (v3)
 
-`sportsdataverse.laliga` — 5 endpoints.
+`sportsdataverse.soccer.laliga` — 5 endpoints.
 
 ## espn_laliga_player_overview
 

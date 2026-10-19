@@ -26,6 +26,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [espn_nba_calendar](additional/espn.md#espn_nba_calendar) | espn_nba_calendar - look up the NBA calendar for a given season from ESPN |
 | [espn_nba_game_rosters](additional/espn.md#espn_nba_game_rosters) | espn_nba_game_rosters() - Pull the game by id. |
 | [espn_nba_pbp](additional/espn.md#espn_nba_pbp) | espn_nba_pbp() - Pull the game by id - Data from API endpoints - `nba/playbyplay`, `nba/summary` |
 | [scoreboard_event_parsing](additional/espn.md#scoreboard_event_parsing) | Internal helper that flattens an ESPN NBA scoreboard event dict into a |

@@ -9,13 +9,15 @@ description: "sdv-py ELH: endpoint references, dataset loaders and parsers for E
 
 | Source | APIs / hosts | Functions | Auth |
 |---|---|---:|---|
-| [hokej.cz (Czech Extraliga)](#hokej-cz-czech-extraliga) | `s3-eu-west-1.amazonaws.com` | 8 | none |
+| [hokej.cz (Czech Extraliga)](#hokej-cz-czech-extraliga) | `s3-eu-west-1.amazonaws.com` | 9 | none |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 1 | — |
 
 ## hokej.cz (Czech Extraliga) {#hokej-cz-czech-extraliga}
 
 | Reference | Functions |
 |---|---:|
 | [Czech Extraliga (hokej.cz S3 bucket + eSports Media scoreboard)](reference/elh) | 8 |
+| [Hand-written wrappers](reference/additional) | 1 |
 
 ## Examples
 

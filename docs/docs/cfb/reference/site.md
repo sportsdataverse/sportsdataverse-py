@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # CFB — ESPN site API (v2)
 
-`sportsdataverse.cfb` — 25 endpoints.
+`sportsdataverse.cfb` — 24 endpoints.
 
 ## espn_cfb_scoreboard
 
@@ -466,33 +466,6 @@ ESPN endpoint.
 
 ```python
 espn_cfb_summary()
-```
-
-_Last validated n/a._
-
-## espn_cfb_calendar
-
-ESPN endpoint.
-
-**Endpoint URL:** `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar`
-
-**Valid URL:** [https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar](https://site.api.espn.com/apis/site/v2/sports/football/college-football/calendar)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#espn_cfb_calendar-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no capture: 404 in nba, nfl, mlb, nhl, wnba, cfb, mbb, wbb with the documented example arguments (2026-10-07).
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#espn_cfb_calendar-example}
-
-```python
-espn_cfb_calendar()
 ```
 
 _Last validated n/a._

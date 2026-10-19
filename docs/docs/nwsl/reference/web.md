@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NWSL — ESPN web API (v3)
 
-`sportsdataverse.nwsl` — 5 endpoints.
+`sportsdataverse.soccer.nwsl` — 5 endpoints.
 
 ## espn_nwsl_player_overview
 

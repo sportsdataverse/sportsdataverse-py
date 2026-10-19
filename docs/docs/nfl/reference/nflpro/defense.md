@@ -1,11 +1,11 @@
 ---
-title: "NFL — nflpro — Defense"
+title: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense"
 sidebar_label: "Defense"
 sidebar_position: 1
-description: "NFL — nflpro — Defense — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — nflpro — Defense
+# NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Defense
 
 ## nfl_pro_defense_overview_season
 

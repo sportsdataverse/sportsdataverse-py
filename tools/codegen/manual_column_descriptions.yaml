@@ -70355,3 +70355,89 @@ ibba_segev_game_crosswalk:
 pleague_team_crosswalk:
   team_id: P. LEAGUE+ site team id (1-8), stable across seasons and renames.
   team_uuid: Preciser team uuid of the same club (team_uuid of the pleague_preciser frames).
+espn_cfb_calendar:
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
+  week_label: Week label as ESPN's calendar names it, e.g. Week 1.
+  week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
+  week_detail: Date span of the week as display text, e.g. Aug 22-Sep 7.
+  week_start_date: Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z).
+  week_end_date: End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week).
+  season_type_label: Name of the season segment the week belongs to, e.g. Regular Season or Postseason.
+  season_type_start_date: Start of that season segment, an ISO 8601 UTC timestamp string.
+  season_type_end_date: End of that season segment, an ISO 8601 UTC timestamp string.
+espn_nfl_calendar:
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
+  week_label: Week label as ESPN's calendar names it, e.g. Week 1.
+  week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
+  week_detail: Date span of the week as display text.
+  week_start_date: Start of the week window, an ISO 8601 UTC timestamp string.
+  week_end_date: End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week).
+  season_type_label: Name of the season segment the week belongs to, e.g. Regular Season.
+  season_type_start_date: Start of that season segment, an ISO 8601 UTC timestamp string.
+  season_type_end_date: End of that season segment, an ISO 8601 UTC timestamp string.
+espn_mbb_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z).
+  month: Month of the calendar day as a two-digit string, e.g. 11.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_wbb_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z).
+  month: Month of the calendar day as a two-digit string, e.g. 11.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_nba_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string.
+  month: Month of the calendar day as a two-digit string.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_wnba_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string.
+  month: Month of the calendar day as a two-digit string.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_mlb_calendar:
+  month: Month of the game day, as an integer (1-12).
+  day: Day of the month of the game day, as an integer.
+espn_wbb_standings:
+  conference_abbreviation: Abbreviation of the team's conference as ESPN's standings name it.
+  games_back: Games behind the conference leader (0 for the leader).
+  avg_points_for: Points the team scored per game.
+  avg_points_against: Points the team allowed per game.
+  division_wins: Wins against division opponents, as ESPN's standings report them.
+  division_losses: Losses against division opponents, as ESPN's standings report them.
+espn_wnba_standings:
+  conference_abbreviation: Conference abbreviation, E (Eastern) or W (Western).
+  games_back: Games behind the conference leader (0 for the leader).
+  avg_points_for: Points the team scored per game.
+  avg_points_against: Points the team allowed per game.
+  division_wins: Wins against division opponents; the WNBA has no divisions, so ESPN sends 0.
+  division_losses: Losses against division opponents; the WNBA has no divisions, so ESPN sends 0.
+espn_wnba_draft:
+  athlete_first_name: Drafted player's first name; null when ESPN's draft feed omits it (display_name carries the name).
+  athlete_last_name: Drafted player's last name; null when ESPN's draft feed omits it.
+  athlete_full_name: Drafted player's full name; null when ESPN's draft feed omits it.
+  athlete_position_id: ESPN position id of the drafted player.
+  athlete_height: Drafted player's height as display text, e.g. 6'0".
+  athlete_weight: Drafted player's weight in pounds; null when ESPN does not list it.
+  athlete_age: Drafted player's age at the draft; null when ESPN does not list it.
+  athlete_birth_city: Drafted player's birth city; null when ESPN does not list it.
+  athlete_birth_state: Drafted player's birth state; null when ESPN does not list it.
+  school_name: Name of the player's school or club before the draft, e.g. Huskies, or a country for an international pick.
+  school_abbreviation: Abbreviation of that school or club, e.g. CONN or ND.
+blue_chip_ratio:
+  blue_chip_ratio: Share of the team's recruits in the trailing window rated at or above the division's blue-chip star floor (4+ stars for FBS).
+  n_recruits: Recruits in the trailing window of classes eligible for this season.
+  n_blue_chip: Recruits in that window rated at or above the blue-chip star floor.
+x_era:
+  x_woba: Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls).
+  x_era: Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines.
+leverage_index:
+  inning_capped: Inning of the state bucket, capped at 9 (extra innings share the ninth's bucket).
+  half: Half inning of the state bucket, top or bottom.
+  base_state: Base occupancy of the state as three characters (first, second, third), e.g. 1_3 for runners on first and third.
+  outs_start: Outs before the play, 0-2.
+  score_diff_bucket: Home minus away score at the state, clipped to [-6, 6].
+load_rosters:
+  status: Roster status code nflverse assigns the player for that season, e.g. ACT (active), RES (reserve) or INA (inactive).
+elh_game_ids:
+  hokejcz_game_id: hokej.cz game id, the file name of the match/{season}/full/{id}.json key.
+  season: Season as its END year (the season the call asked for).
+  key: Full S3 object key of the play-by-play file.
+  last_modified: Time the file was last written, an ISO 8601 UTC timestamp string from the S3 listing.
+  size: File size in bytes; a file of a few hundred bytes is written ahead of a game and holds no events.

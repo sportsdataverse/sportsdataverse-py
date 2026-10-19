@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # WWC — ESPN web API (v3)
 
-`sportsdataverse.wwc` — 5 endpoints.
+`sportsdataverse.soccer.wwc` — 5 endpoints.
 
 ## espn_wwc_player_overview
 

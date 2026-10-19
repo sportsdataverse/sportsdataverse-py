@@ -35,15 +35,17 @@ captures into `tests/fixtures/`; `gen_*_descriptions.py` mine column description
 ## API generation
 
 A no-arg `uv run python tools/codegen/generate.py` runs six stages in order, and
-each one `ruff format`s exactly what it wrote:
+each one `ruff format`s exactly what it wrote. The last two read the package's live
+signatures and docstrings, so they run in a fresh interpreter after the first four have
+written it: one run converges, with no second run needed to pick up its own output.
 
 | Stage | Writes |
 |---|---|
 | `build()` | the `tools/codegen/_generated/` staging copies |
 | `build_live()` | `sportsdataverse/<league>/<prefix>_espn_ext.py` + the container `__init__` files |
-| `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
 | `build_flat_live()` | `sportsdataverse/<league>/<stem>.py` from `api_module.py.jinja`; a league with a `group` in `leagues.yaml` nests under it (`soccer/mls/`), and a home in `generate._NESTED_HOMES` (hockey) or `generate._BASKETBALL_HOMES` (international basketball) under its container (`hockey/sihf/`, `hockey/liiga/`, `basketball/fiba_hub/`; DEL's package is `hockey/del_/` because `del` is a Python keyword) |
 | `build_loaders_live()` | `sportsdataverse/<lg>/<lg>_loaders.py` for the 8 `_GENERATED_LOADER_LEAGUES` |
+| `build_parsed_live()` | `sportsdataverse/parsed/*.py` (the deprecated aliases) |
 | `build_docs()` | the docs tree (below) |
 
 Refresh flags are separate, deliberate, mostly-networked passes:

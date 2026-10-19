@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # XFL — ESPN core API (v2)
 
-`sportsdataverse.xfl` — 82 endpoints.
+`sportsdataverse.football.xfl` — 82 endpoints.
 
 ## Game
 

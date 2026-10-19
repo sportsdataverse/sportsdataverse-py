@@ -3,7 +3,7 @@ title: COLLEGE_BASEBALL
 sidebar_label: COLLEGE_BASEBALL
 description: "sdv-py COLLEGE_BASEBALL: endpoint references, dataset loaders and parsers for COLLEGE_BASEBALL in the SportsDataverse Python package."
 ---
-# COLLEGE_BASEBALL (`sportsdataverse.college_baseball`)
+# COLLEGE_BASEBALL (`sportsdataverse.baseball.college_baseball`)
 
 ## Data sources
 

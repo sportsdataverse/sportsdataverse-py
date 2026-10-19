@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — stats.ncaa.org"
 sidebar_label: "stats.ncaa.org"
-sidebar_position: 7
+sidebar_position: 8
 description: "Package — additional Python functions — stats.ncaa.org — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — stats.ncaa.org
