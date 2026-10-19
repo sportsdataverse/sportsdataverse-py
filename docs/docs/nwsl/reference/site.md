@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NWSL — ESPN site API (v2)
 
-`sportsdataverse.nwsl` — 24 endpoints.
+`sportsdataverse.soccer.nwsl` — 24 endpoints.
 
 ## espn_nwsl_scoreboard
 

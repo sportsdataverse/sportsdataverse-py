@@ -3,7 +3,7 @@ title: LIGAMX
 sidebar_label: LIGAMX
 description: "sdv-py LIGAMX: endpoint references, dataset loaders and parsers for LIGAMX in the SportsDataverse Python package."
 ---
-# LIGAMX (`sportsdataverse.ligamx`)
+# LIGAMX (`sportsdataverse.soccer.ligamx`)
 
 ## Data sources
 

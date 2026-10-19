@@ -13,6 +13,7 @@ not covered by the generated API-endpoint reference above.
 
 | Function | Summary |
 |---|---|
+| [atrium_end_year](additional/sportradar-atrium-embed-api.md#atrium_end_year) | The sdv season key (END year) of a site's `year`, or `None` when it cannot be mapped. |
 | [lmb_pbp](additional/sportradar-atrium-embed-api.md#lmb_pbp) | Play-by-play of a Liga Mayor de Baloncesto (El Salvador) game. |
 | [lmb_player_box](additional/sportradar-atrium-embed-api.md#lmb_player_box) | Player box score of a Liga Mayor de Baloncesto (El Salvador) game. |
 | [lmb_schedule](additional/sportradar-atrium-embed-api.md#lmb_schedule) | Fixtures (schedule and results) of a Liga Mayor de Baloncesto (El Salvador) season. |

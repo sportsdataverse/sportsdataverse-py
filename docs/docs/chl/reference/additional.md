@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # CHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.chl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.chl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

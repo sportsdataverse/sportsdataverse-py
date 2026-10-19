@@ -1,10 +1,35 @@
 ---
-title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings"
-sidebar_label: "Sportradar Atrium embed API: lmb_pbp–lnb_standings"
+title: "ATRIUM — additional Python functions — Sportradar Atrium embed API: atrium_end–lnb_standings"
+sidebar_label: "Sportradar Atrium embed API: atrium_end–lnb_standings"
 sidebar_position: 1
-description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings — function reference in sdv-py, the SportsDataverse Python package."
+description: "ATRIUM — additional Python functions — Sportradar Atrium embed API: atrium_end–lnb_standings — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# ATRIUM — additional Python functions — Sportradar Atrium embed API: lmb_pbp–lnb_standings
+# ATRIUM — additional Python functions — Sportradar Atrium embed API: atrium_end–lnb_standings
+
+### atrium_end_year {#atrium_end_year}
+
+`atrium_end_year(website_id: 'Any', year: 'Any') -> 'Optional[int]'`
+
+The sdv season key (END year) of a site's `year`, or `None` when it cannot be mapped.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `website_id` | `Any` |  | the site (see `SITES`). |
+| `year` | `Any` |  | the `year` of a `data.seasons.seasons[]` row (START year on site 12, the calendar year elsewhere). |
+
+**Returns**
+
+`year + 1` for site 12 (2025 -> 2026 = 2025-26), `year` for the calendar-year sites, `None` for an unregistered site, site 236 (no season list) or a non-integer year.
+
+**Example**
+
+```python
+from sportsdataverse.basketball.atrium import atrium_end_year
+atrium_end_year(12, 2025)   # 2026
+atrium_end_year(14, 2026)   # 2026
+```
 
 ### lmb_pbp {#lmb_pbp}
 

@@ -1045,6 +1045,13 @@ def test_summary_section_parsers_registry_consistent():
         assert callable(fn), f"{name} -> {fn!r} not callable"
 
 
+def test_summary_docstring_counts_the_registered_sections():
+    """A-L41: the docstring said 17 sections while the registry held 21."""
+    from sportsdataverse._common_espn_parsers import SUMMARY_SECTION_PARSERS, parse_summary
+
+    assert f"({len(SUMMARY_SECTION_PARSERS)} sections currently)" in (parse_summary.__doc__ or "")
+
+
 def test_summary_dispatcher_returns_zero_row_dict_on_empty_payload():
     from sportsdataverse._common_espn_parsers import parse_summary
 

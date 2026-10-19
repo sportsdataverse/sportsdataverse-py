@@ -13,18 +13,18 @@ description: "sdv-py WNBA: endpoint references, dataset loaders and parsers for 
 | [sportsdataverse-data releases](#sportsdataverse-data-releases) | `github.com` | 39 | none |
 | [WNBA Stats API](#wnba-stats-api) | `stats.wnba.com` | 113 | none (curl_cffi chrome TLS impersonation) |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 26 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 85 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 89 | — |
 
 ## ESPN {#espn}
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN site API (v2)](reference/site) | 20 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 81 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/espn) | 8 |
+| [Hand-written wrappers](reference/additional/espn) | 12 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -121,10 +121,10 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | `sportsdataverse.wnba` (Python) | `wehoop` (R) |
 |---|---|
 | [`espn_wnba_award`](reference/core/other#espn_wnba_award) | [`espn_wnba_award`](https://wehoop.sportsdataverse.org/reference/espn_wnba_award.html) |
-| [`espn_wnba_calendar`](reference/site#espn_wnba_calendar) | [`espn_wnba_calendar`](https://wehoop.sportsdataverse.org/reference/espn_wnba_calendar.html) |
+| [`espn_wnba_calendar`](reference/additional/espn#espn_wnba_calendar) | [`espn_wnba_calendar`](https://wehoop.sportsdataverse.org/reference/espn_wnba_calendar.html) |
 | [`espn_wnba_coach_season`](reference/core/other#espn_wnba_coach_season) | [`espn_wnba_coach_season`](https://wehoop.sportsdataverse.org/reference/espn_wnba_coach_season.html) |
 | [`espn_wnba_conferences`](reference/site#espn_wnba_conferences) | [`espn_wnba_conferences`](https://wehoop.sportsdataverse.org/reference/espn_wnba_conferences.html) |
-| [`espn_wnba_draft`](reference/site#espn_wnba_draft) | [`espn_wnba_draft`](https://wehoop.sportsdataverse.org/reference/espn_wnba_draft.html) |
+| [`espn_wnba_draft`](reference/additional/espn#espn_wnba_draft) | [`espn_wnba_draft`](https://wehoop.sportsdataverse.org/reference/espn_wnba_draft.html) |
 | [`espn_wnba_franchise`](reference/core/other#espn_wnba_franchise) | [`espn_wnba_franchise`](https://wehoop.sportsdataverse.org/reference/espn_wnba_franchise.html) |
 | [`espn_wnba_franchises`](reference/core/other#espn_wnba_franchises) | [`espn_wnba_franchises`](https://wehoop.sportsdataverse.org/reference/espn_wnba_franchises.html) |
 | [`espn_wnba_game_broadcasts`](reference/core/game#espn_wnba_game_broadcasts) | [`espn_wnba_game_broadcasts`](https://wehoop.sportsdataverse.org/reference/espn_wnba_game_broadcasts.html) |
@@ -173,13 +173,13 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`we
 | [`espn_wnba_season_week`](reference/core/season#espn_wnba_season_week) | [`espn_wnba_season_week`](https://wehoop.sportsdataverse.org/reference/espn_wnba_season_week.html) |
 | [`espn_wnba_season_weeks`](reference/core/season#espn_wnba_season_weeks) | [`espn_wnba_season_weeks`](https://wehoop.sportsdataverse.org/reference/espn_wnba_season_weeks.html) |
 | [`espn_wnba_seasons`](reference/core/other#espn_wnba_seasons) | [`espn_wnba_seasons`](https://wehoop.sportsdataverse.org/reference/espn_wnba_seasons.html) |
-| [`espn_wnba_standings`](reference/site#espn_wnba_standings) | [`espn_wnba_standings`](https://wehoop.sportsdataverse.org/reference/espn_wnba_standings.html) |
+| [`espn_wnba_standings`](reference/additional/espn#espn_wnba_standings) | [`espn_wnba_standings`](https://wehoop.sportsdataverse.org/reference/espn_wnba_standings.html) |
 | [`espn_wnba_team`](reference/site#espn_wnba_team) | [`espn_wnba_team`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team.html) |
 | [`espn_wnba_team_injuries`](reference/site#espn_wnba_team_injuries) | [`espn_wnba_team_injuries`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_injuries.html) |
 | [`espn_wnba_team_leaders`](reference/site#espn_wnba_team_leaders) | [`espn_wnba_team_leaders`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_leaders.html) |
 | [`espn_wnba_team_news`](reference/site#espn_wnba_team_news) | [`espn_wnba_team_news`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_news.html) |
 | [`espn_wnba_team_record`](reference/site#espn_wnba_team_record) | [`espn_wnba_team_record`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_record.html) |
-| [`espn_wnba_team_roster`](reference/site#espn_wnba_team_roster) | [`espn_wnba_team_roster`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_roster.html) |
+| [`espn_wnba_team_roster`](reference/additional/espn#espn_wnba_team_roster) | [`espn_wnba_team_roster`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_roster.html) |
 | [`espn_wnba_team_schedule`](reference/site#espn_wnba_team_schedule) | [`espn_wnba_team_schedule`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_schedule.html) |
 | [`espn_wnba_team_stats`](reference/additional/espn#espn_wnba_team_stats) | [`espn_wnba_team_stats`](https://wehoop.sportsdataverse.org/reference/espn_wnba_team_stats.html) |
 | [`espn_wnba_teams`](reference/additional/espn#espn_wnba_teams) | [`espn_wnba_teams`](https://wehoop.sportsdataverse.org/reference/espn_wnba_teams.html) |

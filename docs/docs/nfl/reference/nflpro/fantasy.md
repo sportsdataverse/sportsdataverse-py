@@ -1,11 +1,11 @@
 ---
-title: "NFL — nflpro — Fantasy"
+title: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Fantasy"
 sidebar_label: "Fantasy"
 sidebar_position: 2
-description: "NFL — nflpro — Fantasy — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Fantasy — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — nflpro — Fantasy
+# NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Fantasy
 
 ## nfl_pro_fantasy_season
 

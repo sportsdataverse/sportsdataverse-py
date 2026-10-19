@@ -6,7 +6,7 @@ sidebar_position: 50
 ---
 # AHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.ahl`
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.ahl`
 not covered by the generated API-endpoint reference above.
 
 ## HockeyTech / LeagueStat

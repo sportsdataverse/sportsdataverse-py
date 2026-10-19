@@ -3,7 +3,7 @@ title: AHL
 sidebar_label: AHL
 description: "sdv-py AHL: endpoint references, dataset loaders and parsers for AHL in the SportsDataverse Python package."
 ---
-# AHL (`sportsdataverse.ahl`)
+# AHL (`sportsdataverse.hockey.ahl`)
 
 ## Data sources
 
@@ -36,7 +36,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
 
-| `sportsdataverse.ahl` (Python) | `fastRhockey` (R) |
+| `sportsdataverse.hockey.ahl` (Python) | `fastRhockey` (R) |
 |---|---|
 | [`ahl_game_corsi`](reference/additional#ahl_game_corsi) | [`ahl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/ahl_game_corsi.html) |
 | [`ahl_game_shifts`](reference/additional#ahl_game_shifts) | [`ahl_game_shifts`](https://fastRhockey.sportsdataverse.org/reference/ahl_game_shifts.html) |

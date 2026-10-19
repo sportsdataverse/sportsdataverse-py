@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # COLLEGE_SOFTBALL — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.college_softball` — 3 endpoints.
+`sportsdataverse.baseball.college_softball` — 3 endpoints.
 
 ## espn_college_softball_cdn_playbyplay
 

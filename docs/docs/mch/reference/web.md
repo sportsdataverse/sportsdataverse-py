@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MCH — ESPN web API (v3)
 
-`sportsdataverse.mch` — 5 endpoints.
+`sportsdataverse.hockey.mch` — 5 endpoints.
 
 ## espn_mch_player_overview
 

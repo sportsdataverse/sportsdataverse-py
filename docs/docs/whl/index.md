@@ -3,7 +3,7 @@ title: WHL
 sidebar_label: WHL
 description: "sdv-py WHL: endpoint references, dataset loaders and parsers for WHL in the SportsDataverse Python package."
 ---
-# WHL (`sportsdataverse.whl`)
+# WHL (`sportsdataverse.hockey.whl`)
 
 ## Data sources
 
@@ -36,7 +36,7 @@ Worked examples — executed notebooks rendered as pages (refreshed weekly again
 
 Each `sportsdataverse` function and its equivalent in the sister R package, [`fastRhockey`](https://github.com/sportsdataverse). Same-named where possible; the R column links the package's pkgdown reference.
 
-| `sportsdataverse.whl` (Python) | `fastRhockey` (R) |
+| `sportsdataverse.hockey.whl` (Python) | `fastRhockey` (R) |
 |---|---|
 | [`most_recent_whl_season`](reference/additional#most_recent_whl_season) | [`most_recent_whl_season`](https://fastRhockey.sportsdataverse.org/reference/most_recent_whl_season.html) |
 | [`whl_game_corsi`](reference/additional#whl_game_corsi) | [`whl_game_corsi`](https://fastRhockey.sportsdataverse.org/reference/whl_game_corsi.html) |

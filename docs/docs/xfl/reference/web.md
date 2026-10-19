@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # XFL — ESPN web API (v3)
 
-`sportsdataverse.xfl` — 5 endpoints.
+`sportsdataverse.football.xfl` — 5 endpoints.
 
 ## espn_xfl_player_overview
 

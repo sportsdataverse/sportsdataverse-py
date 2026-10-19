@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot"
-sidebar_label: "stats.ncaa.org: enrich_stats–phase1_shot"
+title: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb"
+sidebar_label: "stats.ncaa.org: enrich_stats–ncaa_wbb"
 sidebar_position: 3
-description: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: enrich_stats–phase1_shot
+# WBB — additional Python functions — stats.ncaa.org: enrich_stats–ncaa_wbb
 
 ### enrich_stats {#enrich_stats}
 
@@ -900,6 +900,45 @@ from sportsdataverse.mbb.mbb_ncaa_shot_parser import is_team_shooting_left_to_st
 is_team_shooting_left_to_start([(1, shot_a), (1, shot_b)])
 ```
 
+### is_transition {#is_transition}
+
+`is_transition(curr_clump: 'ConcurrentClump', prev_clumps: 'list[ConcurrentClump]', event_parser: 'PossessionEvent', player_version: 'bool') -> 'tuple[Callable[[RawGameEvent, bool], bool], str]'`
+
+Figure out if the current clump is part of a transition offense
+
+following opponent offense (or a marked-fastbreak play) (`is_transition`,
+`LineupUtils.scala:668-927`).
+
+Returns a `(predicate, debug_tag)` tuple mirroring `is_scramble`
+-- the oracle asserts the debug tag directly (`"N/A"`/`"0a.X"`/
+`"1a.a"`/`"1a.b"`/`"1b.a"`/`"1b.b"`/`"1b.X"`/`"NOT"`).
+Unlike `is_scramble`'s predicate, this one takes a *second*
+argument -- `is_scramble` -- so **scramble always wins**: an event
+already classified as a scramble is never additionally tagged
+transition (`!is_scramble && is_transition_event`).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `curr_clump` | `ConcurrentClump` |  | The clump to classify. |
+| `prev_clumps` | `list[ConcurrentClump]` |  | Prior merged clumps, most-recent-first. |
+| `event_parser` | `PossessionEvent` |  | Selects which side of each event is "attacking" (and, for this heuristic, "defending"). |
+| `player_version` | `bool` |  | Unused -- see `is_scramble`'s port notes in the module docstring (the Scala's debug-print gate this flag controls is permanently `false` regardless of its value). |
+
+**Returns**
+
+`(predicate, debug_tag)` where `predicate(ev, is_scramble)` reports whether `ev` is part of a transition play, given whether it was already classified as a scramble.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_lineup_enrich import is_transition
+
+predicate, tag = is_transition(curr_clump, prev_clumps, event_parser, player_version=False)
+[predicate(ev, is_scramble=False) for ev in curr_clump.evs]
+```
+
 ### is_women_game {#is_women_game}
 
 `is_women_game(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]') -> 'bool'`
@@ -1704,47 +1743,4 @@ One row per team per game.
 from sportsdataverse.wbb.wbb_ncaa_stats_agg import ncaa_wbb_team_stats
 team = ncaa_wbb_team_stats(pbp)
 print(team.shape)
-```
-
-### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
-
-`phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'`
-
-The court-geometry enrichment pass: ascending time, coordinate
-
-transform + geo synthesis, and the self-correcting side-flip re-run
-(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
-
-For each shot: compute the ascending game time, decide (from
-`is_team_shooting_left_to_start` + which half the period falls in)
-whether the shot's side needs flipping, run `transform_shot_location`
-to get both the believed-correct and alternative (mirrored) locations,
-keep whichever is closer to the basket (a >1.2x distance advantage for
-the "alternative" wins, or ANY shot taken with <0.1 min left on the
-clock always keeps the original -- a half-court heave near the buzzer
-is plausible, so the tie-break favors trusting the raw geometry there),
-then synthesize a lat/lon.
-
-After all shots are processed, if any period had >=6 shots AND more than
-75% of them came back implausibly long-distance (>50ft), the whole pass
-re-runs ONCE with those periods' orientation flipped (the self-correcting
-part) -- `second_half_override` is `None` on the initial call and a
-non-`None` set on the one allowed retry, preventing infinite recursion.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs from `parse_shot_html`, pre-geometry-transform. |
-| `second_half_override` | `Optional[set[int]]` | `None` | The set of periods whose `second_half_switch` orientation should be inverted (the self-correction re-run's input); `None` on the first call. |
-
-**Returns**
-
-The fully court-geometry-enriched shots, in the same order as `sorted_very_raw_events`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichment
-shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
 ```

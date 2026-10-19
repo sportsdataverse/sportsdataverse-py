@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UFL — ESPN web API (v3)
 
-`sportsdataverse.ufl` — 5 endpoints.
+`sportsdataverse.football.ufl` — 5 endpoints.
 
 ## espn_ufl_player_overview
 

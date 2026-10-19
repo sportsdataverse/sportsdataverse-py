@@ -1,10 +1,45 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression"
-sidebar_label: "Models and calculators: build_productivity–slow_regression"
+title: "MBB — additional Python functions — Models and calculators: build_priors–score_to"
+sidebar_label: "Models and calculators: build_priors–score_to"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: build_priors–score_to — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: build_productivity–slow_regression
+# MBB — additional Python functions — Models and calculators: build_priors–score_to
+
+### build_priors {#build_priors}
+
+`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
+
+Build strong/weak per-player RAPM priors for every column.
+
+Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
+See the module docstring's landmine list, item 1, for the critical
+Python-vs-JS `{}`-truthiness gotcha this function's implementation
+deliberately avoids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
+| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
+| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
+
+**Returns**
+
+A `RapmPriorInfo`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_priors
+
+priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
+print(priors["players_weak"][0])
+```
 
 ### build_productivity {#build_productivity}
 
@@ -1687,67 +1722,4 @@ from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
 
 score_to_tuple("55-68")   # (55, 68)
 score_to_tuple("garbage")  # (0, 0)
-```
-
-### simulate_game {#simulate_game}
-
-`simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'`
-
-Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_em` | `float` |  | Home team's adjusted efficiency margin. |
-| `away_em` | `float` |  | Away team's adjusted efficiency margin. |
-| `neutral` | `bool` |  | True for a neutral-site game. |
-| `rng` | `Generator` |  | A seeded `numpy.random.Generator` (caller owns determinism). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-
-**Returns**
-
-True if the home team wins the sampled game.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_season_sim import simulate_game
-simulate_game(20.0, 5.0, False, np.random.default_rng(0))
-```
-
-### slow_regression {#slow_regression}
-
-`slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
-
-Build the Tikhonov (ridge) regression solver matrix.
-
-Faithful port of the private `RapmUtils.slowRegression`
-(`RapmUtils.ts:756-769`): `(XᵀX + ridge_lambda·I)⁻¹Xᵀ`, where `X`
-is `player_weight_matrix` (one row per lineup, one column per player --
-see `calc_player_weights`). See the section banner above for why
-this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, ctx["num_players"])`. |
-| `ridge_lambda` | `float` |  | The Tikhonov regularization strength. |
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read (sizes the identity matrix). |
-
-**Returns**
-
-The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
-
-x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
-solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
-rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 ```

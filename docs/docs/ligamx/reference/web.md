@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # LIGAMX — ESPN web API (v3)
 
-`sportsdataverse.ligamx` — 5 endpoints.
+`sportsdataverse.soccer.ligamx` — 5 endpoints.
 
 ## espn_ligamx_player_overview
 

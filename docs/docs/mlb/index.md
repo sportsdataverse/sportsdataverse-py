@@ -14,18 +14,18 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 | [MLB Stats API](#mlb-stats-api) | `statsapi.mlb.com` | 79 | none |
 | [Baseball Savant (Statcast)](#baseball-savant-statcast) | `baseballsavant.mlb.com` | 43 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 23 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 100 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 104 | — |
 
 ## ESPN {#espn}
 
 | Reference | Functions |
 |---|---:|
-| [ESPN site API (v2)](reference/site) | 24 |
+| [ESPN site API (v2)](reference/site) | 23 |
 | [ESPN web API (v3)](reference/web) | 5 |
 | [ESPN core API (v2)](reference/core) | 83 |
 | [ESPN FPI API (fitt v3)](reference/fitt) | 1 |
 | [ESPN CDN API (cdn.espn.com)](reference/cdn) | 4 |
-| [Hand-written wrappers](reference/additional/espn) | 5 |
+| [Hand-written wrappers](reference/additional/espn) | 6 |
 
 ## sportsdataverse-data releases {#sportsdataverse-data-releases}
 
@@ -60,6 +60,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`build_we_table`](reference/additional/models-and-calculators#build_we_table)
 - [`count_strike_run_value`](reference/additional/models-and-calculators#count_strike_run_value)
 - [`event_run_value`](reference/additional/models-and-calculators#event_run_value)
+- [`leverage_index`](reference/additional/models-and-calculators#leverage_index)
 - [`mae`](reference/additional/models-and-calculators#mae)
 - [`mlb_batter_projection`](reference/additional/models-and-calculators#mlb_batter_projection)
 - [`mlb_command_plus`](reference/additional/models-and-calculators#mlb_command_plus)
@@ -81,6 +82,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`pbp_base_out_states`](reference/additional/models-and-calculators#pbp_base_out_states)
 - [`pearson_corr`](reference/additional/models-and-calculators#pearson_corr)
 - [`prop_over_prob`](reference/additional/models-and-calculators#prop_over_prob)
+- [`run_value`](reference/additional/models-and-calculators#run_value)
 - [`spearman_corr`](reference/additional/models-and-calculators#spearman_corr)
 
 ### Analytics {#analytics}
@@ -111,6 +113,7 @@ description: "sdv-py MLB: endpoint references, dataset loaders and parsers for M
 - [`sb_success_surface`](reference/additional/analytics#sb_success_surface)
 - [`siera_like`](reference/additional/analytics#siera_like)
 - [`tto_penalty_table`](reference/additional/analytics#tto_penalty_table)
+- [`x_era`](reference/additional/analytics#x_era)
 
 ### Dates and seasons {#dates-and-seasons}
 
@@ -131,7 +134,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | `sportsdataverse.mlb` (Python) | `baseballr` (R) |
 |---|---|
 | [`espn_mlb_award`](reference/core/other#espn_mlb_award) | [`espn_mlb_award`](https://billpetti.github.io/baseballr/reference/espn_mlb_award.html) |
-| [`espn_mlb_calendar`](reference/site#espn_mlb_calendar) | [`espn_mlb_calendar`](https://billpetti.github.io/baseballr/reference/espn_mlb_calendar.html) |
+| [`espn_mlb_calendar`](reference/additional/espn#espn_mlb_calendar) | [`espn_mlb_calendar`](https://billpetti.github.io/baseballr/reference/espn_mlb_calendar.html) |
 | [`espn_mlb_coach`](reference/core/other#espn_mlb_coach) | [`espn_mlb_coach`](https://billpetti.github.io/baseballr/reference/espn_mlb_coach.html) |
 | [`espn_mlb_coach_record`](reference/core/other#espn_mlb_coach_record) | [`espn_mlb_coach_record`](https://billpetti.github.io/baseballr/reference/espn_mlb_coach_record.html) |
 | [`espn_mlb_coach_season`](reference/core/other#espn_mlb_coach_season) | [`espn_mlb_coach_season`](https://billpetti.github.io/baseballr/reference/espn_mlb_coach_season.html) |
