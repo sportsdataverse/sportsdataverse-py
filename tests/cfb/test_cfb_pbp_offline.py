@@ -396,24 +396,36 @@ def test_an_out_of_scheme_play_id_is_placed_by_its_clock():
 
 
 @pytest.mark.parametrize(
-    ("game_id", "stray", "neighbours"),
+    ("game_id", "stray", "neighbours", "lead_text"),
     [
         # the feed files Western Michigan's personal foul AFTER the 9:41 touchdown, at the same clock
-        (400548110, 4005481100, (400548110102905801, 400548110102905804)),
+        (400548110, 4005481100, (400548110102905801, 400548110102905804), "Richard Montgomery run for 11 yds"),
         # the 11:58 rush follows the 13:23 pass; its twin's id sorts among the 14:43 plays, so a count
-        # of the plays with more time left put it between the 13:23 punt and that pass
-        (401420836, 4014208360, (401420836102867603, 401420836102886901)),
+        # of the plays with more time left put it between the 13:23 punt and that pass. The processor's
+        # second sort repairs the final order, but lead_text (read between the two) keeps the first
+        # pass's neighbour: the 13:23 pass under a count, the 11:30 touchdown under the last-row rule
+        (401420836, 4014208360, (401420836102867603, 401420836102886901), "Hunter Luepke run for 47 yds for a TD"),
     ],
     ids=["400548110-clock-tie", "401420836-id-not-clock-ordered"],
 )
-def test_an_out_of_scheme_play_follows_the_last_play_before_it(game_id, stray, neighbours):
+def test_an_out_of_scheme_play_follows_the_last_play_before_it(game_id, stray, neighbours, lead_text):
     """R837-1: the stray goes right after the last play of an earlier period, with more time left, or
     with the same clock and earlier in ESPN's feed -- not after a count of such plays."""
     with warnings.catch_warnings():
         warnings.simplefilter("error", PlayOrderWarning)
-        ids = _process_capture(game_id).plays_frame["id"].to_list()
+        plays = _process_capture(game_id).plays_frame
+    ids = plays["id"].to_list()
     at = ids.index(stray)
     assert (ids[at - 1], ids[at + 1]) == neighbours
+    assert plays["lead_text"][at].startswith(lead_text)
+
+
+def test_out_of_scheme_placement_refuses_a_frame_without_its_row_order():
+    """R908-2: without the pre-sort `_feed` column the tie-break has nothing to read, so it raises."""
+    from sportsdataverse.cfb.cfb_pbp import _place_out_of_scheme_plays
+
+    with pytest.raises(ValueError, match="_feed"):
+        _place_out_of_scheme_plays(pl.DataFrame({"id": [1, 2, 3]}))
 
 
 @pytest.mark.parametrize("keys", [("end",), ("homeScore", "awayScore")], ids=lambda k: k[0])

@@ -2143,6 +2143,8 @@ def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
     runs in period order and is left alone, and a wrong period LABEL under a well-formed id
     (401628439) is not a sort problem; :func:`_warn_period_steps_back` names it.
     """
+    if "_feed" not in plays_df.columns:
+        raise ValueError("_place_out_of_scheme_plays needs the pre-sort row order in a `_feed` column")
     if plays_df.height < 3 or not {"id", "period.number", "start.adj_TimeSecsRem"}.issubset(plays_df.columns):
         return plays_df
     period = pl.col("period.number").cast(pl.Int64, strict=False)
@@ -2184,7 +2186,9 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """
     # maintain_order: a play repeated under drives.current sits after its
     # drives.previous copy, so the same-id dedupe keeps the fresher one
-    plays_df = plays_df.with_row_index("_feed")  # ESPN's feed order breaks a clock tie (R837-1)
+    # the incoming row order breaks a clock tie (R837-1): ESPN's feed on the first call
+    # (__helper_cfb_pbp_features), the first pass's output on the second (__add_downs_data)
+    plays_df = plays_df.with_row_index("_feed")
     plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))
     plays_df = plays_df.drop("_feed")
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
