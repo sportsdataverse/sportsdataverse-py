@@ -1429,7 +1429,8 @@
   expected: kill
   note: >-
     without the yardLine 0 / yardsToEndzone 0 test every play that kept the ball takes the next
-    snap's start; 401856797637 (a mirrored end, a different defect) moves and the count breaks
+    snap's start; 401752886558 and 40176244395 (stated ends; 401856797637 was the killer until EX-3.4-a
+    fixed its mirrored end) move and the count breaks
 # --- EX-3.4-b (3.4(a), PR #834): a Timeout row is no change of possession ------------------------
 # Killers: tests/cfb/test_cfb_timeout_possession.py on committed captures (401752753, 401754571,
 # 401756960, 401761656 penalty rows; 401628559 punt -> receiver's timeout -> snap; 401643775 score ->
@@ -1440,9 +1441,9 @@
   file: sportsdataverse/cfb/cfb_pbp.py
   snippet: "change_of_pos_team=pl.when(pl.col(\"type.text\") == \"Timeout\")\n                .then(False)\n                .when("
   mutant: "change_of_pos_team=pl.when("
-  test: tests/cfb/test_cfb_timeout_possession.py::test_penalty_after_a_defensive_timeout_reads_no_turnover
+  test: tests/cfb/test_cfb_timeout_possession.py -k "penalty_after_a_defensive_timeout or defensive_timeout_row"
   expected: kill
-  note: "a defensive Timeout row (filed under the caller) reads as a change of possession again"
+  note: "a Timeout row reads as a change of possession again (since R834-13 a defensive timeout is the offense's row, so the killer is a timeout between possessions filed under the team that does not snap next)"
 - id: cfb-ex34b-lagged-possession-skips-timeouts
   group: cfb-ex34b
   finding: EX-3.4-b
@@ -1796,3 +1797,66 @@
   test: tests/cfb/test_cfb_pbp_offline.py -k "pandas_missing_override_flag"
   expected: kill
   note: an override from a pandas row of older data (NaN / pd.NA for the absent column) would raise
+
+# --- cfb 3.4 follow-ups (EX-3.4-a, EX-3.4-c, R834-13; fix/cfb-3-4-end-states) ---------------------
+# Killers on committed captures: tests/cfb/test_cfb_end_state_ex34.py (the 7 EX-3.4-c rows, 401856797637,
+# and the two ex34/ guard rows), tests/cfb/test_cfb_timeout_possession.py (defensive timeouts in 4 games).
+- id: cfb-ex34c-no-rule
+  group: cfb-ex34-end-states
+  finding: EX-3.4-c
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_ex34c=pl.col("_end_degenerate")'
+  mutant: '_ex34c=pl.lit(False)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "unstated_end"
+  expected: kill
+  note: the seven degenerate ends on a rush, a pass or a penalty keep down 0 (and the own 99) again
+
+- id: cfb-ex34c-next-snap-same-team
+  group: cfb-ex34-end-states
+  finding: EX-3.4-c
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(_next_real_play(\"start.pos_team.id\") == pl.col(\"start.pos_team.id\"))\n                .and_(_next_real_play(\"start.down\").is_between(1, 4))"
+  mutant: ".and_(_next_real_play(\"start.down\").is_between(1, 4))"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "other_teams_snap"
+  expected: kill
+  note: 401403973 / 401520162's declined flags after a turnover would take the other team's next start
+
+- id: cfb-ex34a-no-admin-crossing
+  group: cfb-ex34-end-states
+  finding: EX-3.4-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)'
+  mutant: '    return nxt'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "401856797637"
+  expected: kill
+  note: 401856797's Q3-closing rush keeps the mirrored 99 (EPA -4.62) behind the End Period row
+
+- id: cfb-ex34a-stated-yardage
+  group: cfb-ex34-end-states
+  finding: EX-3.4-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)'
+  mutant: '    return pl.when(admin_next & _in_same_half(_next_real_play)).then(_next_real_play(col)).otherwise(nxt)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "admin_row"
+  expected: kill
+  note: 401282772 and 401761589 would mirror a right end toward a next snap whose own start is the mirror
+
+- id: cfb-r834-13-offense-on-timeout
+  group: cfb-ex34-end-states
+  finding: R834-13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".then(_next_real_play(\"start.pos_team.id\"))\n                .otherwise(pl.col(\"start.pos_team.id\"))\n                .alias(\"start.pos_team.id\"),"
+  mutant: ".then(pl.col(\"start.pos_team.id\"))\n                .otherwise(pl.col(\"start.pos_team.id\"))\n                .alias(\"start.pos_team.id\"),"
+  test: tests/cfb/test_cfb_timeout_possession.py -k "defensive_timeout"
+  expected: kill
+  note: a defensive timeout reads as the caller's possession again, with the offense's EP
+
+- id: cfb-r834-13-one-team-around
+  group: cfb-ex34-end-states
+  finding: R834-13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                    & (_prev_real_play("start.pos_team.id") == _next_real_play("start.pos_team.id"))'
+  mutant: '                    & pl.lit(True)'
+  test: tests/cfb/test_cfb_timeout_possession.py
+  expected: kill
+  note: a timeout between two possessions would be handed to the team that snaps next
