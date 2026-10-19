@@ -55,8 +55,8 @@ _ADDED_IN_2023 = [
 ]
 
 
-# Bound before any monkeypatching: ``_loaders.pl`` IS the polars module, so
-# patching ``pl.read_parquet`` there patches it here too.
+# The committed fixtures are read with the real polars reader (the release fetch is stubbed at
+# ``_release_bytes``, R898-9).
 _read_parquet = pl.read_parquet
 
 
@@ -316,7 +316,7 @@ def test_ff_loaders_return_string_ids_as_pandas(load, id_cols, padded, no_cache,
 
 
 @pytest.mark.parametrize("kind", ["draft", "week"])
-def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, tmp_path, monkeypatch, no_cache):
+def test_ff_rankings_types_a_column_empty_in_its_first_100_rows(kind, monkeypatch, no_cache):
     """Early in a season the first 100+ ``rank_delta`` cells are empty. With polars'
     default 100-row inference the column read as String; the whole file is scanned."""
     rows = ["player,rank_delta"] + [f"p{i}," for i in range(120)] + [f"q{i},{i - 5}" for i in range(30)]

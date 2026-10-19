@@ -61,11 +61,12 @@ def test_read_release_parquet_returns_df_on_success():
 
 @pytest.mark.parametrize("read", [rt._fetch_release_parquet, rt._read_release_parquet])
 def test_release_read_goes_through_pyarrow(read):
-    """A-M10: polars' own reader asks the release CDN for a suffix range, which it answers 501.
+    """A-M10: the release bytes are parsed by pyarrow (``use_pyarrow=True``).
 
-    Removing ``use_pyarrow=True`` brings that back on every release loader under polars 2.0,
-    so the kwarg itself is the contract (CLAUDE.md "Polars version"). Since R898-9 the URL
-    never reaches polars (urllib fetches, pyarrow parses the bytes); the kwarg stays pinned.
+    Handed a URL, polars 2.0's own reader asked the release CDN for a suffix range, which it
+    answers 501. Since R898-9 polars gets a ``BytesIO`` and never a URL, so that cannot recur;
+    the pin now keeps pyarrow as the parser: the one the release frames have always come
+    from, and the one whose Arrow-FFI import the ``PanicException`` fallback is written for.
     """
     with patch.object(rt.pl, "read_parquet", return_value=pl.DataFrame({"a": [1]})) as rp:
         read("https://github.com/o/r/releases/download/t/x.parquet")

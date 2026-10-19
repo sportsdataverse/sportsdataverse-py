@@ -260,8 +260,8 @@ def test_zero_byte_asset_416_probe_is_reachable(server):
     assert _Handler.hits["/zero-byte.parquet"] == 3
 
 
-# R898-1 / A-M10: the second read keeps use_pyarrow=True as well (polars 2.0's own reader asks
-# the release CDN for a suffix range, which it answers 501).
+# R898-1 / A-M10: the read after the probe parses with pyarrow too (``use_pyarrow=True``): the same
+# parser, frames and panic fallback as the first read (R898-21).
 def test_second_read_goes_through_pyarrow():
     real = pl.read_parquet
 
