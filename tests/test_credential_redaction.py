@@ -246,9 +246,9 @@ def assert_redaction_linear(build: Callable[[int], str]) -> None:
     Compares the input against one 4x its size instead of holding either to a wall-clock budget, so
     a slow or coverage-traced runner cannot flake it: linear work takes ~4x as long, a quadratic scan
     (an unbounded repeat retried from every start position) ~16x. The best of 5 interleaved repeats
-    drops scheduler noise, and a busy runner gets 3 attempts: a quadratic scan fails all of them.
-    10K/40K chars keeps a quadratic mutant to seconds (1.7-2.3 s per 40K call) while the linear scan
-    takes 0.2-7 ms there, measured with and without coverage.
+    drops scheduler noise, and a busy runner gets 3 attempts; a ratio over 12x (clearly quadratic)
+    fails at once. 10K/40K chars keeps a quadratic mutant to seconds per call while the linear scan
+    takes a few ms.
     """
     small, big = build(10_000), build(40_000)
     for _ in range(3):
@@ -263,6 +263,8 @@ def assert_redaction_linear(build: Callable[[int], str]) -> None:
         ratio = best_big / best_small
         if ratio < 8:
             return
+        if ratio > 12:  # clearly quadratic: no retry would rescue it
+            break
     pytest.fail(f"4x the input took {ratio:.1f}x as long ({best_small:.4f}s -> {best_big:.4f}s)")
 
 
