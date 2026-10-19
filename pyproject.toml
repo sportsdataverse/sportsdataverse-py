@@ -278,8 +278,6 @@ ignore = [
 "sportsdataverse/**/__init__.py" = ["F401", "F403"]
 # BLE001 ratchet (task 4.9): files whose broad excepts belong to another task's open work. Each owner
 # narrows (or justifies) its sites and deletes its line here; never add a file to this list.
-# codegen-runtime 4.2 (open PR edits parse_items, the one site left here):
-"sportsdataverse/_common_espn_parsers.py" = ["BLE001"]
 # providers 4.1b (provider parsers / runtimes):
 "sportsdataverse/_crosswalk_basketball_fox_yahoo.py" = ["BLE001"]
 "sportsdataverse/_crosswalk_basketball_sources.py" = ["BLE001"]

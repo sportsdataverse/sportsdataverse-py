@@ -2591,3 +2591,13 @@
   test: tests/mbb/test_mbb_ncaa_box_stats_parity.py -k logged_not_printed
   expected: kill
   note: the dropped game went to stdout instead of the module logger
+
+- id: espn-parse-items-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift("parse_items: items", exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_items"
+  expected: kill
+  note: a drifted Core v2 items list read as "no data" with no warning (narrowed after 4.2 merged)

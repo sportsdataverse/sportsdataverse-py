@@ -1907,7 +1907,11 @@ if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype c
 
 @pytest.mark.parametrize(
     ("parser", "fixture", "key"),
-    [("parse_news", "news_nba", "articles"), ("parse_transactions", "transactions_nba", "transactions")],
+    [
+        ("parse_news", "news_nba", "articles"),
+        ("parse_transactions", "transactions_nba", "transactions"),
+        ("parse_items", "season_coaches_nba", "items"),
+    ],
 )
 def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
     """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""

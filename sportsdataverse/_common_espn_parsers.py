@@ -1417,7 +1417,8 @@ def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         )
     try:
         df = pd.json_normalize(rows, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_items: items", exc)
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
     # ponytail: a polars frame has no metadata slot (R-028), so the page envelope rides as two constant columns.
