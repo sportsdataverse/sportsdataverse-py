@@ -61,12 +61,13 @@ Invalidation
 
 from __future__ import annotations
 
+import copy
 import fnmatch
 import hashlib
 import json
 import os
 import re
-import shutil
+import warnings
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
@@ -243,6 +244,26 @@ def _resolve_ttl(
     return ttl
 
 
+#: Stem of every filesystem entry (:func:`_cache_key`); ``clear_cache`` deletes nothing else.
+_ENTRY_STEM = re.compile(r"[0-9a-f]{32}")
+#: How every entry :func:`cache_set` writes begins (``saved_at`` is the first key it dumps).
+_ENTRY_HEAD = b'{"saved_at":'
+
+
+def _is_entry(path: Path) -> bool:
+    """A file this cache wrote: a key-named ``.json`` that opens like a cache entry.
+
+    The content check keeps a user's own md5-named JSON in a shared ``SDV_PY_CACHE_DIR``.
+    """
+    if not _ENTRY_STEM.fullmatch(path.stem):
+        return False
+    try:
+        with path.open("rb") as fh:
+            return fh.read(len(_ENTRY_HEAD)) == _ENTRY_HEAD
+    except OSError:
+        return False
+
+
 def _cache_dir() -> Path:
     """Resolve the filesystem cache directory.
 
@@ -350,7 +371,8 @@ def cache_get(
     age = datetime.now(timezone.utc) - saved
     if age > effective_ttl:
         return None
-    return entry.get("body")
+    # A memory hit is the stored object: copy it, or one caller's edit reaches every later hit.
+    return copy.deepcopy(entry.get("body")) if _MODE == "memory" else entry.get("body")
 
 
 def _scrub_body(node: Any, secrets: "list[str]") -> Any:
@@ -458,6 +480,25 @@ def clear_cache(
     return _drop_matching(glob)
 
 
+def _remove(path: Path) -> bool:
+    """Delete one cache file; ``False`` when it is already gone or locked (a Windows handle), never a raise.
+
+    A locked entry warns: the caller asked for it to be gone, and it is still served.
+    """
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        return False
+    except PermissionError:
+        warnings.warn(
+            f"clear_cache: {path} is in use by another process and was not deleted; it stays cached",
+            RuntimeWarning,
+            stacklevel=4,  # _remove <- _drop_one/_drop_matching <- clear_cache <- the caller
+        )
+        return False
+    return True
+
+
 def _drop_one(key: str) -> int:
     if _MODE == "memory":
         if key in _MEMORY_CACHE:
@@ -465,10 +506,7 @@ def _drop_one(key: str) -> int:
             return 1
         return 0
     if _MODE == "filesystem":
-        path = _cache_dir() / f"{key}.json"
-        if path.exists():
-            path.unlink()
-            return 1
+        return int(_remove(_cache_dir() / f"{key}.json"))
     return 0
 
 
@@ -482,16 +520,13 @@ def _drop_matching(glob: str) -> int:
         cache_dir = _cache_dir()
         if not cache_dir.exists():
             return 0
-        if glob == "*":
-            # Nuke fast path — remove the whole directory tree.
-            count = sum(1 for _ in cache_dir.glob("*.json"))
-            shutil.rmtree(cache_dir, ignore_errors=True)
-            return count
+        # Only the files this cache wrote (``<32-hex key>.json``): ``cache_dir`` defaults to
+        # ~/.cache/sportsdataverse, which also holds the NFL cache and its downloaded models,
+        # and an SDV_PY_CACHE_DIR may hold anything. Never rmtree it.
         count = 0
         for path in cache_dir.glob("*.json"):
-            if fnmatch.fnmatch(path.stem, glob):
-                path.unlink()
-                count += 1
+            if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):
+                count += _remove(path)  # a locked entry is skipped, not counted
         return count
     return 0
 

@@ -196,6 +196,14 @@ def cmd_cache(args: argparse.Namespace) -> int:
 # ---------------------------------------------------------------------------
 
 
+_EXIT_CODES = """exit codes:
+  0  success (find-*: a match was found)
+  1  find-*: no match
+  2  error, printed as "sdv: <message>": invalid input, a gh / runtime failure,
+     NoDataError (the host answered "nothing there") or AssetFetchError (the fetch failed)
+"""
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="sdv",
@@ -203,6 +211,8 @@ def _build_parser() -> argparse.ArgumentParser:
             "sportsdataverse-py CLI — name-to-ID resolution, function "
             "discovery, and HTTP cache controls without writing any Python."
         ),
+        epilog=_EXIT_CODES,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
         "--json",
@@ -277,11 +287,29 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main(argv: Optional[list[str]] = None) -> int:
+    """Run the ``sdv`` command line; returns the process exit code.
+
+    Exit codes: 0 the command succeeded (for ``find-*``, a match was found); 1 a
+    ``find-*`` command found no match; 2 an error, printed as ``sdv: <message>`` on
+    stderr: invalid input (``ValueError``, such as an unknown league), a ``gh`` /
+    runtime failure (``RuntimeError``), a host that answered "nothing there"
+    (``NoDataError``) or a fetch that failed (``AssetFetchError``: 403, rate limit,
+    5xx). argparse itself exits 2 on a usage error.
+
+    Args:
+        argv: Arguments after the program name; ``None`` reads ``sys.argv[1:]``.
+
+    Returns:
+        int: The exit code above (the console script passes it to ``SystemExit``).
+    """
     parser = _build_parser()
     args = parser.parse_args(argv)
+    from sportsdataverse.errors import SportsDataverseError
+
     try:
         return args.func(args)
-    except (ValueError, KeyError, RuntimeError) as e:
+    except (ValueError, RuntimeError, SportsDataverseError) as e:
+        # SportsDataverseError covers NoDataError (nothing there) and AssetFetchError (the fetch failed)
         print(f"sdv: {e}", file=sys.stderr)
         return 2
 
