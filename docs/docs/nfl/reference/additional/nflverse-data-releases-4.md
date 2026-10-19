@@ -23,7 +23,7 @@ Load NFL team stats data going back to 1999
 
 **Returns**
 
-Polars dataframe containing team stats available for the requested seasons.
+Polars dataframe containing team stats available for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|

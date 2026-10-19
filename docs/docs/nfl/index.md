@@ -208,7 +208,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`nf
 | [`load_nfl_contracts`](reference/additional/nflverse-data-releases#load_nfl_contracts) | [`load_contracts`](https://nflreadr.nflverse.com/reference/load_contracts.html) |
 | [`load_nfl_depth_charts`](reference/loaders/other#load_nfl_depth_charts) | [`load_depth_charts`](https://nflreadr.nflverse.com/reference/load_depth_charts.html) |
 | [`load_nfl_draft_picks`](reference/additional/nflverse-data-releases#load_nfl_draft_picks) | [`load_draft_picks`](https://nflreadr.nflverse.com/reference/load_draft_picks.html) |
-| [`load_nfl_espn_qbr`](reference/additional/nflverse-data-releases#load_nfl_espn_qbr) | [`load_espn_qbr`](https://nflreadr.nflverse.com/reference/load_espn_qbr.html) |
+| [`load_nfl_espn_qbr`](reference/additional/nflverse-data-releases-2#load_nfl_espn_qbr) | [`load_espn_qbr`](https://nflreadr.nflverse.com/reference/load_espn_qbr.html) |
 | [`load_nfl_ff_opportunity`](reference/additional/nflverse-data-releases-2#load_nfl_ff_opportunity) | [`load_ff_opportunity`](https://nflreadr.nflverse.com/reference/load_ff_opportunity.html) |
 | [`load_nfl_ff_playerids`](reference/additional/nflverse-data-releases-2#load_nfl_ff_playerids) | [`load_ff_playerids`](https://nflreadr.nflverse.com/reference/load_ff_playerids.html) |
 | [`load_nfl_ff_rankings`](reference/additional/nflverse-data-releases-2#load_nfl_ff_rankings) | [`load_ff_rankings`](https://nflreadr.nflverse.com/reference/load_ff_rankings.html) |

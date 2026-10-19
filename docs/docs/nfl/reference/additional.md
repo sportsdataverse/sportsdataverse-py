@@ -71,7 +71,7 @@ not covered by the generated API-endpoint reference above.
 | [load_nfl_combine](additional/nflverse-data-releases.md#load_nfl_combine) | Load NFL Combine information |
 | [load_nfl_contracts](additional/nflverse-data-releases.md#load_nfl_contracts) | Load NFL Historical contracts information |
 | [load_nfl_draft_picks](additional/nflverse-data-releases.md#load_nfl_draft_picks) | Load NFL Draft picks information |
-| [load_nfl_espn_qbr](additional/nflverse-data-releases.md#load_nfl_espn_qbr) | Load ESPN Total QBR (Quarterback Rating) data going back to 2006. |
+| [load_nfl_espn_qbr](additional/nflverse-data-releases-2.md#load_nfl_espn_qbr) | Load ESPN Total QBR (Quarterback Rating) data going back to 2006. |
 | [load_nfl_ff_opportunity](additional/nflverse-data-releases-2.md#load_nfl_ff_opportunity) | Load NFL fantasy football opportunity data from ffverse/ffopportunity |
 | [load_nfl_ff_playerids](additional/nflverse-data-releases-2.md#load_nfl_ff_playerids) | Load fantasy football player IDs from DynastyProcess.com |
 | [load_nfl_ff_rankings](additional/nflverse-data-releases-2.md#load_nfl_ff_rankings) | Load fantasy football rankings and projections |

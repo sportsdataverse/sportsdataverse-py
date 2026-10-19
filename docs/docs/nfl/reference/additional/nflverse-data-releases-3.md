@@ -23,7 +23,7 @@ Load NFL team stats data going back to 1999
 
 **Returns**
 
-Polars dataframe containing team stats available for the requested seasons.
+Polars dataframe containing team stats available for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -328,7 +328,7 @@ Load NFL play-by-play participation data for selected seasons
 
 **Returns**
 
-Polars dataframe containing play-by-play participation data available for the requested seasons.
+Polars dataframe containing play-by-play participation data available for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -392,7 +392,7 @@ changing call sites.
 
 **Returns**
 
-Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`.
+Polars dataframe containing PFR advanced stats data for the requested `stat_type`, `summary_level`, and `seasons`. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -486,14 +486,14 @@ schema -- the legacy column set, in the legacy order, at the legacy dtypes:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads every season from 1999 through the current one, matching the old whole-file behavior. |
+| `seasons` | `list` | `None` | Seasons to load. 1999 is the earliest available season. `None` (the default) loads the current season, `True` every published season from 1999, and `[]` an empty frame (no request); nflreadpy's contract (`None` used to load every season from 1999). |
 | `kicking` | `bool` | `False` | If True, load kicking stats. If False, load all other stats. |
 | `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
 | `source` | `str` | `'nflverse'` | Which player-stats release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse published `stats_player` weekly release, reconciled to the legacy schema described above. `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_player_stats` release built by `sportsdataverse.nfl.build_nfl_player_stats` from SDV-native play-by-play (1999-present, week-level, REG+POST) with its own columns, season-filtered but otherwise untouched. Any other value raises `ValueError`. |
 
 **Returns**
 
-Polars dataframe containing player stats.
+Polars dataframe containing player stats. `seasons=[]` gives the contracted columns with no rows (nflverse source) or an empty frame with no columns (SDV source).
 
 | col_name | type | description |
 |---|---|---|
@@ -695,7 +695,7 @@ credential-gated NFL Data Exchange that the public build cannot reach.
 
 **Returns**
 
-Polars dataframe of weekly rosters for the requested seasons (`pandas.DataFrame` when `return_as_pandas=True`).
+Polars dataframe of weekly rosters for the requested seasons (`pandas.DataFrame` when `return_as_pandas=True`). `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -766,7 +766,7 @@ Load NFL schedule data
 
 **Returns**
 
-Polars dataframe containing the schedule for the requested seasons.
+Polars dataframe containing the schedule for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|
@@ -854,7 +854,7 @@ Load NFL snap counts data for selected seasons
 
 **Returns**
 
-Polars dataframe containing snap counts available for the requested seasons.
+Polars dataframe containing snap counts available for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
 
 | col_name | type | description |
 |---|---|---|

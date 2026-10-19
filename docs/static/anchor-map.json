@@ -4091,7 +4091,7 @@
   "load_nfl_combine": "nflverse-data-releases",
   "load_nfl_contracts": "nflverse-data-releases",
   "load_nfl_draft_picks": "nflverse-data-releases",
-  "load_nfl_espn_qbr": "nflverse-data-releases",
+  "load_nfl_espn_qbr": "nflverse-data-releases-2",
   "load_nfl_ff_opportunity": "nflverse-data-releases-2",
   "load_nfl_ff_playerids": "nflverse-data-releases-2",
   "load_nfl_ff_rankings": "nflverse-data-releases-2",

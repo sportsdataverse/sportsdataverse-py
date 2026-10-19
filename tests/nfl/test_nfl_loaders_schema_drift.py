@@ -75,15 +75,20 @@ def no_cache():
 
 @pytest.fixture()
 def offline_participation(monkeypatch):
-    """Serve the committed per-season fixtures instead of hitting the release."""
+    """Serve the committed per-season fixtures' bytes at the transport, instead of the release.
 
-    def fake_read_parquet(source, *args, **kwargs):
+    The release read fetches the bytes (``_release_bytes``) and parses them apart (R898-9), so
+    the real parse runs on the real captures.
+    """
+    from sportsdataverse import _codegen_runtime
+
+    def fake_release_bytes(url):
         for season in (2016, 2023):
-            if str(season) in str(source):
-                return _fixture(season)
-        raise AssertionError(f"unexpected read_parquet source: {source!r}")
+            if str(season) in url:
+                return (FIXTURES / f"pbp_participation_{season}_head3.parquet").read_bytes()
+        raise AssertionError(f"unexpected release url: {url!r}")
 
-    monkeypatch.setattr(_loaders.pl, "read_parquet", fake_read_parquet)
+    monkeypatch.setattr(_codegen_runtime, "_release_bytes", fake_release_bytes)
 
 
 def test_fixtures_really_do_drift():
