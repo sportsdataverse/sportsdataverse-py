@@ -44,6 +44,8 @@ ROWS = {
     401761622102957402: (401761622, "summary_401761622_trimmed.json.gz", "EX-3.4-c Penalty, PI enforced"),
     401858435289: (401858435, "summary_401858435.json", "EX-3.4-c Pass Reception, holding enforced"),
     401856797637: (401856797, "supp002/401856797_trimmed.json.gz", "EX-3.4-a mirrored end, End Period between"),
+    # R905-3: an interception a flag wiped out ("pass intercepted ... PENALTY USC ..."); the same team snaps next
+    401752832104944503: (401752832, "ex34/401752832_trimmed.json.gz", "EX-3.4-c Penalty on a wiped-out interception"),
 }
 
 pytestmark = pytest.mark.whole_game
@@ -90,7 +92,7 @@ def test_unstated_end_takes_the_next_snap(play_id):
         row["end.distance"],
         row["end.yardsToEndzone"],
     )
-    assert row["change_of_pos_team"] is False, why
+    assert row["change_of_pos_team"] is False and row["downs_turnover"] is False, why
     oracle = nxt["EP_start"] - row["EP_start"]
     assert abs(row["EPA"] - oracle) <= EPA_ABS_TOL, f"{why}: EPA {row['EPA']} vs next-snap {oracle}"
     assert abs(nxt["EP_between"]) <= EPA_ABS_TOL, f"{nid}: EP_between {nxt['EP_between']}"
@@ -139,3 +141,57 @@ def test_degenerate_end_before_the_other_teams_snap_is_left_alone(play_id):
     row = _frame(game_id, name).filter(pl.col("id") == play_id).row(0, named=True)
     assert (row["end.down"], row["end.yardsToEndzone"]) == (down, ytez), (row["end.down"], row["end.yardsToEndzone"])
     assert abs(row["EPA"] - epa) <= 1e-5, row["EPA"]
+
+
+def test_same_half_never_spans_regulation_and_overtime():
+    """R905-2: ``half`` is 2 for every period from the third on, so Q4 and overtime are not one half.
+
+    An expression test: the rows are the shape of a Q3 -> Q4 break and a Q4 -> OT break (each with its End
+    Period row), and two snaps inside the first overtime period.
+    """
+    from sportsdataverse.cfb.cfb_pbp import _in_same_half, _next_real_play
+
+    frame = pl.DataFrame(
+        {
+            "type.text": ["Rush", "End Period", "Rush", "End Period", "Rush", "Rush"],
+            "period.number": [3, 3, 4, 4, 5, 5],
+            "half": [2, 2, 2, 2, 2, 2],
+        }
+    )
+    got = frame.select(_in_same_half(_next_real_play).alias("same"))["same"].to_list()
+    #     Q3 -> Q4 (same half), End Period, Q4 -> OT (not), End Period, OT -> OT, last row (nothing next)
+    assert got == [True, True, False, False, True, False], got
+
+
+@pytest.mark.xdist_group("cfb-ex34-400548284")
+def test_degenerate_end_before_another_overtime_period_is_left_alone():
+    """R905-3's killer for EX-3.4-c's same-period-or-half clause: a byte-stability pin, NOT an oracle.
+
+    400548284's OT1 "Devontae Booker run for 4 yds to the OrgSt 19" (degenerate end) is followed by the same
+    team's 3rd & 4 at the 19, which ESPN files under OT2 (a period label error: the drive continues). The clause
+    keeps a period break in overtime, so the row keeps base's end (down 0, the own 99; EPA -2.80) where the next
+    snap would give 0.21. It is the only EPA row the clause decides in the 2,591-game sweep.
+    """
+    row = (
+        _frame(400548284, "ex34/400548284_trimmed.json.gz")
+        .filter(pl.col("id") == 400548284106000241)
+        .row(0, named=True)
+    )
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (0, 4, 99), row["end.down"]
+    assert abs(row["EPA"] - -2.8000831604003906) <= 1e-5, row["EPA"]
+
+
+@pytest.mark.xdist_group("cfb-ex34-401752915")
+def test_degenerate_end_on_a_kick_is_left_alone():
+    """R905-3's killer for EX-3.4-c's play-type allowlist: a byte-stability pin, NOT an oracle.
+
+    401752915's "K. Crimmins punt for 0 yds", filed on Illinois's 1st & 10 between a Wisconsin punt
+    and Illinois's first snap (a stray record), has a degenerate end and the same team's 1st & 13 after it. A
+    punt record is no play whose end is the next snap, so the row keeps base's end (down 0, the 80; EPA 2.51);
+    taking the snap would score it 2.15. On the sweep the allowlist alone decides 4 EPA rows (this one and three
+    ESPN rows typed "Fumble" whose text is a pass); the 4th-down punts it also guards are now excluded by the
+    4th-down clause (R905-1) as well.
+    """
+    row = _frame(401752915, "ex34/401752915_trimmed.json.gz").filter(pl.col("id") == 401752915563).row(0, named=True)
+    assert (row["end.down"], row["end.distance"], row["end.yardsToEndzone"]) == (0, 10, 80), row["end.down"]
+    assert abs(row["EPA"] - 2.5122759342193604) <= 1e-5, row["EPA"]

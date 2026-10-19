@@ -143,10 +143,12 @@ def test_defensive_timeout_row_keeps_the_offense_as_pos_team(game_id):
 
     Oracle: the raw feed's team on each row. ESPN files a Timeout under the team that called it; when the
     real plays on either side of it (the processor's order, same half, no score or kickoff between) are the
-    other team's, the timeout was called by the defense. On that row ``pos_team`` is the offense, its EP the play before's end
-    (EX-3.4-b), its EPA 0, and its score margin the offense's, so ``wp_before`` (margin + EP) reads one
-    team's perspective. Before the ruling the row read as the caller's possession with the offense's EP
-    (401864518 "Timeout UNLV" in NDSU's drive: wp_before 0.76 for UNLV, from NDSU's EP).
+    other team's, the timeout was called by the defense. On that row ``pos_team`` is the offense, its EP the
+    play before's end (EX-3.4-b), its EPA 0, and its score margin the offense's, so the margin and the EP that
+    ``wp_before`` adds are the same team's. Before the ruling the row read as the caller's possession with the
+    offense's EP (401864518 "Timeout UNLV" in NDSU's drive: wp_before 0.76 for UNLV, from NDSU's EP). Not fixed
+    here: the row's down, distance and spot are still ESPN's stale start in the caller's perspective, which
+    ``wp_before`` also reads (R905-4; 401864518287 reads 1st & 10 at the 66 after NDSU's 2nd & 7 at the 31).
     """
     summary = _summary(game_id)
     raw = {

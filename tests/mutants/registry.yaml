@@ -1860,3 +1860,54 @@
   test: tests/cfb/test_cfb_timeout_possession.py
   expected: kill
   note: a timeout between two possessions would be handed to the team that snaps next
+
+# --- review of #905 (R905-1, R905-2) ---------------------------------------------------------------
+- id: cfb-r905-1-fourth-down-short-excluded
+  group: cfb-ex34-end-states
+  finding: R905-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "((pl.col(\"type.text\") != \"Penalty\") & (pl.col(\"start.down\") == 4))"
+  mutant: "(pl.lit(False))"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "fourth_down_short"
+  expected: kill
+  note: 401760417's ghost 4th & 1 takes the same team's next snap while downs_turnover flips its margin (EPA +0.82)
+
+- id: cfb-r905-2-same-half-regulation-only
+  group: cfb-ex34-end-states
+  finding: R905-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '((pl.col("period.number") < 5) & (other("period.number") < 5) & (other("half") == pl.col("half")))'
+  mutant: '((pl.col("period.number") < 5) & (other("half") == pl.col("half")))'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "same_half"
+  expected: kill
+  note: Q4 and an overtime period read as one half again
+
+- id: cfb-r905-3-wiped-interception-not-excluded
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.col("text").str.contains(r"(?i)fumbl") == False)'
+  mutant: '.and_(pl.col("text").str.contains(r"(?i)fumbl|intercept") == False)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "401752832104944503"
+  expected: kill
+  note: an interception a flag wiped out keeps down 0 again (401752832 EPA 0.97 -> 0.17, the next snap's EP_between 0.80)
+
+- id: cfb-ex34c-same-period-or-half
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(_next_real_play(\"type.text\").str.contains(_NOT_A_SNAP_RE) == False)\n                .and_(_in_same_half(_next_real_play))"
+  mutant: ".and_(_next_real_play(\"type.text\").str.contains(_NOT_A_SNAP_RE) == False)"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "another_overtime"
+  expected: kill
+  note: a degenerate end takes a snap filed in the next overtime period (400548284, the clause's only EPA row in the sweep)
+
+- id: cfb-ex34c-play-type-allowlist
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(pl.col(\"type.text\").str.contains(_DEGENERATE_END_TYPES_RE))\n"
+  mutant: "\n"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "on_a_kick"
+  expected: kill
+  note: a stray punt record before the same team's snap would end at that snap (401752915 EPA 2.51 -> 2.15)

@@ -2282,13 +2282,15 @@ def _prev_real_play(col: str) -> pl.Expr:
 
 
 def _in_same_half(other: Callable[[str], pl.Expr]) -> pl.Expr:
-    """The row ``other`` reads is in this row's period, or in its half of regulation (never null).
+    """The row ``other`` reads is in this row's period, or both are in the same half of regulation (never null).
 
-    Needs ``period.number`` and ``half``; an overtime period hands the ball back to the team that just had it.
+    Needs ``period.number`` and ``half``. ``half`` is 2 for every period from the third on, so both rows must be in
+    regulation for the half to count: Q4 and an overtime period are not one half (R905-2), and an overtime period
+    hands the ball back to the team that just had it.
     """
     return (
         (other("period.number") == pl.col("period.number"))
-        | ((pl.col("period.number") < 5) & (other("half") == pl.col("half")))
+        | ((pl.col("period.number") < 5) & (other("period.number") < 5) & (other("half") == pl.col("half")))
     ).fill_null(False)
 
 
@@ -3491,12 +3493,25 @@ class CFBPlayProcess(object):
                 # 70: EPA -1.85, where the next snap, 3rd & 5 at the 70, gives -0.5). When the
                 # same team snaps next in the same period (or regulation half), that snap's
                 # start IS this play's end: an incompletion or a declined flag leaves the spot,
-                # a gain or an enforced flag moves it there. Not a score, a kick, a try, an
-                # interception or a fumble; the next row must be a snap, not a kickoff or a try.
+                # a gain or an enforced flag moves it there. Not a score, a kick, a try or a
+                # fumble (supp-002's rule below); the next row must be a snap, not a kickoff or a
+                # try. An interception the same team snaps after was wiped out by a flag
+                # (401761639's "pass intercepted ... PENALTY", then 2nd & 1 at the 3): the rule
+                # applies (R905-3: 14 such rows in the 2,591-game sweep, 8 with EPA moved).
                 _ex34c=pl.col("_end_degenerate")
                 .and_(pl.col("scoringPlay") == False)
                 .and_(pl.col("type.text").str.contains(_DEGENERATE_END_TYPES_RE))
-                .and_(pl.col("text").str.contains(r"(?i)fumbl|intercept") == False)
+                .and_(pl.col("text").str.contains(r"(?i)fumbl") == False)
+                # R905-1: not a 4th-down play short of the line to gain. downs_turnover reads it
+                # as a turnover from the start state and statYardage alone and flips the end
+                # margin, so an end taken from the same team's next snap would be scored from
+                # two sides (401760417's ghost "Br. Barnes run for 0 yds": -1.07 -> +0.82).
+                .and_(
+                    ((pl.col("type.text") != "Penalty") & (pl.col("start.down") == 4))
+                    .and_(pl.col("statYardage") < pl.col("start.distance"))
+                    .fill_null(False)
+                    == False
+                )
                 .and_(_next_real_play("start.pos_team.id") == pl.col("start.pos_team.id"))
                 .and_(_next_real_play("start.down").is_between(1, 4))
                 .and_(_next_real_play("type.text").str.contains(_NOT_A_SNAP_RE) == False)
