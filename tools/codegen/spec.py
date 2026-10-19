@@ -57,6 +57,8 @@ class Param:
         if self.transform_offset is not None:
             sign = "-" if self.transform_offset < 0 else "+"
             return f"None if {arg} is None else int({arg}) {sign} {abs(self.transform_offset)}"
+        if self.transform == "bool_str":  # its ValueError names the parameter (A-M17)
+            return f'bool_str({arg}, name="{self.python_name}")'
         return f"{self.transform}({', '.join((arg, *self.transform_with))})"
 
 

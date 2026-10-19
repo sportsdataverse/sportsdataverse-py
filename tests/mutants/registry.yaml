@@ -1487,6 +1487,106 @@
   expected: kill
   note: R897-5, api_token= / user_key= values echoed in the body reached the filesystem entry
 
+# --- 4.8: wire-value coercion at the shared runtime boundary (A-M6, A-M16, A-M17, A-N2, A-N3) -----
+# Killer: tests/test_runtime_coercion.py (gate wire-values-coerced).
+- id: csv-iterable-only-list-tuple-set
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return not isinstance(value, (str, bytes)) and hasattr(value, "__iter__")'
+  mutant: 'return isinstance(value, (list, tuple, set))'
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: the original test; a numpy array, a polars Series and a range went to the wire as their repr
+
+- id: csv-float-id-not-through-int
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'if isinstance(value, numbers.Real) and float(value).is_integer():'
+  mutant: 'if False:'
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: 2024.0 reaches the wire as "2024.0"
+
+- id: csv-set-in-hash-order
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'items = sorted(values) if isinstance(values, (set, frozenset)) else values'
+  mutant: 'items = values'
+  test: tests/test_runtime_coercion.py -k csv_exact_query_string
+  expected: kill
+  note: '{104, 103} iterates 104 first, so the query string depends on hash order'
+
+- id: season-list-numpy-integer-rejected
+  group: codegen-runtime
+  finding: A-M6
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if _is_many(seasons):'
+  mutant: '    if not isinstance(seasons, (int, str)):'
+  test: tests/test_runtime_coercion.py -k "season_list_accepts or numpy_or_float"
+  expected: kill
+  note: >-
+    the original dispatch; np.int64(2024) and 2024.0 were iterated and raised TypeError in every generated
+    loader (278 call sites). (Narrowing the Integral check alone is an equivalent mutant: the Real branch
+    still takes a numpy integer.)
+
+- id: season-list-fraction-truncated
+  group: codegen-runtime
+  finding: A-M6
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    """One season as an ``int`` year (see :func:`_as_season_list`)."""'
+  mutant: '    """One season."""; value = int(value) if isinstance(value, float) else value'
+  test: tests/test_runtime_coercion.py -k "rejects_non_years or fractional_season"
+  expected: kill
+  note: the original `int(s)` truncated 2024.5 to 2024 and loaded the wrong season
+
+- id: bool-str-truthy-string
+  group: codegen-runtime
+  finding: A-M17
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        text = value.strip().lower()'
+  mutant: '        return "true" if value else "false"'
+  test: tests/test_runtime_coercion.py -k "bool_str or string_false or bad_flag"
+  expected: kill
+  note: the original; bool_str("false") was "true"
+
+- id: espn-path-param-unquoted
+  group: codegen-runtime
+  finding: A-N2
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return quote(_wire_text(value), safe="")'
+  mutant: 'return _wire_text(value)'
+  test: tests/test_runtime_coercion.py -k "path_param_is_quoted or league_is_quoted"
+  expected: kill
+  note: team_id="13/roster" changed the route
+
+- id: espn-misspelled-kwarg-unchecked
+  group: codegen-runtime
+  finding: A-N3
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'bad = sorted(set(kwargs) - _GET_KWARGS)'
+  mutant: 'bad = []'
+  test: tests/test_runtime_coercion.py -k misspelled_kwarg
+  expected: kill
+  note: date= for dates= reached download and failed naming download(), after the wrapper had run
+
+- id: wire-text-bool-as-python-repr
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  # block scalars: the first line sets the indent, the later line keeps its 4 spaces
+  snippet: |-
+    return "true" if value else "false"
+        whole = _integral(value)
+  mutant: |-
+    pass
+        whole = _integral(value)
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: R896-3, a bool in a list-valued param went to the wire as "True" rather than "true"
+
 # --- R896-11: redaction linearity is a size ratio, not a wall-clock budget -----------------------------
 - id: redact-pair-separator-quadratic
   group: codegen-runtime
