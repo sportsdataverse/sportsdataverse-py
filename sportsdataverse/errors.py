@@ -350,7 +350,7 @@ _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueEr
 def _warn_schema_drift(where: str, exc: BaseException) -> None:
     """Warn that ``where`` (``"<parser>: <payload path>"``) met an unrecognised shape (A-L60)."""
     _warnings.warn(
-        f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); returning zero rows",
+        f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); no rows read from it",
         SchemaDriftWarning,
         stacklevel=3,
     )

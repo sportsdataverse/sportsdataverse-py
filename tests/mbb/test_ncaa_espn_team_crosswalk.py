@@ -195,8 +195,12 @@ def test_reads_the_release_first(monkeypatch):
 
 @pytest.mark.parametrize(
     "read",
-    [lambda url: None, lambda url: (_ for _ in ()).throw(AssetFetchError("release asset fetch failed with HTTP 403"))],
-    ids=["absent", "fetch-failed"],
+    [
+        lambda url: None,
+        lambda url: (_ for _ in ()).throw(AssetFetchError("release asset fetch failed with HTTP 403")),
+        lambda url: _release_like("mbb").drop("espn_team_id"),  # a drifted asset: the column cast fails
+    ],
+    ids=["absent", "fetch-failed", "drifted"],
 )
 def test_falls_back_to_the_bundled_copy(monkeypatch, read):
     monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
@@ -204,6 +208,14 @@ def test_falls_back_to_the_bundled_copy(monkeypatch, read):
     with pytest.warns(UserWarning, match="using the bundled copy"):
         df = ncaa_espn_team_crosswalk(league="wbb")
     assert df.equals(xw._packaged_crosswalk("wbb"))
+
+
+def test_a_bug_in_the_release_read_is_not_a_fallback(monkeypatch):
+    """MD-4: only a failed fetch, an absent asset or a drifted one falls back; any other error propagates."""
+    monkeypatch.setattr(xw, "_CROSSWALK_CACHE", {})
+    monkeypatch.setattr(xw, "_read_release_parquet", lambda url: (_ for _ in ()).throw(KeyError("a bug")))
+    with pytest.raises(KeyError, match="a bug"):
+        ncaa_espn_team_crosswalk(league="mbb")
 
 
 @skip_if_no_live

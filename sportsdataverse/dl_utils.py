@@ -513,7 +513,7 @@ def download(
                     # it would re-raise for the whole TTL instead of being fetched again (R880-4).
                     if _is_data_body(url, body):
                         cache_set(url, _cache_params, body, ttl=cache_ttl)
-                except Exception:  # noqa: BLE001
+                except (ValueError, OSError):  # a body that is not JSON, or a cache that cannot be written
                     pass
             return response
         except NoDataError:
@@ -527,7 +527,7 @@ def download(
             # now instead of retrying it with backoff for ~50 s (A-L30).
             _redact_exception(e)
             raise
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # noqa: BLE001 -- the retry loop: redacted, retried, and the last one raised after the loop
             # Before anything logs or re-raises it: requests quotes the URL, key and all.
             _redact_exception(e)
             last_exc = e

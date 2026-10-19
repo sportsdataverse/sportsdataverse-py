@@ -191,3 +191,24 @@ def test_empty_html_returns_empty_schema() -> None:
     df = parse_ncaa_bb_box("<html><body>nope</body></html>", "0")
     assert df.height == 0
     assert df.columns == list(ORACLE_TO_SNAKE.values())
+
+
+def test_failed_game_is_logged_not_printed(caplog, capsys) -> None:
+    """B-L41: a game the driver drops is reported through the module logger (sibling drivers' convention)."""
+    from sportsdataverse.errors import AssetFetchError
+    from sportsdataverse.mbb.mbb_ncaa_box_stats import _scrape_many
+
+    good, bad = GAMES["mbb"][0], "9999999"
+
+    class _Fetcher:
+        def fetch_game_individual_stats(self, contest_id: object) -> str:
+            if str(contest_id) == bad:
+                raise AssetFetchError("stats.ncaa.org answered 403")
+            return _fixture_html(str(contest_id))
+
+    with caplog.at_level("WARNING", logger="sportsdataverse.mbb.mbb_ncaa_box_stats"):
+        frames = _scrape_many([good, bad], _Fetcher())
+    assert len(frames) == 1 and frames[0].height > 0
+    assert f"Error with game id: {bad} // stats.ncaa.org answered 403" in caplog.text
+    assert f"{bad} removed" in caplog.text
+    assert capsys.readouterr().out == ""

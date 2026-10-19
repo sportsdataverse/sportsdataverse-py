@@ -91,7 +91,11 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _error_envelope_code
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _warn_schema_drift
+
+# What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
+# ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
+_FROM_PANDAS_ERRORS = (TypeError, ValueError, NotImplementedError, pl.exceptions.PolarsError)
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -135,7 +139,7 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         df[col] = df[col].apply(lambda v: str(v) if isinstance(v, (dict, list)) else v)
     try:
         return pl.from_pandas(df)
-    except Exception:
+    except _FROM_PANDAS_ERRORS:
         # Last-resort: stringify everything that is still object-typed
         for col in [c for c in df.columns if df[c].dtype == "object"]:
             df[col] = df[col].astype(str)
@@ -300,6 +304,7 @@ def parse_scoreboard(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
 # ===========================================================================
 
 
+@_zero_rows_unless_dict
 def parse_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a site-v2 teams response into a tidy polars frame.
 
@@ -348,7 +353,8 @@ def parse_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         df = pd.json_normalize(cleaned, sep="_")
         df = _snake_columns(df)
         return _to_output(df, return_as_pandas)
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_teams: teams", exc)
         return _empty_frame(return_as_pandas)
 
 
@@ -468,6 +474,7 @@ def _flatten_groups(groups: List[dict], parent_id: str = "", depth: int = 0) -> 
     return rows
 
 
+@_zero_rows_unless_dict
 def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     """Parse a groups response into a tidy polars frame.
 
@@ -493,7 +500,8 @@ def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
             groups = (leagues[0] or {}).get("groups") or [] if leagues else []
         else:
             groups = payload.get("groups") or []
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_groups: sports", exc)
         groups = []
 
     if not groups:
@@ -668,7 +676,8 @@ def parse_athlete_overview(payload: Dict, return_as_pandas: bool = False) -> pl.
             df = pd.json_normalize(payload, sep="_")
             df = _snake_columns(df)
             return _to_output(df, return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_athlete_overview: payload", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -767,7 +776,8 @@ def parse_athlete_stats(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
         try:
             df = pd.json_normalize(payload, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_athlete_stats: payload", exc)
             return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
@@ -902,7 +912,8 @@ def parse_athlete_splits(payload: Dict, return_as_pandas: bool = False) -> pl.Da
         try:
             df = pd.json_normalize(payload, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_athlete_splits: payload", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -978,7 +989,8 @@ def parse_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
         try:
             df = pd.json_normalize(payload, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_leaders: payload", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -1035,7 +1047,8 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
         try:
             df = pd.json_normalize(items, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_coaches: items", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -1077,7 +1090,7 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
 
     rounds = payload.get("rounds") or []
     if isinstance(rounds, dict):  # Core v2: the rounds are a $ref, so this is the draft's index row
-        return _single_row(payload, return_as_pandas)
+        return _single_row(payload, return_as_pandas, where="parse_draft: payload")
     all_picks: List[dict] = []
 
     if rounds:
@@ -1099,7 +1112,8 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         df = pd.json_normalize(all_picks, sep="_")
         df = _snake_columns(df)
         return _to_output(df, return_as_pandas)
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_draft: all_picks", exc)
         return _empty_frame(return_as_pandas)
 
 
@@ -1150,7 +1164,8 @@ def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False)
         try:
             df = pd.json_normalize(entries, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_event_competitor_roster: entries", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -1215,7 +1230,8 @@ def parse_event_competitor_statistics(payload: Dict, return_as_pandas: bool = Fa
         try:
             df = pd.json_normalize(payload, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_event_competitor_statistics: payload", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -1325,7 +1341,8 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
         try:
             df = pd.json_normalize(items, sep="_")
             return _to_output(_snake_columns(df), return_as_pandas)
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_event_plays: items", exc)
             return _empty_frame(return_as_pandas)
 
     df = pd.DataFrame(rows)
@@ -1433,7 +1450,8 @@ def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(events, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_team_schedule: events", exc)
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
@@ -1496,12 +1514,14 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
             return _empty_frame(return_as_pandas)
         try:
             df = pd.json_normalize(rows, sep="_")
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_team_roster: rows", exc)
             return _empty_frame(return_as_pandas)
     else:
         try:
             df = pd.json_normalize(athletes, sep="_")
-        except Exception:
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift("parse_team_roster: athletes", exc)
             return _empty_frame(return_as_pandas)
 
     df = _snake_columns(df)
@@ -1540,7 +1560,8 @@ def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(articles, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_news: articles", exc)
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
@@ -1574,7 +1595,8 @@ def parse_transactions(payload: Dict, return_as_pandas: bool = False) -> pl.Data
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(records, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_transactions: records", exc)
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
@@ -1611,7 +1633,8 @@ def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(teams, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_injuries: teams", exc)
         return _empty_frame(return_as_pandas)
     # Keep the per-player nested list column as a string so polars can ingest.
     for col in df.columns:
@@ -1780,7 +1803,8 @@ def parse_summary_plays(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(plays, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_summary_plays: plays", exc)
         return _empty_frame(return_as_pandas)
     # Stringify the participants list so polars accepts the frame.
     for col in df.columns:
@@ -1812,7 +1836,8 @@ def parse_summary_winprobability(payload: Dict, return_as_pandas: bool = False) 
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(wp, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift("parse_summary_winprobability: wp", exc)
         return _empty_frame(return_as_pandas)
     df = _snake_columns(df)
     return _to_output(df, return_as_pandas)
@@ -1876,13 +1901,14 @@ def parse_summary_leaders(payload: Dict, return_as_pandas: bool = False) -> pl.D
     return _to_output(df, return_as_pandas)
 
 
-def _single_row(payload_dict: Dict, return_as_pandas: bool):
+def _single_row(payload_dict: Dict, return_as_pandas: bool, where: str):
     """Flatten a dict to a single-row frame; zero-row frame on empty."""
     if not isinstance(payload_dict, dict) or not payload_dict:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(payload_dict, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
     # Stringify any list-valued cells so polars can ingest.
     for col in df.columns:
@@ -1892,13 +1918,14 @@ def _single_row(payload_dict: Dict, return_as_pandas: bool):
     return _to_output(df, return_as_pandas)
 
 
-def _row_per_item(items, return_as_pandas: bool):
+def _row_per_item(items, return_as_pandas: bool, where: str):
     """Flatten a list-of-dicts to one row per item; zero-row on empty."""
     if not isinstance(items, list) or not items:
         return _empty_frame(return_as_pandas)
     try:
         df = pd.json_normalize(items, sep="_")
-    except Exception:
+    except _SHAPE_ERRORS as exc:
+        _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
     for col in df.columns:
         if df[col].apply(lambda v: isinstance(v, list)).any():
@@ -1927,7 +1954,7 @@ def parse_summary_game_info(payload: Dict, return_as_pandas: bool = False) -> pl
             for k2, v2 in v.items():
                 if isinstance(v2, (str, int, float, bool)) or v2 is None:
                     flat[f"venue_{k}_{k2}"] = v2
-    return _single_row(flat, return_as_pandas)
+    return _single_row(flat, return_as_pandas, where="parse_summary_game_info: gameInfo")
 
 
 @_zero_rows_unless_dict
@@ -1938,7 +1965,7 @@ def parse_summary_officials(payload: Dict, return_as_pandas: bool = False) -> pl
     ``position``, ``order``.
     """
     officials = ((payload or {}).get("gameInfo") or {}).get("officials")
-    return _row_per_item(officials, return_as_pandas)
+    return _row_per_item(officials, return_as_pandas, where="parse_summary_officials: officials")
 
 
 def parse_summary_header(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -1949,7 +1976,11 @@ def parse_summary_header(payload: Dict, return_as_pandas: bool = False) -> pl.Da
     list is one element per game and is flattened as
     ``competitions_0_*`` columns.
     """
-    return _single_row(payload.get("header") if isinstance(payload, dict) else None, return_as_pandas)
+    return _single_row(
+        payload.get("header") if isinstance(payload, dict) else None,
+        return_as_pandas,
+        where="parse_summary_header: header",
+    )
 
 
 @_zero_rows_unless_dict
@@ -1962,7 +1993,7 @@ def parse_summary_season_series(payload: Dict, return_as_pandas: bool = False) -
     series entry.
     """
     series = (payload or {}).get("seasonseries")
-    return _row_per_item(series, return_as_pandas)
+    return _row_per_item(series, return_as_pandas, where="parse_summary_season_series: series")
 
 
 @_zero_rows_unless_dict
@@ -2059,7 +2090,9 @@ def parse_summary_broadcasts(payload: Dict, return_as_pandas: bool = False) -> p
     region``. One row per broadcast; zero-row frame when the list is
     absent or empty.
     """
-    return _row_per_item((payload or {}).get("broadcasts"), return_as_pandas)
+    return _row_per_item(
+        (payload or {}).get("broadcasts"), return_as_pandas, where="parse_summary_broadcasts: broadcasts"
+    )
 
 
 def parse_summary_format(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -2069,7 +2102,11 @@ def parse_summary_format(payload: Dict, return_as_pandas: bool = False) -> pl.Da
     overtime: {displayName, slug, clock}}``. Flattens to a single-row
     frame with ``regulation_*`` and ``overtime_*`` columns.
     """
-    return _single_row(payload.get("format") if isinstance(payload, dict) else None, return_as_pandas)
+    return _single_row(
+        payload.get("format") if isinstance(payload, dict) else None,
+        return_as_pandas,
+        where="parse_summary_format: format",
+    )
 
 
 @_zero_rows_unless_dict
@@ -2081,7 +2118,9 @@ def parse_summary_pickcenter(payload: Dict, return_as_pandas: bool = False) -> p
     past games; this parser returns a zero-row frame when the list is
     absent.
     """
-    return _row_per_item((payload or {}).get("pickcenter"), return_as_pandas)
+    return _row_per_item(
+        (payload or {}).get("pickcenter"), return_as_pandas, where="parse_summary_pickcenter: pickcenter"
+    )
 
 
 @_zero_rows_unless_dict
@@ -2091,7 +2130,7 @@ def parse_summary_odds(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     Similar shape to ``pickcenter`` but typically a flatter list of
     provider × market entries.  Empty for many past games.
     """
-    return _row_per_item((payload or {}).get("odds"), return_as_pandas)
+    return _row_per_item((payload or {}).get("odds"), return_as_pandas, where="parse_summary_odds: odds")
 
 
 def parse_summary_article(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
@@ -2101,7 +2140,11 @@ def parse_summary_article(payload: Dict, return_as_pandas: bool = False) -> pl.D
     ``id, headline, description, byline, published, links, images``.
     Flattens to one row.
     """
-    return _single_row(payload.get("article") if isinstance(payload, dict) else None, return_as_pandas)
+    return _single_row(
+        payload.get("article") if isinstance(payload, dict) else None,
+        return_as_pandas,
+        where="parse_summary_article: article",
+    )
 
 
 @_zero_rows_unless_dict
@@ -2114,7 +2157,7 @@ def parse_summary_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.
     endpoint or on ``{"injuries": payload["injuries"]}`` for the same
     output; this parser is a convenience that handles the unwrap.
     """
-    return _row_per_item((payload or {}).get("injuries"), return_as_pandas)
+    return _row_per_item((payload or {}).get("injuries"), return_as_pandas, where="parse_summary_injuries: injuries")
 
 
 @_zero_rows_unless_dict
@@ -2126,7 +2169,7 @@ def parse_summary_news(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     Returns one row per article from ``news.articles``.
     """
     news = (payload or {}).get("news") or {}
-    return _row_per_item(news.get("articles"), return_as_pandas)
+    return _row_per_item(news.get("articles"), return_as_pandas, where="parse_summary_news: articles")
 
 
 @_zero_rows_unless_dict
@@ -2155,7 +2198,9 @@ def parse_single_entity(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
         ``pl.DataFrame`` (or pandas) with one row of the flattened
         payload. Zero-row frame on empty / non-dict input.
     """
-    return _single_row(payload if isinstance(payload, dict) else None, return_as_pandas)
+    return _single_row(
+        payload if isinstance(payload, dict) else None, return_as_pandas, where="parse_single_entity: payload"
+    )
 
 
 @_zero_rows_unless_dict
@@ -2184,7 +2229,7 @@ def parse_summary_drives(payload: Dict, return_as_pandas: bool = False) -> pl.Da
     """
     drives = (payload or {}).get("drives") or {}
     previous = drives.get("previous") if isinstance(drives, dict) else None
-    return _row_per_item(previous, return_as_pandas)
+    return _row_per_item(previous, return_as_pandas, where="parse_summary_drives: previous")
 
 
 @_zero_rows_unless_dict
@@ -2198,7 +2243,9 @@ def parse_summary_scoring_plays(payload: Dict, return_as_pandas: bool = False) -
     Returns one row per scoring play; zero rows when the section is
     absent or empty.
     """
-    return _row_per_item((payload or {}).get("scoringPlays"), return_as_pandas)
+    return _row_per_item(
+        (payload or {}).get("scoringPlays"), return_as_pandas, where="parse_summary_scoring_plays: scoringPlays"
+    )
 
 
 @_zero_rows_unless_dict
@@ -2243,7 +2290,7 @@ def parse_summary_drive_plays(payload: Dict, return_as_pandas: bool = False) -> 
             for k, v in play.items():
                 row[k] = v
             rows.append(row)
-    return _row_per_item(rows, return_as_pandas)
+    return _row_per_item(rows, return_as_pandas, where="parse_summary_drive_plays: rows")
 
 
 @_zero_rows_unless_dict

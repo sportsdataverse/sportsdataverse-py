@@ -28,6 +28,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _read_release_parquet, cli_warn
 from sportsdataverse.config import SDVRELEASES
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_team_ids import _LEAGUE_PKG, _league_data_bytes
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -71,7 +72,9 @@ def _release_crosswalk(league: str) -> Optional[pl.DataFrame]:
         if df is not None:
             return df.select([pl.col(c).cast(t) for c, t in _SCHEMA.items()])
         reason = "no published asset"
-    except Exception as e:  # noqa: BLE001 -- offline, rate-limited or drifted: the bundled copy still answers
+    # A failed fetch (offline, rate-limited) or a drifted asset (a column gone or of another type) is a stale
+    # fallback, not an empty one: the bundled copy still answers, with a warning (MD-4). Anything else is a bug.
+    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:
         reason = f"{type(e).__name__}: {e}"
     cli_warn(f"ncaa_espn_team_crosswalk: {url} unavailable ({reason}); using the bundled copy")
     return None

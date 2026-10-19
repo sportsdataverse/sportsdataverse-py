@@ -520,7 +520,6 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
             return _to_output(df, return_as_pandas)
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift(f"parse_edge_payload: {best_key}", exc)
-            pass
 
     # Single-row fallback.
     return parse_edge_detail(payload, return_as_pandas=return_as_pandas)

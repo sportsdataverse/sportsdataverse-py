@@ -1879,3 +1879,18 @@ def test_dtype_snapshot_ids_are_never_float(name):
 
 if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change
     _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")
+
+
+@pytest.mark.parametrize(
+    ("parser", "fixture", "key"),
+    [("parse_news", "news_nba", "articles"), ("parse_transactions", "transactions_nba", "transactions")],
+)
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
+    """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
+    import sportsdataverse._common_espn_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    assert parse(raw).height > 0
+    with pytest.warns(SchemaDriftWarning, match=f"{parser}: "):
+        assert parse({**raw, key: [str(row) for row in raw[key]]}).height == 0
