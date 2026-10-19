@@ -2158,10 +2158,15 @@ def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
         return plays_df
     rest = plays_df.filter(~stray)
     for row in plays_df.filter(stray).iter_slices(1):
-        p, t = row["period.number"].item(), row["start.adj_TimeSecsRem"].item()
-        rest_p = rest["period.number"].cast(pl.Int64, strict=False)
-        # after every earlier period's play and every play of its own period with more time left
-        at = int(((rest_p < p) | ((rest_p == p) & (rest["start.adj_TimeSecsRem"] > t))).sum())
+        p, t, f = row["period.number"].item(), row["start.adj_TimeSecsRem"].item(), row["_feed"].item()
+        rest_p, rest_t = rest["period.number"].cast(pl.Int64, strict=False), rest["start.adj_TimeSecsRem"]
+        # just after the LAST play that comes before it (an earlier period, more time left, or the same
+        # clock and earlier in ESPN's feed), not after a count of them: the id-sorted rest is not always
+        # in clock order (401420836 files this rush's 11:58 twin among its 14:43 plays), and on a clock
+        # tie the feed decides (400548110's personal foul follows the 9:41 touchdown it is filed after)
+        before = (rest_p < p) | ((rest_p == p) & ((rest_t > t) | ((rest_t == t) & (rest["_feed"] < f))))
+        hits = before.fill_null(False).arg_true()
+        at = int(hits[-1]) + 1 if hits.len() else 0
         rest = pl.concat([rest.slice(0, at), row, rest.slice(at)])
     return rest
 
@@ -2179,7 +2184,9 @@ def _sort_plays_ot_aware(plays_df: pl.DataFrame) -> pl.DataFrame:
     """
     # maintain_order: a play repeated under drives.current sits after its
     # drives.previous copy, so the same-id dedupe keeps the fresher one
+    plays_df = plays_df.with_row_index("_feed")  # ESPN's feed order breaks a clock tie (R837-1)
     plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))
+    plays_df = plays_df.drop("_feed")
     if "period.number" not in plays_df.columns or "sequenceNumber" not in plays_df.columns:
         return _reunite_drive_rows(plays_df)
     plays_df = _place_tries_filed_after_the_kickoff(_reunite_drive_rows(_reorder_late_inserts(plays_df)))
