@@ -48,7 +48,7 @@ def serve(monkeypatch) -> Callable[[Callable[[str], Answer]], List[Dict[str, Any
 
         def request(self, method, url, *args, **kwargs):
             url = requests.Request(method, url, params=kwargs.get("params")).prepare().url  # with the query
-            calls.append({"method": method, "url": url, "timeout": kwargs.get("timeout")})
+            calls.append({"method": method, "url": url, "timeout": kwargs.get("timeout"), "session": self})
             got = answer(url)
             if isinstance(got, Exception):
                 raise got
@@ -109,9 +109,10 @@ def test_a_failed_mint_surfaces_through_the_nfl_api_wrapper_getter(serve):
 def test_mint_returns_the_access_token_and_refuses_a_body_without_one(serve):
     serve(lambda url: (200, '{"accessToken": "eyJ.not-a-real.token", "expiresIn": 3600}'))
     assert nfl_games._mint_token("k", "s") == "eyJ.not-a-real.token"
-    serve(lambda url: (200, '{"refreshToken": "r"}'))
-    with pytest.raises(AssetFetchError, match="without an accessToken"):
-        nfl_games._mint_token("k", "s")
+    for body in ('{"refreshToken": "r"}', '{"accessToken": ""}'):  # an empty one would be sent as "Bearer "
+        serve(lambda url, body=body: (200, body))
+        with pytest.raises(AssetFetchError, match="without an accessToken"):
+            nfl_games._mint_token("k", "s")
 
 
 def test_game_details_real_body_unwraps(serve):
@@ -136,6 +137,13 @@ def test_game_details_graphql_errors_envelope_is_a_failed_fetch(serve):
         nfl_games.nfl_game_details(game_id=GAME, headers={}, raw=True)
 
 
+def test_game_details_errors_beside_a_populated_game_detail_is_a_failed_fetch(serve):
+    """Ruling: any GraphQL ``errors`` list raises, even next to data -- a partial answer is an unknown answer."""
+    serve(lambda url: (200, _envelope(errors=[{"message": "partial: drives unavailable"}])))
+    with pytest.raises(AssetFetchError, match="partial: drives unavailable"):
+        nfl_games.nfl_game_details(game_id=GAME, headers={})
+
+
 def test_game_details_without_game_detail_is_a_failed_fetch(serve):
     serve(lambda url: (200, _envelope(data={"viewer": {}})))
     with pytest.raises(AssetFetchError, match="without data.viewer.gameDetail"):
@@ -147,10 +155,37 @@ def test_game_details_null_game_detail_is_an_empty_game(serve):
     assert nfl_games.nfl_game_details(game_id=GAME, headers={}) == {}
 
 
-def test_ngs_real_body_parses(serve):
-    serve(lambda url: (200, "<html>home</html>") if url == nfl_ngs._HOME else (200, HIGHLIGHT))
+def test_ngs_real_body_parses_on_the_warmed_session(serve):
+    calls = serve(lambda url: (200, "<html>home</html>") if url == nfl_ngs._HOME else (200, HIGHLIGHT))
     df = nfl_ngs.nfl_ngs_play_is_highlight(game_id=2025090708, play_id=2244)
+    nfl_ngs.nfl_ngs_play_is_highlight(game_id=2025090708, play_id=2244)
     assert df.height == 1 and df["isHighlight"].to_list() == [True]
+    # One warm-up, then every API call on that session (its UA / Referer / cookies), not download's shared one.
+    assert [c["url"] for c in calls].count(nfl_ngs._HOME) == 1 and calls[0]["url"] == nfl_ngs._HOME
+    assert [c["session"] for c in calls[1:]] == [nfl_ngs._SESSION] * 2
+    assert nfl_ngs._SESSION.headers["Referer"] == nfl_ngs._REFERER
+
+
+@pytest.mark.parametrize("status", [429, 503])
+def test_ngs_retries_a_rate_limit_or_5xx(serve, status):
+    answers = iter([(status, '{"message": "busy"}'), (200, HIGHLIGHT)])
+    calls = serve(lambda url: (200, "<html>home</html>") if url == nfl_ngs._HOME else next(answers))
+    df = nfl_ngs.nfl_ngs_play_is_highlight(game_id=2025090708, play_id=2244)
+    assert df.height == 1
+    assert len([c for c in calls if c["url"] != nfl_ngs._HOME]) == 2
+
+
+def test_ngs_is_never_cached_even_when_the_warm_up_sets_no_cookie(serve, monkeypatch):
+    """An empty cookie jar made the session look uncredentialed, so ``download`` would have cached NGS."""
+    import sportsdataverse.cache as cache
+
+    touched: List[str] = []
+    monkeypatch.setattr(cache, "get_cache_mode", lambda: "memory")
+    monkeypatch.setattr(cache, "cache_get", lambda *a, **k: touched.append("get"))
+    monkeypatch.setattr(cache, "cache_set", lambda *a, **k: touched.append("set"))
+    serve(lambda url: requests.ConnectionError("warm-up down") if url == nfl_ngs._HOME else (200, HIGHLIGHT))
+    nfl_ngs.nfl_ngs_play_is_highlight(game_id=2025090708, play_id=2244)
+    assert touched == []
 
 
 def test_ngs_deny_is_answered_once(serve):
@@ -173,14 +208,42 @@ def test_ngs_deny_is_answered_once(serve):
     ids=["mint", "ngs", "nfl_api", "nflpro", "details"],
 )
 def test_getters_honour_sdv_py_http_timeout(serve, monkeypatch, getter):
-    """A-L67: the NFL getters hard-set their timeout and ignored ``SDV_PY_HTTP_TIMEOUT``."""
+    """A-L67: the NFL getters hard-set their timeout and ignored ``SDV_PY_HTTP_TIMEOUT`` (the NGS warm-up too)."""
     calls = serve(lambda url: (200, '{"accessToken": "t"}') if "token" in url else (200, HIGHLIGHT))
     monkeypatch.setenv("SDV_PY_HTTP_TIMEOUT", "7")
     try:
         getter()
     except AssetFetchError:  # details refuses the isHighlight body; the request was still made
         pass
-    assert {c["timeout"] for c in calls if c["url"] != nfl_ngs._HOME} == {7}
+    assert {c["timeout"] for c in calls} == {7}
+
+
+@pytest.mark.parametrize(
+    ("getter", "default"),
+    [
+        (lambda: nfl_games._mint_token("k", "s"), 30),
+        (lambda: nfl_ngs.nfl_ngs_play_is_highlight(game_id=2025090708, play_id=2244), 20),
+        (lambda: nfl_api_runtime._get("https://api.nfl.com/football/v2/x", headers={}), 30),
+        (lambda: nflpro_runtime._get("https://pro.nfl.com/x", headers={}), 45),
+        (lambda: nfl_games.nfl_game_details(game_id=GAME, headers={}), 30),
+    ],
+    ids=["mint", "ngs", "nfl_api", "nflpro", "details"],
+)
+def test_getters_keep_their_default_timeout(serve, getter, default):
+    calls = serve(lambda url: (200, '{"accessToken": "t"}') if "token" in url else (200, HIGHLIGHT))
+    try:
+        getter()
+    except AssetFetchError:
+        pass
+    assert {c["timeout"] for c in calls} == {default}
+
+
+def test_nflpro_403_is_answered_once(serve):
+    """A 401 / 403 is a missing entitlement: ``download``'s default policy would retry the 403."""
+    calls = serve(lambda url: (403, "<html>Forbidden</html>"))
+    with pytest.raises(nflpro_runtime.NFLProAuthError):
+        nflpro_runtime._get("https://pro.nfl.com/api/secured/stats/x", headers={})
+    assert len(calls) == 1
 
 
 def test_nflpro_auth_error_is_an_asset_fetch_error_and_still_a_runtime_error():
@@ -201,14 +264,17 @@ def test_nflpro_string_limit_still_pages(serve):
     assert len(body["passers"]) == 12
 
 
-def test_an_undecodable_nflpro_token_is_logged_not_silent(caplog):
+@pytest.mark.parametrize(
+    ("secret", "kind"),
+    [("not-a-jwt-secret", "IndexError"), ("a.!!!.c", "JSONDecodeError")],  # JWT-shaped garbage: a ValueError
+)
+def test_an_undecodable_nflpro_token_is_logged_not_silent(caplog, secret, kind):
     """A-L70: ``except Exception: return False`` made a token that never decodes re-log-in silently."""
-    secret = "not-a-jwt-secret"
     with caplog.at_level(logging.WARNING, logger=nflpro_runtime.__name__):
         assert nflpro_runtime._fresh(secret) is False
         assert nflpro_runtime._entitled(secret) is False
     assert [r.getMessage() for r in caplog.records] == [
-        "NFL Pro token does not decode (IndexError); treating it as unusable"
+        f"NFL Pro token does not decode ({kind}); treating it as unusable"
     ] * 2
     assert secret not in caplog.text
 

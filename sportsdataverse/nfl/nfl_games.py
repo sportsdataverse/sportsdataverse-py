@@ -292,7 +292,8 @@ def nfl_game_details(
         ValueError: api.nfl.com answered 400 / 422.
         AssetFetchError: Any other non-2xx or a connection failure after retries (the
             token mint's included), a 2xx whose body is not a JSON object or array, or
-            a body carrying a GraphQL ``errors`` list or no ``data.viewer.gameDetail``.
+            a body with no ``data.viewer.gameDetail`` or carrying any GraphQL ``errors``
+            list, even alongside a populated ``gameDetail`` (a partial answer is an unknown one).
 
     Example:
         Quick start::

@@ -92,7 +92,7 @@ def _get_session() -> requests.Session:
         sess.headers.update({"User-Agent": _UA, "Referer": _REFERER})
         # Warm the cookie jar -- one homepage hit seeds the gateway cookies.
         try:
-            sess.get(_HOME, timeout=20)
+            sess.get(_HOME, timeout=_env_int(_ENV_TIMEOUT, 20))
         except requests.RequestException:
             pass
         _SESSION = sess
@@ -108,6 +108,8 @@ def _ngs_get(path: str, params: Optional[dict] = None) -> dict:
 
     Goes through :func:`sportsdataverse.dl_utils.download` (retries 408 / 429 / 5xx; the
     timeout honours ``SDV_PY_HTTP_TIMEOUT``, default 20 s) and the error vocabulary (B-M22).
+    Never cached (``cache_ttl=0``), as before: whether ``download`` would cache depends on
+    whether the warm-up left cookies in the session.
 
     Args:
         path: API path beginning with ``/`` (e.g. ``"/statboard/passing"``).
@@ -129,6 +131,7 @@ def _ngs_get(path: str, params: Optional[dict] = None) -> dict:
         session=_get_session(),
         timeout=_env_int(_ENV_TIMEOUT, 20),
         retry_statuses=_NGS_RETRY_STATUSES,
+        cache_ttl=0,
     )
 
 
