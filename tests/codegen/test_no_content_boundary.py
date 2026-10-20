@@ -458,18 +458,12 @@ _LOOKUPS = {
     "kzs _header": ("basketball.kzs.kzs_runtime", "_fetch", lambda R: R._header(7)),
     "kzs _season_competitions": ("basketball.kzs.kzs_runtime", "_fetch", lambda R: R._season_competitions(27)),
     "easl _season": ("basketball.easl.easl_runtime", "_fetch", lambda R: R._season(2026)),
-    "easl _period_table": ("basketball.easl.easl_runtime", "_fetch", lambda R: R._period_table("f", {"teams": []})),
     "easl _no_stale": ("basketball.easl.easl_runtime", "_fetch", lambda R: R._no_stale([])),
     "tpbl _season_row": ("basketball.tpbl.tpbl_runtime", "_list_body", lambda R: R._season_row(2025)),
     "tpbl _verify_games": ("basketball.tpbl.tpbl_runtime", "_list_body", lambda R: R._verify_games("u", {"id": 1}, [])),
     "tbf _league": ("basketball.tbf.tbf_runtime", "_fetch", lambda R: R._league(2025, "bsl")),
     "cba _info": ("basketball.cba.cba_runtime", "_fetch", lambda R: R._info(1)),
     "wjbl _final_header": ("basketball.wjbl.wjbl_runtime", "_fetch", lambda R: R._final_header(1)),
-    "khl _all_goalies": (
-        "hockey.khl.khl_runtime",
-        "_post",
-        lambda R: R._all_goalies("https://www.khl.ru/rest/x/", {}, None, 1, {}),
-    ),
     # lookups at a ``with _no_content_unknown(...)`` site inside a route
     "easl header check": (
         "basketball.easl.easl_runtime",
@@ -544,3 +538,42 @@ def test_fiba_alternate_url_lookups_answering_no_content_are_an_unknown_answer(m
     with pytest.raises(AssetFetchError, match=r"alternate-URL lookups\): the lookup answered HTTP 204") as err:
         R._get("https://www.fiba.basketball/en/games/100720", {"comp": 208182})
     assert not isinstance(err.value, (_NoContent, R._NotFoundShell))
+
+
+_FID = "10af8fd4-106e-11f1-960b-5798087c7aa3"
+_CTX = {"body": {"fixtureId": _FID}, "teams": ["A", "B"], "scores": {"A": 80, "B": 70}}
+
+
+def test_easl_period_table_is_the_period_routes_own_answer(monkeypatch):
+    """R4.1b-d-11: the per-period route's own 204 is {}; the same table checked by the play-by-play is a lookup."""
+    R = _mod("basketball.easl.easl_runtime")
+    monkeypatch.setattr(R, "_header", lambda fid, **kw: _CTX)
+    monkeypatch.setattr(R, "_fetch", _no_content)
+    assert R._get(f"{R.BASE}/matches/{_FID}/teamstats/by/period") == {}
+    pbp = {"playbyplay": [{"periodId": 4, "scores": {"A": 80, "B": 70}}], "teams": [{"teamId": "A"}, {"teamId": "B"}]}
+    monkeypatch.setattr(R, "_fetch", lambda path, params=None, **kw: pbp)
+    monkeypatch.setattr(R, "_period_table", _no_content)
+    with pytest.raises(AssetFetchError, match=r"period check\): the lookup answered HTTP 204"):
+        R._get(f"{R.BASE}/matches/{_FID}/playbyplay")
+
+
+def _goalie_page(n: int) -> Dict[str, Any]:
+    rows = [{"cols": {"gp": 1, "w": 0}, "first": [{"link": f"/p/{n}-{i}", "val": f"G{n}{i}"}]} for i in range(20)]
+    return {"status": "success", "data": {"list": [{"list": rows}]}}  # a full page, no nav.max
+
+
+def test_khl_goalie_paging_a_204_after_page_one_is_a_partial_list(monkeypatch):
+    """R4.1b-d-10: a full page 1 with no nav.max, then a 204 on page 2, is unknown, never page 1 alone."""
+    R = _mod("hockey.khl.khl_runtime")
+    pages = iter([_goalie_page(1)])
+    monkeypatch.setattr(R, "_post", lambda *a, **k: next(pages, None) or _no_content())
+    with pytest.raises(AssetFetchError, match="page 2 answered HTTP 204 mid-list"):
+        R._all_goalies("https://www.khl.ru/rest/stat/players/", {}, None, 1, {})
+
+
+def test_khl_goalie_paging_a_204_on_page_one_is_the_routes_empty_answer(monkeypatch):
+    """A 204 on page 1 is the route's own answer: ``_NoContent``, which ``_get`` turns into {}."""
+    R = _mod("hockey.khl.khl_runtime")
+    monkeypatch.setattr(R, "_post", _no_content)
+    with pytest.raises(_NoContent):
+        R._all_goalies("https://www.khl.ru/rest/stat/players/", {}, None, 1, {})

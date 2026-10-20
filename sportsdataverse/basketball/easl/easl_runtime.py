@@ -294,7 +294,6 @@ def _periods(body: Any) -> List[int]:
     return sorted({int(k[7:]) for r in _rows(body) for k in r if re.fullmatch(r"period_\d+", k)})
 
 
-@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _period_table(fid: str, ctx: Mapping[str, Any], **kw: Any) -> List[Mapping[str, Any]]:
     where = f"easl.joshricha.com/api/v1/matches/{fid}/teamstats/by/period"
     rows = _rows(_list(where, _fetch(f"/matches/{fid}/teamstats/by/period", None, **kw)))
@@ -353,7 +352,9 @@ def _game_route(name: str, fid: str, **kw: Any) -> Any:
             raise AssetFetchError(
                 f"{where}/playbyplay: the last event is in period {pids[-1]!r}, not the final period (4 or more)"
             )
-        table = _period_table(fid, ctx, **kw)
+        # the per-period route's own answer elsewhere; here a check of the play-by-play, so its 204 is unknown (R4.1b-d-11)
+        with _rt._no_content_unknown(f"{where}/teamstats/by/period (the play-by-play's period check)"):
+            table = _period_table(fid, ctx, **kw)
         if max(_periods(table)) != max(known):
             raise AssetFetchError(
                 f"{where}/playbyplay: ends in period {max(known)}, the period table in {max(_periods(table))}"
