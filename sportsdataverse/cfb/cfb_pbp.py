@@ -2000,9 +2000,12 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
       earlier, and a 10:44 punt after the next drive's first run). The stranded copy goes;
       the copy inside its drive stays, so a down replayed in its own drive is never touched.
       A clock that half its period's rows share (a clockless feed's 0:00, an old overtime's
-      15:00) tells no plays apart, and such a row is never called a copy. Over the 23,024
-      cfb-raw games: 490 rows in 235 games (213 of them punts), each with its twin kept; 438
-      sit next to that twin in ESPN's feed.
+      15:00) tells no plays apart, and such a row is never called a copy. "Half" is a safe
+      margin, not a boundary the data sets: the one known wrong drop (401327913's kickoffs)
+      sat at 95%, and 0.6-0.9 would drop only more real copies (17 rows at 0.6). Over the
+      23,024 cfb-raw games this step drops 490 rows in 235 games (213 of them punts), each
+      with its twin kept (489 fewer rows after the whole pipeline); 438 sit next to that twin
+      in ESPN's feed.
 
     Timeouts and end-of-period rows are never dropped, and neither is a play without a start
     spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
