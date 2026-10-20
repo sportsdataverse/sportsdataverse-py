@@ -525,16 +525,19 @@ def test_the_captured_challenge_page_matches_the_challenge_title() -> None:
     assert realgm._tables(_CHALLENGE) == []
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="B-M8: a never-cleared Cloudflare challenge parses to a zero-row frame; task 4.4",
-)
 def test_a_challenge_page_is_a_failed_fetch() -> None:
     from sportsdataverse.errors import AssetFetchError
 
-    try:
-        out = realgm.realgm_players(fetcher=lambda path, proxy: _CHALLENGE)
-    except AssetFetchError:
-        return
-    raise AssertionError(f"the challenge page became a {out.shape} frame")
+    with pytest.raises(AssetFetchError, match=r"/nba/players is still the Cloudflare challenge page.*Just a moment"):
+        realgm.realgm_players(fetcher=lambda path, proxy: _CHALLENGE)
+
+
+def test_a_challenge_page_raises_from_every_endpoint() -> None:
+    # B-M8 is at the shared fetch boundary, so no realgm_* call parses the challenge page.
+    from sportsdataverse.errors import AssetFetchError
+
+    endpoints = [getattr(realgm, name) for name in realgm.__all__ if name != "realgm_close_browser"]
+    assert len(endpoints) == 17
+    for endpoint in endpoints:
+        with pytest.raises(AssetFetchError, match="Cloudflare challenge"):
+            endpoint(fetcher=lambda path, proxy: _CHALLENGE)
