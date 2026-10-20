@@ -388,3 +388,36 @@ def test_a_live_poll_has_no_winner_and_a_final_has_one():
     final, _ = _adapted("fox_nfl_401671775.json", "401671775", "26", "22")
     assert [c["winner"] for c in live["header"]["competitions"][0]["competitors"]] == [False, False]
     assert sorted(c["winner"] for c in final["header"]["competitions"][0]["competitors"]) == [False, True]
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_hands_over_whatever_form_it_takes(row, missing):
+    """The guard tested raw truthiness: NaN passed (and failed later in the summary), pandas.NA raised."""
+    payload = _load("fox_nfl_401671775.json")
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _fox_adapter(
+            "nfl", int(row["espn_event_id"]), _Ctx(payload=payload, idmap_row={**row, "home_espn_team_id": missing})
+        )
+
+
+def test_a_float_id_map_row_resolves_the_fox_id_by_integer_team_ids(row, monkeypatch):
+    """B-GB-22: ``str(26.0 or "")`` is "26.0", which is no key of the ESPN -> Fox team table."""
+    import sportsdataverse.nfl.fox_pbp.to_espn_summary as adapter_module
+
+    seen = []
+    monkeypatch.setattr(
+        adapter_module, "_resolve_fox_game_id", lambda *a, **k: seen.append(a[3:5]) or (None, "unresolved")
+    )
+    floats = {
+        **row,
+        "home_espn_team_id": float(row["home_espn_team_id"]),
+        "away_espn_team_id": float(row["away_espn_team_id"]),
+    }
+    _resolve_fox_event_id(floats, transport=lambda path: pytest.fail("no request"))
+    assert seen == [(row["home_espn_team_id"], row["away_espn_team_id"])]

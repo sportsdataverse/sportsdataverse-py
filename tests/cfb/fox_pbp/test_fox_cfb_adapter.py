@@ -171,3 +171,16 @@ def test_fox_cfb_espn_reference_parity(final):
     report = espn_reference_report("cfb", int(ROW["espn_event_id"]), "fox", final, ROW, odds)
     assert report.check(ESPN_REFERENCE_PINNED) == [], report.gates()
     print("FOX_CFB_ESPN_REFERENCE_OK", report.gates()["paired_share"])
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_hands_over_whatever_form_it_takes(final, missing):
+    """The guard tested raw truthiness: NaN passed (and failed later in the summary), pandas.NA raised."""
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _fox_adapter("cfb", 401856679, _Ctx(payload=final, idmap_row={**ROW, "home_espn_team_id": missing}))

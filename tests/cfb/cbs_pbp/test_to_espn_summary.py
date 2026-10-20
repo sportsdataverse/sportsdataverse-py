@@ -736,3 +736,34 @@ def test_a_float_id_map_row_adapts_exactly_like_the_text_row(osu_tex_cbs):
     good, adapted = _adapt(osu_tex_cbs, OSU_TEX_ROW)[0], _adapt(osu_tex_cbs, floats)[0]
     assert adapted["header"]["id"] == OSU_TEX_ROW["espn_event_id"]
     assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_hands_over_whatever_form_it_takes(osu_tex_cbs, missing):
+    """The guard tested raw truthiness: NaN passed (and became "" in the summary), pandas.NA raised."""
+    from sportsdataverse.football.sources.dispatch import SourceContext
+
+    row = {**OSU_TEX_ROW, "home_espn_team_id": missing}
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _adapter_for("cfb", "cbs")("cfb", OSU_TEX_ESPN_ID, SourceContext(idmap_row=row, payload=osu_tex_cbs))
+
+
+def test_a_float_id_map_row_looks_the_cbs_game_up_by_integer_team_ids(monkeypatch):
+    """B-GB-22: the week-scoreboard lookup received ``251.0`` / ``194.0``, which match no CBS card."""
+    from sportsdataverse.cfb.cbs_pbp import game_id as game_id_module
+    from sportsdataverse.football.sources.dispatch import SourceContext
+
+    seen = []
+    monkeypatch.setattr(
+        game_id_module, "_resolve_cbs_game_id", lambda *a, **k: seen.append(a[2:4]) or (None, {"how": "unresolved"})
+    )
+    floats = {**OSU_TEX_ROW, "home_espn_team_id": 251.0, "away_espn_team_id": 194.0}
+    with pytest.raises(SourceUnavailable, match="no CBS game id"):
+        _adapter_for("cfb", "cbs")("cfb", OSU_TEX_ESPN_ID, SourceContext(idmap_row=floats))
+    assert seen == [("251", "194")]

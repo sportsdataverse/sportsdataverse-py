@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import ESPN_PLAY_TYPES as _YAHOO_CFB_PLAY_TYPES
 from sportsdataverse.football.fox_common import (
     _fox_event_data,
@@ -174,7 +175,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             f"cfb {espn_id}: fox event {fox_event_id or payload.get('header', {}).get('id')} carries no "
             "play-by-play (HTTP 200 with no plays: FCS-hosted, or before Fox's 2022 play floor)"
         )
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)

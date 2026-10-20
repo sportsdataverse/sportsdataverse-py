@@ -19,6 +19,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.football.fox_common import (
     _fox_event_data,
     _fox_event_odds,
@@ -65,8 +66,8 @@ def _resolve_fox_event_id(idmap_row: Mapping[str, Any], *, transport: Any = None
         row.get("season"),
         row.get("season_type"),
         row.get("week"),
-        row.get("home_espn_team_id"),
-        row.get("away_espn_team_id"),
+        _id_text(row.get("home_espn_team_id")),
+        _id_text(row.get("away_espn_team_id")),
         transport=transport,
     )
 
@@ -141,7 +142,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             "play-by-play (HTTP 200 with no plays: before Fox's 2024 NFL play floor, "
             "or a listed game Fox has not served yet)"
         )
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)

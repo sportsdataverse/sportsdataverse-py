@@ -798,3 +798,19 @@ def test_a_float_id_map_row_adapts_exactly_like_the_text_row():
     adapted = _ncaa_to_espn_summary(bundle(name), floats)[0]
     assert adapted["header"]["id"] == row["espn_event_id"]
     assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_falls_back_to_the_crosswalk_whatever_form_it_takes(missing):
+    """A NaN id passed the raw-truthiness guard, skipped the crosswalk and became "" in the summary
+    (handed over); pandas.NA raised. Missing in any form, the crosswalk resolves the club."""
+    row = {**idmap_row("final_fbs_6386337"), "home_espn_team_id": missing}
+    adapted = adapter(401762505, _Ctx(payload=bundle("final_fbs_6386337"), idmap_row=row))
+    competitors = adapted.summary["header"]["competitions"][0]["competitors"]
+    assert [c["team"]["id"] for c in competitors] == ["2226", "202"]

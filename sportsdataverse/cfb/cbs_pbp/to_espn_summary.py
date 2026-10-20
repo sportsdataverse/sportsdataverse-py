@@ -973,7 +973,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     row = dict(ctx.idmap_row or {})
     row.setdefault("espn_event_id", str(espn_id))
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     cbs_game_id = str(payload.get("cbs_game_id")) if payload is not None and payload.get("cbs_game_id") else None
@@ -989,8 +990,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         cbs_game_id, scoreboard_provenance = _resolve_cbs_game_id(
             int(row["season"]),
             int(row["week"]),
-            row["home_espn_team_id"],
-            row["away_espn_team_id"],
+            _id_text(row["home_espn_team_id"]),
+            _id_text(row["away_espn_team_id"]),
             kickoff_utc=row.get("kickoff_utc"),
             season_type=int(row.get("season_type") or 2),
         )

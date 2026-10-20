@@ -889,7 +889,8 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         )
 
     team_ids: Dict[str, str] = {}
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         from sportsdataverse.cfb.cfb_ncaa_box import parse_cfb_ncaa_linescore
 
         # The completeness test is PER SIDE and spans both sources, because that is how
@@ -897,7 +898,11 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         # Counting ``team_ids`` alone refused a game whose id map carried one club and whose
         # crosswalk carried the other -- a servable game, handed on for nothing.
         def _unresolved() -> set:
-            return {side for side in ("home", "away") if not (row.get(f"{side}_espn_team_id") or team_ids.get(side))}
+            return {
+                side
+                for side in ("home", "away")
+                if not (_id_text(row.get(f"{side}_espn_team_id")) or team_ids.get(side))
+            }
 
         linescore = parse_cfb_ncaa_linescore(bundle.get("box_score") or "")
         sides = {r["team"]: r["home_away"] for r in linescore.to_dicts() if r.get("team")}

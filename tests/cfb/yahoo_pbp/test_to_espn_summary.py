@@ -521,3 +521,9 @@ def test_a_missing_team_id_hands_over_whatever_form_it_takes(osu_tex_yahoo, miss
     row = {**OSU_TEX_ROW, "home_espn_team_id": missing}
     with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
         _adapter_for("cfb", "yahoo")("cfb", OSU_TEX_ESPN_ID, _ctx(idmap_row=row, payload=osu_tex_yahoo))
+
+
+def test_a_float_home_id_computes_the_same_yahoo_id():
+    """B-GB-22: the formula looked the float ``96.0`` up as a team and found none, so the game handed over."""
+    computed = _resolve_game_id(401856674, {"kickoff_utc": "2026-09-12T19:30Z", "home_espn_team_id": 96.0}, ())
+    assert computed == ("ncaaf.g.202609120069", "computed")

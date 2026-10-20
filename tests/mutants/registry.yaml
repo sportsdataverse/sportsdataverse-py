@@ -3228,3 +3228,114 @@
   test: tests/nfl/shield_pbp/test_to_espn_summary.py -k two_missing
   expected: kill
   note: two "" ids collapsed abbrs to one key and credited every play to one club
+
+# 4.8b #928 follow-up: every remaining adapter team-id guard through _id_text
+- id: cfb-cbs-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k missing_team_id_hands_over
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: cfb-cbs-lookup-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: '            _id_text(row["home_espn_team_id"]),'
+  mutant: '            row["home_espn_team_id"],'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k integer_team_ids
+  expected: kill
+  note: the CBS week-scoreboard lookup received a float team id
+
+- id: cfb-fox-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/fox_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/fox_pbp/test_fox_cfb_adapter.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: nfl-fox-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/fox_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: nfl-fox-resolver-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/fox_pbp/to_espn_summary.py
+  snippet: '        _id_text(row.get("home_espn_team_id")),'
+  mutant: '        row.get("home_espn_team_id"),'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k resolves_the_fox_id
+  expected: kill
+  note: str(26.0 or "") is "26.0", no key of the ESPN -> Fox team table
+
+- id: cfb-ncaa-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k falls_back_to_the_crosswalk_whatever
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError; a NaN id skipped the crosswalk
+
+- id: cfb-ncaa-unresolved-side-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get(f"{side}_espn_team_id")) or team_ids.get(side))'
+  mutant: 'if not (row.get(f"{side}_espn_team_id") or team_ids.get(side))'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k "falls_back_to_the_crosswalk_whatever and pd_na"
+  expected: kill
+  note: pandas.NA raised TypeError in the per-side check
+
+- id: cfb-yahoo-formula-team-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/fetch.py
+  snippet: '        _id_text(row.get("home_espn_team_id")) or None,'
+  mutant: '        row.get("home_espn_team_id"),'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k float_home_id
+  expected: kill
+  note: a float home id found no Yahoo team number, so the game handed over
+
+- id: nfl-yahoo-formula-team-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'row.get("kickoff_utc"), _id_text(row.get("home_espn_team_id")) or None, et_date=row.get("gameday")'
+  mutant: 'row.get("kickoff_utc"), row.get("home_espn_team_id"), et_date=row.get("gameday")'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k float_home_id
+  expected: kill
+  note: a float home id computed no Yahoo id
+
+- id: nfl-yahoo-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'if not (_game_id() and _id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (_game_id() and row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-yahoo-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed
