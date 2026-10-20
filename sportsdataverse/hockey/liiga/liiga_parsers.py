@@ -63,6 +63,7 @@ import polars as pl
 
 from sportsdataverse._codegen_runtime import _cast_ids_int64
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 from sportsdataverse.hockey.liiga.liiga_dtypes import DTYPES
 
 __all__ = [
@@ -305,6 +306,7 @@ def _rows(raw: Any) -> List[Mapping[str, Any]]:
     return [body]
 
 
+@_data_only
 def parse_liiga(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Generic Liiga body -> frame by the module's row rule.
 
@@ -948,6 +950,7 @@ def parse_liiga_players_info(
 # --- one player ---------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_liiga_player(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """``/players/info/{playerId}`` -> one row: the player's bio.
 

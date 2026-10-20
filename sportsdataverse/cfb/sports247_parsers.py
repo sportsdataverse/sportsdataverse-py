@@ -21,6 +21,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_sports247_result_set",
@@ -62,6 +63,7 @@ def _extract_rows(raw: Any) -> List[Dict[str, Any]]:
     return []
 
 
+@_data_only
 def parse_sports247_result_set(
     raw: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]],
     *,
@@ -98,6 +100,7 @@ def parse_sports247_result_set(
     return df.to_pandas() if return_as_pandas else df
 
 
+@_data_only
 def parse_sports247_teams(
     raw: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]],
     *,
@@ -129,6 +132,7 @@ def parse_sports247_teams(
     return parse_sports247_result_set(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_sports247_institution_rankings(
     raw: Optional[Dict[str, Any]],
     *,

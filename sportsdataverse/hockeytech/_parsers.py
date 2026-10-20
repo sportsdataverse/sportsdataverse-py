@@ -14,6 +14,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only, _dict_only
 
 
 def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -48,7 +49,9 @@ def _to_frame(records: List[Dict[str, Any]], return_as_pandas: bool) -> Any:
 
 
 def _sitekit(payload: Any, key: str) -> Any:
-    return ((payload or {}).get("SiteKit", {}) or {}).get(key)
+    # A body that is not an object (a list, an error string) has no SiteKit: zero rows (A-L17).
+    site = payload.get("SiteKit") if isinstance(payload, dict) else None
+    return site.get(key) if isinstance(site, dict) else None
 
 
 def _derive_season_year(name: str) -> Optional[int]:
@@ -473,6 +476,7 @@ def _parse_pbp_b(events: List[Any], game_id: Any = None) -> List[Dict[str, Any]]
     return _parse_pbp_a(events, game_id=game_id)
 
 
+@_data_only
 def parse_pbp(
     payload: Any,
     pbp_style: str = "hockeytech_a",
@@ -691,6 +695,7 @@ def _shots_by_period_to_records(sbp: Any) -> List[Dict[str, Any]]:
     return []
 
 
+@_dict_only
 def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
     """Parse a HockeyTech ``gc/gamesummary`` JSON payload.
 
@@ -715,7 +720,8 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
     ``homeTeam``/``visitingTeam`` sub-keys; both layouts are handled.
 
     An empty/None payload returns the five-key dict with zero-row frames for all
-    subframes and a one-row ``game`` frame whose ``game_id`` is the supplied arg.
+    subframes and a one-row ``game`` frame whose ``game_id`` is the supplied arg; with no
+    ``game_id`` either, the ``game`` frame has zero rows too (A-L17).
     """
     gc_root: Dict[str, Any] = (payload or {}).get("GC", {}) or {}
 
@@ -769,7 +775,8 @@ def parse_game_summary(payload: Any, game_id: Any = None) -> Dict[str, Any]:
     stars_raw = list(summary.get("threeStars") or summary.get("three_stars") or summary.get("mvps") or [])
 
     return {
-        "game": _to_frame([game_row], False),
+        # the stub row carries only the caller's game_id: without one (or any data) it is no row
+        "game": _to_frame([game_row] if game_id is not None or summary else [], False),
         "goals": _to_frame(goals_raw, False),
         "penalties": _to_frame(penalties_raw, False),
         "shots_by_period": _to_frame(sbp_raw, False),

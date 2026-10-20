@@ -51,6 +51,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_cbs_napi",
@@ -166,6 +167,7 @@ def _envelope_rows(raw: Any) -> List[Any]:
     return [raw]
 
 
+@_data_only
 def parse_cbs_napi(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

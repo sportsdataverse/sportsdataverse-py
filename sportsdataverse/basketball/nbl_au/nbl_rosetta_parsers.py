@@ -59,6 +59,7 @@ import polars as pl
 from sportsdataverse.basketball.nbl_au.nbl_rosetta_dtypes import DTYPES
 from sportsdataverse.basketball.nbl_au.nbl_rosetta_runtime import REQUEST_KEY, end_year
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_nbl_rosetta_match",
@@ -659,6 +660,7 @@ def parse_nbl_rosetta_next_match(
     return _parse(raw, "parse_nbl_rosetta_next_match", columns, return_as_pandas, _list_shape("match"))
 
 
+@_data_only
 def parse_nbl_rosetta_next_matches(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
