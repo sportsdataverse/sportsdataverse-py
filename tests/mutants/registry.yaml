@@ -2642,3 +2642,167 @@
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
   expected: kill
   note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
+
+# 4.8b
+# --- Task 4.8b: per-provider casts (providers) -------------------------------------------------
+- id: zero-padded-guard-always-false
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return bool(text.str.contains(r"^\s*[+-]?0\d").any())'
+  mutant: 'return False'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k jersey_00
+  expected: kill
+  note: the shared guard; a no-new-nulls cast turned jersey "00" into 0 in every text-to-number caster
+
+- id: kenpom-cast-numerics-skips-zero-padded
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):'
+  mutant: 'if frame.schema[col] != pl.Utf8:'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k jersey_00
+  expected: kill
+  note: KenPom's _cast_numerics cast any all-digit text column to Int64 ("00" -> 0)
+
+- id: bref-finish-jersey-column-by-name
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/nba/bref.py
+  snippet: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS or _zero_padded(nonblank):'
+  mutant: 'if nonblank.len() == 0 or _zero_padded(nonblank):'
+  test: tests/nba/test_bref.py -k jersey_column_text_without
+  expected: kill
+  note: without the name rule, number is Float64 on a roster with no "00" and String on one with it
+
+- id: bref-finish-zero-padded-guard
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/nba/bref.py
+  snippet: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS or _zero_padded(nonblank):'
+  mutant: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS:'
+  test: tests/nba/test_bref.py -k zero_padded_column
+  expected: kill
+  note: a zero-padded column other than number lost its zeros through _finish
+
+- id: torvik-number-is-text
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/mbb/torvik_parsers.py
+  snippet: '"height", "number", "hometown"'
+  mutant: '"height", "hometown"'
+  test: tests/mbb/test_mbb_torvik.py -k jersey_00
+  expected: kill
+  note: the 8 "00" jerseys of the real 2025 file merged into the "0" rows as Int64
+
+- id: sports247-color-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("jersey", "postal_code")'
+  test: tests/test_sports247_site_pages_parsers.py -k colour_without_leading_zero
+  expected: kill
+  note: a colour such as "990000" was cast to Int64
+
+- id: sports247-jersey-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("color", "postal_code")'
+  test: tests/test_sports247_site_pages_parsers.py -k "jersey_and_postal_code and recruitment_finalchoice"
+  expected: kill
+  note: recruitment_finalchoice.json jersey "3" was Int64
+
+- id: sports247-postal-code-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("jersey", "color")'
+  test: tests/test_sports247_site_pages_parsers.py -k "jersey_and_postal_code and institution_location"
+  expected: kill
+  note: institution_location.json postal_code "32605" was Int64 (a New England "02134" would lose its zero)
+
+- id: sports247-zero-padded-guard
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'if non_null == 0 or _zero_padded(s):'
+  mutant: 'if non_null == 0:'
+  test: tests/test_sports247_site_pages_parsers.py -k colour_without_leading_zero
+  expected: kill
+  note: the "lossless" trial cast checked only for new nulls, so "007" became 7
+
+- id: sports247-zero-coordinates-null
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'if c.endswith(_COORD_SUFFIXES) and t.is_numeric()'
+  mutant: 'if False'
+  test: tests/test_sports247_site_pages_parsers.py -k zero_coordinates
+  expected: kill
+  note: 247's "0.000000" no-location sentinel became a real (0, 0)
+
+- id: nba-stats-float-game-id
+  group: provider-casts
+  finding: B-L92
+  file: sportsdataverse/nba/nba_stats_runtime.py
+  snippet: 'clean["GameID"] = _wire_text(clean["GameID"]).zfill(10)'
+  mutant: 'clean["GameID"] = str(clean["GameID"]).zfill(10)'
+  test: tests/nba/test_nba_stats_runtime.py -k float_game_id
+  expected: kill
+  note: GameID=22400001.0 went to the wire as "22400001.0" and stats.nba.com answered HTTP 400 (live 2026-10-11)
+
+- id: nba-stats-env-value-named
+  group: provider-casts
+  finding: A-L68
+  file: sportsdataverse/nba/nba_stats_runtime.py
+  snippet: 'raise ValueError(f"{name}={raw!r} is not a valid {kind.__name__}") from None'
+  mutant: 'raise'
+  test: tests/nba/test_nba_stats_runtime.py -k malformed_env
+  expected: kill
+  note: SDV_PY_NBA_STATS_RETRIES=three raised a bare ValueError naming neither the variable nor its value
+
+- id: mlb-api-extra-private-csv
+  group: provider-casts
+  finding: B-L86
+  file: sportsdataverse/mlb/mlb_api_extra.py
+  snippet: 'from sportsdataverse._codegen_runtime import _csv, _json_body, _transport_errors'
+  mutant: |-
+    from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+    _csv = lambda v: None if v is None else ",".join(str(x) for x in v) if isinstance(v, (list, tuple)) else str(v)  # noqa: E731
+  test: tests/mlb/test_mlb_api_extra_params.py
+  expected: kill
+  note: the private _csv copy sent league_id={103, 104} as "{103, 104}" and 103.0 as "103.0"
+
+- id: nhl-records-comeback-scope-validated
+  group: provider-casts
+  finding: B-M27
+  file: sportsdataverse/nhl/nhl_records_extra.py
+  snippet: 'if scope not in valid:'
+  mutant: 'if False:'
+  test: tests/nhl/test_nhl_records_extra_scope.py -k unknown_scope
+  expected: kill
+  note: scope="Franchise" or "team" silently returned the league-wide table
+
+- id: fox-id-map-float-id
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/football/fox_common.py
+  snippet: '    return _wire_text(value)'
+  mutant: '    return str(value)'
+  test: tests/football/test_fox_common.py -k float_id_map_row
+  expected: kill
+  note: str(401671775.0) is "401671775.0", which matches no ESPN event or team id
+
+- id: fox-id-map-nan-is-missing
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/football/fox_common.py
+  snippet: 'if value is None or value != value:'
+  mutant: 'if value is None:'
+  test: tests/football/test_fox_common.py -k nan_team_id
+  expected: kill
+  note: a pandas row's NaN team id became "nan" and passed the "no ESPN team ids" guard

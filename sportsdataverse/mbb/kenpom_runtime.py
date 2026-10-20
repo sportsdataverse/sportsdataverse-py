@@ -50,6 +50,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _zero_padded
 from sportsdataverse._subscription_http import (
     SubscriptionSite,
     get_html,
@@ -238,7 +239,8 @@ def _cast_numerics(frame: pl.DataFrame) -> pl.DataFrame:
 
     KenPom serves everything as text, and signed values carry a leading ``+``
     (``"+9.46"``) that a bare cast rejects. A column converts only when EVERY
-    non-null value parses, so ``w_l`` (``"35-4"``), ``conf`` and ``team`` stay text.
+    non-null value parses, so ``w_l`` (``"35-4"``), ``conf`` and ``team`` stay text,
+    and never when a value is zero-padded (jersey ``"00"`` would collide with ``"0"``).
 
     Args:
         frame: A parsed KenPom table.
@@ -248,7 +250,7 @@ def _cast_numerics(frame: pl.DataFrame) -> pl.DataFrame:
     """
     out = frame
     for col in frame.columns:
-        if frame.schema[col] != pl.Utf8:
+        if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):
             continue
         cleaned = frame[col].str.strip_chars().str.replace(r"^\+", "")
         parsed = cleaned.cast(pl.Float64, strict=False)

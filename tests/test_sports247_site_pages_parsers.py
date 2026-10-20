@@ -119,6 +119,50 @@ def test_genuine_string_numeric_hybrids_stay_utf8():
     assert df.schema["rankable"] == pl.Utf8
 
 
+def test_event_primary_color_stays_text():
+    """B-M18: ``"000000"`` passed the no-new-nulls check and became Int64 0 on event.json only."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
+
+    df = parse_sports247_site_page(_load("event"))
+    assert df.schema["primary_color"] == pl.Utf8
+    assert df["primary_color"].to_list() == ["000000"]
+    assert df.schema["key"].is_integer()  # a real integer column still casts
+
+
+@pytest.mark.parametrize(
+    ("stem", "column", "value"),
+    [("recruitment_finalchoice", "jersey", "3"), ("institution_location", "postal_code", "32605")],
+)
+def test_jersey_and_postal_code_stay_text(stem, column, value):
+    """Labels, not quantities: one dtype whatever the capture holds, so "00" / "02134" keep their zeros."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
+
+    df = parse_sports247_site_page(_load(stem))
+    assert df.schema[column] == pl.Utf8
+    assert df[column].to_list() == [value]
+
+
+def test_colour_without_leading_zero_and_zero_padded_text_stay_text():
+    """A colour such as ``"990000"`` is a label too; any other zero-padded column keeps its zeros."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import _cast_numeric_strings
+
+    df = _cast_numeric_strings(pl.DataFrame({"primary_color": ["990000"], "code": ["007"], "rank": ["7"]}))
+    assert df.schema["primary_color"] == pl.Utf8 and df.schema["code"] == pl.Utf8
+    assert df["code"].to_list() == ["007"]
+    assert df.schema["rank"] == pl.Int64
+
+
+def test_zero_coordinates_are_null_and_real_ones_kept():
+    """B-M18: 247's ``"0.000000"`` no-location sentinel is null, not a point off the coast of Africa."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
+
+    df = parse_sports247_site_page(_load("institution_list"))
+    assert df.schema["latitude"] == pl.Float64 and df.schema["longitude"] == pl.Float64
+    assert df["latitude"].null_count() == df["longitude"].null_count() == 3
+    assert df["latitude"].drop_nulls().to_list() == [40.622601, 41.785476]
+    assert (df["latitude"] == 0).sum() == 0 and (df["longitude"] == 0).sum() == 0
+
+
 @pytest.mark.parametrize("payload", [None, {}, [], "nope", 3])
 def test_zero_row_on_empty_or_malformed(payload):
     from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page

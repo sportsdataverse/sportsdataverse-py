@@ -79,6 +79,17 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+def _zero_padded(text: pl.Series) -> bool:
+    """True when a String column holds digits a numeric cast would lose: ``"00"``, ``"007"``, ``"000000"``.
+
+    The text-to-number casts in the HTML / CSV parsers call a cast lossless when it
+    invents no nulls; a leading zero before a digit is the case that check misses
+    (jersey ``"00"`` and ``"0"`` both become 0, colour ``"000000"`` becomes 0). Such a
+    column stays text (A-M18, B-M18, B-M19).
+    """
+    return bool(text.str.contains(r"^\s*[+-]?0\d").any())
+
+
 def _where(url: str) -> str:
     """``host/path`` of ``url``: never the query string, which can carry an API key."""
     parts = urlsplit(url)

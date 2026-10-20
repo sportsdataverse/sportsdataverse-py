@@ -36,6 +36,7 @@ from typing import Any, Dict, List, Optional, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _zero_padded
 from sportsdataverse.dl_utils import underscore
 
 __all__ = ["parse_sports247_site_page"]
@@ -54,27 +55,43 @@ def _extract_rows(raw: Any) -> List[Dict[str, Any]]:
     return []
 
 
+#: Column-name endings that are labels, not quantities: jersey, colour and postal code stay text.
+_TEXT_SUFFIXES = ("jersey", "color", "postal_code")
+
+#: 247 writes ``"0.000000"`` for a location it does not know; (0, 0) is not a campus.
+_COORD_SUFFIXES = ("latitude", "longitude")
+
+
 def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
     """Cast string-numeric columns to Int64/Float64 when lossless.
 
     For each ``Utf8`` column, trial ``Int64`` then ``Float64``; keep the cast
-    only when it adds no new nulls (every non-null original value parsed). FK/PK
-    columns already arrive Int64 from ``json_normalize`` and are untouched.
+    only when it adds no new nulls (every non-null original value parsed) and
+    no value is zero-padded (``"000000"`` is not 0). Jersey, colour and postal
+    code columns stay text whatever they hold, and a zero latitude / longitude
+    (247's no-location sentinel) becomes null (B-M18). FK/PK columns already
+    arrive Int64 from ``json_normalize`` and are untouched.
     """
     casts: List[pl.Expr] = []
     for col, dtype in df.schema.items():
-        if dtype != pl.Utf8:
+        if dtype != pl.Utf8 or col.endswith(_TEXT_SUFFIXES):
             continue
         s = df[col]
         non_null = s.len() - s.null_count()
-        if non_null == 0:
-            continue  # all-null: nothing to widen, leave as Utf8
+        if non_null == 0 or _zero_padded(s):
+            continue  # all-null: nothing to widen; zero-padded: a cast would lose the zeros
         for target in (pl.Int64, pl.Float64):
             trial = s.cast(target, strict=False)
             if trial.null_count() == s.null_count():  # no NEW nulls introduced
                 casts.append(pl.col(col).cast(target, strict=False))
                 break
-    return df.with_columns(casts) if casts else df
+    out = df.with_columns(casts) if casts else df
+    coords = [
+        pl.when(pl.col(c) != 0).then(pl.col(c)).alias(c)
+        for c, t in out.schema.items()
+        if c.endswith(_COORD_SUFFIXES) and t.is_numeric()
+    ]
+    return out.with_columns(coords) if coords else out
 
 
 def parse_sports247_site_page(

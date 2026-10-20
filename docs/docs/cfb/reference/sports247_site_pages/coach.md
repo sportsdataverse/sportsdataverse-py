@@ -77,7 +77,7 @@ Coach hometown Location.
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `postal_code` | integer |  |
+| `postal_code` | character |  |
 | `city` | character | Venue city. |
 | `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | numeric | Venue latitude in decimal degrees. |

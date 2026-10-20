@@ -2,6 +2,7 @@ import sys
 import warnings
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from sportsdataverse.errors import AssetFetchError, EmptyResponseWarning, NoDataError
@@ -59,6 +60,31 @@ def test_get_builds_url_strips_none_and_pads_gameid():
     assert "Empty" not in captured["params"]
     assert captured["params"]["GameID"] == "0000000061"
     assert out["resultSets"][0]["name"] == "X"
+
+
+_GAME_IDS = [22400001.0, 22400001, "0022400001", "22400001", np.float64(22400001), np.int64(22400001)]
+
+
+@GETTERS
+@pytest.mark.parametrize("game_id", _GAME_IDS, ids=["float", "int", "text", "short", "np_float", "np_int"])
+def test_float_game_id_is_sent_as_integer_text(get, game_id):
+    """A-L68 / B-L92: ``str(22400001.0).zfill(10)`` sent "22400001.0", which stats.nba.com answers with HTTP 400."""
+    sent = []
+
+    def transport(url, params, headers, proxy_url):
+        sent.append(params["GameID"])
+        return 200, '{"resultSets": []}'
+
+    get("playbyplayv3", {"GameID": game_id}, transport=transport)
+    assert sent == ["0022400001"]
+
+
+@pytest.mark.parametrize("name", ["SDV_PY_NBA_STATS_RETRIES", "SDV_PY_NBA_STATS_BACKOFF"])
+def test_malformed_env_value_names_the_variable(name, monkeypatch):
+    """A-L68: ``int("three")`` raised a bare ValueError that named neither the variable nor its value."""
+    monkeypatch.setenv(name, "three")
+    with pytest.raises(ValueError, match=f"{name}='three'"):
+        _get("x", {}, transport=lambda *a: (200, '{"resultSets": []}'))
 
 
 # --- the error vocabulary: every answer, both runtimes ---

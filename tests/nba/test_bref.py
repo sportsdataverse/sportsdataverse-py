@@ -421,14 +421,24 @@ def test_real_team_page_roster_matches_the_page(calls: _Transport) -> None:
     assert df["college"].to_list()[:2] == page["College"].tolist()[:2]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason='B-M19: _finish casts the all-numeric jersey column, so "00" (Robert Parish) collides with "0"; task 4.8',
-)
-def test_real_team_page_keeps_jersey_numbers_as_text(calls: _Transport) -> None:
+def test_real_team_page_keeps_jersey_00_as_text(calls: _Transport) -> None:
+    """B-M19: ``_finish`` cast the all-numeric jersey column, so Robert Parish's "00" became 0.0."""
     calls.serve("/teams/BOS/1986.html", _BOS_1986)
     df = bref.bref_team_roster(team="BOS", season=1986)
     page = _page_roster()
     assert "00" in page["No."].tolist()
+    assert df.schema["number"] == pl.Utf8
     assert df["number"].to_list() == page["No."].tolist()
+    assert df.filter(pl.col("player") == "Robert Parish")["number"].to_list() == ["00"]
+
+
+def test_finish_keeps_a_zero_padded_column_as_text() -> None:
+    """The guard is not just the ``number`` name: any zero-padded column keeps its zeros."""
+    df = bref._finish(pl.DataFrame({"code": ["007", "12"], "pts": ["7", "12"]}))
+    assert df.schema["code"] == pl.Utf8 and df["code"].to_list() == ["007", "12"]
+    assert df.schema["pts"] == pl.Float64  # a plain numeric column still casts
+
+
+def test_finish_keeps_the_jersey_column_text_without_a_00() -> None:
+    """``number`` is text on every roster, not only on the ones that carry a "00" (one dtype per column)."""
+    assert bref._finish(pl.DataFrame({"number": ["44", "33"]})).schema["number"] == pl.Utf8
