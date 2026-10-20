@@ -1234,3 +1234,40 @@ def test_date_games_closes_the_browser_it_opened(monkeypatch: pytest.MonkeyPatch
     df = mbb_ncaa_scoreboard.ncaa_mbb_date_games("11/11/2025")
     assert df.height == 82
     assert events == ["enter", "fetch", "exit"]
+
+
+# --- 400 / 422 is ValueError (#920 review), task 4.5 --------------------------------------
+
+
+@pytest.mark.parametrize("status", [400, 422])
+def test_vocabulary_a_clean_400_or_422_is_a_value_error_after_one_request(tmp_path: Path, status: int) -> None:
+    transport = FakeTransport([(status, "")])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(
+        ValueError, match=rf"stats\.ncaa\.org rejected https://stats\.ncaa\.org/contests/1/box_score: HTTP {status}"
+    ):
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/1/box_score")
+    assert len(transport.calls) == 1  # never rotated through the pool
+    assert not cached_path("contests/1/box_score", cache_dir=tmp_path).exists()
+
+
+@pytest.mark.parametrize("body", [_DENIED, _NAV_CHALLENGE], ids=["access-denied", "challenge"])
+def test_vocabulary_a_400_carrying_a_waf_page_stays_a_failed_fetch(tmp_path: Path, body: str) -> None:
+    transport = FakeTransport([(400, body)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
+    with pytest.raises(AssetFetchError, match="pool exhausted"):
+        NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"]).fetch_html("contests/1/box_score")
+
+
+@pytest.mark.parametrize(("status", "error"), [(400, ValueError), (422, ValueError), (404, AssetFetchError)])
+def test_vocabulary_proxybonanza_rejected_request_is_a_value_error(status: int, error: type) -> None:
+    def transport(url: str, headers: dict) -> "tuple[int, str]":
+        return status, "{}"
+
+    with pytest.raises(
+        error,
+        match=rf"api\.proxybonanza\.com rejected /v1/userpackages/pkg123\.json: HTTP {status}"
+        if error is ValueError
+        else f"status={status}",
+    ):
+        load_proxybonanza_pool("key", "pkg123", transport=transport)

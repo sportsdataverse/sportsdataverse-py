@@ -408,8 +408,9 @@ def load_proxybonanza_pool(
         One ``http://login:password@ip:port`` URL per IP in the package.
 
     Raises:
-        AssetFetchError: Non-200 response, or a 200 whose body is not the package
-            JSON (an error or HTML page).
+        ValueError: HTTP 400 / 422 (the request itself is wrong).
+        AssetFetchError: Any other non-200 response, or a 200 whose body is not
+            the package JSON (an error or HTML page).
 
     Example:
         Offline (injected transport)::
@@ -421,6 +422,9 @@ def load_proxybonanza_pool(
     url = f"https://api.proxybonanza.com/v1/userpackages/{pkg}.json"
     _transport = transport or _default_pool_transport
     status, text = _transport(url, {"Authorization": api_key})
+    if status in (400, 422):
+        # The request itself is wrong (repo-wide rule); a 404 or 401 stays a failed setup fetch below.
+        raise ValueError(f"api.proxybonanza.com rejected /v1/userpackages/{pkg}.json: HTTP {status}")
     if status != 200:
         raise AssetFetchError(f"ProxyBonanza pool fetch failed: status={status}")
     try:
@@ -1175,6 +1179,9 @@ class NcaaFetcher:
                 # A real "no such page": the host answered, and no other proxy
                 # answers differently -- rotating the whole pool on it reads as a ban.
                 raise NoDataError(f"stats.ncaa.org has no page at {url} (HTTP 404)")
+            if status in (400, 422) and _ban_check(text) == "clean" and not _is_challenge(text):
+                # The request itself is wrong (repo-wide rule): no proxy answers it differently.
+                raise ValueError(f"stats.ncaa.org rejected {url}: HTTP {status}; not retried")
             if status == 200 and _ban_check(text) == "clean":
                 self._since_rotate += 1
                 if self.config.rotate_every and self._since_rotate >= self.config.rotate_every:
@@ -1231,7 +1238,8 @@ class NcaaFetcher:
 
         Raises:
             ValueError: *path* is a full URL for a host other than
-                ``stats.ncaa.org``.
+                ``stats.ncaa.org``, or stats.ncaa.org answered HTTP 400 / 422
+                with no ban or challenge page (one request, no rotation).
             RuntimeError: No proxy is configured (the binding directive --
                 there is no direct-fetch mode).
             NoDataError: stats.ncaa.org answered HTTP 404 (one request, no rotation).
