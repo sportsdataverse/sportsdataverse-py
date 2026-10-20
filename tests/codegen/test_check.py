@@ -433,7 +433,9 @@ def test_build_docstring_flags_change_only_what_they_document():
 def test_build_docstring_vocab_raises_adds_only_the_errors_not_already_named():
     doc = _doc(vocab_raises=True, doc_extras={"raises": ["NoDataError: custom."]})
     raises = doc.split("Raises:")[1].split("Example:")[0]
-    assert raises.count("NoDataError") == 1 and "custom." in raises
+    # main #864 (_merge_raises): the YAML qualifier joins the vocabulary line, capitalized, in one row.
+    assert raises.count("NoDataError") == 1
+    assert "NoDataError: The host answered 404 -- the requested resource does not exist. Custom." in raises
     assert "ValueError: The host answered 400 / 422" in raises and "AssetFetchError: The fetch failed" in raises
     assert "Raises:" not in _doc()
 
