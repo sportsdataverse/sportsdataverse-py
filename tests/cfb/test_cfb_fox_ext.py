@@ -1,13 +1,16 @@
-"""``fox_cfb_pbp`` on real Fox captures (task 3.5: B-L57, B-L58, B-L63)."""
+"""``fox_cfb_pbp`` / CFB segment enumeration on real Fox captures (task 3.5: B-L54, B-L57, B-L58, B-L63)."""
 
 from __future__ import annotations
 
 import json
 import pathlib
 
+import pytest
+
 import sportsdataverse.cfb.cfb_fox_ext as ext
 
 HERE = pathlib.Path(__file__).resolve().parent
+FOX = HERE / "fixtures" / "fox"
 
 
 def _load(path):
@@ -35,3 +38,44 @@ def test_fox_cfb_pbp_play_team_is_a_club_and_the_athlete_has_its_own_column(monk
     row = df.filter(df["play_id"] == "1").row(0, named=True)
     assert row["play_player"] == first["entityLink"]["title"]
     assert row["play_team"] != row["play_player"]
+
+
+def test_the_bowls_segment_carries_every_cfp_game():
+    """2025 postseason, captured 2026-10-19: all 11 CFP games are in the bowls segment, which is
+    why a failed ``cfp`` group fetch may be dropped (after a retry and a warning)."""
+    bowls = {r["game_id"] for r in ext._parse_fox_segment(_load(FOX / "fox_cfb_segment_2025_bowls.json"), "b")}
+    cfp = {r["game_id"] for r in ext._parse_fox_segment(_load(FOX / "fox_cfb_segment_2025_cfp.json"), "c")}
+    assert len(cfp) == 11
+    assert cfp <= bowls
+
+
+def _main_with(cfp_failures):
+    main = {"selectionGroupList": [{"selectionList": [{"id": "2025-1-1"}, {"id": "2025-bowls-2"}]}]}
+    cfp_main = {"selectionGroupList": [{"selectionList": [{"id": "2025-cfp-2"}]}]}
+    calls = []
+
+    def fake_get(path, params=None, **k):
+        if (params or {}).get("groupId") == "cfp":
+            calls.append("cfp")
+            if len(calls) <= cfp_failures:
+                raise ConnectionError("fox down")
+            return cfp_main
+        return main
+
+    return fake_get, calls
+
+
+def test_a_failed_cfp_group_fetch_is_retried_once(monkeypatch, recwarn):
+    fake_get, calls = _main_with(cfp_failures=1)
+    monkeypatch.setattr(ext, "_fox_get", fake_get)
+    assert ext._fox_segment_ids(2025, "2") == ["2025-1-1", "2025-bowls-2", "2025-cfp-2"]
+    assert calls == ["cfp", "cfp"]
+    assert not recwarn.list
+
+
+def test_a_cfp_group_that_fails_twice_warns(monkeypatch):
+    fake_get, calls = _main_with(cfp_failures=2)
+    monkeypatch.setattr(ext, "_fox_get", fake_get)
+    with pytest.warns(UserWarning, match="CFP group enumeration failed twice"):
+        assert ext._fox_segment_ids(2025, "2") == ["2025-1-1", "2025-bowls-2"]
+    assert calls == ["cfp", "cfp"]

@@ -238,3 +238,34 @@ def test_fox_wbb_wnba_wrappers_registered():
         "fox_wnba_teams",
     ):
         assert callable(getattr(wnba, fn)), fn
+
+
+@pytest.mark.parametrize("module", ["sportsdataverse.mbb.mbb_fox_ext", "sportsdataverse.wbb.wbb_fox_ext"])
+def test_teams_all_warns_when_the_budget_runs_out_mid_discovery(monkeypatch, module):
+    """B-GB-23: a budget spent while the last fetch still found new teams may truncate the directory."""
+    import importlib
+
+    ext = importlib.import_module(module)
+    monkeypatch.setattr(ext, "fox_get", lambda path, **kw: path)
+    # every fetch finds one new team (id 1000 + candidate), so discovery never stops
+    monkeypatch.setattr(
+        ext,
+        "parse_teams",
+        lambda path: [{"fox_team_id": str(1000 + int(path.split("/")[2])), "fox_team_name": "T", "fox_section": "S"}],
+    )
+    with pytest.warns(UserWarning, match=r"max_calls=3 budget at candidate id 4 of 500 while still finding teams \(3"):
+        assert len(ext.fox_wbb_teams_all(max_calls=3) if "wbb" in module else ext.fox_mbb_teams_all(max_calls=3)) == 3
+
+
+@pytest.mark.parametrize("module", ["sportsdataverse.mbb.mbb_fox_ext", "sportsdataverse.wbb.wbb_fox_ext"])
+def test_teams_all_is_silent_when_the_last_fetch_found_nothing_new(monkeypatch, recwarn, module):
+    """The real conference payload on every call: only the first fetch adds teams, so the budget
+    running out is not a truncation and must not warn."""
+    import importlib
+
+    ext = importlib.import_module(module)
+    payload = _load("wcbk_team_11_standings.json")
+    monkeypatch.setattr(ext, "fox_get", lambda path, **kw: payload)
+    fn = ext.fox_wbb_teams_all if "wbb" in module else ext.fox_mbb_teams_all
+    assert len(fn(max_id=500, max_calls=3)) > 0
+    assert not [w for w in recwarn.list if "max_calls" in str(w.message)]

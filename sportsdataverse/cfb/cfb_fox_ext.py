@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 import re
+import warnings
 from typing import TYPE_CHECKING, Any, Dict, List, Literal, Optional, Sequence, Union, overload
 
 import polars as pl
@@ -323,12 +324,21 @@ def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> L
     postseason — is stable year to year).
     """
     mains = [_fox_get("cfb/scoreboard/main", params={"groupId": group_id}, **kwargs)]
-    try:
-        # The CFP lives under its own group; it is supplemental (the bowls segment
-        # already carries CFP games), so a failure here must not abort enumeration.
-        mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
-    except Exception as exc:
-        logger.warning("Fox CFP group enumeration failed for %s (continuing without it): %s", season, exc)
+    # The CFP lives under its own group; it is supplemental (the bowls segment already carries
+    # every CFP game: 11 of 11 in the committed 2025 captures), so a failure here must not abort
+    # enumeration. It is retried once, then reported as a warning the caller can see.
+    for attempt in (1, 2):
+        try:
+            mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
+            break
+        except Exception as exc:  # noqa: BLE001 -- supplemental group; the bowls segment covers it
+            if attempt == 2:
+                warnings.warn(
+                    f"Fox CFP group enumeration failed twice for {season} (continuing with the bowls "
+                    f"segment, which carries the CFP games): {type(exc).__name__}: {exc}",
+                    UserWarning,
+                    stacklevel=2,
+                )
     ids: List[str] = []
     seen: set[str] = set()
     for main in mains:
