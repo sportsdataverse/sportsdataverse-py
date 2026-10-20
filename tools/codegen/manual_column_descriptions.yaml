@@ -62185,7 +62185,7 @@ torvik_player_stats:
   mid_pct: Field-goal percentage on non-rim twos as a fraction (0-1).
   min_pct: Share of team minutes played, in percent.
   minutes: Share of team minutes played, in percent (as on the Torvik player page).
-  number: Jersey number as listed (Int64).
+  number: Jersey number as listed, as text ("00" is not "0").
   o_rtg: Offensive rating (points produced per 100 individual possessions).
   obpm: Offensive box plus/minus.
   ogbpm: Offensive game box plus/minus.

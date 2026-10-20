@@ -71,7 +71,7 @@ Recruiting event detail (camp/combine/regional).
 | `event_type` | integer | Numeric code for the kind of 247Sports recruiting event on this row. |
 | `event_date` | character |  |
 | `default_asset` | integer | Nested 247Sports image asset for the event (stringified). |
-| `primary_color` | integer |  |
+| `primary_color` | character |  |
 | `year` | integer | Four-digit season year (e.g. 2019). |
 | `default_name` | character | Server-rendered display label for the entity. |
 
@@ -204,7 +204,7 @@ Institution location (city/state/coords/tax).
 | col_name | type | description |
 |---|---|---|
 | `key` | integer | Primary key of this entity (the id used in its `.json` route). |
-| `postal_code` | integer |  |
+| `postal_code` | character |  |
 | `city` | character | Venue city. |
 | `state` | integer | U.S. state of the location record, per 247Sports. |
 | `latitude` | numeric | Venue latitude in decimal degrees. |

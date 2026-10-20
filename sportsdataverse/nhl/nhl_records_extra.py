@@ -184,7 +184,13 @@ def nhl_records_comeback_wins(scope: str = "league", **filters) -> Dict:
 
     Returns:
         Dict: Games where the team overcame a deficit to win.
+
+    Raises:
+        ValueError: *scope* is not ``"league"`` or ``"franchise"``.
     """
+    valid = ("league", "franchise")
+    if scope not in valid:
+        raise ValueError(f"scope must be one of {list(valid)}, got {scope!r}.")
     if scope == "franchise":
         return _fetch("/comeback-franchise-wins", params=_build_params(**filters))
     return _fetch("/comeback-league-wins", params=_build_params(**filters))

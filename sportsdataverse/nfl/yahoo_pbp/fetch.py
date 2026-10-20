@@ -27,6 +27,7 @@ import re
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.football.yahoo_common import (
     _fetch_playbook_boxscore,
     _game_block,
@@ -133,16 +134,17 @@ def _resolve_row(
 
     def _game_id() -> Optional[str]:
         return row.get("yahoo_game_id") or _yahoo_nfl_game_id(
-            row.get("kickoff_utc"), row.get("home_espn_team_id"), et_date=row.get("gameday")
+            row.get("kickoff_utc"), _id_text(row.get("home_espn_team_id")) or None, et_date=row.get("gameday")
         )
 
     idmap_resolved_by = "idmap" if idmap_row else "none"
-    if not (_game_id() and row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_game_id() and _id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         from_schedule = _row_from_nflverse_schedule(espn_id)
         if from_schedule:
             idmap_resolved_by = "nflverse_schedule" if not idmap_row else "idmap+nflverse_schedule"
             for key, value in from_schedule.items():
-                if row.get(key) is None:
+                if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):
                     row[key] = value
     game_id = _game_id()
     return (

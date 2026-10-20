@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Union  # noqa: F401
 
-from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+from sportsdataverse._codegen_runtime import _csv, _json_body, _transport_errors
 from sportsdataverse.dl_utils import download
 
 _BASE = "https://statsapi.mlb.com"
@@ -50,15 +50,6 @@ def _get(path: str, params: Optional[dict] = None, **kwargs) -> Dict:
     with _transport_errors(url):
         resp = download(url=url, params=clean, **kwargs)
     return _json_body(resp, url)
-
-
-def _csv(values) -> Optional[str]:
-    """Join a list/tuple into a comma-separated string; pass-through scalars / None."""
-    if values is None:
-        return None
-    if isinstance(values, (list, tuple)):
-        return ",".join(str(v) for v in values)
-    return str(values)
 
 
 def mlb_schedule(

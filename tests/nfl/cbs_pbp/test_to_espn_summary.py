@@ -639,3 +639,99 @@ def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, idmap
     with pytest.raises(SourceUnavailable, match="no plays"):
         adapter("nfl", CLE_JAX_ESPN_ID, _Ctx())
     assert asked == [optional]
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_payload, cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)
+
+
+def test_a_float_id_map_row_looks_the_cbs_game_up_by_integer_team_ids(monkeypatch):
+    """B-GB-22: the week-scoreboard lookup got ``"30.0"`` / ``"5.0"``, which match no CBS card."""
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+
+    seen = []
+
+    def resolve(season, season_type, week, home, away, **kwargs):
+        seen.append((home, away))
+        return None, {"how": "unresolved"}
+
+    monkeypatch.setattr(game_id_module, "_resolve_cbs_game_id", resolve)
+    row = {k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}
+    floats = {
+        **row,
+        "home_espn_team_id": float(row["home_espn_team_id"]),
+        "away_espn_team_id": float(row["away_espn_team_id"]),
+    }
+
+    class _Ctx:
+        idmap_row = floats
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert seen == [(row["home_espn_team_id"], row["away_espn_team_id"])]
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_is_backfilled_before_the_cbs_lookup(missing, monkeypatch):
+    """CodeRabbit PRRT_..Swdt: a NaN id skipped the schedule backfill (truthy) and reached the CBS
+    lookup / summary as ""; ``pandas.NA`` raised TypeError."""
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as shield_module
+
+    seen = []
+    monkeypatch.setattr(
+        game_id_module, "_resolve_cbs_game_id", lambda *a, **k: seen.append(a[3:5]) or (None, {"how": "unresolved"})
+    )
+    home = CLE_JAX_ROW["home_espn_team_id"]
+    monkeypatch.setattr(shield_module, "_idmap_row_from_schedule", lambda espn_id: {"home_espn_team_id": home})
+    row = {k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}
+
+    class _Ctx:
+        idmap_row = {**row, "home_espn_team_id": missing}
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert seen == [(home, CLE_JAX_ROW["away_espn_team_id"])]
+
+
+def test_the_summary_refuses_a_missing_team_id(cle_jax_payload):
+    row = {**CLE_JAX_ROW, "home_espn_team_id": float("nan")}
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), row)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_without_a_schedule_row_hands_over(missing, monkeypatch):
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as shield_module
+
+    monkeypatch.setattr(game_id_module, "_resolve_cbs_game_id", lambda *a, **k: pytest.fail("no lookup without ids"))
+    monkeypatch.setattr(shield_module, "_idmap_row_from_schedule", lambda espn_id: None)
+
+    class _Ctx:
+        idmap_row = {**{k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}, "home_espn_team_id": missing}
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())

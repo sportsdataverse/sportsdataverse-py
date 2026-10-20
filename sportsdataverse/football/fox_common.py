@@ -66,6 +66,8 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
+
 #: Fox section / ``periodOfPlay`` labels -> period number.
 _PERIODS: Dict[str, int] = {
     "1ST": 1,
@@ -820,10 +822,10 @@ def _fox_to_espn_summary(
     right = (header or {}).get("rightTeam")
     if not isinstance(left, Mapping) or not isinstance(right, Mapping):
         raise ValueError("fox payload carries no header with both teams")
-    event_id = str(idmap_row["espn_event_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
     espn_ids = {
-        "away": str(idmap_row.get("away_espn_team_id") or ""),
-        "home": str(idmap_row.get("home_espn_team_id") or ""),
+        "away": _id_text(idmap_row.get("away_espn_team_id")),
+        "home": _id_text(idmap_row.get("home_espn_team_id")),
     }
     if not (espn_ids["away"] and espn_ids["home"]):
         raise ValueError("id-map row states no ESPN team ids: possession cannot be attributed")

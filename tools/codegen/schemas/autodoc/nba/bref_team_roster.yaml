@@ -2,7 +2,7 @@ schema: bref_team_roster
 kind: dataframe
 columns:
 - name: number
-  type: double
+  type: character
   description: ''
 - name: player
   type: character

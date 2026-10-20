@@ -2683,3 +2683,659 @@
   test: tests/nfl/test_nfl_fox_ext.py -k neither
   expected: kill
   note: CodeRabbit #922; a header team and a drive both without a uri match on None and the drive gets that club
+
+# 4.8b
+# --- Task 4.8b: per-provider casts (providers) -------------------------------------------------
+- id: zero-padded-guard-always-false
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return bool(text.str.contains(_ZERO_PADDED).any())'
+  mutant: 'return False'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k jersey_00
+  expected: kill
+  note: the shared guard; a no-new-nulls cast turned jersey "00" into 0 in every text-to-number caster
+
+- id: bref-finish-jersey-column-by-name
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/nba/bref.py
+  snippet: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS or _zero_padded(nonblank):'
+  mutant: 'if nonblank.len() == 0 or _zero_padded(nonblank):'
+  test: tests/nba/test_bref.py -k jersey_column_text_without
+  expected: kill
+  note: without the name rule, number is Float64 on a roster with no "00" and String on one with it
+
+- id: bref-finish-zero-padded-guard
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/nba/bref.py
+  snippet: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS or _zero_padded(nonblank):'
+  mutant: 'if nonblank.len() == 0 or name in _TEXT_COLUMNS:'
+  test: tests/nba/test_bref.py -k zero_padded_column
+  expected: kill
+  note: a zero-padded column other than number lost its zeros through _finish
+
+- id: torvik-number-is-text
+  group: provider-casts
+  finding: B-M19
+  file: sportsdataverse/mbb/torvik_parsers.py
+  snippet: '"height", "number", "hometown"'
+  mutant: '"height", "hometown"'
+  test: tests/mbb/test_mbb_torvik.py -k jersey_00
+  expected: kill
+  note: the 8 "00" jerseys of the real 2025 file merged into the "0" rows as Int64
+
+- id: sports247-color-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("jersey", "postal_code")'
+  test: tests/test_sports247_site_pages_parsers.py -k colour_without_leading_zero
+  expected: kill
+  note: a colour such as "990000" was cast to Int64
+
+- id: sports247-jersey-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("color", "postal_code")'
+  test: tests/test_sports247_site_pages_parsers.py -k "jersey_and_postal_code and recruitment_finalchoice"
+  expected: kill
+  note: recruitment_finalchoice.json jersey "3" was Int64
+
+- id: sports247-postal-code-suffix-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: '_TEXT_SUFFIXES = ("jersey", "color", "postal_code")'
+  mutant: '_TEXT_SUFFIXES = ("jersey", "color")'
+  test: tests/test_sports247_site_pages_parsers.py -k "jersey_and_postal_code and institution_location"
+  expected: kill
+  note: institution_location.json postal_code "32605" was Int64 (a New England "02134" would lose its zero)
+
+- id: sports247-zero-padded-guard
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'if non_null == 0 or _zero_padded(s):'
+  mutant: 'if non_null == 0:'
+  test: tests/test_sports247_site_pages_parsers.py -k colour_without_leading_zero
+  expected: kill
+  note: the "lossless" trial cast checked only for new nulls, so "007" became 7
+
+- id: sports247-zero-coordinates-null
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'unknown = ((pl.col(lat) == 0) & (pl.col(lon) == 0)).fill_null(False)'
+  mutant: 'unknown = pl.lit(False)'
+  test: tests/test_sports247_site_pages_parsers.py -k zero_coordinates
+  expected: kill
+  note: 247's "0.000000" no-location sentinel became a real (0, 0)
+
+- id: nba-stats-float-game-id
+  group: provider-casts
+  finding: B-L92
+  file: sportsdataverse/nba/nba_stats_runtime.py
+  snippet: 'clean["GameID"] = _wire_text(clean["GameID"]).zfill(10)'
+  mutant: 'clean["GameID"] = str(clean["GameID"]).zfill(10)'
+  test: tests/nba/test_nba_stats_runtime.py -k float_game_id
+  expected: kill
+  note: GameID=22400001.0 went to the wire as "22400001.0" and stats.nba.com answered HTTP 400 (live 2026-10-11)
+
+- id: nba-stats-env-value-named
+  group: provider-casts
+  finding: A-L68
+  file: sportsdataverse/nba/nba_stats_runtime.py
+  snippet: 'raise ValueError(f"{name}={raw!r} is not a valid {kind.__name__}") from None'
+  mutant: 'raise'
+  test: tests/nba/test_nba_stats_runtime.py -k malformed_env
+  expected: kill
+  note: SDV_PY_NBA_STATS_RETRIES=three raised a bare ValueError naming neither the variable nor its value
+
+- id: mlb-api-extra-private-csv
+  group: provider-casts
+  finding: B-L86
+  file: sportsdataverse/mlb/mlb_api_extra.py
+  snippet: 'from sportsdataverse._codegen_runtime import _csv, _json_body, _transport_errors'
+  mutant: |-
+    from sportsdataverse._codegen_runtime import _json_body, _transport_errors
+    _csv = lambda v: None if v is None else ",".join(str(x) for x in v) if isinstance(v, (list, tuple)) else str(v)  # noqa: E731
+  test: tests/mlb/test_mlb_api_extra_params.py
+  expected: kill
+  note: the private _csv copy sent league_id={103, 104} as "{103, 104}" and 103.0 as "103.0"
+
+- id: nhl-records-comeback-scope-validated
+  group: provider-casts
+  finding: B-M27
+  file: sportsdataverse/nhl/nhl_records_extra.py
+  snippet: 'if scope not in valid:'
+  mutant: 'if False:'
+  test: tests/nhl/test_nhl_records_extra_scope.py -k unknown_scope
+  expected: kill
+  note: scope="Franchise" or "team" silently returned the league-wide table
+
+- id: fox-id-map-float-id
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return _wire_text(value)'
+  mutant: '    return str(value)'
+  test: tests/football/test_fox_common.py -k float_id_map_row
+  expected: kill
+  note: str(401671775.0) is "401671775.0", which matches no ESPN event or team id
+
+- id: fox-id-map-nan-is-missing
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'if value is None or value != value:'
+  mutant: 'if value is None:'
+  test: tests/football/test_fox_common.py -k nan_team_id
+  expected: kill
+  note: a pandas row's NaN team id became "nan" and passed the "no ESPN team ids" guard
+
+# 4.8b review round 1 (R48b-1 / R48b-2 / R48b-3 / R48b-5)
+- id: zero-padded-single-leading-zero
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_ZERO_PADDED = r"^\s*[+-]?0\d"'
+  mutant: '_ZERO_PADDED = r"^\s*[+-]?00"'
+  test: tests/nba/test_bref.py -k zero_padded_column
+  expected: kill
+  note: R48b-2 R1, "07" (one leading zero) must stay text like "00"
+
+- id: nba-stats-timeout-env-named
+  group: provider-casts
+  finding: A-L68
+  file: sportsdataverse/nba/nba_stats_runtime.py
+  snippet: 'timeout = _env_number("SDV_PY_NBA_STATS_TIMEOUT", "30", float)'
+  mutant: 'timeout = float(os.environ.get("SDV_PY_NBA_STATS_TIMEOUT", "30"))'
+  test: tests/nba/test_nba_stats_runtime.py -k malformed_timeout
+  expected: kill
+  note: R48b-2 R4, the third SDV_PY_NBA_STATS_* parse
+
+- id: id-text-none-is-missing
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'if value is None or value != value:'
+  mutant: 'if value != value:'
+  test: tests/football/test_fox_common.py -k missing_team_id
+  expected: kill
+  note: R48b-2 R6, an absent team id became the text "None" and passed the "no ESPN team ids" guard
+
+- id: id-text-pandas-na-is-missing
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    except TypeError:  # pandas.NA: its comparison is NA, whose truth value raises'
+  mutant: '    except ValueError:  # pandas.NA: its comparison is NA, whose truth value raises'
+  test: tests/test_id_text.py -k pd_na
+  expected: kill
+  note: R48b-3, _id_text(pd.NA) raised TypeError (a nullable Int64 id-map column)
+
+- id: sports247-coordinates-pairwise
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'unknown = ((pl.col(lat) == 0) & (pl.col(lon) == 0)).fill_null(False)'
+  mutant: 'unknown = ((pl.col(lat) == 0) | (pl.col(lon) == 0)).fill_null(False)'
+  test: tests/test_sports247_site_pages_parsers.py -k zero_zero_pair
+  expected: kill
+  note: R48b-5, a lone zero (equator / Greenwich meridian) is a real coordinate; only (0, 0) is the sentinel
+
+- id: cfb-cbs-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: cfb-cbs-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: 'home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])'
+  mutant: 'home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: nfl-cbs-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: nfl-cbs-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])'
+  mutant: 'home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: cfb-yahoo-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: cfb-yahoo-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/to_espn_summary.py
+  snippet: 'home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])'
+  mutant: 'home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: nfl-shield-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: nfl-shield-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: 'home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])'
+  mutant: 'home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: nfl-yahoo-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: nfl-yahoo-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/to_espn_summary.py
+  snippet: 'home_id = _id_text(idmap_row.get("home_espn_team_id")) or str(_espn_team_number(yahoo_home) or "")'
+  mutant: 'home_id = str(idmap_row.get("home_espn_team_id") or _espn_team_number(yahoo_home) or "")'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: cfb-ncaa-id-map-event-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'event_id = _id_text(idmap_row["espn_event_id"])'
+  mutant: 'event_id = str(idmap_row["espn_event_id"])'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float event id went out as "<id>.0"
+
+- id: cfb-ncaa-id-map-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'home_id = _id_text(idmap_row.get("home_espn_team_id")) or _id_text(resolved.get("home")) or None'
+  mutant: 'home_id = str(idmap_row.get("home_espn_team_id") or resolved.get("home") or "") or None'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k float_id_map_row
+  expected: kill
+  note: R48b-3, a float team id went out as "<id>.0"
+
+- id: nfl-cbs-adapter-lookup-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: '            _id_text(row["home_espn_team_id"]),'
+  mutant: '            str(row["home_espn_team_id"]),'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k integer_team_ids
+  expected: kill
+  note: the CBS week-scoreboard lookup received "<id>.0" team ids from a float id-map row (follow-up after 3.5 merged)
+
+# 4.8b review round 2 (R48b-7: the KenPom jersey is text on every page)
+- id: kenpom-cast-numerics-skips-zero-padded
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey" or _zero_padded(frame[col]):'
+  mutant: 'if frame.schema[col] != pl.Utf8 or col == "jersey":'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k cast_numerics_jersey_00
+  expected: kill
+  note: KenPom's _cast_numerics cast any all-digit text column to Int64 ("00" -> 0)
+
+- id: kenpom-cast-numerics-skips-jersey
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey" or _zero_padded(frame[col]):'
+  mutant: 'if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, a jersey column read as text was cast back to Int64 by _cast_numerics
+
+- id: kenpom-jersey-text-every-page
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'tables = html_tables(raw, min_rows=2, text_columns=_jersey_column)'
+  mutant: 'tables = html_tables(raw, min_rows=2)'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey or two_pages_stack or real_page_jersey_00"
+  expected: kill
+  note: R48b-1 / R48b-7, read_html typed the jersey Float64 / Int64, so "00" became 0 and pages did not stack
+
+- id: html-tables-text-columns-restored
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_html_tables.py
+  snippet: '        frame.isetitem(j, col.where(col.notna(), None))'
+  mutant: '        pass'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, the text read of a label column was not swapped in
+
+- id: html-tables-text-columns-named
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_html_tables.py
+  snippet: 'frame.columns = [labels.get(j, name) for j, name in enumerate(names)]'
+  mutant: 'frame.columns = names'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, the jersey kept its positional column_0 / column_0_rk name
+
+- id: kenpom-jersey-is-no-anchor
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey":  # a jersey is text, never the anchor'
+  mutant: 'if frame.schema[col] != pl.Utf8:  # a jersey is text, never the anchor'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey and team-player_table"
+  expected: kill
+  note: a text jersey column became the repeated-header anchor and dropped the section-label rows (16 -> 11)
+
+- id: kenpom-jersey-box-number-header
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'numbered = [j for j, cell in enumerate(cells) if "number" in (cell.get("class") or [])]'
+  mutant: 'numbered = []'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey and box"
+  expected: kill
+  note: R48b-7, the box score jersey is the <th class=number> column
+
+- id: kenpom-jersey-roster-player-link
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if len(tds) > 1 and tds[1].find("a", href=re.compile(r"(^|/)player\.php")):'
+  mutant: 'if len(tds) > 1:'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k only_the_jersey_columns_change
+  expected: kill
+  note: player.php shares the roster header; its first column is the season, not a jersey
+
+- id: kenpom-jersey-roster-header
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if [cell.get_text(strip=True) for cell in cells[:3]] != ["", "", "Ht"]:'
+  mutant: 'if False:'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k only_the_jersey_columns_change
+  expected: kill
+  note: only a roster table (blank, blank, Ht) has a first-column jersey
+
+# 4.8b #928 CodeRabbit round (label columns shipped as numbers; missing ids normalised before the guards)
+- id: sports247-numeric-label-to-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'casts.append(source.cast(pl.Utf8).alias(col))'
+  mutant: 'pass'
+  test: tests/test_sports247_site_pages_parsers.py -k json_number
+  expected: kill
+  note: a jersey shipped as the JSON number 3 kept the column numeric, so its dtype depended on the payload
+
+- id: sports247-numeric-label-via-integer
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'source = pl.col(col).cast(pl.Int64) if whole else pl.col(col)'
+  mutant: 'source = pl.col(col)'
+  test: tests/test_sports247_site_pages_parsers.py -k "json_number and float_with_null"
+  expected: kill
+  note: a Float64 jersey (a null beside it) became "3.0"
+
+- id: cfb-yahoo-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard; pandas.NA raised TypeError
+
+- id: nfl-cbs-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id")) and row.get("season")):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id") and row.get("season")):'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k backfilled_before_the_cbs_lookup
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-cbs-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k backfilled_before_the_cbs_lookup
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed and became ""
+
+- id: nfl-cbs-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k "without_a_schedule_row"
+  expected: kill
+  note: pandas.NA raised TypeError instead of handing over
+
+- id: nfl-cbs-summary-refuses-missing-id
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: '    if not (home_id and away_id):'
+  mutant: '    if False:'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k summary_refuses
+  expected: kill
+  note: a "" team id reached the summary ids and the abbrs keys
+
+- id: nfl-shield-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: |-
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+        if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
+  mutant: |-
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+        if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-shield-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed and became ""
+
+- id: nfl-shield-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: |-
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
+            raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
+  mutant: |-
+    if row.get("home_espn_team_id") is None or row.get("away_espn_team_id") is None:
+            raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k without_a_schedule_row
+  expected: kill
+  note: the is-None check let NaN and "" through to the summary
+
+- id: nfl-shield-summary-refuses-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: '    if not (home_id and away_id):  # a'
+  mutant: '    if False:  # a'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k two_missing
+  expected: kill
+  note: two "" ids collapsed abbrs to one key and credited every play to one club
+
+# 4.8b #928 follow-up: every remaining adapter team-id guard through _id_text
+- id: cfb-cbs-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k missing_team_id_hands_over
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: cfb-cbs-lookup-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/cbs_pbp/to_espn_summary.py
+  snippet: '            _id_text(row["home_espn_team_id"]),'
+  mutant: '            row["home_espn_team_id"],'
+  test: tests/cfb/cbs_pbp/test_to_espn_summary.py -k integer_team_ids
+  expected: kill
+  note: the CBS week-scoreboard lookup received a float team id
+
+- id: cfb-fox-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/fox_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/fox_pbp/test_fox_cfb_adapter.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: nfl-fox-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/fox_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError
+
+- id: nfl-fox-resolver-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/fox_pbp/to_espn_summary.py
+  snippet: '        _id_text(row.get("home_espn_team_id")),'
+  mutant: '        row.get("home_espn_team_id"),'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k resolves_the_fox_id
+  expected: kill
+  note: str(26.0 or "") is "26.0", no key of the ESPN -> Fox team table
+
+- id: cfb-ncaa-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k falls_back_to_the_crosswalk_whatever
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard and pandas.NA raised TypeError; a NaN id skipped the crosswalk
+
+- id: cfb-ncaa-unresolved-side-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/ncaa_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get(f"{side}_espn_team_id")) or team_ids.get(side))'
+  mutant: 'if not (row.get(f"{side}_espn_team_id") or team_ids.get(side))'
+  test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k "falls_back_to_the_crosswalk_whatever and pd_na"
+  expected: kill
+  note: pandas.NA raised TypeError in the per-side check
+
+- id: cfb-yahoo-formula-team-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/fetch.py
+  snippet: '        _id_text(row.get("home_espn_team_id")) or None,'
+  mutant: '        row.get("home_espn_team_id"),'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k float_home_id
+  expected: kill
+  note: a float home id found no Yahoo team number, so the game handed over
+
+- id: nfl-yahoo-formula-team-id-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'row.get("kickoff_utc"), _id_text(row.get("home_espn_team_id")) or None, et_date=row.get("gameday")'
+  mutant: 'row.get("kickoff_utc"), row.get("home_espn_team_id"), et_date=row.get("gameday")'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k float_home_id
+  expected: kill
+  note: a float home id computed no Yahoo id
+
+- id: nfl-yahoo-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'if not (_game_id() and _id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (_game_id() and row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-yahoo-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/yahoo_pbp/fetch.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/yahoo_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed

@@ -22,6 +22,7 @@ from typing import Any, Dict, Mapping, Optional, Tuple
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.teams import _yahoo_team_number
 
 # League-neutral Yahoo handling (fetching, the 429 / no-coverage shapes, the id arithmetic's
@@ -117,7 +118,7 @@ def _resolve_game_id(
     home_team = row.get("home_team") or {}
     computed = _yahoo_cfb_game_id(
         row.get("kickoff_utc"),
-        row.get("home_espn_team_id"),
+        _id_text(row.get("home_espn_team_id")) or None,
         (home_team or {}).get("yahoo_team_id"),
     )
     if computed:
