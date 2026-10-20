@@ -4,9 +4,10 @@ Custom exceptions for sportsdataverse module
 
 from __future__ import annotations
 
+import functools as _functools
 import re as _re
 import warnings as _warnings
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
@@ -368,6 +369,40 @@ def _error_envelope_code(body: Any) -> int | None:
         if isinstance(code, int) and not isinstance(code, bool) and 400 <= code <= 599:
             return code
     return None
+
+
+def _data_only(parse: Callable[..., Any]) -> Callable[..., Any]:
+    """The parser contract on a body that is not data (A-L17, EX-SYNC-g): zero rows, never a raise.
+
+    Wraps a public provider parser so ``{"code", "message"}`` error envelopes (see
+    :func:`_error_envelope_code`) read as ``{}`` and a list body loses its empty ``{}`` records, which
+    carry no field, instead of becoming a one-row frame. Every other body reaches the parser unchanged.
+    """
+
+    @_functools.wraps(parse)
+    def wrapper(payload: Any, *args: Any, **kwargs: Any) -> Any:
+        if _error_envelope_code(payload) is not None:
+            payload = {}
+        elif isinstance(payload, list):
+            payload = [rec for rec in payload if rec != {}]
+        return parse(payload, *args, **kwargs)
+
+    return wrapper
+
+
+def _dict_only(parse: Callable[..., Any]) -> Callable[..., Any]:
+    """For a parser whose payload is always an object: any non-dict body reads as ``{}`` (A-L17).
+
+    No envelope check: every parser it wraps reads named keys, which an error envelope lacks.
+    """
+
+    @_functools.wraps(parse)
+    def wrapper(payload: Any, *args: Any, **kwargs: Any) -> Any:
+        if not isinstance(payload, dict):
+            payload = {}
+        return parse(payload, *args, **kwargs)
+
+    return wrapper
 
 
 #: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other

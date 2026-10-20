@@ -36,6 +36,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.soccer._frames import as_output, as_tables, rows_to_frame
 
 __all__ = [
@@ -63,6 +64,7 @@ def _rows_key(raw: Dict[str, Any]) -> Union[List[Any], None]:
     return None
 
 
+@_data_only
 def parse_mls_api(
     raw: Union[Dict[str, Any], List[Any], None],
     *,
@@ -114,6 +116,7 @@ def parse_mls_api(
     return as_output(rows_to_frame(rows), return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_mls_entity(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

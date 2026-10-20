@@ -37,6 +37,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = ["parse_sports247_site_page"]
 
@@ -77,6 +78,7 @@ def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
     return df.with_columns(casts) if casts else df
 
 
+@_data_only
 def parse_sports247_site_page(
     raw: Optional[Union[Dict[str, Any], List[Dict[str, Any]]]],
     *,

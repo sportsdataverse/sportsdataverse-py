@@ -31,6 +31,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from sportsdataverse.basketball.vtb import vtb_frames as F
 from sportsdataverse.basketball.vtb.vtb_frames import Frame
+from sportsdataverse.errors import _data_only
 
 __all__ = ["parse_vtb_league_leagues", "parse_vtb_league_matches", "parse_vtb_league_seasons"]
 
@@ -49,6 +50,7 @@ def _pair(value: Any, name: str) -> Dict[str, Any]:
     return {f"{name}_en": d.get("en"), f"{name}_ru": d.get("ru")}
 
 
+@_data_only
 def parse_vtb_league_leagues(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -84,6 +86,7 @@ def parse_vtb_league_leagues(
     return F.finish(F.frame(data), columns, return_as_pandas, "parse_vtb_league_leagues")
 
 
+@_data_only
 def parse_vtb_league_seasons(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -177,6 +180,7 @@ def _match_row(m: Mapping[str, Any]) -> Dict[str, Any]:
     return row
 
 
+@_data_only
 def parse_vtb_league_matches(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
