@@ -2179,7 +2179,7 @@ def _place_out_of_scheme_plays(plays_df: pl.DataFrame) -> pl.DataFrame:
         p, t, f = row["period.number"].item(), row["start.adj_TimeSecsRem"].item(), row["_feed"].item()
         rest_p, rest_t = rest["period.number"].cast(pl.Int64, strict=False), rest["start.adj_TimeSecsRem"]
         # just after the LAST play that comes before it (an earlier period, more time left, or the same
-        # clock and earlier in ESPN's feed), not after a count of them: the id-sorted rest is not always
+        # clock and earlier in the incoming row order), not after a count of them: the id-sorted rest is not always
         # in clock order (401420836 files this rush's 11:58 twin among its 14:43 plays), and on a clock
         # tie the feed decides (400548110's personal foul follows the 9:41 touchdown it is filed after)
         before = (rest_p < p) | ((rest_p == p) & ((rest_t > t) | ((rest_t == t) & (rest["_feed"] < f))))
