@@ -82,7 +82,7 @@ def test_the_captured_logged_out_page_is_the_login_form() -> None:
 
 def test_logged_out_page_raises_instead_of_parsing(monkeypatch, logins) -> None:
     _serve(monkeypatch, _LOGGED_OUT)
-    with pytest.raises(AssetFetchError, match=r"KenPom answered kenpom.com/summary.php with its login page"):
+    with pytest.raises(AssetFetchError, match=r"KenPom answered kenpom.com/summary.php with its logged-out page"):
         kenpom_runtime._get("https://kenpom.com/summary.php", {"y": 2025})
 
 
