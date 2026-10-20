@@ -1058,8 +1058,8 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             int(row["season"]),
             int(row.get("season_type") or 2),
             int(row["week"]),
-            str(row["home_espn_team_id"]),
-            str(row["away_espn_team_id"]),
+            _id_text(row["home_espn_team_id"]),
+            _id_text(row["away_espn_team_id"]),
             kickoff_utc=row.get("kickoff_utc"),
         )
         cbs_id_source = "week_scoreboard"

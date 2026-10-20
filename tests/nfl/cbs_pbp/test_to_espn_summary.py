@@ -650,3 +650,32 @@ def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_payload, cl
     adapted = _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), floats)[0]
     assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
     assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)
+
+
+def test_a_float_id_map_row_looks_the_cbs_game_up_by_integer_team_ids(monkeypatch):
+    """B-GB-22: the week-scoreboard lookup got ``"30.0"`` / ``"5.0"``, which match no CBS card."""
+    from sportsdataverse.nfl.cbs_pbp import game_id as game_id_module
+
+    seen = []
+
+    def resolve(season, season_type, week, home, away, **kwargs):
+        seen.append((home, away))
+        return None, {"how": "unresolved"}
+
+    monkeypatch.setattr(game_id_module, "_resolve_cbs_game_id", resolve)
+    row = {k: v for k, v in CLE_JAX_ROW.items() if k != "cbs_game_id"}
+    floats = {
+        **row,
+        "home_espn_team_id": float(row["home_espn_team_id"]),
+        "away_espn_team_id": float(row["away_espn_team_id"]),
+    }
+
+    class _Ctx:
+        idmap_row = floats
+        payload = None
+        participants = None
+        odds_override = None
+
+    with pytest.raises(SourceUnavailable):
+        _adapter_for("nfl", "cbs")("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert seen == [(row["home_espn_team_id"], row["away_espn_team_id"])]

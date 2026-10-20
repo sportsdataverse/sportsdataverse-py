@@ -3055,3 +3055,13 @@
   test: tests/cfb/ncaa_pbp/test_to_espn_summary.py -k float_id_map_row
   expected: kill
   note: R48b-3, a float team id went out as "<id>.0"
+
+- id: nfl-cbs-adapter-lookup-team-ids-text
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: '            _id_text(row["home_espn_team_id"]),'
+  mutant: '            str(row["home_espn_team_id"]),'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k integer_team_ids
+  expected: kill
+  note: the CBS week-scoreboard lookup received "<id>.0" team ids from a float id-map row (follow-up after 3.5 merged)
