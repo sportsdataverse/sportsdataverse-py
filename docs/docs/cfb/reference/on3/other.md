@@ -1,7 +1,7 @@
 ---
 title: "CFB — On3 Recruit Database (api.on3.com) — Other"
 sidebar_label: "Other"
-sidebar_position: 10
+sidebar_position: 13
 description: "CFB — On3 Recruit Database (api.on3.com) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -28,6 +28,14 @@ GET /rdb/v1/coaches/{personKey}/history
 No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#on3_coaches_history-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#on3_coaches_history-example}
 
@@ -57,405 +65,18 @@ No returns table is published for this endpoint: no committed capture with rows,
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_coaches_profile-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_coaches_profile-example}
 
 ```python
 on3_coaches_profile(person_key=89617)
-```
-
-_Last validated n/a._
-
-## on3_draft_organization_rank
-
-GET /rdb/v1/draft-organization-rank
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/draft-organization-rank`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/draft-organization-rank](https://api.on3.com/public/rdb/v1/draft-organization-rank)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `page` | `page` |  |  | `Y` | page query parameter. |
-| `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
-
-### Returns {#on3_draft_organization_rank-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_draft_organization_rank-example}
-
-```python
-on3_draft_organization_rank()
-```
-
-_Last validated n/a._
-
-## on3_draft_pick_organization_rank
-
-GET /rdb/v1/draft-pick-organization-rank
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/draft-pick-organization-rank`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/draft-pick-organization-rank](https://api.on3.com/public/rdb/v1/draft-pick-organization-rank)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `page` | `page` |  |  | `Y` | page query parameter. |
-| `pageSize` | `page_size` |  |  | `Y` | pageSize query parameter. |
-
-### Returns {#on3_draft_pick_organization_rank-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_draft_pick_organization_rank-example}
-
-```python
-on3_draft_pick_organization_rank()
-```
-
-_Last validated n/a._
-
-## on3_drafts
-
-GET /rdb/v1/drafts
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/drafts](https://api.on3.com/public/rdb/v1/drafts)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `round` | `round` |  |  | `Y` | round query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-
-### Returns {#on3_drafts-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: its committed capture has 0 rows, so the parser emits no columns; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_drafts-example}
-
-```python
-on3_drafts()
-```
-
-_Last validated n/a._
-
-## on3_drafts_by_stars
-
-GET /rdb/v1/drafts-by-stars
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts-by-stars`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/drafts-by-stars](https://api.on3.com/public/rdb/v1/drafts-by-stars)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `yearSpan` | `year_span` |  |  | `Y` | yearSpan query parameter. |
-
-### Returns {#on3_drafts_by_stars-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `blue_chip_percent` | numeric | Percent of the drafted group who were blue-chip (four- or five-star) recruits. |
-| `population_percent` | numeric | Percent of the overall recruit population holding this star rating. |
-| `talent_ratio` | numeric | Ratio of the star tier's draft share to its population share (On3's talent ratio). |
-| `five_stars` | integer | Number of drafted players who were five-star recruits. |
-| `four_stars` | integer | Number of drafted players who were four-star recruits. |
-| `three_stars` | integer | Number of drafted players who were three-star recruits. |
-| `zero_stars` | integer | Number of drafted players who were unrated (zero-star) recruits. |
-| `total` | integer | Total drafted players counted in the row. |
-| `state_key` | integer | On3 numeric key of the state. |
-| `state_name` | character | Name of the state the row aggregates (e.g. Alabama). |
-| `state_abbreviation` | character | Two-letter state abbreviation. |
-| `state_country_key` | integer | On3 numeric key of the state's country. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_drafts_by_stars-example}
-
-```python
-on3_drafts_by_stars()
-```
-
-_Last validated n/a._
-
-## on3_drafts_by_stars_summary
-
-GET /rdb/v1/drafts-by-stars-summary
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts-by-stars-summary`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/drafts-by-stars-summary](https://api.on3.com/public/rdb/v1/drafts-by-stars-summary)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-
-### Returns {#on3_drafts_by_stars_summary-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_drafts_by_stars_summary-example}
-
-```python
-on3_drafts_by_stars_summary()
-```
-
-_Last validated n/a._
-
-## on3_drafts_players
-
-GET /rdb/v1/drafts/{orgKey}/players
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/drafts/{org_key}/players`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/drafts/1867/players](https://api.on3.com/public/rdb/v1/drafts/1867/players)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `org_key` | `org_key` |  | `Y` |  | org_key path parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-
-### Returns {#on3_drafts_players-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_drafts_players-example}
-
-```python
-on3_drafts_players(org_key=1867)
-```
-
-_Last validated n/a._
-
-## on3_filters_conferences
-
-GET /rdb/v1/filters/conferences
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/conferences`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/conferences](https://api.on3.com/public/rdb/v1/filters/conferences)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-
-### Returns {#on3_filters_conferences-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_conferences-example}
-
-```python
-on3_filters_conferences()
-```
-
-_Last validated n/a._
-
-## on3_filters_draft_rounds
-
-GET /rdb/v1/filters/draft-rounds
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/draft-rounds`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/draft-rounds](https://api.on3.com/public/rdb/v1/filters/draft-rounds)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-
-### Returns {#on3_filters_draft_rounds-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `round` | integer | Draft round number. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_draft_rounds-example}
-
-```python
-on3_filters_draft_rounds()
-```
-
-_Last validated n/a._
-
-## on3_filters_positions
-
-GET /rdb/v1/filters/positions
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/positions`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/positions](https://api.on3.com/public/rdb/v1/filters/positions)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-| `positionType` | `position_type` |  |  | `Y` | positionType query parameter. |
-
-### Returns {#on3_filters_positions-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_positions-example}
-
-```python
-on3_filters_positions()
-```
-
-_Last validated n/a._
-
-## on3_filters_sports
-
-GET /rdb/v1/filters/sports
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/sports`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/sports](https://api.on3.com/public/rdb/v1/filters/sports)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#on3_filters_sports-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_sports-example}
-
-```python
-on3_filters_sports()
-```
-
-_Last validated n/a._
-
-## on3_filters_status
-
-GET /rdb/v1/filters/status
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/status`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/status](https://api.on3.com/public/rdb/v1/filters/status)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#on3_filters_status-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `value` | character | Filter value as On3 lists it. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_status-example}
-
-```python
-on3_filters_status()
-```
-
-_Last validated n/a._
-
-## on3_filters_teams
-
-GET /rdb/v1/filters/teams
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/teams`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/teams](https://api.on3.com/public/rdb/v1/filters/teams)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `groupBy` | `group_by` |  |  | `Y` | groupBy query parameter. |
-| `year` | `year` |  |  | `Y` | year query parameter. |
-| `sportKey` | `sport_key` |  |  | `Y` | sportKey query parameter. |
-
-### Returns {#on3_filters_teams-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_teams-example}
-
-```python
-on3_filters_teams()
-```
-
-_Last validated n/a._
-
-## on3_filters_years
-
-GET /rdb/v1/filters/years
-
-**Endpoint URL:** `GET https://api.on3.com/public/rdb/v1/filters/years`
-
-**Valid URL:** [https://api.on3.com/public/rdb/v1/filters/years](https://api.on3.com/public/rdb/v1/filters/years)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-
-### Returns {#on3_filters_years-returns}
-
-**`return_parsed=True`** (default) — the output of `parse_on3_rdb`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#on3_filters_years-example}
-
-```python
-on3_filters_years()
 ```
 
 _Last validated n/a._
@@ -479,6 +100,14 @@ GET /rdb/v1/person-connections/{connectionKey}
 No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#on3_person_connections_connection_key-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#on3_person_connections_connection_key-example}
 
@@ -508,6 +137,14 @@ No returns table is published for this endpoint: no committed capture with rows;
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_person_primary_recruitment_evaluation-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_person_primary_recruitment_evaluation-example}
 
 ```python
@@ -536,6 +173,14 @@ No returns table is published for this endpoint: no committed capture with rows;
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_person_recruitment_evaluations-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_person_recruitment_evaluations-example}
 
 ```python
@@ -563,6 +208,14 @@ GET /rdb/v1/person-sport/{psKey}/profile-recruit
 No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#on3_person_sport_profile_recruit-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#on3_person_sport_profile_recruit-example}
 
@@ -595,6 +248,14 @@ No returns table is published for this endpoint: no committed capture with rows,
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_person_sport_rankings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_person_sport_rankings-example}
 
 ```python
@@ -624,6 +285,14 @@ Expert prediction accuracy + feed (see PredictionAccuracies)
 No returns table is published for this endpoint: no committed capture with rows, and the response type is only heuristically mapped (x-source: call-site); names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#on3_predictions_user_key-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#on3_predictions_user_key-example}
 
@@ -672,6 +341,14 @@ GET /rdb/v1/quotes
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_quotes-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_quotes-example}
 
 ```python
@@ -700,6 +377,14 @@ No returns table is published for this endpoint: no committed capture with rows,
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#on3_quotes_key-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#on3_quotes_key-example}
 
 ```python
@@ -727,6 +412,14 @@ GET /rdb/v1/videos/{videoKey}
 No returns table is published for this endpoint: no committed capture with rows, and the row has nested objects whose flattened column names depend on which are null in the data; names derived from the OpenAPI response type matched parse_on3_rdb's output on only 7 of the 9 checkable endpoints, so none are published.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#on3_videos_video_key-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#on3_videos_video_key-example}
 

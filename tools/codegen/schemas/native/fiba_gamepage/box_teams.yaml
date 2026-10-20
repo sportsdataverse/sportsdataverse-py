@@ -76,7 +76,7 @@ columns:
   type: integer
 - description: ''
   name: blocks_received
-  type: character
+  type: integer
 - description: ''
   name: turnovers
   type: integer

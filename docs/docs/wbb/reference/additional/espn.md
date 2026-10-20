@@ -39,6 +39,13 @@ Polars (or pandas) DataFrame with one row per official: `game_id`, `season`, `of
 | `position_display_name` | character | Position display name. |
 | `order` | integer | Display order within the result set. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -157,6 +164,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
 
 **Example**
 
@@ -371,6 +385,13 @@ A single-row wide DataFrame (polars by default). Columns: identity / echo (`seas
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404 (no season line for that athlete/season). |
+
 **Example**
 
 ```python
@@ -522,6 +543,13 @@ Pull ESPN team season stats for a women's-college-basketball team.
 
 Dict with one DataFrame per stat category. The canonical keys `"Averages"`, `"Totals"`, `"Misc"` are ALWAYS present; missing categories come back as empty frames carrying the documented schema. Any ESPN-shipped category whose name does not match one of the three canonical keys is collected under an additional `"Other"` key (only added if non-empty). Per-category column set (one row per stat): * `stat_name` (Utf8) * `abbreviation` (Utf8) * `display_value` (Utf8) * `value` (Float64) * `description` (Utf8) * `category` (Utf8, constant per frame) * `team_id` (Int64, constant) * `season` (Int32, constant) If `raw=True`, returns the raw response dict.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -586,6 +614,13 @@ Polars dataframe of the women's college basketball teams, one row per team, with
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 

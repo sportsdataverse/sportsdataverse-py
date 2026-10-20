@@ -41,6 +41,14 @@ Every CEBL season (2019 on), with the active and live flags.
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_seasons-example}
 
 ```python
@@ -76,6 +84,14 @@ Every franchise identity, past and present (15 team ids; a relocated franchise h
 | `icon_url` | character | Team icon URL (upstream: 'Should not include the team name'). |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_teams-example}
 
@@ -136,6 +152,14 @@ Standings of one season, one row per team: record, home/away splits, games behin
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_standings-example}
 
 ```python
@@ -174,6 +198,14 @@ One team's roster in one season: player, nationality, birth date, position and j
 | `photo_url` | character | Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com). |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_roster-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_roster-example}
 
@@ -251,6 +283,14 @@ Team statistic table (totals or per game) with a league row; filter by season, c
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_team_stats-example}
 
 ```python
@@ -307,6 +347,14 @@ Schedule and results of one season (regular season and finals), with the Genius 
 | `broadcast_partner_logo_urls` | character | Logo URLs of the game's broadcasters (TSN+, CEBL+, ...); 2 to 7 per game. |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_games-example}
 
@@ -378,6 +426,14 @@ Player statistic table (totals or per game) for a season or all-time; filter by 
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_player_stats-example}
 
 ```python
@@ -426,6 +482,14 @@ Top five players per requested statistic (long frame, one row per statistic and 
 | `photo_url` | character | Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com). |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_player_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player_leaders-example}
 
@@ -494,6 +558,14 @@ One player's per-season rows and career row (totals or per game).
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_player_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_player_seasons-example}
 
 ```python
@@ -538,6 +610,14 @@ One player's profile and current team: name, nationality, birth date, position, 
 | `photo_url` | character | Player headshot URL on the Genius Sports image CDN (images.statsengine.playbyplay.api.geniussports.com). |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_player-example}
 
@@ -600,6 +680,14 @@ One player's game log: one row per game played, with the Genius match id of the 
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
 
+### Raises {#cebl_player_gamelog-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
+
 ### Example {#cebl_player_gamelog-example}
 
 ```python
@@ -635,6 +723,14 @@ News articles in one language. The API answered an empty list on every probe, so
 | `html_content` | character | Article body as HTML (upstream schema; unobserved, no article was ever served). |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'rows': <API body>, '_request': {...}}` with the request (kind, season, mode, competition, segment, ids) stamped under `_request`.
+
+### Raises {#cebl_news-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown season, team or player answers an empty list, an all-null profile; an empty news feed). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected key after a re-read, a non-2xx, a non-JSON body, an error envelope, a body for another season, team or player). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A mode, competition, segment or conference outside its set, a season that is not a 4-digit year, an id that is not an integer, or HTTP 400 / 422 (a missing required query parameter). |
 
 ### Example {#cebl_news-example}
 

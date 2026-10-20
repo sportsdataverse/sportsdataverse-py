@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # PLG — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## IDs and crosswalks
 
@@ -35,6 +35,12 @@ polars.DataFrame | pandas.DataFrame: eight rows, `team_id` (`Int64`) and `team_u
 |---|---|---|
 | `team_id` | integer | P. LEAGUE+ site team id (1-8), stable across seasons and renames. |
 | `team_uuid` | character | Preciser team uuid of the same club (team_uuid of the pleague_preciser frames). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `Nothing` | The table is a constant, no request is made. |
 
 **Example**
 

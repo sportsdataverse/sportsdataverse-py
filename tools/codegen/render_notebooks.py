@@ -35,12 +35,10 @@ import re
 import sys
 import tempfile
 from pathlib import Path
+from typing import Optional
 
 _LEAGUES = "cfb|nfl|nba|wnba|mbb|wbb|mlb|nhl|pwhl"
 
-# Avoid loading a polluted global jupyter/nbconvert config (some machines register
-# a missing ``jupyter_contrib_nbextensions`` preprocessor that breaks nbconvert).
-os.environ["JUPYTER_CONFIG_DIR"] = tempfile.mkdtemp(prefix="sdv-nbrender-")
 
 ROOT = Path(__file__).resolve().parents[2]
 NB_DIR = ROOT / "examples" / "notebooks"
@@ -122,7 +120,7 @@ def _clean_outputs(nb) -> None:
         cell["outputs"] = kept
 
 
-def _fix_links(body: str) -> str:
+def _fix_links(body: str, anchor_map: Optional[dict] = None) -> str:
     """Rewrite notebook cross-reference links so they resolve from the rendered page.
 
     The source notebooks live in ``examples/notebooks/`` and link siblings as
@@ -132,10 +130,14 @@ def _fix_links(body: str) -> str:
 
     * ``](<anything>/NN_<name>.ipynb)`` -> ``](NN_<name>.md)`` (sibling tutorial page)
     * ``](<anything><lg>/index.md)``     -> ``](../<lg>/index.md)`` (league index)
+    * ``](../<lg>/reference/<page>[/<family>].md#<fn>)`` -> the family page that holds ``<fn>`` NOW, from
+      ``anchor_map`` (the one ``generate.py`` builds while splitting pages; default: the committed
+      ``docs/static/anchor-map.json``)
     """
     body = re.sub(r"\]\([^)]*?(\d\d_[a-z0-9_]+)\.ipynb\)", r"](\1.md)", body)
     body = re.sub(rf"\]\([^)]*?({_LEAGUES})/index\.md\)", r"](../\1/index.md)", body)
-    return _REF_ANCHOR_LINK.sub(_to_family_page, body)
+    amap = _anchor_map() if anchor_map is None else anchor_map
+    return _REF_ANCHOR_LINK.sub(lambda m: _to_family_page(m, amap), body)
 
 
 # A link to a function on a reference page that generate.py split into family pages
@@ -152,8 +154,8 @@ def _anchor_map() -> dict:
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
-def _to_family_page(m: re.Match) -> str:
-    slug = _anchor_map().get(f"/docs/{m.group(2)}/reference/{m.group(3)}", {}).get(m.group(4))
+def _to_family_page(m: re.Match, anchor_map: dict) -> str:
+    slug = anchor_map.get(f"/docs/{m.group(2)}/reference/{m.group(3)}", {}).get(m.group(4))
     return f"]({m.group(1)}/{slug}.md#{m.group(4)})" if slug else m.group(0)
 
 
@@ -191,11 +193,25 @@ def _with_links(stem: str, body: str) -> str:
     return f"{head}\n\n{line}\n{rest}" if head.startswith("# ") else f"{line}\n\n{body}"
 
 
-def _relink(text: str, stem: str, label: str, position: int) -> str:
-    """A committed page with its head (frontmatter, notebook links) rebuilt, without executing anything."""
+def _relink(text: str, stem: str, label: str, position: int, anchor_map: Optional[dict] = None) -> str:
+    """A committed page with its head (frontmatter, notebook links) rebuilt, without executing anything.
+
+    ``generate.py`` calls this on every committed tutorial page with the anchor map of the pages it is
+    writing, so a function a page split moves never strands a tutorial link (and ``--check`` covers them).
+    """
     body = text.split("\n---\n", 1)[1].lstrip("\n")
     body = re.sub(rf"^{re.escape(_LINKS_PREFIX)}.*\n\n", "", body, count=1, flags=re.M)
-    return _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, _fix_links(body)))
+    return _normalize_md(_frontmatter(stem, label, position) + _with_links(stem, _fix_links(body, anchor_map)))
+
+
+def relinked_pages(anchor_map: dict) -> dict:
+    """``{"tutorials/<stem>.md": page}`` for every committed tutorial page, relinked against ``anchor_map``."""
+    out = {}
+    for stem, label, position in TUTORIALS:
+        page = OUT_DIR / f"{stem}.md"
+        if page.exists():
+            out[f"tutorials/{stem}.md"] = _relink(page.read_text(encoding="utf-8"), stem, label, position, anchor_map)
+    return out
 
 
 def main() -> int:
@@ -217,6 +233,10 @@ def main() -> int:
             print(f"  relinked {page}")
         return 0
 
+    # Avoid loading a polluted global jupyter/nbconvert config (some machines register
+    # a missing ``jupyter_contrib_nbextensions`` preprocessor that breaks nbconvert). Set here, not at
+    # import, so generate.py importing this module for relinked_pages() leaves the environment alone.
+    os.environ["JUPYTER_CONFIG_DIR"] = tempfile.mkdtemp(prefix="sdv-nbrender-")
     import nbformat
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)

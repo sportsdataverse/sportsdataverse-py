@@ -102,6 +102,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
+
 **Example**
 
 ```python
@@ -324,6 +331,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+
 **Example**
 
 ```python
@@ -490,6 +504,13 @@ Polars dataframe of the men's college basketball teams, one row per team, with t
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
+
 **Example**
 
 ```python
@@ -643,6 +664,12 @@ One row per player -- see `parse_ncaa_bb_team_roster` for the column contract.
 | `ht_inches` | integer |  |
 | `player_id` | character | Unique player identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
+
 **Example**
 
 ```python
@@ -687,6 +714,12 @@ One row per scheduled game -- see `parse_ncaa_bb_team_schedule` for the column c
 | `is_neutral` | logical |  |
 | `detail` | character | Detail. |
 | `attendance` | integer | Reported attendance. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `team_id` nor a resolvable `team`/`season` pair was given. |
 
 **Example**
 

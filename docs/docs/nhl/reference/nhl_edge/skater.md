@@ -1,11 +1,11 @@
 ---
-title: "NHL — NHL EDGE API — Skater: detail–zone"
-sidebar_label: "Skater: detail–zone"
+title: "NHL — NHL EDGE API — Skater: detail–distance"
+sidebar_label: "Skater: detail–distance"
 sidebar_position: 3
-description: "NHL — NHL EDGE API — Skater: detail–zone — function reference in sdv-py, the SportsDataverse Python package."
+description: "NHL — NHL EDGE API — Skater: detail–distance — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NHL — NHL EDGE API — Skater: detail–zone
+# NHL — NHL EDGE API — Skater: detail–distance
 
 ## nhl_edge_skater_detail
 
@@ -125,6 +125,14 @@ Pull EDGE detail stats for a single skater.
 | `zone_time_details_defensive_zone_league_avg` | double | League-average percentage of ice time spent in the defensive zone among qualifying skaters, used as a comparison baseline. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_detail-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_detail-example}
 
@@ -262,6 +270,14 @@ Pull EDGE comparison data for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_edge_skater_comparison-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_edge_skater_comparison-example}
 
 ```python
@@ -300,6 +316,14 @@ Pull EDGE shot-location detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_edge_skater_shot_location_detail-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_edge_skater_shot_location_detail-example}
 
 ```python
@@ -331,6 +355,14 @@ Pull the EDGE top-10 skaters for a shot-location category.
 No returns table is published for this endpoint: no capture: every value tried 404s for season 20242025 (sort_by points/total/savePctg/save-pctg, position F/forwards/all, category shots/high/all/high-danger, fastRhockey's examples included), so the valid path values are unconfirmed.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_shot_location_top_10-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_shot_location_top_10-example}
 
@@ -399,6 +431,14 @@ Pull EDGE shot-speed detail for a single skater.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_edge_skater_shot_speed_detail-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_edge_skater_shot_speed_detail-example}
 
 ```python
@@ -465,6 +505,14 @@ Pull the EDGE top-10 skaters by shot speed.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_edge_skater_shot_speed_top_10-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_edge_skater_shot_speed_top_10-example}
 
 ```python
@@ -497,6 +545,14 @@ Pull EDGE skating-distance detail for a single skater.
 | `skating_distance_details` | character | JSON-serialized per-game breakdown of total distance skated by the player during the tracking period. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_skating_distance_detail-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_skating_distance_detail-example}
 
@@ -556,6 +612,14 @@ Pull EDGE skating-speed detail for a single skater.
 | `skating_speed_details_bursts18_to20_league_avg` | double | League-average number of skating speed bursts in the 18-20 mph band per game, used as the baseline for percentile calculation. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_skating_speed_detail-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_skating_speed_detail-example}
 
@@ -621,6 +685,14 @@ Pull the EDGE top-10 skaters by skating speed.
 | `player_team_common_name_fr` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_speed_top_10-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_speed_top_10-example}
 
@@ -701,100 +773,18 @@ Pull the EDGE top-10 skaters by skating distance.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_edge_skater_distance_top_10-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_edge_skater_distance_top_10-example}
 
 ```python
 nhl_edge_skater_distance_top_10(positions='defense', strength='all', sort_by='total', season=20242025)
-```
-
-_Last validated n/a._
-
-## nhl_edge_skater_zone_time
-
-Pull EDGE zone-time detail for a single skater.
-
-**Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/{season}/{game_type}`
-
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time/8480801/now](https://api-web.nhle.com/v1/edge/skater-zone-time/8480801/now)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
-| `season` | `season` |  |  | `Y` | season path parameter. |
-| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
-
-### Returns {#nhl_edge_skater_zone_time-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
-| `offensive_zone_pctg` | double | Percentage of time spent in the offensive zone. |
-| `offensive_zone_percentile` | double | League percentile rank for offensive-zone time. |
-| `offensive_zone_league_avg` | double | League average offensive-zone time percentage. |
-| `neutral_zone_pctg` | double | Percentage of time spent in the neutral zone. |
-| `neutral_zone_percentile` | double | League percentile rank for neutral-zone time. |
-| `neutral_zone_league_avg` | double | League average neutral-zone time percentage. |
-| `defensive_zone_pctg` | double | Percentage of time spent in the defensive zone. |
-| `defensive_zone_percentile` | double | League percentile rank for defensive-zone time. |
-| `defensive_zone_league_avg` | double | League average defensive-zone time percentage. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nhl_edge_skater_zone_time-example}
-
-```python
-nhl_edge_skater_zone_time(player_id=8480801)
-```
-
-_Last validated n/a._
-
-## nhl_edge_skater_zone_time_top_10
-
-Pull the EDGE top-10 skaters by zone time.
-
-**Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}`
-
-**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2](https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2)
-
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `positions` | `positions` |  | `Y` |  | positions path parameter. |
-| `strength` | `strength` |  | `Y` |  | strength path parameter. |
-| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
-| `season` | `season` |  |  | `Y` | season path parameter. |
-| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
-
-### Returns {#nhl_edge_skater_zone_time_top_10-returns}
-
-**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
-
-| col_name | type | description |
-|---|---|---|
-| `defensive_zone_time` | double | Percentage of time spent in the defensive zone. |
-| `neutral_zone_time` | double | Percentage of time spent in the neutral zone. |
-| `offensive_zone_time` | double | Percentage of time spent in the offensive zone. |
-| `player_first_name_default` | character | Player first name (default language). |
-| `player_headshot` | character | URL to the player headshot image. |
-| `player_last_name_default` | character | Player last name (default language). |
-| `player_position` | character | Primary player position. |
-| `player_slug` | character | URL slug for the player. |
-| `player_sweater_number` | integer | Player jersey number. |
-| `player_team_abbrev` | character | Player team abbreviation. |
-| `player_team_common_name_default` | character | Player team common name (default locale). |
-| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
-| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
-| `player_team_slug` | character | Player team URL-friendly slug. |
-| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
-| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
-
-**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
-
-### Example {#nhl_edge_skater_zone_time_top_10-example}
-
-```python
-nhl_edge_skater_zone_time_top_10(positions='defense', strength='all', sort_by='offensive', season=20242025)
 ```
 
 _Last validated n/a._

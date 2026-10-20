@@ -172,10 +172,10 @@ columns:
   type: character
 - description: ''
   name: height
-  type: character
+  type: integer
 - description: ''
   name: weight
-  type: character
+  type: integer
 - description: ''
   name: player_position
   type: integer
