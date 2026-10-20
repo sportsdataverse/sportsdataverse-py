@@ -112,6 +112,25 @@ def _team_contest_ids(
     return _contest_ids_from_html(html, team_id, league, season, root)
 
 
+def _sweep_team(
+    team_id: int, fetch_fn: FetchFn, league: str, season: int, root: str | Path | None
+) -> tuple[list[str] | None, bool]:
+    """``(contest_ids, missing)``: None after ``_TEAM_TRIES`` failed fetches.
+
+    ``missing`` is True for a 404, which is not retried and -- as in the capture stage --
+    is not a step toward the ban-suspect abort: the host answered.
+    """
+    for _ in range(_TEAM_TRIES):
+        try:
+            return _team_contest_ids(team_id, fetch_fn, league, season, root), False
+        except NoDataError:
+            logger.warning("team_id=%s has no team page (HTTP 404) -- skipped", team_id)
+            return None, True
+        except AssetFetchError:
+            continue
+    return None, False
+
+
 def discover_season(
     season: int,
     *,
@@ -259,15 +278,10 @@ def discover_season(
             # the HTML is gone. The ids still stand; the dataset row does not.
             contest_ids.update(checkpointed[team_id])
             continue
-        got: Optional[List[str]] = None
-        for _ in range(_TEAM_TRIES):
-            try:
-                got = _team_contest_ids(team_id, fn, league, season, root)
-                break
-            except NoDataError:
-                break  # a 404 does not change on retry; the team is skipped below
-            except AssetFetchError:
-                continue
+        got, missing = _sweep_team(team_id, fn, league, season, root)
+        if missing:
+            skipped.append(team_id)
+            continue
         if got is None:
             consecutive += 1
             skipped.append(team_id)
