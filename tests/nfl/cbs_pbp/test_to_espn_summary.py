@@ -596,3 +596,40 @@ def test_a_failed_optional_resource_raises_instead_of_reading_as_absent(monkeypa
     monkeypatch.setattr(napi, "cbs_game_scoring_drives", raiser(AssetFetchError("429")))
     with pytest.raises(AssetFetchError):
         _fetch_cbs_game("1", optional=("drives",))
+
+
+def test_a_200_page_with_no_cards_is_remembered_for_the_process(monkeypatch):
+    """A 200 without a card is an ANSWER too: it never expires like a failed read."""
+    import types
+
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    transport = _stub_transport("<html>no games this week</html>")
+    for _ in range(3):
+        assert _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0] is None
+        clock[0] += 10 * cbs_common._FAILURE_TTL_SECONDS
+    assert len(transport.urls) == 1
+
+
+@pytest.mark.parametrize(
+    ("odds_override", "optional"), [(None, ("drives", "odds")), ({"gameSpread": 3.0}, ("drives",))]
+)
+def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, optional):
+    """A failed (non-404) odds fetch raises, so it is not asked for when the caller already has the line."""
+    from sportsdataverse.nfl.cbs_pbp import to_espn_summary as adapter_module
+
+    asked = []
+    monkeypatch.setattr(adapter_module, "_fetch_cbs_game", lambda gid, optional: asked.append(optional) or {})
+    adapter = _adapter_for("nfl", "cbs")
+
+    class _Ctx:
+        idmap_row = CLE_JAX_ROW
+        payload = None
+        participants = None
+
+    _Ctx.odds_override = odds_override
+    with pytest.raises(SourceUnavailable, match="no plays"):
+        adapter("nfl", CLE_JAX_ESPN_ID, _Ctx())
+    assert asked == [optional]
