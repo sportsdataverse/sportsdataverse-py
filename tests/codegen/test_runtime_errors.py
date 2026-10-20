@@ -551,14 +551,7 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
-_NFLPRO = "A-M4: nflpro_runtime._fetch skips _check_status/_json_body; task 4.1b"
-_KNOWN: Dict[Tuple[str, str], str] = {
-    **{
-        ("nflpro_runtime", case): _NFLPRO
-        for case in ("400", "403", "429", "503", "204", "empty_200", "html_200", "scalar_200")
-    },
-    ("pff_api_runtime", "204"): "A-L69: pff_api_runtime hand-rolls status, so a 204 is AssetFetchError; task 4.1b",
-}
+_KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pff_api's 204 (A-L69)
 
 
 # Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
@@ -616,15 +609,7 @@ _SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
 
 def _raises(stem: str, case: str) -> Any:
     """What an open case fails with today: a getter that returns where it should raise fails
-    ``pytest.raises`` (DID NOT RAISE); nflpro raises its own types; pff_api raises on a 204."""
-    if stem == "nflpro_runtime" and case != "scalar_200":
-        from sportsdataverse.nfl.nflpro_runtime import NFLProAuthError
-
-        return {"403": NFLProAuthError, "204": ValueError, "empty_200": ValueError, "html_200": ValueError}.get(
-            case, requests.HTTPError
-        )
-    if stem == "pff_api_runtime":
-        return AssetFetchError
+    ``pytest.raises`` (DID NOT RAISE)."""
     return pytest.fail.Exception
 
 
