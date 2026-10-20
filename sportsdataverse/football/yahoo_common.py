@@ -4,8 +4,8 @@ Yahoo serves both college and pro football from the same ``playbookBoxscore`` su
 same envelope, the same failure shapes and the same presentational fields. Everything here is
 identical for ``ncaaf`` and ``nfl`` and is therefore owned once:
 
-* **Fetching and its failure shapes.** The rate limit answers with a 23-byte ``text/html``
-  body, not JSON (:func:`_game_block` -> None, "try again"), and a game Yahoo does not cover
+* **Fetching and its failure shapes.** The rate limit (a 429, or a 23-byte ``text/html`` body)
+  raises ``AssetFetchError`` from the shangrila getter ("try again"), and a game Yahoo does not cover
   answers **HTTP 200** with a real game object carrying no plays (:func:`_has_plays` -> False,
   "never worth another try"). The two must not collapse into one error.
 * **Id arithmetic.** Both leagues' game ids embed the kickoff's **US-Eastern** calendar date

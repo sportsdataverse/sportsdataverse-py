@@ -144,8 +144,8 @@ def _fox_adapter(league: str, espn_id: int, ctx: Any) -> Any:
 
     Raises:
         SourceUnavailable: no Fox event id could be resolved without inventing one; the fetch
-            failed; the payload carries no ``header`` (the shared ``_get`` returns ``{}`` on
-            any failure); the payload carries no ``pbp``; the id-map row states no ESPN team
+            failed; the payload carries no ``header`` (an empty or headerless injected payload, or
+            a bad id); the payload carries no ``pbp``; the id-map row states no ESPN team
             ids; or the adapted drive chart carries no plays yet.
     """
     from sportsdataverse.football.sources.dispatch import AdaptedGame, SourceUnavailable
