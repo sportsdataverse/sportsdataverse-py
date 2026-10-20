@@ -530,6 +530,13 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 | `two_pt_recommendation` | character | Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp". |
 | `two_pt_wp_diff` | double | two_pt_wp minus xp_wp; positive favors going for two. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
+| `ValueError` | If `season` is absent or all-null. The era-aware models would otherwise score against an all-zero one-hot -- a rule era that never existed -- and return a plausible number. |
+
 **Example**
 
 ```python
@@ -584,6 +591,13 @@ A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `firs
 
 No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
+| `ValueError` | If `season` is absent or all-null. The era-aware models would otherwise score against an all-zero one-hot -- a rule era that never existed -- and return a plausible number. |
+
 **Example**
 
 ```python
@@ -637,6 +651,12 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
 
 No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
 
 **Example**
 

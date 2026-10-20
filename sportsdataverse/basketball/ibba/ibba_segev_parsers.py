@@ -198,10 +198,8 @@ def parse_ibba_segev_game_info(
         has no offset; it can differ from the IBBA ``tip_off``). ``competition`` is the reliable men's / women's
         discriminator (``Winner League``, ``Winner Cup``, ``Women``, ``Leumit``, ...). Scores are not here: the
         feed's header ``Score`` is always 0. A body without a header gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::
@@ -269,10 +267,8 @@ def parse_ibba_segev_rosters(
         One row per player listed in the header, home side first. ``player_id`` is the Segev player id (stable
         across seasons); ``in_roster`` is 0 or 2 in the samples (meaning unverified). A body without rosters
         gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::
@@ -381,10 +377,8 @@ def parse_ibba_segev_player_box(
         Counts are ``Int64``; the feed gives made / MISSED pairs, so ``fg2a`` / ``fg3a`` / ``fta`` are derived
         (made + missed). ``minutes`` is the feed's ``'mm:ss'`` and ``seconds_played`` its seconds. A body
         without a box score gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::
@@ -470,10 +464,8 @@ def parse_ibba_segev_team_box(
         2025-26 and 2026-27 land in one column each; ``fast_break_possessions`` (the N of the feed's "P of N"
         fast-break stat, its meaning unverified), ``defensive_stops`` and ``biggest_scoring_run`` exist only
         from 2026-27 and are null before. A body without a box score gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::
@@ -539,10 +531,8 @@ def parse_ibba_segev_period_scores(
         One row per period played (1 to the last period; the feed pads its lists with zeros to seven
         periods, which are dropped). The points are scored IN the period, not cumulative. A body without
         period lists gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::
@@ -629,10 +619,8 @@ def parse_ibba_segev_pbp(raw: Any, *, return_as_pandas: bool = False, columns: O
         are shot coordinates in a half-court frame (x across 0-1470, basket near 735; y out from the baseline,
         rim near 112-140); which sideline is x = 0 is unverified and the metric scale is unverified. The
         ``jersey`` columns are jersey numbers, not ids. A body without actions gives a zero-row frame.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come from
-        the wrapper itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from the wrapper itself.
 
     Example:
         Quick start::

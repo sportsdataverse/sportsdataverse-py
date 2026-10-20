@@ -1,52 +1,52 @@
 columns:
 - description: ''
   name: assists
-  type: character
+  type: numeric
 - description: ''
   name: blocked
-  type: character
+  type: numeric
 - description: ''
   name: cba_rank
   type: character
 - description: ''
   name: field_goals
-  type: character
+  type: numeric
 - description: ''
   name: field_goals_attempted
-  type: character
+  type: numeric
 - description: ''
   name: field_goals_percentage_rate
-  type: character
+  type: numeric
 - description: ''
   name: fouls
-  type: character
+  type: numeric
 - description: ''
   name: free_throws
-  type: character
+  type: numeric
 - description: ''
   name: free_throws_attempted
-  type: character
+  type: numeric
 - description: ''
   name: free_throws_percentage_rate
-  type: character
+  type: numeric
 - description: ''
   name: losses_number
   type: integer
 - description: ''
   name: points
-  type: character
+  type: numeric
 - description: ''
   name: real_player_times
   type: integer
 - description: ''
   name: rebounds
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_defensive
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_offensive
-  type: character
+  type: numeric
 - description: ''
   name: round
   type: numeric
@@ -61,7 +61,7 @@ columns:
   type: character
 - description: ''
   name: steals
-  type: character
+  type: numeric
 - description: ''
   name: team_id
   type: integer
@@ -70,24 +70,24 @@ columns:
   type: character
 - description: ''
   name: three_point_attempted
-  type: character
+  type: numeric
 - description: ''
   name: three_point_goals
-  type: character
+  type: numeric
 - description: ''
   name: three_point_percentage_rate
-  type: character
+  type: numeric
 - description: ''
   name: time
-  type: character
+  type: numeric
 - description: ''
   name: turnovers
-  type: character
+  type: numeric
 - description: ''
   name: win_number
   type: integer
 - description: ''
   name: win_rate
-  type: character
+  type: numeric
 kind: dataframe
 schema: cba_team_basic

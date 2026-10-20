@@ -51,6 +51,12 @@ pull, and the returned session can be passed to a wrapper as `session=`.
 
 An authenticated `requests.Session` carrying the subscription cookie and the resolved proxy.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `RuntimeError` | When credentials cannot be resolved, or KenPom rejects them. |
+
 **Example**
 
 ```python

@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # MBB — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.mbb`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.mbb` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## Highlights
 
@@ -300,8 +300,8 @@ not covered by the generated API-endpoint reference above.
 | [roc_auc](additional/models-and-calculators-2.md#roc_auc) | Area under the ROC curve via the rank-sum (Mann-Whitney) identity. |
 | [save_artifact](additional/models-and-calculators-2.md#save_artifact) | Write a bundled artifact (dev/fitter use -- writes into the source tree). |
 | [score_to_tuple](additional/models-and-calculators-2.md#score_to_tuple) | Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`, |
-| [simulate_game](additional/models-and-calculators-2.md#simulate_game) | Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`. |
-| [slow_regression](additional/models-and-calculators-2.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
+| [simulate_game](additional/models-and-calculators-3.md#simulate_game) | Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`. |
+| [slow_regression](additional/models-and-calculators-3.md#slow_regression) | Build the Tikhonov (ridge) regression solver matrix. |
 | [spearman_corr](additional/models-and-calculators-3.md#spearman_corr) | Spearman rank correlation between two arrays. |
 | [talent_split_mse](additional/models-and-calculators-3.md#talent_split_mse) | Weighted MSE of the k-regressed first half predicting the raw second half. |
 | [transfer_cohort](additional/models-and-calculators-3.md#transfer_cohort) | One row per transfer: same `player_id`, different `team_id` in |
@@ -348,7 +348,7 @@ not covered by the generated API-endpoint reference above.
 | [ncaa_mbb_on_off](additional/analytics.md#ncaa_mbb_on_off) | Team stats for every on/off combination of the given players. |
 | [ncaa_mbb_player_combos](additional/analytics.md#ncaa_mbb_player_combos) | Team stats for every n-player combination on the court together. |
 | [ncaa_mbb_player_lineups](additional/analytics.md#ncaa_mbb_player_lineups) | Filter a lineups frame by on-court player membership. |
-| [order_lineup](additional/analytics.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
+| [order_lineup](additional/analytics-2.md#order_lineup) | Order a 5-man lineup `X1_X2_X3_X4_X5` into PG/SG/SF/PF/C slot order. |
 | [pos_class_to_score](additional/analytics-2.md#pos_class_to_score) | Ordinal "positional weight" for a position class, PG=1000..C=8000. |
 | [project_bracket](additional/analytics-2.md#project_bracket) | Select and seed a tournament field from a per-team résumé frame. |
 | [regress_shot_quality](additional/analytics-2.md#regress_shot_quality) | Shrink a small-sample shot-quality stat toward its positional average. |

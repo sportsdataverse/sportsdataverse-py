@@ -193,6 +193,12 @@ Task 3.5 "`ndarray` breaks deep `==`" concern).
 
 A `RapmPreProcDiagnostics`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `numpy.linalg.LinAlgError` | If the SVD fails to converge (not reachable via either oracle fixture). |
+
 **Example**
 
 ```python
@@ -422,6 +428,12 @@ numpy-propagate).
 
 `sum((player_outs[i] - regressed_outs[i]) ** 2)` -- the `errSq` term consumed by `calculate_sd_rapm`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `player_outs` and `regressed_outs` have different lengths -- see landmine 7 above. |
+
 **Example**
 
 ```python
@@ -471,6 +483,12 @@ Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
 **Returns**
 
 A length-`num_players` array of per-player RAPM standard errors.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ZeroDivisionError` | If `num_lineups == num_players` -- see landmine 8 above. |
 
 **Example**
 
@@ -553,6 +571,12 @@ League constants bundle for the shot-quality spine.
 
 The frozen `ShotQualityConstants` for that league.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown league. |
+
 **Example**
 
 ```python
@@ -575,6 +599,12 @@ Return the `PlayerValueConstants` for a league.
 **Returns**
 
 The league's `PlayerValueConstants`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not a known key. |
 
 **Example**
 
@@ -655,6 +685,12 @@ call) and an `old_value` (from the second) side by side.
 | `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / `_get_strong_weight` exactly as `pick_ridge_regression` does. |
 | `read_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- which key (`"value"`/`"old_value"`) to prefer when reading `stats_averages`/`ctx["team_info"]` offsets and when calling `calc_lineup_outputs` (forwarded as its `use_old_val_if_possible` flag). |
 | `write_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key each written field carries its result under. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If a player in `players` is absent from both `ctx["removed_players"]` and `ctx["player_to_col"]` -- see landmine 12 (a Python-vs-JS divergence in genuinely dead territory for the oracle). |
 
 **Example**
 
@@ -1083,6 +1119,12 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 | `off_eff` | double | Off eff. |
 | `def_eff` | double | Def eff. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a season's games have 0 turnovers under every turnover key (ESPN's pre-2009 women's box), so no rating built from it would be meaningful. |
+
 **Example**
 
 ```python
@@ -1269,6 +1311,12 @@ this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
 
 The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `numpy.linalg.LinAlgError` | If `XᵀX + ridge_lambda·I` is singular -- not reachable with `ridge_lambda > 0` (which always makes the matrix positive-definite), but possible with `ridge_lambda <= 0` on a rank-deficient `X`. |
+
 **Example**
 
 ```python
@@ -1346,6 +1394,12 @@ Three-point arc radius (feet) for a league x season.
 **Returns**
 
 Arc radius in feet.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Unknown league or unconfigured season. |
 
 **Example**
 

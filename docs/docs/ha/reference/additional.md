@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # HA — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.ha`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.ha` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## HockeyAllsvenskan site API
 
@@ -34,6 +34,14 @@ confirms the player appears in that SHL season.
 **Returns**
 
 polars.DataFrame | pandas.DataFrame: one row per distinct player id: `player_statnet_id` and `shl_player_id` (`Int64`; null when the SHL season has no such player), `athlete_uuid`, `full_name` and `date_of_birth` from the SHL.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither `season` nor `shl_crosswalk` was given, a frame has no `player_statnet_id` column, or an id is not an integer. |
+| `sportsdataverse.errors.NoDataError` | The SHL has no such season (from the SHL lookup). |
+| `sportsdataverse.errors.AssetFetchError` | The SHL fetch failed. |
 
 **Example**
 

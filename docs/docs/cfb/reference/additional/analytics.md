@@ -561,6 +561,12 @@ Build the polars expression mapping raw `type.text` to a canonical type.
 
 A `pl.Expr` aliased `play_type_canonical`. Values absent from `PLAY_TYPE_CANONICAL` (and nulls) yield null, so upstream vocabulary drift surfaces rather than silently creating a category.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `polars.exceptions.ColumnNotFoundError` | At collection time if `source` is absent from the frame. Use `add_play_type_canonical`, which checks first and returns the frame unchanged. |
+
 **Example**
 
 ```python
@@ -818,6 +824,12 @@ Per `(season, team_id)`: `off_returning`, `def_returning`, `overall_returning` (
 | `def_basis` | character | Defensive measure behind def_returning: participants (production season 2014+: tackles, assists, tackles for loss, shared sacks, passes defended), pbp_splash (2004-2013: sacks, interceptions, pass breakups, forced fumbles; no tackle volume, so not on the same scale), box (the source release was missing), or null with def_returning. |
 | `overall_basis` | character | Units in overall_returning: offense+defense, or offense for a team with no defensive value, whose overall then equals off_returning. |
 | `is_estimated` | logical | True for 2004 only, where season-2003 production is parsed from play text; it reads about 0.085 low against the box route. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the season-S CFBD roster cannot be resolved to team ids above the crosswalk match floor (the ESPN roster carries `team_id` and needs no resolution; the two are unioned, see `_roster_keys`). |
 
 **Example**
 

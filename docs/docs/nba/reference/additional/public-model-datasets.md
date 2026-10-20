@@ -36,6 +36,12 @@ Frame with schema `DARKO_DPM_ORACLE_SCHEMA`. Zero rows (with that schema) when t
 | `odpm` | integer |  |
 | `ddpm` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
+
 **Example**
 
 ```python
@@ -73,6 +79,12 @@ Frame with schema `DT_STATS_ORACLE_SCHEMA`. Zero rows (with that schema) when th
 | `team_alias` | character | JSON-encoded alias object for the entity's team, carrying its Yahoo page URL and path. |
 | `ewins` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
+
 **Example**
 
 ```python
@@ -105,6 +117,12 @@ Frame with schema `EPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the fil
 | `oepm` | double |  |
 | `depm` | double |  |
 | `epm` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
 
 **Example**
 
@@ -140,6 +158,12 @@ Frame with schema `LEBRON_DAILY_ORACLE_SCHEMA`. Zero rows (with that schema) whe
 | `o_lebron` | double |  |
 | `d_lebron` | double |  |
 | `war` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
 
 **Example**
 
@@ -180,6 +204,12 @@ Frame with schema `LEBRON_SEASON_ORACLE_SCHEMA`. Zero rows (with that schema) wh
 | `o_lebron` | double |  |
 | `d_lebron` | double |  |
 | `war` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
 
 **Example**
 
@@ -222,6 +252,12 @@ Frame with schema `RAPM_ORACLE_SCHEMA`. Zero rows (with that schema) when the fi
 | `RA_FTR` | double |  |
 | `RA_ORBD` | double |  |
 | `RA_TOV` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | If `path` does not exist. |
 
 **Example**
 

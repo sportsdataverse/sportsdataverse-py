@@ -116,6 +116,14 @@ def test_get_through_a_proxy_passes_it_and_never_names_the_url_in_an_error(monke
     assert "secret" not in str(err.value) and "SDV_TEST_PROXY" in str(err.value) and "ConnectionError" in str(err.value)
 
 
+def test_get_through_a_proxy_sends_a_json_body_as_download_json_body(monkeypatch):
+    monkeypatch.setenv("SDV_TEST_PROXY", "http://proxy.example:8080")
+    seen = {}
+    monkeypatch.setattr(rt._rt, "_download_json", lambda dl, target, **kw: seen.update(kw) or {})
+    rt._get("https://api.example/q", {"a": None}, proxy_env="SDV_TEST_PROXY", json={"x": 1, "y": None})
+    assert seen["json_body"] == {"x": 1} and "json" not in seen and seen["params"] == {}
+
+
 def test_get_without_the_proxy_variable_set_goes_direct(monkeypatch):
     monkeypatch.delenv("SDV_TEST_PROXY", raising=False)
     seen = {}

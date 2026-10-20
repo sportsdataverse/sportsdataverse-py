@@ -238,7 +238,8 @@ fiba_gdap_federation_games:
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
-  utc_offset: Venue UTC offset at tip-off, hours.
+  utc_offset: 'Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such
+    as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample).'
   venue_capacity: Venue capacity (0 = unknown).
   venue_id: Venue id (GDAP key space; 0 = unknown).
   venue_name: Name of the arena the game is played in.
@@ -349,7 +350,8 @@ fiba_gdap_game:
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
   technical_name: Technical game name '<roundId>-<groupPairingCode>-<gameNumber>'.
-  utc_offset: Venue UTC offset at tip-off, hours.
+  utc_offset: 'Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such
+    as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample).'
   venue_capacity: Venue capacity (0 = unknown).
   venue_id: Venue id (GDAP key space; 0 = unknown).
   venue_name: Name of the arena the game is played in.
@@ -504,7 +506,8 @@ fiba_gdap_games_between:
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
-  utc_offset: Venue UTC offset at tip-off, hours.
+  utc_offset: 'Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such
+    as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample).'
   venue_capacity: Venue capacity (0 = unknown).
   venue_id: Venue id (GDAP key space; 0 = unknown).
   venue_name: Name of the arena the game is played in.
@@ -1083,7 +1086,8 @@ fiba_gdap_schedule:
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
-  utc_offset: Venue UTC offset at tip-off, hours.
+  utc_offset: 'Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such
+    as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample).'
   venue_capacity: Venue capacity (0 = unknown).
   venue_id: Venue id (GDAP key space; 0 = unknown).
   venue_name: Name of the arena the game is played in.
@@ -1199,7 +1203,8 @@ fiba_gdap_team_games:
   team_b_team_id: 'Competition team id: one per team per competition (Germany = 279569
     at the 2023 World Cup, 281545 at Paris 2024). Joins getgdapcompetitionteamrosterbyteamid
     / getgdapcompetitionteamstatisticsbyteamid gdapTeamId; not an organisationId.'
-  utc_offset: Venue UTC offset at tip-off, hours.
+  utc_offset: 'Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such
+    as India +5.5 or Adelaide +9.5 is a fraction; whole hours in every sample).'
   venue_capacity: Venue capacity (0 = unknown).
   venue_id: Venue id (GDAP key space; 0 = unknown).
   venue_name: Name of the arena the game is played in.

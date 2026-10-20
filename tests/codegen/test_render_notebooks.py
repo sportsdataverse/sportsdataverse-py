@@ -38,3 +38,14 @@ def test_a_link_to_a_moved_anchor_goes_to_its_family_page(monkeypatch):
         rn._fix_links(text)
         == "[a](../cfb/reference/loaders/pbp.md#load_cfb_pbp) [b](../cfb/reference/loaders.md#load_cfb_x)"
     )
+
+
+def test_relinked_pages_follow_the_anchor_map_generate_passes_not_the_committed_file(monkeypatch):
+    # generate.py hands over the anchor map of the pages it is writing: a function its splitter just moved
+    # (mlb_awards: other.md -> other-2.md) must be followed even before docs/static/anchor-map.json is rewritten
+    monkeypatch.setattr(rn, "_anchor_map", lambda: {})
+    page = "---\ntitle: MLB tutorial\n---\n\n# MLB\n\n[a](../mlb/reference/mlb_api/other.md#mlb_awards)\n"
+    out = rn._relink(page, "09_mlb_intro", "MLB", 9, {"/docs/mlb/reference/mlb_api": {"mlb_awards": "other-2"}})
+    assert "](../mlb/reference/mlb_api/other-2.md#mlb_awards)" in out
+    pages = rn.relinked_pages({})
+    assert pages and all(k.startswith("tutorials/") and k.endswith(".md") for k in pages)

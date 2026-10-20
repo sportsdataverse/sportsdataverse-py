@@ -4,19 +4,19 @@ columns:
   type: integer
 - description: ''
   name: assists
-  type: character
+  type: numeric
 - description: ''
   name: birth_date
   type: character
 - description: ''
   name: blocked
-  type: character
+  type: numeric
 - description: ''
   name: cn_alias
   type: character
 - description: ''
   name: field_goals
-  type: character
+  type: numeric
 - description: ''
   name: field_goals_at_rim_attempted
   type: numeric
@@ -25,7 +25,7 @@ columns:
   type: numeric
 - description: ''
   name: field_goals_attempted
-  type: character
+  type: numeric
 - description: ''
   name: field_goals_mid_range_attempted
   type: numeric
@@ -34,25 +34,25 @@ columns:
   type: numeric
 - description: ''
   name: field_goals_percentage
-  type: character
+  type: numeric
 - description: ''
   name: field_goals_percentage_sort
   type: numeric
 - description: ''
   name: fouls
-  type: character
+  type: numeric
 - description: ''
   name: fouls_defensive
   type: numeric
 - description: ''
   name: free_throws
-  type: character
+  type: numeric
 - description: ''
   name: free_throws_attempted
-  type: character
+  type: numeric
 - description: ''
   name: free_throws_percentage
-  type: character
+  type: numeric
 - description: ''
   name: free_throws_percentage_sort
   type: numeric
@@ -61,7 +61,7 @@ columns:
   type: integer
 - description: ''
   name: minutes
-  type: character
+  type: numeric
 - description: ''
   name: nationality
   type: character
@@ -79,7 +79,7 @@ columns:
   type: character
 - description: ''
   name: points
-  type: character
+  type: numeric
 - description: ''
   name: position
   type: character
@@ -91,13 +91,13 @@ columns:
   type: character
 - description: ''
   name: rebounds
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_defensive
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_offensive
-  type: character
+  type: numeric
 - description: ''
   name: schedule_id
   type: integer
@@ -106,10 +106,10 @@ columns:
   type: integer
 - description: ''
   name: seconds
-  type: character
+  type: numeric
 - description: ''
   name: steals
-  type: character
+  type: numeric
 - description: ''
   name: team_cn_alias
   type: character
@@ -118,18 +118,18 @@ columns:
   type: integer
 - description: ''
   name: three_point_attempted
-  type: character
+  type: numeric
 - description: ''
   name: three_point_goals
-  type: character
+  type: numeric
 - description: ''
   name: three_point_percentage
-  type: character
+  type: numeric
 - description: ''
   name: three_point_percentage_sort
   type: numeric
 - description: ''
   name: turnovers
-  type: character
+  type: numeric
 kind: dataframe
 schema: cba_player_base
