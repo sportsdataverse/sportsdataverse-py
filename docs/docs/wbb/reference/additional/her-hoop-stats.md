@@ -65,7 +65,8 @@ session = herhoopstats_login(proxy="http://user:pw@proxy.example:8080")
 The player roster table from one Her Hoop Stats team page.
 
 Port of wehoop's `hhs_team_roster()`: picks the table carrying a player /
-name column, falling back to the tallest table on the page.
+name column. A page without one has no roster: it answers a zero-row frame with the
+roster columns, never another table (wehoop falls back to the tallest table).
 
 **Parameters**
 
@@ -78,7 +79,7 @@ name column, falling back to the tallest table on the page.
 
 **Returns**
 
-One row per player. A zero-row frame when the page carried no roster.
+One row per player. A zero-row frame with the roster columns when the page carried no roster.
 
 | col_name | type | description |
 |---|---|---|

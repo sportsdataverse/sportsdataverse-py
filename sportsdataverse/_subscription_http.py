@@ -45,9 +45,10 @@ from typing import Any, Dict, Optional, Tuple
 
 import requests
 
-from sportsdataverse._codegen_runtime import _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors, _where
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 
 __all__ = [
     "SubscriptionSite",
@@ -99,6 +100,10 @@ class SubscriptionSite:
             discoverable form (relative to ``base_url`` or absolute).
         signup_url: Where to buy a subscription; quoted in the "no credentials"
             error so the message is actionable.
+        free_tier_marker: Regex that matches only a page served WITHOUT a live
+            subscription, for a site whose free tier has no login form to detect (Her
+            Hoop Stats serves a 5-row teaser table instead); ``None`` when the login
+            form is the only marker.
     """
 
     name: str
@@ -113,6 +118,7 @@ class SubscriptionSite:
     csrf_field: Optional[str] = None
     default_action: Optional[str] = None
     signup_url: str = ""
+    free_tier_marker: Optional[str] = None
 
 
 def _env_first(names: Tuple[str, ...]) -> Optional[str]:
@@ -247,27 +253,24 @@ def _hidden_value(html: str, name: str) -> Optional[str]:
 
 
 def _looks_logged_out(html: str, site: SubscriptionSite) -> bool:
-    """Whether ``html`` still shows the login form (i.e. the login failed).
+    """Whether ``html`` is a page served without a live subscription.
 
     A rejected login on both sites returns HTTP 200 with the login page, not an
-    error status. Detecting that here is what stops a bad password from quietly
-    yielding logged-out (free-tier) tables that a caller would treat as
-    subscriber data.
+    error status, and an expired session gets the same page (KenPom) or a free-tier
+    teaser (Her Hoop Stats, matched by ``site.free_tier_marker``). Detecting that is
+    what stops logged-out tables from reaching a caller as subscriber data.
 
     Args:
-        html: The response body from the login POST.
+        html: A response body (the login POST's, or any member page's).
         site: The site being scraped.
 
     Returns:
-        ``True`` when a password input is still present in the response.
+        ``True`` when a password input is present, or the site's free-tier marker matches.
     """
-    return bool(
-        re.search(
-            rf"""<input[^>]*\bname=["']{re.escape(site.password_field)}["']""",
-            html or "",
-            re.IGNORECASE,
-        )
-    )
+    text = html or ""
+    if site.free_tier_marker and re.search(site.free_tier_marker, text):
+        return True
+    return bool(re.search(rf"""<input[^>]*\bname=["']{re.escape(site.password_field)}["']""", text, re.IGNORECASE))
 
 
 def login(
@@ -306,8 +309,10 @@ def login(
 
     Raises:
         RuntimeError: When credentials cannot be resolved, or when the site
-            rejects them (the response still shows the login form).
-        requests.exceptions.RequestException: On a connection-level failure.
+            rejects them (the response is still the logged-out or free-tier page).
+        NoDataError: The login page answered 404.
+        ValueError: The site answered 400 / 422.
+        AssetFetchError: Any other non-2xx, an empty body, or a connection failure.
 
     Example:
         Log in once and reuse (offline-safe pattern -- credentials from env)::
@@ -358,28 +363,37 @@ def _login(
     if proxies:
         sess.proxies.update(proxies)
 
-    landing = sess.get(site.login_url, timeout=timeout)
-    landing.raise_for_status()
+    # A-L64: both legs answer in the error vocabulary (404 NoDataError, 400/422 ValueError,
+    # anything else or a dead connection AssetFetchError), never a bare requests error.
+    # The form GET goes through ``download``. Its response cache stores JSON bodies only, so this
+    # HTML form (whose CSRF token belongs to the session) is always fetched fresh; pinned by
+    # test_login_form_is_never_served_from_the_response_cache.
+    with _transport_errors(site.login_url):
+        landing = download(
+            url=site.login_url,
+            headers={"User-Agent": USER_AGENT},
+            proxy=sess.proxies or None,
+            session=sess,
+            timeout=timeout,
+        )
+    landing_html = _text_body(landing, site.login_url)
 
     form = dict(site.extra_form)
     form[site.user_field] = resolved_email
     form[site.password_field] = resolved_pw
     if site.csrf_field:
-        token = _hidden_value(landing.text, site.csrf_field)
+        token = _hidden_value(landing_html, site.csrf_field)
         if token:
             form[site.csrf_field] = token
 
-    posted = sess.post(
-        _form_action(landing.text, site),
-        data=form,
-        headers={"Referer": site.login_url},
-        timeout=timeout,
-    )
-    posted.raise_for_status()
-    if _looks_logged_out(posted.text, site):
+    action = _form_action(landing_html, site)
+    # ponytail: ``download`` is GET-only, so the POST stays on the session; its answer is still classified.
+    with _transport_errors(action):
+        posted = sess.post(action, data=form, headers={"Referer": site.login_url}, timeout=timeout)
+    if _looks_logged_out(_text_body(posted, action), site):
         raise RuntimeError(
-            f"{site.name} rejected the supplied credentials (the response still shows the "
-            f"login form). Check {' / '.join(site.email_env)} and "
+            f"{site.name} rejected the supplied credentials (the response is still the logged-out "
+            f"or free-tier page). Check {' / '.join(site.email_env)} and "
             f"{' / '.join(site.password_env)}, and that the subscription is active."
         )
     return sess
@@ -431,7 +445,9 @@ def get_html(
         NoDataError: The page answered 404.
         ValueError: The site answered 400 / 422 -- the request is wrong.
         AssetFetchError: Any other non-2xx or a connection failure after retries, or
-            an empty 200 -- its error page is not data.
+            an empty 200 -- its error page is not data. Also a 200 that is the login page or
+            the free-tier teaser (the session expired, was replaced, or the subscription
+            lapsed): the cached session is dropped, so the next call logs in again.
 
     Example:
         One page, explicit proxy::
@@ -455,4 +471,15 @@ def get_html(
             session=sess,
             **kwargs,
         )
-    return _text_body(resp, full)
+    body = _text_body(resp, full)
+    if _looks_logged_out(body, site):
+        # A-M19: the session died (server expiry, or KenPom's one-session-per-account rule let a
+        # second login replace it). Drop it so the next call logs in afresh; never parse the page.
+        with _lock:
+            for key in [k for k, (cached, _) in _sessions.items() if cached is sess]:
+                del _sessions[key]
+        raise AssetFetchError(
+            f"{site.name} answered {_where(full)} with its logged-out page (login form or free-tier teaser): "
+            "the session expired, another login replaced it, or the subscription lapsed. Call again to log in afresh."
+        )
+    return body
