@@ -58,9 +58,6 @@ def _extract_rows(raw: Any) -> List[Dict[str, Any]]:
 #: Column-name endings that are labels, not quantities: jersey, colour and postal code stay text.
 _TEXT_SUFFIXES = ("jersey", "color", "postal_code")
 
-#: 247 writes ``"0.000000"`` for a location it does not know; (0, 0) is not a campus.
-_COORD_SUFFIXES = ("latitude", "longitude")
-
 
 def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
     """Cast string-numeric columns to Int64/Float64 when lossless.
@@ -68,8 +65,8 @@ def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
     For each ``Utf8`` column, trial ``Int64`` then ``Float64``; keep the cast
     only when it adds no new nulls (every non-null original value parsed) and
     no value is zero-padded (``"000000"`` is not 0). Jersey, colour and postal
-    code columns stay text whatever they hold, and a zero latitude / longitude
-    (247's no-location sentinel) becomes null (B-M18). FK/PK columns already
+    code columns stay text whatever they hold, and a (0, 0) latitude / longitude
+    pair (247's no-location sentinel) becomes null (B-M18). FK/PK columns already
     arrive Int64 from ``json_normalize`` and are untouched.
     """
     casts: List[pl.Expr] = []
@@ -86,11 +83,14 @@ def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
                 casts.append(pl.col(col).cast(target, strict=False))
                 break
     out = df.with_columns(casts) if casts else df
-    coords = [
-        pl.when(pl.col(c) != 0).then(pl.col(c)).alias(c)
-        for c, t in out.schema.items()
-        if c.endswith(_COORD_SUFFIXES) and t.is_numeric()
-    ]
+    # 247 writes "0.000000" for a location it does not know: null a pair that is exactly (0, 0),
+    # which is no campus, but keep a lone 0 (the equator, the Greenwich meridian).
+    coords: List[pl.Expr] = []
+    for lat in [c for c in out.columns if c.endswith("latitude")]:
+        lon = lat[: -len("latitude")] + "longitude"
+        if lon in out.columns and out.schema[lat].is_numeric() and out.schema[lon].is_numeric():
+            unknown = ((pl.col(lat) == 0) & (pl.col(lon) == 0)).fill_null(False)
+            coords += [pl.when(unknown).then(None).otherwise(pl.col(c)).alias(c) for c in (lat, lon)]
     return out.with_columns(coords) if coords else out
 
 

@@ -787,3 +787,14 @@ def test_ncaa_espn_reference_parity(name):
     report = espn_reference_report("cfb", int(GAMES[name][0]), "ncaa", bundle(name), idmap_row(name), None)
     assert report.check(ESPN_REFERENCE_PINNED[name]) == [], report.gates()
     print("NCAA_ESPN_REFERENCE_OK", name, report.gates()["paired_share"])
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row():
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    name = "final_fbs_6386337"
+    row = idmap_row(name)
+    floats = {**row, **{k: float(row[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")}}
+    good = _ncaa_to_espn_summary(bundle(name), row)[0]
+    adapted = _ncaa_to_espn_summary(bundle(name), floats)[0]
+    assert adapted["header"]["id"] == row["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)

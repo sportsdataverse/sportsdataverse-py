@@ -79,6 +79,10 @@ def _cast_ids_int64(df: pl.DataFrame, cols: List[str]) -> pl.DataFrame:
     return df
 
 
+#: A leading zero before a digit: the text a numeric cast would change ("07", "00", "000000").
+_ZERO_PADDED = r"^\s*[+-]?0\d"
+
+
 def _zero_padded(text: pl.Series) -> bool:
     """True when a String column holds digits a numeric cast would lose: ``"00"``, ``"007"``, ``"000000"``.
 
@@ -87,7 +91,7 @@ def _zero_padded(text: pl.Series) -> bool:
     (jersey ``"00"`` and ``"0"`` both become 0, colour ``"000000"`` becomes 0). Such a
     column stays text (A-M18, B-M18, B-M19).
     """
-    return bool(text.str.contains(r"^\s*[+-]?0\d").any())
+    return bool(text.str.contains(_ZERO_PADDED).any())
 
 
 def _where(url: str) -> str:
@@ -336,6 +340,21 @@ def _wire_text(value: Any) -> str:
     if _is_many(value):
         raise ValueError(f"expected a single value, got {type(value).__name__} {value!r}")
     return str(value)
+
+
+def _id_text(value: Any) -> str:
+    """An id read from a hand-built row as the text ESPN uses (B-GB-22): :func:`_wire_text`, or ``""`` when missing.
+
+    A float id goes through ``int`` (``401671775.0`` -> ``"401671775"``; ``str`` gave
+    ``"401671775.0"``, which matches no ESPN id). ``None``, NaN and ``pandas.NA`` -- how a
+    pandas-built id-map row carries a missing id -- are ``""``, never ``"None"`` / ``"nan"``.
+    """
+    try:
+        if value is None or value != value:  # NaN is the one value unequal to itself
+            return ""
+    except TypeError:  # pandas.NA: its comparison is NA, whose truth value raises
+        return ""
+    return _wire_text(value)
 
 
 def _csv(values: Any) -> Optional[str]:

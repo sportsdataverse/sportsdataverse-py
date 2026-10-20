@@ -517,3 +517,14 @@ def test_the_first_card_logo_is_the_away_team_on_a_real_page():
         club_of = {logo: club for club, logo in linked}
         assert len(club_of) == 2, card
         assert (club_of[card["away_cbs_team_id"]], club_of[card["home_cbs_team_id"]]) == (card["away"], card["home"])
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_payload, cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _cbs_nfl_to_espn_summary(*_bodies(cle_jax_payload), floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)

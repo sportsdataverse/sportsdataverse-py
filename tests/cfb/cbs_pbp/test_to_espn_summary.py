@@ -725,3 +725,14 @@ def test_one_game_listed_on_two_pages_is_still_one_match_and_two_games_are_none(
 
 def test_an_unmapped_team_matches_nothing():
     assert _match_cbs_card([_UCF_TULANE_2016], "999999", "2655", "2016-11-05T21:00Z") is None
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(osu_tex_cbs):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **OSU_TEX_ROW,
+        **{k: float(OSU_TEX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    good, adapted = _adapt(osu_tex_cbs, OSU_TEX_ROW)[0], _adapt(osu_tex_cbs, floats)[0]
+    assert adapted["header"]["id"] == OSU_TEX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(good, sort_keys=True)

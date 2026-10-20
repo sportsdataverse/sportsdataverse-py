@@ -495,3 +495,14 @@ def _ctx(**kwargs):
     from sportsdataverse.football.sources.dispatch import SourceContext
 
     return SourceContext(**kwargs)
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(osu_tex_yahoo, osu_tex_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **OSU_TEX_ROW,
+        **{k: float(OSU_TEX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _yahoo_to_espn_summary(osu_tex_yahoo, floats)[0]
+    assert adapted["header"]["id"] == OSU_TEX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(osu_tex_summary[0], sort_keys=True)

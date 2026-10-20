@@ -79,6 +79,16 @@ def test_float_game_id_is_sent_as_integer_text(get, game_id):
     assert sent == ["0022400001"]
 
 
+def test_malformed_timeout_names_the_variable(monkeypatch):
+    """A-L68, the third variable: the timeout is parsed in the curl transport, before any request."""
+    pytest.importorskip("curl_cffi")
+    from sportsdataverse.nba.nba_stats_runtime import _curl_transport
+
+    monkeypatch.setenv("SDV_PY_NBA_STATS_TIMEOUT", "three")
+    with pytest.raises(ValueError, match="SDV_PY_NBA_STATS_TIMEOUT='three'"):
+        _curl_transport("https://stats.nba.com/stats/x", {}, {}, None)
+
+
 @pytest.mark.parametrize("name", ["SDV_PY_NBA_STATS_RETRIES", "SDV_PY_NBA_STATS_BACKOFF"])
 def test_malformed_env_value_names_the_variable(name, monkeypatch):
     """A-L68: ``int("three")`` raised a bare ValueError that named neither the variable nor its value."""

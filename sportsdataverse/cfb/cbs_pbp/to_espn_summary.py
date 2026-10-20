@@ -52,6 +52,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.cbs_pbp.teams import _cbs_team
 from sportsdataverse.football.cbs_common import (
     _admin_row,
@@ -611,8 +612,8 @@ def _cbs_cfb_to_espn_summary(
             not be attributed to either club).
     """
     notes: List[str] = []
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
     home_cbs = str((scoreboard.get("hometeam") or {}).get("id") or "")
     away_cbs = str((scoreboard.get("awayteam") or {}).get("id") or "")
     if not home_cbs or not away_cbs or home_cbs == away_cbs:

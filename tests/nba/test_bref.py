@@ -434,8 +434,9 @@ def test_real_team_page_keeps_jersey_00_as_text(calls: _Transport) -> None:
 
 def test_finish_keeps_a_zero_padded_column_as_text() -> None:
     """The guard is not just the ``number`` name: any zero-padded column keeps its zeros."""
-    df = bref._finish(pl.DataFrame({"code": ["007", "12"], "pts": ["7", "12"]}))
+    df = bref._finish(pl.DataFrame({"code": ["007", "12"], "one_zero": ["07", "12"], "pts": ["7", "12"]}))
     assert df.schema["code"] == pl.Utf8 and df["code"].to_list() == ["007", "12"]
+    assert df.schema["one_zero"] == pl.Utf8 and df["one_zero"].to_list() == ["07", "12"]  # a single leading zero
     assert df.schema["pts"] == pl.Float64  # a plain numeric column still casts
 
 

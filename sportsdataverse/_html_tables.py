@@ -27,6 +27,7 @@ from typing import Any, Dict
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _ZERO_PADDED
 from sportsdataverse.dl_utils import underscore
 
 __all__ = ["html_tables"]
@@ -168,11 +169,33 @@ def _table_key(node: Any, index: int, used: set[str]) -> str:
     return key
 
 
+def _restore_zero_padded(frame: Any, node: Any) -> Any:
+    """``frame`` with each column whose cell text is zero-padded put back as that text (A-M18).
+
+    ``read_html`` takes no ``dtype=``, so the table is read a second time with a ``str``
+    converter per column position; only the columns holding a value such as ``"00"`` are
+    swapped in, every other column keeps ``read_html``'s typing.
+    """
+    import pandas as pd
+
+    converters = dict.fromkeys(range(frame.shape[1]), str)
+    text = pd.read_html(io.StringIO(str(node)), flavor="lxml", converters=converters)[0]
+    if text.shape != frame.shape:
+        return frame
+    frame = frame.copy()
+    for j in range(frame.shape[1]):
+        col = text.iloc[:, j]
+        if col.astype("string").str.contains(_ZERO_PADDED, na=False).any():
+            frame.isetitem(j, col.where(col.notna(), None))
+    return frame
+
+
 def html_tables(
     html: str,
     *,
     min_rows: int = 1,
     return_as_pandas: bool = False,
+    keep_zero_padded: bool = False,
 ) -> Dict[str, Any]:
     """Parse every ``<table>`` on a page into cleaned DataFrames.
 
@@ -187,6 +210,9 @@ def html_tables(
         min_rows: Drop tables with fewer than this many data rows (KenPom pages
             carry small nav/legend tables alongside the real one).
         return_as_pandas: Return ``pandas.DataFrame`` values instead of polars.
+        keep_zero_padded: Keep, as text, any column whose cells include a zero-padded
+            number (jersey ``"00"``), which ``read_html`` would otherwise type as 0.
+            Every other column keeps ``read_html``'s typing.
 
     Returns:
         ``{table_key: DataFrame}`` -- keyed by the table's HTML ``id`` (e.g.
@@ -227,6 +253,8 @@ def html_tables(
         frame = frames[0]
         if len(frame) < min_rows:
             continue
+        if keep_zero_padded:
+            frame = _restore_zero_padded(frame, node)
         flat = [_flatten_header(col) for col in frame.columns]
         frame.columns = _dedupe_headers(flat)
         key = _table_key(node, i, set(out))

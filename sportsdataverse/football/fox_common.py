@@ -65,7 +65,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from sportsdataverse._codegen_runtime import _wire_text
+from sportsdataverse._codegen_runtime import _id_text
 
 #: Fox section / ``periodOfPlay`` labels -> period number.
 _PERIODS: Dict[str, int] = {
@@ -709,17 +709,6 @@ def _drive(
         "displayResult": result.title() or None,
         "plays": plays,
     }
-
-
-def _id_text(value: Any) -> str:
-    """An id-map id as ESPN's text: a float id goes through ``int``, a missing (None / NaN / blank) one is ``""``.
-
-    ``str(401872922.0)`` is ``"401872922.0"``, which matches no ESPN id (B-GB-22); a
-    pandas row carries a missing id as NaN, which ``str`` turns into ``"nan"``.
-    """
-    if value is None or value != value:  # NaN is the one value unequal to itself
-        return ""
-    return _wire_text(value)
 
 
 def _fox_to_espn_summary(

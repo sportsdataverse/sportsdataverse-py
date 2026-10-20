@@ -330,3 +330,10 @@ def test_a_nan_team_id_is_missing_not_the_text_nan(nfl_final, nfl_row):
     """A missing id in a pandas row is NaN; ``str`` made it ``"nan"`` and the "no ESPN team ids" guard passed."""
     with pytest.raises(ValueError, match="states no ESPN team ids"):
         _fox_nfl_to_espn_summary(nfl_final, {**nfl_row, "home_espn_team_id": float("nan")})
+
+
+def test_a_missing_team_id_is_missing_not_the_text_none(nfl_final, nfl_row):
+    """``.get()`` of an absent key is None; ``str`` made it ``"None"`` and the "no ESPN team ids" guard passed."""
+    row = {k: v for k, v in nfl_row.items() if k != "away_espn_team_id"}
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        _fox_nfl_to_espn_summary(nfl_final, row)

@@ -34,6 +34,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.yahoo_pbp.fetch import _fetch_playbook_boxscore, _game_block, _has_plays, _resolve_game_id
 from sportsdataverse.football.yahoo_common import (
     _clock,
@@ -408,8 +409,8 @@ def _yahoo_to_espn_summary(
         raise ValueError("payload carries no shangrila game object")
     notes: List[str] = []
 
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
     espn_by_yahoo = {str(game.get("homeTeamId")): home_id, str(game.get("awayTeamId")): away_id}
     if len(espn_by_yahoo) < 2 or "None" in espn_by_yahoo:
         # A null Yahoo team id must not become a dict KEY: with both sides null the mapping

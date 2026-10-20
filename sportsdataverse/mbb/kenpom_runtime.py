@@ -204,7 +204,7 @@ def _drop_repeated_headers(frame: pl.DataFrame) -> pl.DataFrame:
         The frame without header-repeat or all-null rows.
     """
     for col in frame.columns:
-        if frame.schema[col] != pl.Utf8:
+        if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):  # a "00" jersey column is no anchor
             continue
         parsed = frame[col].str.strip_chars().str.replace(r"^\+", "").cast(pl.Float64, strict=False)
         if len(frame) and parsed.is_not_null().sum() / len(frame) >= 0.5:
@@ -326,7 +326,7 @@ def parse_kenpom_page(
             tables = kenpom_ratings(y=2025)
             tables["ratings_table"].head()
     """
-    tables = html_tables(raw, min_rows=2)
+    tables = html_tables(raw, min_rows=2, keep_zero_padded=True)  # jersey "00" is not 0 (A-M18)
     tidied = {k: _cast_numerics(_split_ncaa_seed(_drop_repeated_headers(v))) for k, v in tables.items()}
     depth_chart = _depth_chart_table(raw)
     if depth_chart is not None:

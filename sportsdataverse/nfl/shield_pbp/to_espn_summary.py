@@ -39,6 +39,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.nfl.shield_pbp.live import game_phase, is_final
 from sportsdataverse.nfl.shield_pbp.parse import _GAMEBOOK_TO_NFLVERSE, _SCORING_POINTS, _impute_clock
 
@@ -571,8 +572,8 @@ def shield_to_espn_summary(
     game = game or {}
     notes: List[str] = []
 
-    event_id = str(idmap_row["espn_event_id"])
-    home_id, away_id = str(idmap_row["home_espn_team_id"]), str(idmap_row["away_espn_team_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
+    home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
     abbrs = {
         home_id: _espn_abbr(idmap_row, "home", home_id),
         away_id: _espn_abbr(idmap_row, "away", away_id),

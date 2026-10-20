@@ -45,6 +45,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 import polars as pl
 
+from sportsdataverse._codegen_runtime import _id_text
 from sportsdataverse.cfb.ncaa_pbp.fetch import _espn_team_ids_from_bundle, _has_plays, _ncaa_team_ids
 from sportsdataverse.cfb.yahoo_pbp.to_espn_summary import ESPN_PLAY_TYPES
 
@@ -636,7 +637,7 @@ def _ncaa_to_espn_summary(
             proc.espn_cfb_pbp(summary=summary)
             result = proc.run_processing_pipeline()
     """
-    event_id = str(idmap_row["espn_event_id"])
+    event_id = _id_text(idmap_row["espn_event_id"])
     season = idmap_row.get("season")
     cfbfastr, pbp, linescore, drive_titles = _parse_bundle(bundle, int(season) if season is not None else None)
     if not cfbfastr.height:
@@ -644,8 +645,8 @@ def _ncaa_to_espn_summary(
 
     home_name, away_name = _sides(cfbfastr, linescore)
     resolved = dict(team_ids or {})
-    home_id = str(idmap_row.get("home_espn_team_id") or resolved.get("home") or "") or None
-    away_id = str(idmap_row.get("away_espn_team_id") or resolved.get("away") or "") or None
+    home_id = _id_text(idmap_row.get("home_espn_team_id")) or _id_text(resolved.get("home")) or None
+    away_id = _id_text(idmap_row.get("away_espn_team_id")) or _id_text(resolved.get("away")) or None
     if not home_id or not away_id or home_id == away_id:
         # A null team id must not reach the frame: the processor forward-fills possession and
         # floats the whole column, and with both sides equal every play is credited to one club

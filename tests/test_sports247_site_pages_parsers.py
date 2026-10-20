@@ -163,6 +163,22 @@ def test_zero_coordinates_are_null_and_real_ones_kept():
     assert (df["latitude"] == 0).sum() == 0 and (df["longitude"] == 0).sum() == 0
 
 
+def test_only_a_zero_zero_pair_is_the_sentinel():
+    """R48b-5: a lone zero is a real place (the equator / the Greenwich meridian); only (0, 0) is unknown."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import _cast_numeric_strings
+
+    df = _cast_numeric_strings(
+        pl.DataFrame(
+            {
+                "hometown_latitude": ["0.000000", "0.000000", "51.4779"],
+                "hometown_longitude": ["0.000000", "32.58", "0.000000"],
+            }
+        )
+    )
+    assert df["hometown_latitude"].to_list() == [None, 0.0, 51.4779]
+    assert df["hometown_longitude"].to_list() == [None, 32.58, 0.0]
+
+
 @pytest.mark.parametrize("payload", [None, {}, [], "nope", 3])
 def test_zero_row_on_empty_or_malformed(payload):
     from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page

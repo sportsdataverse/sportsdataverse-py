@@ -528,3 +528,14 @@ def test_missing_timeouts_is_surfaced_as_a_note():
         stripped["summary"][side].pop("timeouts", None)
     _summary, notes = shield_to_espn_summary(stripped, DET_BUF_ROW)
     assert any("summary.timeouts" in n for n in notes)
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_shield, cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = shield_to_espn_summary(cle_jax_shield, floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)

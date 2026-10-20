@@ -570,3 +570,14 @@ def test_a_float_typed_home_team_id_resolves_to_nothing_rather_than_team_000():
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30) == "nfl.g.20260913030"
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", 30.0) is None
     assert _yahoo_nfl_game_id("2026-09-14T00:15Z", "30.0") is None
+
+
+def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_summary):
+    """B-GB-22: a pandas-built id-map row carries float ids; ``str`` sent ``"401856682.0"``, which matches no ESPN id."""
+    floats = {
+        **CLE_JAX_ROW,
+        **{k: float(CLE_JAX_ROW[k]) for k in ("espn_event_id", "home_espn_team_id", "away_espn_team_id")},
+    }
+    adapted = _yahoo_to_espn_summary(_payload(CLE_JAX_YAHOO_ID), floats)[0]
+    assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
+    assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary, sort_keys=True)
