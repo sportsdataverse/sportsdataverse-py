@@ -260,14 +260,15 @@ def main() -> None:
         "parser_module": "cbs.cbs_napi_parsers",
         "qualifier": "",
         "passthrough_query": False,
+        "getter_module": "sportsdataverse.cbs.cbs_napi_runtime",
         "runtime_imports": ["_get"],
         "docstring": {
             "example_import": True,
             "raises": [
+                "NoDataError: The id is unknown -- NAPI answers it with HTTP 200 plus a "
+                "``warnings`` entry whose ``code`` is 404 (or with an HTTP 404).",
                 "AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after "
-                "retries, or an empty or unreadable 200 body). An unknown id is NOT an "
-                "exception -- NAPI answers it with HTTP 200 plus an "
-                "``{error|errors|warnings}`` envelope, which parses to a zero-row frame.",
+                "retries, or an empty or unreadable 200 body).",
             ],
             "see_also": [
                 {
