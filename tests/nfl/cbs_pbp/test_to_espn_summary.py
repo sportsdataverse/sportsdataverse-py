@@ -614,9 +614,15 @@ def test_a_200_page_with_no_cards_is_remembered_for_the_process(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    ("odds_override", "optional"), [(None, ("drives", "odds")), ({"gameSpread": 3.0}, ("drives",))]
+    ("odds_override", "idmap_line", "optional"),
+    [
+        (None, {}, ("drives", "odds")),
+        ({"gameSpread": 3.0}, {}, ("drives",)),
+        # the common production path: the id-map row carries the nflverse closing line
+        (None, {"spread_line": 3.5, "total_line": 47.5}, ("drives",)),
+    ],
 )
-def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, optional):
+def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, idmap_line, optional):
     """A failed (non-404) odds fetch raises, so it is not asked for when the caller already has the line."""
     from sportsdataverse.nfl.cbs_pbp import to_espn_summary as adapter_module
 
@@ -625,7 +631,7 @@ def test_a_known_line_skips_the_cbs_odds_fetch(monkeypatch, odds_override, optio
     adapter = _adapter_for("nfl", "cbs")
 
     class _Ctx:
-        idmap_row = CLE_JAX_ROW
+        idmap_row = {**CLE_JAX_ROW, **idmap_line}
         payload = None
         participants = None
 
