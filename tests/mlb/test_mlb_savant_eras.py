@@ -86,9 +86,11 @@ def test_an_abs_era_only_frame_is_fit_in_its_own_frame(pitches_2024):
     assert probs["abs_era"].all() and probs["called_strike_prob"].n_unique() > 1
 
 
-def test_a_degenerate_zone_fit_warns(pitches_2024):
-    with pytest.warns(UserWarning, match="fewer than 2 called pitches"):
-        fitted = fit_zone_model(pitches_2024.head(0))
+@pytest.mark.parametrize("n_called", [0, 1])
+def test_a_degenerate_zone_fit_warns(pitches_2024, n_called):
+    called = pitches_2024.filter(pl.col("description").is_in(["called_strike", "ball"])).head(n_called)
+    with pytest.warns(UserWarning, match=f"fewer than 2 called pitches \\({n_called}\\)"):
+        fitted = fit_zone_model(called)
     assert fitted["coef"] == [0.0] * 7 and fitted["intercept"] == 0.0
 
 
