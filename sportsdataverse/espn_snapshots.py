@@ -52,10 +52,13 @@ from __future__ import annotations
 import importlib
 import re
 import time
+import warnings
 from datetime import date, datetime, timezone
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Union
+from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Union
 
 import polars as pl
+
+from sportsdataverse.errors import AssetFetchError, NoDataError
 
 __all__ = [
     "DEPTHCHART_SNAPSHOT_SCHEMA",
@@ -282,6 +285,38 @@ def parse_injuries_snapshot(
     return df.to_pandas() if return_as_pandas else df
 
 
+def _gather(
+    keys: Sequence[Any], fetch_one: Callable[[Any], pl.DataFrame], *, request_delay: float, label: str
+) -> List[pl.DataFrame]:
+    """Fetch every key in order, ``request_delay`` apart, keeping the others when one fails.
+
+    A current-state snapshot cannot be re-taken, so one failed league or team must not
+    discard the frames already fetched: the failures are named in one warning and the rest
+    are kept. Only when every key failed is the last error raised -- an all-failed day is an
+    outage, and returning zero rows for it would read as "nothing to report".
+    """
+    frames: List[pl.DataFrame] = []
+    failed: List[str] = []
+    last: Optional[Exception] = None
+    for index, key in enumerate(keys):
+        if index and request_delay > 0:
+            time.sleep(request_delay)
+        try:
+            frames.append(fetch_one(key))
+        except (AssetFetchError, NoDataError) as exc:
+            failed.append(str(key))
+            last = exc
+    if last is not None:
+        if not frames:
+            raise last
+        warnings.warn(
+            f"{label}: {len(failed)} of {len(keys)} fetches failed ({', '.join(failed)}); "
+            f"the snapshot keeps the other {len(frames)}. Last error: {last}",
+            stacklevel=3,
+        )
+    return frames
+
+
 def espn_injuries_snapshot(
     leagues: Union[str, Sequence[str]] = ESPN_INJURY_LEAGUES,
     *,
@@ -324,10 +359,8 @@ def espn_injuries_snapshot(
     """
     slugs = [leagues] if isinstance(leagues, str) else list(leagues)
     stamp = as_of_date or datetime.now(timezone.utc).date()
-    frames: List[pl.DataFrame] = []
-    for index, slug in enumerate(slugs):
-        if index and request_delay > 0:
-            time.sleep(request_delay)
+
+    def _one(slug: str) -> pl.DataFrame:
         try:
             module = importlib.import_module(f"sportsdataverse.{slug}")
             fetch = getattr(module, f"espn_{slug}_injuries")
@@ -335,7 +368,9 @@ def espn_injuries_snapshot(
             raise ValueError(
                 f"no espn_{slug}_injuries wrapper -- known leagues: {', '.join(ESPN_INJURY_LEAGUES)}"
             ) from exc
-        frames.append(parse_injuries_snapshot(fetch(return_parsed=False), league=slug, as_of_date=stamp))
+        return parse_injuries_snapshot(fetch(return_parsed=False), league=slug, as_of_date=stamp)
+
+    frames = _gather(slugs, _one, request_delay=request_delay, label="espn_injuries_snapshot")
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=INJURY_SNAPSHOT_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
 
@@ -552,16 +587,13 @@ def espn_depthcharts_snapshot(
                 f"espn_{league}_teams() returned no teams -- refusing to report an empty"
                 " snapshot that would read as 'this league has no depth charts'"
             )
-    frames: List[pl.DataFrame] = []
-    for index, team_id in enumerate(team_ids or []):
-        if index and request_delay > 0:
-            time.sleep(request_delay)
-        frames.append(
-            parse_depthchart_snapshot(
-                fetch(team_id=str(team_id), return_parsed=False),
-                league=league,
-                as_of_date=stamp,
-            )
-        )
+    frames = _gather(
+        list(team_ids or []),
+        lambda team_id: parse_depthchart_snapshot(
+            fetch(team_id=str(team_id), return_parsed=False), league=league, as_of_date=stamp
+        ),
+        request_delay=request_delay,
+        label=f"espn_depthcharts_snapshot({league})",
+    )
     df = pl.concat(frames, how="vertical") if frames else pl.DataFrame(schema=DEPTHCHART_SNAPSHOT_SCHEMA)
     return df.to_pandas() if return_as_pandas else df
