@@ -58,6 +58,20 @@ def test_untokenizable_page_raises_instead_of_no_games(monkeypatch) -> None:
         ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
 
 
+def test_text_under_a_game_pk_header_raises(monkeypatch) -> None:
+    # CodeRabbit on #919: this body parses to one row with a `game_pk` column, so the column check
+    # alone passed it and the error text came back as Statcast data.
+    _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": "game_pk\nAccess denied"})
+    with pytest.raises(AssetFetchError, match="not a Statcast CSV: game_pk Access denied"):
+        ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+
+
+def test_header_only_search_answer_is_still_an_empty_window(monkeypatch) -> None:
+    header_only = _SEARCH.splitlines()[0] + "\n"  # the real 119-column header, no rows
+    _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": header_only})
+    assert ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1).height == 46
+
+
 def test_empty_body_is_left_to_the_empty_path(monkeypatch) -> None:
     # Unverified what Savant sends for a window with no data; an empty body keeps its old reading.
     _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": ""})

@@ -139,8 +139,11 @@ def _fetch_chunk(
     frame = _csv_to_frame(text, uncast_ids=uncast_ids)
     # B-M7: a 200 HTML page or error text is not a Statcast CSV. Kept, it became a junk 1x1 chunk
     # or (header-only, or a page pandas cannot tokenize at all) a window read as "no games".
-    # Judged on the body, not the parse: only an empty body stays the empty path.
-    if text.strip() and "game_pk" not in frame.columns:
+    # Judged on the body, not the parse: only an empty body stays the empty path. A body whose first
+    # line happens to be ``game_pk`` (``game_pk\nAccess denied``) parses with that column, so it must
+    # also hold integer game ids. A header-only answer passes: the parser pins its empty id columns Int64.
+    bad_ids = "game_pk" in frame.columns and not frame.schema["game_pk"].is_integer()
+    if text.strip() and ("game_pk" not in frame.columns or bad_ids):
         raise AssetFetchError(
             f"{label} answered HTTP {status} with a body that is not a Statcast CSV: {_excerpt(text)}"
         )
