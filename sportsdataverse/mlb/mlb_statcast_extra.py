@@ -138,8 +138,9 @@ def _fetch_chunk(
     _check_status(base_url, status, text, label=label)
     frame = _csv_to_frame(text, uncast_ids=uncast_ids)
     # B-M7: a 200 HTML page or error text is not a Statcast CSV. Kept, it became a junk 1x1 chunk
-    # (or, header-only, a window read as "no games"). An empty body stays the empty path.
-    if frame.width and "game_pk" not in frame.columns:
+    # or (header-only, or a page pandas cannot tokenize at all) a window read as "no games".
+    # Judged on the body, not the parse: only an empty body stays the empty path.
+    if text.strip() and "game_pk" not in frame.columns:
         raise AssetFetchError(
             f"{label} answered HTTP {status} with a body that is not a Statcast CSV: {_excerpt(text)}"
         )

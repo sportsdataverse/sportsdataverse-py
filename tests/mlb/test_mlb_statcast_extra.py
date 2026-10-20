@@ -48,6 +48,16 @@ def test_error_chunk_raises_instead_of_no_games(monkeypatch) -> None:
         ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
 
 
+def test_untokenizable_page_raises_instead_of_no_games(monkeypatch) -> None:
+    # R4.4-1: pandas cannot tokenize this real 200 HTML page at all, so it parses to a 0x0 frame;
+    # judged on the parse it read as "no games" and the window vanished from a 46-row result.
+    page = (_FIX.parent / "herhoopstats" / "team_single_seasons_2025_logged_out.html").read_text(encoding="utf-8")
+    assert ex._csv_to_frame(page).shape == (0, 0)
+    _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": page})
+    with pytest.raises(AssetFetchError, match=r"2024-06-16\.\.2024-06-16\) answered HTTP 200 with a body that is not"):
+        ex.mlb_statcast_search("2024-06-15", "2024-06-16", chunk_days=1)
+
+
 def test_empty_body_is_left_to_the_empty_path(monkeypatch) -> None:
     # Unverified what Savant sends for a window with no data; an empty body keeps its old reading.
     _serve_by_window(monkeypatch, {"2024-06-15": _SEARCH, "2024-06-16": ""})
