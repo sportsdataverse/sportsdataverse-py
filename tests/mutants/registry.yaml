@@ -2642,3 +2642,34 @@
   test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
   expected: kill
   note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
+
+# 3.5
+- id: fox-sack-safety-typed-sack
+  group: provider-gates
+  finding: B-GB-28
+  file: sportsdataverse/football/fox_common.py
+  snippet: '    if "safety" in low:'
+  mutant: '    if False:'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k safety
+  expected: kill
+  note: the CLE @ JAX sack in the end zone is typed 7 with no scoring side
+
+- id: fox-regulation-end-reads-ot-kickoff
+  group: provider-gates
+  finding: B-GB-05
+  file: sportsdataverse/football/fox_common.py
+  snippet: '            if period <= 4 < (later["period"]["number"] or 0):'
+  mutant: '            if False:'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k overtime_boundary
+  expected: kill
+  note: the SEA @ NE kneel that ends regulation takes the OT kickoff's spot
+
+- id: fox-drive-pbp-newest-first
+  group: provider-gates
+  finding: B-L58
+  file: sportsdataverse/_fox_layout.py
+  snippet: '    rows.sort(key=lambda r: int(r["play_id"]) if str(r["play_id"]).isdigit() else float("inf"))'
+  mutant: '    pass'
+  test: tests/nfl/test_nfl_fox_ext.py tests/cfb/test_cfb_fox_ext.py -k sorted
+  expected: kill
+  note: a live Fox poll comes back newest-first from fox_nfl_pbp and fox_cfb_pbp
