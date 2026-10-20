@@ -65,7 +65,6 @@ def _get(
     if headers is None:
         headers = nfl_headers_gen()
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    kwargs.setdefault("timeout", 30)
     with _transport_errors(url):
         resp = download(url=url, params=clean, headers=headers, **kwargs)
     return _json_body(resp, url)
