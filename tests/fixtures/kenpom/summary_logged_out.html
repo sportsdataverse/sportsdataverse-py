@@ -1,0 +1,745 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><LINK REL=stylesheet TYPE="text/css" HREF="css/rate2.css?1784308361">
+<LINK REL=stylesheet TYPE="text/css" HREF="css/register-kenpom.css?1785540345">
+<LINK REL=stylesheet TYPE="text/css" HREF="css/register-form.css?1785540345">
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    // var stripe = Stripe("pk_test_REDACTED");
+    var stripe = Stripe("pk_live_REDACTED");
+    var elements = stripe.elements({
+        fonts: [
+            {
+                cssSrc: 'https://fonts.googleapis.com/css?family=Signika'
+            }
+        ],
+    });
+</script>
+<TITLE>kenpom.com subscription</TITLE>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6DKK0E2CDM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6DKK0E2CDM');
+</script>
+
+<!-- try to use css link for google fonts -->
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Signika:600,400&text=1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:%c3%97%C3%A9%c2%b7%C2%A9%20%26%2B%2D%2C%2E%25%27%28%29%2a%7C%95%3F" />
+
+<link rel="Shortcut Icon" type="image/ico" href="assets/favicon.ico?1662440188" />
+
+<link rel="preload" href="/assets/raspoutine.woff2" as="font" type="font/woff2" crossorigin />
+
+<LINK REL=stylesheet TYPE='text/css' HREF='css/master2.css?1792028557'><script src='https://code.jquery.com/jquery-1.11.3.min.js'></script>
+<script src='menu.js?1662440188'></script>
+
+</head>
+
+<body>
+<div id="wrapper">
+<div id="container">
+<!-- <div id='login-container'> -->
+<div id="logged-in">
+<div id="login-box">
+<div id='empty-left'></div><div id='login-form'><form id="login" method="POST" action="handlers/login_handler.php">
+<input type='email' name='email' placeholder='E-mail' required>
+<input type="password" name="password" placeholder="Password" required>
+<input type="submit" name="submit" value="Login!" />
+<span class="desktopHide"><br></span><input type="checkbox" name="remember" />Remember me &nbsp;&nbsp;
+<a href="password_request.php">Forgot password?</a>
+</form>
+</div><div id="subscribe">
+<span class="mobileHide"><a href="register-kenpom.php"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 137.638 23" role="img" aria-label="Subscribe!">
+  <text style="fill: rgb(255, 128, 22); font-family: &quot;Raspoutine DemiBold&quot;; font-size: 28px; letter-spacing: 0.5px; paint-order: stroke; stroke: rgb(0, 0, 0); white-space: pre;" transform="matrix(1, 0, 0, 1, -107.865166, -91.689934)"><tspan x="108.282" y="112.894">SUBSCRIBE</tspan><tspan x="108.282" dy="1em">​</tspan></text>
+</svg></a>
+</span><span class="desktopHide subscribe_text"><a href="register-kenpom.php"><strong> SUBSCRIBE!</strong></a></span>
+</div>
+</div>
+    <!-- new navigation bar -->
+    <div id="logo-header">
+        <div id="tagline-container">
+            <div class="icon">
+                <a href="https://doubletakeout.com"><img src="https://kenpom.com/assets/dt_icon_outline.svg?v=4" width=24></a>
+                <a href="https://bballanalytics.com"><img src="https://kenpom.com/assets/bbanalytics.png" width="17"></a>
+            </div>
+            <div id="tagline"><h3>ADVANCED ANALYSIS OF COLLEGE BASKETBALL</h3></div>
+            <div class="icon desktop-icons">
+                <button
+                    id="theme-toggle-desktop"
+                    class="theme-toggle"
+                    type="button"
+                    aria-label="Toggle dark mode">
+                    <img src="/assets/dark-theme.svg" height="16" alt="">
+                </button>
+
+                <a href="https://kenpom.substack.com">
+                    <img src="https://kenpom.com/assets/substack.svg" height="16">
+                </a>
+
+                <a href="https://dunksandthrees.com">
+                    <img src="https://kenpom.com/assets/dunksandthrees.svg" height="16">
+                </a>
+            </div>
+        </div>
+        <hr><hr>
+    </div> <!-- end logo-header div -->
+    <div id="nav2">
+        <nav>
+            <h1 class="logo"><a href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="13.2 4 469.8 95" xmlns:bx="https://boxy-svg.com">
+                    <defs>
+                        <bx:export>
+                        <bx:file format="svg" href="#object-0" normalization="{&quot;removeForeignMetadata&quot;:true}" width="500" height="26"/>
+                        </bx:export>
+                    </defs>
+                    <text style="fill: currentColor; font-family: &quot;Raspoutine DemiBold&quot;; font-size: 32.7424px; font-weight: 700; letter-spacing: -1px; stroke: currentColor; stroke-width: 0.1px; white-space: pre; text-anchor: middle;" transform="matrix(2.781731, 0, 0, 2.781731, -514.654602, -523.45575)" id="object-0"><tspan x="274.089" y="215.26">kenpom.com</tspan><tspan x="274.089" dy="1em"></tspan></text>
+                    <text style="white-space: pre; fill: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 28px;" x="427.868" y="206.335"><tspan x="427.8680114746094" dy="1em"></tspan></text>
+                </svg>
+            </a></h1>
+            <button id="theme-toggle-mobile"
+                    class="theme-toggle mobile-theme"
+                    type="button">
+                <img src="/assets/dark-theme.svg" height="16">
+            </button>
+
+            <a class="burger-nav">
+                <span class="burger-span">&#8801;</span>
+            </a>
+            <ul id="main-menu">
+                <li id="stats-menu" class="stats"><a href="#">Stats</a>
+                    <ul>
+                        <li><a href="summary.php">Efficiency</a></li>
+                        <li><a href="stats.php">Four Factors</a></li>
+                        <li><a href="playerstats.php">Player Stats</a></li>
+                        <li><a href="pointdist.php">Point Distribution</a></li>
+                        <li><a href="height.php">Height/Experience</a></li>
+                        <li><a href="teamstats.php">Misc. Team Stats</a></li>
+                    </ul>
+                </li>
+                <li class="fanmatch"><a href="fanmatch.php" title="FanMatch">FanMatch</a></li>
+                <li class="universe"><a href="universe.php" title="D-I Universe">D-I Universe</a></li>
+                <li id="misc-menu" class="misc"><a href="#">Miscellany</a>
+                    <ul>
+                        <li><a href="blog">Blog</a></li>
+                        <li><a href="game_attrs.php">Game Rankings</a></li>
+                        <li><a href="trends.php">D-I Stats Trends</a></li>
+                        <li><a href="officials.php">Ref Ratings</a></li>
+                        <li><a href="hca.php">Home Court Ratings</a></li>
+                        <li><a href="jump_ball.php">Jump Ball Ratings</a></li>
+                        <li><a href="arenas.php">Arena Capacity</a></li>
+                    </ul>
+                </li>
+                <li class="search">
+                    <form action="team.php">
+                        <input id="teams" name="team" placeholder="Search teams"/>
+                    </form>
+                    <form action="history.php">
+                        <input id="coaches" name="c" placeholder="Search coaches"/>
+                    </form>
+                </li>
+                <li class="contact"><a href="contact.php" title="Contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <hr>
+    <hr>
+</div>
+
+<!-- dark mode -->
+<script>
+const toggles = document.querySelectorAll('.theme-toggle');
+
+toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        const isDark =
+            document.documentElement.getAttribute('data-theme') === 'dark';
+
+        const newTheme = isDark ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+});
+
+// Restore saved preference
+const savedTheme = localStorage.getItem('theme');
+
+if (savedTheme) {
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+</script>
+
+<!-- The content header -->
+<div id="content-header">
+<p style=color:var(--wrong)>The page you are requesting is available to subscribers only.</p>
+<div id='register-header'><h4 id="sub">Purchase a 12-month subscription for $24.95</h4>
+
+</div><div id="column-left">
+<p>You'll get unrestricted <b>ad-free</b> access to the most insightful 
+college basketball data on the web, including...</p>
+<p>&raquo; All of the data that <a href="http://www.nytimes.com/2011/03/24/sports/ncaabasketball/24ncaa.html" 
+target="_blank"> many of the nation's most successful coaches use.</a></p>
+<p>&raquo; Detailed statistical breakdowns of <a href="/team.php?team=Wichita+St.">every team</a> 
+and <a href="/player.php?p=21138">player</a> in Division I.</p>
+<p>&raquo; <a href="fanmatch.php?d=2012-12-31">Predictions</a> and <a href="box.php?g=458&y=2013">box scores</a> 
+for every Division I game this season, along with a forecast of a team's final conference and overall record.</p>
+<p>&raquo; <b>Still undecided?
+Check out the <a href="tour.php" target="_blank">guided tour</a> 
+    for a preview of additional content available.</b></p>
+<p><b>Note:</b><br/>
+&raquo; To purchase a subscription as a gift for someone <a href="gift-kenpom.php">go here</a>.</p>
+&raquo; <span style='background-color: var(--highlight4); font-weight: bold; padding: 2px 4px; border: 1px solid var(--form-background); border-radius: 4px;'>New!</span> To purchase API access <a href="register-api.php">go here</a>.</p>
+<p>&raquo; If you are trying to renew (even if the subscription has lapsed) you must log-in above and use the 
+renew link that will appear.</p>
+</div>
+<div id="column-right">
+<p>Please enter the information requested below to sign up. (Payments processed by <a href='https://stripe.com' target="_blank">Stripe</a>. No credit card information will be stored at kenpom.com.)</p><div id="form-area">
+
+<form action="stripe.php?action=process" method="post" id="payment-form">
+<div class="form-row">
+    <label>Email</label><input type="email" name="email1" required/>
+</div>
+<div class="form-row">
+    <label>Re-enter Email</label><input type="email" name="email2" required/>
+</div>
+<div class="form-row">
+    <label>Enter a Password</label> <input type="password" name="password1" minlength="8" required/>
+</div>
+<div class="form-row">
+    <label>Re-enter Password</label> <input type="password" name="password2" minlength="8" required/>
+</div>
+<div class="form-row">
+    <label><a href="popular.php" target="_blank">Favorite team</a></label> <select name="favorite"><option value="NULL" selected>I don't want to say</option>
+<option value="Abilene Christian">Abilene Christian</option>
+<option value="Air Force">Air Force</option>
+<option value="Akron">Akron</option>
+<option value="Alabama">Alabama</option>
+<option value="Alabama A&M">Alabama A&M</option>
+<option value="Alabama St.">Alabama St.</option>
+<option value="Albany">Albany</option>
+<option value="Alcorn St.">Alcorn St.</option>
+<option value="American">American</option>
+<option value="Appalachian St.">Appalachian St.</option>
+<option value="Arizona">Arizona</option>
+<option value="Arizona St.">Arizona St.</option>
+<option value="Arkansas">Arkansas</option>
+<option value="Arkansas Pine Bluff">Arkansas Pine Bluff</option>
+<option value="Arkansas St.">Arkansas St.</option>
+<option value="Army">Army</option>
+<option value="Auburn">Auburn</option>
+<option value="Austin Peay">Austin Peay</option>
+<option value="Ball St.">Ball St.</option>
+<option value="Baylor">Baylor</option>
+<option value="Bellarmine">Bellarmine</option>
+<option value="Belmont">Belmont</option>
+<option value="Bethune Cookman">Bethune Cookman</option>
+<option value="Binghamton">Binghamton</option>
+<option value="Boise St.">Boise St.</option>
+<option value="Boston College">Boston College</option>
+<option value="Boston University">Boston University</option>
+<option value="Bowling Green">Bowling Green</option>
+<option value="Bradley">Bradley</option>
+<option value="Brown">Brown</option>
+<option value="Bryant">Bryant</option>
+<option value="Bucknell">Bucknell</option>
+<option value="Buffalo">Buffalo</option>
+<option value="Butler">Butler</option>
+<option value="BYU">BYU</option>
+<option value="Cal Baptist">Cal Baptist</option>
+<option value="Cal Poly">Cal Poly</option>
+<option value="Cal St. Bakersfield">Cal St. Bakersfield</option>
+<option value="Cal St. Fullerton">Cal St. Fullerton</option>
+<option value="California">California</option>
+<option value="Campbell">Campbell</option>
+<option value="Canisius">Canisius</option>
+<option value="Central Arkansas">Central Arkansas</option>
+<option value="Central Connecticut">Central Connecticut</option>
+<option value="Central Michigan">Central Michigan</option>
+<option value="Charleston">Charleston</option>
+<option value="Charleston Southern">Charleston Southern</option>
+<option value="Charlotte">Charlotte</option>
+<option value="Chattanooga">Chattanooga</option>
+<option value="Chicago St.">Chicago St.</option>
+<option value="Cincinnati">Cincinnati</option>
+<option value="Clemson">Clemson</option>
+<option value="Cleveland St.">Cleveland St.</option>
+<option value="Coastal Carolina">Coastal Carolina</option>
+<option value="Colgate">Colgate</option>
+<option value="Colorado">Colorado</option>
+<option value="Colorado St.">Colorado St.</option>
+<option value="Columbia">Columbia</option>
+<option value="Connecticut">Connecticut</option>
+<option value="Coppin St.">Coppin St.</option>
+<option value="Cornell">Cornell</option>
+<option value="Creighton">Creighton</option>
+<option value="CSUN">CSUN</option>
+<option value="Dartmouth">Dartmouth</option>
+<option value="Davidson">Davidson</option>
+<option value="Dayton">Dayton</option>
+<option value="Delaware">Delaware</option>
+<option value="Delaware St.">Delaware St.</option>
+<option value="Denver">Denver</option>
+<option value="DePaul">DePaul</option>
+<option value="Detroit Mercy">Detroit Mercy</option>
+<option value="Drake">Drake</option>
+<option value="Drexel">Drexel</option>
+<option value="Duke">Duke</option>
+<option value="Duquesne">Duquesne</option>
+<option value="East Carolina">East Carolina</option>
+<option value="East Tennessee St.">East Tennessee St.</option>
+<option value="East Texas A&M">East Texas A&M</option>
+<option value="Eastern Illinois">Eastern Illinois</option>
+<option value="Eastern Kentucky">Eastern Kentucky</option>
+<option value="Eastern Michigan">Eastern Michigan</option>
+<option value="Eastern Washington">Eastern Washington</option>
+<option value="Elon">Elon</option>
+<option value="Evansville">Evansville</option>
+<option value="Fairfield">Fairfield</option>
+<option value="Fairleigh Dickinson">Fairleigh Dickinson</option>
+<option value="FIU">FIU</option>
+<option value="Florida">Florida</option>
+<option value="Florida A&M">Florida A&M</option>
+<option value="Florida Atlantic">Florida Atlantic</option>
+<option value="Florida Gulf Coast">Florida Gulf Coast</option>
+<option value="Florida St.">Florida St.</option>
+<option value="Fordham">Fordham</option>
+<option value="Fresno St.">Fresno St.</option>
+<option value="Furman">Furman</option>
+<option value="Gardner Webb">Gardner Webb</option>
+<option value="George Mason">George Mason</option>
+<option value="George Washington">George Washington</option>
+<option value="Georgetown">Georgetown</option>
+<option value="Georgia">Georgia</option>
+<option value="Georgia Southern">Georgia Southern</option>
+<option value="Georgia St.">Georgia St.</option>
+<option value="Georgia Tech">Georgia Tech</option>
+<option value="Gonzaga">Gonzaga</option>
+<option value="Grambling St.">Grambling St.</option>
+<option value="Grand Canyon">Grand Canyon</option>
+<option value="Green Bay">Green Bay</option>
+<option value="Hampton">Hampton</option>
+<option value="Harvard">Harvard</option>
+<option value="Hawaii">Hawaii</option>
+<option value="High Point">High Point</option>
+<option value="Hofstra">Hofstra</option>
+<option value="Holy Cross">Holy Cross</option>
+<option value="Houston">Houston</option>
+<option value="Houston Christian">Houston Christian</option>
+<option value="Howard">Howard</option>
+<option value="Idaho">Idaho</option>
+<option value="Idaho St.">Idaho St.</option>
+<option value="Illinois">Illinois</option>
+<option value="Illinois Chicago">Illinois Chicago</option>
+<option value="Illinois St.">Illinois St.</option>
+<option value="Incarnate Word">Incarnate Word</option>
+<option value="Indiana">Indiana</option>
+<option value="Indiana St.">Indiana St.</option>
+<option value="Iona">Iona</option>
+<option value="Iowa">Iowa</option>
+<option value="Iowa St.">Iowa St.</option>
+<option value="IU Indy">IU Indy</option>
+<option value="Jackson St.">Jackson St.</option>
+<option value="Jacksonville">Jacksonville</option>
+<option value="Jacksonville St.">Jacksonville St.</option>
+<option value="James Madison">James Madison</option>
+<option value="Kansas">Kansas</option>
+<option value="Kansas City">Kansas City</option>
+<option value="Kansas St.">Kansas St.</option>
+<option value="Kennesaw St.">Kennesaw St.</option>
+<option value="Kent St.">Kent St.</option>
+<option value="Kentucky">Kentucky</option>
+<option value="La Salle">La Salle</option>
+<option value="Lafayette">Lafayette</option>
+<option value="Lamar">Lamar</option>
+<option value="Le Moyne">Le Moyne</option>
+<option value="Lehigh">Lehigh</option>
+<option value="Liberty">Liberty</option>
+<option value="Lindenwood">Lindenwood</option>
+<option value="Lipscomb">Lipscomb</option>
+<option value="Little Rock">Little Rock</option>
+<option value="LIU">LIU</option>
+<option value="Long Beach St.">Long Beach St.</option>
+<option value="Longwood">Longwood</option>
+<option value="Louisiana">Louisiana</option>
+<option value="Louisiana Monroe">Louisiana Monroe</option>
+<option value="Louisiana Tech">Louisiana Tech</option>
+<option value="Louisville">Louisville</option>
+<option value="Loyola Chicago">Loyola Chicago</option>
+<option value="Loyola Marymount">Loyola Marymount</option>
+<option value="Loyola MD">Loyola MD</option>
+<option value="LSU">LSU</option>
+<option value="LSU New Orleans">LSU New Orleans</option>
+<option value="Maine">Maine</option>
+<option value="Manhattan">Manhattan</option>
+<option value="Marist">Marist</option>
+<option value="Marquette">Marquette</option>
+<option value="Marshall">Marshall</option>
+<option value="Maryland">Maryland</option>
+<option value="Maryland Eastern Shore">Maryland Eastern Shore</option>
+<option value="Massachusetts">Massachusetts</option>
+<option value="McNeese">McNeese</option>
+<option value="Memphis">Memphis</option>
+<option value="Mercer">Mercer</option>
+<option value="Mercyhurst">Mercyhurst</option>
+<option value="Merrimack">Merrimack</option>
+<option value="Miami FL">Miami FL</option>
+<option value="Miami OH">Miami OH</option>
+<option value="Michigan">Michigan</option>
+<option value="Michigan St.">Michigan St.</option>
+<option value="Middle Tennessee">Middle Tennessee</option>
+<option value="Milwaukee">Milwaukee</option>
+<option value="Minnesota">Minnesota</option>
+<option value="Mississippi">Mississippi</option>
+<option value="Mississippi St.">Mississippi St.</option>
+<option value="Mississippi Valley St.">Mississippi Valley St.</option>
+<option value="Missouri">Missouri</option>
+<option value="Missouri St.">Missouri St.</option>
+<option value="Monmouth">Monmouth</option>
+<option value="Montana">Montana</option>
+<option value="Montana St.">Montana St.</option>
+<option value="Morehead St.">Morehead St.</option>
+<option value="Morgan St.">Morgan St.</option>
+<option value="Mount St. Mary's">Mount St. Mary's</option>
+<option value="Murray St.">Murray St.</option>
+<option value="N.C. State">N.C. State</option>
+<option value="Navy">Navy</option>
+<option value="Nebraska">Nebraska</option>
+<option value="Nebraska Omaha">Nebraska Omaha</option>
+<option value="Nevada">Nevada</option>
+<option value="New Hampshire">New Hampshire</option>
+<option value="New Haven">New Haven</option>
+<option value="New Mexico">New Mexico</option>
+<option value="New Mexico St.">New Mexico St.</option>
+<option value="Niagara">Niagara</option>
+<option value="Nicholls">Nicholls</option>
+<option value="NJIT">NJIT</option>
+<option value="Norfolk St.">Norfolk St.</option>
+<option value="North Alabama">North Alabama</option>
+<option value="North Carolina">North Carolina</option>
+<option value="North Carolina A&T">North Carolina A&T</option>
+<option value="North Carolina Central">North Carolina Central</option>
+<option value="North Dakota">North Dakota</option>
+<option value="North Dakota St.">North Dakota St.</option>
+<option value="North Florida">North Florida</option>
+<option value="North Texas">North Texas</option>
+<option value="Northeastern">Northeastern</option>
+<option value="Northern Arizona">Northern Arizona</option>
+<option value="Northern Colorado">Northern Colorado</option>
+<option value="Northern Illinois">Northern Illinois</option>
+<option value="Northern Iowa">Northern Iowa</option>
+<option value="Northern Kentucky">Northern Kentucky</option>
+<option value="Northwestern">Northwestern</option>
+<option value="Northwestern St.">Northwestern St.</option>
+<option value="Notre Dame">Notre Dame</option>
+<option value="Oakland">Oakland</option>
+<option value="Ohio">Ohio</option>
+<option value="Ohio St.">Ohio St.</option>
+<option value="Oklahoma">Oklahoma</option>
+<option value="Oklahoma St.">Oklahoma St.</option>
+<option value="Old Dominion">Old Dominion</option>
+<option value="Oral Roberts">Oral Roberts</option>
+<option value="Oregon">Oregon</option>
+<option value="Oregon St.">Oregon St.</option>
+<option value="Pacific">Pacific</option>
+<option value="Penn">Penn</option>
+<option value="Penn St.">Penn St.</option>
+<option value="Pepperdine">Pepperdine</option>
+<option value="Pittsburgh">Pittsburgh</option>
+<option value="Portland">Portland</option>
+<option value="Portland St.">Portland St.</option>
+<option value="Prairie View A&M">Prairie View A&M</option>
+<option value="Presbyterian">Presbyterian</option>
+<option value="Princeton">Princeton</option>
+<option value="Providence">Providence</option>
+<option value="Purdue">Purdue</option>
+<option value="Purdue Fort Wayne">Purdue Fort Wayne</option>
+<option value="Queens">Queens</option>
+<option value="Quinnipiac">Quinnipiac</option>
+<option value="Radford">Radford</option>
+<option value="Rhode Island">Rhode Island</option>
+<option value="Rice">Rice</option>
+<option value="Richmond">Richmond</option>
+<option value="Rider">Rider</option>
+<option value="Robert Morris">Robert Morris</option>
+<option value="Rutgers">Rutgers</option>
+<option value="Sacramento St.">Sacramento St.</option>
+<option value="Sacred Heart">Sacred Heart</option>
+<option value="Saint Joseph's">Saint Joseph's</option>
+<option value="Saint Louis">Saint Louis</option>
+<option value="Saint Mary's">Saint Mary's</option>
+<option value="Saint Peter's">Saint Peter's</option>
+<option value="Sam Houston St.">Sam Houston St.</option>
+<option value="Samford">Samford</option>
+<option value="San Diego">San Diego</option>
+<option value="San Diego St.">San Diego St.</option>
+<option value="San Francisco">San Francisco</option>
+<option value="San Jose St.">San Jose St.</option>
+<option value="Santa Clara">Santa Clara</option>
+<option value="Seattle">Seattle</option>
+<option value="Seton Hall">Seton Hall</option>
+<option value="Siena">Siena</option>
+<option value="SIUE">SIUE</option>
+<option value="SMU">SMU</option>
+<option value="South Alabama">South Alabama</option>
+<option value="South Carolina">South Carolina</option>
+<option value="South Carolina St.">South Carolina St.</option>
+<option value="South Dakota">South Dakota</option>
+<option value="South Dakota St.">South Dakota St.</option>
+<option value="South Florida">South Florida</option>
+<option value="Southeast Missouri">Southeast Missouri</option>
+<option value="Southeastern Louisiana">Southeastern Louisiana</option>
+<option value="Southern">Southern</option>
+<option value="Southern Illinois">Southern Illinois</option>
+<option value="Southern Indiana">Southern Indiana</option>
+<option value="Southern Miss">Southern Miss</option>
+<option value="Southern Utah">Southern Utah</option>
+<option value="St. Bonaventure">St. Bonaventure</option>
+<option value="St. John's">St. John's</option>
+<option value="St. Thomas">St. Thomas</option>
+<option value="Stanford">Stanford</option>
+<option value="Stephen F. Austin">Stephen F. Austin</option>
+<option value="Stetson">Stetson</option>
+<option value="Stonehill">Stonehill</option>
+<option value="Stony Brook">Stony Brook</option>
+<option value="Syracuse">Syracuse</option>
+<option value="Tarleton St.">Tarleton St.</option>
+<option value="TCU">TCU</option>
+<option value="Temple">Temple</option>
+<option value="Tennessee">Tennessee</option>
+<option value="Tennessee Martin">Tennessee Martin</option>
+<option value="Tennessee St.">Tennessee St.</option>
+<option value="Tennessee Tech">Tennessee Tech</option>
+<option value="Texas">Texas</option>
+<option value="Texas A&M">Texas A&M</option>
+<option value="Texas A&M Corpus Chris">Texas A&M Corpus Chris</option>
+<option value="Texas Southern">Texas Southern</option>
+<option value="Texas St.">Texas St.</option>
+<option value="Texas Tech">Texas Tech</option>
+<option value="The Citadel">The Citadel</option>
+<option value="Toledo">Toledo</option>
+<option value="Towson">Towson</option>
+<option value="Troy">Troy</option>
+<option value="Tulane">Tulane</option>
+<option value="Tulsa">Tulsa</option>
+<option value="UAB">UAB</option>
+<option value="UC Davis">UC Davis</option>
+<option value="UC Irvine">UC Irvine</option>
+<option value="UC Riverside">UC Riverside</option>
+<option value="UC San Diego">UC San Diego</option>
+<option value="UC Santa Barbara">UC Santa Barbara</option>
+<option value="UCF">UCF</option>
+<option value="UCLA">UCLA</option>
+<option value="UMass Lowell">UMass Lowell</option>
+<option value="UMBC">UMBC</option>
+<option value="UNC Asheville">UNC Asheville</option>
+<option value="UNC Greensboro">UNC Greensboro</option>
+<option value="UNC Wilmington">UNC Wilmington</option>
+<option value="UNLV">UNLV</option>
+<option value="USC">USC</option>
+<option value="USC Upstate">USC Upstate</option>
+<option value="UT Arlington">UT Arlington</option>
+<option value="UT Rio Grande Valley">UT Rio Grande Valley</option>
+<option value="Utah">Utah</option>
+<option value="Utah St.">Utah St.</option>
+<option value="Utah Tech">Utah Tech</option>
+<option value="Utah Valley">Utah Valley</option>
+<option value="UTEP">UTEP</option>
+<option value="UTSA">UTSA</option>
+<option value="Valparaiso">Valparaiso</option>
+<option value="Vanderbilt">Vanderbilt</option>
+<option value="VCU">VCU</option>
+<option value="Vermont">Vermont</option>
+<option value="Villanova">Villanova</option>
+<option value="Virginia">Virginia</option>
+<option value="Virginia Tech">Virginia Tech</option>
+<option value="VMI">VMI</option>
+<option value="Wagner">Wagner</option>
+<option value="Wake Forest">Wake Forest</option>
+<option value="Washington">Washington</option>
+<option value="Washington St.">Washington St.</option>
+<option value="Weber St.">Weber St.</option>
+<option value="West Florida">West Florida</option>
+<option value="West Georgia">West Georgia</option>
+<option value="West Virginia">West Virginia</option>
+<option value="Western Carolina">Western Carolina</option>
+<option value="Western Illinois">Western Illinois</option>
+<option value="Western Kentucky">Western Kentucky</option>
+<option value="Western Michigan">Western Michigan</option>
+<option value="Wichita St.">Wichita St.</option>
+<option value="William & Mary">William & Mary</option>
+<option value="Winthrop">Winthrop</option>
+<option value="Wisconsin">Wisconsin</option>
+<option value="Wofford">Wofford</option>
+<option value="Wright St.">Wright St.</option>
+<option value="Wyoming">Wyoming</option>
+<option value="Xavier">Xavier</option>
+<option value="Yale">Yale</option>
+<option value="Youngstown St.">Youngstown St.</option>
+ </select></div>
+
+<div class="form-row">
+    <label>Credit/Debit Card</label>
+    <div id="card-element" class="field empty"></div>
+    <!-- Used to display Element errors. -->
+    <div id="card-errors" role="alert"></div>
+</div>
+<div class="form-row">
+    <label class="checkbox"><input type="checkbox" name="agree" value="checked" class="checkbox" required>
+    I have read and agree to the <a href="terms.php">terms of service</a> and <a href="privacy.php">privacy policy</a> and understand all sales are final.</label>
+</div>
+<div class="form-row"><input type='hidden' name='idempotency' id='idempotency' value='REDACTED'><button class="submit-button" id="submit-button">Pay $24.95<br/><span style="font-size:75%">For 12 months of access</span></button></div></form>
+</div>
+</div>
+<div id="sub-footer"></div>
+
+<script>
+    // Custom styling can be passed to options when creating an Element.
+    const storedTheme = localStorage.getItem('theme');
+    
+    let isDark = storedTheme 
+        ? storedTheme === 'dark' 
+        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const lightStyle = {
+        base: {
+            fontSize: '16px',
+            fontFamily: 'Signika',
+            color: '#111111',
+            backgroundColor: '#eee',
+            '::placeholder': {
+                color: '#aab7c4'
+            },
+            ':-webkit-autofill': {
+                color: '#111111', // text color when autofilled
+            },
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+
+    const darkStyle = {
+        base: {
+            fontSize: '16px',
+            fontFamily: 'Signika',
+            color: '#e8ddd5',
+            backgroundColor: '#2f2f2f',
+            '::placeholder': {
+                color: '#6b7280'
+            },
+            ':-webkit-autofill': {
+                color: '#e8ddd5', // text color when autofilled
+            },
+
+        },
+        invalid: {
+            color: '#ff6b6b',
+            iconColor: '#ff6b6b'
+        }
+    };
+
+    const style = isDark ? darkStyle : lightStyle;
+    // Create an instance of the card Element.
+    var card = elements.create('card', {style: style});
+
+    // Add an instance of the card Element into the `card-element` <div>.
+    card.mount('#card-element');
+
+    document.documentElement.setAttribute(
+        'data-theme',
+        isDark ? 'dark' : 'light'
+    );
+
+    document.querySelectorAll('.theme-toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            isDark = !isDark;
+
+            const newTheme = isDark ? 'dark' : 'light';
+
+            localStorage.setItem('theme', newTheme);
+            document.documentElement.setAttribute('data-theme', newTheme);
+            card.update({ style: isDark ? darkStyle : lightStyle });
+        });
+    });
+
+    // Validate input of the card elements
+    var resultContainer = document.getElementById('card-errors');
+    card.addEventListener('change', function(event) {
+        if (event.error) {
+            resultContainer.innerHTML = '<p>'+event.error.message+'</p>';
+        } else {
+            resultContainer.innerHTML = '';
+        }
+    });
+
+    // Get payment form element
+    var form = document.getElementById('payment-form');
+
+    // Create a token when the form is submitted.
+    // deactivate button and change button text after it is clicked
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn=document.getElementById('submit-button');
+        btn.innerText='Submitting...';
+        btn.style.color='var(--border_light)';
+        createToken();
+    });
+
+    // Create single-use token to charge the user
+    function createToken() {
+        stripe.createToken(card).then(function(result) {
+            // console.log(result.token);
+            // console.log(result.error);
+            if (result.error) {
+                // Inform the user if there was an error
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server
+                // return;
+                stripeTokenHandler(result.token,result);
+            }
+        });
+    }
+
+    // Callback to handle the response from stripe
+    function stripeTokenHandler(token,result) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        var hiddenInput2 = document.createElement('input');
+        hiddenInput2.setAttribute('type', 'hidden');
+        hiddenInput2.setAttribute('name', 'fullToken');
+        hiddenInput2.setAttribute('value', JSON.stringify(token));
+        var hiddenInput3 = document.createElement('input');
+        hiddenInput3.setAttribute('type', 'hidden');
+        hiddenInput3.setAttribute('name', 'fullError');
+        hiddenInput3.setAttribute('value', JSON.stringify(result.error));
+        form.appendChild(hiddenInput);
+        form.appendChild(hiddenInput2);
+        form.appendChild(hiddenInput3);
+
+        // Submit the form
+        form.submit();
+    }
+
+</script>
+</div></div></div>
+<footer>
+&copy; 1999-2026 The Forecast Factory LLC. All rights reserved.
+<span class="mobileHide">| <a href="terms.php">Terms of Use</a> | <a href="privacy.php">Privacy Policy</a> | Stats provided by <a href="https://stats.com">STATS Perform</a><br /></span>
+</footer>
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4d4b1322ff5bcbf',t:'MTc5MjQ2NDM4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.min.css">
+<script type="text/javascript" src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+<script type='text/javascript' src='coach_box.js?1791936912'></script>
+</html>

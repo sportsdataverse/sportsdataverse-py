@@ -163,14 +163,14 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
         **kwargs: forwarded to :func:`sportsdataverse.dl_utils.download`.
 
     Returns:
-        The parsed JSON ``dict`` (``{"pageProps": {...}}``), or ``{}`` for a path
-        shape no On3 route family matches.
+        The parsed JSON ``dict`` (``{"pageProps": {...}}``).
 
     Raises:
         NoDataError: the ranking page 404s, or the data route 404s again after a
             buildId refresh (or the buildId did not change) -- the ranking does not
             exist.
-        ValueError: On3 answered 400 / 422 -- the request is wrong.
+        ValueError: the path matches no On3 rankings route (a malformed ``year`` or
+            ``sport_slug``), or On3 answered 400 / 422 -- the request is wrong.
         AssetFetchError: the page or data route answered any other non-2xx or a
             connection failure outlived the retries, the page carries no buildId,
             or a 2xx data body is empty, not JSON, or not a JSON object.
@@ -178,9 +178,13 @@ def _scrape_get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
     path = url[len(_HOST) :] if url.startswith(_HOST) else url
     m = _RANKINGS_PATH_RE.match(path)
     if not m:
-        # ponytail: only the rankings route family exists today; extend the
-        # regex (or add a per-family mapping) when more On3 routes are wrapped.
-        return {}
+        # A malformed ``year`` / ``sport_slug`` builds a path no rankings route matches: the request
+        # is wrong, so say so instead of answering ``{}`` (B-L88). ponytail: only the rankings route
+        # family exists today; extend the regex when more On3 routes are wrapped.
+        raise ValueError(
+            f"{_where(url)} is not an On3 rankings route "
+            "(/rivals/rankings/<type>/<sport>/<4-digit year>.json): check year and sport_slug"
+        )
     ranking_type, sport, year = m.groups()
     page_url = f"{_HOST}/db/rankings/{ranking_type}/{sport}/{year}/"
     headers = {**_headers(), **kwargs.pop("headers", {})}

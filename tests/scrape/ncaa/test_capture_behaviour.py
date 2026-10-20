@@ -14,7 +14,8 @@ from typing import Dict, List
 
 import pytest
 
-from sportsdataverse.scrape.ncaa import capture
+from sportsdataverse.errors import AssetFetchError, NoDataError
+from sportsdataverse.scrape.ncaa import capture, discover, rosters
 from sportsdataverse.scrape.ncaa.bundle import bundle_path, read_bundle
 
 FIX = Path(__file__).resolve().parents[2] / "fixtures" / "ncaa"
@@ -93,11 +94,53 @@ def test_a_clean_page_resets_the_soft_ban_counter(tmp_path):
 
 
 def test_ban_suspect_is_a_hard_stop(tmp_path):
-    fetch = _Script([True, RuntimeError("proxy pool exhausted"), True])
+    fetch = _Script([True, AssetFetchError("proxy pool exhausted"), True])
     with pytest.raises(SystemExit, match="BAN-SUSPECT: capture halted at contest_id=2"):
         capture.capture_contests(["1", "2", "3"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
     assert fetch.fetched == ["1", "2"]
     assert _written(tmp_path) == ["1.json.gz"]
+
+
+def test_vocabulary_a_404_contest_is_counted_failed_and_the_run_goes_on(tmp_path):
+    fetch = _Script([NoDataError("stats.ncaa.org has no page (HTTP 404)"), True])
+    counts = capture.capture_contests(["1", "2"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
+    assert counts == {"captured": 1, "skipped": 0, "failed": 1}
+    assert _written(tmp_path) == ["2.json.gz"]
+
+
+def test_vocabulary_a_bug_is_not_reported_as_a_ban(tmp_path):
+    fetch = _Script([RuntimeError("a parser bug")])
+    with pytest.raises(RuntimeError, match="a parser bug"):
+        capture.capture_contests(["1"], 2015, league="wbb", root=tmp_path, fetch_pages_fn=fetch)
+
+
+@pytest.mark.parametrize(
+    ("error", "calls"),
+    [(AssetFetchError("pool exhausted"), 3), (NoDataError("HTTP 404"), 1)],
+    ids=["failed-fetch-retried", "404-not-retried"],
+)
+def test_vocabulary_team_sweeps_skip_a_failed_team(tmp_path, error, calls):
+    seen: List[str] = []
+
+    def fetch(arg):
+        seen.append(str(arg))
+        raise error
+
+    df = discover.discover_season(2015, league="wbb", fetch_fn=fetch, team_ids=[7], root=None)
+    assert df.height == 0 and seen == ["7"] * calls
+    seen.clear()
+    assert rosters.capture_rosters(2015, league="wbb", root=tmp_path, fetch_fn=fetch, team_ids=[7]) == (0, 0, 1)
+    assert seen == ["teams/7/roster"] * calls
+
+
+def test_vocabulary_team_sweeps_do_not_swallow_a_bug(tmp_path):
+    def fetch(arg):
+        raise RuntimeError("a parser bug")
+
+    with pytest.raises(RuntimeError, match="a parser bug"):
+        discover.discover_season(2015, league="wbb", fetch_fn=fetch, team_ids=[7], root=None)
+    with pytest.raises(RuntimeError, match="a parser bug"):
+        rosters.capture_rosters(2015, league="wbb", root=tmp_path, fetch_fn=fetch, team_ids=[7])
 
 
 def test_shards_are_disjoint_and_cover_every_contest():

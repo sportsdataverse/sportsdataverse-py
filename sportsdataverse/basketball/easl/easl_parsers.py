@@ -51,6 +51,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_easl_game",
@@ -745,6 +746,7 @@ def _shape_one(name: str, raw: Any, **derived: Any) -> List[Dict[str, Any]]:
 # --- parsers -------------------------------------------------------------------------------------------------------
 
 
+@_data_only
 def parse_easl_health(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/health`` body to a tidy frame.
 
@@ -772,6 +774,7 @@ def parse_easl_health(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_easl_health", _shape_one("parse_easl_health", raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/metadata/seasons`` body to a tidy frame.
 
@@ -812,6 +815,7 @@ def parse_easl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     )
 
 
+@_data_only
 def parse_easl_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/matches`` body to a tidy frame.
 
@@ -839,6 +843,7 @@ def parse_easl_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_easl_schedule", _shape_fixtures("parse_easl_schedule", raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_game(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/matches/{fixtureId}`` body to a tidy frame.
 
@@ -920,6 +925,7 @@ def parse_easl_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_easl_pbp", _shape_pbp(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_team_box(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/matches/{fixtureId}/teamstats`` body to a tidy frame.
 
@@ -974,6 +980,7 @@ def parse_easl_team_box_by_period(raw: Any, *, return_as_pandas: bool = False) -
     return _finish(_frame("parse_easl_team_box_by_period", _shape_team_box_by_period(raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/standings`` body to a tidy frame.
 
@@ -1028,6 +1035,7 @@ def parse_easl_leaders(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_easl_leaders", _shape_leaders("parse_easl_leaders", raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/teams`` body to a tidy frame.
 
@@ -1082,6 +1090,7 @@ def parse_easl_team(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     return _finish(_frame("parse_easl_team", _shape_one("parse_easl_team", raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_team_schedule(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/teams/{teamId}/matches`` body to a tidy frame.
 
@@ -1177,6 +1186,7 @@ def parse_easl_team_leaders(raw: Any, *, return_as_pandas: bool = False) -> Fram
     return _finish(_frame("parse_easl_team_leaders", _shape_leaders("parse_easl_team_leaders", raw)), return_as_pandas)
 
 
+@_data_only
 def parse_easl_players(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """``/players`` body to a tidy frame.
 

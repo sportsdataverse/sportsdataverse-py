@@ -26,6 +26,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.soccer._frames import as_output, as_tables, rows_to_frame
 
 __all__ = [
@@ -47,6 +48,7 @@ def _as_rows(raw: Union[Dict[str, Any], List[Any], None]) -> List[Any]:
     return []
 
 
+@_data_only
 def parse_asa(
     raw: Union[Dict[str, Any], List[Any], None],
     *,
@@ -93,6 +95,7 @@ def parse_asa(
     return as_output(rows_to_frame(_as_rows(raw)), return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_asa_goals_added(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

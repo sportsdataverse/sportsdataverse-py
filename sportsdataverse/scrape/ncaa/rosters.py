@@ -39,6 +39,7 @@ import polars as pl
 # and ncaa_datasets owns that two-entry mapping plus the tree writers.
 from .datasets import TEAM_ID_CROSSWALKS as _TEAM_ID_CROSSWALKS
 from .datasets import persist_roster, read_html
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_schedule import parse_ncaa_bb_team_roster
 
 logger = logging.getLogger(__name__)
@@ -60,6 +61,18 @@ def _default_fetch_fn(root: "Union[str, Path]", shard_i: int = 0, shard_n: int =
     from sportsdataverse.mbb.mbb_ncaa_fetch import NcaaFetcher
 
     return NcaaFetcher.with_browser().fetch_html
+
+
+def _fetch_roster(fn: Callable[[str], str], team_id: int) -> Optional[str]:
+    """The roster page, or None after ``_TEAM_TRIES`` failed fetches (one for a 404)."""
+    for _ in range(_TEAM_TRIES):
+        try:
+            return fn(f"teams/{team_id}/roster")
+        except NoDataError:
+            return None  # a 404 does not change on retry
+        except AssetFetchError:
+            continue
+    return None
 
 
 def capture_rosters(
@@ -114,12 +127,7 @@ def capture_rosters(
         # how a parser fix reaches every captured season for free.
         html: Optional[str] = read_html(root, league, "rosters", season, team_id)
         if html is None:
-            for _ in range(_TEAM_TRIES):
-                try:
-                    html = fn(f"teams/{team_id}/roster")
-                    break
-                except RuntimeError:
-                    continue
+            html = _fetch_roster(fn, team_id)
         if html is None:
             consecutive += 1
             failed.append(team_id)

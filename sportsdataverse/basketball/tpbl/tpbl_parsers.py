@@ -42,6 +42,8 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
+
 __all__ = [
     "parse_tpbl_box_player_periods",
     "parse_tpbl_box_players",
@@ -696,6 +698,7 @@ def _season_ctx(req: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # ----------------------------------------------------------------------------- season routes
+@_data_only
 def parse_tpbl_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Every TPBL season (``/seasons``).
 
@@ -738,6 +741,7 @@ def parse_tpbl_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Opt
     return _frame(out, _SEASONS_SPEC, columns, return_as_pandas)
 
 
+@_data_only
 def parse_tpbl_divisions(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """The divisions (competition phases) of one season (``/events/{season_id}/divisions``).
 
@@ -778,6 +782,7 @@ def parse_tpbl_divisions(raw: Any, *, return_as_pandas: bool = False, columns: O
     return _frame(out, _DIVISIONS_SPEC, columns, return_as_pandas)
 
 
+@_data_only
 def parse_tpbl_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """The teams of one season (``/events/{season_id}/teams``).
 
@@ -858,6 +863,7 @@ def _game_row(g: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+@_data_only
 def parse_tpbl_games(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """Every game of one season, all divisions (``/seasons/{season_id}/games``).
 
@@ -960,6 +966,7 @@ def parse_tpbl_referees(raw: Any, *, return_as_pandas: bool = False, columns: Op
     return _frame(out, _REFEREES_SPEC, columns, return_as_pandas)
 
 
+@_data_only
 def parse_tpbl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """The standings of one division (``/divisions/{division_id}/games/standings``).
 
@@ -1239,6 +1246,7 @@ def parse_tpbl_box_team_periods(
 
 
 # ----------------------------------------------------------------------------- division and player routes
+@_data_only
 def parse_tpbl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None) -> Frame:
     """The roster of one team in one division (``/divisions/{division_id}/teams/{team_id}/players``).
 
@@ -1315,6 +1323,7 @@ def _shots(raw: Any, spec: Spec, keys: Dict[str, Any], columns: Optional[Sequenc
     return _frame(out, spec, columns, as_pandas)
 
 
+@_data_only
 def parse_tpbl_team_shots(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1348,6 +1357,7 @@ def parse_tpbl_team_shots(
     )
 
 
+@_data_only
 def parse_tpbl_player_shots(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:
@@ -1378,6 +1388,7 @@ def parse_tpbl_player_shots(
     )
 
 
+@_data_only
 def parse_tpbl_player_games(
     raw: Any, *, return_as_pandas: bool = False, columns: Optional[Sequence[str]] = None
 ) -> Frame:

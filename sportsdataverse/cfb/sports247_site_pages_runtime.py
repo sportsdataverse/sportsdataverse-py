@@ -25,6 +25,7 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int
 
 __all__ = ["_get", "site_headers"]
 
@@ -77,7 +78,7 @@ def _curl_transport(
         headers=headers,
         proxies=proxies,
         impersonate="chrome",
-        timeout=30,
+        timeout=_env_int(_ENV_TIMEOUT, 30),  # SDV_PY_HTTP_TIMEOUT, like every download() caller (A-L67)
     )
     return r.status_code, r.text
 

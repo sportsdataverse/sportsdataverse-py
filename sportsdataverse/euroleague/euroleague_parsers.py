@@ -64,6 +64,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.euroleague._euroleague_schemas import SCHEMAS
 from sportsdataverse.soccer._frames import as_output, rows_to_frame, to_utf8_ids
 
@@ -103,6 +104,7 @@ def _as_rows(raw: Union[Dict[str, Any], List[Any], None]) -> List[Any]:
     return []
 
 
+@_data_only
 def parse_euroleague(
     raw: Union[Dict[str, Any], List[Any], None],
     *,
@@ -169,6 +171,7 @@ def _live_frame(short: str, rows: List[Any]) -> pl.DataFrame:
     return to_utf8_ids(df, [c for c, t in df.schema.items() if _LIVE_ID.match(c) or t == pl.Null])
 
 
+@_data_only
 def parse_euroleague_points(
     raw: Union[Dict[str, Any], List[Any], None],
     *,
@@ -235,6 +238,7 @@ def parse_euroleague_points(
     return as_output(_live_frame("game_points", _as_rows(raw)), return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_euroleague_header(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

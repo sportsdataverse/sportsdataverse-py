@@ -175,7 +175,8 @@ def _get(
         NoDataError: kenpom.com answered 404.
         ValueError: kenpom.com answered 400 / 422 -- the request is wrong.
         AssetFetchError: Any other non-2xx or a connection failure after retries, or
-            an empty 200 -- an error page is never returned as HTML to parse.
+            an empty 200 -- an error page is never returned as HTML to parse. Also the
+            login page a dead or replaced session gets (A-M19).
 
     Example:
         Fetch the 2025 ratings page (needs a live subscription)::

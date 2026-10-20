@@ -61,6 +61,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 __all__ = [
     "parse_nationalleague",
@@ -330,6 +331,7 @@ _GAME_BOX_RENAMES = {"fo": "faceoffs", "fo_percentage": "faceoffs_percentage"}
 # ---------------------------------------------------------------------------
 
 
+@_data_only
 def parse_nationalleague(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse any National League body by the row rule, typing every column from its values.
 
@@ -432,6 +434,7 @@ def parse_nationalleague_bracket(raw: Any, *, return_as_pandas: bool = False) ->
     return _frame(rows, _SCHEMAS["bracket"], return_as_pandas)
 
 
+@_data_only
 def parse_nationalleague_player_stats(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse season player rows (``/player``, ``/player/topscorer``, ``/player/team/{teamId}``, ``/player/{playerId}``).
 
@@ -498,6 +501,7 @@ def parse_nationalleague_standings(raw: Any, *, return_as_pandas: bool = False) 
     return _frame(_flat_rows(raw, _SEASON_RENAMES, lists_only=True), _SCHEMAS["standings"], return_as_pandas)
 
 
+@_data_only
 def parse_nationalleague_team_info(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     """Parse ``/teams/{teamId}/info``: the club's CMS record as one row.
 

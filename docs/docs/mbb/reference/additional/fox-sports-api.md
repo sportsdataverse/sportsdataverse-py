@@ -759,7 +759,7 @@ an earlier conference) and unions the results, spending at most
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `max_id` | `int` | `500` | Highest candidate team id to try. Defaults to `500`. |
-| `max_calls` | `int` | `60` | Budget of standings fetches. Defaults to `60`. |
+| `max_calls` | `int` | `60` | Budget of standings fetches. Defaults to `60`. Warns when the budget runs out while the last fetch that answered (not a 404) was still finding new teams. |
 | `return_as_pandas` | `bool` | `False` | If `True` return a pandas DataFrame; otherwise polars. |
 
 **Returns**

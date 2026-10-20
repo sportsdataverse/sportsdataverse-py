@@ -1397,6 +1397,7 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 # turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
 # A-M14's class, task 5.2). The snapshot pins that measured state.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
+_FIX_ROOT = Path(__file__).parent / "fixtures"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
 # hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
 # ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
@@ -1468,282 +1469,13 @@ _ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_si
 _HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_envelope": _ENVELOPE}
 # Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
 # case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
-_HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
-    "cbs.cbs_napi_parsers.parse_cbs_napi": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.on3_parsers.parse_on3_rankings": {"list": AttributeError},
-    "cfb.on3_parsers.parse_on3_rdb": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.on3_parsers.parse_on3_team_rankings": {"list": AttributeError},
-    "cfb.sports247_parsers.parse_sports247_institution_rankings": {
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "cfb.sports247_parsers.parse_sports247_result_set": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.sports247_parsers.parse_sports247_teams": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.sports247_site_pages_parsers.parse_sports247_site_page": {"error_envelope": AssertionError},
-    "espn_content.espn_content_parsers.parse_espn_content": {"error_envelope": AssertionError, "list": AssertionError},
-    "euroleague.euroleague_parsers.parse_euroleague": {"error_envelope": AssertionError},
-    "euroleague.euroleague_parsers.parse_euroleague_header": {"error_envelope": AssertionError},
-    "euroleague.euroleague_parsers.parse_euroleague_points": {"error_envelope": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_events": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_header": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_nav": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_polls": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_roster": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_search": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_standings": {"list": AssertionError},
-    "fox.fox_api_parsers.parse_fox_api_trending": {"list": AssertionError},
-    "hockeytech._parsers.parse_game_info": {"list": AttributeError},
-    "hockeytech._parsers.parse_game_summary": {
-        "dict": AssertionError,
-        "empty_str": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AttributeError,
-        "none": AssertionError,
-    },
-    "hockeytech._parsers.parse_leaders": {"list": AttributeError},
-    "hockeytech._parsers.parse_pbp": {"list": AssertionError},
-    "hockeytech._parsers.parse_player_box": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_game_log": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_info": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_search": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_stats": {"list": AttributeError},
-    "hockeytech._parsers.parse_playoff_bracket": {"list": AttributeError},
-    "hockeytech._parsers.parse_roster": {"list": AttributeError},
-    "hockeytech._parsers.parse_schedule": {"list": AttributeError},
-    "hockeytech._parsers.parse_scorebar": {"list": AttributeError},
-    "hockeytech._parsers.parse_seasons": {"list": AttributeError},
-    "hockeytech._parsers.parse_shifts": {"list": AttributeError},
-    "hockeytech._parsers.parse_stats": {"list": AttributeError},
-    "hockeytech._parsers.parse_streaks": {"list": AttributeError},
-    "hockeytech._parsers.parse_teams": {"list": AttributeError},
-    "hockeytech._parsers.parse_transactions": {"list": AttributeError},
-    "mlb.mlb_statcast_parsers.parse_mlb_statcast_player": {"error_envelope": TypeError, "list": TypeError},
-    "nfl.nfl_api_parsers.parse_nfl_combine_profiles": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_draft_picks": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_game_details_by_slug": {"error_envelope": AssertionError},
-    "nfl.nfl_api_parsers.parse_nfl_game_details_v2": {"error_envelope": AssertionError},
-    "nfl.nfl_api_parsers.parse_nfl_game_summaries": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_injuries": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_rosters": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_standings": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_team": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_teams_history": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_weekly_game_details": {
-        "empty_str": AttributeError,
-        "list": AssertionError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_weeks": {
-        "empty_str": AttributeError,
-        "list": AttributeError,
-        "none": AttributeError,
-    },
-    "nfl.nfl_api_parsers.parse_nfl_weeks_by_date": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "nfl.nflpro_parsers.parse_nfl_pro_stats": {"list": AssertionError},
-    "nfl.sleeper_parsers.parse_sleeper": {"error_envelope": AssertionError, "list": AssertionError},
-    "odds.kalshi_parsers.parse_kalshi": {"error_envelope": AssertionError, "list": AssertionError},
-    "odds.polymarket_parsers.parse_polymarket": {"error_envelope": AssertionError, "list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_event_odds": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_event_odds_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_events": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_events_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_odds": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_odds_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_participants": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_scores": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_sports": {"list": AssertionError},
-    "soccer.asa_parsers.parse_asa": {"error_envelope": AssertionError},
-    "soccer.asa_parsers.parse_asa_goals_added": {"error_envelope": AssertionError},
-    "soccer.fifa_parsers.parse_fifa": {"error_envelope": AssertionError},
-    "soccer.fotmob_parsers.parse_fotmob": {"error_envelope": AssertionError},
-    "soccer.mls.mls_api_parsers.parse_mls_api": {"error_envelope": AssertionError},
-    "soccer.mls.mls_api_parsers.parse_mls_entity": {"error_envelope": AssertionError},
-    "soccer.openligadb_parsers.parse_openligadb": {"error_envelope": AssertionError, "list": AssertionError},
-    "soccer.uefa_parsers.parse_uefa": {"error_envelope": AssertionError},
-    "thesportsdb.thesportsdb_parsers.parse_thesportsdb": {"list": AssertionError},
-}
+_HOSTILE_OPEN: Dict[str, Dict[str, type]] = {}  # task 4.1b closed the last of them (A-L17, A-L62, B-L6)
 # Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) return rows for a
 # hostile body, measured 2026-10-18 on the sync tree (109 cases, every one AssertionError = rows returned).
-_HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {
-    **{
-        q: {"error_envelope": AssertionError}
-        for q in (
-            "basketball.dbl.sportality_parsers.parse_sportality",
-            "basketball.dbl.sportality_parsers.parse_sportality_page",
-            "basketball.easl.easl_parsers.parse_easl_health",
-            "basketball.fiba_hub.fiba_gdap_parsers.parse_fiba_gdap_rounds",
-            "basketball.scb.scb_parsers.parse_scb_season_player",
-            "basketball.scb.scb_parsers.parse_scb_team",
-            "hockey.esports_parsers.parse_esports",
-            "hockey.esports_parsers.parse_esports_game_info",
-            "hockey.ha.ha_parsers.parse_ha",
-            "hockey.ha.ha_parsers.parse_ha_leaders",
-            "hockey.ha.ha_parsers.parse_ha_players",
-            "hockey.ha.ha_parsers.parse_ha_standings",
-            "hockey.ha.ha_parsers.parse_ha_team_stats",
-            "hockey.khl.khl_webcaster_parsers.parse_khl_webcaster",
-            "hockey.liiga.liiga_parsers.parse_liiga",
-            "hockey.liiga.liiga_parsers.parse_liiga_player",
-            "hockey.nl.nationalleague_parsers.parse_nationalleague",
-            "hockey.nl.nationalleague_parsers.parse_nationalleague_player_stats",
-            "hockey.nl.nationalleague_parsers.parse_nationalleague_team_info",
-            "hockey.shl.shl_parsers.parse_shl",
-            "hockey.shl.shl_parsers.parse_shl_page",
-        )
-    },
-    **{
-        q: {"error_envelope": AssertionError, "list": AssertionError}
-        for q in (
-            "hockey.ha.ha_parsers.parse_ha_games",
-            "hockey.ha.ha_parsers.parse_ha_schedule",
-        )
-    },
-    **{
-        q: {"list": AssertionError}
-        for q in (
-            "basketball.cba.cba_parsers.parse_cba_game_team_four",
-            "basketball.cba.cba_parsers.parse_cba_game_team_shots",
-            "basketball.cba.cba_parsers.parse_cba_match_types",
-            "basketball.cba.cba_parsers.parse_cba_schedule_day",
-            "basketball.cba.cba_parsers.parse_cba_schedule_month",
-            "basketball.cba.cba_parsers.parse_cba_seasons",
-            "basketball.cba.cba_parsers.parse_cba_team_basic",
-            "basketball.cba.cba_parsers.parse_cba_team_counts",
-            "basketball.cba.cba_parsers.parse_cba_team_four",
-            "basketball.cba.cba_parsers.parse_cba_team_options",
-            "basketball.cba.cba_parsers.parse_cba_teams",
-            "basketball.cebl.cebl_parsers.parse_cebl_games",
-            "basketball.cebl.cebl_parsers.parse_cebl_news",
-            "basketball.cebl.cebl_parsers.parse_cebl_player_gamelog",
-            "basketball.cebl.cebl_parsers.parse_cebl_player_seasons",
-            "basketball.cebl.cebl_parsers.parse_cebl_player_stats",
-            "basketball.cebl.cebl_parsers.parse_cebl_roster",
-            "basketball.cebl.cebl_parsers.parse_cebl_seasons",
-            "basketball.cebl.cebl_parsers.parse_cebl_standings",
-            "basketball.cebl.cebl_parsers.parse_cebl_team_stats",
-            "basketball.cebl.cebl_parsers.parse_cebl_teams",
-            "basketball.easl.easl_parsers.parse_easl_game",
-            "basketball.easl.easl_parsers.parse_easl_players",
-            "basketball.easl.easl_parsers.parse_easl_schedule",
-            "basketball.easl.easl_parsers.parse_easl_seasons",
-            "basketball.easl.easl_parsers.parse_easl_standings",
-            "basketball.easl.easl_parsers.parse_easl_team_box",
-            "basketball.easl.easl_parsers.parse_easl_team_schedule",
-            "basketball.easl.easl_parsers.parse_easl_teams",
-            "basketball.genius.genius_parsers.parse_genius_competition_games",
-            "basketball.kbl.kbl_parsers.parse_kbl_current_standings",
-            "basketball.kbl.kbl_parsers.parse_kbl_pbp",
-            "basketball.kbl.kbl_parsers.parse_kbl_player_box",
-            "basketball.kbl.kbl_parsers.parse_kbl_player_totals",
-            "basketball.kbl.kbl_parsers.parse_kbl_players",
-            "basketball.kbl.kbl_parsers.parse_kbl_round_mvps",
-            "basketball.kbl.kbl_parsers.parse_kbl_schedule",
-            "basketball.kbl.kbl_parsers.parse_kbl_seasons",
-            "basketball.kbl.kbl_parsers.parse_kbl_standings",
-            "basketball.kbl.kbl_parsers.parse_kbl_team_box",
-            "basketball.kbl.kbl_parsers.parse_kbl_teams",
-            "basketball.kzs.kzs_parsers.parse_kzs_competitions",
-            "basketball.kzs.kzs_parsers.parse_kzs_matches",
-            "basketball.kzs.kzs_parsers.parse_kzs_player_leaderboard",
-            "basketball.kzs.kzs_parsers.parse_kzs_playing_days",
-            "basketball.kzs.kzs_parsers.parse_kzs_roster",
-            "basketball.kzs.kzs_parsers.parse_kzs_seasons",
-            "basketball.kzs.kzs_parsers.parse_kzs_team_leaderboard",
-            "basketball.kzs.kzs_parsers.parse_kzs_teams",
-            "basketball.nbl_au.nbl_rosetta_parsers.parse_nbl_rosetta_next_matches",
-            "basketball.scb.scb_parsers.parse_scb_games",
-            "basketball.scb.scb_parsers.parse_scb_player_statistics",
-            "basketball.scb.scb_parsers.parse_scb_referees",
-            "basketball.scb.scb_parsers.parse_scb_seasons",
-            "basketball.scb.scb_parsers.parse_scb_standings",
-            "basketball.scb.scb_parsers.parse_scb_team_statistics",
-            "basketball.scb.scb_parsers.parse_scb_transfers",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_divisions",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_games",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_games",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_shots",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_roster",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_seasons",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_standings",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_team_shots",
-            "basketball.tpbl.tpbl_parsers.parse_tpbl_teams",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_player_parameters",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_team_parameters",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_calendar",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_cross_table",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_playoff",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_seasons",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_standings",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_comps",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_games",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_preview",
-            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_seasons",
-            "basketball.vtb.vtb_league_parsers.parse_vtb_league_leagues",
-            "basketball.vtb.vtb_league_parsers.parse_vtb_league_matches",
-            "basketball.vtb.vtb_league_parsers.parse_vtb_league_seasons",
-            "basketball.wjbl.wjbl_parsers.parse_wjbl_leagues",
-            "basketball.wjbl.wjbl_parsers.parse_wjbl_teams",
-            "hockey.esports_parsers.parse_esports_player_stats",
-            "hockey.esports_parsers.parse_esports_shifts",
-        )
-    },
-}
-# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13) and 4.9 the nhl/mlb/nba parsers'
-# (A-L60): none of those modules is open above (test_hostile_closed_modules_stay_closed); 4.1b owns every other
-# provider parser (A-L17).
+_HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {}  # task 4.1b closed them (EX-SYNC-g)
+# Plan v2.2: task 4.1 closed the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 the nhl/mlb/nba parsers'
+# (A-L60) and 4.1b every other provider parser (A-L17, EX-SYNC-g). None of these modules may be re-opened
+# above (test_hostile_closed_modules_stay_closed).
 _CLOSED = (
     "_common_espn_parsers.",
     "nhl.nhl_edge_parsers.",
@@ -1802,7 +1534,8 @@ def test_hostile_closed_modules_stay_closed():
 
 def test_hostile_sweep_covers_every_public_parser():
     parsers = _public_parsers()
-    assert len(parsers) >= 214 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    # 831 on 2026-10-20: a decorator that dropped ``functools.wraps`` would lose its parsers from this sweep (R4.1b-2)
+    assert len(parsers) >= 831 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
     needs_more = [
         q
         for q, fn in parsers.items()
@@ -1817,6 +1550,63 @@ def test_hostile_sweep_covers_every_public_parser():
     assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
     unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
+
+
+def _hostile_decorated() -> Dict[str, str]:
+    """``{"<module>.<parse_fn>": decorator}`` for every parser carrying ``errors._data_only`` / ``_dict_only``."""
+    import re
+
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for deco, name in re.findall(r"^@(_data_only|_dict_only)\ndef (parse_\w+)\(", path.read_text("utf-8"), re.M):
+            out[f"{mod.split('.', 1)[1]}.{name}"] = deco
+    return out
+
+
+def test_hostile_decorated_parsers_keep_their_identity_and_keyword_payload():
+    """R4.1b-1 / R4.1b-2: a decorated parser stays in the sweep (``functools.wraps``: name, module, ``__wrapped__``)
+    and takes its payload under its own first-parameter name as a keyword, as it did undecorated."""
+    decorated = _hostile_decorated()
+    assert len(decorated) >= 153
+    parsers = _public_parsers()
+    for qual in decorated:
+        fn = parsers[qual]  # KeyError: the decorator hid the parser from the sweep
+        assert fn.__name__ == qual.rsplit(".", 1)[1] and hasattr(fn, "__wrapped__"), qual
+        first = next(iter(inspect.signature(fn).parameters))
+        for body in ({}, [{}], _ENVELOPE):
+            assert {sec: df.height for sec, df in _frames(fn(**{first: body})).items() if df.height} == {}, qual
+
+
+def test_a_decorated_parser_reads_a_real_body_the_same_by_keyword():
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+    from sportsdataverse.odds.kalshi_parsers import parse_kalshi
+
+    events = json.loads((_FIX_ROOT / "kalshi" / "events.json").read_text("utf-8"))  # _data_only
+    assert parse_kalshi(raw=events).equals(parse_kalshi(events)) and parse_kalshi(raw=events).height > 0
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))  # _dict_only
+    by_kw, by_pos = parse_game_summary(payload=summary, game_id=42), parse_game_summary(summary, 42)
+    assert {k: v.height for k, v in by_kw.items()} == {k: v.height for k, v in by_pos.items()}
+    assert by_kw["goals"].height > 0
+
+
+def test_game_summary_keeps_its_game_row_without_a_game_id():
+    """R4.1b-2 (M8): the stub-row guard drops the row only when there is neither a game_id nor data."""
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))
+    game = parse_game_summary(summary)["game"]
+    assert game.height == 1 and game["game_id"].to_list() == [None] and game["home_team"].to_list()[0]
+    assert parse_game_summary({}, game_id=7)["game"]["game_id"].to_list() == [7]  # the documented stub
+
+
+@pytest.mark.parametrize("site_kit", [["x"], "x", 1])
+def test_a_sitekit_that_is_not_an_object_is_zero_rows(site_kit):
+    """R4.1b-2 (M6): ``_sitekit`` reads only a dict ``SiteKit``."""
+    from sportsdataverse.hockeytech._parsers import parse_scorebar, parse_seasons, parse_teams
+
+    for parse in (parse_teams, parse_seasons, parse_scorebar):
+        assert parse({"SiteKit": site_kit}).height == 0, parse.__name__
 
 
 @pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*

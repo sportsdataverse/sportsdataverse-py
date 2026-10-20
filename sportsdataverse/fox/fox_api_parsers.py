@@ -23,6 +23,7 @@ import polars as pl
 
 from sportsdataverse import _fox_layout as _fx
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _data_only
 
 if TYPE_CHECKING:  # pragma: no cover
     import pandas as pd
@@ -103,6 +104,7 @@ def _out(rows: List[Dict[str, Any]], return_as_pandas: bool) -> _Frame:
     return _fx.frame(_homogenize(rows), return_as_pandas)
 
 
+@_data_only
 def parse_fox_api(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Generic Bifrost / Fox payload -> one row per record of the largest record list.
 
@@ -165,6 +167,7 @@ _trending = _dedicated(_fx.parse_trending, ("data",))
 _roster = _dedicated(_roster_rows, ("groups",))
 
 
+@_data_only
 def parse_fox_api_events(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Scoreboard / schedule / segment payloads -> one row per game.
 
@@ -174,6 +177,7 @@ def parse_fox_api_events(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     return _events(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_standings(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """``standingsSections`` tables -> wide rows (one per team).
 
@@ -183,6 +187,7 @@ def parse_fox_api_standings(raw: Any, *, return_as_pandas: bool = False) -> _Fra
     return _standings(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_polls(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """League poll tables -> one row per ranked team.
 
@@ -192,26 +197,31 @@ def parse_fox_api_polls(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     return _polls(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_nav(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """teamnav / conferences / explore-browse -> one row per navigable entity."""
     return _nav(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_header(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Entity header (league or team) -> a single descriptive row."""
     return _header(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_search(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Search content / entities / popular -> one row per hit."""
     return _search(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_trending(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Trending articles / videos -> one row per item."""
     return _trending(raw, return_as_pandas=return_as_pandas)
 
 
+@_data_only
 def parse_fox_api_roster(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Team roster groups -> one row per athlete (``athlete_id`` as a string)."""
     return _roster(raw, return_as_pandas=return_as_pandas)

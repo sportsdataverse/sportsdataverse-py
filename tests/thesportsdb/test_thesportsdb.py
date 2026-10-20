@@ -80,7 +80,7 @@ def test_yaml_host_pins_the_free_key_so_the_docs_links_resolve():
     24 dead links, so the host carries the documented free test key and the runtime swaps
     that segment for the caller's key."""
     doc = yaml.safe_load(YAML_PATH.read_text(encoding="utf-8"))
-    assert doc["host"] == "https://www.thesportsdb.com/api/v1/json/3"
+    assert doc["host"] == "https://www.thesportsdb.com/api/v1/json/123"
     assert "{" not in doc["host"]
     assert doc["getter_module"] == "sportsdataverse.thesportsdb.thesportsdb_runtime"
 

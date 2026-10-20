@@ -73,6 +73,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
 from requests import Request
+from requests.structures import CaseInsensitiveDict
 
 # ---------------------------------------------------------------------------
 # TTL tiers
@@ -312,7 +313,12 @@ class CachedResponse:
         self.url = url
         self.status_code = status_code
         self.from_cache = from_cache
-        self.headers: Dict[str, str] = {"X-From-Cache": "1"}
+        # The cache only stores bodies that decoded as JSON (``dl_utils.download``), and ``.text``
+        # re-serializes JSON, so a hit IS JSON: say so, or a getter that branches on the
+        # Content-Type (statcast, torvik, the basketball runtimes) reads it as text (B-M10, B-GB-04).
+        # ponytail: a JSON body a host labelled text/plain comes back labelled JSON; store the
+        # original content type with the entry if a getter ever needs that distinction.
+        self.headers = CaseInsensitiveDict({"X-From-Cache": "1", "Content-Type": "application/json"})
 
     def json(self) -> Any:
         return self._body
