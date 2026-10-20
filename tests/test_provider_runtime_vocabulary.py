@@ -156,9 +156,18 @@ def test_pff_api_injected_404_is_no_data():
         _pff_api(404, '{"error": {"code": "not_found", "message": "no such team"}}')
 
 
-def test_pff_api_any_2xx_object_is_data():
+@pytest.mark.parametrize("status", [200, 201, 202, 203, 206, 299])
+def test_pff_api_any_2xx_object_is_data(status):
     body = (FIX / "pff_api" / "team_directory.json").read_text(encoding="utf-8")  # PFF's own spec example
-    assert _pff_api(201, body) == json.loads(body)
+    assert _pff_api(status, body) == json.loads(body)
+
+
+@pytest.mark.parametrize("status", [300, 301, 304])
+def test_pff_api_a_3xx_object_is_not_data(status):
+    # R4.1b-b-2: the 2xx range ends at 299; a redirect's body is never the answer.
+    body = (FIX / "pff_api" / "team_directory.json").read_text(encoding="utf-8")
+    with pytest.raises(AssetFetchError, match=f"HTTP {status}"):
+        _pff_api(status, body)
 
 
 # --- pff_runtime (LEGACY premium.pff.com): B-L75 and the A-L67 timeout ------------------------------------
@@ -249,6 +258,15 @@ def test_on3_shim_malformed_args_raise_value_error_not_empty(year, sport):
 
 
 # --- statcast / torvik: the second (cached) call returns the shape the first did (B-M10, B-GB-04) ----------
+
+
+def test_cached_response_content_type_is_case_insensitive():
+    # R4.1b-b-1: readers spell the header both ways (``content-type`` in the runtimes, ``Content-Type`` in
+    # errors._may_be_json); a plain dict holding one spelling misses the other.
+    from sportsdataverse.cache import CachedResponse
+
+    headers = CachedResponse({"a": 1}, url="https://example.test/x").headers
+    assert headers.get("Content-Type") == headers.get("content-type") == "application/json"
 
 
 @pytest.mark.parametrize(
