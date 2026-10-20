@@ -45,9 +45,10 @@ from typing import Any, Dict, Optional, Tuple
 
 import requests
 
-from sportsdataverse._codegen_runtime import _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _text_body, _transport_errors, _where
 from sportsdataverse._html_tables import html_tables
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 
 __all__ = [
     "SubscriptionSite",
@@ -431,7 +432,9 @@ def get_html(
         NoDataError: The page answered 404.
         ValueError: The site answered 400 / 422 -- the request is wrong.
         AssetFetchError: Any other non-2xx or a connection failure after retries, or
-            an empty 200 -- its error page is not data.
+            an empty 200 -- its error page is not data. Also a 200 that is the login page
+            (the session expired or was replaced): the cached session is dropped, so the
+            next call logs in again.
 
     Example:
         One page, explicit proxy::
@@ -455,4 +458,15 @@ def get_html(
             session=sess,
             **kwargs,
         )
-    return _text_body(resp, full)
+    body = _text_body(resp, full)
+    if _looks_logged_out(body, site):
+        # A-M19: the session died (server expiry, or KenPom's one-session-per-account rule let a
+        # second login replace it). Drop it so the next call logs in afresh; never parse the page.
+        with _lock:
+            for key in [k for k, (cached, _) in _sessions.items() if cached is sess]:
+                del _sessions[key]
+        raise AssetFetchError(
+            f"{site.name} answered {_where(full)} with its login page: the session expired or another "
+            "login replaced it. Call again to log in afresh."
+        )
+    return body
