@@ -436,7 +436,7 @@ df = fox_nfl_odds("...")
 
 `fox_nfl_pbp(game_id: 'Union[int, str]', *, return_parsed: 'bool' = True, return_as_pandas: 'bool' = False, **kwargs: 'Any') -> "Union[pl.DataFrame, 'pd.DataFrame', Dict[str, Any]]"`
 
-NFL play-by-play (one row per play; drive-based).
+NFL play-by-play (one row per play, oldest first, live or final; drive-based).
 
 **Parameters**
 
@@ -463,7 +463,8 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `clock` | character |  |
 | `field_position` | character | Ball spot expressed on Yahoo's 0-100 field scale, measured toward the offense's target goal line. |
 | `play_text` | character |  |
-| `play_team` | character |  |
+| `play_team` | character | Club code from the game header (e.g. 'NYG') of the drive group Fox files the play under, i.e. the possession team; on a kickoff it is the receiving team, since Fox opens the receiver's drive with the kick. |
+| `play_player` | character | Name of the athlete Fox credits the play to (its play-level entity link), upper-cased as Fox serves it (e.g. 'DEVIN SINGLETARY'); null on admin rows such as timeouts and period ends. |
 
 **Example**
 

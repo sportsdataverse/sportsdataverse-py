@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 
 from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY
+from sportsdataverse._fox_layout import parse_drive_pbp
 from sportsdataverse._fox_layout import register_league_endpoints  # single source of truth for the public Fox key
 
 logger = logging.getLogger(__name__)
@@ -124,6 +125,7 @@ _PBP_COLUMNS: Sequence[str] = (
     "field_position",
     "play_text",
     "play_team",
+    "play_player",
 )
 _TEAM_ROSTER_COLUMNS: Sequence[str] = (
     "team_id",
@@ -482,7 +484,7 @@ def fox_cfb_pbp(
     return_as_pandas: bool = False,
     **kwargs: Any,
 ) -> Union[pl.DataFrame, "pd.DataFrame", Dict[str, Any]]:
-    """Fox Sports CFB play-by-play (one row per play).
+    """Fox Sports CFB play-by-play (one row per play, oldest first, live or final).
 
     Endpoint: ``GET https://api.foxsports.com/bifrost/v1/cfb/event/{game_id}/data``
 
@@ -508,28 +510,7 @@ def fox_cfb_pbp(
     raw = _fox_get(f"cfb/event/{game_id}/data", **kwargs)
     if not return_parsed:
         return raw
-    rows: List[Dict] = []
-    for sec in (raw.get("pbp", {}) or {}).get("sections", []) or []:
-        quarter = sec.get("title")
-        for drv in sec.get("groups", []) or []:
-            for p in drv.get("plays", []) or []:
-                rows.append(
-                    {
-                        "game_id": str(game_id),
-                        "quarter": quarter,
-                        "drive_id": drv.get("id"),
-                        "drive_result": drv.get("title"),
-                        "drive_summary": drv.get("subtitle"),
-                        "drive_team": (drv.get("entityLink") or {}).get("title"),
-                        "play_id": p.get("id"),
-                        "period": p.get("periodOfPlay"),
-                        "clock": p.get("timeOfPlay"),
-                        "field_position": p.get("title"),
-                        "play_text": p.get("playDescription"),
-                        "play_team": (p.get("entityLink") or {}).get("title"),
-                    }
-                )
-    return _frame(rows, return_as_pandas, _PBP_COLUMNS)
+    return _frame(parse_drive_pbp(raw, game_id), return_as_pandas, _PBP_COLUMNS)
 
 
 @overload
