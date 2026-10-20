@@ -370,3 +370,31 @@ def test_login_post_dropped_connection_is_asset_fetch_error():
     dropped = requests.ConnectionError("connection reset")
     with pytest.raises(AssetFetchError):
         login(KENPOM, "u@example.com", "pw", session=_FailingSession(post=dropped), use_cache=False)
+
+
+def test_login_form_is_never_served_from_the_response_cache(monkeypatch):
+    """R4.4-2: a fresh session has no cookies, so ``download`` would cache its login form; the
+    form's CSRF token belongs to the session that fetched it, so a cached form would make every
+    re-login post a stale token. ``cache_ttl=0`` keeps the form GET out of the cache."""
+    import itertools
+
+    import sportsdataverse.cache as cache
+
+    tokens = itertools.count(1)
+
+    class _TokenSession(FakeSession):
+        def get(self, url, **kwargs):
+            return FakeResponse(LOGIN_FORM.replace("TOK123", f"TOK{next(tokens)}"))
+
+    before = cache.get_cache_mode()
+    cache.set_cache_mode("memory")
+    cache.clear_cache()
+    try:
+        first, second = _TokenSession(), _TokenSession()
+        login(HERHOOPSTATS, "u@example.com", "fake-pw", session=first, use_cache=False)
+        login(HERHOOPSTATS, "u@example.com", "fake-pw", session=second, use_cache=False)
+    finally:
+        cache.clear_cache()
+        cache.set_cache_mode(before)
+    assert first.posted["data"]["csrfmiddlewaretoken"] == "TOK1"
+    assert second.posted["data"]["csrfmiddlewaretoken"] == "TOK2"  # its own form, not the cached one

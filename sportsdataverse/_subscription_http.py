@@ -365,7 +365,9 @@ def _login(
 
     # A-L64: both legs answer in the error vocabulary (404 NoDataError, 400/422 ValueError,
     # anything else or a dead connection AssetFetchError), never a bare requests error.
-    # The form GET goes through ``download`` uncached (its CSRF token is per session).
+    # The form GET goes through ``download``. Its response cache stores JSON bodies only, so this
+    # HTML form (whose CSRF token belongs to the session) is always fetched fresh; pinned by
+    # test_login_form_is_never_served_from_the_response_cache.
     with _transport_errors(site.login_url):
         landing = download(
             url=site.login_url,
@@ -373,7 +375,6 @@ def _login(
             proxy=sess.proxies or None,
             session=sess,
             timeout=timeout,
-            cache_ttl=0,
         )
     landing_html = _text_body(landing, site.login_url)
 
