@@ -588,8 +588,18 @@ def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: 
     the ESPN summaries of this capture. Keeping the offence's frame is a ~100-yard, multi-EPA
     error on the highest-leverage snap in football, on the newest row of a live poll: 50 rows
     of the 7,184 in the capture would be served that way (#545 finding 1, same class).
+
+    **A kick hands the ball over**, so it ends in the RECEIVING team's frame at 1st & 10: a punt
+    or kickoff where its last event stops (Fox states a touchback as a final ``TB`` event ending
+    at the touchback line: 51 of 51 in the committed captures), a missed field goal at the spot it
+    was kicked from. Measured on the 8 kicks that end a half or
+    regulation in the 32 NFL OT games of 2024-25: all 8 land on ESPN's team, 6 on its spot, one
+    1 yard off and one 15 off (a penalty on the return, which Fox's geometry does not carry).
     """
     start = play["start"]
+    kick = _kick_end(play, team_ids, home_side)
+    if kick is not None:
+        return kick
     keeps = play["type"]["id"] in _KEEPS_THE_BALL
     gained = int(play.get("statYardage") or 0) if keeps else 0
     to_endzone = start["yardsToEndzone"]
@@ -611,6 +621,27 @@ def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: 
         "yardLine": start["yardLine"] if to_endzone is None else ((100 - to_endzone) if is_home else to_endzone),
         "yardsToEndzone": to_endzone,
         "team": {"id": team_ids[side]},
+    }
+
+
+def _kick_end(play: Mapping[str, Any], team_ids: Mapping[str, str], home_side: str) -> Optional[Dict[str, Any]]:
+    """The receiving team's end state of a punt, kickoff or missed field goal, or None."""
+    type_id, start = play["type"]["id"], play["start"]
+    receiver = "home" if start["team"]["side"] == "away" else "away"
+    to_endzone: Optional[int] = None
+    if type_id == "60" and start["yardsToEndzone"] is not None:
+        to_endzone = 100 - int(start["yardsToEndzone"])
+    elif type_id in ("52", "53") and play.get("_end_pos") is not None:
+        end_pos = int(play["_end_pos"])
+        to_endzone = (100 - end_pos) if receiver == "away" else end_pos
+    if to_endzone is None:
+        return None
+    return {
+        "down": 1,
+        "distance": 10,
+        "yardLine": (100 - to_endzone) if receiver == home_side else to_endzone,
+        "yardsToEndzone": to_endzone,
+        "team": {"id": team_ids[receiver]},
     }
 
 
@@ -954,6 +985,7 @@ def _fox_to_espn_summary(
             },
             "end": {},
             "_scoring_side": scoring_side,
+            "_end_pos": _pos(events[-1].get("yardEnd")) if events else None,
         }
         penalty = _penalty(description, side_of, espn_ids)
         if penalty:
@@ -1003,6 +1035,7 @@ def _fox_to_espn_summary(
     for play in emitted:
         play["start"]["team"].pop("side", None)
         play.pop("_scoring_side", None)
+        play.pop("_end_pos", None)
 
     colours = {
         "away": (_hex_colour((header or {}).get("leftColor")), _hex_colour((header or {}).get("alternateLeftColor"))),

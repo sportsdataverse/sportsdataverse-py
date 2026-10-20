@@ -1,0 +1,4014 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 240, 31, 65",
+  "alternateRightColor": "1, 255, 188, 41",
+  "eventStatus": 3,
+  "eventTime": "2024-12-30T01:20:00Z",
+  "id": "10616",
+  "leftColor": "1, 240, 31, 65",
+  "leftTeam": {
+   "imageAltText": "Atlanta Falcons",
+   "isLoser": true,
+   "longName": "Falcons",
+   "name": "ATL",
+   "score": 24,
+   "stackedNameBottom": "Falcons",
+   "stackedNameTop": "Atlanta",
+   "uri": "football/nfl/teams/25"
+  },
+  "rightColor": "1, 255, 188, 41",
+  "rightTeam": {
+   "imageAltText": "Washington Commanders",
+   "isLoser": false,
+   "longName": "Commanders",
+   "name": "WAS",
+   "score": 30,
+   "stackedNameBottom": "Commanders",
+   "stackedNameTop": "Washington",
+   "uri": "football/nfl/teams/19"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "961",
+      "subtitle": "5 plays · 17 yards · 2:15",
+      "title": "INTERCEPTION",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Gonzalez kicks 65 yards from WAS 35 to the ATL End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left guard for 7 yards. Tackled by Q.Martin at ATL 37.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short right complete. Catch made by K.Hodge for 9 yards. Tackled by J.Chinn; B.Wagner at ATL 46.",
+        "timeOfPlay": "14:18",
+        "title": "2nd & 3 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short right complete. Catch made by B.Robinson for 1 yards. Tackled by M.Davis, F.Luvu at ATL 47.",
+        "timeOfPlay": "13:43",
+        "title": "1st & 10 · ATL 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short middle intended for D.Mooney.",
+        "timeOfPlay": "12:59",
+        "title": "2nd & 9 · ATL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass deep left INTERCEPTED at WAS 33. Intercepted by Q.Martin at WAS 33. Pushed out of bounds by R.McCloud; M.Penix at ATL 38.",
+        "timeOfPlay": "12:54",
+        "title": "3rd & 9 · ATL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INT",
+            "yardEnd": 67,
+            "yardStart": 47
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 38,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "962",
+      "subtitle": "7 plays · 38 yards · 3:12",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "ATL"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short right complete. Catch made by O.Zaccheaus for 12 yards. Pushed out of bounds by J.Bates III; K.Elliss at ATL 26.",
+        "timeOfPlay": "12:45",
+        "title": "1st & 10 · ATL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed right guard for 2 yards. Tackled by D.Onyemata; M.Hughes at ATL 24.",
+        "timeOfPlay": "12:17",
+        "title": "1st & 10 · ATL 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short right complete. Catch made by O.Zaccheaus for 9 yards. Tackled by K.Elliss at ATL 15.",
+        "timeOfPlay": "11:40",
+        "title": "2nd & 8 · ATL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 15,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed up the middle for 1 yards. Tackled by G.Jarrett at ATL 14.",
+        "timeOfPlay": "11:02",
+        "title": "1st & 10 · ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 14,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short middle intended for Z.Ertz.",
+        "timeOfPlay": "10:25",
+        "title": "2nd & 9 · ATL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by J.Crowder for 7 yards. Tackled by J.Bates III at ATL 7.",
+        "timeOfPlay": "10:19",
+        "title": "3rd & 9 · ATL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 7,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "13",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short left complete [J.Bates III]. Catch made by O.Zaccheaus for 7 yards. TOUCHDOWN.",
+        "timeOfPlay": "9:37",
+        "title": "4th & 2 · ATL 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "9:33",
+        "title": "ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "963",
+      "subtitle": "10 plays · 70 yards · 4:23",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Gonzalez kicks 65 yards from WAS 35 to the ATL End Zone. Touchback.",
+        "timeOfPlay": "9:33",
+        "title": "WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed right guard for 13 yards. Tackled by Q.Martin, S.Day at ATL 43.",
+        "timeOfPlay": "9:33",
+        "title": "1st & 10 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep middle intended for K.Hodge (J.Chinn).",
+        "timeOfPlay": "9:10",
+        "title": "1st & 10 · ATL 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short right complete. Catch made by K.Pitts for 23 yards. Pushed out of bounds by Q.Martin at WAS 34.",
+        "timeOfPlay": "8:59",
+        "title": "2nd & 10 · ATL 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short right complete. Catch made by B.Robinson for 1 yards. Tackled by B.Wagner; D.Armstrong at WAS 33.",
+        "timeOfPlay": "8:20",
+        "title": "1st & 10 · WAS 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 67,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short middle complete. Catch made by K.Pitts for 5 yards. Tackled by J.Chinn at WAS 28.",
+        "timeOfPlay": "7:39",
+        "title": "2nd & 9 · WAS 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 72,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "22",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short right intended for D.London.",
+        "timeOfPlay": "6:59",
+        "title": "3rd & 4 · WAS 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Patterson yard field goal attempt is good, Center-L.McCullough, Holder-B.Pinion. PENALTY on WAS-M.Sainristil, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "6:53",
+        "title": "4th & 4 · WAS 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 77,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 13 yards. Pushed out of bounds by M.Sainristil at WAS 10.",
+        "timeOfPlay": "6:49",
+        "title": "1st & 10 · WAS 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 90,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left end for 4 yards. Tackled by J.Jean-Baptiste at WAS 6.",
+        "timeOfPlay": "6:08",
+        "title": "1st & 10 · WAS 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 94,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short right intended for K.Hodge.",
+        "timeOfPlay": "5:23",
+        "title": "2nd & 6 · WAS 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short left intended for D.London. PENALTY on WAS-M.Davis, Defensive Pass Interference, 5 yards, accepted. No Play.",
+        "timeOfPlay": "5:17",
+        "title": "3rd & 6 · WAS 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 99,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "28",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left tackle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:12",
+        "title": "1st & 1 · WAS 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "29",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Patterson extra point is good.",
+        "timeOfPlay": "5:10",
+        "title": "WAS 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "964",
+      "subtitle": "3 plays · -1 yard · 2:22",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Pinion kicks 65 yards from ATL 35 to the WAS End Zone. Touchback.",
+        "timeOfPlay": "5:10",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left tackle for 0 yards. Tackled by N.Landman at WAS 30.",
+        "timeOfPlay": "5:10",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels steps back to pass. Sacked at WAS 17 for -13 yards (J.Bertrand).",
+        "timeOfPlay": "4:37",
+        "title": "2nd & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 83,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short right complete. Catch made by O.Zaccheaus for 12 yards. Tackled by D.Malone; M.Hughes at WAS 29.",
+        "timeOfPlay": "3:55",
+        "title": "3rd & 23 · WAS 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Way punts 55 yards to ATL 16, Center-T.Ott. A.Williams returned punt from the ATL 16. Tackled by K.Seymour; J.Reaves at ATL 29.",
+        "timeOfPlay": "3:00",
+        "title": "4th & 11 · WAS 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 16,
+            "yardStart": 71
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 29,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "965",
+      "subtitle": "3 plays · 4 yards · 2:03",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left end for 8 yards. Pushed out of bounds by Q.Martin at ATL 37.",
+        "timeOfPlay": "2:48",
+        "title": "1st & 10 · ATL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on ATL-C.Woerner, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "2:07",
+        "title": "2nd & 2 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 32,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left end for 1 yards. Tackled by C.Ferrell; B.Wagner at ATL 33.",
+        "timeOfPlay": "1:46",
+        "title": "2nd & 7 · ATL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short left intended for B.Robinson.",
+        "timeOfPlay": "1:04",
+        "title": "3rd & 6 · ATL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Pinion punts 61 yards to WAS 6, Center-L.McCullough. J.Crowder MUFFS catch. J.Crowder returned punt from the WAS 6. Tackled by D.Malone; N.Landman at WAS 28. ",
+        "timeOfPlay": "0:59",
+        "title": "4th & 6 · ATL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 94,
+            "yardStart": 33
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 72,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "966",
+      "subtitle": "9 plays · 50 yards · 5:08",
+      "title": "INTERCEPTION",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "42",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Daniels pass short right complete. Catch made by Z.Ertz for 9 yards. Tackled by N.Landman at WAS 37.",
+        "timeOfPlay": "0:45",
+        "title": "1st & 10 · WAS 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 63,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left end for 12 yards. Tackled by J.Simmons; N.Landman at WAS 49.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 1 · WAS 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed up the middle for 7 yards. Tackled by J.Bates III at ATL 44. PENALTY on ATL-G.Jarrett, Defensive Holding, 5 yards, accepted.",
+        "timeOfPlay": "14:43",
+        "title": "1st & 10 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 39,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "46",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left end for 1 yards. Tackled by Z.Harrison; D.Harris at ATL 38.",
+        "timeOfPlay": "14:22",
+        "title": "1st & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short left complete. Catch made by T.McLaurin for 5 yards. Tackled by M.Judon at ATL 33.",
+        "timeOfPlay": "13:41",
+        "title": "2nd & 9 · ATL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by J.Crowder for 9 yards. Tackled by D.Alford at ATL 24.",
+        "timeOfPlay": "13:01",
+        "title": "3rd & 4 · ATL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short left complete. Catch made by J.McNichols for -1 yards. Pushed out of bounds by M.Hughes at ATL 25.",
+        "timeOfPlay": "12:24",
+        "title": "1st & 10 · ATL 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 25,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by O.Zaccheaus for 13 yards. Tackled by K.Elliss, J.Bates III at ATL 12.",
+        "timeOfPlay": "11:51",
+        "title": "2nd & 11 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 12,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels rushed right end for yards. Tackled by D.Harris; D.Alford at ATL 12. PENALTY on WAS-T.Biadasz, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "11:07",
+        "title": "1st & 10 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 22,
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short middle INTERCEPTED at ATL 16. Intercepted by K.Elliss at ATL 16. Pushed out of bounds by J.Crowder; T.Biadasz at ATL 28.",
+        "timeOfPlay": "10:46",
+        "title": "1st & 20 · ATL 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INT",
+            "yardEnd": 16,
+            "yardStart": 22
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 28,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "967",
+      "subtitle": "11 plays · 72 yards · 6:13",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "14",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Allgeier rushed right guard for 8 yards. Tackled by B.Wagner; Q.Martin at ATL 36.",
+        "timeOfPlay": "10:37",
+        "title": "1st & 10 · ATL 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 36,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Allgeier rushed right end for 5 yards. Tackled by N.Igbinoghene; J.Chinn at ATL 41.",
+        "timeOfPlay": "10:02",
+        "title": "2nd & 2 · ATL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep left intended for K.Hodge.",
+        "timeOfPlay": "9:18",
+        "title": "1st & 10 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 14 yards. Pushed out of bounds by Q.Martin at WAS 45.",
+        "timeOfPlay": "9:10",
+        "title": "2nd & 10 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right guard for 5 yards. Tackled by J.Newton at WAS 40.",
+        "timeOfPlay": "8:30",
+        "title": "1st & 10 · WAS 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left guard for 12 yards. Tackled by B.St-Juste at WAS 28.",
+        "timeOfPlay": "7:47",
+        "title": "2nd & 5 · WAS 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 72,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Allgeier rushed right end for 6 yards. Tackled by D.Payne at WAS 22.",
+        "timeOfPlay": "7:02",
+        "title": "1st & 10 · WAS 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 78,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "61",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short right intended for K.Hodge. PENALTY on WAS-D.Fowler, Roughing the Passer, 10 yards, accepted. No Play.",
+        "timeOfPlay": "6:22",
+        "title": "2nd & 4 · WAS 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 88,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 8 yards. Pushed out of bounds by B.St-Juste at WAS 4.",
+        "timeOfPlay": "6:17",
+        "title": "1st & 10 · WAS 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 96,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for yards. TOUCHDOWN. The Replay Official reviewed the runner broke the plane and the play was overturned. B.Robinson rushed right end for 3 yards. Pushed out of bounds by B.St-Juste at WAS 1.",
+        "timeOfPlay": "5:33",
+        "title": "2nd & 2 · WAS 4",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 96
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix rushed left guard for 0 yards. Tackled by C.Ferrell; B.Wagner at WAS 1.",
+        "timeOfPlay": "5:10",
+        "title": "1st & 1 · WAS 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "4:27",
+        "title": "2nd & 1 · WAS 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Patterson extra point is good.",
+        "timeOfPlay": "4:24",
+        "title": "WAS 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "968",
+      "subtitle": "4 plays · 15 yards · 2:31",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Pinion kicks 65 yards from ATL 35 to the WAS End Zone. Touchback.",
+        "timeOfPlay": "4:24",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels rushed left end for 25 yards. Pushed out of bounds by K.Elliss at ATL 45.",
+        "timeOfPlay": "4:24",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 45,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed left end for yards. Tackled by D.Onyemata at ATL 39. PENALTY on WAS-B.Coleman, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "3:53",
+        "title": "1st & 10 · ATL 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 55,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "3:31",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels steps back to pass. Sacked at WAS 35 for -10 yards (M.Judon).",
+        "timeOfPlay": "3:31",
+        "title": "1st & 20 · WAS 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 65,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "73",
+        "playDescription": "Timeout #1 by WAS.",
+        "timeOfPlay": "2:44",
+        "title": "Timeout"
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "2:44",
+        "title": "2nd & 30 · WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "75",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels pass short right complete. Catch made by O.Zaccheaus for 10 yards. Tackled by J.Bates III; M.Hughes at WAS 45.",
+        "timeOfPlay": "2:38",
+        "title": "3rd & 30 · WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "76",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Way punts 37 yards to ATL 18, Center-T.Ott. Out of bounds. PENALTY on WAS-D.Forrest, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "2:00",
+        "title": "4th & 20 · WAS 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 28,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "969",
+      "subtitle": "8 plays · 51 yards · 1:51",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "78",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right end for 9 yards. Tackled by B.Wagner; J.Chinn at ATL 37.",
+        "timeOfPlay": "1:53",
+        "title": "1st & 10 · ATL 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Robinson rushed right tackle for 10 yards. Tackled by J.Chinn at ATL 47.",
+        "timeOfPlay": "1:19",
+        "title": "2nd & 1 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass deep right complete. Catch made by D.London for 17 yards. D.London ran out of bounds.",
+        "timeOfPlay": "0:54",
+        "title": "1st & 10 · ATL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short right complete. Catch made by D.Mooney for 12 yards. Tackled by M.Davis at WAS 24.",
+        "timeOfPlay": "0:46",
+        "title": "1st & 10 · WAS 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix pass short right complete. Catch made by K.Pitts for 3 yards. K.Pitts ran out of bounds.",
+        "timeOfPlay": "0:22",
+        "title": "1st & 10 · WAS 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 79,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short middle intended for B.Robinson (B.Wagner).",
+        "timeOfPlay": "0:16",
+        "title": "2nd & 7 · WAS 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep left intended for D.London.",
+        "timeOfPlay": "0:11",
+        "title": "3rd & 7 · WAS 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "85",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Patterson 39 yard field goal attempt is good, Center-L.McCullough, Holder-B.Pinion.",
+        "timeOfPlay": "0:06",
+        "title": "4th & 7 · WAS 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "970",
+      "subtitle": "1 plays · -1 yard · 0:02",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "86",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Pinion kicks 65 yards from ATL 35 to the WAS End Zone. Touchback.",
+        "timeOfPlay": "0:02",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Daniels kneels at the WAS 29.",
+        "timeOfPlay": "0:02",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 71,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "88",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "971",
+      "subtitle": "15 plays · 69 yards · 7:47",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": true,
+        "score": "14",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "89",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Pinion kicks 63 yards from ATL 35 to the WAS 2. L.McCaffrey returns the kickoff. Tackled by D.Alford; J.Bertrand at WAS 31.",
+        "timeOfPlay": "15:00",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 98,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 69,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "90",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short right intended for O.Zaccheaus. PENALTY on WAS-S.Cosmi, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "14:49",
+        "title": "1st & 10 · WAS 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 79,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by B.Robinson for 5 yards. Tackled by A.Ebiketie at WAS 26.",
+        "timeOfPlay": "14:49",
+        "title": "1st & 20 · WAS 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 74,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "92",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Sacked at WAS 19 for -7 yards (D.Onyemata).",
+        "timeOfPlay": "14:21",
+        "title": "2nd & 15 · WAS 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 81,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Sacked at WAS 15 for -4 yards (A.Ebiketie). PENALTY on ATL-D.Malone, Illegal Contact, 5 yards, accepted. No Play.",
+        "timeOfPlay": "13:40",
+        "title": "3rd & 22 · WAS 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 76,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "94",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short left intended for J.Crowder.",
+        "timeOfPlay": "13:29",
+        "title": "1st & 10 · WAS 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "95",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed right end for 10 yards. Tackled by D.Malone; D.Alford at WAS 34.",
+        "timeOfPlay": "13:22",
+        "title": "2nd & 10 · WAS 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short left complete. Catch made by O.Zaccheaus for yards. Tackled by K.Street at WAS 45. PENALTY on WAS-K.Osborn, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "12:45",
+        "title": "1st & 10 · WAS 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 76,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short left complete. Catch made by Z.Ertz for 37 yards. Tackled by J.Bertrand at ATL 39.",
+        "timeOfPlay": "12:21",
+        "title": "1st & 20 · WAS 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short left intended for J.McNichols.",
+        "timeOfPlay": "11:32",
+        "title": "1st & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "99",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.McNichols rushed right guard for 5 yards. Tackled by G.Jarrett at ATL 34.",
+        "timeOfPlay": "11:29",
+        "title": "2nd & 10 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "100",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels scrambles left end for 9 yards. Pushed out of bounds by K.Elliss at ATL 25.",
+        "timeOfPlay": "10:55",
+        "title": "3rd & 5 · ATL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short middle intended for T.McLaurin (A.Terrell).",
+        "timeOfPlay": "10:14",
+        "title": "1st & 10 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete deep middle intended for T.McLaurin.",
+        "timeOfPlay": "10:11",
+        "title": "2nd & 10 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short right complete. Catch made by J.Crowder for 9 yards. Tackled by M.Hughes at ATL 16.",
+        "timeOfPlay": "10:06",
+        "title": "3rd & 10 · ATL 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 16,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels rushed right end for 4 yards. Pushed out of bounds by J.Bates III at ATL 12.",
+        "timeOfPlay": "9:24",
+        "title": "4th & 1 · ATL 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 12,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed right end for 3 yards. Tackled by D.Harris; E.Goldman at ATL 9.",
+        "timeOfPlay": "8:47",
+        "title": "1st & 10 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 9,
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Sacked at ATL 10 for -1 yards (J.Bates III). ",
+        "timeOfPlay": "8:04",
+        "title": "2nd & 7 · ATL 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 10,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by Z.Ertz for 10 yards. TOUCHDOWN.",
+        "timeOfPlay": "7:19",
+        "title": "3rd & 8 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "7:13",
+        "title": "ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "972",
+      "subtitle": "3 plays · -1 yard · 2:07",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "14",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Gonzalez kicks 67 yards from WAS 35 to the ATL End Zone. A.Williams returns the kickoff. Tackled by J.Reaves at ATL 29.",
+        "timeOfPlay": "7:13",
+        "title": "WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": -2,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 29,
+            "yardStart": -2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed left end for 1 yards. Tackled by J.Newton; D.Payne at ATL 30.",
+        "timeOfPlay": "7:07",
+        "title": "1st & 10 · ATL 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "112",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 4 yards. Tackled by M.Davis at ATL 34.",
+        "timeOfPlay": "6:16",
+        "title": "2nd & 9 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Penix steps back to pass. Sacked at ATL 28 for -6 yards (D.Fowler). M.Penix FUMBLES, forced by D.Fowler. Fumble RECOVERED by ATL-M.Penix at ATL 28. Tackled by at ATL 29. PENALTY on ATL-M.Bergeron, Offensive Holding, 10 yards, declined. ",
+        "timeOfPlay": "5:36",
+        "title": "3rd & 5 · ATL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 28,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Pinion punts 42 yards to WAS 30, Center-L.McCullough. Out of bounds.",
+        "timeOfPlay": "5:15",
+        "title": "4th & 11 · ATL 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 70,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "973",
+      "subtitle": "14 plays · 70 yards · 7:03",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": true,
+        "score": "21",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels scrambles up the middle for 13 yards. Tackled by A.Terrell at WAS 43.",
+        "timeOfPlay": "5:06",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on WAS-S.Cosmi, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "4:31",
+        "title": "1st & 10 · WAS 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 62,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short middle intended for T.McLaurin (N.Landman).",
+        "timeOfPlay": "4:16",
+        "title": "1st & 15 · WAS 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels scrambles up the middle for 18 yards. Pushed out of bounds by R.Grant at ATL 44.",
+        "timeOfPlay": "4:11",
+        "title": "2nd & 15 · WAS 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 44,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.Rodriguez rushed right end for 2 yards. Tackled by N.Landman at ATL 42.",
+        "timeOfPlay": "3:30",
+        "title": "1st & 10 · ATL 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels scrambles right end for 3 yards. Tackled by L.Carter at ATL 39.",
+        "timeOfPlay": "3:09",
+        "title": "2nd & 8 · ATL 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 39,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete deep left intended for T.McLaurin.",
+        "timeOfPlay": "2:23",
+        "title": "3rd & 5 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by J.McNichols for 6 yards. Tackled by J.Bates III at ATL 33.",
+        "timeOfPlay": "2:15",
+        "title": "4th & 5 · ATL 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "124",
+        "playDescription": "Timeout #1 by ATL.",
+        "timeOfPlay": "1:38",
+        "title": "Timeout"
+       },
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels pass short right complete. Catch made by O.Zaccheaus for 6 yards. Pushed out of bounds by D.Alford at ATL 27.",
+        "timeOfPlay": "1:38",
+        "title": "1st & 10 · ATL 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 27,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "O.Zaccheaus rushed right end for 8 yards. Tackled by J.Bates III; K.Elliss at ATL 19.",
+        "timeOfPlay": "1:09",
+        "title": "2nd & 4 · ATL 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 19,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Daniels rushed right end for 5 yards. Pushed out of bounds by K.Elliss at ATL 14.",
+        "timeOfPlay": "0:38",
+        "title": "1st & 10 · ATL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 14,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "128",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "129",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Rodriguez rushed right tackle for 4 yards. Tackled by M.Judon at ATL 10.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 5 · ATL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 10,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "130",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Rodriguez rushed up the middle for 2 yards. Tackled by E.Goldman; G.Jarrett at ATL 8.",
+        "timeOfPlay": "14:22",
+        "title": "3rd & 1 · ATL 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 8,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Rodriguez rushed left guard for 6 yards. Tackled by J.Simmons, K.Elliss at ATL 2.",
+        "timeOfPlay": "13:46",
+        "title": "1st & 8 · ATL 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Rodriguez rushed left end for 2 yards. TOUCHDOWN.",
+        "timeOfPlay": "13:08",
+        "title": "2nd & 2 · ATL 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez extra point is good.",
+        "timeOfPlay": "13:03",
+        "title": "ATL 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "974",
+      "subtitle": "6 plays · 15 yards · 3:01",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "21",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "135",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez kicks 65 yards from WAS 35 to the ATL End Zone. Touchback.",
+        "timeOfPlay": "13:03",
+        "title": "WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short middle complete. Catch made by C.Woerner for 6 yards. Tackled by M.Davis at ATL 36.",
+        "timeOfPlay": "13:03",
+        "title": "1st & 10 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left end for 2 yards. Tackled by J.Allen at ATL 38.",
+        "timeOfPlay": "12:27",
+        "title": "2nd & 4 · ATL 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short middle complete. Catch made by R.McCloud for 13 yards. Tackled by M.Sainristil; J.Newton at WAS 49.",
+        "timeOfPlay": "11:46",
+        "title": "3rd & 2 · ATL 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short left intended for D.Mooney [D.Fowler].",
+        "timeOfPlay": "11:09",
+        "title": "1st & 10 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short middle intended for D.London (Q.Martin).",
+        "timeOfPlay": "11:02",
+        "title": "2nd & 10 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Sacked at ATL 45 for -6 yards (D.Armstrong). M.Penix FUMBLES, forced by D.Armstrong. Fumble RECOVERED by ATL-D.Dalman at ATL 45. Tackled by at ATL 45. ",
+        "timeOfPlay": "10:57",
+        "title": "3rd & 10 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 45,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Pinion punts 38 yards to WAS 17, Center-L.McCullough. J.Crowder returned punt from the WAS 17. Tackled by A.Williams; J.Bertrand at WAS 36.",
+        "timeOfPlay": "10:13",
+        "title": "4th & 16 · ATL 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 83,
+            "yardStart": 45
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 64,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "975",
+      "subtitle": "10 plays · 52 yards · 5:30",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "ATL"
+       },
+       {
+        "changed": true,
+        "score": "24",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by O.Zaccheaus for 16 yards. Tackled by J.Bates III at ATL 48.",
+        "timeOfPlay": "10:02",
+        "title": "1st & 10 · WAS 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "145",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels rushed left end for 7 yards. Tackled by N.Landman at ATL 41.",
+        "timeOfPlay": "9:23",
+        "title": "1st & 10 · ATL 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left guard for 11 yards. Tackled by J.Simmons at ATL 30.",
+        "timeOfPlay": "8:41",
+        "title": "2nd & 3 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left end for 12 yards. Tackled by K.Elliss at ATL 18.",
+        "timeOfPlay": "8:05",
+        "title": "1st & 10 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 18,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed right guard for 1 yards. Tackled by K.Street at ATL 17.",
+        "timeOfPlay": "7:32",
+        "title": "1st & 10 · ATL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 17,
+            "yardStart": 18
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "149",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by J.Bates for 14 yards. Tackled by J.Simmons at ATL 3.",
+        "timeOfPlay": "6:58",
+        "title": "2nd & 9 · ATL 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 3,
+            "yardStart": 17
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "150",
+        "playDescription": "Timeout #1 by WAS.",
+        "timeOfPlay": "6:07",
+        "title": "Timeout"
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels rushed left tackle for 2 yards. Tackled by G.Jarrett; E.Goldman at ATL 1.",
+        "timeOfPlay": "6:07",
+        "title": "1st & 3 · ATL 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "playDescription": "Timeout #2 by WAS.",
+        "timeOfPlay": "5:21",
+        "title": "Timeout"
+       },
+       {
+        "id": "153",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed up the middle for -1 yards. Tackled by M.Judon, R.Orhorhoro at ATL 2.",
+        "timeOfPlay": "5:21",
+        "title": "2nd & 1 · ATL 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels pass short left complete. Catch made by O.Zaccheaus for yards. TOUCHDOWN. PENALTY on WAS-S.Cosmi, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "4:45",
+        "title": "3rd & 2 · ATL 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 12,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "155",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short left intended for T.McLaurin.",
+        "timeOfPlay": "4:39",
+        "title": "3rd & 12 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez 31 yard field goal attempt is good, Center-T.Ott, Holder-T.Way.",
+        "timeOfPlay": "4:35",
+        "title": "4th & 12 · ATL 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "976",
+      "subtitle": "12 plays · 68 yards · 3:13",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "24",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Gonzalez kicks 60 yards from WAS 35 to the ATL 5. A.Williams returns the kickoff. Tackled by B.Tremayne at ATL 32.",
+        "timeOfPlay": "4:32",
+        "title": "WAS 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 5,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 32,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "159",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left end for 5 yards. Pushed out of bounds by M.Sainristil at ATL 37.",
+        "timeOfPlay": "4:25",
+        "title": "1st & 10 · ATL 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep right intended for D.London.",
+        "timeOfPlay": "4:18",
+        "title": "2nd & 5 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 14 yards. D.London ran out of bounds.",
+        "timeOfPlay": "4:13",
+        "title": "3rd & 5 · ATL 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short left complete. Catch made by K.Pitts for yards. Tackled by M.Davis at WAS 41. PENALTY on ATL-K.McGary, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "4:08",
+        "title": "1st & 10 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 41,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short middle complete. Catch made by B.Robinson for 6 yards. Tackled by D.Fowler; D.Armstrong at ATL 47.",
+        "timeOfPlay": "3:57",
+        "title": "1st & 20 · ATL 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix scrambles up the middle for 3 yards. Tackled by J.Jean-Baptiste; D.Armstrong at ATL 50.",
+        "timeOfPlay": "3:28",
+        "title": "2nd & 14 · ATL 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep right intended for K.Pitts (J.Chinn).",
+        "timeOfPlay": "2:40",
+        "title": "3rd & 11 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "166",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass deep left complete. Catch made by D.London for 31 yards. Pushed out of bounds by Q.Martin at WAS 19.",
+        "timeOfPlay": "2:34",
+        "title": "4th & 11 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 81,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.McCloud rushed right end for 14 yards. Pushed out of bounds by Q.Martin at WAS 5.",
+        "timeOfPlay": "2:25",
+        "title": "1st & 10 · WAS 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 95,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson FUMBLES (aborted). Fumble RECOVERED by ATL-B.Robinson at WAS 27. Tackled by J.Holmes at WAS 26.",
+        "timeOfPlay": "2:20",
+        "title": "1st & 5 · WAS 5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 74,
+            "yardStart": 95
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "169",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "170",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short left complete. Catch made by D.London for 13 yards. Pushed out of bounds by M.Davis at WAS 13.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 26 · WAS 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 87,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short right intended for D.London.",
+        "timeOfPlay": "1:30",
+        "title": "3rd & 13 · WAS 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass short middle complete. Catch made by K.Pitts for 13 yards. TOUCHDOWN.",
+        "timeOfPlay": "1:23",
+        "title": "4th & 13 · WAS 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Patterson extra point is good.",
+        "timeOfPlay": "1:19",
+        "title": "WAS 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "977",
+      "subtitle": "3 plays · 0 yards · 0:39",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Pinion kicks 65 yards from ATL 35 to the WAS End Zone. Touchback.",
+        "timeOfPlay": "1:19",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels steps back to pass. Sacked at WAS 30 for 0 yards (A.Ebiketie).",
+        "timeOfPlay": "1:19",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 70,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete short middle intended for T.McLaurin.",
+        "timeOfPlay": "0:59",
+        "title": "2nd & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Daniels steps back to pass. Pass incomplete deep middle intended for O.Zaccheaus.",
+        "timeOfPlay": "0:55",
+        "title": "3rd & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Way punts 61 yards to ATL 9, Center-T.Ott. A.Williams returned punt from the ATL 9. Tackled by P.Butler at ATL 19.",
+        "timeOfPlay": "0:50",
+        "title": "4th & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 9,
+            "yardStart": 70
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 19,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "978",
+      "subtitle": "4 plays · 43 yards · 0:40",
+      "title": "MISSED FG",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/25"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "ATL"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix pass deep right complete. Catch made by D.Mooney for 25 yards. Tackled by M.Davis at ATL 44.",
+        "timeOfPlay": "0:40",
+        "title": "1st & 10 · ATL 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 44,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep left intended for D.Mooney.",
+        "timeOfPlay": "0:19",
+        "title": "1st & 10 · ATL 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete short middle intended for D.London.",
+        "timeOfPlay": "0:12",
+        "title": "2nd & 10 · ATL 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "183",
+        "playDescription": "Timeout #2 by ATL.",
+        "timeOfPlay": "0:07",
+        "title": "Timeout"
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on WAS-D.Payne, Neutral Zone Infraction, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:07",
+        "title": "3rd & 10 · ATL 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 49,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Penix steps back to pass. Pass incomplete deep right intended for D.Mooney [D.Armstrong]. PENALTY on WAS-M.Davis, Defensive Pass Interference, 13 yards, accepted. No Play.",
+        "timeOfPlay": "0:07",
+        "title": "3rd & 5 · ATL 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 62,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "186",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Patterson 56 yard field goal attempt is no good, Center-L.McCullough, Holder-B.Pinion.",
+        "timeOfPlay": "0:02",
+        "title": "1st & 10 · WAS 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - NO GOOD",
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "979",
+      "subtitle": "12 plays · 70 yards · 7:18",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/19"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "ATL"
+       },
+       {
+        "changed": true,
+        "score": "30",
+        "title": "WAS"
+       }
+      ],
+      "plays": [
+       {
+        "id": "188",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Pinion kicks 65 yards from ATL 35 to the WAS End Zone. Touchback.",
+        "timeOfPlay": "10:00",
+        "title": "ATL 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "189",
+        "periodOfPlay": "OT",
+        "playDescription": "PENALTY on WAS-B.Coleman, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 10 · WAS 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 75,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "190",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels scrambles up the middle for 7 yards. Tackled by L.Carter at WAS 32.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 15 · WAS 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "191",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by Z.Ertz for 10 yards. Tackled by J.Bates III at WAS 42.",
+        "timeOfPlay": "9:24",
+        "title": "2nd & 8 · WAS 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels rushed left end for 7 yards. Tackled by N.Landman at WAS 49.",
+        "timeOfPlay": "8:46",
+        "title": "1st & 10 · WAS 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "193",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Robinson rushed left tackle for 1 yards. Tackled by G.Jarrett at WAS 50.",
+        "timeOfPlay": "8:10",
+        "title": "2nd & 3 · WAS 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "194",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels scrambles right end for 16 yards. Pushed out of bounds by J.Simmons at ATL 34.",
+        "timeOfPlay": "7:38",
+        "title": "3rd & 2 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by Z.Ertz for 4 yards. Tackled by K.Elliss at ATL 30.",
+        "timeOfPlay": "6:58",
+        "title": "1st & 10 · ATL 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "196",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels pass short left complete. Catch made by C.Rodriguez for 12 yards. Pushed out of bounds by M.Hughes at ATL 18.",
+        "timeOfPlay": "6:19",
+        "title": "2nd & 6 · ATL 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 18,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "197",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels pass short right complete. Catch made by B.Robinson for 4 yards. Tackled by J.Bates III; D.Alford at ATL 14.",
+        "timeOfPlay": "5:41",
+        "title": "1st & 10 · ATL 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 14,
+            "yardStart": 18
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "198",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels rushed right end for 6 yards. Tackled by J.Bertrand at ATL 8.",
+        "timeOfPlay": "5:07",
+        "title": "2nd & 6 · ATL 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 8,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "199",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels rushed left end for 0 yards. Tackled by D.Alford at ATL 8.",
+        "timeOfPlay": "4:26",
+        "title": "1st & 8 · ATL 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 8,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "200",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels scrambles up the middle for 6 yards. Tackled by J.Simmons at ATL 2.",
+        "timeOfPlay": "3:37",
+        "title": "2nd & 8 · ATL 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "201",
+        "playDescription": "Timeout #1 by WAS.",
+        "timeOfPlay": "2:45",
+        "title": "Timeout"
+       },
+       {
+        "id": "202",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Daniels pass short middle complete. Catch made by Z.Ertz for 2 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:45",
+        "title": "3rd & 2 · ATL 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "203",
+        "playDescription": "End Game",
+        "timeOfPlay": "2:42",
+        "title": "Game End"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

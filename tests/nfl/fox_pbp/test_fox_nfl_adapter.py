@@ -342,6 +342,25 @@ def test_overtime_boundary_end_state_is_read_from_regulation():
     assert kneel["end"]["yardsToEndzone"] != plays[first_ot]["start"]["yardsToEndzone"]
 
 
+@pytest.mark.parametrize(
+    ("name", "espn_id", "home", "away", "needle", "team", "to_go"),
+    [
+        # each row's expected end is ESPN's own summary of the game
+        ("fox_nfl_401671688.json", "401671688", "12", "27", "Araiza punts 40 yards", "27", 79),  # punt, downed
+        ("fox_nfl_401772939.json", "401772939", "14", "25", "Evans kicks 71 yards", "25", 68),  # kickoff, returned
+        ("fox_nfl_401671842.json", "401671842", "28", "1", "Patterson 56 yard field goal", "28", 62),  # missed FG
+    ],
+)
+def test_overtime_boundary_a_kick_ending_regulation_ends_with_the_receiver(
+    name, espn_id, home, away, needle, team, to_go
+):
+    """TB @ KC 2024, SF @ LA 2025, ATL @ WAS 2024: regulation ends on a kick, and a kick hands the ball
+    over -- ESPN ends each in the receiving team's frame at 1st & 10."""
+    _, plays = _adapted(name, espn_id, home, away)
+    (kick,) = [p for p in plays if needle in p["text"] and p["period"]["number"] == 4]
+    assert (kick["end"]["team"]["id"], kick["end"]["yardsToEndzone"], kick["end"]["down"]) == (team, to_go, 1)
+
+
 def test_a_live_poll_has_no_winner_and_a_final_has_one():
     """Fox reads ``isLoser: false`` for both clubs on every live poll (B-L59)."""
     live, _ = _adapted("fox_nfl_live_mid.json", "401872932", "2", "8")
