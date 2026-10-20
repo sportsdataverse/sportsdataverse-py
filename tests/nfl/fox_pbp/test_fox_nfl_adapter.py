@@ -203,7 +203,7 @@ def test_a_game_below_the_2024_play_floor_hands_over_by_shape(row):
 
 
 def test_an_empty_body_is_a_failed_request_not_a_game_without_coverage(row):
-    """``_codegen_runtime._get`` returns ``{}`` on any failure; the two must not read alike."""
+    """An empty injected payload is not a game without coverage; the two must not read alike."""
     with pytest.raises(SourceUnavailable, match="no event payload"):
         _fox_adapter("nfl", 1, _Ctx(payload={}, idmap_row=row))
 
@@ -277,3 +277,114 @@ def test_fox_nfl_espn_reference_parity(row):
     report = espn_reference_report("nfl", int(row["espn_event_id"]), "fox", _load("fox_nfl_401671775.json"), row, odds)
     assert report.check(ESPN_REFERENCE_PINNED) == [], report.gates()
     print("FOX_NFL_ESPN_REFERENCE_OK", report.gates()["paired_share"])
+
+
+# ------------------------------------------------------- classification and end-state edges (3.5)
+def _adapted(name, espn_id, home, away):
+    from sportsdataverse.nfl.fox_pbp.to_espn_summary import _fox_nfl_to_espn_summary
+
+    row = {"espn_event_id": espn_id, "home_espn_team_id": home, "away_espn_team_id": away}
+    summary, _ = _fox_nfl_to_espn_summary(_load(name), row)
+    drives = summary["drives"]["previous"] + ([summary["drives"]["current"]] if "current" in summary["drives"] else [])
+    return summary, [p for d in drives for p in d["plays"]]
+
+
+def test_no_play_penalty_rows_classify_as_penalties():
+    """NYG @ DAL 2025 wk 2 (Fox 10777): the two event-less Delay of Game rows are ESPN type 8.
+
+    ESPN's own summary of 401772834 types both ``8`` and starts them where the flag fell
+    (4th & 5 at DAL 10, and 4th & 5 with 57 to go in OT); the fallback used to type them
+    ``2`` End Period with the NEXT snap's spot and down 0.
+    """
+    _, plays = _adapted("fox_nfl_401772834.json", "401772834", "6", "19")
+    # the two rows Fox charges to the club itself ("NYG-NYG"), which carry no event geometry
+    delay = [p for p in plays if "on NYG-NYG, Delay" in p["text"] or "on DAL-DAL, Delay" in p["text"]]
+    assert [p["type"]["id"] for p in delay] == ["8", "8"]
+    assert [(p["start"]["down"], p["start"]["distance"], p["start"]["yardsToEndzone"]) for p in delay] == [
+        (4, 5, 10),
+        (4, 5, 57),
+    ]
+    # the end is the next snap's start: the same 4th down, five yards back
+    assert [(p["end"]["down"], p["end"]["distance"], p["end"]["yardsToEndzone"]) for p in delay] == [
+        (4, 10, 15),
+        (4, 10, 62),
+    ]
+    assert all(p["penalty"]["yards"] == 5 for p in delay)
+    assert not any(p["type"]["id"] == "2" and p["period"]["number"] in (3, 5) and "PENALTY" in p["text"] for p in plays)
+
+
+def test_a_sack_for_a_safety_carries_the_scoring_side():
+    """CLE @ JAX 2024 wk 2 (Fox 10431): "Sacked at JAC End Zone ... SAFETY." is a Safety for CLE."""
+    _, plays = _adapted("fox_nfl_401671635.json", "401671635", "30", "5")
+    (safety,) = [p for p in plays if "SAFETY" in p["text"]]
+    assert safety["type"]["id"] == "20"
+    assert safety["scoringPlay"] is True
+    assert safety["scoringType"]["name"] == "safety"
+    before = plays[plays.index(safety) - 1]
+    # the two points land on the safety row itself, for the away club (CLE), not on the next drive
+    assert safety["awayScore"] == before["awayScore"] + 2
+    assert safety["homeScore"] == before["homeScore"]
+
+
+def test_overtime_boundary_end_state_is_read_from_regulation():
+    """SEA @ NE 2024 wk 2 (Fox 10432): regulation ends on a kneel and Fox emits no end-of-Q4 row.
+
+    Reading through the period change gave the kneel the OT kickoff's spot in the kicking
+    team's frame (65 to go); ESPN's summary of 401671702 ends it at SEA 23, 77 to go, SEA ball.
+    Over the 32 OT games of 2024-25, 23 regulation-ending snaps read into the OT kickoff.
+    """
+    _, plays = _adapted("fox_nfl_401671702.json", "401671702", "17", "26")
+    first_ot = next(i for i, p in enumerate(plays) if p["period"]["number"] == 5)
+    kneel = next(p for p in reversed(plays[:first_ot]) if "kneels" in p["text"])
+    assert kneel["period"]["number"] == 4
+    assert kneel["end"]["team"]["id"] == "26"
+    assert kneel["end"]["yardsToEndzone"] == 77
+    assert kneel["end"]["yardsToEndzone"] != plays[first_ot]["start"]["yardsToEndzone"]
+
+
+@pytest.mark.parametrize(
+    ("name", "espn_id", "home", "away", "needle", "team", "to_go"),
+    [
+        # each row's expected end is ESPN's own summary of the game
+        ("fox_nfl_401671688.json", "401671688", "12", "27", "Araiza punts 40 yards", "27", 79),  # punt, downed
+        ("fox_nfl_401772939.json", "401772939", "14", "25", "Evans kicks 71 yards", "25", 68),  # kickoff, returned
+        ("fox_nfl_401671842.json", "401671842", "28", "1", "Patterson 56 yard field goal", "28", 62),  # missed FG
+    ],
+)
+def test_overtime_boundary_a_kick_ending_regulation_ends_with_the_receiver(
+    name, espn_id, home, away, needle, team, to_go
+):
+    """TB @ KC 2024, SF @ LA 2025, ATL @ WAS 2024: regulation ends on a kick, and a kick hands the ball
+    over -- ESPN ends each in the receiving team's frame at 1st & 10."""
+    _, plays = _adapted(name, espn_id, home, away)
+    (kick,) = [p for p in plays if needle in p["text"] and p["period"]["number"] == 4]
+    assert (kick["end"]["team"]["id"], kick["end"]["yardsToEndzone"], kick["end"]["down"]) == (team, to_go, 1)
+
+
+def test_a_muffed_kick_the_kicking_team_recovers_stays_with_it_when_it_is_the_newest_row():
+    """CAR @ ATL 2025 (Fox 10766): "Fumble RECOVERED by CAR-N.Brooks at ATL 16" on CAR's kickoff.
+
+    The real final is cut after that row, the shape of a live poll taken at that moment: with no next
+    snap the kick's end comes from ``_kick_end``, and ESPN's summary of 401772882 gives the ball to CAR.
+    """
+    from sportsdataverse.nfl.fox_pbp.to_espn_summary import _fox_nfl_to_espn_summary
+
+    fox = _load("fox_nfl_401772882.json")
+    fox["header"]["eventStatus"] = 2
+    for section in fox["pbp"]["sections"]:
+        for group in section["groups"]:
+            group["plays"] = [p for p in group["plays"] if int(p["id"]) <= 100]
+    row = {"espn_event_id": "401772882", "home_espn_team_id": "1", "away_espn_team_id": "29"}
+    summary, _ = _fox_nfl_to_espn_summary(fox, row)
+    drives = summary["drives"]["previous"] + [summary["drives"]["current"]]
+    newest = [p for d in drives for p in d["plays"]][-1]
+    assert "RECOVERED by CAR" in newest["text"]
+    assert newest["end"]["team"]["id"] == "29"
+
+
+def test_a_live_poll_has_no_winner_and_a_final_has_one():
+    """Fox reads ``isLoser: false`` for both clubs on every live poll (B-L59)."""
+    live, _ = _adapted("fox_nfl_live_mid.json", "401872932", "2", "8")
+    final, _ = _adapted("fox_nfl_401671775.json", "401671775", "26", "22")
+    assert [c["winner"] for c in live["header"]["competitions"][0]["competitors"]] == [False, False]
+    assert sorted(c["winner"] for c in final["header"]["competitions"][0]["competitors"]) == [False, True]

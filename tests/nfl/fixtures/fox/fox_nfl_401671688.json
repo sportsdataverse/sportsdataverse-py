@@ -1,0 +1,3905 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 170, 0, 49",
+  "alternateRightColor": "1, 255, 255, 255",
+  "eventStatus": 3,
+  "eventTime": "2024-11-05T01:15:00Z",
+  "id": "10518",
+  "leftColor": "1, 170, 0, 49",
+  "leftTeam": {
+   "imageAltText": "Tampa Bay Buccaneers",
+   "isLoser": true,
+   "longName": "Buccaneers",
+   "name": "TB",
+   "score": 24,
+   "stackedNameBottom": "Buccaneers",
+   "stackedNameTop": "Tampa Bay",
+   "uri": "football/nfl/teams/24"
+  },
+  "rightColor": "1, 255, 255, 255",
+  "rightTeam": {
+   "imageAltText": "Kansas City Chiefs",
+   "isLoser": false,
+   "longName": "Chiefs",
+   "name": "KC",
+   "score": 30,
+   "stackedNameBottom": "Chiefs",
+   "stackedNameTop": "Kansas City",
+   "uri": "football/nfl/teams/11"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "980",
+      "subtitle": "10 plays · 29 yards · 5:44",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Hunt rushed up the middle for 5 yards. Tackled by K.Britt, V.Vea at KC 35.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 65,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 4 yards. Tackled by Z.McCollum at KC 39.",
+        "timeOfPlay": "14:32",
+        "title": "2nd & 5 · KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Hunt rushed right guard for 1 yards. Tackled by W.Gholston at KC 40.",
+        "timeOfPlay": "13:57",
+        "title": "3rd & 1 · KC 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by T.Kelce for 11 yards. Tackled by K.Britt at TB 49.",
+        "timeOfPlay": "13:20",
+        "title": "1st & 10 · KC 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 49,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Hunt rushed left end for 2 yards. Tackled by T.Smith at TB 47.",
+        "timeOfPlay": "12:42",
+        "title": "1st & 10 · TB 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 47,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.Steele rushed up the middle for 5 yards. Tackled by J.Whitehead at TB 42.",
+        "timeOfPlay": "12:05",
+        "title": "2nd & 8 · TB 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 9 yards. Tackled by J.Whitehead at TB 33.",
+        "timeOfPlay": "11:29",
+        "title": "3rd & 3 · TB 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass deep left complete. Catch made by X.Worthy for 32 yards. Out of bounds. The Replay Official reviewed the runner was in bounds and the play was overturned. P.Mahomes steps back to pass. Pass incomplete deep left intended for X.Worthy.",
+        "timeOfPlay": "10:47",
+        "title": "1st & 10 · TB 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by D.Hopkins for 1 yards. Tackled by Z.McCollum at TB 32.",
+        "timeOfPlay": "10:41",
+        "title": "2nd & 10 · TB 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 32,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes steps back to pass. Sacked at TB 41 for -9 yards (V.Vea).",
+        "timeOfPlay": "10:06",
+        "title": "3rd & 9 · TB 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 41,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Araiza punts 35 yards to TB 6, Center-J.Winchester. Fair catch by T.Palmer.",
+        "timeOfPlay": "9:24",
+        "title": "4th & 18 · TB 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 6,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "981",
+      "subtitle": "5 plays · 23 yards · 2:26",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by C.Otton for 9 yards. Tackled by J.Williams at TB 15.",
+        "timeOfPlay": "9:16",
+        "title": "1st & 10 · TB 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 15,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by R.White for 11 yards. Tackled by F.Anudike-Uzomah at TB 26.",
+        "timeOfPlay": "8:37",
+        "title": "2nd & 1 · TB 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Irving rushed up the middle for 3 yards. Tackled by G.Karlaftis at TB 29.",
+        "timeOfPlay": "7:53",
+        "title": "1st & 10 · TB 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 29,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete deep right intended for T.Palmer (J.Reid).",
+        "timeOfPlay": "7:13",
+        "title": "2nd & 7 · TB 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short left intended for C.Otton (G.Karlaftis).",
+        "timeOfPlay": "7:08",
+        "title": "3rd & 7 · TB 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "T.Gill punts 56 yards to KC 15, Center-Z.Triner. M.Hardman returned punt from the KC 15. Pushed out of bounds by J.Russell at KC 45.",
+        "timeOfPlay": "7:04",
+        "title": "4th & 7 · TB 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 85,
+            "yardStart": 29
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 55,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "982",
+      "subtitle": "8 plays · 33 yards · 4:34",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "TB"
+       },
+       {
+        "changed": true,
+        "score": "3",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by D.Hopkins for 8 yards. Pushed out of bounds by T.Smith at TB 47.",
+        "timeOfPlay": "6:50",
+        "title": "1st & 10 · KC 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "22",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by D.Hopkins for 17 yards. Tackled by Z.McCollum; A.Winfield at TB 30.",
+        "timeOfPlay": "6:15",
+        "title": "2nd & 2 · TB 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Hunt rushed up the middle for 3 yards. Tackled by Y.Diaby at TB 27.",
+        "timeOfPlay": "5:40",
+        "title": "1st & 10 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 27,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes scrambles right end for 7 yards. Tackled by J.Russell at TB 20.",
+        "timeOfPlay": "5:07",
+        "title": "2nd & 7 · TB 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 20,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "X.Worthy rushed right end for -10 yards. Tackled by Y.Diaby at TB 30.",
+        "timeOfPlay": "4:27",
+        "title": "1st & 10 · TB 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by D.Hopkins for 4 yards. Tackled by L.David at TB 26.",
+        "timeOfPlay": "3:45",
+        "title": "2nd & 20 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by S.Perine for 4 yards. Tackled by L.David; V.Jones at TB 22.",
+        "timeOfPlay": "3:06",
+        "title": "3rd & 16 · TB 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 22,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "28",
+        "periodOfPlay": "1ST",
+        "playDescription": "H.Butker 40 yard field goal attempt is good, Center-J.Winchester, Holder-M.Araiza.",
+        "timeOfPlay": "2:20",
+        "title": "4th & 12 · TB 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "983",
+      "subtitle": "11 plays · 70 yards · 6:53",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "3",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "30",
+        "periodOfPlay": "1ST",
+        "playDescription": "H.Butker kicks 65 yards from KC 35 to the TB End Zone. Touchback.",
+        "timeOfPlay": "2:16",
+        "title": "KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Irving rushed left end for 0 yards. Tackled by J.Reid; M.Herring at TB 30.",
+        "timeOfPlay": "2:16",
+        "title": "1st & 10 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Irving rushed left guard for 4 yards. Tackled by G.Karlaftis, D.Tranquill at TB 34.",
+        "timeOfPlay": "1:33",
+        "title": "2nd & 10 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Mayfield steps back to pass. Sacked at TB 32 for yards (G.Karlaftis). PENALTY on KC-T.McDuffie, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:54",
+        "title": "3rd & 6 · TB 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 39,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.White rushed right guard for 3 yards. Tackled by N.Bolton at TB 42.",
+        "timeOfPlay": "0:26",
+        "title": "1st & 10 · TB 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "35",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "36",
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on TB-B.Mayfield, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 7 · TB 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 37,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by C.Otton for 11 yards. Pushed out of bounds by D.Tranquill at TB 48.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 12 · TB 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 48,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Shepard rushed right end for 19 yards. Pushed out of bounds by B.Cook at KC 33.",
+        "timeOfPlay": "14:24",
+        "title": "3rd & 1 · TB 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 67,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short middle complete. Catch made by B.Irving for 4 yards. Tackled by T.McDuffie; F.Anudike-Uzomah at KC 29.",
+        "timeOfPlay": "13:54",
+        "title": "1st & 10 · KC 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Irving rushed up the middle for 8 yards. Tackled by N.Bolton; B.Cook at KC 21.",
+        "timeOfPlay": "13:13",
+        "title": "2nd & 6 · KC 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 79,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by C.Otton for 2 yards. Tackled by B.Cook at KC 19.",
+        "timeOfPlay": "12:30",
+        "title": "1st & 10 · KC 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 81,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by B.Irving for -1 yards. Tackled by J.Reid at KC 20.",
+        "timeOfPlay": "11:48",
+        "title": "2nd & 8 · KC 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 80,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by S.Shepard for 13 yards. Pushed out of bounds by B.Cook at KC 7.",
+        "timeOfPlay": "11:08",
+        "title": "3rd & 9 · KC 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 93,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.White rushed left end for 7 yards. TOUCHDOWN.",
+        "timeOfPlay": "10:28",
+        "title": "1st & 7 · KC 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 93
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McLaughlin extra point is good.",
+        "timeOfPlay": "10:23",
+        "title": "KC 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "984",
+      "subtitle": "11 plays · 70 yards · 6:18",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": true,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "10:23",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by T.Kelce for -1 yards. Tackled by Z.McCollum at KC 29.",
+        "timeOfPlay": "10:23",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by J.Watson for 12 yards. Tackled by J.Hayes at KC 41.",
+        "timeOfPlay": "9:49",
+        "title": "2nd & 11 · KC 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Hunt rushed left end for 3 yards. Tackled by V.Vea at KC 44.",
+        "timeOfPlay": "9:15",
+        "title": "1st & 10 · KC 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 56,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes steps back to pass. Sacked at KC 41 for -3 yards (V.Vea).",
+        "timeOfPlay": "8:40",
+        "title": "2nd & 7 · KC 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 59,
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "8:18",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "53",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by J.Watson for 19 yards. Tackled by A.Winfield at TB 40.",
+        "timeOfPlay": "8:18",
+        "title": "3rd & 10 · KC 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 40,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short left complete [C.Braswell]. Catch made by T.Kelce for 2 yards. Tackled by T.Smith at TB 38.",
+        "timeOfPlay": "7:40",
+        "title": "1st & 10 · TB 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 38,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "X.Worthy rushed left end for 0 yards. Tackled by L.David at TB 38.",
+        "timeOfPlay": "6:59",
+        "title": "2nd & 8 · TB 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass deep left complete [C.Kancey]. Catch made by D.Hopkins for 35 yards. Tackled by J.Hayes at TB 3.",
+        "timeOfPlay": "6:18",
+        "title": "3rd & 8 · TB 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 3,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Hunt rushed right guard for 0 yards. Tackled by J.Whitehead, A.Nelson at TB 3.",
+        "timeOfPlay": "5:31",
+        "title": "1st & 3 · TB 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 3,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Hunt rushed right guard for 2 yards. Tackled by K.Britt at TB 1.",
+        "timeOfPlay": "4:47",
+        "title": "2nd & 3 · TB 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by D.Hopkins for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "4:09",
+        "title": "3rd & 1 · TB 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "H.Butker extra point is good.",
+        "timeOfPlay": "4:05",
+        "title": "TB 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "985",
+      "subtitle": "3 plays · 6 yards · 2:18",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "H.Butker kicks 65 yards from KC 35 to the TB End Zone. Touchback.",
+        "timeOfPlay": "4:05",
+        "title": "KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 20,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Irving rushed right tackle for 3 yards. Tackled by C.Jones at TB 23.",
+        "timeOfPlay": "4:05",
+        "title": "1st & 10 · TB 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield steps back to pass. Sacked at TB 20 for -3 yards (G.Karlaftis).",
+        "timeOfPlay": "3:24",
+        "title": "2nd & 7 · TB 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 20,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by R.White for 6 yards. Tackled by J.Uche at TB 26.",
+        "timeOfPlay": "2:43",
+        "title": "3rd & 10 · TB 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "67",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Gill punts 57 yards to KC 17, Center-Z.Triner. Downed by C.Izien.",
+        "timeOfPlay": "2:00",
+        "title": "4th & 4 · TB 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 83,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "986",
+      "subtitle": "6 plays · 37 yards · 0:52",
+      "title": "FUMBLE",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by S.Perine for 11 yards. Tackled by L.David at KC 28.",
+        "timeOfPlay": "1:47",
+        "title": "1st & 10 · KC 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 72,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short left intended for X.Worthy (J.Hayes).",
+        "timeOfPlay": "1:31",
+        "title": "1st & 10 · KC 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short right intended for [V.Vea].",
+        "timeOfPlay": "1:24",
+        "title": "2nd & 10 · KC 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass deep right complete. Catch made by T.Kelce for 20 yards. Tackled by T.Smith at KC 48.",
+        "timeOfPlay": "1:18",
+        "title": "3rd & 10 · KC 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "playDescription": "Timeout #1 by KC.",
+        "timeOfPlay": "1:10",
+        "title": "Timeout"
+       },
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete deep right intended for J.Watson.",
+        "timeOfPlay": "1:10",
+        "title": "1st & 10 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by T.Kelce for 6 yards. T.Kelce FUMBLES, forced by T.Smith. Fumble RECOVERED by TB-J.Hayes at TB 45.",
+        "timeOfPlay": "1:03",
+        "title": "2nd & 10 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 45,
+            "yardStart": 51
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 45,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "987",
+      "subtitle": "4 plays · 6 yards · 0:30",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "75",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by C.Otton for 4 yards. Tackled by C.Conner at TB 49.",
+        "timeOfPlay": "0:55",
+        "title": "1st & 10 · TB 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 49,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "76",
+        "playDescription": "Timeout #1 by TB.",
+        "timeOfPlay": "0:50",
+        "title": "Timeout"
+       },
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short left intended for S.Shepard.",
+        "timeOfPlay": "0:50",
+        "title": "2nd & 6 · TB 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "78",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield scrambles up the middle for 2 yards. Tackled by J.Uche at KC 49. PENALTY on TB-C.Mauch, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "0:46",
+        "title": "3rd & 6 · TB 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 41,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Mayfield scrambles right end for 10 yards. Pushed out of bounds by D.Tranquill; G.Karlaftis at KC 49.",
+        "timeOfPlay": "0:41",
+        "title": "3rd & 14 · TB 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Gill punts 32 yards to KC 17, Center-Z.Triner. Fair catch by M.Hardman.",
+        "timeOfPlay": "0:32",
+        "title": "4th & 4 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 83,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "988",
+      "subtitle": "3 plays · 6 yards · 0:25",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by S.Perine for 3 yards. Pushed out of bounds by T.Smith at KC 20.",
+        "timeOfPlay": "0:25",
+        "title": "1st & 10 · KC 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 80,
+            "yardStart": 83
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Perine rushed up the middle for 10 yards. Tackled by T.Smith at KC 30.",
+        "timeOfPlay": "0:16",
+        "title": "2nd & 7 · KC 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "playDescription": "Timeout #2 by KC.",
+        "timeOfPlay": "0:10",
+        "title": "Timeout"
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "P.Mahomes steps back to pass. Sacked at KC 23 for -7 yards (C.Kancey).",
+        "timeOfPlay": "0:10",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 77,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "85",
+        "playDescription": "End Quarter 2",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "989",
+      "subtitle": "6 plays · 51 yards · 3:24",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "14",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "86",
+        "periodOfPlay": "3RD",
+        "playDescription": "H.Butker kicks 62 yards from KC 35 to the TB 3. B.Irving returns the kickoff. Tackled by L.Chenal; C.Roland-Wallace at TB 49.",
+        "timeOfPlay": "15:00",
+        "title": "KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 3,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 49,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "periodOfPlay": "3RD",
+        "playDescription": "S.Tucker rushed left end for 3 yards. Tackled by D.Tranquill at KC 48.",
+        "timeOfPlay": "14:50",
+        "title": "1st & 10 · TB 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "88",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by S.Tucker for 6 yards. Tackled by L.Chenal at KC 42.",
+        "timeOfPlay": "14:09",
+        "title": "2nd & 7 · KC 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "89",
+        "periodOfPlay": "3RD",
+        "playDescription": "S.Tucker rushed left end for 5 yards. Tackled by J.Williams at KC 37. PENALTY on KC-J.Williams, Horse Collar Tackle, 15 yards, accepted.",
+        "timeOfPlay": "13:23",
+        "title": "3rd & 1 · KC 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 78,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "90",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by R.Jarrett for 9 yards. Tackled by J.Williams at KC 13.",
+        "timeOfPlay": "13:02",
+        "title": "1st & 10 · KC 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 87,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "periodOfPlay": "3RD",
+        "playDescription": "S.Shepard rushed right end for 2 yards. Tackled by J.Reid at KC 11.",
+        "timeOfPlay": "12:22",
+        "title": "2nd & 1 · KC 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 89,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "92",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by C.Otton for 11 yards. TOUCHDOWN.",
+        "timeOfPlay": "11:40",
+        "title": "1st & 10 · KC 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 89
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McLaughlin extra point is good.",
+        "timeOfPlay": "11:36",
+        "title": "KC 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "990",
+      "subtitle": "3 plays · -12 yards · 1:05",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "95",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "11:36",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short right intended for N.Gray.",
+        "timeOfPlay": "11:36",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short middle intended for T.Kelce (T.Smith).",
+        "timeOfPlay": "11:30",
+        "title": "2nd & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes steps back to pass. Sacked at KC 18 for -12 yards (C.Kancey).",
+        "timeOfPlay": "11:23",
+        "title": "3rd & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 82,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "99",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Araiza punts 49 yards to TB 33, Center-J.Winchester. T.Palmer returned punt from the TB 33. Tackled by J.Cochrane at TB 41.",
+        "timeOfPlay": "10:44",
+        "title": "4th & 22 · KC 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 33,
+            "yardStart": 82
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 41,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "991",
+      "subtitle": "8 plays · 30 yards · 4:41",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass deep left complete. Catch made by C.Otton for 18 yards. Tackled by J.Hicks at KC 41.",
+        "timeOfPlay": "10:31",
+        "title": "1st & 10 · TB 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Irving rushed right end for 4 yards. Tackled by N.Bolton; D.Tranquill at KC 37.",
+        "timeOfPlay": "9:55",
+        "title": "1st & 10 · KC 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by R.White for -1 yards. Tackled by J.Hicks, T.Wharton at KC 38.",
+        "timeOfPlay": "9:16",
+        "title": "2nd & 6 · KC 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on TB-L.Goedeke, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "8:31",
+        "title": "3rd & 7 · KC 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 57,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by C.Otton for 15 yards. Tackled by C.Roland-Wallace at KC 28.",
+        "timeOfPlay": "8:16",
+        "title": "3rd & 12 · KC 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 72,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "7:48",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Irving rushed left end for yards. Tackled by T.McDuffie at KC 21. PENALTY on TB-T.Wirfs, Offensive Facemask, 15 yards, accepted. No Play.",
+        "timeOfPlay": "7:48",
+        "title": "1st & 10 · KC 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 57,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short right intended for R.Miller.",
+        "timeOfPlay": "7:24",
+        "title": "1st & 25 · KC 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by B.Irving for 7 yards. Tackled by D.Tranquill at KC 36.",
+        "timeOfPlay": "7:21",
+        "title": "2nd & 25 · KC 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by C.Otton for 7 yards. Tackled by T.Wharton at KC 29.",
+        "timeOfPlay": "6:38",
+        "title": "3rd & 18 · KC 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 71,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McLaughlin 47 yard field goal attempt is good, Center-Z.Triner, Holder-T.Gill.",
+        "timeOfPlay": "5:55",
+        "title": "4th & 11 · KC 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "992",
+      "subtitle": "12 plays · 70 yards · 6:36",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": true,
+        "score": "17",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "5:50",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed up the middle for 7 yards. Tackled by A.Winfield; L.David at KC 37.",
+        "timeOfPlay": "5:50",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed left guard for 9 yards. Tackled by K.Britt; C.Brewer at KC 46.",
+        "timeOfPlay": "5:20",
+        "title": "2nd & 3 · KC 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 54,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed left guard for 4 yards. Tackled by K.Britt at KC 50.",
+        "timeOfPlay": "4:43",
+        "title": "1st & 10 · KC 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed right end for 0 yards. Tackled by A.Winfield; J.Tryon-Shoyinka at KC 50.",
+        "timeOfPlay": "4:07",
+        "title": "2nd & 6 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 50,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by M.Hardman for 7 yards. Tackled by J.Hayes at TB 43.",
+        "timeOfPlay": "3:26",
+        "title": "3rd & 6 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by T.Kelce for 8 yards. Tackled by J.Hayes at TB 35.",
+        "timeOfPlay": "2:48",
+        "title": "1st & 10 · TB 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed up the middle for yards. Tackled by V.Vea at TB 34. PENALTY on KC-D.Hopkins, Offensive Illegal Block Above the Waist, 15 yards, offset. PENALTY on TB-T.Smith, Unnecessary Roughness / Defense, 15 yards, offset. No Play.",
+        "timeOfPlay": "2:13",
+        "title": "2nd & 2 · TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 35,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed left guard for 15 yards. Tackled by A.Winfield; J.Hayes at TB 20.",
+        "timeOfPlay": "1:57",
+        "title": "2nd & 2 · TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 20,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "1:37",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed up the middle for 8 yards. Tackled by J.Whitehead; A.Winfield at TB 12.",
+        "timeOfPlay": "1:37",
+        "title": "1st & 10 · TB 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 12,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "124",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Hunt rushed up the middle for 4 yards. Tackled by K.Britt; J.Whitehead at TB 8.",
+        "timeOfPlay": "1:04",
+        "title": "2nd & 2 · TB 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 8,
+            "yardStart": 12
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by M.Hardman for -2 yards. Tackled by Y.Diaby at TB 10.",
+        "timeOfPlay": "0:26",
+        "title": "1st & 8 · TB 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 9,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 3 yards. Tackled by L.David at TB 7.",
+        "timeOfPlay": "15:00",
+        "title": "2nd & 10 · TB 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 7,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "128",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by S.Perine for 7 yards. TOUCHDOWN.",
+        "timeOfPlay": "14:21",
+        "title": "3rd & 7 · TB 7",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 7
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "129",
+        "periodOfPlay": "4TH",
+        "playDescription": "H.Butker extra point is good.",
+        "timeOfPlay": "14:14",
+        "title": "TB 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "993",
+      "subtitle": "3 plays · 8 yards · 1:31",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "17",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "131",
+        "periodOfPlay": "4TH",
+        "playDescription": "H.Butker kicks 65 yards from KC 35 to the TB End Zone. Touchback.",
+        "timeOfPlay": "14:14",
+        "title": "KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "4TH",
+        "playDescription": "S.Tucker rushed right guard for 3 yards. Tackled by J.Reid at TB 33.",
+        "timeOfPlay": "14:14",
+        "title": "1st & 10 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 33,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short middle intended for C.Otton.",
+        "timeOfPlay": "13:37",
+        "title": "2nd & 7 · TB 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "134",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield scrambles left end for 5 yards. Tackled by C.Roland-Wallace; B.Cook at TB 38.",
+        "timeOfPlay": "13:33",
+        "title": "3rd & 7 · TB 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "135",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Gill punts 40 yards to KC 22, Center-Z.Triner. Fair catch by M.Hardman.",
+        "timeOfPlay": "12:48",
+        "title": "4th & 2 · TB 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 78,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "994",
+      "subtitle": "15 plays · 78 yards · 8:26",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": true,
+        "score": "24",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "136",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed right guard for 3 yards. Tackled by Y.Diaby; Z.McCollum at KC 25.",
+        "timeOfPlay": "12:43",
+        "title": "1st & 10 · KC 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by T.Kelce for 5 yards. Tackled by A.Winfield at KC 30.",
+        "timeOfPlay": "12:12",
+        "title": "2nd & 7 · KC 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by T.Kelce for 7 yards. Tackled by J.Hayes at KC 37.",
+        "timeOfPlay": "11:29",
+        "title": "3rd & 2 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 63,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed right end for 6 yards. Tackled by J.Whitehead at KC 43.",
+        "timeOfPlay": "10:52",
+        "title": "1st & 10 · KC 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 57,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed left guard for 3 yards. Tackled by V.Vea at KC 46.",
+        "timeOfPlay": "10:16",
+        "title": "2nd & 4 · KC 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 54,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Steele rushed up the middle for 0 yards. Tackled by V.Vea at KC 46.",
+        "timeOfPlay": "9:36",
+        "title": "3rd & 1 · KC 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 54,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed right guard for 3 yards. Tackled by A.Winfield; V.Vea at KC 49.",
+        "timeOfPlay": "8:50",
+        "title": "4th & 1 · KC 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by M.Hardman for 12 yards. Pushed out of bounds by T.Smith at TB 39.",
+        "timeOfPlay": "8:13",
+        "title": "1st & 10 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on TB-C.Brewer, Defensive Offside, 5 yards, accepted. No Play.",
+        "timeOfPlay": "7:38",
+        "title": "1st & 10 · TB 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 34,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "145",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed up the middle for 0 yards. Tackled by L.Hall; W.Gholston at TB 34.",
+        "timeOfPlay": "7:38",
+        "title": "1st & 5 · TB 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short left intended for.",
+        "timeOfPlay": "7:05",
+        "title": "2nd & 5 · TB 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short middle complete. Catch made by J.Watson for 12 yards. Tackled by A.Winfield at TB 22.",
+        "timeOfPlay": "6:57",
+        "title": "3rd & 5 · TB 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 22,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed left guard for 13 yards. Tackled by J.Whitehead; Z.McCollum at TB 9.",
+        "timeOfPlay": "6:22",
+        "title": "1st & 10 · TB 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 9,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "149",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed up the middle for 0 yards. Tackled by V.Vea, J.Russell at TB 9.",
+        "timeOfPlay": "5:41",
+        "title": "1st & 9 · TB 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 9,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.Steele rushed left guard for 4 yards. Tackled by J.Russell at TB 5.",
+        "timeOfPlay": "5:02",
+        "title": "2nd & 9 · TB 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 5,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by D.Hopkins for 5 yards. TOUCHDOWN.",
+        "timeOfPlay": "4:20",
+        "title": "3rd & 5 · TB 5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "H.Butker extra point is good.",
+        "timeOfPlay": "4:17",
+        "title": "TB 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "995",
+      "subtitle": "3 plays · -6 yards · 1:38",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "H.Butker kicks 65 yards from KC 35 to the TB End Zone. Touchback.",
+        "timeOfPlay": "4:17",
+        "title": "KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "155",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Irving rushed right guard for 2 yards. Tackled by C.Jones at TB 32.",
+        "timeOfPlay": "4:17",
+        "title": "1st & 10 · TB 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield steps back to pass. Sacked at TB 24 for -8 yards (D.Tranquill; F.Anudike-Uzomah).",
+        "timeOfPlay": "3:37",
+        "title": "2nd & 8 · TB 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 24,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete deep left intended for R.Miller (C.Conner).",
+        "timeOfPlay": "2:54",
+        "title": "3rd & 16 · TB 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Gill punts 31 yards to KC 45, Center-Z.Triner. Downed by TB. PENALTY on KC-C.Roland-Wallace, Defensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "2:49",
+        "title": "4th & 16 · TB 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 65,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "996",
+      "subtitle": "3 plays · -1 yard · 0:23",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed right guard for 1 yards. Tackled by L.David at KC 36.",
+        "timeOfPlay": "2:39",
+        "title": "1st & 10 · KC 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 64,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "playDescription": "Timeout #1 by TB.",
+        "timeOfPlay": "2:33",
+        "title": "Timeout"
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Hunt rushed right end for -2 yards. Tackled by A.Nelson at KC 34.",
+        "timeOfPlay": "2:33",
+        "title": "2nd & 9 · KC 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "playDescription": "Timeout #2 by TB.",
+        "timeOfPlay": "2:29",
+        "title": "Timeout"
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short right intended for S.Perine.",
+        "timeOfPlay": "2:29",
+        "title": "3rd & 11 · KC 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Araiza punts 47 yards to TB 19, Center-J.Winchester. T.Palmer returned punt from the TB 19. Pushed out of bounds by S.Perine at TB 29.",
+        "timeOfPlay": "2:26",
+        "title": "4th & 11 · KC 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 19,
+            "yardStart": 66
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 29,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "997",
+      "subtitle": "10 plays · 71 yards · 1:49",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/24"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "24",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "166",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.White rushed left end for yards. Tackled by C.Roland-Wallace; N.Bolton at TB 37. PENALTY on TB-B.Bredeson, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "2:16",
+        "title": "1st & 10 · TB 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 19,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by T.Palmer for 14 yards. Tackled by T.McDuffie at TB 33.",
+        "timeOfPlay": "2:08",
+        "title": "1st & 20 · TB 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass deep left complete [C.Jones]. Catch made by S.Shepard for 18 yards. Tackled by C.Roland-Wallace at KC 49.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 6 · TB 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 51,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short right intended for T.Palmer.",
+        "timeOfPlay": "1:41",
+        "title": "1st & 10 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by S.Shepard for 9 yards. S.Shepard ran out of bounds. The Replay Official reviewed the pass completion and the play was upheld.",
+        "timeOfPlay": "1:34",
+        "title": "2nd & 10 · KC 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 60,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.White rushed up the middle for 9 yards. Tackled by C.Roland-Wallace at KC 31.",
+        "timeOfPlay": "1:30",
+        "title": "3rd & 1 · KC 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass short left complete. Catch made by S.Shepard for 8 yards. Tackled by C.Roland-Wallace at KC 23.",
+        "timeOfPlay": "1:11",
+        "title": "1st & 10 · KC 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 77,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "174",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield scrambles left end for 3 yards. Pushed out of bounds by F.Anudike-Uzomah at KC 20.",
+        "timeOfPlay": "0:51",
+        "title": "2nd & 2 · KC 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 80,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by T.Palmer for 19 yards. Tackled by B.Cook, J.Williams at KC 1.",
+        "timeOfPlay": "0:44",
+        "title": "1st & 10 · KC 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 99,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "playDescription": "Timeout #3 by TB.",
+        "timeOfPlay": "0:33",
+        "title": "Timeout"
+       },
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield steps back to pass. Pass incomplete short right intended for C.Otton (T.McDuffie).",
+        "timeOfPlay": "0:33",
+        "title": "1st & 1 · KC 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Mayfield pass short right complete. Catch made by R.Miller for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "0:30",
+        "title": "2nd & 1 · KC 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.McLaughlin extra point is good.",
+        "timeOfPlay": "0:27",
+        "title": "KC 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "998",
+      "subtitle": "3 plays · 9 yards · 0:27",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "TB"
+       },
+       {
+        "changed": false,
+        "score": "24",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "0:27",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by P.Hendershot for 9 yards. Tackled by J.Russell; Z.McCollum at KC 39.",
+        "timeOfPlay": "0:27",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "playDescription": "Timeout #1 by KC.",
+        "timeOfPlay": "0:19",
+        "title": "Timeout"
+       },
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short middle intended for T.Kelce (K.Britt).",
+        "timeOfPlay": "0:19",
+        "title": "2nd & 1 · KC 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "P.Mahomes steps back to pass. Pass incomplete short left intended for D.Hopkins.",
+        "timeOfPlay": "0:14",
+        "title": "3rd & 1 · KC 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Araiza punts 40 yards to TB 21, Center-J.Winchester. Downed by KC.",
+        "timeOfPlay": "0:13",
+        "title": "4th & 1 · KC 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 21,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "999",
+      "subtitle": "10 plays · 70 yards · 5:52",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/11"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "24",
+        "title": "TB"
+       },
+       {
+        "changed": true,
+        "score": "30",
+        "title": "KC"
+       }
+      ],
+      "plays": [
+       {
+        "id": "187",
+        "periodOfPlay": "OT",
+        "playDescription": "T.Gill kicks 65 yards from TB 35 to the KC End Zone. Touchback.",
+        "timeOfPlay": "10:00",
+        "title": "TB 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by K.Hunt for 11 yards. Pushed out of bounds by A.Winfield at KC 41.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 10 · KC 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "189",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Hunt rushed left guard for 5 yards. Tackled by V.Vea, Y.Diaby at KC 46.",
+        "timeOfPlay": "9:28",
+        "title": "1st & 10 · KC 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 54,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "190",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 7 yards. Tackled by J.Whitehead at TB 47.",
+        "timeOfPlay": "8:50",
+        "title": "2nd & 5 · KC 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "191",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Hunt rushed left end for 4 yards. Tackled by A.Winfield; L.David at TB 43.",
+        "timeOfPlay": "8:12",
+        "title": "1st & 10 · TB 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes pass short left complete. Catch made by D.Hopkins for 15 yards. Pushed out of bounds by A.Winfield at TB 28.",
+        "timeOfPlay": "7:29",
+        "title": "2nd & 6 · TB 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 28,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "193",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes scrambles right end for 2 yards. Tackled by K.Britt at TB 26.",
+        "timeOfPlay": "6:53",
+        "title": "1st & 10 · TB 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 26,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "194",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 15 yards. Tackled by K.Britt at TB 11.",
+        "timeOfPlay": "6:14",
+        "title": "2nd & 8 · TB 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 11,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Hunt rushed left guard for 5 yards. Tackled by K.Britt; V.Vea at TB 6.",
+        "timeOfPlay": "5:40",
+        "title": "1st & 10 · TB 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 6,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "196",
+        "playDescription": "Timeout #1 by KC.",
+        "timeOfPlay": "4:57",
+        "title": "Timeout"
+       },
+       {
+        "id": "197",
+        "periodOfPlay": "OT",
+        "playDescription": "P.Mahomes pass short right complete. Catch made by T.Kelce for 4 yards. Tackled by J.Whitehead; T.Smith at TB 2.",
+        "timeOfPlay": "4:57",
+        "title": "2nd & 5 · TB 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 2,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "198",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Hunt rushed right guard for 2 yards. TOUCHDOWN.",
+        "timeOfPlay": "4:15",
+        "title": "3rd & 1 · TB 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "199",
+        "playDescription": "End Game",
+        "timeOfPlay": "4:08",
+        "title": "Game End"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

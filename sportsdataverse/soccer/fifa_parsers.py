@@ -39,6 +39,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
+from sportsdataverse.errors import _data_only
 from sportsdataverse.soccer._frames import as_output, is_id_name, rows_to_frame, to_utf8_ids
 
 __all__ = ["parse_fifa"]
@@ -73,6 +74,7 @@ def _as_rows(raw: Union[Dict[str, Any], List[Any], None]) -> List[Any]:
     return [raw]
 
 
+@_data_only
 def parse_fifa(
     raw: Union[Dict[str, Any], List[Any], None],
     *,

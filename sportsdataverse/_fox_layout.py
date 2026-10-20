@@ -406,9 +406,12 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
         game_id: Fox Bifrost event id, stamped on every row as ``str``.
 
     Returns:
-        One dict per play with drive context (``drive_id``, ``drive_result``,
-        ``drive_summary``, ``drive_team``) plus the play fields. A payload with
-        no ``pbp`` section yields ``[]``.
+        One dict per play, **oldest first**, with drive context (``drive_id``,
+        ``drive_result``, ``drive_summary``, ``drive_team``) plus the play fields.
+        ``play_team`` is the club code (``"DET"``) of the drive group Fox files the
+        play under (the possession team; on a kickoff, the receiving team) and
+        ``play_player`` the athlete Fox credits the play to. A payload with no
+        ``pbp`` section yields ``[]``.
 
     Raises:
         None: a malformed or empty payload returns ``[]`` rather than raising.
@@ -419,11 +422,20 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
             from sportsdataverse._fox_layout import fox_get, parse_drive_pbp
             rows = parse_drive_pbp(fox_get("nfl/event/1234/data"), 1234)
     """
+    header = raw.get("header") or {}
+    club = {
+        _uri_id((header.get(k) or {}).get("uri")): (header.get(k) or {}).get("name") for k in ("leftTeam", "rightTeam")
+    }
+    # never key the map on None: a header team and a drive both missing their uri are not a match
+    club.pop(None, None)
     rows: List[Dict] = []
     for sec in (raw.get("pbp", {}) or {}).get("sections", []) or []:
         quarter = sec.get("title")
         for drv in sec.get("groups", []) or []:
+            link = drv.get("entityLink") or {}
+            team = club.get(_uri_id(link.get("contentUri") or link.get("uri")))
             for p in drv.get("plays", []) or []:
+                player = p.get("entityLink") or {}
                 rows.append(
                     {
                         "game_id": str(game_id),
@@ -431,15 +443,19 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
                         "drive_id": drv.get("id"),
                         "drive_result": drv.get("title"),
                         "drive_summary": drv.get("subtitle"),
-                        "drive_team": (drv.get("entityLink") or {}).get("title"),
+                        "drive_team": link.get("title"),
                         "play_id": p.get("id"),
                         "period": p.get("periodOfPlay"),
                         "clock": p.get("timeOfPlay"),
                         "field_position": p.get("title"),
                         "play_text": p.get("playDescription"),
-                        "play_team": (p.get("entityLink") or {}).get("title"),
+                        "play_team": team,
+                        "play_player": player.get("title"),
                     }
                 )
+    # Fox serves the whole pbp tree newest-first until FINAL; the play id is one ascending
+    # 1..N sequence over the game, so sorting on it gives the same order live and final.
+    rows.sort(key=lambda r: int(r["play_id"]) if str(r["play_id"]).isdigit() else float("inf"))
     return rows
 
 

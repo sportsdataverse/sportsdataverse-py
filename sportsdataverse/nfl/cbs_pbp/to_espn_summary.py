@@ -1066,8 +1066,11 @@ def _cbs_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             raise SourceUnavailable(f"nfl {espn_id}: no CBS game id on the week scoreboard page")
 
     if payload is None:
+        # a line the caller already supplies makes CBS's odds unneeded, so a failed odds fetch must
+        # not hand the whole game over (the fetch raises on any non-404 failure)
+        known_line = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)
         try:
-            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives", "odds"))
+            payload = _fetch_cbs_game(str(cbs_game_id), optional=("drives",) if known_line else ("drives", "odds"))
         except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"cbs napi fetch failed: {type(exc).__name__}: {exc}") from exc
 
