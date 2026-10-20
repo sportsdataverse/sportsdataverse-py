@@ -1091,7 +1091,7 @@ misspellings(None)  # {} (generic fallback)
 
 ### ncaa_wbb_box_scores {#ncaa_wbb_box_scores}
 
-`ncaa_wbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False) -> "Union['pl.DataFrame', 'pd.DataFrame']"`
+`ncaa_wbb_box_scores(game_ids: 'Union[str, int, Iterable[Union[str, int]]]', *, multi_games: 'bool' = False, fetcher: 'Optional[Any]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "Union['pl.DataFrame', 'pd.DataFrame']"`
 
 Scrape WBB per-player box scores (wbigballR `get_box_scores`/`scrape_box`).
 
@@ -1109,6 +1109,7 @@ markup no longer ships).
 | `multi_games` | `bool` | `False` | Aggregate per player across all games (fixed grouping on player/clean_name/team). |
 | `fetcher` | `Optional[Any]` | `None` | Optional injected fetcher exposing `fetch_game_individual_stats` (tests/offline). Defaults to a fresh `NcaaFetcher.with_browser()` context per call. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default) raises `AssetFetchError` on a failed fetch; `"skip"` skips it and adds a `scrape_status` column (see `~sportsdataverse.mbb.mbb_ncaa_box_stats.ncaa_mbb_box_scores`). |
 
 **Returns**
 

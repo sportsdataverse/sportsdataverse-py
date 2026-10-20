@@ -528,7 +528,7 @@ sched = espn_mbb_schedule(dates=season)
 
 ### ncaa_mbb_play_by_play {#ncaa_mbb_play_by_play}
 
-`ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
+`ncaa_mbb_play_by_play(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "'Union[pl.DataFrame, Any]'"`
 
 Scrape many MBB games' play-by-play (bigballR `get_play_by_play`).
 
@@ -543,10 +543,11 @@ row-binds the survivors, and logs the removed ids.
 | `game_ids` | `Sequence[object]` |  | NCAA contest ids; `None`/NaN entries are dropped. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `parse_failed: ...` or `empty`). |
 
 **Returns**
 
-Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did).
+Row-bound play-by-play for every game that scraped successfully (zero-row contract frame when none did). A missing game or a page the parser cannot read is dropped and logged (bigballR parity).
 
 | col_name | type | description |
 |---|---|---|

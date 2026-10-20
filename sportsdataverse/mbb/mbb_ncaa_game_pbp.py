@@ -48,6 +48,8 @@ from typing import Any, Callable, Literal, Optional, overload, Protocol, Sequenc
 
 import polars as pl
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
+
 from .mbb_ncaa_html import parse_html
 
 logger = logging.getLogger(__name__)
@@ -1112,13 +1114,46 @@ def _fetch_and_parse(
     fetcher: _SupportsFetchGamePbp,
     game_id: object,
     period_model: PeriodModel,
-) -> pl.DataFrame:
+    errors: str = "raise",
+) -> "tuple[pl.DataFrame, str]":
+    """One game's frame and its status: ``ok``, ``empty``, or why it has no rows.
+
+    A failed fetch (``AssetFetchError``: a ban, an exhausted pool, a challenge) raises
+    unless ``errors="skip"``; swallowing it made a ban read as a smaller season. A
+    missing game (``NoDataError``) or a parser crash keeps R's tryCatch(-> NULL) parity.
+    """
     try:
         html = fetcher.fetch_game_pbp(game_id)
-        return parse_ncaa_bb_game_pbp(html, str(game_id), period_model=_resolve_period_model(period_model, html))
-    except Exception:  # R tryCatch(-> NULL) parity (:1870-1872)
+        df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=_resolve_period_model(period_model, html))
+    except AssetFetchError as exc:
+        if errors == "raise":
+            raise
+        logger.warning("fetch failed for game id %s: %s", game_id, exc)
+        return _empty_pbp(), f"fetch_failed: {exc}"
+    except Exception as exc:  # R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
-        return _empty_pbp()
+        return _empty_pbp(), f"{'no_data' if isinstance(exc, NoDataError) else 'parse_failed'}: {exc}"
+    return df, "ok" if df.height else "empty"
+
+
+def _with_status(out: pl.DataFrame, removed: "list[tuple[str, str]]") -> pl.DataFrame:
+    """``errors="skip"`` output: ``scrape_status`` is ``ok`` on every row, plus one row per dropped game saying why.
+
+    Not ``status``: the play-by-play contract already has a ``status`` column (the game's state).
+    """
+    out = out.with_columns(pl.lit("ok").alias("scrape_status"))
+    if not removed:
+        return out
+    stub = pl.DataFrame(
+        {"game_id": [g for g, _ in removed], "scrape_status": [why for _, why in removed]},
+        schema={"game_id": pl.Utf8, "scrape_status": pl.Utf8},
+    )
+    return pl.concat([out, stub], how="diagonal_relaxed")
+
+
+def _check_errors(errors: str) -> None:
+    if errors not in ("raise", "skip"):
+        raise ValueError(f"errors must be 'raise' or 'skip', not {errors!r}")
 
 
 def _ncaa_bb_game_pbp(
@@ -1146,21 +1181,23 @@ def _ncaa_bb_play_by_play(
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     period_model: PeriodModel = _MBB_PERIOD_MODEL,
     return_as_pandas: bool = False,
+    errors: str = "raise",
 ) -> "Union[pl.DataFrame, Any]":
     """League-parameterized multi-game driver (bigballR ``get_play_by_play``)."""
+    _check_errors(errors)
     # drop NA ids (R :1859); `x == x` filters float NaN
     ids = [g for g in game_ids if g is not None and g == g]
 
-    def _run(f: _SupportsFetchGamePbp) -> "tuple[list[pl.DataFrame], list[str]]":
+    def _run(f: _SupportsFetchGamePbp) -> "tuple[list[pl.DataFrame], list[tuple[str, str]]]":
         frames: "list[pl.DataFrame]" = []
-        removed: "list[str]" = []
+        removed: "list[tuple[str, str]]" = []
         for gid in ids:
-            df = _fetch_and_parse(f, gid, period_model)
+            df, status = _fetch_and_parse(f, gid, period_model, errors)
             if df.height == 0:
                 # retry a NULL/empty scrape once (R :1873-1878)
-                df = _fetch_and_parse(f, gid, period_model)
+                df, status = _fetch_and_parse(f, gid, period_model, errors)
             if df.height == 0:
-                removed.append(str(gid))
+                removed.append((str(gid), status))
             else:
                 frames.append(df)
         return frames, removed
@@ -1174,8 +1211,10 @@ def _ncaa_bb_play_by_play(
         frames, removed = _run(fetcher)
 
     if removed:
-        logger.warning("%s removed", ",".join(removed))
+        logger.warning("%s removed", ",".join(g for g, _ in removed))
     out = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_pbp()
+    if errors == "skip":
+        out = _with_status(out, removed)
     return out.to_pandas() if return_as_pandas else out
 
 
@@ -1254,6 +1293,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = ...,
     return_as_pandas: Literal[False] = ...,
+    errors: Literal["raise", "skip"] = ...,
 ) -> pl.DataFrame: ...
 
 
@@ -1263,6 +1303,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = ...,
     return_as_pandas: Literal[True],
+    errors: Literal["raise", "skip"] = ...,
 ) -> Any: ...
 
 
@@ -1271,6 +1312,7 @@ def ncaa_mbb_play_by_play(
     *,
     fetcher: Optional[_SupportsFetchGamePbp] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> "Union[pl.DataFrame, Any]":
     """Scrape many MBB games' play-by-play (bigballR ``get_play_by_play``).
 
@@ -1283,10 +1325,21 @@ def ncaa_mbb_play_by_play(
         fetcher: Optional injected fetcher exposing ``fetch_game_pbp``.
             Defaults to one shared ``NcaaFetcher.with_browser()`` context.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default): a failed fetch (a ban, an exhausted
+            proxy pool, an uncleared challenge) raises ``AssetFetchError``.
+            ``"skip"``: it is dropped like a missing game, and the frame gains a
+            ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
+            dropped game (``game_id`` and why: ``fetch_failed: ...``,
+            ``no_data: ...``, ``parse_failed: ...`` or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully
-        (zero-row contract frame when none did).
+        (zero-row contract frame when none did). A missing game or a page
+        the parser cannot read is dropped and logged (bigballR parity).
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: ``errors`` is not ``"raise"`` or ``"skip"``.
 
     Example:
         Quick start::
@@ -1309,4 +1362,5 @@ def ncaa_mbb_play_by_play(
         fetcher=fetcher,
         period_model=_MBB_PERIOD_MODEL,
         return_as_pandas=return_as_pandas,
+        errors=errors,
     )
