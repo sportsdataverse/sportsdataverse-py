@@ -336,6 +336,7 @@ def _goalie_key(row: Any) -> Tuple[float, float, str, str]:
     return (-num(cols.get("gp")), -num(cols.get("w")), str(who.get("val") or ""), str(who.get("link") or ""))
 
 
+@_rt._no_content_is_unknown  # several pages: a 204 on one leaves the list partial, unknown (R4.1b-d-8)
 def _all_goalies(
     url: str, form: Dict[str, str], headers: Optional[Dict[str, str]], timeout: Any, kwargs: Dict[str, Any]
 ) -> Any:

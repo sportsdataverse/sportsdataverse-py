@@ -632,7 +632,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
     canonical = pattern.pattern.strip("^$")
     path = re.sub(r"\(\?P<(\w+)>\[\^/\]\+\)", lambda mm: str(ids[mm.group(1)]), canonical)
     if check in _GATED:  # the gate reads the game first, so an unfinished game costs one request
-        _game(ids["gameId"])
+        with _rt._no_content_unknown(f"{base.netloc}/schedule/find/{ids['gameId']} (the finished-game check)"):
+            _game(ids["gameId"])
     body = _scrub_personal(_call(path, q or None))
     where = f"{base.netloc}{path}"
     check(body, ids, q, where)

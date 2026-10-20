@@ -520,14 +520,16 @@ def _page(url: str, params: Mapping[str, Any], **kwargs: Any) -> Dict[str, Any]:
     comp = _int_id(params.get("comp"))
     if comp is None:
         raise ValueError("comp (the GDAP competition id of the game) is required to build the game page URL")
-    real = _page_url(game_id, comp)
+    with _rt._no_content_unknown(f"competition {comp} game {game_id} (the page-URL lookups)"):
+        real = _page_url(game_id, comp)
     where = _rt._where(real)
     headers = {"RSC": "1", **dict(kwargs.get("headers") or {})}
     try:
         page = _fetch_game_page(real, game_id, headers)
     except _NotFoundShell as shell:
-        code_a, code_b = _team_codes(comp, game_id)
-        slug = _event_slug(comp)
+        with _rt._no_content_unknown(f"competition {comp} game {game_id} (the alternate-URL lookups)"):
+            code_a, code_b = _team_codes(comp, game_id)
+            slug = _event_slug(comp)
         # ponytail: the Champions League host serves only its current season; unverified live (no probe left).
         alternates = [f"{SITE_URL}/en/events/{slug}/games/{game_id}-{code_a}-{code_b}"] if slug else []
         alternates.append(f"{BCL_URL}/en/games/{game_id}-{code_a}-{code_b}")

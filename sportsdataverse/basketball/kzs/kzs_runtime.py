@@ -167,6 +167,7 @@ def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
 # --- dependencies (one extra, cached request each) ------------------------------------------------------------------
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _competition(competition_id: int, **kwargs: Any) -> Mapping[str, Any]:
     key = ("competition", competition_id)
     if key not in _CACHE:
@@ -177,6 +178,7 @@ def _competition(competition_id: int, **kwargs: Any) -> Mapping[str, Any]:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _team_ids(competition_id: int, **kwargs: Any) -> set:
     """Team ids in the standings of a competition (the competition's entrants)."""
     key = ("teams", competition_id)
@@ -193,6 +195,7 @@ def _team_ids(competition_id: int, **kwargs: Any) -> set:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _header(match_id: int, **kwargs: Any) -> Mapping[str, Any]:
     """The match header, which must be FINISHED (cached once it is)."""
     key = ("header", match_id)
@@ -210,6 +213,7 @@ def _need_final(match_id: int, head: Mapping[str, Any]) -> None:
         raise AssetFetchError(f"match {match_id}: the game is not final (status={head.get('status')!r})")
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _season_competitions(sid: int, **kwargs: Any) -> set:
     key = ("season", sid)
     if key not in _CACHE:

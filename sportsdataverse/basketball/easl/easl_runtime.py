@@ -220,6 +220,7 @@ def _seasons(**kw: Any) -> List[Mapping[str, Any]]:
     return _CACHE[("seasons",)]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _season(season: Any, **kw: Any) -> Tuple[Mapping[str, Any], int]:
     """``(season row, END year)`` of a public ``season`` (``None`` = the ACTIVE season); ``ValueError`` if unknown."""
     rows = _seasons(**kw)
@@ -250,6 +251,7 @@ def _fresh(**kw: Any) -> datetime:
     return server
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _no_stale(rows: List[Mapping[str, Any]], **kw: Any) -> None:
     """Refuse an ACTIVE-season fixture list in which a game is still SCHEDULED a day after its tip-off."""
     server = _fresh(**kw)
@@ -292,6 +294,7 @@ def _periods(body: Any) -> List[int]:
     return sorted({int(k[7:]) for r in _rows(body) for k in r if re.fullmatch(r"period_\d+", k)})
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _period_table(fid: str, ctx: Mapping[str, Any], **kw: Any) -> List[Mapping[str, Any]]:
     where = f"easl.joshricha.com/api/v1/matches/{fid}/teamstats/by/period"
     rows = _rows(_list(where, _fetch(f"/matches/{fid}/teamstats/by/period", None, **kw)))
@@ -306,11 +309,12 @@ def _period_table(fid: str, ctx: Mapping[str, Any], **kw: Any) -> List[Mapping[s
 
 
 def _game_route(name: str, fid: str, **kw: Any) -> Any:
-    ctx = _header(fid, **kw)
+    if name == "match":  # the header IS the answer here; on the other routes it is a lookup
+        return _header(fid, **kw)["body"]
+    with _rt._no_content_unknown(f"easl.joshricha.com/api/v1/matches/{fid} (the header check)"):
+        ctx = _header(fid, **kw)
     teams, scores = ctx["teams"], ctx["scores"]
     where = f"easl.joshricha.com/api/v1/matches/{fid}"
-    if name == "match":
-        return ctx["body"]
     if name == "boxscore":
         body = _obj(_fetch(f"/matches/{fid}/boxscore", None, **kw))
         rows, tms = _rows(body.get("boxScore")), _rows(body.get("teams"))

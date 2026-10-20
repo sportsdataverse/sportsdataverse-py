@@ -183,6 +183,7 @@ def league_id(season: Any, **kwargs: Any) -> int:
     return by_end[end]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _final_header(gid: int, **kwargs: Any) -> Mapping[str, Any]:
     """The ``/play-schedule/detail`` header of a game, which must be final (cached once it is)."""
     key = ("header", gid)

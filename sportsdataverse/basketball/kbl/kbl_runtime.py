@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import datetime as dt
 import re
+from contextlib import nullcontext
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from sportsdataverse import _codegen_runtime as _rt
@@ -309,7 +310,11 @@ def _game_route(name: str, gmkey: str, **kw: Any) -> Any:
     where = (
         f"api.kbl.or.kr/match/{gmkey}/{name.replace('_', '-')}" if name != "header" else f"api.kbl.or.kr/match/{gmkey}"
     )
-    ctx, header, text = _game(gmkey, **kw)
+    if name == "header":  # the header IS the answer here; on the other match routes the final check is a lookup
+        ctx, header, text = _game(gmkey, **kw)
+    else:
+        with _rt._no_content_unknown(f"{where} (the final-game check)"):
+            ctx, header, text = _game(gmkey, **kw)
     if name == "header":
         if header is None:
             header = _fetch(f"/match/{gmkey}", None, **kw)
@@ -366,10 +371,12 @@ def _match_list(params: Mapping[str, Any], **kw: Any) -> Tuple[List[Any], Dict[s
     season = params.get("season")
     wins = _windows(None if season is None else _season_arg(season), params.get("fromDate"), params.get("toDate"))
     rows: List[Any] = []
-    for lo, hi in wins:
-        part = _list("api.kbl.or.kr/match/list", _fetch("/match/list", {"fromDate": lo, "toDate": hi}, **kw))
-        _same_window("api.kbl.or.kr/match/list", _rows(part), lo, hi)
-        rows.extend(part)
+    # one window is one request (its 204 is the route's {}); several windows leave a season incomplete on a 204
+    with _rt._no_content_unknown("api.kbl.or.kr/match/list (a window of several)") if len(wins) > 1 else nullcontext():
+        for lo, hi in wins:
+            part = _list("api.kbl.or.kr/match/list", _fetch("/match/list", {"fromDate": lo, "toDate": hi}, **kw))
+            _same_window("api.kbl.or.kr/match/list", _rows(part), lo, hi)
+            rows.extend(part)
     stamp: Dict[str, Any] = {"from_date": wins[0][0], "to_date": wins[-1][1]}
     if season is not None:
         stamp["season"] = _season_arg(season)

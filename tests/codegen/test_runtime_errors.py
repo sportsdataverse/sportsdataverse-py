@@ -593,6 +593,12 @@ def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
     )
 
 
+def _seed_fiba(mod: Any, monkeypatch: Any) -> None:  # the game page URL is built from two GDAP lookups
+    monkeypatch.setattr(
+        mod, "_page_url", lambda game_id, comp: f"{mod.SITE_URL}/en/history/x/{comp}/games/{game_id}-A-B"
+    )
+
+
 # R4.1b-d-1: a runtime whose first request is a bootstrap or lookup (a token, session or key page, a snapshot
 # pointer, a finished-game check, a calendar index) is seeded, so every case reaches its DATA request; on the 204
 # row the bootstrap URL must then never be served. A bootstrap's or lookup's own 204 is an unknown answer
@@ -603,6 +609,7 @@ _SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
     "scb_runtime": (_seed_scb, "https://www.easycredit-bbl.de/"),
     "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
     "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
+    "fiba_runtime": (_seed_fiba, "https://digital-api.fiba.basketball/hapi/getGdapCompetitionById"),
     "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
 }
 

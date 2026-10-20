@@ -234,12 +234,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         sez = sez_for_season(season)  # type: ignore[arg-type]
         stamp.update(kind=kind, game_no=game_no, season=int(season), sez=sez)  # type: ignore[arg-type]
         murl = f"{host}/match/{game_no}/{sez}/{lea}/Overview"
-        match = _page(
-            "match",
-            murl,
-            {"game_no": game_no, "sez": sez, "lea": lea},
-            re.compile(rf"^/match/{game_no}/{sez}/{lea}/Overview/?$"),
-        )
+        with _rt._no_content_unknown(f"{_rt._where(murl)} (the helper's match lookup)"):  # R4.1b-d-8
+            match = _page(
+                "match",
+                murl,
+                {"game_no": game_no, "sez": sez, "lea": lea},
+                re.compile(rf"^/match/{game_no}/{sez}/{lea}/Overview/?$"),
+            )
         return {"rows": _helper(kind, host + path, game_no, sez, lea, match), REQUEST_KEY: stamp}
 
     for kind, pattern in _ROUTES:

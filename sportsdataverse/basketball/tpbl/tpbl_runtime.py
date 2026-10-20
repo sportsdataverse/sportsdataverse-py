@@ -207,6 +207,7 @@ def _season_list(*, refresh: bool = False) -> List[Dict[str, Any]]:
     return _SEASONS
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _season_row(season: int) -> Dict[str, Any]:
     """The ``/seasons`` row whose label ends in ``season`` (re-reads the list once when it is missing)."""
     for refresh in (False, True):
@@ -303,6 +304,7 @@ def _played(standings: List[Dict[str, Any]]) -> int:
     )
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _verify_games(url: str, season_row: Dict[str, Any], games: List[Dict[str, Any]]) -> None:
     """Completeness: every division's completed games == the matches of its own standings / 2.
 
@@ -436,9 +438,10 @@ def _stats_error(body: Any, game: Dict[str, Any]) -> Optional[str]:
 
 
 def _game_route(game_id: int, stats: bool) -> Dict[str, Any]:
-    game = _game(game_id)
-    if not stats:
-        return _stamp(game, game_id=game_id)
+    if not stats:  # the game record IS the answer here; for the stats route it is a lookup
+        return _stamp(_game(game_id), game_id=game_id)
+    with _rt._no_content_unknown(f"{_rt._where(f'{API}/games/{game_id}')} (the game check)"):
+        game = _game(game_id)
     url = f"{API}/games/{game_id}/stats"
     body = _json(url)
     _refuse(url, _stats_error(body, game))

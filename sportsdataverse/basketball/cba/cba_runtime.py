@@ -199,6 +199,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
 
 
 # ------------------------------------------------------------------------------ game scope
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _info(sid: int) -> Dict[str, Any]:
     """The game report header of a FINISHED game (cached); anything else raises."""
     if sid in _INFO:
