@@ -10,7 +10,7 @@ providing the canonical ``ncaa_wbb_*`` name.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Iterable, Optional, Union
+from typing import TYPE_CHECKING, Any, Iterable, Literal, Optional, Union
 
 from sportsdataverse.mbb.mbb_ncaa_box_stats import ncaa_mbb_box_scores
 
@@ -29,6 +29,7 @@ def ncaa_wbb_box_scores(
     multi_games: bool = False,
     fetcher: Optional[Any] = None,
     return_as_pandas: bool = False,
+    errors: Literal["raise", "skip"] = "raise",
 ) -> Union["pl.DataFrame", "pd.DataFrame"]:
     """Scrape WBB per-player box scores (wbigballR ``get_box_scores``/``scrape_box``).
 
@@ -46,9 +47,16 @@ def ncaa_wbb_box_scores(
             ``fetch_game_individual_stats`` (tests/offline). Defaults to a
             fresh ``NcaaFetcher.with_browser()`` context per call.
         return_as_pandas: Return a pandas DataFrame instead of polars.
+        errors: ``"raise"`` (default) raises ``AssetFetchError`` on a failed
+            fetch; ``"skip"`` skips it and adds a ``scrape_status`` column (see
+            :func:`~sportsdataverse.mbb.mbb_ncaa_box_stats.ncaa_mbb_box_scores`).
 
     Returns:
         Per-player box rows (or per-player aggregates with ``multi_games``).
+
+    Raises:
+        AssetFetchError: A fetch failed and ``errors="raise"``.
+        ValueError: An unknown ``errors``, or ``errors="skip"`` with ``multi_games``.
 
     Example:
         Quick start::
@@ -62,4 +70,5 @@ def ncaa_wbb_box_scores(
         multi_games=multi_games,
         fetcher=fetcher,
         return_as_pandas=return_as_pandas,
+        errors=errors,
     )

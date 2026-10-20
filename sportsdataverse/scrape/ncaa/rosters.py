@@ -63,16 +63,21 @@ def _default_fetch_fn(root: "Union[str, Path]", shard_i: int = 0, shard_n: int =
     return NcaaFetcher.with_browser().fetch_html
 
 
-def _fetch_roster(fn: Callable[[str], str], team_id: int) -> Optional[str]:
-    """The roster page, or None after ``_TEAM_TRIES`` failed fetches (one for a 404)."""
+def _fetch_roster(fn: Callable[[str], str], team_id: int) -> tuple[str | None, bool]:
+    """``(page, missing)``: the roster page, or None after ``_TEAM_TRIES`` failed fetches.
+
+    ``missing`` is True for a 404, which is not retried and -- as in the capture stage --
+    is not a step toward the ban-suspect abort: the host answered.
+    """
     for _ in range(_TEAM_TRIES):
         try:
-            return fn(f"teams/{team_id}/roster")
+            return fn(f"teams/{team_id}/roster"), False
         except NoDataError:
-            return None  # a 404 does not change on retry
+            logger.warning("team_id=%s has no roster page (HTTP 404) -- skipped", team_id)
+            return None, True
         except AssetFetchError:
             continue
-    return None
+    return None, False
 
 
 def capture_rosters(
@@ -125,9 +130,12 @@ def capture_rosters(
         # A committed roster page is re-parsed offline rather than re-fetched:
         # that is how an interrupted run resumes without spending a request, and
         # how a parser fix reaches every captured season for free.
-        html: Optional[str] = read_html(root, league, "rosters", season, team_id)
+        html, missing = read_html(root, league, "rosters", season, team_id), False
         if html is None:
-            html = _fetch_roster(fn, team_id)
+            html, missing = _fetch_roster(fn, team_id)
+        if missing:
+            failed.append(team_id)
+            continue
         if html is None:
             consecutive += 1
             failed.append(team_id)

@@ -289,7 +289,7 @@ df = ncaa_wbb_game_pbp("1613299", season=2015)
 
 ### ncaa_wbb_play_by_play {#ncaa_wbb_play_by_play}
 
-`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False) -> "Union[pl.DataFrame, 'pd.DataFrame']"`
+`ncaa_wbb_play_by_play(game_ids: 'Sequence[object]', *, season: 'Optional[object]' = None, fetcher: 'Optional[_SupportsFetchGamePbp]' = None, return_as_pandas: 'bool' = False, errors: "Literal['raise', 'skip']" = 'raise') -> "Union[pl.DataFrame, 'pd.DataFrame']"`
 
 Scrape many WBB games' play-by-play (wbigballR `get_play_by_play`, era-aware).
 
@@ -305,6 +305,7 @@ the WBB period model for each game's era bound.
 | `season` | `Optional[object]` | `None` | Season shared by every id, as an ending year or span. When omitted each page's era is inferred from its first-period clock, so ids from both eras may be mixed. |
 | `fetcher` | `Optional[_SupportsFetchGamePbp]` | `None` | Optional injected fetcher exposing `fetch_game_pbp`. Defaults to one shared `NcaaFetcher.with_browser()` context. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is dropped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every play row, plus one row per dropped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...`, `parse_failed: ...` or `empty`). |
 
 **Returns**
 
