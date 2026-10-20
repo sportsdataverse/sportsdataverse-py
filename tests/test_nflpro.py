@@ -15,6 +15,7 @@ import pandas as pd
 import polars as pl
 import pytest
 
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.nfl.nflpro_parsers import parse_nfl_pro_stats
 from sportsdataverse.nfl.nflpro_runtime import NFLProAuthError, _get, nflpro_token
 
@@ -132,7 +133,7 @@ class _Resp:
 def test_empty_200_raises_rather_than_returning_a_string(monkeypatch):
     """An unsupported param returns HTTP 200 with an EMPTY body and no error envelope."""
     monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime.download", lambda **kw: _Resp(None))
-    with pytest.raises(ValueError, match="empty body"):
+    with pytest.raises(AssetFetchError, match="empty body.*unsupported query params"):
         _get("https://pro.nfl.com/api/secured/stats/x/season", {}, headers={"a": "b"})
 
 
@@ -189,25 +190,19 @@ def test_server_ignoring_offset_raises_instead_of_duplicating(monkeypatch):
 
 
 def test_http_error_surfaces_the_response_body(monkeypatch):
-    """A missing required param (e.g. position_group) 500s with no field named
-    in a bare requests HTTPError -- the body usually names the failed request."""
+    """A missing required param (e.g. position_group) 500s; the body usually names
+    the failed request, so the AssetFetchError quotes it (A-M4: it was a bare HTTPError)."""
 
     class Failing(_Resp):
+        status_code = 500
+
         def __init__(self):
             super().__init__({})
             self.text = '{"ok":false,"status":500,"statusText":"missing positionGroup"}'
 
-        def raise_for_status(self):
-            exc = Exception("500 Server Error")
-            exc.response = self  # what requests.HTTPError carries in real life
-            raise exc
-
     monkeypatch.setattr("sportsdataverse.nfl.nflpro_runtime.download", lambda **kw: Failing())
-    with pytest.raises(Exception, match="missing positionGroup") as exc_info:
+    with pytest.raises(AssetFetchError, match="fantasy/game answered HTTP 500.*missing positionGroup"):
         _get("https://pro.nfl.com/api/secured/stats/fantasy/game", {}, headers={"a": "b"})
-    # A caller inspecting exc.response must still find it -- a fresh
-    # type(exc)(...) instance would have silently dropped it.
-    assert exc_info.value.response is not None
 
 
 def test_missing_total_still_pages_on_a_full_page(monkeypatch):
