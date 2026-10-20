@@ -216,13 +216,13 @@ def _is_no_shot_map(err: ParseError) -> bool:
     return any("no shot events found" in str(m).lower() for m in (err.messages or []))
 
 
-def _family_failed(parse_errors: "list[dict[str, str]]", family: str, contest_id: str, exc: BaseException) -> None:
+def _family_failed(parse_errors: list[dict[str, str]], family: str, contest_id: str, exc: BaseException) -> None:
     """Log a family whose parse raised and record it for the ``parse_errors`` marker."""
     logger.warning("ncaa_parse: family=%s contest_id=%s failed", family, contest_id, exc_info=exc)
     parse_errors.append({"family": family, "error": _clip(f"{type(exc).__name__}: {exc}", 300)})
 
 
-def _with_marker(result: "dict[str, Any]", parse_errors: "list[dict[str, str]]") -> "dict[str, Any]":
+def _with_marker(result: dict[str, Any], parse_errors: list[dict[str, str]]) -> dict[str, Any]:
     """Add ``parse_errors`` only when a family failed: a crashed family is an empty list exactly
     like a game with no shots or lineups, so the failure is recorded beside it. Absent = clean."""
     if parse_errors:
@@ -404,7 +404,7 @@ def parse_bundle(
         "possessions": [],
     }
 
-    parse_errors: "list[dict[str, str]]" = []
+    parse_errors: list[dict[str, str]] = []
     pbp_df: Optional[pl.DataFrame] = None
     try:
         # Explicit branch rather than **kwargs: unpacking a dict hides which

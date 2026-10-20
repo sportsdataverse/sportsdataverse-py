@@ -1046,8 +1046,6 @@ _global:
   outcome_type: Outcome classification for a completed game (e.g., "outcome.type.won", "outcome.type.tied").
   page_metadata: JSON-encoded data-island pointer to the SEO and page metadata for the entity.
   par: Par of the golf course in play for the tournament.
-  parse_errors: In an NCAA parse-stage game JSON, one {family, error} entry per data family whose parser raised (that
-    family is an empty list); absent when every family parsed.
   partial_game_bets: JSON-encoded list of in-game betting markets covering only part of the game, such as halves or quarters.
   partner_url: Partner or affiliate deep link associated with the scoreboard game.
   passing_leader: JSON-encoded leading passer for the game or team, with the statistics that earned the billing.
@@ -1103,8 +1101,6 @@ _global:
   roster: JSON-encoded roster of the players on the team for the requested season.
   rushing_leader: JSON-encoded leading rusher for the game or team, with the statistics that earned the billing.
   score_type: Kind of score produced by the scoring play (e.g., "TD" touchdown, "FG" field goal, "SF" safety).
-  scrape_status: Present only with errors="skip"; "ok" on every scraped row, and on the one row added per dropped game
-    the reason it has no rows (fetch_failed / no_data / request_error / parse_failed / empty, then the message).
   season_current_phase: Phase the league season is currently in, as Yahoo's season-phase key.
   season_current_sched_state: Numeric scheduling state matching the current phase (2 regular season, 3 postseason, 4 offseason).
   season_current_stat_state_graphite_phase: Phase key the stats graph is currently serving statistics for (e.g., "REGULAR_SEASON").

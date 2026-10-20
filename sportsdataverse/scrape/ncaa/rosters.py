@@ -63,7 +63,7 @@ def _default_fetch_fn(root: "Union[str, Path]", shard_i: int = 0, shard_n: int =
     return NcaaFetcher.with_browser().fetch_html
 
 
-def _fetch_roster(fn: Callable[[str], str], team_id: int) -> "tuple[Optional[str], bool]":
+def _fetch_roster(fn: Callable[[str], str], team_id: int) -> tuple[str | None, bool]:
     """``(page, missing)``: the roster page, or None after ``_TEAM_TRIES`` failed fetches.
 
     ``missing`` is True for a 404, which is not retried and -- as in the capture stage --

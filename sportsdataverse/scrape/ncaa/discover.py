@@ -113,8 +113,8 @@ def _team_contest_ids(
 
 
 def _sweep_team(
-    team_id: int, fetch_fn: FetchFn, league: str, season: int, root: Optional[Union[str, Path]]
-) -> "tuple[Optional[List[str]], bool]":
+    team_id: int, fetch_fn: FetchFn, league: str, season: int, root: str | Path | None
+) -> tuple[list[str] | None, bool]:
     """``(contest_ids, missing)``: None after ``_TEAM_TRIES`` failed fetches.
 
     ``missing`` is True for a 404, which is not retried and -- as in the capture stage --

@@ -287,7 +287,7 @@ def parse_injuries_snapshot(
 
 def _gather(
     keys: Sequence[Any], fetch_one: Callable[[Any], pl.DataFrame], *, request_delay: float, label: str
-) -> List[pl.DataFrame]:
+) -> list[pl.DataFrame]:
     """Fetch every key in order, ``request_delay`` apart, keeping the others when one fails.
 
     A current-state snapshot cannot be re-taken, so one failed league or team must not
@@ -295,9 +295,9 @@ def _gather(
     are kept. Only when every key failed is the last error raised -- an all-failed day is an
     outage, and returning zero rows for it would read as "nothing to report".
     """
-    frames: List[pl.DataFrame] = []
-    failed: List[str] = []
-    last: Optional[Exception] = None
+    frames: list[pl.DataFrame] = []
+    failed: list[str] = []
+    last: Exception | None = None
     for index, key in enumerate(keys):
         if index and request_delay > 0:
             time.sleep(request_delay)

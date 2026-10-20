@@ -20,7 +20,7 @@ BANNED, MISSING, BROKEN, BLANK, REJECTED = "9000001", "9000002", "9000003", "900
 
 class _Fetcher:
     def __init__(self) -> None:
-        self.calls: "list[str]" = []
+        self.calls: list[str] = []
 
     def fetch_game_pbp(self, contest_id: object) -> str:
         gid = str(contest_id)

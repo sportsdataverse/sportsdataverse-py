@@ -1115,7 +1115,7 @@ def _fetch_and_parse(
     game_id: object,
     period_model: PeriodModel,
     errors: str = "raise",
-) -> "tuple[pl.DataFrame, str]":
+) -> tuple[pl.DataFrame, str]:
     """One game's frame and its status: ``ok``, ``empty``, or why it has no rows.
 
     A failed fetch (``AssetFetchError``: a ban, an exhausted pool, a challenge) raises
@@ -1148,7 +1148,7 @@ def _failure_kind(exc: BaseException, *, fetched: bool) -> str:
     return "parse_failed" if fetched else "request_error"
 
 
-def _with_status(out: pl.DataFrame, removed: "list[tuple[str, str]]") -> pl.DataFrame:
+def _with_status(out: pl.DataFrame, removed: list[tuple[str, str]]) -> pl.DataFrame:
     """``errors="skip"`` output: ``scrape_status`` is ``ok`` on every row, plus one row per dropped game saying why.
 
     Not ``status``: the play-by-play contract already has a ``status`` column (the game's state).
@@ -1200,9 +1200,9 @@ def _ncaa_bb_play_by_play(
     # drop NA ids (R :1859); `x == x` filters float NaN
     ids = [g for g in game_ids if g is not None and g == g]
 
-    def _run(f: _SupportsFetchGamePbp) -> "tuple[list[pl.DataFrame], list[tuple[str, str]]]":
-        frames: "list[pl.DataFrame]" = []
-        removed: "list[tuple[str, str]]" = []
+    def _run(f: _SupportsFetchGamePbp) -> tuple[list[pl.DataFrame], list[tuple[str, str]]]:
+        frames: list[pl.DataFrame] = []
+        removed: list[tuple[str, str]] = []
         for gid in ids:
             df, status = _fetch_and_parse(f, gid, period_model, errors)
             if df.height == 0:
