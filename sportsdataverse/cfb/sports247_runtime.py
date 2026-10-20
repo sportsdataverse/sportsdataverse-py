@@ -45,6 +45,7 @@ import threading
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from sportsdataverse._codegen_runtime import _json_text, _transport_errors
+from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int
 
 __all__ = ["_get", "rdb_headers"]
 
@@ -111,7 +112,7 @@ def _mint_guest_jwt() -> Optional[str]:
         return None
     try:
         sess = creq.Session()
-        sess.get(_SITE_ROOT, headers=rdb_headers(), impersonate="chrome", timeout=30)
+        sess.get(_SITE_ROOT, headers=rdb_headers(), impersonate="chrome", timeout=_env_int(_ENV_TIMEOUT, 30))
         return sess.cookies.get("JWT")
     except Exception:  # noqa: BLE001  # pragma: no cover - network failure path
         return None
@@ -138,7 +139,7 @@ def _curl_transport(
         headers=headers,
         proxies=proxies,
         impersonate="chrome",
-        timeout=30,
+        timeout=_env_int(_ENV_TIMEOUT, 30),  # SDV_PY_HTTP_TIMEOUT, like every download() caller (A-L67)
     )
     return r.status_code, r.text
 

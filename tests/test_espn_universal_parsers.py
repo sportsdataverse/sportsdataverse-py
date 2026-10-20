@@ -1470,9 +1470,6 @@ _HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_enve
 # case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
 _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "cbs.cbs_napi_parsers.parse_cbs_napi": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.on3_parsers.parse_on3_rankings": {"list": AttributeError},
-    "cfb.on3_parsers.parse_on3_rdb": {"error_envelope": AssertionError, "list": AssertionError},
-    "cfb.on3_parsers.parse_on3_team_rankings": {"list": AttributeError},
     "cfb.sports247_parsers.parse_sports247_institution_rankings": {
         "error_envelope": AssertionError,
         "list": AssertionError,
@@ -1518,7 +1515,6 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "hockeytech._parsers.parse_streaks": {"list": AttributeError},
     "hockeytech._parsers.parse_teams": {"list": AttributeError},
     "hockeytech._parsers.parse_transactions": {"list": AttributeError},
-    "mlb.mlb_statcast_parsers.parse_mlb_statcast_player": {"error_envelope": TypeError, "list": TypeError},
     "nfl.nfl_api_parsers.parse_nfl_combine_profiles": {
         "empty_str": AttributeError,
         "list": AttributeError,
@@ -1580,31 +1576,6 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "nfl.sleeper_parsers.parse_sleeper": {"error_envelope": AssertionError, "list": AssertionError},
     "odds.kalshi_parsers.parse_kalshi": {"error_envelope": AssertionError, "list": AssertionError},
     "odds.polymarket_parsers.parse_polymarket": {"error_envelope": AssertionError, "list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_event_odds": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_event_odds_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_events": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_events_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_odds": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_odds_history": {
-        "dict": AssertionError,
-        "error_envelope": AssertionError,
-        "list": AssertionError,
-    },
-    "odds.the_odds_api_parsers.parse_toa_participants": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_scores": {"list": AssertionError},
-    "odds.the_odds_api_parsers.parse_toa_sports": {"list": AssertionError},
     "soccer.asa_parsers.parse_asa": {"error_envelope": AssertionError},
     "soccer.asa_parsers.parse_asa_goals_added": {"error_envelope": AssertionError},
     "soccer.fifa_parsers.parse_fifa": {"error_envelope": AssertionError},
