@@ -489,6 +489,48 @@ def test_only_a_copy_stranded_outside_its_drive_goes(order, home, copy, kept):
     assert _drop_espn_play_copies(alone)["id"].to_list() == alone["id"].to_list()
 
 
+@pytest.mark.parametrize(
+    ("game_id", "play_id", "kept"),
+    [
+        # each row stands outside its drive and matches a row inside the drive on every key but one
+        (252462426, 252462426141, True),  # period: Q3 15:00 and the Q2 0:00 kickoff share one adjusted clock
+        (400548291, 400548291101989406, True),  # down: "pass incomplete" on 3rd and 10, the twin on 1st and 10
+        (401309834, 401309834101957706, True),  # distance: the 4th-and-12 punt, the twin 4th and 8
+        (401524051, 401524051104936103, True),  # spot: 1st and 10 at the 37, the twin at the 25
+        (401282272, 401282272104878311, True),  # play type "Kickoff Return (Offense)", the twin "Kickoff"
+        (401636866, 401636866104866103, True),  # drive: the twin is filed in another drive, not this rule's call
+        # the frame's last row has no next row; out of its drive, its field goal's in-drive twin sends it
+        (292900218, 292900218135, False),
+        # a clock most of the period shares tells no plays apart: 401327913 reads 0:00 on 95% of its rows
+        # and files every kickoff in drive 1, yet scoringPlays has a score before each of these kickoffs
+        (401327913, 401327913102000013, True),
+        (401327913, 401327913102000033, True),
+        (401327913, 401327913103000035, True),
+    ],
+    ids=[
+        "period",
+        "down",
+        "distance",
+        "spot",
+        "type",
+        "drive",
+        "last-row",
+        "blank-clock-1",
+        "blank-clock-2",
+        "blank-clock-3",
+    ],
+)
+def test_a_stranded_copy_needs_every_key_of_its_twin(game_id, play_id, kept):
+    """R312-1, R312-2: one real row per match key (and per frame-edge or blank-clock rule) from the
+    stranded_copies/ trimmed captures."""
+    with gzip.open(FIX / "stranded_copies" / f"{game_id}_trimmed.json.gz", "rt", encoding="utf-8") as fh:
+        summary = json.load(fh)
+    proc = CFBPlayProcess(gameId=game_id, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline(fourth_down_probs=False, two_pt_probs=False)
+    assert (play_id in proc.plays_frame["id"].to_list()) is kept
+
+
 @pytest.mark.parametrize("keys", [("end",), ("homeScore", "awayScore")], ids=lambda k: k[0])
 def test_a_play_field_absent_from_every_play_does_not_crash(keys):
     """C-NF-10(a): a block absent from EVERY play leaves json_normalize no column for it; the plays

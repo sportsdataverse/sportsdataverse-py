@@ -1958,8 +1958,8 @@
   group: cfb-stranded-copy
   finding: R908-3
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '(pl.col("_out") == True) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
-  mutant: '(pl.col("_out") == True) & (pl.col("start.yardsToEndzone") != 0)'
+  snippet: '(pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_blank") == False) & (pl.col("start.yardsToEndzone") != 0)'
   test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and marker"
   expected: kill
   note: timeouts and end-of-period rows are never dropped
@@ -1968,8 +1968,8 @@
   group: cfb-stranded-copy
   finding: R908-3
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '(pl.col("_out") == True) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
-  mutant: '(pl.col("_out") == True) & ~marker'
+  snippet: '(pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_blank") == False) & ~marker'
   test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and spotless"
   expected: kill
   note: a row with no start spot has too little state to call it a copy
@@ -1978,8 +1978,8 @@
   group: cfb-stranded-copy
   finding: R908-3
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'same = pl.col("drive.id"), [*key, "text", "start.adj_TimeSecsRem"]'
-  mutant: 'same = pl.col("drive.id"), [*key, "start.adj_TimeSecsRem"]'
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [*key, "start.adj_TimeSecsRem"], marker)'
   test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and text"
   expected: kill
   note: other text at the same clock and state is another play
@@ -1988,8 +1988,88 @@
   group: cfb-stranded-copy
   finding: R908-3
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'same = pl.col("drive.id"), [*key, "text", "start.adj_TimeSecsRem"]'
-  mutant: 'same = pl.col("drive.id"), [*key, "text"]'
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [*key, "text"], marker)'
   test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and clock"
   expected: kill
   note: the same text at another clock is another play
+
+- id: cfb-stranded-copy-key-drive-id
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "drive.id"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and drive"
+  expected: kill
+  note: 401636866's Q4 13:38 kickoff copy is filed in another drive; the rule only judges a row against its own drive
+
+- id: cfb-stranded-copy-key-period-number
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "period.number"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and period"
+  expected: kill
+  note: 252462426's Q3 15:00 kickoff and its Q2 0:00 twin share one adjusted clock
+
+- id: cfb-stranded-copy-key-type-text
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "type.text"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and type"
+  expected: kill
+  note: 401282272's kickoff text under two types (Kickoff, Kickoff Return (Offense))
+
+- id: cfb-stranded-copy-key-start-down
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.down"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and down"
+  expected: kill
+  note: 400548291's 3rd-and-10 incompletion at 1:05 and the 1st-and-10 one before it
+
+- id: cfb-stranded-copy-key-start-distance
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.distance"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and distance"
+  expected: kill
+  note: 401309834's 4th-and-12 punt and the 4th-and-8 one before the false start
+
+- id: cfb-stranded-copy-key-start-yardstoendzone
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.yardsToEndzone"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and spot"
+  expected: kill
+  note: 401524051's 1st-and-10 incompletions at the 37 and the 25
+
+- id: cfb-stranded-copy-last-row
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(drive.shift(-1) != drive).fill_null(True)'
+  mutant: '(drive.shift(-1) != drive).fill_null(False)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and last"
+  expected: kill
+  note: the frame's last row has no next row; 292900218's last row is a field goal copy outside its drive
+
+- id: cfb-stranded-copy-blank-clock
+  group: cfb-stranded-copy
+  finding: R312-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_out") == True) & (pl.col("_blank") == False) & '
+  mutant: '(pl.col("_out") == True) & '
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and blank"
+  expected: kill
+  note: 401327913 reads 0:00 on 95% of its rows; three real kickoffs (one per score in scoringPlays) would go

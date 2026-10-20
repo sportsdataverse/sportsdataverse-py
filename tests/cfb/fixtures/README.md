@@ -155,6 +155,10 @@ oracle does not pick them up.
 `rush_forms/282782655_trimmed.json.gz` (Tulane @ Army, 2008) is one more trimmed capture, from
 `cfbfastR-cfb-raw/cfb/json/raw/282782655.json` at `9c61a436cc`, for the directional rush-loss reader
 (`test_stated_rush_yardage_is_read`, EX-1.2-a, play 282782655087); it is not a `summary_*` file either.
+`stranded_copies/` holds 8 trimmed captures (the `trimmed` form above, from `cfbfastR-cfb-raw/cfb/json/raw/<id>.json`
+at `19865a79e3`, trimmed 2026-10-20): 252462426, 292900218, 400548291, 401282272, 401309834, 401327913, 401524051 and
+401636866. Each holds one real row that a key of the stranded-copy rule in `_drop_espn_play_copies` keeps or drops
+(`test_a_stranded_copy_needs_every_key_of_its_twin`, R312-1 / R312-2). They are not `summary_*` files either.
 
 ## Captures
 
