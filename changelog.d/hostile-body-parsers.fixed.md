@@ -1,2 +1,3 @@
-- **Parsers:** 153 provider parsers (HockeyTech, NFL.com Shield, Fox, CBS, 247Sports, EuroLeague, Sleeper, NFL Pro, Kalshi, Polymarket, the soccer, international basketball and European hockey families) return the zero-row frame for an error envelope, an empty `{}` record or a wrong-typed body instead of a one-row frame or an `AttributeError`;
-  `parse_game_summary` (HockeyTech) adds its `game` stub row only when a `game_id` is passed or the payload has data. (#TBD)
+- **Parsers:** 153 provider parsers (HockeyTech, NFL.com Shield, Fox, CBS, 247Sports, EuroLeague, Sleeper, NFL Pro, Kalshi,
+  Polymarket, soccer, international basketball, European hockey) return zero rows for an error envelope, an empty `{}` record
+  or a wrong-typed body; HockeyTech `parse_game_summary` adds its `game` stub row only with a `game_id` or data. (#TBD)
