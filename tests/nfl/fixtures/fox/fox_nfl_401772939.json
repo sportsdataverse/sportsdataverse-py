@@ -1,0 +1,4229 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 170, 0, 49",
+  "alternateRightColor": "1, 0, 87, 244",
+  "eventStatus": 3,
+  "eventTime": "2025-10-03T00:15:00Z",
+  "id": "10726",
+  "leftColor": "1, 170, 0, 49",
+  "leftTeam": {
+   "imageAltText": "San Francisco 49ers",
+   "isLoser": false,
+   "longName": "49ers",
+   "name": "SF",
+   "score": 26,
+   "stackedNameBottom": "49ers",
+   "stackedNameTop": "San Francisco",
+   "uri": "football/nfl/teams/28"
+  },
+  "rightColor": "1, 0, 87, 244",
+  "rightTeam": {
+   "imageAltText": "Los Angeles Rams",
+   "isLoser": true,
+   "longName": "Rams",
+   "name": "LAR",
+   "score": 23,
+   "stackedNameBottom": "Rams",
+   "stackedNameTop": "Los Angeles",
+   "uri": "football/nfl/teams/26"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "9622",
+      "subtitle": "8 plays · 72 yards · 4:51",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Karty kicks 49 yards from LA 35 to the SF 16. S.Moore MUFFS catch. Fumble RECOVERED by SF-S.Moore at SF 27. Tackled by J.Wallace; S.Dolac at SF 28.",
+        "timeOfPlay": "15:00",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 28,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed up the middle for 4 yards. Tackled by B.Young at SF 32.",
+        "timeOfPlay": "14:55",
+        "title": "1st & 10 · SF 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 32,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 15 yards. Tackled by D.Williams; C.Durant at SF 47.",
+        "timeOfPlay": "14:24",
+        "title": "2nd & 6 · SF 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "PENALTY on SF-C.Colby, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "13:43",
+        "title": "1st & 10 · SF 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 42,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short right complete. Catch made by C.McCaffrey for 15 yards. Tackled by Q.Lake at LA 43.",
+        "timeOfPlay": "13:31",
+        "title": "1st & 15 · SF 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 57,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short right intended for K.Juszczyk. PENALTY on SF-C.McKivitz, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "12:50",
+        "title": "1st & 10 · LAR 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 47,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short middle complete. Catch made by K.Bourne for 35 yards. Tackled by N.Landman at LA 18.",
+        "timeOfPlay": "12:45",
+        "title": "1st & 20 · SF 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 82,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed left guard for 3 yards. Tackled by N.Landman at LA 15.",
+        "timeOfPlay": "12:02",
+        "title": "1st & 10 · LAR 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 85,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short middle complete [J.Verse]. Catch made by J.Tonges for 6 yards. Tackled by K.Curl; K.Kinchens at LA 9.",
+        "timeOfPlay": "11:31",
+        "title": "2nd & 7 · LAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 91,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed left tackle for 3 yards. Tackled by O.Speights; K.Curl at LA 6.",
+        "timeOfPlay": "10:52",
+        "title": "3rd & 1 · LAR 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 94,
+            "yardStart": 91
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short middle complete. Catch made by J.Tonges for 6 yards. TOUCHDOWN.",
+        "timeOfPlay": "10:12",
+        "title": "1st & 6 · LAR 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "E.Pineiro extra point is good.",
+        "timeOfPlay": "10:09",
+        "title": "LAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9623",
+      "subtitle": "6 plays · 7 yards · 3:10",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "E.Pineiro kicks 52 yards from SF 35 to the LA 13. X.Smith returns the kickoff. Tackled by L.Gifford at LA 33.",
+        "timeOfPlay": "10:09",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 87,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 67,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Williams rushed up the middle for 4 yards. Tackled by M.Sigle at LA 37.",
+        "timeOfPlay": "10:04",
+        "title": "1st & 10 · LAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Stafford pass short left complete. Catch made by P.Nacua for 5 yards. Tackled by J.Elliott at LA 42.",
+        "timeOfPlay": "9:36",
+        "title": "2nd & 6 · LAR 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Williams rushed up the middle for 2 yards. Tackled by K.Davis; U.Stout at LA 44.",
+        "timeOfPlay": "9:02",
+        "title": "3rd & 1 · LAR 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 56,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep left intended for T.Atwell.",
+        "timeOfPlay": "8:24",
+        "title": "1st & 10 · LAR 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Stafford steps back to pass. Sacked at LA 33 for -11 yards (B.Huff).",
+        "timeOfPlay": "8:19",
+        "title": "2nd & 10 · LAR 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 67,
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "K.Williams rushed right guard for 7 yards. Tackled by B.Huff; F.Warner at LA 40.",
+        "timeOfPlay": "7:44",
+        "title": "3rd & 21 · LAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "E.Evans punts 51 yards to SF 9, Center-A.Ward. S.Moore returned punt from the SF 9. Tackled by S.Dolac at SF 9.",
+        "timeOfPlay": "7:12",
+        "title": "4th & 14 · LAR 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 9,
+            "yardStart": 60
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 9,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "9624",
+      "subtitle": "17 plays · 91 yards · 8:15",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "14",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "23",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed left guard for 4 yards. Tackled by J.Verse at SF 13.",
+        "timeOfPlay": "6:59",
+        "title": "1st & 10 · SF 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 13,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short right complete. Catch made by D.Robinson for 13 yards. Pushed out of bounds by C.Durant at SF 26. PENALTY on LA-J.Stewart, Roughing the Passer, 15 yards, accepted.",
+        "timeOfPlay": "6:30",
+        "title": "2nd & 6 · SF 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 41,
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed right guard for 5 yards. Tackled by T.Davis at SF 46.",
+        "timeOfPlay": "6:13",
+        "title": "1st & 10 · SF 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed left tackle for -1 yards. Tackled by P.Ford at SF 45.",
+        "timeOfPlay": "5:40",
+        "title": "2nd & 5 · SF 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 45,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 5 yards. Tackled by J.McCollough at LA 50.",
+        "timeOfPlay": "5:01",
+        "title": "3rd & 6 · SF 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "28",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones rushed up the middle for 2 yards. Tackled by P.Ford at LA 48.",
+        "timeOfPlay": "4:16",
+        "title": "4th & 1 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "29",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short middle complete. Catch made by M.Valdes-Scantling for 9 yards. Tackled by N.Landman; Q.Lake at LA 39.",
+        "timeOfPlay": "3:36",
+        "title": "1st & 10 · LAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "30",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed up the middle for 0 yards. Tackled by P.Ford; Q.Lake at LA 39.",
+        "timeOfPlay": "2:54",
+        "title": "2nd & 1 · LAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 61,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short left intended for K.Juszczyk.",
+        "timeOfPlay": "2:17",
+        "title": "3rd & 1 · LAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "playDescription": "Timeout #1 by SF.",
+        "timeOfPlay": "2:11",
+        "title": "Timeout"
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed up the middle for 1 yards. Tackled by O.Speights at LA 38.",
+        "timeOfPlay": "2:11",
+        "title": "4th & 1 · LAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 62,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 8 yards. Tackled by T.Hamilton; J.Verse at LA 30.",
+        "timeOfPlay": "1:35",
+        "title": "1st & 10 · LAR 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Robinson rushed left tackle for 5 yards. Tackled by N.Landman at LA 25.",
+        "timeOfPlay": "0:54",
+        "title": "2nd & 2 · LAR 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 75,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "36",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete deep right intended for D.Robinson.",
+        "timeOfPlay": "0:17",
+        "title": "1st & 10 · LAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "C.McCaffrey rushed left guard for 1 yards. Tackled by P.Ford at LA 24.",
+        "timeOfPlay": "0:09",
+        "title": "2nd & 10 · LAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass deep left complete. Catch made by D.Robinson for 18 yards. Pushed out of bounds by at LA 6.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 9 · LAR 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 94,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed right end for 5 yards. Tackled by B.Young at LA 1.",
+        "timeOfPlay": "14:37",
+        "title": "1st & 6 · LAR 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "13:47",
+        "title": "2nd & 1 · LAR 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "2ND",
+        "playDescription": "E.Pineiro extra point is good.",
+        "timeOfPlay": "13:44",
+        "title": "LAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9625",
+      "subtitle": "9 plays · 39 yards · 4:53",
+      "title": "FUMBLE",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "44",
+        "periodOfPlay": "2ND",
+        "playDescription": "E.Pineiro kicks 57 yards from SF 35 to the LA 8. X.Smith returns the kickoff. Pushed out of bounds by J.Brown; C.Lucas at LA 31.",
+        "timeOfPlay": "13:44",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 92,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 69,
+            "yardStart": 92
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short right complete. Catch made by P.Nacua for 5 yards. Tackled by D.Lenoir; U.Stout at LA 36.",
+        "timeOfPlay": "13:36",
+        "title": "1st & 10 · LAR 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "46",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short right intended for K.Williams (Y.Gross-Matos).",
+        "timeOfPlay": "12:58",
+        "title": "2nd & 5 · LAR 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short left complete. Catch made by P.Nacua for 14 yards. Tackled by M.Sigle at LA 50.",
+        "timeOfPlay": "12:51",
+        "title": "3rd & 5 · LAR 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Williams rushed up the middle for 2 yards. Tackled by F.Warner; M.Sigle at SF 48.",
+        "timeOfPlay": "12:13",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "49",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Williams rushed up the middle for 6 yards. Tackled by R.Green; U.Stout at SF 42.",
+        "timeOfPlay": "11:32",
+        "title": "2nd & 8 · SF 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Williams rushed right guard for 1 yards. Tackled by F.Warner at SF 41.",
+        "timeOfPlay": "10:49",
+        "title": "3rd & 2 · SF 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "K.Williams rushed up the middle for 4 yards. Tackled by S.Okuayinonu at SF 37.",
+        "timeOfPlay": "10:12",
+        "title": "4th & 1 · SF 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Corum rushed up the middle for 13 yards. Tackled by M.Sigle; U.Stout at SF 24.",
+        "timeOfPlay": "9:35",
+        "title": "1st & 10 · SF 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "53",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford FUMBLES (aborted). Fumble RECOVERED by SF-T.Gipson at SF 30.",
+        "timeOfPlay": "8:58",
+        "title": "1st & 10 · SF 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 24
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 30,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9626",
+      "subtitle": "5 plays · 22 yards · 2:40",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "S.Moore rushed right end for 1 yards. Tackled by Q.Lake at SF 31.",
+        "timeOfPlay": "8:51",
+        "title": "1st & 10 · SF 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 31,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass short right complete. Catch made by K.Bourne for 16 yards. Tackled by Q.Lake, K.Curl at SF 47.",
+        "timeOfPlay": "8:18",
+        "title": "2nd & 9 · SF 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed left tackle for 2 yards. Tackled by T.Davis at SF 49.",
+        "timeOfPlay": "7:42",
+        "title": "1st & 10 · SF 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 49,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed right guard for 3 yards. Tackled by T.Davis at LA 48.",
+        "timeOfPlay": "6:59",
+        "title": "2nd & 8 · SF 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 52,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short left intended for K.Bourne.",
+        "timeOfPlay": "6:22",
+        "title": "3rd & 5 · LAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "T.Morstead punts 33 yards to LA 15, Center-J.Weeks. Fair catch by X.Smith.",
+        "timeOfPlay": "6:18",
+        "title": "4th & 5 · LAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 85,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "PENALTY on LA-A.Jackson, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "6:11",
+        "title": "1st & 10 · LAR 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 90,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9627",
+      "subtitle": "8 plays · 90 yards · 4:02",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SF"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short middle intended for D.Adams (R.Green).",
+        "timeOfPlay": "6:11",
+        "title": "1st & 15 · LAR 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "64",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short left complete. Catch made by D.Adams for 11 yards. Pushed out of bounds by R.Green at LA 21.",
+        "timeOfPlay": "6:07",
+        "title": "2nd & 15 · LAR 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 79,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short right complete. Catch made by P.Nacua for yards. Tackled by U.Stout at LA 24. PENALTY on SF-D.Lenoir, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "5:30",
+        "title": "3rd & 4 · LAR 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 74,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep left intended for P.Nacua.",
+        "timeOfPlay": "5:18",
+        "title": "1st & 10 · LAR 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "67",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by K.Williams for 6 yards. Tackled by F.Warner; D.Winters at LA 32.",
+        "timeOfPlay": "5:08",
+        "title": "2nd & 10 · LAR 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass deep right complete. Catch made by T.Ferguson for 21 yards. Tackled by M.Sigle at SF 47.",
+        "timeOfPlay": "4:27",
+        "title": "3rd & 4 · LAR 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass deep left complete. Catch made by J.Whittington for 22 yards. Tackled by J.Pinnock at SF 25.",
+        "timeOfPlay": "3:45",
+        "title": "1st & 10 · SF 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 25,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short right complete. Catch made by J.Whittington for 11 yards. Tackled by M.Sigle; D.Lenoir at SF 14.",
+        "timeOfPlay": "3:03",
+        "title": "1st & 10 · SF 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 14,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Stafford pass short right complete. Catch made by K.Williams for 14 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:15",
+        "title": "1st & 10 · SF 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 14
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Karty extra point is good.",
+        "timeOfPlay": "2:09",
+        "title": "SF 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9628",
+      "subtitle": "12 plays · 48 yards · 2:09",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "17",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Karty kicks 52 yards from LA 35 to the SF 13. S.Moore MUFFS catch. Fumble RECOVERED by SF-S.Moore at SF 17. Tackled by T.Reeder at SF 33.",
+        "timeOfPlay": "2:09",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 33,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for L.Farrell (N.Landman).",
+        "timeOfPlay": "2:04",
+        "title": "1st & 10 · SF 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "75",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "76",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass short right complete. Catch made by K.Bourne for 13 yards. Tackled by D.Williams at SF 46.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 10 · SF 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 46,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for J.Tonges (N.Landman).",
+        "timeOfPlay": "1:20",
+        "title": "1st & 10 · SF 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "78",
+        "playDescription": "Timeout #1 by LA.",
+        "timeOfPlay": "1:16",
+        "title": "Timeout"
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed right tackle for 0 yards. Tackled by B.Fiske at SF 46. PENALTY on SF-K.Bourne, Illegal Formation, 5 yards, declined.",
+        "timeOfPlay": "1:16",
+        "title": "2nd & 10 · SF 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 46,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "playDescription": "Timeout #2 by SF.",
+        "timeOfPlay": "1:11",
+        "title": "Timeout"
+       },
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass short middle complete. Catch made by J.Tonges for 11 yards. Tackled by K.Curl at LA 43.",
+        "timeOfPlay": "1:11",
+        "title": "3rd & 10 · SF 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 57,
+            "yardStart": 46
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones pass short left complete. Catch made by D.Robinson for 8 yards. Tackled by C.Durant, N.Landman at LA 35.",
+        "timeOfPlay": "0:50",
+        "title": "1st & 10 · LAR 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 65,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short right intended for M.Valdes-Scantling.",
+        "timeOfPlay": "0:31",
+        "title": "2nd & 2 · LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed up the middle for 8 yards. Tackled by K.Curl at LA 27.",
+        "timeOfPlay": "0:26",
+        "title": "3rd & 2 · LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 73,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "85",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones spikes the ball.",
+        "timeOfPlay": "0:14",
+        "title": "1st & 10 · LAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "86",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for M.Valdes-Scantling.",
+        "timeOfPlay": "0:13",
+        "title": "2nd & 10 · LAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "playDescription": "Timeout #2 by LA.",
+        "timeOfPlay": "0:09",
+        "title": "Timeout"
+       },
+       {
+        "id": "88",
+        "periodOfPlay": "2ND",
+        "playDescription": "C.McCaffrey rushed right guard for 8 yards. Tackled by Q.Lake; P.Ford at LA 19.",
+        "timeOfPlay": "0:09",
+        "title": "3rd & 10 · LAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 81,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "89",
+        "playDescription": "Timeout #3 by SF.",
+        "timeOfPlay": "0:02",
+        "title": "Timeout"
+       },
+       {
+        "id": "90",
+        "periodOfPlay": "2ND",
+        "playDescription": "E.Pineiro 37 yard field goal attempt is good, Center-J.Weeks, Holder-T.Morstead.",
+        "timeOfPlay": "0:02",
+        "title": "4th & 2 · LAR 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 81
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "9629",
+      "subtitle": "6 plays · 28 yards · 2:14",
+      "title": "MISSED FG",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "92",
+        "periodOfPlay": "3RD",
+        "playDescription": "E.Pineiro kicks 55 yards from SF 35 to the LA 10. X.Smith returns the kickoff. Tackled by B.Willis at LA 37.",
+        "timeOfPlay": "15:00",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 90,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 63,
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass short right complete. Catch made by P.Nacua for 4 yards. Pushed out of bounds by U.Stout; D.Lenoir at LA 41.",
+        "timeOfPlay": "14:54",
+        "title": "1st & 10 · LAR 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "94",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass short right complete [A.Collins]. Catch made by D.Allen for 20 yards. Pushed out of bounds by D.Winters at SF 39.",
+        "timeOfPlay": "14:23",
+        "title": "2nd & 6 · LAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "95",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Williams rushed up the middle for 1 yards. Tackled by M.Williams at SF 38. PENALTY on SF-J.Elliott, Defensive Holding, 5 yards, offset. No Play. PENALTY on LA-T.Atwell, Offensive Holding, 10 yards, offset.",
+        "timeOfPlay": "13:53",
+        "title": "1st & 10 · SF 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 39,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Williams rushed up the middle for 4 yards. Tackled by F.Warner; S.Okuayinonu at SF 35.",
+        "timeOfPlay": "13:45",
+        "title": "1st & 10 · SF 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 35,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short left intended for J.Whittington.",
+        "timeOfPlay": "12:59",
+        "title": "2nd & 6 · SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "98",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short right intended for K.Williams.",
+        "timeOfPlay": "12:55",
+        "title": "3rd & 6 · SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "99",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Karty 53 yard field goal attempt is no good, Center-A.Ward, Holder-E.Evans.",
+        "timeOfPlay": "12:51",
+        "title": "4th & 6 · SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - NO GOOD",
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9630",
+      "subtitle": "12 plays · 55 yards · 6:13",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McCaffrey rushed right guard for 2 yards. Tackled by K.Turner; J.Verse at SF 45.",
+        "timeOfPlay": "12:46",
+        "title": "1st & 10 · SF 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 45,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete deep right intended for C.McCaffrey.",
+        "timeOfPlay": "12:10",
+        "title": "2nd & 8 · SF 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short right intended for J.Tonges. PENALTY on LA-D.Williams, Defensive Pass Interference, 6 yards, accepted. No Play.",
+        "timeOfPlay": "12:04",
+        "title": "3rd & 8 · SF 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 51,
+            "yardStart": 45
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "104",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass deep left complete [J.Verse]. Catch made by K.Bourne for 19 yards. K.Bourne ran out of bounds.",
+        "timeOfPlay": "12:00",
+        "title": "1st & 10 · LAR 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 70,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McCaffrey rushed left end for 2 yards. Tackled by N.Landman; Q.Lake at LA 28.",
+        "timeOfPlay": "11:20",
+        "title": "1st & 10 · LAR 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 72,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Robinson rushed right tackle for 5 yards. Tackled by Q.Lake at LA 23.",
+        "timeOfPlay": "10:40",
+        "title": "2nd & 8 · LAR 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 77,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass short middle complete [J.Verse]. Catch made by K.Bourne for 10 yards. Tackled by N.Landman at LA 13.",
+        "timeOfPlay": "9:59",
+        "title": "3rd & 3 · LAR 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 87,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McCaffrey rushed left guard for 4 yards. Tackled by B.Young at LA 9.",
+        "timeOfPlay": "9:18",
+        "title": "1st & 10 · LAR 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 91,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass short right complete. Catch made by K.Bourne for 6 yards. Tackled by D.Williams at LA 3.",
+        "timeOfPlay": "8:40",
+        "title": "2nd & 6 · LAR 9",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 97,
+            "yardStart": 91
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McCaffrey rushed right guard for 2 yards. Tackled by B.Fiske; P.Ford at LA 1.",
+        "timeOfPlay": "7:59",
+        "title": "1st & 3 · LAR 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 99,
+            "yardStart": 97
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Juszczyk rushed left guard for -1 yards. Tackled by J.Verse, B.Fiske at LA 2.",
+        "timeOfPlay": "7:22",
+        "title": "2nd & 1 · LAR 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 98,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "112",
+        "playDescription": "Timeout #1 by SF.",
+        "timeOfPlay": "6:39",
+        "title": "Timeout"
+       },
+       {
+        "id": "113",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for D.Robinson [B.Young].",
+        "timeOfPlay": "6:39",
+        "title": "3rd & 2 · LAR 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "114",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "6:36",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "E.Pineiro 20 yard field goal attempt is good, Center-J.Weeks, Holder-T.Morstead.",
+        "timeOfPlay": "6:36",
+        "title": "4th & 2 · LAR 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 98
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9631",
+      "subtitle": "7 plays · 69 yards · 2:48",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": true,
+        "score": "14",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "E.Pineiro kicks 58 yards from SF 35 to the LA 7. X.Smith returns the kickoff. Tackled by L.Gifford; C.Robinson at LA 31.",
+        "timeOfPlay": "6:33",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 93,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 69,
+            "yardStart": 93
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep right intended for B.Corum.",
+        "timeOfPlay": "6:27",
+        "title": "1st & 10 · LAR 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass deep right complete. Catch made by T.Atwell for 34 yards. Tackled by M.Sigle at SF 35.",
+        "timeOfPlay": "6:20",
+        "title": "2nd & 10 · LAR 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "119",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by P.Nacua for 16 yards. Tackled by F.Warner at SF 19.",
+        "timeOfPlay": "5:44",
+        "title": "1st & 10 · SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 19,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short left intended for B.Corum.",
+        "timeOfPlay": "5:10",
+        "title": "1st & 10 · SF 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass short left complete. Catch made by P.Nacua for 11 yards. Tackled by F.Warner at SF 8.",
+        "timeOfPlay": "5:05",
+        "title": "2nd & 10 · SF 19",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 8,
+            "yardStart": 19
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "K.Williams rushed up the middle for 7 yards. Tackled by A.Collins at SF 1.",
+        "timeOfPlay": "4:29",
+        "title": "1st & 8 · SF 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Stafford pass short right complete. Catch made by P.Nacua for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "3:48",
+        "title": "2nd & 1 · SF 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "124",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Karty extra point is good.",
+        "timeOfPlay": "3:45",
+        "title": "SF 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "9632",
+      "subtitle": "7 plays · 17 yards · 4:42",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "14",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Karty kicks 56 yards from LA 35 to the SF 9. I.Guerendo returns the kickoff. Tackled by S.Dolac; O.Speights at SF 27.",
+        "timeOfPlay": "3:45",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 9,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 27,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on SF-C.McKivitz, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:40",
+        "title": "1st & 10 · SF 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 22,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "128",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass short left complete. Catch made by K.Bourne for 6 yards. Tackled by N.Landman at SF 28.",
+        "timeOfPlay": "3:40",
+        "title": "1st & 15 · SF 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 28,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "129",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass short left complete. Catch made by L.Farrell for 8 yards. Tackled by K.Curl at SF 36.",
+        "timeOfPlay": "3:01",
+        "title": "2nd & 9 · SF 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "130",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones rushed left tackle for 1 yards. Tackled by O.Speights at SF 37. The Replay Official reviewed the short of the line to gain and the play was overturned. M.Jones rushed left tackle for 0 yards. Tackled by O.Speights at SF 36.",
+        "timeOfPlay": "2:27",
+        "title": "3rd & 1 · SF 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 36,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones rushed up the middle for 2 yards. Tackled by K.Turner at SF 38.",
+        "timeOfPlay": "1:47",
+        "title": "4th & 1 · SF 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 38,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "playDescription": "Timeout #2 by SF.",
+        "timeOfPlay": "1:00",
+        "title": "Timeout"
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "3RD",
+        "playDescription": "C.McCaffrey rushed right end for 4 yards. Tackled by Q.Lake, N.Landman at SF 42.",
+        "timeOfPlay": "1:00",
+        "title": "1st & 10 · SF 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "134",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Jones pass short left complete. Catch made by K.Juszczyk for 5 yards. Tackled by C.Durant at SF 47.",
+        "timeOfPlay": "0:26",
+        "title": "2nd & 6 · SF 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "135",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.McCaffrey rushed right tackle for -3 yards. Tackled by N.Landman at SF 44.",
+        "timeOfPlay": "15:00",
+        "title": "3rd & 1 · SF 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 44,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Morstead punts 50 yards to LA 6, Center-J.Weeks. X.Smith returned punt from the LA 6. Tackled by I.Guerendo at LA 12.",
+        "timeOfPlay": "14:15",
+        "title": "4th & 4 · SF 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 94,
+            "yardStart": 44
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 88,
+            "yardStart": 94
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9633",
+      "subtitle": "9 plays · 88 yards · 3:24",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": true,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "138",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short left complete. Catch made by P.Nacua for 9 yards. Tackled by U.Stout; M.Sigle at LA 21.",
+        "timeOfPlay": "14:03",
+        "title": "1st & 10 · LAR 12",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 79,
+            "yardStart": 88
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by D.Allen for 4 yards. Tackled by F.Warner at LA 25.",
+        "timeOfPlay": "13:36",
+        "title": "2nd & 1 · LAR 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 75,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep left intended for D.Adams.",
+        "timeOfPlay": "13:09",
+        "title": "1st & 10 · LAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by K.Williams for 9 yards. Tackled by F.Warner at LA 34.",
+        "timeOfPlay": "13:04",
+        "title": "2nd & 10 · LAR 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Williams rushed right tackle for 3 yards. Tackled by M.Sigle at LA 37.",
+        "timeOfPlay": "12:28",
+        "title": "3rd & 1 · LAR 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 63,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short middle intended for K.Mumpfield [T.Gipson]. PENALTY on SF-D.Lenoir, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "11:57",
+        "title": "1st & 10 · LAR 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 58,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass deep middle complete. Catch made by D.Adams for 26 yards. Tackled by F.Warner at SF 32. PENALTY on SF-C.West, Illegal Use of Hands / Defense, 5 yards, declined.",
+        "timeOfPlay": "11:57",
+        "title": "1st & 10 · LAR 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 32,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "145",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass deep middle complete. Catch made by D.Adams for 24 yards. Tackled by U.Stout at SF 8.",
+        "timeOfPlay": "11:34",
+        "title": "1st & 10 · SF 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 8,
+            "yardStart": 32
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short left intended for C.Parkinson (M.Sigle).",
+        "timeOfPlay": "10:52",
+        "title": "1st & 8 · SF 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short left complete. Catch made by K.Williams for 8 yards. TOUCHDOWN.",
+        "timeOfPlay": "10:43",
+        "title": "2nd & 8 · SF 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 8
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Karty extra point is blocked. J.Elliott blocked the kick.",
+        "timeOfPlay": "10:39",
+        "title": "SF 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT BLOCKED",
+            "yardEnd": 65,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9634",
+      "subtitle": "3 plays · 2 yards · 1:28",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Karty kicks 65 yards from LA 35 to the SF End Zone. Touchback.",
+        "timeOfPlay": "10:39",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 35,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short left complete. Catch made by J.Tonges for 2 yards. Tackled by T.Davis; P.Ford at SF 37.",
+        "timeOfPlay": "10:39",
+        "title": "1st & 10 · SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 37,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.McCaffrey rushed right tackle for 0 yards. Tackled by J.Verse at SF 37.",
+        "timeOfPlay": "10:03",
+        "title": "2nd & 8 · SF 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 37,
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "153",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short left intended for D.Robinson [J.Verse].",
+        "timeOfPlay": "9:24",
+        "title": "3rd & 8 · SF 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 37
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Morstead punts 35 yards to LA 28, Center-J.Weeks. X.Smith returned punt from the LA 28. Tackled by C.Robinson; L.Gifford at LA 30.",
+        "timeOfPlay": "9:19",
+        "title": "4th & 8 · SF 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 72,
+            "yardStart": 37
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 70,
+            "yardStart": 72
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9635",
+      "subtitle": "3 plays · 9 yards · 1:07",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep left intended for D.Adams.",
+        "timeOfPlay": "9:11",
+        "title": "1st & 10 · LAR 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short left complete. Catch made by D.Adams for 9 yards. Tackled by U.Stout at LA 39.",
+        "timeOfPlay": "9:03",
+        "title": "2nd & 10 · LAR 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short left intended for D.Adams.",
+        "timeOfPlay": "8:20",
+        "title": "3rd & 1 · LAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "159",
+        "periodOfPlay": "4TH",
+        "playDescription": "E.Evans punts 59 yards to SF 2, Center-A.Ward. Downed by X.Smith.",
+        "timeOfPlay": "8:18",
+        "title": "4th & 1 · LAR 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 2,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9636",
+      "subtitle": "12 plays · 57 yards · 5:12",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "23",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for J.Tonges (N.Landman).",
+        "timeOfPlay": "8:04",
+        "title": "1st & 10 · SF 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short right complete. Catch made by K.Bourne for 9 yards. Tackled by E.Forbes at SF 11.",
+        "timeOfPlay": "7:58",
+        "title": "2nd & 10 · SF 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 11,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short left complete [J.Verse]. Catch made by K.Bourne for 18 yards. Tackled by Q.Lake at SF 29.",
+        "timeOfPlay": "7:16",
+        "title": "3rd & 1 · SF 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 29,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short left complete. Catch made by K.Juszczyk for 4 yards. Tackled by B.Young at SF 33.",
+        "timeOfPlay": "6:32",
+        "title": "1st & 10 · SF 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 29
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Robinson rushed left tackle for 1 yards. Tackled by J.Verse at SF 34.",
+        "timeOfPlay": "5:54",
+        "title": "2nd & 6 · SF 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 34,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "166",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 16 yards. Tackled by C.Durant; N.Landman at SF 50.",
+        "timeOfPlay": "5:15",
+        "title": "3rd & 5 · SF 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 50,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short right intended for M.Turner (Q.Lake).",
+        "timeOfPlay": "4:33",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "168",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short middle complete. Catch made by K.Bourne for 10 yards. Tackled by K.Kinchens at LA 40.",
+        "timeOfPlay": "4:28",
+        "title": "2nd & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 60,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short right intended for. PENALTY on SF-C.McKivitz, Ineligible Downfield Pass, 5 yards, accepted. No Play.",
+        "timeOfPlay": "3:48",
+        "title": "1st & 10 · LAR 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 55,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short left intended for D.Robinson [B.Fiske].",
+        "timeOfPlay": "3:44",
+        "title": "1st & 15 · LAR 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones pass short left complete. Catch made by J.Tonges for 4 yards. Tackled by J.McCollough at LA 41.",
+        "timeOfPlay": "3:39",
+        "title": "2nd & 15 · LAR 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short middle intended for J.Tonges (J.Stewart).",
+        "timeOfPlay": "3:02",
+        "title": "3rd & 11 · LAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "E.Pineiro 59 yard field goal attempt is good, Center-J.Weeks, Holder-T.Morstead.",
+        "timeOfPlay": "2:57",
+        "title": "4th & 11 · LAR 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9637",
+      "subtitle": "5 plays · 63 yards · 1:47",
+      "title": "FUMBLE",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "23",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "E.Pineiro kicks 65 yards from SF 35 to the LA End Zone. Touchback.",
+        "timeOfPlay": "2:52",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 65,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by P.Nacua for 11 yards. Tackled by M.Sigle at LA 46.",
+        "timeOfPlay": "2:52",
+        "title": "1st & 10 · LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 54,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "177",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass deep left complete. Catch made by D.Adams for 18 yards. Tackled by M.Sigle at SF 36.",
+        "timeOfPlay": "2:31",
+        "title": "1st & 10 · LAR 46",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 54
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete short middle intended for. PENALTY on SF-C.Lucas, Illegal Contact, 5 yards, declined. PENALTY on SF-D.Lenoir, Defensive Holding, 5 yards, accepted. No Play.",
+        "timeOfPlay": "2:02",
+        "title": "1st & 10 · SF 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 31,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "1:56",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Williams rushed up the middle for 20 yards. Tackled by F.Warner at SF 11.",
+        "timeOfPlay": "1:56",
+        "title": "1st & 10 · SF 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 11,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Williams rushed up the middle for 4 yards. Tackled by F.Warner; M.Sigle at SF 7. PENALTY on SF-M.Williams, Illegal Use of Hands / Defense, 4 yards, accepted.",
+        "timeOfPlay": "1:13",
+        "title": "1st & 10 · SF 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 3,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "periodOfPlay": "4TH",
+        "playDescription": "K.Williams rushed up the middle for 1 yards. K.Williams FUMBLES, forced by A.Collins. Fumble RECOVERED by SF-A.Collins at SF 1.",
+        "timeOfPlay": "1:07",
+        "title": "1st & 3 · SF 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 3
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 1,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9638",
+      "subtitle": "3 plays · 2 yards · 0:23",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "23",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Jones rushed up the middle for 1 yards. Tackled by N.Landman at SF 2.",
+        "timeOfPlay": "1:05",
+        "title": "1st & 10 · SF 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "playDescription": "Timeout #1 by LA.",
+        "timeOfPlay": "1:02",
+        "title": "Timeout"
+       },
+       {
+        "id": "185",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.McCaffrey rushed up the middle for 0 yards. Tackled by N.Landman; T.Davis at SF 2.",
+        "timeOfPlay": "1:02",
+        "title": "2nd & 9 · SF 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 2,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "186",
+        "playDescription": "Timeout #2 by LA.",
+        "timeOfPlay": "0:58",
+        "title": "Timeout"
+       },
+       {
+        "id": "187",
+        "periodOfPlay": "4TH",
+        "playDescription": "C.McCaffrey rushed up the middle for 1 yards. Tackled by B.Young; K.Turner at SF 3.",
+        "timeOfPlay": "0:58",
+        "title": "3rd & 9 · SF 2",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 3,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "playDescription": "Timeout #3 by LA.",
+        "timeOfPlay": "0:53",
+        "title": "Timeout"
+       },
+       {
+        "id": "189",
+        "periodOfPlay": "4TH",
+        "playDescription": "T.Morstead punts 50 yards to LA 47, Center-J.Weeks. X.Smith returned punt from the LA 47. Tackled by S.Neal at SF 40. PENALTY on LA-T.Brown, Offensive Holding, 10 yards, accepted.",
+        "timeOfPlay": "0:53",
+        "title": "4th & 8 · SF 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 53,
+            "yardStart": 3
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 50,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9639",
+      "subtitle": "7 plays · 20 yards · 0:40",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "23",
+        "title": "SF"
+       },
+       {
+        "changed": true,
+        "score": "23",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "190",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep right intended for P.Nacua (D.Lenoir).",
+        "timeOfPlay": "0:42",
+        "title": "1st & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "191",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep middle intended for D.Adams.",
+        "timeOfPlay": "0:36",
+        "title": "2nd & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short right complete. Catch made by K.Williams for 7 yards. Pushed out of bounds by D.Lenoir at SF 43.",
+        "timeOfPlay": "0:31",
+        "title": "3rd & 10 ·  50",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 50
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "193",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by K.Williams for 13 yards. Tackled by D.Lenoir at SF 30.",
+        "timeOfPlay": "0:25",
+        "title": "4th & 3 · SF 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "194",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford spikes the ball.",
+        "timeOfPlay": "0:12",
+        "title": "1st & 10 · SF 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "playDescription": "Timeout #3 by SF.",
+        "timeOfPlay": "0:12",
+        "title": "Timeout"
+       },
+       {
+        "id": "196",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep right intended for D.Adams.",
+        "timeOfPlay": "0:12",
+        "title": "2nd & 10 · SF 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "197",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Karty 48 yard field goal attempt is good, Center-A.Ward, Holder-E.Evans.",
+        "timeOfPlay": "0:06",
+        "title": "3rd & 10 · SF 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9640",
+      "subtitle": "0 plays · 0 yards · 0:02",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "23",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "23",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "198",
+        "periodOfPlay": "4TH",
+        "playDescription": "E.Evans kicks 71 yards from LA 35 to the SF End Zone. S.Moore returns the kickoff. Tackled by J.Wallace at SF 32.",
+        "timeOfPlay": "0:02",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": -6,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 32,
+            "yardStart": -6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "199",
+        "playDescription": "End Quarter 4",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "9641",
+      "subtitle": "8 plays · 37 yards · 4:09",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/28"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "26",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "23",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "200",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Karty kicks 25 yards from LA 35 to the SF 40. Downed by LA. PENALTY on LA-J.Karty, Kickoff Short of Landing Zone, 0 yards, accepted.",
+        "timeOfPlay": "10:00",
+        "title": "LAR 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 40,
+            "yardStart": 65
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "201",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones pass short left complete. Catch made by K.Juszczyk for 12 yards. Tackled by O.Speights at LA 48.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 10 · SF 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 52,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "202",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones pass short right complete. Catch made by C.McCaffrey for 15 yards. Tackled by N.Landman at LA 33.",
+        "timeOfPlay": "9:21",
+        "title": "1st & 10 · LAR 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 67,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "203",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones pass short left complete. Catch made by J.Tonges for 6 yards. Tackled by Q.Lake at LA 27.",
+        "timeOfPlay": "8:38",
+        "title": "1st & 10 · LAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 73,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "204",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones pass short left complete. Catch made by J.Tonges for 6 yards. Tackled by K.Curl at LA 21.",
+        "timeOfPlay": "8:03",
+        "title": "2nd & 4 · LAR 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 79,
+            "yardStart": 73
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "205",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones pass short left complete. Catch made by C.McCaffrey for 7 yards. Tackled by C.Durant at LA 14.",
+        "timeOfPlay": "7:18",
+        "title": "1st & 10 · LAR 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 86,
+            "yardStart": 79
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "206",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones steps back to pass. Sacked at LA 23 for -9 yards (K.Turner; B.Young).",
+        "timeOfPlay": "6:49",
+        "title": "2nd & 3 · LAR 14",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 77,
+            "yardStart": 86
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "207",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Jones steps back to pass. Pass incomplete short left intended for J.Tonges [B.Young].",
+        "timeOfPlay": "6:00",
+        "title": "3rd & 12 · LAR 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "208",
+        "periodOfPlay": "OT",
+        "playDescription": "E.Pineiro 41 yard field goal attempt is good, Center-J.Weeks, Holder-T.Morstead.",
+        "timeOfPlay": "5:55",
+        "title": "4th & 12 · LAR 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "9642",
+      "subtitle": "6 plays · 56 yards · 2:15",
+      "title": "DOWNS",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/26"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "26",
+        "title": "SF"
+       },
+       {
+        "changed": false,
+        "score": "23",
+        "title": "LAR"
+       }
+      ],
+      "plays": [
+       {
+        "id": "209",
+        "periodOfPlay": "OT",
+        "playDescription": "E.Pineiro kicks 60 yards from SF 35 to the LA 5. X.Smith returns the kickoff. Tackled by L.Gifford at LA 33.",
+        "timeOfPlay": "5:51",
+        "title": "SF 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 95,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 67,
+            "yardStart": 95
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "210",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Stafford pass short right complete. Catch made by P.Nacua for 9 yards. Pushed out of bounds by at LA 42.",
+        "timeOfPlay": "5:46",
+        "title": "1st & 10 · LAR 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 58,
+            "yardStart": 67
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "211",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Stafford pass deep right complete. Catch made by T.Atwell for 38 yards. Pushed out of bounds by at SF 20.",
+        "timeOfPlay": "5:26",
+        "title": "2nd & 1 · LAR 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 20,
+            "yardStart": 58
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "212",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Stafford steps back to pass. Pass incomplete deep right intended for T.Atwell.",
+        "timeOfPlay": "4:54",
+        "title": "1st & 10 · SF 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "213",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Stafford pass short right complete. Catch made by K.Williams for 4 yards. Tackled by D.Winters at SF 16.",
+        "timeOfPlay": "4:50",
+        "title": "2nd & 10 · SF 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 16,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "214",
+        "periodOfPlay": "OT",
+        "playDescription": "M.Stafford pass short middle complete. Catch made by K.Williams for 5 yards. Tackled by D.Winters at SF 11.",
+        "timeOfPlay": "4:14",
+        "title": "3rd & 6 · SF 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 11,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "215",
+        "playDescription": "Timeout #1 by SF.",
+        "timeOfPlay": "3:41",
+        "title": "Timeout"
+       },
+       {
+        "id": "216",
+        "playDescription": "Timeout #1 by LA.",
+        "timeOfPlay": "3:41",
+        "title": "Timeout"
+       },
+       {
+        "id": "217",
+        "periodOfPlay": "OT",
+        "playDescription": "K.Williams rushed right tackle for 0 yards. Tackled by M.Sigle; D.Lenoir at SF 11.",
+        "timeOfPlay": "3:41",
+        "title": "4th & 1 · SF 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 11,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

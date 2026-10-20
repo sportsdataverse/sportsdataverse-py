@@ -224,6 +224,7 @@ def test_parse_drive_pbp():
         "field_position",
         "play_text",
         "play_team",
+        "play_player",
     }
     assert all(r["game_id"] == "41616" for r in rows)
     assert len({r["drive_id"] for r in rows}) > 1, "plays span multiple drives"

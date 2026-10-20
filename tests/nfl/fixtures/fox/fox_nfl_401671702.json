@@ -1,0 +1,3974 @@
+{
+ "header": {
+  "alternateLeftColor": "1, 0, 156, 26",
+  "alternateRightColor": "1, 0, 87, 244",
+  "eventStatus": 3,
+  "eventTime": "2024-09-15T17:00:00Z",
+  "id": "10432",
+  "leftColor": "1, 0, 156, 26",
+  "leftTeam": {
+   "imageAltText": "Seattle Seahawks",
+   "isLoser": false,
+   "longName": "Seahawks",
+   "name": "SEA",
+   "score": 23,
+   "stackedNameBottom": "Seahawks",
+   "stackedNameTop": "Seattle",
+   "uri": "football/nfl/teams/14"
+  },
+  "rightColor": "1, 0, 87, 244",
+  "rightTeam": {
+   "imageAltText": "New England Patriots",
+   "isLoser": true,
+   "longName": "Patriots",
+   "name": "NE",
+   "score": 20,
+   "stackedNameBottom": "Patriots",
+   "stackedNameTop": "New England",
+   "uri": "football/nfl/teams/4"
+  },
+  "statusLine": "FINAL / OT"
+ },
+ "pbp": {
+  "sections": [
+   {
+    "title": "1ST QUARTER",
+    "groups": [
+     {
+      "id": "3268",
+      "subtitle": "3 plays · -1 yard · 1:57",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "1",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the NE End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "2",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed up the middle for 1 yards. Tackled by J.Baker; T.Dodson at NE 31.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "3",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short right complete. Catch made by R.Stevenson for 7 yards. Pushed out of bounds by J.Baker at NE 38.",
+        "timeOfPlay": "14:22",
+        "title": "2nd & 9 · NE 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "4",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett steps back to pass. Sacked at NE 29 for -9 yards (B.Mafe).",
+        "timeOfPlay": "13:49",
+        "title": "3rd & 2 · NE 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 71,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "5",
+        "periodOfPlay": "1ST",
+        "playDescription": "B.Baringer punts 56 yards to SEA 15, Center-J.Cardona. Out of bounds.",
+        "timeOfPlay": "13:12",
+        "title": "4th & 11 · NE 29",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 15,
+            "yardStart": 71
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3269",
+      "subtitle": "6 plays · 7 yards · 3:14",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "0",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "6",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Charbonnet rushed left guard for 1 yards. Tackled by A.Jennings at SEA 16.",
+        "timeOfPlay": "13:03",
+        "title": "1st & 10 · SEA 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 16,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "7",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short left complete. Catch made by J.Smith-Njigba for 8 yards. Pushed out of bounds by J.Jones at SEA 24.",
+        "timeOfPlay": "12:41",
+        "title": "2nd & 9 · SEA 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "8",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 3 yards. Tackled by J.Peppers at SEA 27.",
+        "timeOfPlay": "12:32",
+        "title": "3rd & 1 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 27,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "9",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short left complete. Catch made by T.Lockett for -1 yards. Tackled by K.Dugger at SEA 26.",
+        "timeOfPlay": "11:34",
+        "title": "1st & 10 · SEA 27",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 27
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "10",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith steps back to pass. Sacked at SEA 22 for -4 yards (K.White; D.Ekuale).",
+        "timeOfPlay": "10:49",
+        "title": "2nd & 11 · SEA 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 22,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "11",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep middle intended for J.Smith-Njigba (J.Hawkins).",
+        "timeOfPlay": "10:07",
+        "title": "3rd & 15 · SEA 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "12",
+        "periodOfPlay": "1ST",
+        "playDescription": "M.Dickson punts 53 yards to NE 25, Center-C.Stoll. M.Jones returned punt from the NE 25. Tackled by K.Wallace; J.Bobo at NE 40.",
+        "timeOfPlay": "10:02",
+        "title": "4th & 15 · SEA 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 75,
+            "yardStart": 22
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 60,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3270",
+      "subtitle": "8 plays · 60 yards · 4:53",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "0",
+        "title": "SEA"
+       },
+       {
+        "changed": true,
+        "score": "7",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "14",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed up the middle for 9 yards. Tackled by B.Mafe; R.Jenkins at NE 49.",
+        "timeOfPlay": "9:49",
+        "title": "1st & 10 · NE 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 51,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "15",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short middle complete. Catch made by H.Henry for 8 yards. Tackled by J.Baker at SEA 43.",
+        "timeOfPlay": "9:11",
+        "title": "2nd & 1 · NE 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 43,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "16",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short right complete. Catch made by H.Henry for 12 yards. Tackled by K.Wallace at SEA 31.",
+        "timeOfPlay": "8:30",
+        "title": "1st & 10 · SEA 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "17",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed up the middle for 6 yards. Tackled by B.Mafe at SEA 25.",
+        "timeOfPlay": "7:41",
+        "title": "1st & 10 · SEA 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "18",
+        "periodOfPlay": "1ST",
+        "playDescription": "A.Gibson rushed right guard for 2 yards. Tackled by J.Reed at SEA 23.",
+        "timeOfPlay": "7:01",
+        "title": "2nd & 4 · SEA 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "19",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short left complete. Catch made by H.Henry for 17 yards. Tackled by J.Love, D.Witherspoon at SEA 6.",
+        "timeOfPlay": "6:18",
+        "title": "3rd & 2 · SEA 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 6,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "20",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed up the middle for 1 yards. Tackled by J.Baker; R.Jenkins at SEA 5.",
+        "timeOfPlay": "5:33",
+        "title": "1st & 6 · SEA 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 5,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "21",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short middle complete. Catch made by J.Polk for 5 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:00",
+        "title": "2nd & 5 · SEA 5",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 5
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "22",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Slye extra point is good.",
+        "timeOfPlay": "4:56",
+        "title": "SEA 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3271",
+      "subtitle": "4 plays · 72 yards · 2:06",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "7",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "7",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "24",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Slye kicks 63 yards from NE 35 to the SEA 2. L.Shenault returns the kickoff. Tackled by R.McMillan, K.Dugger at SEA 28.",
+        "timeOfPlay": "4:56",
+        "title": "NE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 2,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 28,
+            "yardStart": 2
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "25",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short left complete. Catch made by J.Smith-Njigba for 5 yards. Tackled by K.Dugger at SEA 33.",
+        "timeOfPlay": "4:47",
+        "title": "1st & 10 · SEA 28",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 28
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "26",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass short left complete. Catch made by J.Smith-Njigba for 6 yards. Tackled by M.Jones at SEA 39.",
+        "timeOfPlay": "4:10",
+        "title": "2nd & 5 · SEA 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "27",
+        "periodOfPlay": "1ST",
+        "playDescription": "Z.Charbonnet rushed up the middle for 5 yards. Tackled by J.Tavai, C.Gonzalez at SEA 44.",
+        "timeOfPlay": "3:35",
+        "title": "1st & 10 · SEA 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 44,
+            "yardStart": 39
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "28",
+        "periodOfPlay": "1ST",
+        "playDescription": "G.Smith pass deep left complete. Catch made by D.Metcalf for 56 yards. TOUCHDOWN.",
+        "timeOfPlay": "2:57",
+        "title": "2nd & 5 · SEA 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 44
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "29",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Myers extra point is good.",
+        "timeOfPlay": "2:50",
+        "title": "NE 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "2ND QUARTER",
+    "groups": [
+     {
+      "id": "3272",
+      "subtitle": "15 plays · 59 yards · 6:45",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "7",
+        "title": "SEA"
+       },
+       {
+        "changed": true,
+        "score": "10",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "31",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the NE End Zone. Touchback.",
+        "timeOfPlay": "2:50",
+        "title": "SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "32",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed right tackle for -4 yards. Tackled by D.Jones, D.Hall at NE 26.",
+        "timeOfPlay": "2:50",
+        "title": "1st & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 74,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "33",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short left complete. Catch made by A.Hooper for 5 yards. Tackled by D.Witherspoon, T.Dodson at NE 31.",
+        "timeOfPlay": "2:11",
+        "title": "2nd & 14 · NE 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 69,
+            "yardStart": 74
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "34",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short right complete. Catch made by H.Henry for 10 yards. Tackled by T.Dodson at NE 41.",
+        "timeOfPlay": "1:28",
+        "title": "3rd & 9 · NE 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 59,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "35",
+        "periodOfPlay": "1ST",
+        "playDescription": "R.Stevenson rushed right guard for 3 yards. Tackled by B.Mafe; L.Williams at NE 44.",
+        "timeOfPlay": "1:00",
+        "title": "1st & 10 · NE 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 56,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "36",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for K.Osborn.",
+        "timeOfPlay": "0:33",
+        "title": "2nd & 7 · NE 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "37",
+        "periodOfPlay": "1ST",
+        "playDescription": "J.Brissett pass short middle complete. Catch made by H.Henry for 9 yards. Tackled by J.Love at SEA 47.",
+        "timeOfPlay": "0:30",
+        "title": "3rd & 7 · NE 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "38",
+        "playDescription": "End Quarter 1",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "39",
+        "periodOfPlay": "2ND",
+        "playDescription": "A.Gibson rushed right tackle for 4 yards. Tackled by R.Woolen, J.Reed at SEA 43.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · SEA 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 43,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "40",
+        "periodOfPlay": "2ND",
+        "playDescription": "A.Gibson rushed right end for 19 yards. Tackled by J.Love at SEA 24.",
+        "timeOfPlay": "14:30",
+        "title": "2nd & 6 · SEA 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 24,
+            "yardStart": 43
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "41",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett pass short middle complete. Catch made by H.Henry for 7 yards. Tackled by J.Love at SEA 17.",
+        "timeOfPlay": "13:48",
+        "title": "1st & 10 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 17,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "42",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Polk rushed right end for 0 yards. Pushed out of bounds by T.Brown at SEA 17.",
+        "timeOfPlay": "13:15",
+        "title": "2nd & 3 · SEA 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 17,
+            "yardStart": 17
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "43",
+        "periodOfPlay": "2ND",
+        "playDescription": "A.Gibson rushed right tackle for 4 yards. Tackled by R.Jenkins at SEA 13.",
+        "timeOfPlay": "12:37",
+        "title": "3rd & 3 · SEA 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 13,
+            "yardStart": 17
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "44",
+        "playDescription": "Timeout #1 by NE.",
+        "timeOfPlay": "12:02",
+        "title": "Timeout"
+       },
+       {
+        "id": "45",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for R.Stevenson (J.Baker).",
+        "timeOfPlay": "12:02",
+        "title": "1st & 10 · SEA 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "46",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett pass short middle complete. Catch made by R.Stevenson for 2 yards. Tackled by J.Reed, T.Knight at SEA 11.",
+        "timeOfPlay": "11:56",
+        "title": "2nd & 10 · SEA 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 11,
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "47",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for H.Henry [L.Williams].",
+        "timeOfPlay": "11:14",
+        "title": "3rd & 8 · SEA 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "48",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Slye 29 yard field goal attempt is good, Center-J.Cardona, Holder-B.Baringer.",
+        "timeOfPlay": "11:08",
+        "title": "4th & 8 · SEA 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3273",
+      "subtitle": "11 plays · 70 yards · 5:18",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "14",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "10",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "50",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Slye kicks 65 yards from NE 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "11:05",
+        "title": "NE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "51",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed left tackle for 0 yards. Tackled by J.Pharms at SEA 30.",
+        "timeOfPlay": "11:05",
+        "title": "1st & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 30,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "52",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by L.Shenault for 6 yards. Tackled by K.Dugger, R.McMillan at SEA 36.",
+        "timeOfPlay": "10:29",
+        "title": "2nd & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "53",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short left complete [D.Wise]. Catch made by J.Smith-Njigba for 19 yards. Tackled by K.Dugger at NE 45.",
+        "timeOfPlay": "9:48",
+        "title": "3rd & 4 · SEA 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "54",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep middle intended for D.Metcalf (D.Wise).",
+        "timeOfPlay": "9:22",
+        "title": "1st & 10 · NE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "55",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed left tackle for 5 yards. Tackled by K.White at NE 40.",
+        "timeOfPlay": "9:16",
+        "title": "2nd & 10 · NE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 60,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "56",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by Z.Charbonnet for 4 yards. Tackled by C.Gonzalez at NE 36.",
+        "timeOfPlay": "8:35",
+        "title": "3rd & 5 · NE 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 64,
+            "yardStart": 60
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "57",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith rushed right guard for 2 yards. Tackled by A.Jennings at NE 34.",
+        "timeOfPlay": "8:04",
+        "title": "4th & 1 · NE 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 64
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "58",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass deep right complete [J.Pharms]. Catch made by J.Smith-Njigba for 16 yards. Tackled by M.Wilson at NE 18.",
+        "timeOfPlay": "7:17",
+        "title": "1st & 10 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 82,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "59",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed up the middle for 2 yards. Tackled by D.Godchaux at NE 16.",
+        "timeOfPlay": "6:49",
+        "title": "1st & 10 · NE 18",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 84,
+            "yardStart": 82
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "60",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short left complete. Catch made by D.Metcalf for 3 yards. Tackled by D.Ekuale, R.McMillan at NE 13. PENALTY on SEA-L.Tomlinson, Ineligible Downfield Pass, 5 yards, declined.",
+        "timeOfPlay": "6:11",
+        "title": "2nd & 8 · NE 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 87,
+            "yardStart": 84
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "61",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short right intended for T.Lockett. PENALTY on NE-M.Wilson, Defensive Pass Interference, 12 yards, accepted. No Play.",
+        "timeOfPlay": "6:09",
+        "title": "3rd & 5 · NE 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 99,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "62",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed up the middle for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "5:52",
+        "title": "1st & 1 · NE 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "TD",
+            "yardEnd": 105,
+            "yardStart": 99
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "63",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Myers extra point is good.",
+        "timeOfPlay": "5:47",
+        "title": "NE 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PAT - GOOD",
+            "yardEnd": 105,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3274",
+      "subtitle": "9 plays · 60 yards · 3:16",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SEA"
+       },
+       {
+        "changed": true,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "65",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the NE End Zone. Touchback.",
+        "timeOfPlay": "5:47",
+        "title": "SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "66",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Stevenson rushed right guard for 1 yards. Tackled by T.Dodson, D.Hall at NE 31.",
+        "timeOfPlay": "5:47",
+        "title": "1st & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 69,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "67",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for D.Douglas. PENALTY on SEA-D.Witherspoon, Defensive Pass Interference, 10 yards, accepted. No Play.",
+        "timeOfPlay": "5:13",
+        "title": "2nd & 9 · NE 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 59,
+            "yardStart": 69
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "68",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett pass short right complete. Catch made by H.Henry for 35 yards. Tackled by R.Jenkins at SEA 24.",
+        "timeOfPlay": "5:05",
+        "title": "1st & 10 · NE 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 24,
+            "yardStart": 59
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "69",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for J.Polk.",
+        "timeOfPlay": "4:33",
+        "title": "1st & 10 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "70",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Stevenson rushed right guard for 7 yards. Tackled by T.Knight at SEA 17.",
+        "timeOfPlay": "4:27",
+        "title": "2nd & 10 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 17,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "71",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett scrambles up the middle for 1 yards. Tackled by J.Reed; R.Jenkins at SEA 16. PENALTY on SEA-D.Witherspoon, Illegal Contact, 5 yards, accepted.",
+        "timeOfPlay": "3:48",
+        "title": "3rd & 3 · SEA 17",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 11,
+            "yardStart": 17
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "72",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for.",
+        "timeOfPlay": "3:36",
+        "title": "1st & 10 · SEA 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "73",
+        "periodOfPlay": "2ND",
+        "playDescription": "R.Stevenson rushed up the middle for 1 yards. Tackled by D.Witherspoon, T.Knight at SEA 10.",
+        "timeOfPlay": "3:16",
+        "title": "2nd & 10 · SEA 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 10,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "74",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for R.Stevenson.",
+        "timeOfPlay": "2:39",
+        "title": "3rd & 9 · SEA 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "75",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Slye 28 yard field goal attempt is good, Center-J.Cardona, Holder-B.Baringer.",
+        "timeOfPlay": "2:34",
+        "title": "4th & 9 · SEA 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "FG - GOOD",
+            "yardEnd": -5,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3275",
+      "subtitle": "3 plays · 4 yards · 0:54",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "77",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Slye kicks 65 yards from NE 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "2:31",
+        "title": "NE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "78",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 9 yards. PENALTY on SEA-D.Metcalf, Offensive Pass Interference, 10 yards, offset. PENALTY on NE-C.Gonzalez, Face Mask (15 Yards), 15 yards, offset. No Play.",
+        "timeOfPlay": "2:31",
+        "title": "1st & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 30,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "79",
+        "periodOfPlay": "2ND",
+        "playDescription": "Z.Charbonnet rushed left end for 5 yards. Tackled by J.Jones at SEA 35. PENALTY on SEA-A.Bradford, Unnecessary Roughness / Defense, 15 yards, accepted.",
+        "timeOfPlay": "2:08",
+        "title": "1st & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 20,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "80",
+        "playDescription": "Two minute warning.",
+        "timeOfPlay": "2:00",
+        "title": "Two Minute Warning"
+       },
+       {
+        "id": "81",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by D.Metcalf for 10 yards. Pushed out of bounds by J.Peppers at SEA 30.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 20 · SEA 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 30,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "82",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short right complete. Catch made by Z.Charbonnet for 4 yards. Tackled by K.Dugger, J.Jones at SEA 34.",
+        "timeOfPlay": "1:53",
+        "title": "3rd & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 34,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "83",
+        "playDescription": "Timeout #2 by NE.",
+        "timeOfPlay": "1:43",
+        "title": "Timeout"
+       },
+       {
+        "id": "84",
+        "periodOfPlay": "2ND",
+        "playDescription": "M.Dickson punts 58 yards to NE 8, Center-C.Stoll. Out of bounds.",
+        "timeOfPlay": "1:43",
+        "title": "4th & 6 · SEA 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 92,
+            "yardStart": 34
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3276",
+      "subtitle": "3 plays · 2 yards · 1:02",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "14",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "85",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Hasty rushed left end for 2 yards. Tackled by B.Mafe, T.Knight at NE 10.",
+        "timeOfPlay": "1:37",
+        "title": "1st & 10 · NE 8",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 90,
+            "yardStart": 92
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "86",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for H.Henry (J.Love).",
+        "timeOfPlay": "0:59",
+        "title": "2nd & 8 · NE 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "87",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short right intended for H.Henry.",
+        "timeOfPlay": "0:54",
+        "title": "3rd & 8 · NE 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 90
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "88",
+        "periodOfPlay": "2ND",
+        "playDescription": "B.Baringer punts 64 yards to SEA 26, Center-J.Cardona. D.Williams returned punt from the SEA 26. Tackled by J.Cardona at SEA 49.",
+        "timeOfPlay": "0:41",
+        "title": "4th & 8 · NE 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 26,
+            "yardStart": 90
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 49,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3277",
+      "subtitle": "6 plays · 26 yards · 0:35",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "90",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by Z.Charbonnet for 7 yards. Tackled by J.Uche at NE 44.",
+        "timeOfPlay": "0:35",
+        "title": "1st & 10 · SEA 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 56,
+            "yardStart": 49
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "91",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith steps back to pass. Sacked at NE 48 for -4 yards (K.Dugger).",
+        "timeOfPlay": "0:27",
+        "title": "2nd & 3 · NE 44",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 52,
+            "yardStart": 56
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "92",
+        "playDescription": "Timeout #1 by SEA.",
+        "timeOfPlay": "0:23",
+        "title": "Timeout"
+       },
+       {
+        "id": "93",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by N.Fant for 14 yards. Tackled by J.Tavai at NE 34.",
+        "timeOfPlay": "0:23",
+        "title": "3rd & 7 · NE 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 52
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "94",
+        "playDescription": "Timeout #2 by SEA.",
+        "timeOfPlay": "0:16",
+        "title": "Timeout"
+       },
+       {
+        "id": "95",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith pass short middle complete. Catch made by D.Metcalf for 9 yards. Tackled by K.Dugger at NE 25.",
+        "timeOfPlay": "0:16",
+        "title": "1st & 10 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 75,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "96",
+        "periodOfPlay": "2ND",
+        "playDescription": "G.Smith spikes the ball.",
+        "timeOfPlay": "0:07",
+        "title": "2nd & 1 · NE 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 75,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "97",
+        "periodOfPlay": "2ND",
+        "playDescription": "J.Myers 44 yard field goal attempt is good, Center-C.Stoll, Holder-M.Dickson.",
+        "timeOfPlay": "0:04",
+        "title": "3rd & 1 · NE 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "3RD QUARTER",
+    "groups": [
+     {
+      "id": "3278",
+      "subtitle": "10 plays · 46 yards · 4:39",
+      "title": "DOWNS",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "100",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Slye kicks 65 yards from NE 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "15:00",
+        "title": "NE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "101",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for D.Metcalf (R.McMillan).",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "102",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 3 yards. Tackled by J.Jones at SEA 33.",
+        "timeOfPlay": "14:56",
+        "title": "2nd & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 33,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "103",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass deep middle complete. Catch made by J.Smith-Njigba for 24 yards. Tackled by K.White; C.Gonzalez at NE 43.",
+        "timeOfPlay": "14:08",
+        "title": "3rd & 7 · SEA 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 57,
+            "yardStart": 33
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "104",
+        "playDescription": "Timeout #1 by NE.",
+        "timeOfPlay": "13:54",
+        "title": "Timeout"
+       },
+       {
+        "id": "105",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Bobo for 9 yards. Tackled by R.McMillan; J.Tavai at NE 34.",
+        "timeOfPlay": "13:54",
+        "title": "1st & 10 · NE 43",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 66,
+            "yardStart": 57
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "106",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Charbonnet rushed up the middle for 0 yards. Tackled by J.Peppers, A.Jennings at NE 34.",
+        "timeOfPlay": "13:30",
+        "title": "2nd & 1 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "107",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith rushed up the middle for 2 yards. Tackled by A.Jennings; K.White at NE 32.",
+        "timeOfPlay": "12:57",
+        "title": "3rd & 1 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "108",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 0 yards. Pushed out of bounds by C.Gonzalez, J.Peppers at NE 32.",
+        "timeOfPlay": "12:14",
+        "title": "1st & 10 · NE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 68,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "109",
+        "periodOfPlay": "3RD",
+        "playDescription": "PENALTY on SEA-A.Bradford, False Start, 5 yards, accepted. No Play.",
+        "timeOfPlay": "11:32",
+        "title": "2nd & 10 · NE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 63,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "110",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for J.Smith-Njigba (M.Jones).",
+        "timeOfPlay": "11:11",
+        "title": "2nd & 15 · NE 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "111",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Smith-Njigba for 14 yards. Tackled by M.Jones, J.Peppers at NE 23.",
+        "timeOfPlay": "11:05",
+        "title": "3rd & 15 · NE 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 77,
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "112",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Charbonnet rushed left guard for -1 yards. Tackled by K.Dugger at NE 24.",
+        "timeOfPlay": "10:27",
+        "title": "4th & 1 · NE 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 76,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3279",
+      "subtitle": "3 plays · 9 yards · 2:46",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "114",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett scrambles left end for 5 yards. Tackled by R.Jenkins at NE 30.",
+        "timeOfPlay": "10:21",
+        "title": "1st & 10 · NE 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 75
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "115",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Stevenson rushed left end for yards. Tackled by K.Wallace at NE 45. PENALTY on NE-V.Lowe, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "9:52",
+        "title": "2nd & 5 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 80,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "116",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Stevenson rushed up the middle for 12 yards. Tackled by D.Witherspoon; R.Jenkins at NE 32.",
+        "timeOfPlay": "9:31",
+        "title": "2nd & 15 · NE 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "117",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Stevenson rushed up the middle for 2 yards. Tackled by R.Jenkins; L.Williams at NE 34.",
+        "timeOfPlay": "8:34",
+        "title": "3rd & 3 · NE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 66,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "118",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Baringer punts 56 yards to SEA 10, Center-J.Cardona. Fair catch by D.Williams.",
+        "timeOfPlay": "8:06",
+        "title": "4th & 1 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 10,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3280",
+      "subtitle": "3 plays · 3 yards · 0:59",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "120",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Charbonnet rushed up the middle for 3 yards. Tackled by R.McMillan, J.Pharms at SEA 13.",
+        "timeOfPlay": "7:35",
+        "title": "1st & 10 · SEA 10",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 13,
+            "yardStart": 10
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "121",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for D.Metcalf.",
+        "timeOfPlay": "6:56",
+        "title": "2nd & 7 · SEA 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "122",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short middle intended for N.Fant.",
+        "timeOfPlay": "6:51",
+        "title": "3rd & 7 · SEA 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 13
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "123",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Dickson punts 57 yards to NE 30, Center-C.Stoll. M.Jones returned punt from the NE 30. Tackled by K.Wallace at NE 39.",
+        "timeOfPlay": "6:48",
+        "title": "4th & 7 · SEA 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 70,
+            "yardStart": 13
+           },
+           {
+            "leftToRight": false,
+            "text": "RET",
+            "yardEnd": 61,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3281",
+      "subtitle": "3 plays · -6 yards · 1:00",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "125",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short middle intended for.",
+        "timeOfPlay": "6:36",
+        "title": "1st & 10 · NE 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "126",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short middle intended for [B.Mafe].",
+        "timeOfPlay": "6:30",
+        "title": "2nd & 10 · NE 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "127",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett steps back to pass. Sacked at NE 33 for -6 yards (L.Williams).",
+        "timeOfPlay": "6:25",
+        "title": "3rd & 10 · NE 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 67,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "128",
+        "periodOfPlay": "3RD",
+        "playDescription": "B.Baringer punts 67 yards to SEA End Zone, Center-J.Cardona. Touchback.",
+        "timeOfPlay": "5:45",
+        "title": "4th & 16 · NE 33",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 0,
+            "yardStart": 67
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 20,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3282",
+      "subtitle": "3 plays · 6 yards · 1:33",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "13",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "130",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for D.Metcalf (C.Gonzalez).",
+        "timeOfPlay": "5:36",
+        "title": "1st & 10 · SEA 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "131",
+        "periodOfPlay": "3RD",
+        "playDescription": "Z.Charbonnet rushed left end for 0 yards. Tackled by A.Jennings; D.Wise at SEA 20.",
+        "timeOfPlay": "5:29",
+        "title": "2nd & 10 · SEA 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 20,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "132",
+        "periodOfPlay": "3RD",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Bobo for 6 yards. Tackled by M.Jones at SEA 26.",
+        "timeOfPlay": "4:49",
+        "title": "3rd & 10 · SEA 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 26,
+            "yardStart": 20
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "133",
+        "periodOfPlay": "3RD",
+        "playDescription": "M.Dickson punts 40 yards to NE 34, Center-C.Stoll. Fair catch by M.Jones.",
+        "timeOfPlay": "4:11",
+        "title": "4th & 4 · SEA 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 66,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "4TH QUARTER",
+    "groups": [
+     {
+      "id": "3283",
+      "subtitle": "11 plays · 66 yards · 6:20",
+      "title": "TOUCHDOWN",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": true,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "135",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Stevenson rushed left tackle for 18 yards. Tackled by K.Wallace, D.Witherspoon at SEA 48.",
+        "timeOfPlay": "4:03",
+        "title": "1st & 10 · NE 34",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 48,
+            "yardStart": 66
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "136",
+        "periodOfPlay": "3RD",
+        "playDescription": "R.Stevenson rushed right tackle for 7 yards. Tackled by J.Love at SEA 41.",
+        "timeOfPlay": "3:21",
+        "title": "1st & 10 · SEA 48",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 48
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "137",
+        "periodOfPlay": "3RD",
+        "playDescription": "A.Gibson rushed left guard for -1 yards. Tackled by B.Murphy at SEA 42.",
+        "timeOfPlay": "2:46",
+        "title": "2nd & 3 · SEA 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 42,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "138",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett pass short left complete. Catch made by A.Gibson for 7 yards. Tackled by T.Knight at SEA 35.",
+        "timeOfPlay": "2:01",
+        "title": "3rd & 4 · SEA 42",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 35,
+            "yardStart": 42
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "139",
+        "periodOfPlay": "3RD",
+        "playDescription": "A.Gibson rushed left tackle for 9 yards. Tackled by J.Love at SEA 26.",
+        "timeOfPlay": "1:30",
+        "title": "1st & 10 · SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 26,
+            "yardStart": 35
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "140",
+        "periodOfPlay": "3RD",
+        "playDescription": "A.Gibson rushed right end for 4 yards. Tackled by D.Witherspoon at SEA 22.",
+        "timeOfPlay": "0:52",
+        "title": "2nd & 1 · SEA 26",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 22,
+            "yardStart": 26
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "141",
+        "periodOfPlay": "3RD",
+        "playDescription": "J.Brissett pass short right complete. Catch made by H.Henry for 11 yards. Tackled by T.Dodson; B.Murphy at SEA 11.",
+        "timeOfPlay": "0:08",
+        "title": "1st & 10 · SEA 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 11,
+            "yardStart": 22
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "142",
+        "playDescription": "End Quarter 3",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       },
+       {
+        "id": "143",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed right guard for 5 yards. Tackled by J.Hankins at SEA 6.",
+        "timeOfPlay": "15:00",
+        "title": "1st & 10 · SEA 11",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 6,
+            "yardStart": 11
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "144",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed up the middle for 3 yards. R.Stevenson FUMBLES, forced by T.Dodson. Fumble RECOVERED by NE-M.Onwenu at SEA 3.",
+        "timeOfPlay": "14:03",
+        "title": "2nd & 5 · SEA 6",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 3,
+            "yardStart": 6
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "145",
+        "playDescription": "Timeout #2 by NE.",
+        "timeOfPlay": "13:30",
+        "title": "Timeout"
+       },
+       {
+        "id": "146",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed right guard for 2 yards. Tackled by B.Murphy; T.Knight at SEA 1.",
+        "timeOfPlay": "13:30",
+        "title": "3rd & 2 · SEA 3",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 1,
+            "yardStart": 3
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "147",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed left guard for 1 yards. TOUCHDOWN.",
+        "timeOfPlay": "12:46",
+        "title": "1st & 1 · SEA 1",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "TD",
+            "yardEnd": -5,
+            "yardStart": 1
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "148",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Slye extra point is good.",
+        "timeOfPlay": "12:43",
+        "title": "SEA 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PAT - GOOD",
+            "yardEnd": -5,
+            "yardStart": 15
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3284",
+      "subtitle": "5 plays · 9 yards · 3:34",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "150",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Slye kicks 65 yards from NE 35 to the SEA End Zone. Touchback.",
+        "timeOfPlay": "12:43",
+        "title": "NE 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "KICK",
+            "yardEnd": 0,
+            "yardStart": 65
+           },
+           {
+            "leftToRight": true,
+            "text": "TB",
+            "yardEnd": 30,
+            "yardStart": 0
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "151",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 6 yards. Tackled by J.Jones at SEA 36.",
+        "timeOfPlay": "12:43",
+        "title": "1st & 10 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 36,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "152",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith scrambles right end for 5 yards. Tackled by J.Tavai at SEA 41.",
+        "timeOfPlay": "12:05",
+        "title": "2nd & 4 · SEA 36",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 41,
+            "yardStart": 36
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "153",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short right complete. Catch made by N.Fant for yards. PENALTY on SEA-A.Barner, Offensive Holding, 10 yards, accepted. No Play.",
+        "timeOfPlay": "11:22",
+        "title": "1st & 10 · SEA 41",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 31,
+            "yardStart": 41
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "154",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for J.Smith-Njigba.",
+        "timeOfPlay": "11:16",
+        "title": "1st & 20 · SEA 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "155",
+        "playDescription": "Timeout #1 by SEA.",
+        "timeOfPlay": "10:47",
+        "title": "Timeout"
+       },
+       {
+        "id": "156",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith steps back to pass. Sacked at SEA 24 for -7 yards (K.White).",
+        "timeOfPlay": "10:47",
+        "title": "2nd & 20 · SEA 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "SACK",
+            "yardEnd": 24,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "157",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short middle complete. Catch made by D.Metcalf for 15 yards. Tackled by J.Peppers; K.White at SEA 39.",
+        "timeOfPlay": "10:05",
+        "title": "3rd & 27 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 39,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "158",
+        "periodOfPlay": "4TH",
+        "playDescription": "M.Dickson punts 61 yards to NE End Zone, Center-C.Stoll. Touchback.",
+        "timeOfPlay": "9:19",
+        "title": "4th & 13 · SEA 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PUNT",
+            "yardEnd": 100,
+            "yardStart": 39
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 80,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3285",
+      "subtitle": "8 plays · 50 yards · 5:15",
+      "title": "BLOCKED FG",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "17",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "160",
+        "periodOfPlay": "4TH",
+        "playDescription": "A.Gibson rushed left tackle for 3 yards. Tackled by T.Dodson at NE 23.",
+        "timeOfPlay": "9:09",
+        "title": "1st & 10 · NE 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 77,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "161",
+        "periodOfPlay": "4TH",
+        "playDescription": "A.Gibson rushed right guard for 9 yards. Tackled by R.Jenkins at NE 32.",
+        "timeOfPlay": "8:31",
+        "title": "2nd & 7 · NE 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 77
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "162",
+        "periodOfPlay": "4TH",
+        "playDescription": "A.Gibson rushed left guard for -2 yards. Tackled by J.Hankins at NE 30.",
+        "timeOfPlay": "7:49",
+        "title": "1st & 10 · NE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 70,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "163",
+        "periodOfPlay": "4TH",
+        "playDescription": "A.Gibson rushed left end for 45 yards. Tackled by D.Witherspoon at SEA 25.",
+        "timeOfPlay": "7:11",
+        "title": "2nd & 12 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 25,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "164",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed right tackle for 2 yards. Tackled by J.Reed at SEA 23.",
+        "timeOfPlay": "6:15",
+        "title": "1st & 10 · SEA 25",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 25
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "165",
+        "periodOfPlay": "4TH",
+        "playDescription": "R.Stevenson rushed up the middle for 2 yards. Tackled by T.Knight, R.Jenkins at SEA 21.",
+        "timeOfPlay": "5:26",
+        "title": "2nd & 8 · SEA 23",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 21,
+            "yardStart": 23
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "166",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Brissett steps back to pass. Sacked at SEA 30 for -9 yards (B.Murphy; L.Williams).",
+        "timeOfPlay": "4:46",
+        "title": "3rd & 6 · SEA 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "SACK",
+            "yardEnd": 30,
+            "yardStart": 21
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "167",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Slye 48 yard field goal attempt is blocked, Center-J.Cardona, Holder-B.Baringer. J.Love blocked the kick.",
+        "timeOfPlay": "3:59",
+        "title": "4th & 15 · SEA 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG BLOCKED",
+            "yardEnd": 38,
+            "yardStart": 30
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3286",
+      "subtitle": "9 plays · 42 yards · 2:59",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "20",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "168",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Charbonnet rushed up the middle for 2 yards. Tackled by D.Ekuale; K.White at SEA 40.",
+        "timeOfPlay": "3:54",
+        "title": "1st & 10 · SEA 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 40,
+            "yardStart": 38
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "169",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short middle complete. Catch made by J.Smith-Njigba for 7 yards. Tackled by A.Jennings at SEA 47.",
+        "timeOfPlay": "3:11",
+        "title": "2nd & 8 · SEA 40",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 47,
+            "yardStart": 40
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "170",
+        "periodOfPlay": "4TH",
+        "playDescription": "Z.Charbonnet rushed up the middle for 6 yards. Tackled by D.Ekuale at NE 47.",
+        "timeOfPlay": "2:34",
+        "title": "3rd & 1 · SEA 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 53,
+            "yardStart": 47
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "171",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short middle complete. Catch made by Z.Charbonnet for 9 yards. Tackled by R.McMillan at NE 38.",
+        "timeOfPlay": "2:08",
+        "title": "1st & 10 · NE 47",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 53
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "172",
+        "playDescription": "TV Timeout",
+        "timeOfPlay": "2:00",
+        "title": "TV Timeout"
+       },
+       {
+        "id": "173",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 14 yards. Pushed out of bounds by at NE 24.",
+        "timeOfPlay": "2:00",
+        "title": "2nd & 1 · NE 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 76,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "174",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete short right intended for N.Fant.",
+        "timeOfPlay": "1:54",
+        "title": "1st & 10 · NE 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "175",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 9 yards. Pushed out of bounds by J.Jones at NE 15. The Replay Official reviewed the short of the line to gain and the play was upheld.",
+        "timeOfPlay": "1:43",
+        "title": "2nd & 10 · NE 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 85,
+            "yardStart": 76
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "176",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith rushed up the middle for 0 yards. Tackled by R.McMillan; A.Jennings at NE 15.",
+        "timeOfPlay": "1:43",
+        "title": "3rd & 1 · NE 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 85,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "177",
+        "playDescription": "Timeout #2 by SEA.",
+        "timeOfPlay": "0:58",
+        "title": "Timeout"
+       },
+       {
+        "id": "178",
+        "periodOfPlay": "4TH",
+        "playDescription": "PENALTY on SEA-G.Smith, Delay of Game, 5 yards, accepted. No Play.",
+        "timeOfPlay": "0:58",
+        "title": "4th & 1 · NE 15",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PEN",
+            "yardEnd": 80,
+            "yardStart": 85
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "179",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Myers 38 yard field goal attempt is good, Center-C.Stoll, Holder-M.Dickson.",
+        "timeOfPlay": "0:58",
+        "title": "4th & 6 · NE 20",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 80
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3287",
+      "subtitle": "3 plays · 7 yards · 0:40",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "180",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the NE End Zone. Touchback.",
+        "timeOfPlay": "0:55",
+        "title": "SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "181",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short middle intended for R.Stevenson [L.Williams].",
+        "timeOfPlay": "0:55",
+        "title": "1st & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "182",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Brissett pass short left complete. Catch made by J.Polk for 7 yards. Tackled by R.Woolen at NE 37.",
+        "timeOfPlay": "0:49",
+        "title": "2nd & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 63,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "183",
+        "periodOfPlay": "4TH",
+        "playDescription": "J.Brissett steps back to pass. Pass incomplete short left intended for H.Henry [D.Hall].",
+        "timeOfPlay": "0:34",
+        "title": "3rd & 3 · NE 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "INC",
+            "yardStart": 63
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "184",
+        "periodOfPlay": "4TH",
+        "playDescription": "B.Baringer punts 54 yards to SEA 9, Center-J.Cardona. D.Williams returned punt from the SEA 9. Tackled by J.Hawkins, C.Elliss at SEA 24.",
+        "timeOfPlay": "0:25",
+        "title": "4th & 3 · NE 37",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 9,
+            "yardStart": 63
+           },
+           {
+            "leftToRight": true,
+            "text": "RET",
+            "yardEnd": 24,
+            "yardStart": 9
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3288",
+      "subtitle": "1 plays · -1 yard · 0:15",
+      "title": "END OF HALF",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "187",
+        "periodOfPlay": "4TH",
+        "playDescription": "G.Smith kneels at the SEA 23.",
+        "timeOfPlay": "0:15",
+        "title": "1st & 10 · SEA 24",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 23,
+            "yardStart": 24
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "188",
+        "playDescription": "End Quarter 4",
+        "timeOfPlay": "0:00",
+        "title": "Period End"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "title": "OVERTIME",
+    "groups": [
+     {
+      "id": "3289",
+      "subtitle": "3 plays · 9 yards · 1:48",
+      "title": "PUNT",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/4"
+      },
+      "scores": [
+       {
+        "changed": false,
+        "score": "20",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "189",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Myers kicks 65 yards from SEA 35 to the NE End Zone. Touchback.",
+        "timeOfPlay": "10:00",
+        "title": "SEA 35",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "KICK",
+            "yardEnd": 100,
+            "yardStart": 35
+           },
+           {
+            "leftToRight": false,
+            "text": "TB",
+            "yardEnd": 70,
+            "yardStart": 100
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "190",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Stevenson rushed left guard for 2 yards. Tackled by J.Hankins at NE 32.",
+        "timeOfPlay": "10:00",
+        "title": "1st & 10 · NE 30",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 68,
+            "yardStart": 70
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "191",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Brissett pass short right complete. Catch made by K.Osborn for 7 yards. Tackled by R.Woolen at NE 39.",
+        "timeOfPlay": "9:20",
+        "title": "2nd & 8 · NE 32",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PASS",
+            "yardEnd": 61,
+            "yardStart": 68
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "192",
+        "periodOfPlay": "OT",
+        "playDescription": "R.Stevenson rushed up the middle for 0 yards. Tackled by T.Dodson; J.Reed at NE 39. PENALTY on NE-C.Wallace, Illegal Formation, 5 yards, declined.",
+        "timeOfPlay": "8:37",
+        "title": "3rd & 1 · NE 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "RUSH",
+            "yardEnd": 61,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "193",
+        "periodOfPlay": "OT",
+        "playDescription": "B.Baringer punts 45 yards to SEA 16, Center-J.Cardona. Fair catch by D.Williams.",
+        "timeOfPlay": "8:18",
+        "title": "4th & 1 · NE 39",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": false,
+            "text": "PUNT",
+            "yardEnd": 16,
+            "yardStart": 61
+           }
+          ]
+         }
+        }
+       }
+      ]
+     },
+     {
+      "id": "3290",
+      "subtitle": "8 plays · 71 yards · 3:35",
+      "title": "FIELD GOAL",
+      "entityLink": {
+       "contentUri": "football/nfl/teams/14"
+      },
+      "scores": [
+       {
+        "changed": true,
+        "score": "23",
+        "title": "SEA"
+       },
+       {
+        "changed": false,
+        "score": "20",
+        "title": "NE"
+       }
+      ],
+      "plays": [
+       {
+        "id": "194",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 5 yards. Tackled by M.Jones at SEA 21.",
+        "timeOfPlay": "8:12",
+        "title": "1st & 10 · SEA 16",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 21,
+            "yardStart": 16
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "195",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith pass short right complete. Catch made by D.Metcalf for 10 yards. Pushed out of bounds by C.Gonzalez at SEA 31.",
+        "timeOfPlay": "7:37",
+        "title": "2nd & 5 · SEA 21",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 31,
+            "yardStart": 21
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "196",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for T.Lockett. PENALTY on NE-J.Jones, Defensive Pass Interference, 20 yards, accepted. No Play.",
+        "timeOfPlay": "7:00",
+        "title": "1st & 10 · SEA 31",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PEN",
+            "yardEnd": 51,
+            "yardStart": 31
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "197",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith pass short right complete. Catch made by J.Smith-Njigba for 4 yards. Tackled by M.Jones at NE 45.",
+        "timeOfPlay": "6:55",
+        "title": "1st & 10 · NE 49",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 55,
+            "yardStart": 51
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "198",
+        "playDescription": "Timeout #1 by NE.",
+        "timeOfPlay": "6:19",
+        "title": "Timeout"
+       },
+       {
+        "id": "199",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith steps back to pass. Pass incomplete deep left intended for J.Smith-Njigba.",
+        "timeOfPlay": "6:19",
+        "title": "2nd & 6 · NE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "INC",
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "200",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith pass short left complete. Catch made by Z.Charbonnet for 7 yards. Tackled by C.Gonzalez at NE 38.",
+        "timeOfPlay": "6:14",
+        "title": "3rd & 6 · NE 45",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 62,
+            "yardStart": 55
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "201",
+        "periodOfPlay": "OT",
+        "playDescription": "G.Smith pass short left complete. Catch made by T.Lockett for 16 yards. Tackled by J.Jones at NE 22.",
+        "timeOfPlay": "5:24",
+        "title": "1st & 10 · NE 38",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "PASS",
+            "yardEnd": 78,
+            "yardStart": 62
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "202",
+        "periodOfPlay": "OT",
+        "playDescription": "Z.Charbonnet rushed left end for 9 yards. Tackled by J.Jones; M.Jones at NE 13. The Replay Official reviewed the short of the line to gain and the play was upheld.",
+        "timeOfPlay": "4:48",
+        "title": "1st & 10 · NE 22",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "RUSH",
+            "yardEnd": 87,
+            "yardStart": 78
+           }
+          ]
+         }
+        }
+       },
+       {
+        "id": "203",
+        "periodOfPlay": "OT",
+        "playDescription": "J.Myers 31 yard field goal attempt is good, Center-C.Stoll, Holder-M.Dickson.",
+        "timeOfPlay": "4:41",
+        "title": "2nd & 1 · NE 13",
+        "modalPlay": {
+         "play": {
+          "events": [
+           {
+            "leftToRight": true,
+            "text": "FG - GOOD",
+            "yardEnd": 105,
+            "yardStart": 87
+           }
+          ]
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}
