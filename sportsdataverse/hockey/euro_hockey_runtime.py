@@ -194,6 +194,7 @@ def get_text(
     transport: Optional[Callable[[str], Any]] = None,
     expect: Optional[str] = None,
     is_missing: Optional[Callable[[str], bool]] = None,
+    no_content: bool = False,
     **kwargs: Any,
 ) -> str:
     """GET a text page (HTML / XML) and return its strictly decoded body, or the error the answer calls for.
@@ -216,15 +217,16 @@ def get_text(
         is_missing: with ``transport``, called with the final URL of a redirected answer; ``True`` means
             "this is the site's not-found page" (:class:`~sportsdataverse.errors.NoDataError`), anything
             else redirected is an :class:`~sportsdataverse.errors.AssetFetchError`.
+        no_content: a data page whose 204 / 205 is "nothing" (see Raises); the default keeps it a failed fetch.
         **kwargs: forwarded to ``download`` (no ``transport``).
 
     Returns:
         The decoded body text.
 
     Raises:
-        NoDataError: HTTP 404, or a redirect ``is_missing`` calls the not-found page. A 204 / 205 raises
-            its subclass ``_rt._NoContent``, which a runtime ``_get`` carrying ``_rt._no_content_is_empty``
-            answers as ``{}``.
+        NoDataError: HTTP 404, or a redirect ``is_missing`` calls the not-found page. With ``no_content=True``
+            a 204 / 205 raises its private subclass ``_rt._NoContent``, for a runtime ``_get`` carrying
+            ``_rt._no_content_is_empty`` to answer as ``{}``; without it a 204 / 205 is an ``AssetFetchError``.
         ValueError: HTTP 400 / 422.
         AssetFetchError: any other non-200 (after the retries), a dead connection, a body of the wrong
             content type, bytes that do not decode in the declared charset (or decode to replacement
@@ -242,11 +244,13 @@ def get_text(
         with _rt._transport_errors(url):
             resp = _rt.download(url=url, params=clean, **{"session": SESSION, **kwargs})
         _rt._check_response(resp, url)
-        _rt._check_no_content(getattr(resp, "status_code", None))  # a 204 / 205: the caller's ``_get`` answers {}
+        if no_content:
+            _rt._check_no_content(getattr(resp, "status_code", None))  # the caller's ``_get`` answers {}
     else:
         resp = _send(url, lambda: transport(full))
         status = getattr(resp, "status_code", None)
-        _rt._check_no_content(status)  # a 204 / 205: the caller's ``_get`` answers {} (EX-SYNC-a)
+        if no_content:
+            _rt._check_no_content(status)  # the caller's ``_get`` answers {} (EX-SYNC-a)
         if status != 200:
             _rt._check_status(url, status, (getattr(resp, "content", b"") or b"")[:400].decode("utf-8", "replace"))
             raise AssetFetchError(f"{where} answered HTTP {status}, not 200")

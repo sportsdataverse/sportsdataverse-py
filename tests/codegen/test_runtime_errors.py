@@ -12,6 +12,7 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple, Union
 
@@ -555,14 +556,54 @@ _KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pf
 
 
 # Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverged from the
-# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them. ``{(runtime, case): (what the case fails with, why)}``,
-# strict, so a row fails the day it is fixed. The two left are the matrix's limit, not the runtime's: the matrix
-# answers EVERY request with the case, including scb's key-page bootstrap, where a 204 or 400 is a page with no
-# key (an unknown answer). tests/basketball/scb asserts the data request's 204 -> {} and 400 -> ValueError.
-_SCB_BOOTSTRAP = "scb: the matrix's case also answers the key-page bootstrap, which cannot read a key from it"
-_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
-    ("scb_runtime", "204"): (AssetFetchError, _SCB_BOOTSTRAP),
-    ("scb_runtime", "400"): (AssetFetchError, _SCB_BOOTSTRAP),
+# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them all. Kept, empty, for the next divergence:
+# ``{(runtime, case): (what the case fails with, why)}``, strict, so a row fails the day it is fixed.
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {}
+
+
+def _seed_feb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._tok, "value", "seeded.bearer.token")
+    monkeypatch.setitem(mod._tok, "exp", time.time() + 3600)
+
+
+def _seed_khl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._sessions, "https://example.test", [mod._new_http(), "seeded-sessid"])
+
+
+def _seed_scb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "_secrets", {"key": "seeded-key", "secret": "seeded-secret"})
+
+
+def _seed_lkl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._GAMES, 11446, {"game_status": "seeded"})  # the finished-game check is cached
+
+
+def _seed_vhl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "vhl_tn", lambda season, stage="regular": 1374)  # the calendar-index lookup
+
+
+class _Pointer:
+    status_code, text, headers, url = 200, "1", {}, ""
+
+
+def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
+    real = mod._fetch
+    monkeypatch.setattr(
+        mod, "_fetch", lambda url, params=None: _Pointer() if url.endswith("/latestid") else real(url, params)
+    )
+
+
+# R4.1b-d-1: a runtime whose first request is a bootstrap or lookup (a token, session or key page, a snapshot
+# pointer, a finished-game check, a calendar index) is seeded, so every case reaches its DATA request; on the 204
+# row the bootstrap URL must then never be served. A bootstrap's or lookup's own 204 is an unknown answer
+# (AssetFetchError), pinned in each family's tests.
+_SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
+    "feb_runtime": (_seed_feb, "https://baloncestoenvivo.feb.es/"),
+    "khl_runtime": (_seed_khl, "https://example.test/"),
+    "scb_runtime": (_seed_scb, "https://www.easycredit-bbl.de/"),
+    "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
+    "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
+    "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
 }
 
 
@@ -671,7 +712,10 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
     stem = mod.rsplit(".", 1)[1]
     status, body, ctype, want = _CASES[case]
     calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
-    get = importlib.import_module(mod)._get
+    module = importlib.import_module(mod)
+    if stem in _SEED:
+        _SEED[stem][0](module, monkeypatch)
+    get = module._get
     kwargs = _KWARGS.get(stem, dict)()
     sig = inspect.signature(get).parameters
     if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
@@ -700,6 +744,8 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
             with pytest.raises(want):
                 call()
     assert calls, f"{mod}._get never reached the transport"
+    if stem in _SEED and case == "204":
+        assert _SEED[stem][1] not in calls, f"{mod}: the seeded bootstrap was fetched: {calls}"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
 
 

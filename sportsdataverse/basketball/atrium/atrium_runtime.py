@@ -76,6 +76,7 @@ def _fetch_seasons(website_id: int, **kwargs: Any) -> List[Dict[str, Any]]:
     return rows
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def atrium_season_id(website_id: int, season: int, competition_id: Optional[str] = None, **kwargs: Any) -> str:
     """The ``seasonId`` of a site's season, from its END year and optionally its competition.
 

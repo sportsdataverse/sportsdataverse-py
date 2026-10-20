@@ -190,6 +190,7 @@ def _json(url: str, params: Optional[Dict[str, Any]]) -> Any:
 
 
 # ----------------------------------------------------------------------------- the game context
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def game_record(gid: int) -> Dict[str, Any]:
     """The verified game page record of a FINISHED game (cached per ``gid``).
 
@@ -206,6 +207,7 @@ def game_record(gid: int) -> Dict[str, Any]:
     return copy.deepcopy(_GAMES[gid])
 
 
+@_rt._no_content_is_empty  # a data body: its 204 / 205 is {}
 def box_data(gid: int) -> Dict[str, Any]:
     """The box body of a finished game, checked against its game page (cached per ``gid``).
 

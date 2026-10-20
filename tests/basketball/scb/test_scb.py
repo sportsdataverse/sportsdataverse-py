@@ -556,9 +556,10 @@ def test_no_content_is_an_empty_answer(net, status):
     assert R._get(BBL + "/games/10130", {"league": "dbbl"}, num_retries=0) == {}
 
 
-def test_a_key_page_that_answers_no_content_is_a_failed_fetch(net):
-    # The bootstrap is not the data request: a 204 there is a page with no key to read, an unknown answer.
-    net.key_page = _Resp(204, text="")
+@pytest.mark.parametrize("status", [204, 205])
+def test_a_key_page_that_answers_no_content_is_a_failed_fetch(net, status):
+    # The bootstrap is not the data request: a 204 / 205 there is a page with no key to read, an unknown answer.
+    net.key_page = _Resp(status, text="")
     net.reply(_Resp(200, [{"id": 2025}]))
     with pytest.raises(AssetFetchError, match="the API key could not be read"):
         R._get(BBL + "/seasons", {}, num_retries=0)

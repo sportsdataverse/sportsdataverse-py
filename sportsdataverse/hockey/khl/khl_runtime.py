@@ -155,8 +155,7 @@ def _prime(http: Any, site: str, timeout: Any) -> str:
     home = site + "/"
     resp = _send(home, lambda: http.get(home, timeout=timeout))
     status = getattr(resp, "status_code", None)
-    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
-    _rt._check_status(home, status, "")
+    _rt._check_status(home, status, "")  # a 204 here has no sessid to read: AssetFetchError below (R4.1b-d-1)
     match = SESSID_RE.search(getattr(resp, "text", "") or "")
     if match is None:
         raise AssetFetchError(
@@ -308,6 +307,7 @@ def _post(
                     raise AssetFetchError(f"{_rt._where(url)} answered 307 again after re-priming the session")
                 session[1] = _prime(http, site, timeout)  # its _polite starts >= 1 s after the 307 answered
                 continue
+            _rt._check_no_content(getattr(resp, "status_code", None))  # the data POST's 204 / 205 is {} (EX-SYNC-a)
             raw = _rt._json_text(url, getattr(resp, "status_code", None), getattr(resp, "text", "") or "")
             if not (isinstance(raw, dict) and "invalid_csrf" in str(raw.get("errors"))):
                 break

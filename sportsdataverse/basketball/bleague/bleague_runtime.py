@@ -188,7 +188,8 @@ def _context(key: int, season: Optional[int]) -> Dict[str, Any]:
         resp = _fetch(f"{base}/latestid")
         if _is_miss(resp):
             continue
-        _status(f"{base}/latestid", resp)
+        with _rt._no_content_unknown(f"{_rt._where(base)}/latestid"):  # a pointer: its 204 is unknown (R4.1b-d-1)
+            _status(f"{base}/latestid", resp)
         latest = (getattr(resp, "text", "") or "").strip()
         if not re.fullmatch(r"\d{1,9}", latest):
             raise AssetFetchError(f"{_rt._where(base)}/latestid: not an integer snapshot id")

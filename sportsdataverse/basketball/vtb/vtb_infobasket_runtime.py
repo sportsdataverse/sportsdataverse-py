@@ -226,6 +226,7 @@ def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     return body
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def season_table(tag: str = DEFAULT_TAG, **kwargs: Any) -> Dict[int, int]:
     """``{END year: season CompID}`` of a competition tag, from ``/Comp/GetSeasonsForTag`` (cached for the process).
 

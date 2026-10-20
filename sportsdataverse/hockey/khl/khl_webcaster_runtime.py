@@ -83,6 +83,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> 
 
 
 @functools.lru_cache(maxsize=1)
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def season_table() -> Tuple[Dict[str, Any], ...]:
     """Every regular-season and playoff stage, from ``data.json`` ``stages_v2`` (cached in-process).
 

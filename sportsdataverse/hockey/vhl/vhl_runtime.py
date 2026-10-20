@@ -115,7 +115,12 @@ def _is_missing_page(final: str) -> bool:
 def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> str:
     """The HTML text of ``url`` (+ ``params``), or the error the answer calls for (see ``get_text``)."""
     return euro_hockey_runtime.get_text(
-        url, params, transport=lambda full: _transport(full), expect="html", is_missing=_is_missing_page
+        url,
+        params,
+        transport=lambda full: _transport(full),
+        expect="html",
+        is_missing=_is_missing_page,
+        no_content=True,  # a 204 / 205 is {} from _get; vhl_tn's calendar lookup maps it to AssetFetchError
     )
 
 
@@ -152,6 +157,7 @@ def _tournaments() -> Dict[Tuple[int, str], int]:
     return {(r["season"], r["stage"]): r["tn"] for r in rows}
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def vhl_tn(season: int, stage: str = "regular") -> int:
     """The VHL tournament id (``tn``) of a season (END year) and stage.
 

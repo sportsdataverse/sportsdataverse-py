@@ -201,6 +201,7 @@ def token_from_page(html: str, now: Optional[float] = None) -> Tuple[str, float]
     return tok, float(exp)
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def _bearer(*, renew: bool = False) -> str:
     """The cached bearer token, fetched from the site root when absent, near expiry or ``renew``."""
     with _tok_lock:

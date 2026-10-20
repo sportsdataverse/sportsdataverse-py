@@ -306,8 +306,11 @@ def _scope_error(kind: str, body: Dict[str, Any], rec: Dict[str, Any]) -> Option
 
 def _api(route: str, game_id: int) -> Dict[str, Any]:
     kind = _API_ROUTES[route]
-    rec = _game(game_id)  # NoDataError / AssetFetchError before the route is asked for
     url = f"{API}/{route}/{game_id}"
+    # the finished-game check is a lookup here: its 204 is an unknown answer (R4.1b-d-1); as the game-page
+    # route's own data request (``_game_page``) a 204 is {}
+    with _rt._no_content_unknown(f"{_rt._where(f'{SITE}/rungtynes/{game_id}')} (the finished-game check)"):
+        rec = _game(game_id)  # NoDataError / AssetFetchError before the route is asked for
     body = _json(url)
     where = _rt._where(url)
     if not isinstance(body, dict) or not body:

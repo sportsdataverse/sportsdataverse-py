@@ -156,6 +156,7 @@ def _leagues(**kwargs: Any) -> List[Mapping[str, Any]]:
     return _CACHE[key]
 
 
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
 def league_id(season: Any, **kwargs: Any) -> int:
     """The opaque ``league_id`` of the league edition whose END year is ``season``.
 

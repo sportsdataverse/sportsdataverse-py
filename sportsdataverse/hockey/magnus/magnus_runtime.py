@@ -250,7 +250,7 @@ def _extract_game_sheet(page: str) -> Optional[Dict[str, Any]]:
 def _game_sheet(url: str, game_id: str, **kwargs: Any) -> Dict[str, Any]:
     """Fetch ``/rencontre/{id}/`` and return its checked game sheet (see the module docstring)."""
     where = _rt._where(url)
-    sheet = _extract_game_sheet(_eh.get_text(url, **kwargs))
+    sheet = _extract_game_sheet(_eh.get_text(url, no_content=True, **kwargs))
     if sheet is None:
         raise AssetFetchError(f"{where}: no <live-rencontre-container :data> game sheet in the page")
     if (sheet and set(sheet) <= _ERROR_KEYS) or "evenements" not in sheet:

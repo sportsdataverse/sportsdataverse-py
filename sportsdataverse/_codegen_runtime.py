@@ -14,7 +14,7 @@ import logging
 import numbers
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Optional
+from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
 
 import polars as pl
@@ -204,8 +204,15 @@ def _check_no_content(status: Any) -> None:
         raise _NoContent(f"answered HTTP {status}: no content")
 
 
-def _no_content_is_empty(get: Callable[..., Any]) -> Callable[..., Any]:
-    """Wrap a runtime's ``_get`` so a 204 / 205 anywhere below it returns ``{}`` (see :func:`_check_no_content`)."""
+_Fn = TypeVar("_Fn", bound=Callable[..., Any])
+
+
+def _no_content_is_empty(get: _Fn) -> _Fn:
+    """Wrap a data getter (a runtime's ``_get``) so a 204 / 205 anywhere below it returns ``{}``.
+
+    ``_NoContent`` is private: every public function that can meet one carries this decorator or
+    :func:`_no_content_is_unknown` (tests/codegen/test_runtime_errors.py checks it).
+    """
 
     @functools.wraps(get)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
@@ -214,7 +221,29 @@ def _no_content_is_empty(get: Callable[..., Any]) -> Callable[..., Any]:
         except _NoContent:
             return {}
 
-    return wrapper
+    return cast(_Fn, wrapper)
+
+
+@contextmanager
+def _no_content_unknown(where: str) -> Iterator[None]:
+    """A lookup or bootstrap (a token page, a session page, a season list, a snapshot pointer) that answers
+    204 / 205 leaves nothing to read, so the answer is unknown: :class:`AssetFetchError`, never the data
+    request's ``{}`` (R4.1b-d-1)."""
+    try:
+        yield
+    except _NoContent as exc:
+        raise AssetFetchError(f"{where}: the lookup {exc}, so the answer is unknown") from None
+
+
+def _no_content_is_unknown(fn: _Fn) -> _Fn:
+    """:func:`_no_content_unknown` around a whole lookup function (a public season resolver, a token reader)."""
+
+    @functools.wraps(fn)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        with _no_content_unknown(getattr(fn, "__qualname__", "a lookup")):
+            return fn(*args, **kwargs)
+
+    return cast(_Fn, wrapper)
 
 
 def _no_content_transport(transport: Optional[Callable[..., Any]] = None) -> Callable[..., Any]:
