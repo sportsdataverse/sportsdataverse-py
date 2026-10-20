@@ -5,9 +5,12 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 import functools as _functools
+import inspect as _inspect
 import re as _re
 import warnings as _warnings
 from typing import TYPE_CHECKING, Any, Callable
+from typing import TypeVar as _TypeVar
+from typing import cast as _cast
 from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
@@ -371,38 +374,53 @@ def _error_envelope_code(body: Any) -> int | None:
     return None
 
 
-def _data_only(parse: Callable[..., Any]) -> Callable[..., Any]:
+_Parser = _TypeVar("_Parser", bound=Callable[..., Any])
+
+
+def _normalize_payload(parse: Callable[..., Any], fix: Callable[[Any], Any]) -> Callable[..., Any]:
+    """``parse`` with ``fix`` applied to its payload, read under the parser's own first-parameter name.
+
+    The payload arrives positionally or as a keyword (``parse_kbl_teams(raw=body)``): a wrapper that took it
+    as ``payload`` would turn every keyword call into a ``TypeError`` (R4.1b-1).
+    """
+    name = next(iter(_inspect.signature(parse).parameters))
+
+    @_functools.wraps(parse)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        if args:
+            args = (fix(args[0]), *args[1:])
+        elif name in kwargs:
+            kwargs[name] = fix(kwargs[name])
+        return parse(*args, **kwargs)
+
+    return wrapper
+
+
+def _data_body(payload: Any) -> Any:
+    if _error_envelope_code(payload) is not None:
+        return {}
+    if isinstance(payload, list):
+        return [rec for rec in payload if rec != {}]
+    return payload
+
+
+def _data_only(parse: _Parser) -> _Parser:
     """The parser contract on a body that is not data (A-L17, EX-SYNC-g): zero rows, never a raise.
 
     Wraps a public provider parser so ``{"code", "message"}`` error envelopes (see
     :func:`_error_envelope_code`) read as ``{}`` and a list body loses its empty ``{}`` records, which
     carry no field, instead of becoming a one-row frame. Every other body reaches the parser unchanged.
+    The result is whatever the parser already returns for ``{}`` / ``[]``.
     """
-
-    @_functools.wraps(parse)
-    def wrapper(payload: Any, *args: Any, **kwargs: Any) -> Any:
-        if _error_envelope_code(payload) is not None:
-            payload = {}
-        elif isinstance(payload, list):
-            payload = [rec for rec in payload if rec != {}]
-        return parse(payload, *args, **kwargs)
-
-    return wrapper
+    return _cast(_Parser, _normalize_payload(parse, _data_body))
 
 
-def _dict_only(parse: Callable[..., Any]) -> Callable[..., Any]:
+def _dict_only(parse: _Parser) -> _Parser:
     """For a parser whose payload is always an object: any non-dict body reads as ``{}`` (A-L17).
 
     No envelope check: every parser it wraps reads named keys, which an error envelope lacks.
     """
-
-    @_functools.wraps(parse)
-    def wrapper(payload: Any, *args: Any, **kwargs: Any) -> Any:
-        if not isinstance(payload, dict):
-            payload = {}
-        return parse(payload, *args, **kwargs)
-
-    return wrapper
+    return _cast(_Parser, _normalize_payload(parse, lambda payload: payload if isinstance(payload, dict) else {}))
 
 
 #: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other

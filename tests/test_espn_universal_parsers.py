@@ -1397,6 +1397,7 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 # turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
 # A-M14's class, task 5.2). The snapshot pins that measured state.
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
+_FIX_ROOT = Path(__file__).parent / "fixtures"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
 # hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
 # ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
@@ -1533,7 +1534,8 @@ def test_hostile_closed_modules_stay_closed():
 
 def test_hostile_sweep_covers_every_public_parser():
     parsers = _public_parsers()
-    assert len(parsers) >= 214 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    # 831 on 2026-10-20: a decorator that dropped ``functools.wraps`` would lose its parsers from this sweep (R4.1b-2)
+    assert len(parsers) >= 831 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
     needs_more = [
         q
         for q, fn in parsers.items()
@@ -1548,6 +1550,63 @@ def test_hostile_sweep_covers_every_public_parser():
     assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
     unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
+
+
+def _hostile_decorated() -> Dict[str, str]:
+    """``{"<module>.<parse_fn>": decorator}`` for every parser carrying ``errors._data_only`` / ``_dict_only``."""
+    import re
+
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for deco, name in re.findall(r"^@(_data_only|_dict_only)\ndef (parse_\w+)\(", path.read_text("utf-8"), re.M):
+            out[f"{mod.split('.', 1)[1]}.{name}"] = deco
+    return out
+
+
+def test_hostile_decorated_parsers_keep_their_identity_and_keyword_payload():
+    """R4.1b-1 / R4.1b-2: a decorated parser stays in the sweep (``functools.wraps``: name, module, ``__wrapped__``)
+    and takes its payload under its own first-parameter name as a keyword, as it did undecorated."""
+    decorated = _hostile_decorated()
+    assert len(decorated) >= 153
+    parsers = _public_parsers()
+    for qual in decorated:
+        fn = parsers[qual]  # KeyError: the decorator hid the parser from the sweep
+        assert fn.__name__ == qual.rsplit(".", 1)[1] and hasattr(fn, "__wrapped__"), qual
+        first = next(iter(inspect.signature(fn).parameters))
+        for body in ({}, [{}], _ENVELOPE):
+            assert {sec: df.height for sec, df in _frames(fn(**{first: body})).items() if df.height} == {}, qual
+
+
+def test_a_decorated_parser_reads_a_real_body_the_same_by_keyword():
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+    from sportsdataverse.odds.kalshi_parsers import parse_kalshi
+
+    events = json.loads((_FIX_ROOT / "kalshi" / "events.json").read_text("utf-8"))  # _data_only
+    assert parse_kalshi(raw=events).equals(parse_kalshi(events)) and parse_kalshi(raw=events).height > 0
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))  # _dict_only
+    by_kw, by_pos = parse_game_summary(payload=summary, game_id=42), parse_game_summary(summary, 42)
+    assert {k: v.height for k, v in by_kw.items()} == {k: v.height for k, v in by_pos.items()}
+    assert by_kw["goals"].height > 0
+
+
+def test_game_summary_keeps_its_game_row_without_a_game_id():
+    """R4.1b-2 (M8): the stub-row guard drops the row only when there is neither a game_id nor data."""
+    from sportsdataverse.hockeytech._parsers import parse_game_summary
+
+    summary = json.loads((_FIX_ROOT / "hockeytech" / "pwhl_game_summary_42.json").read_text("utf-8"))
+    game = parse_game_summary(summary)["game"]
+    assert game.height == 1 and game["game_id"].to_list() == [None] and game["home_team"].to_list()[0]
+    assert parse_game_summary({}, game_id=7)["game"]["game_id"].to_list() == [7]  # the documented stub
+
+
+@pytest.mark.parametrize("site_kit", [["x"], "x", 1])
+def test_a_sitekit_that_is_not_an_object_is_zero_rows(site_kit):
+    """R4.1b-2 (M6): ``_sitekit`` reads only a dict ``SiteKit``."""
+    from sportsdataverse.hockeytech._parsers import parse_scorebar, parse_seasons, parse_teams
+
+    for parse in (parse_teams, parse_seasons, parse_scorebar):
+        assert parse({"SiteKit": site_kit}).height == 0, parse.__name__
 
 
 @pytest.mark.filterwarnings("ignore:ESPN returned page:UserWarning")  # asserted by test_parse_items_short_page_*
