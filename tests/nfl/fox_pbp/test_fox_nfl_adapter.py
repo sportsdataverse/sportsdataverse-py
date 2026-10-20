@@ -361,6 +361,27 @@ def test_overtime_boundary_a_kick_ending_regulation_ends_with_the_receiver(
     assert (kick["end"]["team"]["id"], kick["end"]["yardsToEndzone"], kick["end"]["down"]) == (team, to_go, 1)
 
 
+def test_a_muffed_kick_the_kicking_team_recovers_stays_with_it_when_it_is_the_newest_row():
+    """CAR @ ATL 2025 (Fox 10766): "Fumble RECOVERED by CAR-N.Brooks at ATL 16" on CAR's kickoff.
+
+    The real final is cut after that row, the shape of a live poll taken at that moment: with no next
+    snap the kick's end comes from ``_kick_end``, and ESPN's summary of 401772882 gives the ball to CAR.
+    """
+    from sportsdataverse.nfl.fox_pbp.to_espn_summary import _fox_nfl_to_espn_summary
+
+    fox = _load("fox_nfl_401772882.json")
+    fox["header"]["eventStatus"] = 2
+    for section in fox["pbp"]["sections"]:
+        for group in section["groups"]:
+            group["plays"] = [p for p in group["plays"] if int(p["id"]) <= 100]
+    row = {"espn_event_id": "401772882", "home_espn_team_id": "1", "away_espn_team_id": "29"}
+    summary, _ = _fox_nfl_to_espn_summary(fox, row)
+    drives = summary["drives"]["previous"] + [summary["drives"]["current"]]
+    newest = [p for d in drives for p in d["plays"]][-1]
+    assert "RECOVERED by CAR" in newest["text"]
+    assert newest["end"]["team"]["id"] == "29"
+
+
 def test_a_live_poll_has_no_winner_and_a_final_has_one():
     """Fox reads ``isLoser: false`` for both clubs on every live poll (B-L59)."""
     live, _ = _adapted("fox_nfl_live_mid.json", "401872932", "2", "8")

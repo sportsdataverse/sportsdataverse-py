@@ -630,7 +630,8 @@ def _trailing_end(play: Dict[str, Any], team_ids: Mapping[str, str], home_side: 
 def _kick_end(play: Mapping[str, Any], team_ids: Mapping[str, str], home_side: str) -> Optional[Dict[str, Any]]:
     """The receiving team's end state of a punt, kickoff or missed field goal, or None."""
     type_id, start = play["type"]["id"], play["start"]
-    receiver = "home" if start["team"]["side"] == "away" else "away"
+    # a muffed kick the KICKING team recovers stays with it ("Fumble RECOVERED by CAR-N.Brooks")
+    receiver = play.get("_recovered_by") or ("home" if start["team"]["side"] == "away" else "away")
     to_endzone: Optional[int] = None
     if type_id == "60" and start["yardsToEndzone"] is not None:
         to_endzone = 100 - int(start["yardsToEndzone"])
@@ -989,6 +990,9 @@ def _fox_to_espn_summary(
             "end": {},
             "_scoring_side": scoring_side,
             "_end_pos": _pos(events[-1].get("yardEnd")) if events else None,
+            "_recovered_by": side_of.get(_RECOVERED_RE.findall(description)[-1].upper())
+            if _RECOVERED_RE.search(description)
+            else None,
         }
         penalty = _penalty(description, side_of, espn_ids)
         if penalty:
@@ -1039,6 +1043,7 @@ def _fox_to_espn_summary(
         play["start"]["team"].pop("side", None)
         play.pop("_scoring_side", None)
         play.pop("_end_pos", None)
+        play.pop("_recovered_by", None)
 
     colours = {
         "away": (_hex_colour((header or {}).get("leftColor")), _hex_colour((header or {}).get("alternateLeftColor"))),
