@@ -171,8 +171,11 @@ def test_a_caller_retry_adapter_logs_without_the_key(monkeypatch, caplog):
     session = requests.Session()
     session.mount("https://", HTTPAdapter(max_retries=Retry(total=2, backoff_factor=0)))
     monkeypatch.setattr(urllib3.util.connection, "create_connection", _refuse)
-    with pytest.raises(requests.exceptions.ConnectionError) as ei:
+    # B-L91: the dead connection surfaces as the vocabulary's failed fetch, chained to the redacted original
+    # (the traceback channel below formats the chain too).
+    with pytest.raises(AssetFetchError) as ei:
         toa.toa_sports(api_key=SECRET, return_parsed=False, num_retries=0, session=session)
+    assert isinstance(ei.value.__cause__, requests.exceptions.ConnectionError)
     assert [r for r in caplog.records if r.name == "urllib3.util.retry"]  # it did log the URL
     assert _leaks(ei.value, caplog) == []
 

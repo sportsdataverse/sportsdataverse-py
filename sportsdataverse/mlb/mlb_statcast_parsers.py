@@ -330,7 +330,8 @@ def parse_mlb_statcast_player(
             df = parse_mlb_statcast_player(html_text)                       # seasonal aggregate
             logs = parse_mlb_statcast_player(html_text, section="statcastGameLogs")
     """
-    rows = _html_script_json(payload or "", "serverVals").get(section)
+    # the player page is HTML text: any other body (a JSON object or array) has no serverVals (A-L62)
+    rows = _html_script_json(payload if isinstance(payload, str) else "", "serverVals").get(section)
     if not isinstance(rows, list) or not rows:
         return _empty_frame(return_as_pandas)
     df = pd.json_normalize(rows, sep="_")
