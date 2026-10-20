@@ -55,7 +55,7 @@ from sportsdataverse.football.attribution import (
     refine_play_types_post_attribution as _refine_play_types_post_attribution,
 )
 from sportsdataverse.football.box import air_yards_box as _air_yards_box
-from sportsdataverse.football.box import _ordered_rows
+from sportsdataverse.football.box import _home_first, _ordered_rows
 from sportsdataverse.football.box import _avg_start_ep
 from sportsdataverse.football.box import build_defensive_players_box as _build_defensive_players_box
 from sportsdataverse.football.box import build_specialists_box as _build_specialists_box
@@ -7641,7 +7641,7 @@ class NFLPlayProcess(object):
             lambda left, right: left.join(right, on=["def_pos_team"], how="full", coalesce=True),
             def_data_frames,
         )
-        def_box_json = json.loads(def_box.write_json())
+        def_box_json = json.loads(_home_first(def_box, "def_pos_team", int(self.homeTeamId)).write_json())
 
         pos_ev = play_df.filter(pl.col("is_pos_team_turnover") == True).select(
             team=pl.col("pos_team").cast(pl.Int32),
@@ -7781,11 +7781,11 @@ class NFLPlayProcess(object):
             "pass": json.loads(_ordered_rows(passer_box, "pos_team", "passer_player_name", "Att").write_json()),
             "rush": json.loads(_ordered_rows(rusher_box, "pos_team", "rusher_player_name", "Car").write_json()),
             "receiver": json.loads(_ordered_rows(receiver_box, "pos_team", "receiver_player_name", "Tar").write_json()),
-            "team": json.loads(team_box.write_json()),
-            "situational": json.loads(situation_box.write_json()),
+            "team": json.loads(_home_first(team_box, "pos_team", team_ids[0]).write_json()),
+            "situational": json.loads(_home_first(situation_box, "pos_team", team_ids[0]).write_json()),
             "defensive": def_box_json,
             "turnover": turnover_box_json,
-            "drives": json.loads(drives_data.write_json()),
+            "drives": json.loads(_home_first(drives_data, "pos_team", team_ids[0]).write_json()),
             "defensive_players": _build_defensive_players_box(play_df),
             "specialists": _build_specialists_box(play_df),
             # ESPN's official boxes, verbatim: the reference the play-by-play
