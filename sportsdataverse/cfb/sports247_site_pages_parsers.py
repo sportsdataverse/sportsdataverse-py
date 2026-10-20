@@ -67,12 +67,20 @@ def _cast_numeric_strings(df: pl.DataFrame) -> pl.DataFrame:
     only when it adds no new nulls (every non-null original value parsed) and
     no value is zero-padded (``"000000"`` is not 0). Jersey, colour and postal
     code columns stay text whatever they hold, and a (0, 0) latitude / longitude
-    pair (247's no-location sentinel) becomes null (B-M18). FK/PK columns already
-    arrive Int64 from ``json_normalize`` and are untouched.
+    pair (247's no-location sentinel) becomes null (B-M18). A label column 247 ships as a
+    JSON number (``"Jersey": 7``) becomes text too, from the integer (``"7"``, never
+    ``"7.0"``), so its dtype never depends on the payload. FK/PK columns already arrive
+    Int64 from ``json_normalize`` and are untouched.
     """
     casts: List[pl.Expr] = []
     for col, dtype in df.schema.items():
-        if dtype != pl.Utf8 or col.endswith(_TEXT_SUFFIXES):
+        if col.endswith(_TEXT_SUFFIXES):
+            if dtype != pl.Utf8:
+                whole = dtype.is_float() and bool((df[col].drop_nulls() % 1 == 0).all())
+                source = pl.col(col).cast(pl.Int64) if whole else pl.col(col)
+                casts.append(source.cast(pl.Utf8).alias(col))
+            continue
+        if dtype != pl.Utf8:
             continue
         s = df[col]
         non_null = s.len() - s.null_count()

@@ -711,7 +711,8 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         # caller picked the payload. Yahoo echoes the id it served, so either way the mismatch
         # is checkable -- and serving it would file another game's plays under this ESPN event.
         raise SourceUnavailable(f"cfb {espn_id}: yahoo served game {served_id}, not {expected_id}")
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"cfb {espn_id}: id-map row carries no ESPN team ids")
 
     odds = ctx.odds_override or _odds_override_from_row(ctx.idmap_row)

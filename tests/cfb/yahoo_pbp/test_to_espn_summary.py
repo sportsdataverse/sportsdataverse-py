@@ -506,3 +506,18 @@ def test_a_float_id_map_row_adapts_exactly_like_the_text_row(osu_tex_yahoo, osu_
     adapted = _yahoo_to_espn_summary(osu_tex_yahoo, floats)[0]
     assert adapted["header"]["id"] == OSU_TEX_ROW["espn_event_id"]
     assert json.dumps(adapted, sort_keys=True) == json.dumps(osu_tex_summary[0], sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_hands_over_whatever_form_it_takes(osu_tex_yahoo, missing):
+    """CodeRabbit PRRT_..Swdk: the guard tested raw truthiness, so NaN passed (then became "" in the
+    summary) and ``pandas.NA`` raised TypeError instead of handing over."""
+    row = {**OSU_TEX_ROW, "home_espn_team_id": missing}
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _adapter_for("cfb", "yahoo")("cfb", OSU_TEX_ESPN_ID, _ctx(idmap_row=row, payload=osu_tex_yahoo))

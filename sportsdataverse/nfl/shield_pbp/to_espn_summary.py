@@ -552,6 +552,7 @@ def shield_to_espn_summary(
 
     Raises:
         KeyError: ``idmap_row`` is missing ``espn_event_id`` or a team id.
+        ValueError: a team id is empty, None, NaN or ``pandas.NA`` (possession cannot be attributed).
 
     Example:
         Adapt a stored final and process it::
@@ -574,6 +575,8 @@ def shield_to_espn_summary(
 
     event_id = _id_text(idmap_row["espn_event_id"])
     home_id, away_id = _id_text(idmap_row["home_espn_team_id"]), _id_text(idmap_row["away_espn_team_id"])
+    if not (home_id and away_id):  # a "" abbrs key would credit both clubs' plays to one
+        raise ValueError("id-map row states no ESPN team ids: possession cannot be attributed")
     abbrs = {
         home_id: _espn_abbr(idmap_row, "home", home_id),
         away_id: _espn_abbr(idmap_row, "away", away_id),
@@ -1096,12 +1099,13 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
     # (ESPN id -> nflverse game_id, both clubs, the closing line and the roof) -- everything
     # except the Shield uuid, which only the id map has. Merge, never overwrite.
     resolved_by = "idmap" if ctx.idmap_row else "none"
-    if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         from_schedule = _idmap_row_from_schedule(espn_id)
         if from_schedule:
             resolved_by = "nflverse_schedule" if resolved_by == "none" else "idmap+nflverse_schedule"
             for key, value in from_schedule.items():
-                if row.get(key) is None:
+                if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):
                     row[key] = value
     shield_game_id = row.get("shield_game_id")
     payload = ctx.payload
@@ -1115,7 +1119,7 @@ def _shield_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             payload = nfl_game_details_v2(shield_game_id, include_drive_chart=True, return_parsed=False)
         except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"shield gamedetails fetch failed: {type(exc).__name__}: {exc}") from exc
-    if row.get("home_espn_team_id") is None or row.get("away_espn_team_id") is None:
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
         raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
 
     parsed = shield_nfl_pbp(game_detail=payload, enrich=False)

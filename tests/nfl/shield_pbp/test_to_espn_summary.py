@@ -539,3 +539,43 @@ def test_a_float_id_map_row_adapts_exactly_like_the_text_row(cle_jax_shield, cle
     adapted = shield_to_espn_summary(cle_jax_shield, floats)[0]
     assert adapted["header"]["id"] == CLE_JAX_ROW["espn_event_id"]
     assert json.dumps(adapted, sort_keys=True) == json.dumps(cle_jax_summary[0], sort_keys=True)
+
+
+#: How a pandas-built id-map row carries a missing team id: NaN is truthy, ``pandas.NA`` raises on truthiness.
+_MISSING_IDS = pytest.mark.parametrize(
+    "missing", [float("nan"), __import__("pandas").NA, None, ""], ids=["nan", "pd_na", "none", "blank"]
+)
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_is_backfilled_from_the_schedule(cle_jax_shield, missing, monkeypatch):
+    """CodeRabbit PRRT_..Swd0: the backfill ran only for a falsy id and filled only ``None``, so a NaN
+    id skipped it and reached the summary as ""; ``pandas.NA`` raised TypeError."""
+    from sportsdataverse.football.sources.dispatch import SourceContext
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as adapter_mod
+
+    home = CLE_JAX_ROW["home_espn_team_id"]
+    monkeypatch.setattr(adapter_mod, "_idmap_row_from_schedule", lambda espn_id: {"home_espn_team_id": home})
+    row = {**CLE_JAX_ROW, "home_espn_team_id": missing}
+    ctx = SourceContext(idmap_row=row, payload=cle_jax_shield)
+    adapted = _adapter_for("nfl", "shield")("nfl", int(CLE_JAX_ROW["espn_event_id"]), ctx)
+    competitors = adapted.summary["header"]["competitions"][0]["competitors"]
+    assert [c["id"] for c in competitors] == [home, CLE_JAX_ROW["away_espn_team_id"]]
+
+
+@_MISSING_IDS
+def test_a_missing_team_id_without_a_schedule_row_hands_over(cle_jax_shield, missing, monkeypatch):
+    from sportsdataverse.football.sources.dispatch import SourceContext
+    from sportsdataverse.nfl.shield_pbp import to_espn_summary as adapter_mod
+
+    monkeypatch.setattr(adapter_mod, "_idmap_row_from_schedule", lambda espn_id: None)
+    row = {**CLE_JAX_ROW, "home_espn_team_id": missing}
+    with pytest.raises(SourceUnavailable, match="no ESPN team ids"):
+        _adapter_for("nfl", "shield")("nfl", 1, SourceContext(idmap_row=row, payload=cle_jax_shield))
+
+
+def test_the_summary_refuses_two_missing_team_ids(cle_jax_shield):
+    """Both ids "" collapsed ``abbrs`` to one "" key and credited every play to one club."""
+    row = {**CLE_JAX_ROW, "home_espn_team_id": float("nan"), "away_espn_team_id": float("nan")}
+    with pytest.raises(ValueError, match="states no ESPN team ids"):
+        shield_to_espn_summary(cle_jax_shield, row)

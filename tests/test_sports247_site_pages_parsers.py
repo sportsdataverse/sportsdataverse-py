@@ -216,3 +216,18 @@ def test_wrappers_exported_from_cfb_package():
 
     assert callable(sports247_site_pages_institution)
     assert callable(sports247_site_pages_season_recruits)
+
+
+@pytest.mark.parametrize("second", [None, {"Jersey": None}], ids=["int", "float_with_null"])
+def test_a_jersey_shipped_as_a_json_number_is_text(second):
+    """CodeRabbit PRRT_..Swdh: ``"Jersey": 3`` (a JSON number) skipped the text rule and stayed numeric,
+    so the dtype depended on the payload; with a null beside it pandas made it Float64 ("3.0")."""
+    from sportsdataverse.cfb.sports247_site_pages_parsers import parse_sports247_site_page
+
+    raw = json.loads(
+        (FIXTURES / "recruitment_finalchoice.json").read_text(encoding="utf-8").replace('"Jersey":"3"', '"Jersey":3')
+    )
+    rows = [raw] if second is None else [raw, {**raw, **second}]
+    df = parse_sports247_site_page(rows)
+    assert df.schema["jersey"] == pl.Utf8
+    assert df["jersey"].to_list() == ["3"] + ([None] if second else [])

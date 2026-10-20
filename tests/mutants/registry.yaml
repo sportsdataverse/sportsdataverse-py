@@ -3109,3 +3109,122 @@
   test: tests/mbb/test_kenpom_cast_numerics.py -k only_the_jersey_columns_change
   expected: kill
   note: only a roster table (blank, blank, Ht) has a first-column jersey
+
+# 4.8b #928 CodeRabbit round (label columns shipped as numbers; missing ids normalised before the guards)
+- id: sports247-numeric-label-to-text
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'casts.append(source.cast(pl.Utf8).alias(col))'
+  mutant: 'pass'
+  test: tests/test_sports247_site_pages_parsers.py -k json_number
+  expected: kill
+  note: a jersey shipped as the JSON number 3 kept the column numeric, so its dtype depended on the payload
+
+- id: sports247-numeric-label-via-integer
+  group: provider-casts
+  finding: B-M18
+  file: sportsdataverse/cfb/sports247_site_pages_parsers.py
+  snippet: 'source = pl.col(col).cast(pl.Int64) if whole else pl.col(col)'
+  mutant: 'source = pl.col(col)'
+  test: tests/test_sports247_site_pages_parsers.py -k "json_number and float_with_null"
+  expected: kill
+  note: a Float64 jersey (a null beside it) became "3.0"
+
+- id: cfb-yahoo-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/cfb/yahoo_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/cfb/yahoo_pbp/test_to_espn_summary.py -k missing_team_id
+  expected: kill
+  note: a NaN id passed the raw-truthiness guard; pandas.NA raised TypeError
+
+- id: nfl-cbs-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id")) and row.get("season")):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id") and row.get("season")):'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k backfilled_before_the_cbs_lookup
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-cbs-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k backfilled_before_the_cbs_lookup
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed and became ""
+
+- id: nfl-cbs-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: 'if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):'
+  mutant: 'if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k "without_a_schedule_row"
+  expected: kill
+  note: pandas.NA raised TypeError instead of handing over
+
+- id: nfl-cbs-summary-refuses-missing-id
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/cbs_pbp/to_espn_summary.py
+  snippet: '    if not (home_id and away_id):'
+  mutant: '    if False:'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k summary_refuses
+  expected: kill
+  note: a "" team id reached the summary ids and the abbrs keys
+
+- id: nfl-shield-backfill-condition-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: |-
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+        if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
+  mutant: |-
+    # ids through _id_text first: a NaN id is truthy and pandas.NA raises on truthiness
+        if not (row.get("home_espn_team_id") and row.get("away_espn_team_id")):
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: a NaN id skipped the schedule backfill; pandas.NA raised
+
+- id: nfl-shield-backfill-fills-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: 'if row.get(key) is None or (key.endswith("_espn_team_id") and not _id_text(row.get(key))):'
+  mutant: 'if row.get(key) is None:'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k backfilled_from_the_schedule
+  expected: kill
+  note: the backfill filled only None, so a NaN id stayed and became ""
+
+- id: nfl-shield-adapter-missing-id-normalised
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: |-
+    if not (_id_text(row.get("home_espn_team_id")) and _id_text(row.get("away_espn_team_id"))):
+            raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
+  mutant: |-
+    if row.get("home_espn_team_id") is None or row.get("away_espn_team_id") is None:
+            raise SourceUnavailable(f"nfl {espn_id}: id-map row carries no ESPN team ids")
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k without_a_schedule_row
+  expected: kill
+  note: the is-None check let NaN and "" through to the summary
+
+- id: nfl-shield-summary-refuses-missing-ids
+  group: provider-casts
+  finding: B-GB-22
+  file: sportsdataverse/nfl/shield_pbp/to_espn_summary.py
+  snippet: '    if not (home_id and away_id):  # a'
+  mutant: '    if False:  # a'
+  test: tests/nfl/shield_pbp/test_to_espn_summary.py -k two_missing
+  expected: kill
+  note: two "" ids collapsed abbrs to one key and credited every play to one club
