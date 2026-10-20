@@ -72,6 +72,8 @@ def nfl_pro_players_offense_passing_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -141,6 +143,8 @@ def nfl_pro_players_offense_passing_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -209,6 +213,8 @@ def nfl_pro_players_offense_rushing_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -278,6 +284,8 @@ def nfl_pro_players_offense_rushing_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -346,6 +354,8 @@ def nfl_pro_players_offense_receiving_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -415,6 +425,8 @@ def nfl_pro_players_offense_receiving_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -483,6 +495,8 @@ def nfl_pro_defense_overview_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -552,6 +566,8 @@ def nfl_pro_defense_overview_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -620,6 +636,8 @@ def nfl_pro_defense_nearest_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -689,6 +707,8 @@ def nfl_pro_defense_nearest_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -755,6 +775,8 @@ def nfl_pro_team_offense_overview_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -819,6 +841,8 @@ def nfl_pro_team_offense_overview_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -883,6 +907,8 @@ def nfl_pro_team_defense_overview_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -947,6 +973,8 @@ def nfl_pro_team_defense_overview_week(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1015,6 +1043,8 @@ def nfl_pro_fantasy_season(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -1085,6 +1115,8 @@ def nfl_pro_fantasy_game(
     Raises:
         NFLProAuthError: No user-bound NFL Pro token could be resolved (pass ``token=`` or ``email=``/``password=``, or set ``NFLPRO_TOKEN``, or ``NFLPRO_EMAIL``/``NFLPRO_PW``), or the resolved token carries no active NFL_PLUS_* plan.
         ValueError: pro.nfl.com returned HTTP 200 with an empty body -- how it signals rejected query params, since it sends no error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

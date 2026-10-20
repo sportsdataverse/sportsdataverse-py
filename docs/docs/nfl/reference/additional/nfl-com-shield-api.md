@@ -32,7 +32,7 @@ scores, possession, weather, attendance, ...).
 
 **Returns**
 
-the `gameDetail` object (or the raw envelope when `raw=True`). Empty `dict` if the game has no detail payload.
+the `gameDetail` object (or the raw envelope when `raw=True`). Empty `dict` if `gameDetail` is `null` (the game has no detail payload).
 
 **Example**
 

@@ -41,6 +41,9 @@ from typing import TYPE_CHECKING, List, Optional
 
 import requests
 
+from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse.dl_utils import _ENV_TIMEOUT, _env_int, download
+
 if TYPE_CHECKING:
     import polars as pl
 
@@ -96,8 +99,15 @@ def _get_session() -> requests.Session:
     return _SESSION
 
 
+# The gateway's 403 is an explicit IAM deny (see the module docstring): retrying it only burns the backoff.
+_NGS_RETRY_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
+
+
 def _ngs_get(path: str, params: Optional[dict] = None) -> dict:
     """GET ``{API_HOST}{path}`` through the shared session and return parsed JSON.
+
+    Goes through :func:`sportsdataverse.dl_utils.download` (retries 408 / 429 / 5xx; the
+    timeout honours ``SDV_PY_HTTP_TIMEOUT``, default 20 s) and the error vocabulary (B-M22).
 
     Args:
         path: API path beginning with ``/`` (e.g. ``"/statboard/passing"``).
@@ -105,11 +115,21 @@ def _ngs_get(path: str, params: Optional[dict] = None) -> dict:
 
     Returns:
         The decoded JSON body (``dict`` or ``list``).
+
+    Raises:
+        NoDataError: NGS answered 404.
+        ValueError: NGS answered 400 / 422.
+        AssetFetchError: Any other non-2xx (the gateway's 403 deny included) or a connection
+            failure after retries, or a 2xx whose body is not a JSON object or array.
     """
-    sess = _get_session()
-    resp = sess.get(f"{API_HOST}{path}", params=params or {}, timeout=20)
-    resp.raise_for_status()
-    return resp.json()
+    return _download_json(
+        download,
+        f"{API_HOST}{path}",
+        params=params or {},
+        session=_get_session(),
+        timeout=_env_int(_ENV_TIMEOUT, 20),
+        retry_statuses=_NGS_RETRY_STATUSES,
+    )
 
 
 def _to_frame(records, return_as_pandas: bool):
