@@ -1994,6 +1994,18 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     * **Textless echo** -- a row with no text beside a texted row of the same type, period and
       start state, filed before the play at the previous play's clock (2009-13, 2021-22) or
       after it (2007-15). It goes; the texted twin stays.
+    * **Copy outside its drive** -- the same play (drive, period, clock, start state, type and
+      text) filed under a second id that the id sort puts outside its drive, where neither
+      neighbour is in that drive (401420836: an 11:58 rush among the 14:43 plays two drives
+      earlier, and a 10:44 punt after the next drive's first run). The stranded copy goes;
+      the copy inside its drive stays, so a down replayed in its own drive is never touched.
+      A clock that half its period's rows share (a clockless feed's 0:00, an old overtime's
+      15:00) tells no plays apart, and such a row is never called a copy. "Half" is a safe
+      margin, not a boundary the data sets: the one known wrong drop (401327913's kickoffs)
+      sat at 95%, and 0.6-0.9 would drop only more real copies (17 rows at 0.6). Over the
+      23,024 cfb-raw games this step drops 490 rows in 235 games (213 of them punts), each
+      with its twin kept (489 fewer rows after the whole pipeline); 438 sit next to that twin
+      in ESPN's feed.
 
     Timeouts and end-of-period rows are never dropped, and neither is a play without a start
     spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
@@ -2050,7 +2062,29 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
         .filter(pl.all_horizontal([pl.col(c) == pl.col(c).shift(-1) for c in copy]).fill_null(False))["_pos"]
         .to_list()
     )
-    return df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    df = df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)
+
+
+def _drop_stranded_copies(df: pl.DataFrame, same: list[str], marker: pl.Expr) -> pl.DataFrame:
+    """Drop the copy outside its drive (see :func:`_drop_espn_play_copies`).
+
+    A row goes when neither neighbour is in its drive and a row inside the drive matches it on
+    ``same``. A clock that half its period's rows share tells no plays apart (401327913 reads 0:00
+    on 95% of its rows, and its touchback kickoffs all sit in drive 1), so such a row is never
+    called a copy.
+    """
+    drive = pl.col("drive.id")
+    out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)
+    period_len = pl.len().over("period.number")
+    blank_clock = pl.len().over("period.number", "start.adj_TimeSecsRem") * 2 >= period_len
+    df = df.with_row_index("_pos").with_columns(_out=out_of_drive, _blank=blank_clock)
+    home = df.filter(pl.col("_out") == False).select(same).drop_nulls()
+    stranded = df.filter(
+        (pl.col("_out") == True) & (pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)
+    )
+    copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"]
+    return df.filter(~pl.col("_pos").is_in(copy_of_home.implode())).drop("_pos", "_out", "_blank")
 
 
 _DD_SPOT_RE = re.compile(r"at (.+)$")
