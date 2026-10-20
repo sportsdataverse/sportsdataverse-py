@@ -76,8 +76,8 @@ _ROSTER_SCHEMA = {
     "player": pl.Utf8,
     "g": pl.Int64,
     "gs": pl.Int64,
-    **{c: pl.Float64 for c in ("min", "pts", "trb", "ast", "tov", "stl", "blk")},
-    **{c: pl.Utf8 for c in ("fg_pct", "ft_pct", "2_p_pct", "3_p_pct")},
+    **dict.fromkeys(("min", "pts", "trb", "ast", "tov", "stl", "blk"), pl.Float64),
+    **dict.fromkeys(("fg_pct", "ft_pct", "2_p_pct", "3_p_pct"), pl.Utf8),
 }
 
 
