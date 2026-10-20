@@ -329,7 +329,7 @@ _Last validated n/a._
 
 ## acb_serie
 
-The playoff series a game belongs to, one row per game of the series (HTTP 204 outside a series).
+The playoff series a game belongs to, one row per game of the series (zero rows outside a series: HTTP 204).
 
 **Endpoint URL:** `GET https://api2.acb.com/api/matchdata/Overview/serie`
 

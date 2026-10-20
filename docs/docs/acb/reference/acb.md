@@ -60,7 +60,7 @@ toc_max_heading_level: 2
 | [acb_lead_tracker](acb/other.md#acb_lead_tracker) | Score through a game, one row per scoring moment, with the margin. |
 | [acb_lead_stats](acb/other.md#acb_lead_stats) | Lead statistics of a game (best run, maximum lead, time ahead, lead changes) per side. |
 | [acb_lineup](acb/other.md#acb_lineup) | Players of a game with their game line, starters first. |
-| [acb_serie](acb/other.md#acb_serie) | The playoff series a game belongs to, one row per game of the series (HTTP 204 outside a series). |
+| [acb_serie](acb/other.md#acb_serie) | The playoff series a game belongs to, one row per game of the series (zero rows outside a series: HTTP 204). |
 | [acb_quickfacts](acb/other.md#acb_quickfacts) | Pre-match facts per team: standing, record, recent results. |
 | [acb_season_leaders](acb/other.md#acb_season_leaders) | Each team's season leaders before a game, by category. |
 | [acb_matchlist](acb/other.md#acb_matchlist) | The games of the round (or week) around a game. |

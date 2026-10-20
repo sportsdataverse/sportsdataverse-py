@@ -452,6 +452,17 @@ def test_runtime_non_200_follows_the_vocabulary(transport, status, error):
         R._get(f"{HOST}/api/league-standings-all-time", {"season": 2026})
 
 
+@pytest.mark.parametrize("status", [204, 205])
+@pytest.mark.parametrize(
+    ("route", "params"),
+    [("/api/league-standings-all-time", {"season": 2026}), ("/api/game", {"slug": "20250101-aik-modo"})],
+)
+def test_runtime_no_content_is_an_empty_answer(transport, status, route, params):
+    # EX-SYNC-a: a 204 / 205 is {} on the POST routes and on /api/game (GET), as from every runtime.
+    transport["queue"] = [_Resp(status, None)]
+    assert R._get(f"{HOST}{route}", params) == {}
+
+
 @pytest.mark.parametrize("status", [429, 503])
 def test_runtime_honours_retry_after(transport, monkeypatch, status):
     slept: List[float] = []

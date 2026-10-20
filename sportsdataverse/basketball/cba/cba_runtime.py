@@ -36,6 +36,8 @@ Operator ids (``createdBy`` / ``lastModifiedBy``) and any bare mobile-number str
 
 from __future__ import annotations
 
+from contextlib import nullcontext
+
 import re
 import time
 from typing import Any, Dict, List, Optional, Tuple
@@ -178,6 +180,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
             continue
         break
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
@@ -198,6 +201,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
 
 
 # ------------------------------------------------------------------------------ game scope
+@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-8)
 def _info(sid: int) -> Dict[str, Any]:
     """The game report header of a FINISHED game (cached); anything else raises."""
     if sid in _INFO:
@@ -223,8 +227,9 @@ def _ids(rows: Any, key: str) -> set:
 
 
 def _box(sid: int) -> Dict[str, Any]:
-    if sid not in _BOX:
-        _BOX[sid] = _checked("player-match-datas/data-count", sid, {"scheduleId": str(sid)})
+    if sid not in _BOX:  # the box-score scope check of other routes: a lookup, so its 204 is unknown
+        with _rt._no_content_unknown(f"{_rt._where(API + '/api/player-match-datas/data-count')} (the box-score check)"):
+            _BOX[sid] = _checked("player-match-datas/data-count", sid, {"scheduleId": str(sid)})
     return _BOX[sid]
 
 
@@ -316,14 +321,17 @@ def _pbp(sid: int, quarter: Optional[int]) -> Dict[str, Any]:
     route = "schedule-eventses/filterPage"
     where = _rt._where(f"{API}/api/{route}")
     if quarter is None:
-        periods = _checked("schedule-quarters/getQuarterInfo", sid, {"scheduleId": str(sid)})
+        with _rt._no_content_unknown(f"{where} (the game's period count)"):
+            periods = _checked("schedule-quarters/getQuarterInfo", sid, {"scheduleId": str(sid)})
         count = sum(1 for v in periods["home"].values() if isinstance(v, int))
         quarters = list(range(1, count + 1))
     else:
         quarters = [quarter]
     rows: List[Dict[str, Any]] = []
     for q in quarters:
-        page = _fetch(route, {"startNum": 0}, {"scheduleId": str(sid), "quarterNum": q})
+        # one page per period of a whole game: a 204 on one leaves it partial; one asked-for period is the route's {}
+        with _rt._no_content_unknown(f"{where} (period {q} of a whole game)") if quarter is None else nullcontext():
+            page = _fetch(route, {"startNum": 0}, {"scheduleId": str(sid), "quarterNum": q})
         recs = page.get("records") if isinstance(page, dict) else None
         if not isinstance(recs, list):
             raise AssetFetchError(f"{where}: period {q} has no records list")
@@ -365,6 +373,7 @@ def _split(url: str) -> Tuple[str, Optional[str]]:
     return path, None
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET or POST a CBA route, decrypt it, refuse every wrong answer, return the JSON with the request stamped.
 

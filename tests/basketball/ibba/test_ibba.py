@@ -358,7 +358,7 @@ def test_a_full_season_box_score_runs_end_to_end(site):
     ("handler", "exc", "match"),
     [
         (_serve(b"", 404), NoDataError, "No data found"),
-        (_serve(b"", 200, JSON), NoDataError, "empty 200 body"),
+        (_serve(b"", 200, JSON), AssetFetchError, "empty 200 body"),  # EX-SYNC-d: a blank 2xx is a failed fetch
         (_serve({"boxscore": []}), NoDataError, "no rows"),
         (_serve("no connection", 200, HTML), AssetFetchError, "not JSON"),
         (_serve("no connection", 200, JSON), AssetFetchError, "not JSON"),

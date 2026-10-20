@@ -12,6 +12,7 @@ retries, a connection failure after retries, an empty 200 or a non-JSON 2xx ->
 
 from __future__ import annotations
 
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple, Union
 
@@ -554,56 +555,62 @@ _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
 _KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pff_api's 204 (A-L69)
 
 
-# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
-# vocabulary here, measured 2026-10-18 on the sync tree: ``{(runtime, case): what the case fails with}``
-# (``pytest.fail.Exception`` = DID NOT RAISE). Strict, so each case fails the day its family is fixed.
-_FAILED = pytest.fail.Exception
-_SYNC_204 = (
-    "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
-)
-_SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
-_SYNC_EMPTY = (
-    "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
-)
-_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
-    **{
-        (f"{rt}_runtime", "204"): (AssetFetchError, _SYNC_204)
-        for rt in (
-            "aba",
-            "atrium",
-            "bleague",
-            "bnxt",
-            "cba",
-            "cebl",
-            "easl",
-            "feb",
-            "genius",
-            "ha",
-            "ibba",
-            "ibba_segev",
-            "khl",
-            "kzs",
-            "lkl",
-            "magnus",
-            "nbl_rosetta",
-            "pleague",
-            "pleague_preciser",
-            "scb",
-            "tbf",
-            "tpbl",
-            "vhl",
-            "vtb_infobasket",
-            "vtb_league",
-        )
-    },
-    **{
-        (f"{rt}_runtime", "204"): (NoDataError, _SYNC_204)
-        for rt in ("acb", "esports", "fiba", "kbl", "khl_webcaster", "liiga", "shl", "sportality", "wjbl")
-    },
-    **{
-        (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
-    },
-    ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverged from the
+# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them all. Kept, empty, for the next divergence:
+# ``{(runtime, case): (what the case fails with, why)}``, strict, so a row fails the day it is fixed.
+_SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {}
+
+
+def _seed_feb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._tok, "value", "seeded.bearer.token")
+    monkeypatch.setitem(mod._tok, "exp", time.time() + 3600)
+
+
+def _seed_khl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._sessions, "https://example.test", [mod._new_http(), "seeded-sessid"])
+
+
+def _seed_scb(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "_secrets", {"key": "seeded-key", "secret": "seeded-secret"})
+
+
+def _seed_lkl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setitem(mod._GAMES, 11446, {"game_status": "seeded"})  # the finished-game check is cached
+
+
+def _seed_vhl(mod: Any, monkeypatch: Any) -> None:
+    monkeypatch.setattr(mod, "vhl_tn", lambda season, stage="regular": 1374)  # the calendar-index lookup
+
+
+class _Pointer:
+    status_code, text, headers, url = 200, "1", {}, ""
+
+
+def _seed_bleague(mod: Any, monkeypatch: Any) -> None:
+    real = mod._fetch
+    monkeypatch.setattr(
+        mod, "_fetch", lambda url, params=None: _Pointer() if url.endswith("/latestid") else real(url, params)
+    )
+
+
+def _seed_fiba(mod: Any, monkeypatch: Any) -> None:  # the game page URL is built from two GDAP lookups
+    monkeypatch.setattr(
+        mod, "_page_url", lambda game_id, comp: f"{mod.SITE_URL}/en/history/x/{comp}/games/{game_id}-A-B"
+    )
+
+
+# R4.1b-d-1: a runtime whose first request is a bootstrap or lookup (a token, session or key page, a snapshot
+# pointer, a finished-game check, a calendar index) is seeded, so every case reaches its DATA request; on the 204
+# row the bootstrap URL must then never be served. A bootstrap's or lookup's own 204 is an unknown answer
+# (AssetFetchError), pinned in each family's tests.
+_SEED: Dict[str, Tuple[Callable[[Any, Any], None], str]] = {
+    "feb_runtime": (_seed_feb, "https://baloncestoenvivo.feb.es/"),
+    "khl_runtime": (_seed_khl, "https://example.test/"),
+    "scb_runtime": (_seed_scb, "https://www.easycredit-bbl.de/"),
+    "lkl_runtime": (_seed_lkl, "https://lkl.lt/rungtynes/11446"),
+    "vhl_runtime": (_seed_vhl, "https://www.vhlru.ru/en/calendar/"),
+    "fiba_runtime": (_seed_fiba, "https://digital-api.fiba.basketball/hapi/getGdapCompetitionById"),
+    "bleague_runtime": (_seed_bleague, "https://b-league.s3.amazonaws.com/web_json/v2_genius_contexts/504734/latestid"),
 }
 
 
@@ -712,7 +719,10 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
     stem = mod.rsplit(".", 1)[1]
     status, body, ctype, want = _CASES[case]
     calls, blocked = _answer_every_transport(monkeypatch, status, body, ctype)
-    get = importlib.import_module(mod)._get
+    module = importlib.import_module(mod)
+    if stem in _SEED:
+        _SEED[stem][0](module, monkeypatch)
+    get = module._get
     kwargs = _KWARGS.get(stem, dict)()
     sig = inspect.signature(get).parameters
     if "num_retries" in sig or any(p.kind is p.VAR_KEYWORD for p in sig.values()):
@@ -741,6 +751,8 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
             with pytest.raises(want):
                 call()
     assert calls, f"{mod}._get never reached the transport"
+    if stem in _SEED and case == "204":
+        assert _SEED[stem][1] not in calls, f"{mod}: the seeded bootstrap was fetched: {calls}"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
 
 

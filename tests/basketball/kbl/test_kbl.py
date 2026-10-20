@@ -309,11 +309,19 @@ def test_shot_chart_of_another_game_is_refused(transport):
 ENVELOPE = {"resultCode": "Fail", "message": "x", "object": -1, "errorCode": 500}
 
 
-@pytest.mark.parametrize("status", [200, 400, 500])
+@pytest.mark.parametrize("status", [200, 500])
 def test_error_envelope_and_error_statuses_are_asset_fetch_errors(transport, status):
     transport({"/season/list": _resp(status, ENVELOPE)})
     with pytest.raises(AssetFetchError):
         rt._get(f"{API}/season/list")
+
+
+def test_a_400_is_a_value_error(transport):
+    # EX-SYNC-b: a 400 is the request's fault repo-wide, even with the headers always sent; it was AssetFetchError.
+    transport({"/season/list": _resp(400, ENVELOPE)})
+    with pytest.raises(ValueError) as err:
+        rt._get(f"{API}/season/list")
+    assert not isinstance(err.value, AssetFetchError)
 
 
 def test_a_500_is_not_retried(transport):

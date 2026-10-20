@@ -273,6 +273,7 @@ def _get_page(url: str, **kwargs: Any) -> Dict[str, Any]:
     kwargs.setdefault("session", euro_hockey_runtime.SESSION)  # waits per request, retries included
     with _rt._transport_errors(url):
         resp = _rt.download(url=url, **kwargs)
+    _rt._check_no_content(getattr(resp, "status_code", None))  # a 204 / 205 is {} (EX-SYNC-a)
     text = _rt._text_body(resp, url)
     ctype = (getattr(resp, "headers", None) or {}).get("content-type", "")
     if "html" not in ctype.lower():
@@ -470,6 +471,7 @@ def _guard(url: str, fn: Callable[[], None]) -> None:
         raise type(exc)(f"{_rt._where(url)}: {exc}") from None
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """Fetch one HockeyAllsvenskan route (GET page / GET JSON / POST JSON by path), checked and stamped.
 
@@ -498,7 +500,7 @@ def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, *
         return body
     if path == "/api/game":
         clean = {k: v for k, v in (params or {}).items() if v is not None}
-        body = euro_hockey_runtime._get(url, clean, **kwargs)
+        body = euro_hockey_runtime._fetch_json(url, clean, **kwargs)
         _guard(url, lambda: _check(path, body, clean, {}))
         return body
     if json is None:  # a direct call: the params ARE the body fields
@@ -508,6 +510,6 @@ def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, *
         query = {k: v for k, v in (params or {}).items() if v is not None}
         if query:
             url = f"{url}?{urlencode(query, doseq=True)}"
-    body = _rt._download_json(_post, url, json=request, **kwargs)
+    body = _rt._download_json(_rt._no_content_transport(_post), url, json=request, **kwargs)
     _guard(url, lambda: _check(path, body, request, stamp))
     return _stamped(body, stamp)

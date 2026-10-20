@@ -526,7 +526,6 @@ def test_an_echo_of_the_key_or_secret_in_a_body_is_redacted(net):
     ("answer", "exc"),
     [
         (_Resp(404, text="nope"), NoDataError),
-        (_Resp(204, text=""), NoDataError),
         (_Resp(400, text='"not a valid gameId"'), NoDataError),
         (_Resp(400, text='"currentPage is required and needs to be a number"'), ValueError),
         (_Resp(422, text='"bad"'), ValueError),
@@ -550,6 +549,22 @@ def test_the_error_vocabulary(net, answer, exc):
         R._get(BBL + path, {"league": "dbbl"}, num_retries=0)
 
 
+@pytest.mark.parametrize("status", [204, 205])
+def test_no_content_is_an_empty_answer(net, status):
+    # EX-SYNC-a: a 204 / 205 on the data request is {} (zero rows), as from every runtime; it was NoDataError.
+    net.reply(_Resp(status, text=""))
+    assert R._get(BBL + "/games/10130", {"league": "dbbl"}, num_retries=0) == {}
+
+
+@pytest.mark.parametrize("status", [204, 205])
+def test_a_key_page_that_answers_no_content_is_a_failed_fetch(net, status):
+    # The bootstrap is not the data request: a 204 / 205 there is a page with no key to read, an unknown answer.
+    net.key_page = _Resp(status, text="")
+    net.reply(_Resp(200, [{"id": 2025}]))
+    with pytest.raises(AssetFetchError, match="the API key could not be read"):
+        R._get(BBL + "/seasons", {}, num_retries=0)
+
+
 def test_not_found_and_failed_fetch_are_never_the_same_error():
     assert not issubclass(NoDataError, AssetFetchError) and not issubclass(AssetFetchError, NoDataError)
 
@@ -569,7 +584,7 @@ def test_a_truncated_page_is_refused_not_returned_as_the_season(net):
     ("path", "params", "league", "body"),
     [
         ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId=2023)])),  # another season
-        ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId="2024")])),  # type-strict
+        ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId="2024")])),  # id-type strict
         ("/games", {"seasonId": 2024, "currentPage": 1}, "bbl", _page([_game()])),  # DBBL rows from the BBL host
         ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(competition="BBL")])),
         (

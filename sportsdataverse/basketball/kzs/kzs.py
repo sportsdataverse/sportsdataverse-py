@@ -761,8 +761,8 @@ def kzs_seasons(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -781,7 +781,7 @@ def kzs_seasons(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -822,8 +822,8 @@ def kzs_competitions(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -842,7 +842,7 @@ def kzs_competitions(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -884,8 +884,8 @@ def kzs_competition(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -904,7 +904,7 @@ def kzs_competition(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -943,8 +943,8 @@ def kzs_phases(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -963,7 +963,7 @@ def kzs_phases(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1002,8 +1002,8 @@ def kzs_rounds(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1022,7 +1022,7 @@ def kzs_rounds(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1069,8 +1069,8 @@ def kzs_player_leaderboard(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1089,7 +1089,7 @@ def kzs_player_leaderboard(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     if stats_category not in (
@@ -1178,8 +1178,8 @@ def kzs_team_leaderboard(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1198,7 +1198,7 @@ def kzs_team_leaderboard(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     if stats_category not in (
@@ -1283,8 +1283,8 @@ def kzs_matches(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1303,7 +1303,7 @@ def kzs_matches(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1347,8 +1347,8 @@ def kzs_match(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1367,7 +1367,7 @@ def kzs_match(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1406,8 +1406,8 @@ def kzs_period_scores(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1426,7 +1426,7 @@ def kzs_period_scores(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1465,8 +1465,8 @@ def kzs_pbp(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1485,7 +1485,7 @@ def kzs_pbp(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1524,8 +1524,8 @@ def kzs_pbp_players(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1544,7 +1544,7 @@ def kzs_pbp_players(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1583,8 +1583,8 @@ def kzs_box_score(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1603,7 +1603,7 @@ def kzs_box_score(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1642,8 +1642,8 @@ def kzs_team_box_score(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1662,7 +1662,7 @@ def kzs_team_box_score(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1703,8 +1703,8 @@ def kzs_score_changes(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1723,7 +1723,7 @@ def kzs_score_changes(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1762,8 +1762,8 @@ def kzs_standings(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1782,7 +1782,7 @@ def kzs_standings(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1823,8 +1823,8 @@ def kzs_playing_days(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1843,7 +1843,7 @@ def kzs_playing_days(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1882,8 +1882,8 @@ def kzs_teams(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1902,7 +1902,7 @@ def kzs_teams(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -1944,8 +1944,8 @@ def kzs_team(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1964,7 +1964,7 @@ def kzs_team(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -2005,8 +2005,8 @@ def kzs_team_general(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2025,7 +2025,7 @@ def kzs_team_general(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -2068,8 +2068,8 @@ def kzs_roster(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2088,7 +2088,7 @@ def kzs_roster(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -2131,8 +2131,8 @@ def kzs_player(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2151,7 +2151,7 @@ def kzs_player(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}
@@ -2192,8 +2192,8 @@ def kzs_player_stats(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2212,7 +2212,7 @@ def kzs_player_stats(
         * Unofficial and unsupported: these wrappers read the public read API (Java/Spring, built by OnixWeb) that the kzs.si site itself calls. No terms of use were located (unverified), api.kzs.si/robots.txt answers 401 and www.kzs.si/robots.txt 404, so no policy or Crawl-delay is published. The runtime waits at least 1 s before every request, retries included. Payloads are not redistributed as release assets.
         * Personal data: the API serves officials' and coaches' emails, phones and home towns, and clubs' bank accounts and addresses, publicly. The parsers never output them (officials appear by name only; club addresses, personnel and the commissioner report are dropped). Do not add them back.
         * Seasons are END years (2027 = 2026/2027); KZS' own season ids are opaque (27 = 2026/2027) and the runtime maps them. Competition ids are per season. Three team keys are never interchangeable: the match-team id (per match and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, person_id the person behind it.
-        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
+        * Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises ValueError for it, never an empty frame. List routes default to 150 rows with no truncation signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match header or the competition) to prove the answer is the one asked for and the game is final.
         * Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some 2020/21 men's games have a box score but no play-by-play (NoDataError): the Genius data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius court percent; side (LEFT/RIGHT) names the basket end and teams switch ends at half time, so normalise with side before stacking shots. Advanced box-score fields are 0 in every observed game.
     """
     _caller_params = kwargs.pop("params", None) or {}

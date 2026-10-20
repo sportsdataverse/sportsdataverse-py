@@ -6,6 +6,7 @@ the ~1,000 generated functions share one tested HTTP path instead of inlining it
 
 from __future__ import annotations
 
+import functools
 import inspect
 import io
 import json
@@ -13,7 +14,7 @@ import logging
 import numbers
 import time
 from contextlib import contextmanager
-from typing import Any, Callable, Iterator, List, Optional
+from typing import Any, Callable, Iterator, List, Optional, TypeVar, cast
 from urllib.parse import quote, urlsplit
 
 import polars as pl
@@ -183,6 +184,84 @@ def _transport_errors(url: str) -> Iterator[None]:
         raise AssetFetchError(f"{_where(url)}: fetch failed after retries: {type(exc).__name__}") from exc
 
 
+class _NoContent(NoDataError):
+    """A 204 / 205 met below a hand-written runtime's ``_get`` (see :func:`_no_content_is_empty`).
+
+    A ``NoDataError``, so on a path that is not a getter (a public season-id resolver sharing the
+    runtime's fetch) it still means what a 204 means: the fetch succeeded and there is nothing here.
+    """
+
+
+def _check_no_content(status: Any) -> None:
+    """Raise :class:`_NoContent` for a 204 / 205: no content by definition, so no body check may read it.
+
+    The shared chokepoints answer such a status with ``{}`` (:func:`_json_text`). A runtime that reads
+    its own body (an envelope, a row count, an HTML page) calls this right after the transport, and its
+    ``_get`` carries :func:`_no_content_is_empty`, so the 204 reaches the caller as the same ``{}``
+    instead of a failed envelope or row check (EX-SYNC-a).
+    """
+    if status in (204, 205):
+        raise _NoContent(f"answered HTTP {status}: no content")
+
+
+_Fn = TypeVar("_Fn", bound=Callable[..., Any])
+
+
+def _no_content_is_empty(get: _Fn) -> _Fn:
+    """Wrap a data getter (a runtime's ``_get``) so a 204 / 205 anywhere below it returns ``{}``.
+
+    ``_NoContent`` is private: every public function that can meet one carries this decorator or
+    :func:`_no_content_is_unknown` (tests/codegen/test_runtime_errors.py checks it).
+    """
+
+    @functools.wraps(get)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return get(*args, **kwargs)
+        except _NoContent:
+            return {}
+
+    return cast(_Fn, wrapper)
+
+
+@contextmanager
+def _no_content_unknown(where: str) -> Iterator[None]:
+    """A lookup or bootstrap (a token page, a session page, a season list, a snapshot pointer) that answers
+    204 / 205 leaves nothing to read, so the answer is unknown: :class:`AssetFetchError`, never the data
+    request's ``{}`` (R4.1b-d-1)."""
+    try:
+        yield
+    except _NoContent as exc:
+        raise AssetFetchError(f"{where}: the lookup {exc}, so the answer is unknown") from None
+
+
+def _no_content_is_unknown(fn: _Fn) -> _Fn:
+    """:func:`_no_content_unknown` around a whole lookup function (a public season resolver, a token reader)."""
+
+    @functools.wraps(fn)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        with _no_content_unknown(getattr(fn, "__qualname__", "a lookup")):
+            return fn(*args, **kwargs)
+
+    return cast(_Fn, wrapper)
+
+
+def _no_content_transport(transport: Optional[Callable[..., Any]] = None) -> Callable[..., Any]:
+    """A ``transport`` for :func:`_download_json` that raises :class:`_NoContent` on a 204 / 205.
+
+    For a runtime whose ``_get`` carries :func:`_no_content_is_empty`. ``transport`` defaults to this
+    module's ``download``, looked up at call time, so a test that patches ``_codegen_runtime.download``
+    (or passes its own module's ``download``) still intercepts the request.
+    """
+
+    def call(**kwargs: Any) -> Any:
+        resp = (transport or download)(**kwargs)
+        _check_no_content(getattr(resp, "status_code", None))
+        return resp
+
+    return call
+
+
 def _check_response(resp: Any, url: str) -> None:
     """:func:`_check_status` for a :func:`~sportsdataverse.dl_utils.download` response.
 
@@ -276,8 +355,11 @@ def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> An
     raise AssertionError("unreachable")  # pragma: no cover
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
+def _get(url: str, params: Optional[dict] = None, *, transport: Optional[Callable[..., Any]] = None, **kwargs) -> Any:
     """GET ``url`` as JSON. Strips ``None`` params.
+
+    ``transport`` replaces :func:`~sportsdataverse.dl_utils.download` (a runtime passes
+    :func:`_no_content_transport` to see a 204 / 205 instead of its ``{}``).
 
     Raises:
         NoDataError: the host answered 404 (or ESPN 200 with ``code: 404``).
@@ -286,7 +368,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs) -> Any:
             retries, or a 2xx whose body is empty (not 204/205) or not JSON.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    return _download_json(download, url, params=clean, **kwargs)
+    return _download_json(transport or download, url, params=clean, **kwargs)
 
 
 def _integral(value: Any) -> int | None:
