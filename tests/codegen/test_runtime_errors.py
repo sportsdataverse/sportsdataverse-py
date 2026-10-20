@@ -559,7 +559,6 @@ _KNOWN: Dict[Tuple[str, str], str] = {}  # task 4.1b closed nflpro (A-M4) and pf
 # strict, so a row fails the day it is fixed. The two left are the matrix's limit, not the runtime's: the matrix
 # answers EVERY request with the case, including scb's key-page bootstrap, where a 204 or 400 is a page with no
 # key (an unknown answer). tests/basketball/scb asserts the data request's 204 -> {} and 400 -> ValueError.
-_FAILED = pytest.fail.Exception
 _SCB_BOOTSTRAP = "scb: the matrix's case also answers the key-page bootstrap, which cannot read a key from it"
 _SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
     ("scb_runtime", "204"): (AssetFetchError, _SCB_BOOTSTRAP),
