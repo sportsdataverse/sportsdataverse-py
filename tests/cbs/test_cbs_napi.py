@@ -484,19 +484,12 @@ def test_the_captured_unknown_game_body_is_a_404_warning():
     assert [(w["code"], w["type"]) for w in body["warnings"]] == [(404, "NotFoundException")]
 
 
-@pytest.mark.xfail(
-    strict=True,
-    raises=AssertionError,
-    reason="B-L60: a 200 `warnings[].code == 404` envelope parses to a zero-row frame; task 4.4",
-)
-def test_unknown_game_warning_raises_no_data(monkeypatch):
+@pytest.mark.parametrize("return_parsed", [True, False])
+def test_warnings_404_body_raises_no_data(monkeypatch, return_parsed):
     from sportsdataverse.cbs.cbs_napi import cbs_game_scoring_plays
     from sportsdataverse.errors import NoDataError
     from tests.codegen.test_runtime_errors import _serve
 
     _serve(monkeypatch, 200, _WARNINGS_404)
-    try:
-        out = cbs_game_scoring_plays(1)
-    except NoDataError:
-        return
-    raise AssertionError(f"an unknown game id became a {out.shape} frame")
+    with pytest.raises(NoDataError, match="404 warning: No scoring plays data for that game"):
+        cbs_game_scoring_plays(1, return_parsed=return_parsed)
