@@ -68,6 +68,9 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
     Returns:
         A polars (or pandas) DataFrame, one row per team, with snake-cased,
         de-duplicated column names; zero rows on empty/malformed input.
+        Other malformed input (non-text payload, header-only body, unterminated quoted field) yields a
+        zero-row frame rather than raising, so callers can chain without a null-check. Only a
+        ``pandas`` import failure under ``return_as_pandas=True`` propagates.
 
     Raises:
         ValueError: The payload is an HTML document rather than a data file.
@@ -76,11 +79,6 @@ def parse_torvik_csv(payload: object, return_as_pandas: bool = False) -> Union[p
             is the DOCTYPE -- which reaches the caller as a baffling
             ``ColumnNotFoundError: unable to find column "team"`` several
             frames away. Say what actually happened instead.
-        None: other malformed input (non-text payload, header-only body,
-            unterminated quoted field) yields a zero-row frame rather than
-            raising, so callers can chain without a null-check. Only a
-            ``pandas`` import failure under ``return_as_pandas=True``
-            propagates.
 
     Example:
         Quick start::

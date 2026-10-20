@@ -306,7 +306,12 @@ lba_pbp:
   season: 'Season END year (2027 = 2026-27): the row''s START year + 1.'
   seconds: Elapsed seconds within `minute` (0-59); 0 before 2019-20. Elapsed = minute
     × 60 + seconds; `print_time` = period length minus that.
-  side: 'Which team of the game the row belongs to: home or visitor.'
+  side: 'Basket the row''s side_area_zone is measured from, as sent: 0 = the basket
+    at x = 0, 1 = the one at x = 100 (zone A is that basket''s half: x < 50 for 0,
+    x >= 50 for 1). It is NOT the team of the game (that is team_side): on shots,
+    assists, fouls committed, turnovers and offensive rebounds it is the actor''s
+    attacking basket, which changes at half-time; on defensive rebounds, steals, blocks
+    and fouls drawn it is the opponent''s.'
   side_area_code: Court zone `1`-`10`, number sent as a string (see the coordinates
     section; 2021-22 on).
   side_area_zone: '`A` = in the actor''s attacking half, `D` = its defensive half

@@ -108,6 +108,14 @@ Pull a team's full-season schedule.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_club_schedule_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_club_schedule_season-example}
 
 ```python
@@ -134,6 +142,14 @@ Pull a team's schedule for one month.
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_club_schedule_month-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_club_schedule_month-example}
 
 ```python
@@ -159,6 +175,14 @@ Pull a team's schedule for one week.
 
 **`return_parsed=True`** (default) — a tidy `polars.DataFrame` (parser: `parse_nhl_web_club_schedule`); pass `return_as_pandas=True` for a `pandas.DataFrame`.
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_club_schedule_week-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_club_schedule_week-example}
 
@@ -238,6 +262,14 @@ Pull a team's season stat block.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_club_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_club_stats-example}
 
 ```python
@@ -262,6 +294,14 @@ Pull the seasons a team has stats for.
 
 **`return_parsed=True`** (default) — a dict of `polars.DataFrame`s (parser: `parse_nhl_web_club_stats`); pass `return_as_pandas=True` for a dict of `pandas.DataFrame`s (same keys).
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_club_stats_season-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_club_stats_season-example}
 

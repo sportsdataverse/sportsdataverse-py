@@ -81,6 +81,8 @@ config:
     allowed_elements:
       - a
       - img
+      - picture
+      - source
       - br
       - sub
       - sup

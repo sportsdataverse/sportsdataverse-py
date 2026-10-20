@@ -33,6 +33,14 @@ Current matchday.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_current_group-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_current_group-example}
 
 ```python
@@ -65,6 +73,14 @@ Top scorers.
 | `goal_count` | integer |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#openligadb_goalgetters-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#openligadb_goalgetters-example}
 
@@ -124,6 +140,14 @@ Matches of one matchday.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_group_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_group_matches-example}
 
 ```python
@@ -157,6 +181,14 @@ Matchdays of a league-season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_groups-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_groups-example}
 
 ```python
@@ -188,6 +220,14 @@ Last change timestamp (bare ISO string).
 | `value` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#openligadb_last_change_date-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#openligadb_last_change_date-example}
 
@@ -222,6 +262,14 @@ All leagues (shortcut, season, sport).
 | `sport_sport_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#openligadb_leagues-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#openligadb_leagues-example}
 
@@ -278,6 +326,14 @@ One match.
 | `team2_team_group_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#openligadb_match-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#openligadb_match-example}
 
@@ -336,6 +392,14 @@ Next match of a team (404 text once the season is over).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_next_match-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_next_match-example}
 
 ```python
@@ -393,6 +457,14 @@ All matches of a season.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_season_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_season_matches-example}
 
 ```python
@@ -435,6 +507,14 @@ League table.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#openligadb_table-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#openligadb_table-example}
 
 ```python
@@ -469,6 +549,14 @@ Teams of a league-season.
 | `team_group_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#openligadb_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#openligadb_teams-example}
 

@@ -12,6 +12,7 @@ from __future__ import annotations
 import copy
 import json
 import re
+import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Tuple
 from urllib.parse import parse_qs, urlsplit
@@ -88,11 +89,98 @@ def test_every_parser_gives_a_typed_non_empty_frame(short):
     assert isinstance(df, pl.DataFrame) and df.height > 0
     assert all(SNAKE.match(c) for c in df.columns), df.columns
     for col, code in DTYPES[short].items():
-        assert df.schema[col] == {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}[code], (short, col)
+        assert (
+            df.schema[col] == {"i": pl.Int64, "f": pl.Float64, "p": pl.Float64, "b": pl.Boolean, "s": pl.String}[code]
+        ), (short, col)
     for c in df.columns:
         if re.search(r"(^|_)id$", c):
             assert df.schema[c] == pl.Int64, (short, c)
     assert "created_by" not in df.columns and "last_modified_by" not in df.columns
+
+
+_NUMERIC_TEXT = re.compile(r"^-?\d+(\.\d+)?%?$")
+#: String columns whose digit text is a label, not a measurement: jersey numbers (``00``) and code-table keys.
+_TEXT_DIGITS = {"number", "player_no", "value", "key", "cvalue"}
+
+
+@pytest.mark.parametrize("short", sorted(P.ROUTES))
+def test_display_strings_are_parsed_to_numbers(short):
+    df = ALL_PARSERS[short](_fixture(short))
+    left = [
+        c
+        for c, t in df.schema.items()
+        if t == pl.String
+        and c not in _TEXT_DIGITS
+        and df[c].drop_nulls().len()
+        and all(_NUMERIC_TEXT.match(v) for v in df[c].drop_nulls().to_list())
+    ]
+    assert left == [], left
+
+
+def test_season_averages_and_percent_strings_match_the_box_conventions():
+    base = ALL_PARSERS["player_base"](_fixture("player_base"))
+    row = base.row(0, named=True)  # the body sends points '21.6', fieldGoalsPercentage '39.4%' (sort 0.3944)
+    assert base.schema["points"] == pl.Float64 and row["points"] == 21.6 and row["seconds"] == 1501.3
+    for pct in ("field_goals_percentage", "three_point_percentage", "free_throws_percentage"):
+        assert base.schema[pct] == pl.Float64  # a FRACTION 0-1 like player_box and the *_sort companion
+        assert (base[pct] - base[f"{pct}_sort"]).abs().max() < 0.0006
+    box = ALL_PARSERS["player_box"](_fixture("player_box"))
+    assert box["field_goals_percentage"].max() <= 1.0
+    team = ALL_PARSERS["team_basic"](_fixture("team_basic"))
+    assert team.schema["points"] == pl.Float64 and team["win_rate"][0] == pytest.approx(0.848)
+    assert team.schema["season"] == pl.String  # '2024-2025', a label
+    offensive, four = (
+        ALL_PARSERS["player_offensive"](_fixture("player_offensive")),
+        ALL_PARSERS["team_four"](_fixture("team_four")),
+    )
+    # the scale is per route: player_offensive sends '13.5%' (a FRACTION, like its _sort twin and assists_rate);
+    # team_four sends the plain number 13.5 and keeps its documented 0-100 scale
+    assert offensive.schema["turnovers_rate"] == pl.Float64 and offensive["turnovers_rate"].max() <= 1.0
+    assert (offensive["turnovers_rate"] - offensive["turnovers_rate_sort"]).abs().max() < 0.0006
+    assert offensive["assists_rate"].max() <= 1.0 and four["turnovers_rate"].max() > 1.0
+    assert DTYPES["player_offensive"]["turnovers_rate"] == "p" and DTYPES["team_four"]["turnovers_rate"] == "f"
+    assert ALL_PARSERS["team_four"](_fixture("team_four")).schema["season"] == pl.Int64
+
+
+@pytest.mark.parametrize(
+    "value, code, want",
+    [
+        ("1,234", "i", 1234),
+        ("1,234.5", "f", 1234.5),
+        ("12.0", "i", 12),
+        (12.0, "i", 12),
+        ("12.5", "i", None),
+        ("nan", "f", None),
+        ("inf", "f", None),
+        ("-Infinity", "p", None),
+        (float("nan"), "f", None),
+        ("", "f", None),
+        ("39.4%", "p", 0.394),
+        ("100", "p", 1.0),  # a percent column without the % sign: still percent display text
+        (0.394, "p", 0.394),  # a JSON number under p is already the fraction
+        ("15.3%", "f", 15.3),  # under f the route's 0-100 scale is kept
+        ("9223372036854775807", "i", 9223372036854775807),  # a 19-digit roster id keeps every digit
+        ("abc", "f", None),
+        (True, "i", None),
+    ],
+)
+def test_cast_parses_display_numbers(value, code, want):
+    got = P._cast(value, code)
+    assert got == (pytest.approx(want) if isinstance(want, float) else want) and type(got) is type(want)
+
+
+@pytest.mark.parametrize("short", sorted(P.ROUTES))
+def test_no_non_empty_value_is_nulled_on_the_committed_fixtures(short):
+    # _cast returns None for text that does not convert; on the committed bodies that must never happen
+    rows = P._rows(short, _fixture(short))
+    lost = [
+        (col, r[col])
+        for col, code in DTYPES[short].items()
+        if code in "ifp"
+        for r in rows
+        if r.get(col) not in (None, "") and P._cast(r[col], code) is None
+    ]
+    assert lost == []
 
 
 @pytest.mark.parametrize("short", sorted(P.ROUTES))
@@ -200,10 +288,12 @@ class Site(HTTPAdapter):
         self.handler = handler
         self.calls: List[requests.PreparedRequest] = []
         self.proxies: List[Any] = []
+        self.timeouts: List[Any] = []
 
     def send(self, request: requests.PreparedRequest, **kwargs: Any) -> requests.Response:  # type: ignore[override]
         self.calls.append(request)
         self.proxies.append(kwargs.get("proxies"))
+        self.timeouts.append(kwargs.get("timeout"))
         status, headers, body = self.handler(request)
         resp = requests.Response()
         resp.status_code = status
@@ -279,6 +369,7 @@ def waits(monkeypatch):
 def site(monkeypatch, waits):
     """Mount a Site on a fresh polite session; the finished-game caches start empty and no proxy is set."""
     monkeypatch.delenv(R.PROXY_ENV, raising=False)
+    monkeypatch.delenv(R.DIRECT_ENV, raising=False)
 
     def install(handler=None):
         adapter = Site(handler or _answers())
@@ -530,6 +621,86 @@ def test_the_proxy_is_used_when_set_and_never_appears_in_an_error(site, monkeypa
     with pytest.raises(AssetFetchError, match="set CBA_PROXY"):
         site(boom)
         _call("seasons")
+
+
+def _refused() -> requests.ConnectionError:
+    """What requests raises for a refused TCP connect: ConnectionError(MaxRetryError(reason=NewConnectionError))."""
+    from urllib3.exceptions import MaxRetryError, NewConnectionError
+
+    reason = NewConnectionError(None, "Failed to establish a new connection: [Errno 111] Connection refused")
+    return requests.ConnectionError(MaxRetryError(None, "/api/x", reason))
+
+
+def _reset() -> requests.ConnectionError:
+    """A connection that opened and then broke mid-response (urllib3 ProtocolError over RemoteDisconnected)."""
+    from http.client import RemoteDisconnected
+
+    from urllib3.exceptions import ProtocolError
+
+    return requests.ConnectionError(ProtocolError("Connection aborted.", RemoteDisconnected("closed")))
+
+
+@pytest.mark.parametrize("make", [lambda: requests.ConnectTimeout("connect timed out"), _refused])
+def test_without_a_proxy_a_dropped_connection_fails_fast(site, make):
+    # the host drops datacenter connections at TCP: one short connect attempt, not 3 attempts x 60 s (~3 minutes)
+    exc = type(make())
+
+    def drop(req):
+        raise make()
+
+    adapter = site(drop)
+    start = time.monotonic()
+    with pytest.raises(AssetFetchError, match=r"set CBA_PROXY.*CBA_DIRECT=1") as err:
+        _call("player_box", schedule_id=GAME)
+    assert len(adapter.calls) == 1 and adapter.timeouts[0] == (R.FAST_CONNECT_TIMEOUT, R.TIMEOUT)
+    assert (
+        R.FAST_CONNECT_TIMEOUT * len(adapter.calls) < 30 and time.monotonic() - start < 30
+    )  # worst case on a real drop
+    assert exc.__name__ in str(err.value)
+
+
+@pytest.mark.parametrize("make", [lambda: requests.ReadTimeout("read timed out"), _reset])
+def test_without_a_proxy_a_read_timeout_or_reset_is_still_retried(site, make):
+    # the connection OPENED: not the datacenter block, an ordinary transient failure
+    def flaky(req):
+        if len(adapter.calls) < R.ATTEMPTS:
+            raise make()
+        return 200, ENC, _wire(_full("season_list"))
+
+    adapter = site(flaky)
+    assert _call("seasons").height == 32 and len(adapter.calls) == R.ATTEMPTS
+
+
+def test_with_a_proxy_a_refused_connection_is_still_retried(site, monkeypatch):
+    monkeypatch.setenv(R.PROXY_ENV, "http://proxy.example:8000")
+
+    def refuse(req):
+        raise _refused()
+
+    adapter = site(refuse)
+    with pytest.raises(AssetFetchError, match=f"after {R.ATTEMPTS} attempts"):
+        _call("seasons")
+    assert len(adapter.calls) == R.ATTEMPTS
+
+
+def test_direct_override_keeps_the_retries_and_the_full_timeout(site, monkeypatch):
+    monkeypatch.setenv(R.DIRECT_ENV, "1")  # a residential IP where direct access works
+
+    def drop(req):
+        raise requests.ConnectTimeout("connect timed out")
+
+    adapter = site(drop)
+    with pytest.raises(AssetFetchError, match="set CBA_PROXY"):
+        _call("seasons")
+    assert len(adapter.calls) == R.ATTEMPTS and set(adapter.timeouts) == {R.TIMEOUT}
+    ok = site(_answers({"com-code-tables/getSeason": _full("season_list")}))
+    _call("seasons")
+    assert ok.timeouts == [R.TIMEOUT]
+
+
+def test_a_post_route_without_a_json_body_is_refused():
+    with pytest.raises(TypeError, match="json="):
+        R._get("https://data-server.cbaleague.com/api/player-base-list", params={"season": 2026})
 
 
 def test_dl_utils_and_the_shared_session_are_the_transport():

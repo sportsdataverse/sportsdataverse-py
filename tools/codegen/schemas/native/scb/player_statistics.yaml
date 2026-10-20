@@ -22,7 +22,7 @@ columns:
   type: character
 - description: ''
   name: shirt_number
-  type: integer
+  type: character
 - description: ''
   name: position
   type: character

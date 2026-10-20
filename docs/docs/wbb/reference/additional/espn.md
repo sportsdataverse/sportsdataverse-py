@@ -39,6 +39,13 @@ Polars (or pandas) DataFrame with one row per official: `game_id`, `season`, `of
 | `position_display_name` | character | Position display name. |
 | `order` | integer | Display order within the result set. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -366,6 +373,13 @@ A single-row wide DataFrame (polars by default). Columns: identity / echo (`seas
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404 (no season line for that athlete/season). |
+
 **Example**
 
 ```python
@@ -516,6 +530,13 @@ Pull ESPN team season stats for a women's-college-basketball team.
 **Returns**
 
 Dict with one DataFrame per stat category. The canonical keys `"Averages"`, `"Totals"`, `"Misc"` are ALWAYS present; missing categories come back as empty frames carrying the documented schema. Any ESPN-shipped category whose name does not match one of the three canonical keys is collected under an additional `"Other"` key (only added if non-empty). Per-category column set (one row per stat): * `stat_name` (Utf8) * `abbreviation` (Utf8) * `display_value` (Utf8) * `value` (Float64) * `description` (Utf8) * `category` (Utf8, constant per frame) * `team_id` (Int64, constant) * `season` (Int32, constant) If `raw=True`, returns the raw response dict.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
 
 **Example**
 

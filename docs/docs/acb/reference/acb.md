@@ -17,6 +17,15 @@ toc_max_heading_level: 2
 
 > **Note:** Coverage: box scores from 1983-84 (old seasons carry only the whole-game period, quarter 0); play-by-play and shots from 2016-17 (earlier games answer empty lists, which raise NoDataError). Shot coordinates come in two systems, split by match id: millimetres from the attacked basket from 2020-21 (`coord_system` mm), a 0-100 full-court percent grid before (grid). A game that is not finished (`matchFinished` false) raises AssetFetchError for the routes that report it.
 
+## Competition
+
+| Function | Summary |
+|---|---|
+| [acb_competition_editions](acb/competition.md#acb_competition_editions) | Every competition edition (season) the API knows, one row per edition. |
+| [acb_competition_rounds](acb/competition.md#acb_competition_rounds) | The rounds of every competition edition: the round ids to crawl. |
+| [acb_competition_weeks](acb/competition.md#acb_competition_weeks) | The weeks of every competition edition: the week ids to crawl. |
+| [acb_competition_current](acb/competition.md#acb_competition_current) | The API's current pointers: competition, edition, week, round and match. |
+
 ## Match
 
 | Function | Summary |
@@ -64,17 +73,13 @@ toc_max_heading_level: 2
 | [acb_quickfacts](acb/other.md#acb_quickfacts) | Pre-match facts per team: standing, record, recent results. |
 | [acb_season_leaders](acb/other.md#acb_season_leaders) | Each team's season leaders before a game, by category. |
 | [acb_matchlist](acb/other.md#acb_matchlist) | The games of the round (or week) around a game. |
-| [acb_competition_editions](acb/other.md#acb_competition_editions) | Every competition edition (season) the API knows, one row per edition. |
-| [acb_competition_rounds](acb/other.md#acb_competition_rounds) | The rounds of every competition edition: the round ids to crawl. |
-| [acb_competition_weeks](acb/other.md#acb_competition_weeks) | The weeks of every competition edition: the week ids to crawl. |
-| [acb_competition_current](acb/other.md#acb_competition_current) | The API's current pointers: competition, edition, week, round and match. |
 | [acb_round_matches](acb/other.md#acb_round_matches) | Games of one round (or week) with scores, status and broadcasters. |
 | [acb_standings](acb/other.md#acb_standings) | League table after a round (default: the current round). |
 | [acb_standings_rounds](acb/other.md#acb_standings_rounds) | Standings history: each team's position after each round, with the round's game. |
 | [acb_bracket](acb/other.md#acb_bracket) | Playoff bracket: one row per series (quarter-final, semifinal, final). |
 | [acb_bracket_games](acb/other.md#acb_bracket_games) | The games of every playoff series of a bracket, one row per game. |
-| [acb_calendar](acb/other.md#acb_calendar) | Every round of a season with its games: one call lists every game id. |
-| [acb_league_zones](acb/other.md#acb_league_zones) | League-wide shooting by court zone for a season. |
+| [acb_calendar](acb/other-2.md#acb_calendar) | Every round of a season with its games: one call lists every game id. |
+| [acb_league_zones](acb/other-2.md#acb_league_zones) | League-wide shooting by court zone for a season. |
 | [acb_next_matches](acb/other-2.md#acb_next_matches) | A club's most recent and upcoming games. |
 | [acb_club_data](acb/other-2.md#acb_club_data) | Club profile: arena, contacts and links. |
 | [acb_current_roster](acb/other-2.md#acb_current_roster) | A club's players and staff for an edition (default: the current one). |

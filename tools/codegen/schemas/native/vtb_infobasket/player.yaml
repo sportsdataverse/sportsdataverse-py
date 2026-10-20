@@ -31,7 +31,7 @@ columns:
   type: integer
 - description: ''
   name: player_position
-  type: character
+  type: integer
 - description: ''
   name: player_hand
   type: character

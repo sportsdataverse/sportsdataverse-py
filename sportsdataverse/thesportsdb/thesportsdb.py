@@ -51,7 +51,7 @@ def thesportsdb_event(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -103,7 +103,7 @@ def thesportsdb_league(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -155,7 +155,7 @@ def thesportsdb_league_next_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -207,7 +207,7 @@ def thesportsdb_league_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -257,7 +257,7 @@ def thesportsdb_leagues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -307,7 +307,7 @@ def thesportsdb_player(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -359,7 +359,7 @@ def thesportsdb_player_search(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -413,7 +413,7 @@ def thesportsdb_season_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -464,7 +464,7 @@ def thesportsdb_sports(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -516,7 +516,7 @@ def thesportsdb_table(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -569,7 +569,7 @@ def thesportsdb_team(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -621,7 +621,7 @@ def thesportsdb_team_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: TheSportsDB answered 404 (unknown id or route).
+        NoDataError: The host answered 404 -- the requested resource does not exist. TheSportsDB answered 404 (unknown id or route).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

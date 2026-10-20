@@ -166,6 +166,12 @@ Polars dataframe containing team stats available for the requested seasons.
 | `pt_return_tds` | integer | Number of the team's punts that the opponent returned for a touchdown. |
 | `pt_net_yards` | integer | Net punting yards: pt_yards minus pt_return_yards minus 20 yards per touchback. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999, if `summary_level` is not one of the allowed values, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+
 **Example**
 
 ```python
@@ -421,6 +427,12 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `def_times_hurried` | double | Number of times the defensive player hurried (pressured but did not sack or hit) the quarterback, from Pro Football Reference. |
 | `def_times_hitqb` | double | Number of times the defensive player hit the quarterback on a pass play without recording a sack, from Pro Football Reference. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` or `summary_level` are not allowed values, or if any season is less than 2018. |
+
 **Example**
 
 ```python
@@ -551,6 +563,14 @@ Polars dataframe containing player stats.
 | `fantasy_points` | double | Standard fantasy points. |
 | `fantasy_points_ppr` | double | PPR fantasy points. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is less than 1999. |
+| `TypeError` | If `seasons` is a bool -- the first positional argument used to be `kicking`, so `load_nfl_player_stats(True)` is rejected loudly rather than read as "seasons=True". |
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`; or if `kicking=True` is combined with the SDV source (the SDV play-by-play surface lacks a `kicker_player_id`, so kicking stats are nflverse-only). |
+
 **Example**
 
 ```python
@@ -645,6 +665,13 @@ One-row-per-player identity master. `return_as_pandas` narrows the return to a `
 | `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
 | `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `Exception` | Propagates any network / parquet-read error from the underlying `pl.read_parquet` against the release URL. |
+
 **Example**
 
 ```python
@@ -736,6 +763,12 @@ Polars dataframe of weekly rosters for the requested seasons (`pandas.DataFrame`
 | `draft_club` | character | Team abbreviation of the club that drafted the player. |
 | `draft_number` | integer | Overall pick number at which the player was selected in the NFL draft. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If a requested season precedes the earliest available season (2002). |
+
 **Example**
 
 ```python
@@ -816,6 +849,12 @@ Polars dataframe containing the schedule for the requested seasons.
 | `referee` | character | Name of the game's referee (head official) |
 | `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
 | `stadium` | character | Name of the stadium |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999. |
 
 **Example**
 

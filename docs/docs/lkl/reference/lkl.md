@@ -58,6 +58,14 @@ Game header from the game page: status, tip-off, venue, attendance, officials an
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_game_info-example}
 
 ```python
@@ -93,6 +101,14 @@ Game roster from the game page: every player on either team sheet with the lkl.l
 | `slug` | character | Player slug (key space: lkl.lt persons; the {slug} of lkl.lt/zaidejai/{slug}). Join key to the player_slug of the box score, leaders and play-by-play. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_game_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_players-example}
 
@@ -158,6 +174,14 @@ Per-player box score of a finished game: minutes, points, shooting splits, rebou
 | `efficiency` | integer | Cell: Efficiency rating (EF, Efektyvumas; see gameStatistics efficiency). |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_player_box-example}
 
@@ -226,6 +250,14 @@ Team game totals of both teams: shooting, rebounds, assists, turnovers, fouls, p
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_team_box-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_team_box-example}
 
 ```python
@@ -260,6 +292,14 @@ Points each team scored in each period of a game, overtime included.
 | `points` | integer | Points the team scored IN this period (not cumulative); keyed by period in the site's quarter_scores. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_period_scores-example}
 
@@ -302,6 +342,14 @@ Summary tab: the head-to-head comparison of both teams (shooting, rebounds, assi
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_summary-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_summary-example}
 
 ```python
@@ -334,6 +382,14 @@ Score line of a game: both scores and the clock text.
 | `clock` | character | Clock text, NOT a state flag: an old game keeps '1 KĖLINYS - 10:00' after the final; a finished overtime game reads '1 pratęsimas - 00:00'. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_game_score-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_game_score-example}
 
@@ -376,6 +432,14 @@ Statistics tab: the head-to-head comparison of both teams, one row per statistic
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_game_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_game_stats-example}
 
 ```python
@@ -411,6 +475,14 @@ Lead chart of a game: the score margin at each chart point of each period.
 | `column_height` | numeric | Bar height for the site's chart: \|diff\| / maxDiff x 50 (percent of the chart). |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_lead_chart-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_lead_chart-example}
 
@@ -450,6 +522,14 @@ Leaders tab: each team's top players in points, rebounds, assists, efficiency, s
 | `value` | integer | The player's count in the row's category. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_leaders-example}
 
@@ -498,6 +578,14 @@ Play-by-play of a finished game (2024-25 onward), oldest first, with the running
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_pbp-example}
 
 ```python
@@ -540,6 +628,14 @@ Every field-goal attempt of a finished game (2024-25 onward) with its court posi
 | `area` | character | Court zone code (e.g. inthepaint, underbasket, outsideleft); left and right are from the shooter's view, so zones are point-symmetric between the two baskets. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_shots-example}
 
@@ -587,6 +683,14 @@ Every played game of one LKL season (all pages of the site's results list, merge
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
 
+### Raises {#lkl_results-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#lkl_results-example}
 
 ```python
@@ -629,6 +733,14 @@ League table of one LKL season: overall, home and away records, and the final ra
 | `last5` | character | Last five results (Paskutinės 5) as W / L letters in the order the page renders them, left to right; fewer than five early in a season; null in the final table. |
 
 **`return_parsed=False`** — the raw body (`dict`): the JSON of a game route, the game page record, or the merged results / standings record, plus `_request` (the game id, team ids and slug -> player id map, or the season asked for).
+
+### Raises {#lkl_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#lkl_standings-example}
 

@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression"
-sidebar_label: "Models and calculators: build_productivity–slow_regression"
+title: "MBB — additional Python functions — Models and calculators: build_productivity–score_to"
+sidebar_label: "Models and calculators: build_productivity–score_to"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: build_productivity–slow_regression — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: build_productivity–score_to — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: build_productivity–slow_regression
+# MBB — additional Python functions — Models and calculators: build_productivity–score_to
 
 ### build_productivity {#build_productivity}
 
@@ -125,6 +125,12 @@ Task 3.5 "`ndarray` breaks deep `==`" concern).
 **Returns**
 
 A `RapmPreProcDiagnostics`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `numpy.linalg.LinAlgError` | If the SVD fails to converge (not reachable via either oracle fixture). |
 
 **Example**
 
@@ -355,6 +361,12 @@ numpy-propagate).
 
 `sum((player_outs[i] - regressed_outs[i]) ** 2)` -- the `errSq` term consumed by `calculate_sd_rapm`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `player_outs` and `regressed_outs` have different lengths -- see landmine 7 above. |
+
 **Example**
 
 ```python
@@ -404,6 +416,12 @@ Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
 **Returns**
 
 A length-`num_players` array of per-player RAPM standard errors.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ZeroDivisionError` | If `num_lineups == num_players` -- see landmine 8 above. |
 
 **Example**
 
@@ -486,6 +504,12 @@ Return the `LeagueConstants` for a league.
 
 The league's `LeagueConstants`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not a known key of `LEAGUE_CONSTANTS`. |
+
 **Example**
 
 ```python
@@ -508,6 +532,12 @@ Return the `PlayerValueConstants` for a league.
 **Returns**
 
 The league's `PlayerValueConstants`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not a known key. |
 
 **Example**
 
@@ -588,6 +618,12 @@ call) and an `old_value` (from the second) side by side.
 | `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / `_get_strong_weight` exactly as `pick_ridge_regression` does. |
 | `read_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- which key (`"value"`/`"old_value"`) to prefer when reading `stats_averages`/`ctx["team_info"]` offsets and when calling `calc_lineup_outputs` (forwarded as its `use_old_val_if_possible` flag). |
 | `write_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key each written field carries its result under. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If a player in `players` is absent from both `ctx["removed_players"]` and `ctx["player_to_col"]` -- see landmine 12 (a Python-vs-JS divergence in genuinely dead territory for the oracle). |
 
 **Example**
 
@@ -806,6 +842,13 @@ One row per field team: `team_id, seed?, reach_r32, reach_s16, reach_e8, reach_f
 
 No returns table is published for this function: no capture: it needs a bracket-ordered field whose size is a power of two, and no package function returns one.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the field size is not a power of two. |
+| `KeyError` | If a field team is missing from `ratings`. |
+
 **Example**
 
 ```python
@@ -889,6 +932,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `home_has_ball` | integer |  |
 | `home_win_prob` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If the bundled artifact is an xgboost tree (`.ubj`) and `xgboost` is not installed (`pip install sportsdataverse[models]`). |
+
 **Example**
 
 ```python
@@ -922,6 +971,12 @@ Joins the ratings frame twice (home / away) and applies the closed-form
 One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
 
 No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a join-key dtype mismatches `ratings['team_id']`, or if `ratings` has duplicate `team_id` rows (e.g. multiple seasons passed at once). |
 
 **Example**
 
@@ -1001,6 +1056,12 @@ Monte Carlo the remaining schedule: expected wins + title odds.
 One row per team: `season, team_id, exp_wins` (mean simulated total wins), `playoff_prob` (share of sims finishing in the top 68 win totals -- a field-size proxy, ties broken by `adj_em`) and `conf_title_prob` (share of sims with the most wins among conference members; ties count for every tied team; null without a `conference` column).
 
 No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If a scheduled team is missing from `ratings` -- every `home_team_id` / `away_team_id` must have a ratings row. |
 
 **Example**
 
@@ -1179,6 +1240,12 @@ One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_e
 | `games` | integer | Games played. |
 | `rank` | integer | Rank. |
 | `adj_em_z` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a requested season's games have no turnovers under any turnover key (ESPN's pre-2009 women's box schema), so its possession estimate -- and every rating derived from it -- would be wrong rather than merely missing. |
 
 **Example**
 
@@ -1554,6 +1621,12 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 | `off_eff` | double | Off eff. |
 | `def_eff` | double | Def eff. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a season's games have 0 turnovers under every turnover key (ESPN's pre-2009 women's box), so no rating built from it would be meaningful. |
+
 **Example**
 
 ```python
@@ -1687,67 +1760,4 @@ from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
 
 score_to_tuple("55-68")   # (55, 68)
 score_to_tuple("garbage")  # (0, 0)
-```
-
-### simulate_game {#simulate_game}
-
-`simulate_game(home_em: 'float', away_em: 'float', neutral: 'bool', rng: 'np.random.Generator', *, league: 'str' = 'mens') -> 'bool'`
-
-Sample one game outcome: margin `~ Normal(exp_margin, margin_sd)`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `home_em` | `float` |  | Home team's adjusted efficiency margin. |
-| `away_em` | `float` |  | Away team's adjusted efficiency margin. |
-| `neutral` | `bool` |  | True for a neutral-site game. |
-| `rng` | `Generator` |  | A seeded `numpy.random.Generator` (caller owns determinism). |
-| `league` | `str` | `'mens'` | `"mens"` or `"womens"`. |
-
-**Returns**
-
-True if the home team wins the sampled game.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_season_sim import simulate_game
-simulate_game(20.0, 5.0, False, np.random.default_rng(0))
-```
-
-### slow_regression {#slow_regression}
-
-`slow_regression(player_weight_matrix: 'NDArray[np.float64]', ridge_lambda: 'float', ctx: 'RapmPlayerContext') -> 'NDArray[np.float64]'`
-
-Build the Tikhonov (ridge) regression solver matrix.
-
-Faithful port of the private `RapmUtils.slowRegression`
-(`RapmUtils.ts:756-769`): `(XᵀX + ridge_lambda·I)⁻¹Xᵀ`, where `X`
-is `player_weight_matrix` (one row per lineup, one column per player --
-see `calc_player_weights`). See the section banner above for why
-this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `player_weight_matrix` | `NDArray[float64]` |  | The off/def design matrix, shape `(num_lineups, ctx["num_players"])`. |
-| `ridge_lambda` | `float` |  | The Tikhonov regularization strength. |
-| `ctx` | `RapmPlayerContext` |  | A `RapmPlayerContext` -- only `ctx["num_players"]` is read (sizes the identity matrix). |
-
-**Returns**
-
-The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_rapm import slow_regression, calculate_rapm
-
-x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
-solver = slow_regression(x, 1.0, ctx)  # ctx["num_players"] == 2
-rapm = calculate_rapm(solver, [1.0, 2.0, 3.0])
 ```
