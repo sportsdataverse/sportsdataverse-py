@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Basketligaen fixtures (`www.basketligaen.dk/api`)](#basketligaen-fixtures-wwwbasketligaendkapi)
+  - [Truncated route samples (`*.json` beside this file)](#truncated-route-samples-json-beside-this-file)
+  - [Full bodies (`full/`)](#full-bodies-full)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Basketligaen fixtures (`www.basketligaen.dk/api`)
 
 Real bodies from the Basketligaen site API (keyless GET JSON; Sportality platform, stats by Genius Sports LiveStats:
@@ -21,6 +31,12 @@ braces dropped, `__module__<module>` for stats-info, and `@<uuid>` for a second 
 
 Because the cut keeps three rows and three map keys, a sample's box-score rows need not match its name maps, and its
 `teamList` is not a season's: tests that run the runtime's scope checks use the full bodies below.
+
+One edit to the copies: the three `standings_standings` samples carry the whole `dataColumns` list (10 entries, `Rank`
+.. `Strk`), not the cut's first 3. `dataColumns` is the table's header, not its rows, and the runtime's column check
+needs `W` and `L` in it. The 7 restored entries come from plain GETs of
+`https://www.basketligaen.dk/api/statistics-v2/stats-info/standings_standings?ssgtUuid=<ssgt>&count=1000` on
+2026-10-18 (UTC); their first 3 entries equalled the samples'. Nothing else in those files changed.
 
 `spec_paths.json` is the route list of `sportality.openapi.yaml` (42 paths: 24 routes, `stats-info` as one path per
 module), written by `tools/codegen/gen_sportality.py` so the tests need no refs checkout.

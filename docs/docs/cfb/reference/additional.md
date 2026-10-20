@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # CFB — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.cfb`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.cfb` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## Highlights
 
@@ -110,7 +110,7 @@ not covered by the generated API-endpoint reference above.
 | [calculate_wpa](additional/models-and-calculators.md#calculate_wpa) | Win probability added: the change in WP across a play. |
 | [calculate_xpass](additional/models-and-calculators.md#calculate_xpass) | Expected pass probability for each row. |
 | [cfb_adjusted_epa](additional/models-and-calculators.md#cfb_adjusted_epa) | Season opponent-adjusted per-team EPA from a season's play-by-play. |
-| [cfb_adjusted_epa_by_game](additional/models-and-calculators.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
+| [cfb_adjusted_epa_by_game](additional/models-and-calculators-2.md#cfb_adjusted_epa_by_game) | Walk-forward (point-in-time) opponent-adjusted EPA, one row per team-game. |
 | [cfb_compute_results](additional/models-and-calculators-2.md#cfb_compute_results) | Default results generator — nflseedR's dynamic ELO model for CFB. |
 | [cfb_draft_projection](additional/models-and-calculators-2.md#cfb_draft_projection) | Project NFL-draft probability per player + expected picks per team. |
 | [cfb_field_position](additional/models-and-calculators-2.md#cfb_field_position) | Team-season field-position value: avg start, drive EP, margin, pts/drive. |

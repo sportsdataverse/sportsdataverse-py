@@ -817,8 +817,9 @@ NOTES_TEXT = [
     "API; its site notice was not separately reviewed.",
     "Both hosts need two headers: a constant `x-api-key` and an `x-api-secret` that rotates. The runtime derives "
     "the secret on first use from the key embedded in an easycredit-bbl.de page (reversed, `:` turned into `-`) and "
-    "never logs or returns it. The derivation mirrors what the site's own front-end JavaScript does with that key "
-    "before it calls the API.",
+    "never logs or returns it. The derivation was reverse-engineered from observed requests and responses and has "
+    "not been checked against the site's own front-end code; if the site changes how it signs requests, every call "
+    "fails with AssetFetchError.",
     "Id key spaces: seasonId is the START year (2025 = 2025-26), so a wrapper's END-year `season` is sent as "
     "`season - 1`. Teams are keyed by teamId (seasonTeamId equals it in every sample). seasonPlayerId is per player "
     "per season and per club (a player traded mid-season has two); realPlayerId is the person. playerId is "

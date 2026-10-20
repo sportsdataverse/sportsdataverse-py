@@ -1,7 +1,7 @@
 ---
 title: "ATRIUM — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 4
+sidebar_position: 5
 description: "ATRIUM — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # ATRIUM — additional Python functions — Dates and seasons
@@ -23,6 +23,14 @@ The `seasonId` of a site's season, from its END year and optionally its competit
 **Returns**
 
 The season's UUID, for the `season_id` argument of every season-scoped wrapper.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season` is not an integer, the site is not in `SITES`, it lists no seasons (236), or the year is shared by several competitions and `competition_id` is missing. |
+| `sportsdataverse.errors.NoDataError` | The site lists no such season. |
+| `AssetFetchError` | The season list could not be fetched or is not the site's. |
 
 **Example**
 

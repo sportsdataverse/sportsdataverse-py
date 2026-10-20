@@ -66,6 +66,14 @@ Single club detail (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_club-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_club-example}
 
 ```python
@@ -96,6 +104,14 @@ List seasons for a competition (stats-api).
 | `season` | integer | Season year |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_competition_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_competition_seasons-example}
 
@@ -129,6 +145,14 @@ List competitions (stats-api).
 | `competition_type` | character | `League` or `Tournament` |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_competitions-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_competitions-example}
 
@@ -191,6 +215,14 @@ Season content entity by slug (dapi / Contentful).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_content_season-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_content_season-example}
 
 ```python
@@ -246,6 +278,14 @@ Query season content entities (dapi / Contentful).
 | `fields_competition_sportec_id_overwrite` | logical | Season content field: competition: whether the season's Sportec id is manually overridden in the CMS. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_content_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_content_seasons-example}
 
@@ -309,6 +349,14 @@ Single match detail incl. lineups + referees (stats-api).
 | `minute_of_play` | character | Current minute (live) |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_match-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_match-example}
 
@@ -386,6 +434,14 @@ List matches in a season, date-windowed (stats-api).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_season_matches-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_season_matches-example}
 
 ```python
@@ -440,6 +496,14 @@ Club roster with player Sportec ids (sportapi).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_sportapi_club_players-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_sportapi_club_players-example}
 
 ```python
@@ -480,6 +544,14 @@ Batch club detail by Sportec ids (sportapi).
 | `ecal_widget_id` | character | Identifier of the eCal calendar-subscription widget. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_sportapi_clubs_by_sportec_ids-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_sportapi_clubs_by_sportec_ids-example}
 
@@ -588,6 +660,14 @@ Single match detail (sportapi / .NET).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_sportapi_match-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_sportapi_match-example}
 
 ```python
@@ -693,6 +773,14 @@ Batch match detail by Sportec ids (sportapi).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mls_sportapi_matches_by_sportec_ids-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mls_sportapi_matches_by_sportec_ids-example}
 
 ```python
@@ -751,6 +839,14 @@ Standings table for a competition season (stats-api).
 | `goals_difference_per_game` | numeric | Goal-diff per game |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mls_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoESPNDataError` | The host answered 404 -- the requested resource does not exist. The MLS host returned 404 (unknown id, or an unplayed match on `/matches/{matchId}`). On the season-addressable stats-api endpoints (`season_matches`, `standings`, `competition_seasons`) a season before 2024 has no addressable id -- the stats-api serves 2024+ only. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mls_standings-example}
 

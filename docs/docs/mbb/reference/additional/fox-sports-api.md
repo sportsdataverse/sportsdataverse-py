@@ -736,6 +736,13 @@ A polars DataFrame (default), a pandas DataFrame when `return_as_pandas=True`, o
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | Fox returned 404 for the requested id. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). |
+
 **Example**
 
 ```python
@@ -771,6 +778,12 @@ A polars DataFrame (default) or pandas DataFrame, one row per team: `fox_team_id
 | `fox_team_id` | character | Fox Bifrost team id (NA if unmatched). |
 | `fox_team_name` | character | Fox team name (NA if unmatched). |
 | `fox_section` | character | Fox conference/section label (NA if unmatched). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, or an empty or unreadable 200 body). A 404 on an individual candidate id (`NoDataError`) is expected during the scan and is skipped; every other failure propagates rather than silently truncating the directory. |
 
 **Example**
 

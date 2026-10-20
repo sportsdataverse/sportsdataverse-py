@@ -1,10 +1,39 @@
 ---
-title: "WBB — additional Python functions — Analytics: wbb_strength–weighted_avg"
-sidebar_label: "Analytics: wbb_strength–weighted_avg"
+title: "WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg"
+sidebar_label: "Analytics: wbb_bracketology–weighted_avg"
 sidebar_position: 11
-description: "WBB — additional Python functions — Analytics: wbb_strength–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Analytics: wbb_strength–weighted_avg
+# WBB — additional Python functions — Analytics: wbb_bracketology–weighted_avg
+
+### wbb_bracketology {#wbb_bracketology}
+
+`wbb_bracketology(season: 'int', *, as_of_date: 'Union[datetime.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Women's projected tournament field for a season.
+
+Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `league="womens"` (WBB loaders + women's constants).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` |  | Season to project (e.g. `2024`). |
+| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
+| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
+
+**Returns**
+
+One row per team: `season, team_id, resume_score, projected_seed, at_large_prob, auto_bid, bid` -- see the mbb core for the full contract.
+
+No returns table is published for this function: no capture: it raises a join-key dtype mismatch on every real season (the schedule's home_team_id is Int32, the ratings' team_id is String).
+
+**Example**
+
+```python
+from sportsdataverse.wbb import wbb_bracketology
+field = wbb_bracketology(2024)
+```
 
 ### wbb_strength_of_schedule {#wbb_strength_of_schedule}
 
@@ -62,6 +91,12 @@ weight.
 **Returns**
 
 None. `mutable_acc` is mutated in place.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | If `obj` carries a `game_info` key -- that merge branch is deliberately deferred (see module docstring). |
 
 **Example**
 

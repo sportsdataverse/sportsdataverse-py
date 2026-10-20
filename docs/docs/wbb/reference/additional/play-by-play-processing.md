@@ -275,6 +275,12 @@ The 35-column play-by-play frame (zero rows when the game is not found).
 | `is_garbage_time` | logical |  |
 | `sub_deviate` | integer |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not an integral contest id (`None`, NaN, `5722355.5`); a float such as `5722355.0` is accepted. |
+
 **Example**
 
 ```python
@@ -420,3 +426,9 @@ Read a saved ESPN WBB play-by-play payload from disk.
 **Returns**
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_wbb_pbp`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |
