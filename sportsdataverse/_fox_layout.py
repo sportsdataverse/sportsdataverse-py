@@ -426,6 +426,8 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
     club = {
         _uri_id((header.get(k) or {}).get("uri")): (header.get(k) or {}).get("name") for k in ("leftTeam", "rightTeam")
     }
+    # never key the map on None: a header team and a drive both missing their uri are not a match
+    club.pop(None, None)
     rows: List[Dict] = []
     for sec in (raw.get("pbp", {}) or {}).get("sections", []) or []:
         quarter = sec.get("title")

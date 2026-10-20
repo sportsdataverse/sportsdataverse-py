@@ -2673,3 +2673,13 @@
   test: tests/nfl/test_nfl_fox_ext.py tests/cfb/test_cfb_fox_ext.py -k sorted
   expected: kill
   note: a live Fox poll comes back newest-first from fox_nfl_pbp and fox_cfb_pbp
+
+- id: fox-drive-pbp-club-keyed-on-none
+  group: provider-gates
+  finding: B-L57
+  file: sportsdataverse/_fox_layout.py
+  snippet: '    club.pop(None, None)'
+  mutant: '    pass'
+  test: tests/nfl/test_nfl_fox_ext.py -k neither
+  expected: kill
+  note: CodeRabbit #922; a header team and a drive both without a uri match on None and the drive gets that club

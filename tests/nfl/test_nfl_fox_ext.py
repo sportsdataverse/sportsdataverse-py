@@ -34,3 +34,20 @@ def test_fox_nfl_pbp_is_sorted_oldest_first_on_a_live_poll(live_poll):
 def test_fox_nfl_pbp_play_team_is_a_club(live_poll):
     df = ext.fox_nfl_pbp("11052")
     assert set(df["play_team"].to_list()) == {"DET", "BUF"}
+
+
+def test_fox_nfl_pbp_play_team_is_null_when_neither_side_has_a_uri(monkeypatch):
+    """A header team with no uri and a drive link with no uri must not match on ``None``.
+
+    The real ARI @ SEA final (Fox 10625) with the away team's ``uri`` and the first drive's
+    ``contentUri`` removed: that drive's rows get no club, every other row keeps its own.
+    """
+    raw = _load("fox_nfl_401671775.json")
+    del raw["header"]["leftTeam"]["uri"]
+    first = raw["pbp"]["sections"][0]["groups"][0]
+    first["entityLink"] = {}
+    monkeypatch.setattr(ext, "fox_get", lambda *a, **k: raw)
+    df = ext.fox_nfl_pbp("10625")
+    in_first = df["drive_id"] == first["id"]
+    assert df.filter(in_first)["play_team"].null_count() == in_first.sum() > 0
+    assert set(df.filter(~in_first)["play_team"].drop_nulls().to_list()) <= {"SEA"}
