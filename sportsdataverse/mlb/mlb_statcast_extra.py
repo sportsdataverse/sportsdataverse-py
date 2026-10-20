@@ -9,8 +9,9 @@ from typing import TYPE_CHECKING, Any, List, Optional, Set, Tuple, Union
 
 import polars as pl
 
-from sportsdataverse._codegen_runtime import _check_status, _text_body, _transport_errors
+from sportsdataverse._codegen_runtime import _check_status, _excerpt, _text_body, _transport_errors
 from sportsdataverse.dl_utils import download
+from sportsdataverse.errors import AssetFetchError
 from sportsdataverse.mlb.mlb_statcast_parsers import (
     _MLBAM_ID_COLUMNS,
     _csv_to_frame,
@@ -126,13 +127,23 @@ def _fetch_chunk(
     params = {"all": "true", "type": "details", "player_type": player_type, "game_date_gt": gt, "game_date_lt": lt}
     params.update(_translate_filters(filters))
     params.update(_ROUTE_FLAGS.get(base_url, {}))  # the route's population wins over a forwarded raw flag
-    resp = download(base_url, params=params)
+    label = f"Savant {base_url} ({gt}..{lt})"
+    with _transport_errors(base_url):  # B-L79: a dropped connection is AssetFetchError, not a raw requests error
+        resp = download(base_url, params=params)
     text = getattr(resp, "text", resp if isinstance(resp, str) else "")
+    status = getattr(resp, "status_code", 200)
     # download() returns the LAST response once the retry budget is exhausted on a
     # retryable status (403/429/5xx), so without this the error page parses into an
     # empty frame and the window silently looks like "no games". 400/422 -> ValueError.
-    _check_status(base_url, getattr(resp, "status_code", 200), text, label=f"Savant {base_url} ({gt}..{lt})")
-    return _csv_to_frame(text, uncast_ids=uncast_ids)
+    _check_status(base_url, status, text, label=label)
+    frame = _csv_to_frame(text, uncast_ids=uncast_ids)
+    # B-M7: a 200 HTML page or error text is not a Statcast CSV. Kept, it became a junk 1x1 chunk
+    # (or, header-only, a window read as "no games"). An empty body stays the empty path.
+    if frame.width and "game_pk" not in frame.columns:
+        raise AssetFetchError(
+            f"{label} answered HTTP {status} with a body that is not a Statcast CSV: {_excerpt(text)}"
+        )
+    return frame
 
 
 def _search_core(
@@ -243,7 +254,8 @@ def mlb_statcast_search(
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
-            ``download``'s retries; an outage is never reported as an empty window.
+            ``download``'s retries, or a 200 body that is not a Statcast CSV (an HTML or
+            error page); an outage is never reported as an empty window.
 
     Example:
         Quick start::
@@ -306,7 +318,8 @@ def mlb_statcast_search_minors(
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
-            ``download``'s retries; an outage is never reported as an empty window.
+            ``download``'s retries, or a 200 body that is not a Statcast CSV (an HTML or
+            error page); an outage is never reported as an empty window.
 
     Example:
         Quick start::
@@ -362,7 +375,8 @@ def mlb_statcast_search_wbc(
 
     Raises:
         AssetFetchError: When Savant answers an error status for a chunk after
-            ``download``'s retries; an outage is never reported as an empty window.
+            ``download``'s retries, or a 200 body that is not a Statcast CSV (an HTML or
+            error page); an outage is never reported as an empty window.
 
     Example:
         Quick start::
