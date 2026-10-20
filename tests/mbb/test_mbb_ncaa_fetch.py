@@ -17,6 +17,7 @@ from typing import Callable, Iterator, Optional
 
 import pytest
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_fetch import (
     NcaaFetchConfig,
     _TermsGateError,
@@ -116,7 +117,7 @@ def test_all_proxies_banned_raises_a_clear_error(tmp_path: Path) -> None:
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
     fetcher = NcaaFetcher(cfg, proxy_pool=_POOL)
 
-    with pytest.raises(RuntimeError, match="every proxy in the pool is banned"):
+    with pytest.raises(AssetFetchError, match="every proxy in the pool is banned"):
         fetcher.fetch_html("contests/1/play_by_play")
 
 
@@ -506,7 +507,7 @@ def test_redirect_elsewhere_falls_back_to_an_in_page_fetch() -> None:
 
 def test_terms_gate_surviving_acceptance_raises() -> None:
     page = _GatedPage([_GATE, _GATE], _REFUSED)
-    with pytest.raises(RuntimeError, match="terms gate not accepted"):
+    with pytest.raises(AssetFetchError, match="terms gate not accepted"):
         _transport_with(page)(_URL, {"http": _POOL[0]}, {})
 
 
@@ -607,7 +608,7 @@ def test_failed_call_forces_a_fresh_navigation_next_time() -> None:
 )
 def test_a_gate_with_a_changed_action_is_still_never_cached(tmp_path: Path, gate: str) -> None:
     transport = FakeTransport([(200, gate)])
-    with pytest.raises(RuntimeError, match="terms gate needs the browser transport"):
+    with pytest.raises(AssetFetchError, match="terms gate needs the browser transport"):
         NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("teams/614563")
     assert not cached_path("teams/614563", cache_dir=tmp_path).exists()
 
@@ -627,7 +628,7 @@ def test_terms_gate_fails_fast_instead_of_rotating_the_pool(tmp_path: Path) -> N
     cfg = NcaaFetchConfig(
         cache_dir=tmp_path, transport=_refusing_transport(calls), rotation_backoff=0.0, terms_retries=0
     )
-    with pytest.raises(RuntimeError, match="terms gate not accepted"):
+    with pytest.raises(AssetFetchError, match="terms gate not accepted"):
         NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
     assert len(calls) == 1  # one proxy tried, not the whole pool
 
@@ -644,7 +645,7 @@ def test_refused_terms_gate_backs_off_and_retries(tmp_path: Path) -> None:
 def test_terms_gate_retries_are_bounded(tmp_path: Path) -> None:
     calls: "list[str]" = []
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=_refusing_transport(calls), terms_backoff=0.0, terms_retries=2)
-    with pytest.raises(RuntimeError, match="terms gate not accepted"):
+    with pytest.raises(AssetFetchError, match="terms gate not accepted"):
         NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
     assert len(calls) == 3  # first try + 2 retries
 
@@ -668,7 +669,7 @@ def test_terms_gate_from_a_non_browser_transport_is_never_cached_or_retried(
     transport = FakeTransport([(200, _GATE)])
     fetcher = NcaaFetcher(_cfg(tmp_path, transport))  # default terms_retries / terms_backoff
 
-    with pytest.raises(RuntimeError, match="terms gate needs the browser transport"):
+    with pytest.raises(AssetFetchError, match="terms gate needs the browser transport"):
         fetcher.fetch_html("teams/614563")
     assert not cached_path("teams/614563", cache_dir=tmp_path).exists()
     assert len(transport.calls) == 1
@@ -680,7 +681,7 @@ def test_negative_terms_settings_are_clamped(tmp_path: Path) -> None:
     cfg = NcaaFetchConfig(
         cache_dir=tmp_path, transport=_refusing_transport(calls), terms_backoff=-5.0, terms_retries=-1
     )
-    with pytest.raises(RuntimeError, match="terms gate not accepted"):  # not ValueError / UnboundLocalError
+    with pytest.raises(AssetFetchError, match="terms gate not accepted"):  # not ValueError / UnboundLocalError
         NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("teams/614563")
     assert len(calls) == 1
 
@@ -777,11 +778,11 @@ def test_no_proxy_configured_raises(tmp_path: Path) -> None:
 
 
 def test_cache_hit_makes_zero_transport_calls(tmp_path: Path) -> None:
-    transport = FakeTransport([(200, "<html>hi</html>")])
+    transport = FakeTransport([(200, _CLEAN)])
     fetcher = NcaaFetcher(_cfg(tmp_path, transport))
 
     first = fetcher.fetch_html("contests/123/play_by_play")
-    assert first == "<html>hi</html>"
+    assert first == _CLEAN
     assert len(transport.calls) == 1
     assert cached_path("contests/123/play_by_play", cache_dir=tmp_path).exists()
 
@@ -838,7 +839,7 @@ def test_all_proxies_exhausted_raises(tmp_path: Path) -> None:
     transport = FakeTransport([(403, "forbidden"), (403, "forbidden"), (403, "forbidden")])
     cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
     fetcher = NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"])
-    with pytest.raises(RuntimeError, match="rotating proxies"):
+    with pytest.raises(AssetFetchError, match="rotating proxies"):
         fetcher.fetch_html("contests/1/play_by_play")
 
 
@@ -943,7 +944,7 @@ def test_load_proxybonanza_pool_raises_on_error_status() -> None:
     def transport(url: str, headers: dict) -> "tuple[int, str]":
         return 401, "unauthorized"
 
-    with pytest.raises(RuntimeError, match="status=401"):
+    with pytest.raises(AssetFetchError, match="status=401"):
         load_proxybonanza_pool("bad-key", "pkg123", transport=transport)
 
 
@@ -1126,3 +1127,110 @@ def test_sweep_orphan_profiles_reaps_only_dead_or_stale_unmarked(tmp_path):
     assert f._sweep_orphan_profiles(str(tmp_path)) == (1 if on_windows else 2)
     assert live.exists() and new_unmarked.exists() and unrelated.exists()
     assert orphan.exists() is on_windows and not old_unmarked.exists()
+
+
+# --- error vocabulary (B-M20) and cache-hit re-validation (B-M3), task 4.5 ----------
+
+_FIXTURES = Path(__file__).resolve().parents[1] / "fixtures" / "ncaa"
+# Real: Akamai's 403 "Access Denied" page for an unsolved client (tests/fixtures/ncaa/capture/README.md).
+_DENIED = (_FIXTURES / "capture" / "access_denied_box_score_385627.html").read_text(encoding="utf-8")
+# Real: a 133 KB raw-server play-by-play page (tests/fixtures/ncaa/README.md).
+_REAL_PBP = (_FIXTURES / "test_v1_play_by_play.html").read_text(encoding="utf-8")
+# The navigation interstitial at its documented ~2.3 KB size (ncaa-mbb-hoops-raw SCRAPING_NOTES:
+# "~2310 B interstitial carrying bm-verify / _abck"): over the 1 KB floor, so only the marker check sees it.
+_NAV_CHALLENGE = _CHALLENGE.replace("<body></body>", "<body>" + " " * 2200 + "</body>")
+
+
+def test_vocabulary_real_404_is_no_data_after_one_request(tmp_path: Path) -> None:
+    transport = FakeTransport([(404, "")])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, rotation_backoff=0.0)
+    with pytest.raises(NoDataError, match="HTTP 404"):
+        NcaaFetcher(cfg, proxy_pool=_POOL).fetch_html("contests/1/box_score")
+    assert len(transport.calls) == 1  # never rotated through the pool
+    assert not cached_path("contests/1/box_score", cache_dir=tmp_path).exists()
+
+
+@pytest.mark.parametrize("body", [_DENIED, _NAV_CHALLENGE], ids=["access-denied", "challenge"])
+def test_vocabulary_a_404_carrying_a_waf_page_is_not_no_data(tmp_path: Path, body: str) -> None:
+    transport = FakeTransport([(404, body)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
+    with pytest.raises(AssetFetchError, match="pool exhausted"):
+        NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"]).fetch_html("contests/1/box_score")
+
+
+def test_vocabulary_ban_is_an_asset_fetch_error(tmp_path: Path) -> None:
+    transport = FakeTransport([(403, _DENIED)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
+    with pytest.raises(AssetFetchError, match=r"pool exhausted.*ban suspected: status=403"):
+        NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"]).fetch_html("contests/385627/box_score")
+
+
+def test_vocabulary_uncleared_challenge_is_an_asset_fetch_error(tmp_path: Path) -> None:
+    transport = FakeTransport([(200, _NAV_CHALLENGE)])
+    cfg = NcaaFetchConfig(cache_dir=tmp_path, transport=transport, max_retries=0, rotation_backoff=0.0)
+    with pytest.raises(AssetFetchError, match="pool exhausted.*bm-verify challenge not cleared"):
+        NcaaFetcher(cfg, proxy_pool=["http://u:p@1.1.1.1:1"]).fetch_html("contests/1/play_by_play")
+
+
+def test_vocabulary_terms_gate_is_an_asset_fetch_error(tmp_path: Path) -> None:
+    transport = FakeTransport([(200, _GATE)])
+    with pytest.raises(AssetFetchError, match="terms gate"):
+        NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("teams/614563")
+
+
+def test_vocabulary_proxybonanza_200_error_body_is_an_asset_fetch_error() -> None:
+    def transport(url: str, headers: dict) -> "tuple[int, str]":
+        return 200, '{"success": false, "message": "Invalid API key"}'
+
+    with pytest.raises(AssetFetchError, match="not the package JSON") as exc:
+        load_proxybonanza_pool("bad-key", "pkg123", transport=transport)
+    assert exc.value.__cause__ is None and exc.value.__context__ is None  # the body never rides along
+
+
+@pytest.mark.parametrize(
+    "shell",
+    [_STUB, _DENIED, _NAV_CHALLENGE],
+    ids=["15-byte-stub", "access-denied-403-page", "navigation-interstitial"],
+)
+def test_cache_revalidate_a_cached_shell_is_refetched(tmp_path: Path, shell: str) -> None:
+    cache_file = cached_path("contests/385627/box_score", cache_dir=tmp_path)
+    cache_file.parent.mkdir(parents=True)
+    cache_file.write_text(shell, encoding="utf-8")
+    transport = FakeTransport([(200, _CLEAN)])
+    assert NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("contests/385627/box_score") == _CLEAN
+    assert len(transport.calls) == 1
+    assert cache_file.read_text(encoding="utf-8") == _CLEAN
+
+
+def test_cache_revalidate_a_real_page_is_still_served_without_a_request(tmp_path: Path) -> None:
+    cache_file = cached_path("contests/1613299/play_by_play", cache_dir=tmp_path)
+    cache_file.parent.mkdir(parents=True)
+    cache_file.write_text(_REAL_PBP, encoding="utf-8")
+    transport = FakeTransport([])
+    assert NcaaFetcher(_cfg(tmp_path, transport)).fetch_html("contests/1613299/play_by_play") == _REAL_PBP
+    assert transport.calls == []
+
+
+def test_date_games_closes_the_browser_it_opened(monkeypatch: pytest.MonkeyPatch) -> None:
+    """B-L37: the default browser fetcher is closed on return (a lingering one blocks the next)."""
+    from sportsdataverse.mbb import mbb_ncaa_scoreboard
+    from tests.mbb._bigballr_oracle import HTML_DIR
+
+    events: "list[str]" = []
+
+    class _Browser:
+        def __enter__(self) -> "_Browser":
+            events.append("enter")
+            return self
+
+        def __exit__(self, *exc: object) -> None:
+            events.append("exit")
+
+        def fetch_html(self, path: str) -> str:
+            events.append("fetch")
+            return (HTML_DIR / "scoreboard_18703_11-11-2025.html").read_text(encoding="utf-8")
+
+    monkeypatch.setattr(NcaaFetcher, "with_browser", classmethod(lambda cls, *a, **k: _Browser()))
+    df = mbb_ncaa_scoreboard.ncaa_mbb_date_games("11/11/2025")
+    assert df.height == 82
+    assert events == ["enter", "fetch", "exit"]
