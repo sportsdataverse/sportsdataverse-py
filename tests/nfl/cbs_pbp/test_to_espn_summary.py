@@ -517,3 +517,82 @@ def test_the_first_card_logo_is_the_away_team_on_a_real_page():
         club_of = {logo: club for club, logo in linked}
         assert len(club_of) == 2, card
         assert (club_of[card["away_cbs_team_id"]], club_of[card["home_cbs_team_id"]]) == (card["away"], card["home"])
+
+
+# ------------------------------------------------- failure provenance (task 3.5: B-L53, B-L56)
+def test_a_failed_scoreboard_page_is_retried_after_a_while_not_remembered_as_no_cards(monkeypatch):
+    """A dead connection or a 503 after retries (download() hands back the last response) is
+    skipped for a few minutes -- a burst of games must not re-bill a dead page -- and then read
+    again, so one bad minute cannot switch CBS id lookup off for the life of a worker."""
+    import types
+
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    html = (CBS_FIX / "scoreboard_2019_regular_1_cards.html").read_text(encoding="utf-8")
+
+    class _Resp:
+        def __init__(self, status, text):
+            self.status_code, self.text = status, text
+
+    answers = [ConnectionError("reset"), _Resp(503, "<html>busy</html>"), _Resp(200, html)]
+    urls = []
+
+    def transport(url, **kwargs):
+        urls.append(url)
+        answer = answers.pop(0)
+        if isinstance(answer, Exception):
+            raise answer
+        return answer
+
+    def resolve():
+        return _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0]
+
+    assert resolve() is None  # connection reset
+    assert resolve() is None and len(urls) == 1  # inside the window: not re-read
+    clock[0] += cbs_common._FAILURE_TTL_SECONDS
+    assert resolve() is None and len(urls) == 2  # 503
+    clock[0] += cbs_common._FAILURE_TTL_SECONDS
+    assert resolve() == "3115586" and len(urls) == 3
+
+
+def test_a_404_scoreboard_page_is_remembered_for_the_process(monkeypatch):
+    """A 404 is an ANSWER (CBS has no such page), so unlike a failed read it never expires."""
+    import types
+
+    from sportsdataverse.errors import NoDataError
+    from sportsdataverse.football import cbs_common
+
+    clock = [1000.0]
+    monkeypatch.setattr(cbs_common, "time", types.SimpleNamespace(monotonic=lambda: clock[0]))
+    urls = []
+
+    def transport(url, **kwargs):
+        urls.append(url)
+        raise NoDataError("404")
+
+    for _ in range(3):
+        assert _resolve_cbs_game_id(2019, 2, 1, "18", "34", transport=transport)[0] is None
+        clock[0] += 10 * cbs_common._FAILURE_TTL_SECONDS
+    assert len(urls) == 1
+
+
+def test_a_failed_optional_resource_raises_instead_of_reading_as_absent(monkeypatch):
+    import sportsdataverse.cbs.cbs_napi as napi
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+    from sportsdataverse.football.cbs_common import _fetch_cbs_game
+
+    def raiser(exc):
+        def getter(*a, **k):
+            raise exc
+
+        return getter
+
+    monkeypatch.setattr(napi, "cbs_game_scoring_plays", lambda *a, **k: {"plays": []})
+    monkeypatch.setattr(napi, "cbs_game_scoring_scoreboard", lambda *a, **k: {"scoreboard": {}})
+    monkeypatch.setattr(napi, "cbs_game_scoring_drives", raiser(NoDataError("404")))
+    assert _fetch_cbs_game("1", optional=("drives",))["drives"] is None  # CBS says absent
+    monkeypatch.setattr(napi, "cbs_game_scoring_drives", raiser(AssetFetchError("429")))
+    with pytest.raises(AssetFetchError):
+        _fetch_cbs_game("1", optional=("drives",))
