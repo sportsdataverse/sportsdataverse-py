@@ -154,7 +154,7 @@ def test_get_text_retries_a_dead_connection_429_and_5xx_then_gives_up(waits):
         (_Page(status=404), NoDataError, "HTTP 404"),
         (_Page(status=422), ValueError, "rejected the request"),
         (_Page(status=403), AssetFetchError, "HTTP 403"),
-        (_Page(status=204, body=b""), AssetFetchError, "not 200"),
+        (_Page(status=204, body=b""), NoDataError, "HTTP 204: no content"),  # EX-SYNC-a: the caller's _get answers {}
         (_Page(ctype="application/json"), AssetFetchError, "non-HTML body"),
         (_Page(ctype=""), AssetFetchError, "no content type"),
         (_Page(body=b""), AssetFetchError, "empty body"),

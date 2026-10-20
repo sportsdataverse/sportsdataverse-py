@@ -761,8 +761,8 @@ def kzs_seasons(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -822,8 +822,8 @@ def kzs_competitions(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -884,8 +884,8 @@ def kzs_competition(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -943,8 +943,8 @@ def kzs_phases(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1002,8 +1002,8 @@ def kzs_rounds(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1069,8 +1069,8 @@ def kzs_player_leaderboard(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1178,8 +1178,8 @@ def kzs_team_leaderboard(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1283,8 +1283,8 @@ def kzs_matches(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1347,8 +1347,8 @@ def kzs_match(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1406,8 +1406,8 @@ def kzs_period_scores(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1465,8 +1465,8 @@ def kzs_pbp(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1524,8 +1524,8 @@ def kzs_pbp_players(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1583,8 +1583,8 @@ def kzs_box_score(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1642,8 +1642,8 @@ def kzs_team_box_score(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1703,8 +1703,8 @@ def kzs_score_changes(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1762,8 +1762,8 @@ def kzs_standings(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1823,8 +1823,8 @@ def kzs_playing_days(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1882,8 +1882,8 @@ def kzs_teams(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -1944,8 +1944,8 @@ def kzs_team(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2005,8 +2005,8 @@ def kzs_team_general(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2068,8 +2068,8 @@ def kzs_roster(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2131,8 +2131,8 @@ def kzs_player(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::
@@ -2192,8 +2192,8 @@ def kzs_player_stats(
 
     Raises:
         sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, a competition without standings, a final game with no play-by-play or box score).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: HTTP 400 (the API's only error status: an unknown id or a bad parameter), a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
-        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        ValueError: the API answered HTTP 400 (its only error status: an unknown id or a bad parameter).
+        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: a full list page, a game that is not final, an envelope whose status is not OK, or a body for another competition, match, team, player or season than the one asked for.
 
     Example:
         Quick start::

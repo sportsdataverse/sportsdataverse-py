@@ -146,6 +146,7 @@ def _transport(url: str, **kwargs: Any) -> Any:
     kwargs.setdefault("session", SESSION)
     resp = download(url=url, **kwargs)
     status = getattr(resp, "status_code", 200)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if "/gameday/" in url and status == 200 and not (getattr(resp, "text", "") or "").strip():
         raise NoDataError(f"{_rt._where(url)} answered an empty body: gameday data starts in 2023/24")
     return resp
@@ -302,6 +303,7 @@ def _check(url: str, route: Optional[str], raw: Any, query: Dict[str, Any], ssgt
         raise AssetFetchError(f"{where} answered {field}={wrong[0]!r} for {expected!r}: not the data asked for")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET an SHL route: map the season, fetch politely, then refuse an unusable answer.
 

@@ -9,8 +9,8 @@ proxy is needed.
 What the live API does (sdv-internal-refs ``kbl/``, probed 2026-10-12):
 
 * **Two headers must be present**, with any value: ``Channel`` and ``TeamCode`` (the site sends ``WEB`` and ``XX``).
-  Without them the API answers HTTP 400 ``{"resultCode": "Fail", ...}``; the runtime always sends them, so a 400 here
-  is an unknown answer (``AssetFetchError``), never the caller's fault.
+  Without them the API answers HTTP 400 ``{"resultCode": "Fail", ...}``; the runtime always sends them. A 400 is
+  ``ValueError`` all the same, as everywhere in the package (the error vocabulary).
 * **Errors** are an envelope ``{"resultCode": "Fail", "message": ..., "errorCode": N}`` with HTTP 400 or 500. An
   unknown or malformed id is a **500** ("a server error occurred"), so 500 is never retried (only 429, 502, 503, 504).
   An unknown ``gameNo`` on ``player-stat`` is a 200 ``[]`` and on ``match-chart`` a 200 with empty arrays: the game
@@ -168,10 +168,8 @@ def _fetch(path: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any
     headers = dict(HEADERS)
     headers.update(kwargs.pop("headers", None) or {})
     url = BASE + path
-    try:
-        body = _bb._get(url, dict(params or {}), headers=headers, **kwargs)
-    except ValueError as exc:  # HTTP 400 / 422: the headers are always sent, so the answer is unknown
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(url, dict(params or {}), headers=headers, **kwargs)
     if isinstance(body, dict) and (body.get("resultCode") == "Fail" or ("errorCode" in body and "resultCode" in body)):
         raise AssetFetchError(
             f"{_rt._where(url)} answered the KBL error envelope (errorCode={body.get('errorCode')!r})"
@@ -444,6 +442,7 @@ def _wrap(data: Any, stamp: Mapping[str, Any]) -> Dict[str, Any]:
     return out
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a KBL route, refuse the partial or out-of-scope answers and stamp the request.
 

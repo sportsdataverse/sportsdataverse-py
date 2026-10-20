@@ -138,7 +138,7 @@ def _fetch(path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]
     """
     url = f"{API}{path}"
     body = _rt._download_json(
-        download,
+        _rt._no_content_transport(download),  # a 204 / 205 raises _rt._NoContent: ``_get`` answers {} (EX-SYNC-a)
         url,
         params={k: v for k, v in (params or {}).items() if v is not None},
         session=SESSION,
@@ -574,6 +574,7 @@ _ROUTES: Dict[str, Any] = {
 _PROFILE = re.compile(r"^/Player/get-player-detail-profile-and-career-info/([^/]+)$")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a TBF wrapper route: map season / competition, check the answer's scope, stamp the request.
 

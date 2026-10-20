@@ -272,6 +272,7 @@ def _game_sheet(url: str, game_id: str, **kwargs: Any) -> Dict[str, Any]:
     return sheet
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a Ligue Magnus route: an admin-ajax action as checked JSON, or a game page's game sheet.
 
@@ -297,4 +298,4 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     if match:
         return _game_sheet(url, match.group(1), **kwargs)
     clean = {k: v for k, v in (params or {}).items() if v is not None}
-    return _check_ajax(url, _eh._get(url, clean, **kwargs), clean)
+    return _check_ajax(url, _eh._fetch_json(url, clean, **kwargs), clean)

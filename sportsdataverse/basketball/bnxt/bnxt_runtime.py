@@ -171,6 +171,7 @@ def _call(path: str, params: Optional[Dict[str, Any]] = None) -> Any:
         if getattr(resp, "status_code", None) != 401:
             break
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 401:
         raise _fail(
             f"{where} answered HTTP 401: the X-Authorization key was rejected (key rotated? re-read it from the "
@@ -589,6 +590,7 @@ def _int_arg(value: Any, what: str) -> int:
 
 
 # --------------------------------------------------------------------------------------- the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a Sportpress route, refuse every wrong answer, return the body with the request stamped.
 

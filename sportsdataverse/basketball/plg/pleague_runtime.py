@@ -137,6 +137,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> Any:
                 ) from None
         else:
             status = getattr(resp, "status_code", None)
+            _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
             if status not in RETRY_STATUSES or attempt == ATTEMPTS - 1:
                 return resp
             if status in (429, 503):
@@ -148,6 +149,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> Any:
 def _ok(url: str, resp: Any) -> str:
     """The body text of an HTTP 200 response; every other status follows the error vocabulary."""
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     where = _rt._where(url)
     if status in _REDIRECTS:
         loc = urlsplit(str((getattr(resp, "headers", None) or {}).get("location", ""))).path or "/"
@@ -258,6 +260,7 @@ def _split(path: str) -> Tuple[str, ...]:
     return tuple(s for s in path.split("/") if s)
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a P. LEAGUE+ route, refuse every wrong answer, return the record with the request stamped.
 

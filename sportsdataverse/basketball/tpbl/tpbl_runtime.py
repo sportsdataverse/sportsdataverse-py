@@ -130,6 +130,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None, retry: frozenset =
 
 def _check_status(url: str, resp: Any) -> None:
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 200:
         return
     where = _rt._where(url)
@@ -515,6 +516,7 @@ def _player_games_error(body: List[Any], player_id: int) -> Optional[str]:
 
 
 # ----------------------------------------------------------------------------- entry point
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a TPBL route, refuse every wrong answer, return the body with the request stamped.
 

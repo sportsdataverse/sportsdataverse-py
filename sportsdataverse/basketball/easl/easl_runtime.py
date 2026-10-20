@@ -45,6 +45,7 @@ import re
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from sportsdataverse import _codegen_runtime as _rt
 from sportsdataverse.basketball import basketball_runtime as _bb
 from sportsdataverse.errors import AssetFetchError, NoDataError
 
@@ -179,15 +180,13 @@ def _check_body(where: str, body: Any) -> Any:
 
 
 def _fetch(path: str, params: Optional[Mapping[str, Any]] = None, **kwargs: Any) -> Any:
-    """GET ``BASE + path`` through the polite session; ``ValueError`` (HTTP 400 / 422) becomes ``AssetFetchError``."""
+    """GET ``BASE + path`` through the polite session; HTTP 400 / 422 is ``ValueError``, a 204 / 205 ``_rt._NoContent``."""
     kwargs.setdefault("session", _bb.SESSION)
     kwargs.setdefault("retry_statuses", RETRY_STATUSES)
     headers = {"Accept": "application/json"}
     headers.update(kwargs.pop("headers", None) or {})
-    try:
-        body = _bb._get(BASE + path, dict(params or {}), headers=headers, **kwargs)
-    except ValueError as exc:  # the server answered 400 / 422: the request was built here, so the answer is unknown
-        raise AssetFetchError(str(exc)) from None
+    # a 400 / 422 stays ValueError: the request is wrong (EX-SYNC-b, the repo-wide vocabulary)
+    body = _bb._fetch_json(BASE + path, dict(params or {}), headers=headers, **kwargs)
     return _check_body(f"easl.joshricha.com/api/v1{path}", body)
 
 
@@ -482,6 +481,7 @@ def _simple_route(name: str, ids: Mapping[str, str], wire: Mapping[str, Any], **
 # --- the getter -----------------------------------------------------------------------------------------------------
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET an EASL route, refuse the partial or out-of-scope answers and stamp the request.
 

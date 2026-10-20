@@ -108,8 +108,11 @@ for _scheme in ("https://", "http://"):
     SESSION.mount(_scheme, HTTPAdapter(pool_connections=16, pool_maxsize=32))
 
 
-def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+def _fetch_json(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET ``url`` as JSON; every attempt starts at least :data:`MIN_INTERVAL` after its host's last answer.
+
+    A 204 / 205 raises ``_rt._NoContent``: a runtime that reads its own envelope calls this and carries
+    ``_rt._no_content_is_empty`` on its ``_get``; everything else calls :func:`_get`.
 
     Args:
         url: fully-built request URL.
@@ -121,7 +124,13 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         The parsed JSON body.
     """
     kwargs.setdefault("session", SESSION)
-    return _rt._get(url, params, **kwargs)
+    return _rt._get(url, params, transport=_rt._no_content_transport(), **kwargs)
+
+
+@_rt._no_content_is_empty
+def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
+    """GET ``url`` as JSON (:func:`_fetch_json`); a 204 / 205 returns ``{}``, as from the shared chokepoints."""
+    return _fetch_json(url, params, **kwargs)
 
 
 #: Statuses :func:`get_text` retries on a ``transport`` it drives itself, and the attempt budget
@@ -213,7 +222,9 @@ def get_text(
         The decoded body text.
 
     Raises:
-        NoDataError: HTTP 404, or a redirect ``is_missing`` calls the not-found page.
+        NoDataError: HTTP 404, or a redirect ``is_missing`` calls the not-found page. A 204 / 205 raises
+            its subclass ``_rt._NoContent``, which a runtime ``_get`` carrying ``_rt._no_content_is_empty``
+            answers as ``{}``.
         ValueError: HTTP 400 / 422.
         AssetFetchError: any other non-200 (after the retries), a dead connection, a body of the wrong
             content type, bytes that do not decode in the declared charset (or decode to replacement
@@ -231,9 +242,11 @@ def get_text(
         with _rt._transport_errors(url):
             resp = _rt.download(url=url, params=clean, **{"session": SESSION, **kwargs})
         _rt._check_response(resp, url)
+        _rt._check_no_content(getattr(resp, "status_code", None))  # a 204 / 205: the caller's ``_get`` answers {}
     else:
         resp = _send(url, lambda: transport(full))
         status = getattr(resp, "status_code", None)
+        _rt._check_no_content(status)  # a 204 / 205: the caller's ``_get`` answers {} (EX-SYNC-a)
         if status != 200:
             _rt._check_status(url, status, (getattr(resp, "content", b"") or b"")[:400].decode("utf-8", "replace"))
             raise AssetFetchError(f"{where} answered HTTP {status}, not 200")

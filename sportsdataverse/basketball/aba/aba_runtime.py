@@ -132,6 +132,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> Any:
 
 def _check_status(url: str, resp: Any) -> None:
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 200:
         return
     where = _rt._where(url)
@@ -194,6 +195,7 @@ def _int_arg(value: Any, what: str) -> int:
 
 
 # ------------------------------------------------------------------------------ the getter
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET an ABA route, refuse every wrong answer, return the page record or helper rows with the request stamped.
 

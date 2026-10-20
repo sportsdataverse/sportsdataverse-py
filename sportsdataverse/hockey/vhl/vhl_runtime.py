@@ -224,6 +224,7 @@ def _route(url: str) -> Tuple[str, int]:
     raise ValueError(f"not a VHL route: {_rt._where(url)}")
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET a VHL page, refuse every wrong answer, return its parsed record with the request stamped.
 

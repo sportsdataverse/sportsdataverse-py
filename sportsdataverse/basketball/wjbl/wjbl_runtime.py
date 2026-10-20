@@ -131,7 +131,7 @@ def _route(url: str) -> str:
 def _fetch(url: str, params: Optional[Mapping[str, Any]], **kwargs: Any) -> Any:
     """GET ``url`` through the polite session; an error envelope (HTTP 200) is ``AssetFetchError``."""
     kwargs.setdefault("session", _bb.SESSION)
-    body = _bb._get(url, dict(params or {}), **kwargs)
+    body = _bb._fetch_json(url, dict(params or {}), **kwargs)
     err = _obj(body).get("error") if isinstance(body, dict) else None
     if isinstance(err, dict):
         code = str(err.get("error_code"))[:20]
@@ -333,6 +333,7 @@ def _seasons(where: str, route: str, ids: str, data: Any) -> None:
 # --- the getter -----------------------------------------------------------------------------------------------------
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET a W League route, refuse the empty, partial, non-final and out-of-scope answers and stamp the request.
 

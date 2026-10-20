@@ -81,6 +81,7 @@ def _vendor(kind: str, route: str, uuid: str, ctx: Dict[str, Any]) -> Dict[str, 
     where = _rt._where(url)
     resp = _fetch(url)
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
@@ -116,6 +117,7 @@ def _vendor(kind: str, route: str, uuid: str, ctx: Dict[str, Any]) -> Dict[str, 
     return body[0]
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET one Preciser route, refuse every wrong answer, return the game object with the request stamped.
 

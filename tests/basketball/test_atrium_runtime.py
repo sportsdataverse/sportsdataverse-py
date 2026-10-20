@@ -44,7 +44,7 @@ def wire(monkeypatch):
             calls.append((url, dict(params or {})))
             return answer(url, params or {})
 
-        monkeypatch.setattr(rt._bb, "_get", fake)
+        monkeypatch.setattr(rt._bb, "_fetch_json", fake)  # the runtime reads the raising fetch (EX-SYNC-a)
         return calls
 
     return install

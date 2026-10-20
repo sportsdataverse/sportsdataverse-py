@@ -561,56 +561,16 @@ _KNOWN: Dict[Tuple[str, str], str] = {
 }
 
 
-# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverge from the
-# vocabulary here, measured 2026-10-18 on the sync tree: ``{(runtime, case): what the case fails with}``
-# (``pytest.fail.Exception`` = DID NOT RAISE). Strict, so each case fails the day its family is fixed.
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) diverged from the
+# vocabulary here (EX-SYNC-a/b/d); task 4.1b closed them. ``{(runtime, case): (what the case fails with, why)}``,
+# strict, so a row fails the day it is fixed. The two left are the matrix's limit, not the runtime's: the matrix
+# answers EVERY request with the case, including scb's key-page bootstrap, where a 204 or 400 is a page with no
+# key (an unknown answer). tests/basketball/scb asserts the data request's 204 -> {} and 400 -> ValueError.
 _FAILED = pytest.fail.Exception
-_SYNC_204 = (
-    "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
-)
-_SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
-_SYNC_EMPTY = (
-    "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
-)
+_SCB_BOOTSTRAP = "scb: the matrix's case also answers the key-page bootstrap, which cannot read a key from it"
 _SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
-    **{
-        (f"{rt}_runtime", "204"): (AssetFetchError, _SYNC_204)
-        for rt in (
-            "aba",
-            "atrium",
-            "bleague",
-            "bnxt",
-            "cba",
-            "cebl",
-            "easl",
-            "feb",
-            "genius",
-            "ha",
-            "ibba",
-            "ibba_segev",
-            "khl",
-            "kzs",
-            "lkl",
-            "magnus",
-            "nbl_rosetta",
-            "pleague",
-            "pleague_preciser",
-            "scb",
-            "tbf",
-            "tpbl",
-            "vhl",
-            "vtb_infobasket",
-            "vtb_league",
-        )
-    },
-    **{
-        (f"{rt}_runtime", "204"): (NoDataError, _SYNC_204)
-        for rt in ("acb", "esports", "fiba", "kbl", "khl_webcaster", "liiga", "shl", "sportality", "wjbl")
-    },
-    **{
-        (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
-    },
-    ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
+    ("scb_runtime", "204"): (AssetFetchError, _SCB_BOOTSTRAP),
+    ("scb_runtime", "400"): (AssetFetchError, _SCB_BOOTSTRAP),
 }
 
 

@@ -16,8 +16,8 @@ One host, 33 JSON routes, measured against the live API (sdv-internal-refs ``acb
   licence, the competition ids) differ from the request, whose team rows belong to another edition, or whose
   rows do not involve the asked club or search term. Routes that echo nothing of the request (most match routes
   answer by ``matchId`` alone) are checked for the envelope only.
-* **Error vocabulary.** ``NoDataError``: HTTP 404 (an unknown id: ``text/plain``), HTTP 204 (a match outside a
-  playoff series), and a route whose rows are legitimately empty (play-by-play and shots before 2016-17 answer
+* **Error vocabulary.** ``{}``: HTTP 204 / 205 (a match outside a playoff series), which parses to zero rows.
+  ``NoDataError``: HTTP 404 (an unknown id: ``text/plain``), and a route whose rows are legitimately empty (play-by-play and shots before 2016-17 answer
   empty ``plays`` / ``shotPoints``; a club with no matches that season). ``ValueError``: HTTP 400 / 422, a missing
   or non-integer argument (raised before any request). ``AssetFetchError``: any other non-200 (429 / 5xx after
   three attempts), a dead connection, a non-JSON or ``problem+json`` body, an error envelope, an all-empty stub,
@@ -309,10 +309,11 @@ def _api_key(*, renew: bool = False) -> str:
 
 def _check_status(url: str, resp: Any) -> None:
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 200:
         return
     where = _rt._where(url)
-    if status in (204, 404):
+    if status == 404:
         raise NoDataError(f"{where} answered HTTP {status}: nothing for this request")
     if status in (400, 422):
         raise ValueError(f"{where} rejected the request: HTTP {status}")
@@ -505,6 +506,7 @@ def _stamp(q: Dict[str, Any]) -> Dict[str, Any]:
     return out
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, Any]:
     """GET an ACB route, refuse every wrong answer, return the body with the request stamped.
 
@@ -519,7 +521,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         ``club_id``, ``player_id``, ``competition_id``, ``round_id``, ``week_id``, ``edition_id``, ``season``).
 
     Raises:
-        NoDataError: HTTP 204 / 404, or a route with no rows (see the module docstring).
+        NoDataError: HTTP 404, or a route with no rows (see the module docstring). A 204 / 205 returns ``{}``.
         ValueError: a missing, unknown or non-integer argument, or HTTP 400 / 422.
         AssetFetchError: any other failed or wrong answer (see the module docstring).
         TypeError: an unsupported keyword argument.

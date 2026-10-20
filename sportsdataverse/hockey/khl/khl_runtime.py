@@ -155,6 +155,7 @@ def _prime(http: Any, site: str, timeout: Any) -> str:
     home = site + "/"
     resp = _send(home, lambda: http.get(home, timeout=timeout))
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     _rt._check_status(home, status, "")
     match = SESSID_RE.search(getattr(resp, "text", "") or "")
     if match is None:
@@ -236,6 +237,7 @@ def _check(url: str, route: str, raw: Any, form: Dict[str, str]) -> None:
             )
 
 
+@_rt._no_content_is_empty
 def _get(
     url: str,
     params: Optional[dict] = None,

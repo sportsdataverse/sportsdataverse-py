@@ -178,6 +178,7 @@ def _fetch(route: str, query: Dict[str, Any], body: Optional[Dict[str, Any]]) ->
             continue
         break
     status = getattr(resp, "status_code", None)
+    _rt._check_no_content(status)  # a 204 / 205 is {} (EX-SYNC-a)
     if status == 404:
         raise NoDataError(f"{where} answered HTTP 404")
     if status in (400, 422):
@@ -365,6 +366,7 @@ def _split(url: str) -> Tuple[str, Optional[str]]:
     return path, None
 
 
+@_rt._no_content_is_empty
 def _get(url: str, params: Optional[dict] = None, json: Optional[dict] = None, **kwargs: Any) -> Any:
     """GET or POST a CBA route, decrypt it, refuse every wrong answer, return the JSON with the request stamped.
 
