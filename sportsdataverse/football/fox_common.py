@@ -55,9 +55,10 @@ Documented divergences from a real ESPN summary:
   grammar, so rusher / receiver / sacker / returner names are mostly null.
 * ``boxscore`` is empty: ESPN's box is the only source of ESPN athlete ids.
 * **Coverage floors**: NFL play-by-play from the **2024** season, CFB **2022** full (2021
-  early-season only), and **zero** FCS-hosted games in any era. Fox answers HTTP 200 with the
-  ``pbp`` key simply **absent** in all three cases, which is why coverage is detected by shape
-  (:func:`_has_pbp`) and never by status code.
+  early-season only), and **zero** FCS-hosted games in any era. Fox answers HTTP 200 with **no
+  plays** in all three cases (``"pbp": {"sections": []}`` in both committed no-coverage captures,
+  or no ``pbp`` key), which is why coverage is detected by shape (:func:`_has_pbp`) and never by
+  status code.
 """
 
 from __future__ import annotations
@@ -171,9 +172,9 @@ def _fox_team_id(entity: Any) -> Optional[str]:
 def _has_pbp(fox: Any) -> bool:
     """True when the payload actually carries play-by-play.
 
-    Fox answers **HTTP 200 with the ``pbp`` key simply absent** for a covered-but-unbackfilled
-    game: every NFL game before the 2024 season, every CFB game before 2022 (2021 outside the
-    early season), and **every FCS-hosted game in every era**. Detecting that by shape is the
+    Fox answers **HTTP 200 with no plays** (``"pbp": {"sections": []}``, or no ``pbp`` key) for a
+    covered-but-unbackfilled game: every NFL game before the 2024 season, every CFB game before
+    2022 (2021 outside the early season), and **every FCS-hosted game in every era**. Detecting that by shape is the
     only way to tell "Fox does not have this game" from "the request failed". The getter raises
     on a failed request, but an injected payload (an offline rebuild) can still be ``{}``, so a
     bare truthiness test would conflate the two.
@@ -217,6 +218,8 @@ def _fox_odds_override(odds: Any, home_full_name: Optional[str]) -> Optional[Dic
     total: Optional[float] = None
     home_favourite: Optional[bool] = None
     for row in rows:
+        # values[0] spread, [1] moneyline, [2] total. The six-pack carries one row per team and no
+        # ``id`` key, so there is no "closing" row to select (gap-B-139: live probe of event 11133).
         values = [(v or {}).get("odds") for v in (row or {}).get("values") or []]
         if len(values) < 3 or values[0] is None:
             continue
