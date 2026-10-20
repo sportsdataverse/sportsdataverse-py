@@ -448,7 +448,7 @@ def parse_drive_pbp(raw: Dict, game_id: Union[int, str]) -> List[Dict]:
                         "field_position": p.get("title"),
                         "play_text": p.get("playDescription"),
                         "play_team": team,
-                        "play_player": player.get("title") if player.get("contentType") == "athlete" else None,
+                        "play_player": player.get("title"),
                     }
                 )
     # Fox serves the whole pbp tree newest-first until FINAL; the play id is one ascending

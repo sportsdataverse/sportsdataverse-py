@@ -27,6 +27,7 @@ from sportsdataverse._codegen_runtime import _get
 from sportsdataverse._fox_layout import DATA_KEY as FOX_DATA_KEY
 from sportsdataverse._fox_layout import parse_drive_pbp
 from sportsdataverse._fox_layout import register_league_endpoints  # single source of truth for the public Fox key
+from sportsdataverse.errors import NoDataError
 
 logger = logging.getLogger(__name__)
 
@@ -331,13 +332,15 @@ def _fox_segment_ids(season: int, group_id: Union[int, str], **kwargs: Any) -> L
         try:
             mains.append(_fox_get("cfb/scoreboard/main", params={"groupId": "cfp"}, **kwargs))
             break
+        except NoDataError:
+            break  # a 404 is an answer (no CFP group), not a failure to retry or warn about
         except Exception as exc:  # noqa: BLE001 -- supplemental group; the bowls segment covers it
             if attempt == 2:
                 warnings.warn(
                     f"Fox CFP group enumeration failed twice for {season} (continuing with the bowls "
                     f"segment, which carries the CFP games): {type(exc).__name__}: {exc}",
                     UserWarning,
-                    stacklevel=2,
+                    stacklevel=3,  # the fox_cfb_schedule caller
                 )
     ids: List[str] = []
     seen: set[str] = set()

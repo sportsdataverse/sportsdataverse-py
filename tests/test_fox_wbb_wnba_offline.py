@@ -269,3 +269,27 @@ def test_teams_all_is_silent_when_the_last_fetch_found_nothing_new(monkeypatch, 
     fn = ext.fox_wbb_teams_all if "wbb" in module else ext.fox_mbb_teams_all
     assert len(fn(max_id=500, max_calls=3)) > 0
     assert not [w for w in recwarn.list if "max_calls" in str(w.message)]
+
+
+@pytest.mark.parametrize("module", ["sportsdataverse.mbb.mbb_fox_ext", "sportsdataverse.wbb.wbb_fox_ext"])
+def test_teams_all_warns_when_the_budget_ends_on_a_missing_id(monkeypatch, module):
+    """A 404 on the last budgeted call says nothing about whether discovery has stopped: the last
+    fetch that answered still found teams, so the directory may be incomplete."""
+    import importlib
+
+    from sportsdataverse.errors import NoDataError
+
+    ext = importlib.import_module(module)
+
+    def fake_get(path, **kw):
+        if path.split("/")[2] != "1":
+            raise NoDataError("404")
+        return path
+
+    monkeypatch.setattr(ext, "fox_get", fake_get)
+    monkeypatch.setattr(
+        ext, "parse_teams", lambda path: [{"fox_team_id": "900", "fox_team_name": "T", "fox_section": "S"}]
+    )
+    fn = ext.fox_wbb_teams_all if "wbb" in module else ext.fox_mbb_teams_all
+    with pytest.warns(UserWarning, match=r"max_calls=3 budget at candidate id 4"):
+        assert len(fn(max_calls=3)) == 1

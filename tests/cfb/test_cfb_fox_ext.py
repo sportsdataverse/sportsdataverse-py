@@ -49,7 +49,7 @@ def test_the_bowls_segment_carries_every_cfp_game():
     assert cfp <= bowls
 
 
-def _main_with(cfp_failures):
+def _main_with(cfp_failures, exc=ConnectionError("fox down")):
     main = {"selectionGroupList": [{"selectionList": [{"id": "2025-1-1"}, {"id": "2025-bowls-2"}]}]}
     cfp_main = {"selectionGroupList": [{"selectionList": [{"id": "2025-cfp-2"}]}]}
     calls = []
@@ -58,7 +58,7 @@ def _main_with(cfp_failures):
         if (params or {}).get("groupId") == "cfp":
             calls.append("cfp")
             if len(calls) <= cfp_failures:
-                raise ConnectionError("fox down")
+                raise exc
             return cfp_main
         return main
 
@@ -79,3 +79,30 @@ def test_a_cfp_group_that_fails_twice_warns(monkeypatch):
     with pytest.warns(UserWarning, match="CFP group enumeration failed twice"):
         assert ext._fox_segment_ids(2025, "2") == ["2025-1-1", "2025-bowls-2"]
     assert calls == ["cfp", "cfp"]
+
+
+def test_a_successful_cfp_group_fetch_is_made_once(monkeypatch):
+    fake_get, calls = _main_with(cfp_failures=0)
+    monkeypatch.setattr(ext, "_fox_get", fake_get)
+    assert ext._fox_segment_ids(2025, "2") == ["2025-1-1", "2025-bowls-2", "2025-cfp-2"]
+    assert calls == ["cfp"]
+
+
+def test_a_404_cfp_group_is_an_answer_not_retried_or_warned(monkeypatch, recwarn):
+    from sportsdataverse.errors import NoDataError
+
+    fake_get, calls = _main_with(cfp_failures=2, exc=NoDataError("404"))
+    monkeypatch.setattr(ext, "_fox_get", fake_get)
+    assert ext._fox_segment_ids(2025, "2") == ["2025-1-1", "2025-bowls-2"]
+    assert calls == ["cfp"]
+    assert not recwarn.list
+
+
+def test_the_cfp_warning_points_at_the_caller(monkeypatch):
+    fake_get, _ = _main_with(cfp_failures=2)
+    monkeypatch.setattr(
+        ext, "_fox_get", lambda path, params=None, **k: {} if "segment" in path else fake_get(path, params)
+    )
+    with pytest.warns(UserWarning, match="CFP group enumeration failed twice") as record:
+        ext.fox_cfb_schedule(2025)
+    assert record[0].filename == __file__

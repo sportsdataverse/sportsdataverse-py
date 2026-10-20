@@ -521,7 +521,7 @@ def fox_mbb_teams_all(
     Args:
         max_id: Highest candidate team id to try. Defaults to ``500``.
         max_calls: Budget of standings fetches. Defaults to ``60``. Warns when the budget
-            runs out while the last fetch was still finding new teams.
+            runs out while the last fetch that answered (not a 404) was still finding new teams.
         return_as_pandas: If ``True`` return a pandas DataFrame; otherwise
             polars.
         **kwargs: Forwarded to the underlying HTTP getter.
@@ -563,7 +563,7 @@ def fox_mbb_teams_all(
     for cand in range(1, max_id + 1):
         if calls >= max_calls:
             if added:
-                # the last fetch still found new teams, so the directory may be incomplete
+                # the last fetch that answered still found new teams: the directory may be incomplete
                 warnings.warn(
                     f"fox_mbb_teams_all spent its max_calls={max_calls} budget at candidate id {cand} of "
                     f"{max_id} while still finding teams ({len(rows)} so far); raise max_calls for the full directory",
@@ -581,7 +581,8 @@ def fox_mbb_teams_all(
             # empty directory the caller can't tell apart from a valid scan.
             part = []
         calls += 1
-        added = 0
+        if part:  # a missing id (404) says nothing about whether discovery has stopped
+            added = 0
         for r in part:
             if r["fox_team_id"] not in seen:
                 seen.add(r["fox_team_id"])
