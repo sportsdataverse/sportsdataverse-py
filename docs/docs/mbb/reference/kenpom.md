@@ -500,7 +500,7 @@ GET /team.php - a team's full season page. Returns EVERY table on it, so one cal
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |
@@ -579,7 +579,7 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |
@@ -611,7 +611,7 @@ GET /player-expanded.php - a team's expanded per-player table plus the minutes m
 
 | col_name | type | description |
 |---|---|---|
-| `column_0` | double |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `column_0_rk` | character |  |
 | `ht` | character | Listed height. |
 | `wt` | double | Listed weight (lbs). |
@@ -1031,7 +1031,7 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 | col_name | type | description |
 |---|---|---|
 | `column_0` | character |  |
-| `column_0_rk` | integer |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `name` | character | Display name. |
 | `min` | integer | Minutes played. |
 | `o_rtg` | integer | O rtg. |
@@ -1053,7 +1053,7 @@ GET /box.php - box-score detail for one game (per-team four factors, player line
 | col_name | type | description |
 |---|---|---|
 | `column_0` | character |  |
-| `column_0_rk` | integer |  |
+| `jersey` | character | Jersey number worn by the player. |
 | `name` | character | Display name. |
 | `min` | integer | Minutes played. |
 | `o_rtg` | integer | O rtg. |

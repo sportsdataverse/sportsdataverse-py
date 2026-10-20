@@ -52,8 +52,8 @@ frames:
     description: ''
 - section: player_table
   columns:
-  - name: column_0
-    type: double
+  - name: jersey
+    type: character
     description: ''
   - name: column_0_rk
     type: character

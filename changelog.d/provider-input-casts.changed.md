@@ -6,3 +6,6 @@
   was digits, so event `"000000"` was `0`); a (0, 0) `latitude` / `longitude` pair, 247's no-location sentinel, is null. (#TBD)
 - **NHL Records:** `nhl_records_comeback_wins(scope=)` raises `ValueError` for anything but `"league"` or
   `"franchise"`; `"Franchise"` or `"team"` returned the league-wide table. (#TBD)
+- **KenPom:** the jersey column is String on every page and named `jersey`: `team` / `team_players_expanded`
+  `player_table*` `column_0` (was Float64) and `box` `table_*` `column_0_rk` (was Int64). A season of pages stacks
+  without a String / Float64 clash, and no jersey reads `"2.0"`. (#TBD)

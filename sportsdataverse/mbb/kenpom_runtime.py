@@ -205,7 +205,7 @@ def _drop_repeated_headers(frame: pl.DataFrame) -> pl.DataFrame:
         The frame without header-repeat or all-null rows.
     """
     for col in frame.columns:
-        if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):  # a "00" jersey column is no anchor
+        if frame.schema[col] != pl.Utf8 or col == "jersey":  # a jersey is text, never the anchor
             continue
         parsed = frame[col].str.strip_chars().str.replace(r"^\+", "").cast(pl.Float64, strict=False)
         if len(frame) and parsed.is_not_null().sum() / len(frame) >= 0.5:
@@ -235,6 +235,30 @@ def _split_ncaa_seed(frame: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def _jersey_column(table: Any) -> Dict[int, str]:
+    """KenPom's jersey column in a ``<table>``, as ``{position: "jersey"}`` (R48b-7).
+
+    A box score heads it ``<th class="number">``. A team roster table (``team.php``,
+    ``player-expanded.php``) leaves the first two headers blank (jersey, player) before
+    ``Ht`` and links the player in the second cell; ``player.php`` shares that header but its
+    first cell is the season, so the player link is what tells them apart. A jersey is a
+    label, so it is text on every page: ``"00"`` is not ``"0"``, and a season of pages stacks
+    without a String / Float64 clash.
+    """
+    row = table.find("tr")
+    cells = row.find_all(["th", "td"]) if row else []
+    numbered = [j for j, cell in enumerate(cells) if "number" in (cell.get("class") or [])]
+    if numbered:
+        return dict.fromkeys(numbered, "jersey")
+    if [cell.get_text(strip=True) for cell in cells[:3]] != ["", "", "Ht"]:
+        return {}
+    for body_row in table.find_all("tr")[1:]:
+        tds = body_row.find_all("td", recursive=False)
+        if len(tds) > 1 and tds[1].find("a", href=re.compile(r"(^|/)player\.php")):
+            return {0: "jersey"}
+    return {}
+
+
 def _cast_numerics(frame: pl.DataFrame) -> pl.DataFrame:
     """Cast every fully-numeric text column to Int64 or Float64.
 
@@ -251,7 +275,7 @@ def _cast_numerics(frame: pl.DataFrame) -> pl.DataFrame:
     """
     out = frame
     for col in frame.columns:
-        if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):
+        if frame.schema[col] != pl.Utf8 or col == "jersey" or _zero_padded(frame[col]):
             continue
         cleaned = frame[col].str.strip_chars().str.replace(r"^\+", "")
         parsed = cleaned.cast(pl.Float64, strict=False)
@@ -327,7 +351,8 @@ def parse_kenpom_page(
             tables = kenpom_ratings(y=2025)
             tables["ratings_table"].head()
     """
-    tables = html_tables(raw, min_rows=2, keep_zero_padded=True)  # jersey "00" is not 0 (A-M18)
+    # the jersey is text on every page ("00" is not 0, A-M18 / R48b-7)
+    tables = html_tables(raw, min_rows=2, text_columns=_jersey_column)
     tidied = {k: _cast_numerics(_split_ncaa_seed(_drop_repeated_headers(v))) for k, v in tables.items()}
     depth_chart = _depth_chart_table(raw)
     if depth_chart is not None:

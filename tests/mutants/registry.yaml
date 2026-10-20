@@ -2696,23 +2696,6 @@
   expected: kill
   note: the shared guard; a no-new-nulls cast turned jersey "00" into 0 in every text-to-number caster
 
-- id: kenpom-cast-numerics-skips-zero-padded
-  group: provider-casts
-  finding: A-M18
-  file: sportsdataverse/mbb/kenpom_runtime.py
-  # block scalars: the anchor guard in _drop_repeated_headers shares the first line
-  snippet: |-
-    if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):
-                continue
-            cleaned
-  mutant: |-
-    if frame.schema[col] != pl.Utf8:
-                continue
-            cleaned
-  test: tests/mbb/test_kenpom_cast_numerics.py -k cast_numerics_jersey_00
-  expected: kill
-  note: KenPom's _cast_numerics cast any all-digit text column to Int64 ("00" -> 0)
-
 - id: bref-finish-jersey-column-by-name
   group: provider-casts
   finding: B-M19
@@ -2856,36 +2839,6 @@
   note: a pandas row's NaN team id became "nan" and passed the "no ESPN team ids" guard
 
 # 4.8b review round 1 (R48b-1 / R48b-2 / R48b-3 / R48b-5)
-- id: kenpom-read-html-keeps-zero-padded
-  group: provider-casts
-  finding: A-M18
-  file: sportsdataverse/mbb/kenpom_runtime.py
-  snippet: 'tables = html_tables(raw, min_rows=2, keep_zero_padded=True)'
-  mutant: 'tables = html_tables(raw, min_rows=2)'
-  test: tests/mbb/test_kenpom_cast_numerics.py -k real_page_jersey_00
-  expected: kill
-  note: R48b-1, read_html typed the real jersey columns (team player_table, box table_1) before any cast
-
-- id: html-tables-restore-only-zero-padded-columns
-  group: provider-casts
-  finding: A-M18
-  file: sportsdataverse/_html_tables.py
-  snippet: 'if col.astype("string").str.contains(_ZERO_PADDED, na=False).any():'
-  mutant: 'if True:'
-  test: tests/mbb/test_kenpom_cast_numerics.py -k committed_pages_parse_the_same
-  expected: kill
-  note: R48b-1, only zero-padded columns take the text read; every other column keeps read_html typing
-
-- id: kenpom-zero-padded-column-is-no-anchor
-  group: provider-casts
-  finding: A-M18
-  file: sportsdataverse/mbb/kenpom_runtime.py
-  snippet: 'if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):  # a "00" jersey column is no anchor'
-  mutant: 'if frame.schema[col] != pl.Utf8:  # a "00" jersey column is no anchor'
-  test: tests/mbb/test_kenpom_cast_numerics.py -k "real_page_jersey_00 and team"
-  expected: kill
-  note: a text jersey column became the repeated-header anchor and dropped the section-label rows (16 -> 11)
-
 - id: zero-padded-single-leading-zero
   group: provider-casts
   finding: A-M18
@@ -3065,3 +3018,94 @@
   test: tests/nfl/cbs_pbp/test_to_espn_summary.py -k integer_team_ids
   expected: kill
   note: the CBS week-scoreboard lookup received "<id>.0" team ids from a float id-map row (follow-up after 3.5 merged)
+
+# 4.8b review round 2 (R48b-7: the KenPom jersey is text on every page)
+- id: kenpom-cast-numerics-skips-zero-padded
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey" or _zero_padded(frame[col]):'
+  mutant: 'if frame.schema[col] != pl.Utf8 or col == "jersey":'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k cast_numerics_jersey_00
+  expected: kill
+  note: KenPom's _cast_numerics cast any all-digit text column to Int64 ("00" -> 0)
+
+- id: kenpom-cast-numerics-skips-jersey
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey" or _zero_padded(frame[col]):'
+  mutant: 'if frame.schema[col] != pl.Utf8 or _zero_padded(frame[col]):'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, a jersey column read as text was cast back to Int64 by _cast_numerics
+
+- id: kenpom-jersey-text-every-page
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'tables = html_tables(raw, min_rows=2, text_columns=_jersey_column)'
+  mutant: 'tables = html_tables(raw, min_rows=2)'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey or two_pages_stack or real_page_jersey_00"
+  expected: kill
+  note: R48b-1 / R48b-7, read_html typed the jersey Float64 / Int64, so "00" became 0 and pages did not stack
+
+- id: html-tables-text-columns-restored
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_html_tables.py
+  snippet: '        frame.isetitem(j, col.where(col.notna(), None))'
+  mutant: '        pass'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, the text read of a label column was not swapped in
+
+- id: html-tables-text-columns-named
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/_html_tables.py
+  snippet: 'frame.columns = [labels.get(j, name) for j, name in enumerate(names)]'
+  mutant: 'frame.columns = names'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey"
+  expected: kill
+  note: R48b-7, the jersey kept its positional column_0 / column_0_rk name
+
+- id: kenpom-jersey-is-no-anchor
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if frame.schema[col] != pl.Utf8 or col == "jersey":  # a jersey is text, never the anchor'
+  mutant: 'if frame.schema[col] != pl.Utf8:  # a jersey is text, never the anchor'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey and team-player_table"
+  expected: kill
+  note: a text jersey column became the repeated-header anchor and dropped the section-label rows (16 -> 11)
+
+- id: kenpom-jersey-box-number-header
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'numbered = [j for j, cell in enumerate(cells) if "number" in (cell.get("class") or [])]'
+  mutant: 'numbered = []'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k "unedited_pages_jersey and box"
+  expected: kill
+  note: R48b-7, the box score jersey is the <th class=number> column
+
+- id: kenpom-jersey-roster-player-link
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if len(tds) > 1 and tds[1].find("a", href=re.compile(r"(^|/)player\.php")):'
+  mutant: 'if len(tds) > 1:'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k only_the_jersey_columns_change
+  expected: kill
+  note: player.php shares the roster header; its first column is the season, not a jersey
+
+- id: kenpom-jersey-roster-header
+  group: provider-casts
+  finding: A-M18
+  file: sportsdataverse/mbb/kenpom_runtime.py
+  snippet: 'if [cell.get_text(strip=True) for cell in cells[:3]] != ["", "", "Ht"]:'
+  mutant: 'if False:'
+  test: tests/mbb/test_kenpom_cast_numerics.py -k only_the_jersey_columns_change
+  expected: kill
+  note: only a roster table (blank, blank, Ht) has a first-column jersey
