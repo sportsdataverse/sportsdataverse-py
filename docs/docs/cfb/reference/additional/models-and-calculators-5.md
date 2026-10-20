@@ -561,6 +561,12 @@ Score `df` with `booster`, validated and ordered by the model's card.
 
 The booster's raw predictions.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When any declared feature is absent from `df`. Every missing column is named in one message -- the failure this surface exists to remove is a caller unable to tell what their frame lacks. |
+
 **Example**
 
 ```python
@@ -662,6 +668,12 @@ smaller early and grows through the season. Measured, walk-forward on
 **Returns**
 
 The points-per-rating-unit slope for that bucket, or the flat `net_points_scale` when `games_played` is `None` or falls outside every bucket. The flat value is the average over the curve, so it is a safe default rather than a silent zero.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `slope_by_games` holds a key that is not `"lo-hi"` with integer bounds. |
 
 **Example**
 

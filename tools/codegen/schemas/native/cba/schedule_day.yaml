@@ -7,7 +7,7 @@ columns:
   type: character
 - description: ''
   name: home_team_lose
-  type: character
+  type: integer
 - description: ''
   name: home_team_name
   type: character
@@ -16,7 +16,7 @@ columns:
   type: integer
 - description: ''
   name: home_team_win
-  type: character
+  type: integer
 - description: ''
   name: is_events
   type: integer
@@ -46,7 +46,7 @@ columns:
   type: integer
 - description: ''
   name: schedule_num
-  type: character
+  type: integer
 - description: ''
   name: schedule_time
   type: character
@@ -58,7 +58,7 @@ columns:
   type: integer
 - description: ''
   name: seconds
-  type: character
+  type: numeric
 - description: ''
   name: status
   type: integer
@@ -70,7 +70,7 @@ columns:
   type: character
 - description: ''
   name: visiting_team_lose
-  type: character
+  type: integer
 - description: ''
   name: visiting_team_name
   type: character
@@ -79,6 +79,6 @@ columns:
   type: integer
 - description: ''
   name: visiting_team_win
-  type: character
+  type: integer
 kind: dataframe
 schema: cba_schedule_day

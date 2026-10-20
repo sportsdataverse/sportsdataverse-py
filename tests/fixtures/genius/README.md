@@ -13,6 +13,7 @@ The tests read only these files, never the private `sdv-internal-refs` checkout.
 | `html/hosted_ESAKE_schedule.html` | the real hosted competition chooser of ESAKE (47 competitions) | `GET /ESAKE/en/schedule` |
 | `html/hosted_ESAKE_28567_schedule.html` | a real hosted competition page that lists no matches (the "nothing here" case) | `GET /ESAKE/en/competition/28567/schedule?roundNumber=-1` |
 | `html/hosted_ESAKE_34541_first3.html` | the first 3 real `match-wrap` blocks of ESAKE competition 34541 (the full page is 944 KB), wrapped in a minimal page | `GET /ESAKE/en/competition/34541/schedule?roundNumber=-1` |
+| `html/hosted_FFBB_21849_first3.html` | the first 3 real `match-wrap` blocks of FFBB competition 21849 (LFB 2018-19), fetched 2026-10-18, wrapped in a minimal page: block 1 is an unfilled play-off slot (`To be determined`, match 1145701) with no team or match link | `GET /FFBB/en/competition/21849/schedule?roundNumber=-1` |
 | `html/embednf_HKS_49946_first3.json` | the first 3 real match blocks of the HKS embed envelope (the full body is 2.5 MB) | `GET /embednf/HKS/en/competition/49946/schedule?roundNumber=-1` |
 | `html/widget_ESAKE.js` | the real ESAKE results-widget script | `GET /widget/?RFJIN037I07QV520B7WEXKV1GYNA31` |
 | `spec_routes.json` | the spec's 7 routes (written by `tools/codegen/gen_genius.py`) | `genius-livestats.openapi.yaml` |

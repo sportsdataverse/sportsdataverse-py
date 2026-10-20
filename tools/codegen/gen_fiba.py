@@ -315,12 +315,23 @@ NOTES = [
     "2023 World Cup and 281545 at Paris 2024), while organisation_id is the stable federation or club (64 = Germany, "
     "every year); the game page's T_<id> and the play-by-play oId are organisation ids, not team ids.",
 ]
+#: GDAP routes (schedule, teams, rosters, statistics...): no game page is involved.
 RAISES = [
-    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for "
-    "an unknown id, a game the competition does not list, or a game page with no box score).",
+    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, or GDAP answered {} or [] for "
+    "an unknown id).",
     "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error "
     "envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, "
-    "federation, family or season, the HTTP 200 'not-found shell' of a wrong game page, a live game).",
+    "federation, family or season).",
+    "ValueError: HTTP 400 / 422, or a malformed id, season or date.",
+]
+#: Game-page routes: the GDAP lookups that build the page URL plus the page itself.
+PAGE_RAISES = [
+    "sportsdataverse.errors.NoDataError: FIBA has nothing for the request (HTTP 404, GDAP answered {} or [] for "
+    "an unknown id, a listed game whose teams are not drawn yet, or a game page with no box score).",
+    "sportsdataverse.errors.AssetFetchError: the fetch failed, or the answer is not about the request (an error "
+    "envelope, HTTP 401 after a key refresh, HTTP 500, a body for another game, competition, team, player, "
+    "federation, family or season, a game of another competition than comp, the HTTP 200 'not-found shell' of a "
+    "wrong game page, a live game).",
     "ValueError: HTTP 400 / 422, a malformed id, season or date, or a game page requested without comp.",
 ]
 SEE_ALSO = [
@@ -342,9 +353,14 @@ def _load(stem: str, name: str) -> Any:
     return json.loads((FIXTURES / stem / name).read_text(encoding="utf-8"))
 
 
+#: Columns Float64 whatever the fixtures hold: ``utc_offset`` is whole hours in every sample, but a venue in a
+#: half-hour zone (India +5.5, Adelaide +9.5) sends a fraction, which an Int64 column would refuse.
+FLOAT_COLUMNS = frozenset({"utc_offset"})
+
+
 def _merge(codes: List[str], col: str) -> str:
     seen = set(codes)
-    if fiba_frames._RATE.search(col) and seen <= {"i", "f"}:
+    if (fiba_frames._RATE.search(col) or col in FLOAT_COLUMNS) and seen <= {"i", "f"}:
         return "f"
     if not seen:
         return fiba_frames._code_for(col)
@@ -355,8 +371,8 @@ def _merge(codes: List[str], col: str) -> str:
     return "s"
 
 
-def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, str]:
-    """Ordered ``{column: code}`` for a parser, from every fixture, with the committed dtypes switched off."""
+def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, List[str]]:
+    """Ordered ``{column: [observed codes]}`` for a parser, from every fixture, with the committed dtypes switched off."""
     saved, fiba_dtypes.DTYPES = fiba_dtypes.DTYPES, {}
     try:
         order: List[str] = []
@@ -369,11 +385,22 @@ def _derive(parser: Any, stem: str, fixtures: List[str]) -> Dict[str, str]:
                 if col not in seen:
                     order.append(col)
                     seen[col] = []
-                if dtype != pl.Null:
+                if df[col].null_count() < df.height:  # an all-null column is typed by its name: not an observation
                     seen[col].append(_CODE.get(dtype, "s"))
-        return {col: _merge(seen[col], col) for col in order}
+        return {col: seen[col] for col in order}
     finally:
         fiba_dtypes.DTYPES = saved
+
+
+def _family_codes(observed: Dict[str, Dict[str, List[str]]]) -> Dict[str, Dict[str, str]]:
+    """``{parser: {column: code}}`` for one family; a column no fixture of its parser fills takes the codes the
+    family's other parsers observed for it, so one column name has one dtype across the family (the game page's
+    team lines carry no ``BSR``, so ``box_teams.blocks_received`` is always null: Int64 like ``box_players``)."""
+    family: Dict[str, List[str]] = {}
+    for cols in observed.values():
+        for col, codes in cols.items():
+            family.setdefault(col, []).extend(codes)
+    return {p: {c: _merge(codes or family[c], c) for c, codes in cols.items()} for p, cols in observed.items()}
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -563,7 +590,7 @@ PAGE_RAW = (
 PAGE_DOC: Dict[str, Any] = {
     "example_import": True,
     "raw_doc": PAGE_RAW,
-    "raises": RAISES,
+    "raises": PAGE_RAISES,
     "see_also": SEE_ALSO,
     "notes": NOTES
     + [
@@ -656,12 +683,24 @@ def main() -> None:
 
     # dtypes, from every fixture of every parser
     dtypes: Dict[str, Dict[str, str]] = {}
-    for short, cfg in GDAP.items():
-        parser = f"parse_fiba_gdap_{short}"
-        dtypes[parser] = _derive(getattr(gp, parser), "fiba_gdap", cfg["fixtures"])
-    for short, cfg in PAGE.items():
-        parser = f"parse_fiba_gamepage_{short}"
-        dtypes[parser] = _derive(getattr(pp, parser), "fiba_gamepage", cfg["fixtures"])
+    dtypes.update(
+        _family_codes(
+            {
+                f"parse_fiba_gdap_{s}": _derive(getattr(gp, f"parse_fiba_gdap_{s}"), "fiba_gdap", c["fixtures"])
+                for s, c in GDAP.items()
+            }
+        )
+    )
+    dtypes.update(
+        _family_codes(
+            {
+                f"parse_fiba_gamepage_{s}": _derive(
+                    getattr(pp, f"parse_fiba_gamepage_{s}"), "fiba_gamepage", c["fixtures"]
+                )
+                for s, c in PAGE.items()
+            }
+        )
+    )
     body = ",\n".join(
         f'    "{p}": {{\n' + "".join(f'        "{c}": "{t}",\n' for c, t in cols.items()) + "    }"
         for p, cols in sorted(dtypes.items())

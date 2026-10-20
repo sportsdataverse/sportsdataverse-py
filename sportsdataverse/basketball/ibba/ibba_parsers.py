@@ -325,10 +325,8 @@ def parse_ibba_configuration(
         A frame with the ``configuration`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_configuration`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_configuration`` itself.
 
     Example:
         Quick start::
@@ -354,10 +352,8 @@ def parse_ibba_boards(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         A frame with the ``boards`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_boards`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_boards`` itself.
 
     Example:
         Quick start::
@@ -383,10 +379,8 @@ def parse_ibba_boards_ex(raw: Any, *, return_as_pandas: bool = False, columns: O
         A frame with the ``boards_ex`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_boards_ex`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_boards_ex`` itself.
 
     Example:
         Quick start::
@@ -412,10 +406,8 @@ def parse_ibba_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         A frame with the ``teams`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_teams`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_teams`` itself.
 
     Example:
         Quick start::
@@ -441,10 +433,8 @@ def parse_ibba_team(raw: Any, *, return_as_pandas: bool = False, columns: Option
         A frame with the ``team`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_team`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_team`` itself.
 
     Example:
         Quick start::
@@ -470,10 +460,8 @@ def parse_ibba_players(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         A frame with the ``players`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_players`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_players`` itself.
 
     Example:
         Quick start::
@@ -499,10 +487,8 @@ def parse_ibba_player(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         A frame with the ``player`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_player`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_player`` itself.
 
     Example:
         Quick start::
@@ -528,10 +514,8 @@ def parse_ibba_coaches(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         A frame with the ``coaches`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_coaches`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_coaches`` itself.
 
     Example:
         Quick start::
@@ -557,10 +541,8 @@ def parse_ibba_box_score(raw: Any, *, return_as_pandas: bool = False, columns: O
         A frame with the ``box_score`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_box_score`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_box_score`` itself.
 
     Example:
         Quick start::
@@ -588,10 +570,8 @@ def parse_ibba_player_stats(
         A frame with the ``player_stats`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_player_stats`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_player_stats`` itself.
 
     Example:
         Quick start::
@@ -619,10 +599,8 @@ def parse_ibba_stats_types(
         A frame with the ``stats_types`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_stats_types`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_stats_types`` itself.
 
     Example:
         Quick start::
@@ -648,10 +626,8 @@ def parse_ibba_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         A frame with the ``leaders`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_leaders`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_leaders`` itself.
 
     Example:
         Quick start::
@@ -679,10 +655,8 @@ def parse_ibba_team_stats(
         A frame with the ``team_stats`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_team_stats`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_team_stats`` itself.
 
     Example:
         Quick start::
@@ -708,10 +682,8 @@ def parse_ibba_games(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         A frame with the ``games`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_games`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_games`` itself.
 
     Example:
         Quick start::
@@ -737,10 +709,8 @@ def parse_ibba_games_ex(raw: Any, *, return_as_pandas: bool = False, columns: Op
         A frame with the ``games_ex`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_games_ex`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_games_ex`` itself.
 
     Example:
         Quick start::
@@ -768,10 +738,8 @@ def parse_ibba_games_by_team(
         A frame with the ``games_by_team`` schema in ``SPECS``: ids ``Int64``, counts ``Int64`` or ``Float64`` as
         pinned there, dates ``Date``, text HTML-unescaped. An empty, malformed or unrecognised body gives a
         zero-row frame with the same columns and dtypes, so two empty frames concatenate.
-
-    Raises:
-        None: bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``)
-        come from ``ibba_games_by_team`` itself.
+        Bad input is a zero-row frame. The fetch errors (``NoDataError``, ``AssetFetchError``) come
+        from ``ibba_games_by_team`` itself.
 
     Example:
         Quick start::

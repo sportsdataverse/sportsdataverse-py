@@ -420,7 +420,14 @@ ROUTE: Dict[str, Dict[str, str]] = {
         "ass": "Assists credited to the player in the game.",
     },
     "team_box_score": {"team_id": _CTX_TEAM},
-    "pbp": {"player_name": "Given name of the acting player.", "player_surname": "Family name of the acting player."},
+    "pbp": {
+        "player_name": "Given name of the acting player.",
+        "player_surname": "Family name of the acting player.",
+        "side": "Basket the row's side_area_zone is measured from, as sent: 0 = the basket at x = 0, 1 = the one at "
+        "x = 100 (zone A is that basket's half: x < 50 for 0, x >= 50 for 1). It is NOT the team of the game (that is "
+        "team_side): on shots, assists, fouls committed, turnovers and offensive rebounds it is the actor's attacking "
+        "basket, which changes at half-time; on defensive rebounds, steals, blocks and fouls drawn it is the opponent's.",
+    },
     "shots": {"team_id": _CTX_TEAM},
     "roster": {
         "team_id": _CTX_TEAM,

@@ -67,6 +67,14 @@ Header of one finished game: round, date, venue, attendance, both clubs with the
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_game-example}
 
 ```python
@@ -105,6 +113,14 @@ Points each team scored in each quarter and overtime of one finished game.
 | `away_points` | integer | Away points scored IN the period (not cumulative). |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
+
+### Raises {#aba_periods-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_periods-example}
 
@@ -176,6 +192,14 @@ Player box score of one finished game (2001-02 on): minutes, points, shooting sp
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_box_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_box_players-example}
 
 ```python
@@ -241,6 +265,14 @@ Team totals of one finished game: the Team Compare table, home then away.
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_box_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_box_teams-example}
 
 ```python
@@ -290,6 +322,14 @@ Play-by-play of one finished game (2017-18 on), in game order: shots, rebounds, 
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_pbp-example}
 
 ```python
@@ -331,6 +371,14 @@ Shot chart of one finished game (2017-18 on): every field-goal attempt with its 
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_shots-example}
 
 ```python
@@ -369,6 +417,14 @@ Score after every whole minute of one finished game (the Result Graph; 2017-18 o
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_score_flow-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_score_flow-example}
 
 ```python
@@ -406,6 +462,14 @@ Score after every whole minute of one finished game, from the Score difference c
 | `away_score` | integer | Away cumulative score at the end of that minute (the site sends a numeric string). The last row equals the final score. |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
+
+### Raises {#aba_score_difference-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_score_difference-example}
 
@@ -457,6 +521,14 @@ Full schedule and results of one season of one league: every round and game.
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_calendar-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_calendar-example}
 
 ```python
@@ -503,6 +575,14 @@ Standings tables of one season of one league: regular season groups, Top 8 and P
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
 
+### Raises {#aba_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#aba_standings-example}
 
 ```python
@@ -546,6 +626,14 @@ One player's bio for one season and league: club, position, height, birth date a
 | `career` | character | The Clubs box, one free-text line per stint, oldest first, joined with '; ' ('2021/22 - Texas Legends; 2024-27 - Partizan Mozzart Bet'). |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
+
+### Raises {#aba_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_player-example}
 
@@ -611,6 +699,14 @@ One player's game log for one season and league: one row per game with the box-s
 | `valuation` | integer | Valuation (Val, 'rank Value'): the efficiency rating (PIR-style index) the site ranks players by. |
 
 **`return_parsed=False`** — the raw record (`dict`): the page record (the refs capture shape) or, for the three live-match helpers, `{'rows': [...]}`, plus `_request` (kind, season, sez, league and the game or player asked for).
+
+### Raises {#aba_player_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The site has nothing for the request (an unknown game or season, a season before 2001-02, a helper with no data before 2017-18). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page for another game, season or league, an unfinished game, a helper that does not belong to the game, layout drift). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#aba_player_games-example}
 

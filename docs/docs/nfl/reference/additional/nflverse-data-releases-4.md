@@ -166,6 +166,12 @@ Polars dataframe containing team stats available for the requested seasons.
 | `pt_return_tds` | integer | Number of the team's punts that the opponent returned for a touchdown. |
 | `pt_net_yards` | integer | Net punting yards: pt_yards minus pt_return_yards minus 20 yards per touchback. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999, if `summary_level` is not one of the allowed values, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+
 **Example**
 
 ```python
