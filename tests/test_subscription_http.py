@@ -373,9 +373,9 @@ def test_login_post_dropped_connection_is_asset_fetch_error():
 
 
 def test_login_form_is_never_served_from_the_response_cache(monkeypatch):
-    """R4.4-2: a fresh session has no cookies, so ``download`` would cache its login form; the
-    form's CSRF token belongs to the session that fetched it, so a cached form would make every
-    re-login post a stale token. ``cache_ttl=0`` keeps the form GET out of the cache."""
+    """R4.4-2: the login form's CSRF token belongs to the session that fetched it, so a cached form
+    would make every re-login post a stale token. ``download`` caches only JSON bodies, so the HTML
+    form is never stored; this pins that if the cache ever starts storing HTML."""
     import itertools
 
     import sportsdataverse.cache as cache
