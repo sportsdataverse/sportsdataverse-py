@@ -428,6 +428,67 @@ def test_out_of_scheme_placement_refuses_a_frame_without_its_row_order():
         _place_out_of_scheme_plays(pl.DataFrame({"id": [1, 2, 3]}))
 
 
+def test_a_play_copy_filed_outside_its_drive_is_counted_once():
+    """R908-3: 401420836 files two plays twice under two ids, and the id sort strands one copy of each
+    outside its drive: the 11:58 rush (``...102855603``) among the 14:43 plays, the 10:44 punt
+    (``...104895504``) after the next drive's first run. The stranded copy goes, so Gonnella's carries
+    and Steindorf's punts match ESPN's box score."""
+    plays = _process_capture(401420836).plays_frame
+    with gzip.open(next(FIX.glob("summary_401420836*")), "rt", encoding="utf-8") as fh:
+        box = {
+            (group["name"], athlete["athlete"]["displayName"]): athlete["stats"]
+            for team in json.load(fh)["boxscore"]["players"]
+            for group in team["statistics"]
+            for athlete in group["athletes"]
+        }
+    carries = plays.filter((pl.col("rush") == True) & (pl.col("rusher_player_name") == "Dominic Gonnella"))
+    assert [str(carries.height), str(carries["yds_rushed"].sum())] == box[("rushing", "Dominic Gonnella")][:2]
+    punts = plays.filter((pl.col("punt") == True) & pl.col("text").str.starts_with("Kaedin Steindorf punt"))
+    assert str(punts.height) == box[("punting", "Kaedin Steindorf")][0]
+    ids = plays["id"].to_list()
+    assert ids[ids.index(401420836102855601) + 1] == 401420836102855604  # the punt-return TD, then its kickoff
+    assert {401420836102855603, 401420836104895504}.isdisjoint(ids)
+
+
+_X = ("A", 1, 1, 1, 10, 75, "Rush", "X run for 3 yds", 3000)
+_Y = ("A", 1, 1, 2, 7, 72, "Rush", "Y run for 2 yds", 2980)
+_W = ("B", 1, 2, 1, 10, 80, "Rush", "W run for 1 yd", 2970)
+_V = ("B", 1, 2, 2, 9, 79, "Rush", "V run for 1 yd", 2960)
+_T = (*_X[:6], "Timeout", "Timeout A, clock 10:00", 3000)
+_S = (*_X[:5], 0, *_X[6:])  # no start spot
+_PLAY_COLS = ["drive.id", "period.number", "start.team.id", "start.down", "start.distance", "start.yardsToEndzone"]
+
+
+def _plays(*rows) -> pl.DataFrame:
+    cols = [*_PLAY_COLS, "type.text", "text", "start.adj_TimeSecsRem"]
+    return pl.DataFrame([dict(zip(cols, r)) for r in rows]).with_row_index("id")
+
+
+@pytest.mark.parametrize(
+    ("order", "home", "copy", "kept"),
+    [
+        ("xYWcV", _X, _X, False),  # between two plays of the next drive: the copy goes
+        ("xYcWV", _X, _X, True),  # after its drive's last play, so in its drive (a replayed down)
+        ("WcYxV", _X, _X, True),  # before its drive's first play, so in its drive
+        ("xYWcV", _X, (*_X[:7], "X run for 4 yds", 3000), True),  # other text: another play
+        ("xYWcV", _X, (*_X[:8], 2990), True),  # other clock: another play
+        ("xYWcV", _T, _T, True),  # a marker never goes
+        ("xYWcV", _S, _S, True),  # no start spot: too little state to call it a copy
+    ],
+    ids=["stranded", "drive-end", "drive-start", "text", "clock", "marker", "spotless"],
+)
+def test_only_a_copy_stranded_outside_its_drive_goes(order, home, copy, kept):
+    """R908-3, one case per guard: a row goes only when neither neighbour is in its drive and a row
+    INSIDE its drive has the same drive, clock, start state, type and text."""
+    row = {"x": home, "c": copy, "Y": _Y, "W": _W, "V": _V}
+    df = _plays(*(row[k] for k in order))
+    c = order.index("c")
+    assert _drop_espn_play_copies(df)["id"].to_list() == [i for i in range(df.height) if kept or i != c]
+    # without its twin inside the drive, the stranded row is a play and stays
+    alone = df.filter(pl.col("id") != order.index("x"))
+    assert _drop_espn_play_copies(alone)["id"].to_list() == alone["id"].to_list()
+
+
 @pytest.mark.parametrize("keys", [("end",), ("homeScore", "awayScore")], ids=lambda k: k[0])
 def test_a_play_field_absent_from_every_play_does_not_crash(keys):
     """C-NF-10(a): a block absent from EVERY play leaves json_normalize no column for it; the plays

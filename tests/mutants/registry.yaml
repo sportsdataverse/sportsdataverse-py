@@ -1911,3 +1911,85 @@
   test: tests/cfb/test_cfb_end_state_ex34.py -k "on_a_kick"
   expected: kill
   note: a stray punt record before the same team's snap would end at that snap (401752915 EPA 2.51 -> 2.15)
+
+# cfb 3.12 (R908-3): a play copy the id sort strands outside its drive. Killers:
+# tests/cfb/test_cfb_pbp_offline.py, the 401420836 capture and one case per guard.
+- id: cfb-stranded-copy-rule
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"]'
+  mutant: 'copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"].clear()'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "outside_its_drive_is_counted_once"
+  expected: kill
+  note: 401420836 books Gonnella's 11:58 rush and Steindorf's 10:44 punt twice (7 carries / 4 punts vs ESPN's box 6 / 3)
+
+- id: cfb-stranded-copy-prev-neighbour
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)'
+  mutant: 'out_of_drive = (drive.shift(-1) != drive).fill_null(True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: a copy after its drive's last play is in its drive (a replayed down) and stays
+
+- id: cfb-stranded-copy-next-neighbour
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)'
+  mutant: 'out_of_drive = (drive.shift(1) != drive).fill_null(True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: a copy before its drive's first play is in its drive and stays
+
+- id: cfb-stranded-copy-home-inside-drive
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'home = df.filter(pl.col("_out") == False).select(same)'
+  mutant: 'home = df.select(same)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: with every row a home, each stranded row twins itself and every lone stranded play goes
+
+- id: cfb-stranded-copy-marker
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_out") == True) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_out") == True) & (pl.col("start.yardsToEndzone") != 0)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and marker"
+  expected: kill
+  note: timeouts and end-of-period rows are never dropped
+
+- id: cfb-stranded-copy-spotless
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_out") == True) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_out") == True) & ~marker'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and spotless"
+  expected: kill
+  note: a row with no start spot has too little state to call it a copy
+
+- id: cfb-stranded-copy-text
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'same = pl.col("drive.id"), [*key, "text", "start.adj_TimeSecsRem"]'
+  mutant: 'same = pl.col("drive.id"), [*key, "start.adj_TimeSecsRem"]'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and text"
+  expected: kill
+  note: other text at the same clock and state is another play
+
+- id: cfb-stranded-copy-clock
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'same = pl.col("drive.id"), [*key, "text", "start.adj_TimeSecsRem"]'
+  mutant: 'same = pl.col("drive.id"), [*key, "text"]'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and clock"
+  expected: kill
+  note: the same text at another clock is another play

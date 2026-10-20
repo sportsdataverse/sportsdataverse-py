@@ -1994,6 +1994,13 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
     * **Textless echo** -- a row with no text beside a texted row of the same type, period and
       start state, filed before the play at the previous play's clock (2009-13, 2021-22) or
       after it (2007-15). It goes; the texted twin stays.
+    * **Copy outside its drive** -- the same play (drive, period, clock, start state, type and
+      text) filed under a second id that the id sort puts outside its drive, where neither
+      neighbour is in that drive (401420836: an 11:58 rush among the 14:43 plays two drives
+      earlier, and a 10:44 punt after the next drive's first run). The stranded copy goes;
+      the copy inside its drive stays, so a down replayed in its own drive is never touched.
+      Over the 23,024 cfb-raw games: 524 rows in 244 games (215 of them punts), each with its
+      twin kept; 464 sit next to that twin in ESPN's feed.
 
     Timeouts and end-of-period rows are never dropped, and neither is a play without a start
     spot (``start.yardsToEndzone`` 0), which leaves the spotless 2004 feed to the adjacent rule.
@@ -2050,7 +2057,16 @@ def _drop_espn_play_copies(plays_df: pl.DataFrame) -> pl.DataFrame:
         .filter(pl.all_horizontal([pl.col(c) == pl.col(c).shift(-1) for c in copy]).fill_null(False))["_pos"]
         .to_list()
     )
-    return df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    df = df.filter(~pl.col("_pos").is_in(stale + echo)).drop("_pos", "_stub")
+    # a copy the id sort filed outside its drive: neither neighbour is in its drive, and a row
+    # inside the drive has the same drive, clock, start state, type and text
+    drive, same = pl.col("drive.id"), [*key, "text", "start.adj_TimeSecsRem"]
+    out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)
+    df = df.with_row_index("_pos").with_columns(_out=out_of_drive)
+    home = df.filter(pl.col("_out") == False).select(same).drop_nulls()
+    stranded = df.filter((pl.col("_out") == True) & ~marker & (pl.col("start.yardsToEndzone") != 0))
+    copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"]
+    return df.filter(~pl.col("_pos").is_in(copy_of_home.implode())).drop("_pos", "_out")
 
 
 _DD_SPOT_RE = re.compile(r"at (.+)$")
