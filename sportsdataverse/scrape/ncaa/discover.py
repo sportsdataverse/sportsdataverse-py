@@ -23,6 +23,7 @@ from typing import Callable, List, Optional, Union
 
 import polars as pl
 
+from sportsdataverse.errors import AssetFetchError, NoDataError
 from sportsdataverse.mbb.mbb_ncaa_schedule import parse_ncaa_bb_team_schedule
 
 # The schedules dataset tree is a pure side effect of the sweep below: this
@@ -101,8 +102,8 @@ def _team_contest_ids(
 ) -> List[str]:
     try:
         html = fetch_fn(team_id)
-    except RuntimeError:
-        # NcaaFetcher raises RuntimeError on a ban-suspect / exhausted-proxy
+    except AssetFetchError:
+        # NcaaFetcher raises AssetFetchError on a ban-suspect / exhausted-proxy
         # response ("BAN-SUSPECT:<marker>" is folded into the message). The
         # sweep in discover_season decides retry/skip/abort -- one flaky
         # bm-verify solve must not read as a ban.
@@ -263,7 +264,9 @@ def discover_season(
             try:
                 got = _team_contest_ids(team_id, fn, league, season, root)
                 break
-            except RuntimeError:
+            except NoDataError:
+                break  # a 404 does not change on retry; the team is skipped below
+            except AssetFetchError:
                 continue
         if got is None:
             consecutive += 1
