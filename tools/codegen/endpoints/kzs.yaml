@@ -17,12 +17,12 @@ docstring:
     (one club team in one season) and club_id (across seasons). player_id is the registry
     id, person_id the person behind it.'
   - 'Errors are HTTP 400 for everything (an unknown id and a bad parameter alike),
-    so the runtime raises AssetFetchError for it, never ValueError or an empty frame.
-    List routes default to 150 rows with no truncation signal: every list wrapper
-    asks for a large limit and refuses a full page. The play-by-play and box-score
-    wrappers, the leaderboards, teams, rounds and playing days each make one extra,
-    cached request (the match header or the competition) to prove the answer is the
-    one asked for and the game is final.'
+    so the runtime raises ValueError for it, never an empty frame. List routes default
+    to 150 rows with no truncation signal: every list wrapper asks for a large limit
+    and refuses a full page. The play-by-play and box-score wrappers, the leaderboards,
+    teams, rounds and playing days each make one extra, cached request (the match
+    header or the competition) to prove the answer is the one asked for and the game
+    is final.'
   - 'Coverage: scores from 2007/08; box scores and play-by-play from 2015/16. Some
     2020/21 men''s games have a box score but no play-by-play (NoDataError): the Genius
     data.json (genius_match_id in kzs_matches) is the fallback. Shot x/y are Genius

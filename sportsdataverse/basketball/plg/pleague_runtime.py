@@ -190,14 +190,20 @@ def _json(url: str, params: Optional[Dict[str, Any]]) -> Any:
 
 
 # ----------------------------------------------------------------------------- the game context
-@_rt._no_content_is_unknown  # a lookup: its 204 / 205 is an unknown answer (R4.1b-d-1)
+@_rt._no_content_is_unknown  # a lookup for every caller but the game route, which reads _game_record
 def game_record(gid: int) -> Dict[str, Any]:
     """The verified game page record of a FINISHED game (cached per ``gid``).
 
     Raises:
         NoDataError: the site has no such game.
-        AssetFetchError: the page is another game's, or the game is not final, or the layout drifted.
+        AssetFetchError: the page is another game's, or the game is not final, or the layout drifted, or the
+            page answered 204 / 205 (an unknown answer for a lookup).
     """
+    return _game_record(gid)
+
+
+def _game_record(gid: int) -> Dict[str, Any]:
+    """:func:`game_record`, raising ``_rt._NoContent`` on a 204 (the game route's own answer, so ``{}``)."""
     if gid not in _GAMES:
         rec = _page(f"{HOST}/game/{gid}", "game", gid=gid)
         why = P.game_error(rec, gid)
@@ -209,11 +215,16 @@ def game_record(gid: int) -> Dict[str, Any]:
 
 @_rt._no_content_is_empty  # a data body: its 204 / 205 is {}
 def box_data(gid: int) -> Dict[str, Any]:
-    """The box body of a finished game, checked against its game page (cached per ``gid``).
+    """The box body of a finished game, checked against its game page (cached per ``gid``); ``{}`` on a 204.
 
     Raises:
         AssetFetchError: the body is not the final box of the game (the route echoes no id).
     """
+    return _box_data(gid)
+
+
+def _box_data(gid: int) -> Dict[str, Any]:
+    """:func:`box_data`, raising ``_rt._NoContent`` on a 204, for a caller that decides what the 204 means."""
     if gid not in _BOXES:
         game = game_record(gid)
         url = f"{HOST}/api/boxscore.preciser.php"
@@ -298,7 +309,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         return rec
     if len(seg) == 2 and seg[0] == "game":
         gid = _int_arg(seg[1], "gid")
-        rec = game_record(gid)
+        rec = _game_record(gid)  # the game route's own answer: its 204 is {}
         rec[REQUEST_KEY] = {"kind": "game", "gid": gid}
         return rec
     if len(seg) == 2 and seg[0] == "standings":
@@ -325,7 +336,7 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         return rec
     if seg == ("api", "boxscore.preciser.php"):
         gid = _int_arg(q.get("gid", q.get("id")), "gid")
-        body = box_data(gid)
+        body = _box_data(gid)  # the box route's own answer: its 204 is {}
         body[REQUEST_KEY] = {"kind": "box", "gid": gid}
         return body
     if seg == ("api", "playbyplay.php"):

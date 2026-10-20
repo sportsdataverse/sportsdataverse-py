@@ -120,7 +120,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None) -> str:
         transport=lambda full: _transport(full),
         expect="html",
         is_missing=_is_missing_page,
-        no_content=True,  # a 204 / 205 is {} from _get; vhl_tn's calendar lookup maps it to AssetFetchError
+        no_content=True,  # a 204 / 205 is {} from _get; vhl_tn and _game_number's calendar lookups are unknown
     )
 
 
@@ -206,7 +206,8 @@ def _game_number(tn: int, game_id: int) -> Any:
     with _games_lock:
         known = _games.get(tn, {})
     if game_id not in known:  # one fresh calendar per miss: a game scheduled since the last read
-        _remember_games(tn, _page("calendar", f"{HOST}/en/calendar/{tn}/0/", None, {"tn": tn}))
+        with _rt._no_content_unknown(f"{_rt._where(HOST + f'/en/calendar/{tn}/0/')} (the game-number check)"):
+            _remember_games(tn, _page("calendar", f"{HOST}/en/calendar/{tn}/0/", None, {"tn": tn}))
         with _games_lock:
             known = _games.get(tn, {})
     if game_id not in known:

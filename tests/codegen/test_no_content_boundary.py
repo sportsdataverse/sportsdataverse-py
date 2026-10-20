@@ -110,6 +110,10 @@ def _hits(node: ast.AST, m: _Module, own: Set[str], raising: Dict[str, Set[str]]
     """Whether ``node`` (in module ``m``, whose raising functions are ``own``) can raise ``_NoContent``."""
     if _raises_directly(node):
         return True
+    if isinstance(node, ast.Call) and any(
+        isinstance(a, ast.Name) and a.id in own for a in [*node.args, *(k.value for k in node.keywords)]
+    ):  # a raising function handed over as an argument (``_download_json(_transport, ...)``: sportality, shl)
+        return True
     if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
         callee = node.func.id
         if callee in own:
@@ -163,9 +167,11 @@ def test_no_public_function_can_raise_the_private_no_content():
     """R4.1b-d-2 / -3 / -9: every public function (and every runtime ``_get``) that can meet a 204 below it is a boundary.
 
     The walk follows bare-name calls, calls through an imported module alias (``_bb._fetch_json``, another module's
-    private helper), imported functions, functions held in a module-level table (a route dispatch dict) and a
-    ``raise _NoContent``. Known limit: a call through a value it cannot name statically (``getattr``, a function
-    passed as an argument) is not followed; the behavioural tests below serve a 204 to those runtimes.
+    private helper), imported functions, a raising function passed as an argument (a transport), functions held in
+    a module-level table (a route dispatch dict) and a ``raise _NoContent``. Known limit: a call through a value it
+    cannot name statically (``getattr``, a function stored on an object) is not followed; the behavioural tests below
+    serve a 204 to those runtimes. It proves no ``_NoContent`` escapes; which request inside a getter is a lookup is
+    the PR's per-request table and the dependency tests below.
     """
     assert _leaks_in(_PKG) == {}
 
@@ -195,6 +201,14 @@ _RAISE = "    return _rt._fetch_json(x)\n"
                 "a.py": "def _h(x):\n"
                 + _RAISE
                 + "\n_ROUTES = {'h': _h}\n\n\ndef season(k, x):\n    return _ROUTES[k](x)\n"
+            },
+            {"sportsdataverse.a": ["season"]},
+        ),
+        # a raising transport passed as an argument (sportality / shl's ``_download_json(_transport, ...)``)
+        (
+            {
+                "a.py": "def _transport(**kw):\n    _rt._check_no_content(kw)\n\n\n"
+                "def season(x):\n    return _rt._download_json(_transport, x)\n"
             },
             {"sportsdataverse.a": ["season"]},
         ),
@@ -577,3 +591,194 @@ def test_khl_goalie_paging_a_204_on_page_one_is_the_routes_empty_answer(monkeypa
     monkeypatch.setattr(R, "_post", _no_content)
     with pytest.raises(_NoContent):
         R._all_goalies("https://www.khl.ru/rest/stat/players/", {}, None, 1, {})
+
+
+# --- #929 review (CodeRabbit): the request sweep's remaining lookups, multi-request pages and caches -------------
+
+_UNKNOWN = "the lookup answered HTTP 204"
+
+
+def test_cba_box_score_scope_check_answering_no_content_is_unknown(monkeypatch):
+    R = _mod("basketball.cba.cba_runtime")
+    monkeypatch.setattr(R, "_BOX", {})
+    monkeypatch.setattr(R, "_checked", _no_content)
+    with pytest.raises(AssetFetchError, match=_UNKNOWN):
+        R._box(1)
+
+
+def _next(answers: Any) -> Any:
+    got = next(answers)
+    if got is None:
+        raise _NoContent("answered HTTP 204: no content")
+    return got
+
+
+def test_cba_play_by_play_period_count_answering_no_content_is_unknown(monkeypatch):
+    R = _mod("basketball.cba.cba_runtime")
+    monkeypatch.setattr(R, "_info", lambda sid: {"hostScore": 2, "guestScore": 1})
+    monkeypatch.setattr(R, "_checked", _no_content)
+    with pytest.raises(AssetFetchError, match=r"period count\): the lookup answered HTTP 204"):
+        R._pbp(1, None)
+
+
+def test_cba_play_by_play_a_later_period_answering_no_content_is_unknown(monkeypatch):
+    """A whole game is one page per period: a 204 on period 2 never returns period 1 alone (or {})."""
+    R = _mod("basketball.cba.cba_runtime")
+    monkeypatch.setattr(R, "_info", lambda sid: {"hostScore": 2, "guestScore": 1})
+    monkeypatch.setattr(R, "_checked", lambda *a, **k: {"home": {"1": 1, "2": 1}})
+    page1 = {
+        "records": [
+            {
+                "quarterNum": 1,
+                "minutes": 9,
+                "seconds": 0,
+                "homeScore": 2,
+                "visitorScore": 1,
+            }
+        ],
+        "total": 1,
+    }
+    answers = iter([page1, None])
+    monkeypatch.setattr(R, "_fetch", lambda *a, **k: _next(answers))
+    with pytest.raises(
+        AssetFetchError,
+        match=r"period 2 of a whole game\): the lookup answered HTTP 204",
+    ):
+        R._pbp(1, None)
+
+
+def test_cba_one_asked_for_period_answering_no_content_is_the_routes_answer(
+    monkeypatch,
+):
+    R = _mod("basketball.cba.cba_runtime")
+    monkeypatch.setattr(R, "_info", lambda sid: {"hostScore": 2, "guestScore": 1})
+    monkeypatch.setattr(R, "_fetch", _no_content)
+    with pytest.raises(_NoContent):  # ``_get`` turns it into {}
+        R._pbp(1, 2)
+
+
+@pytest.mark.parametrize("mod", ["basketball.dbl.sportality_runtime", "hockey.shl.shl_runtime"])
+def test_layout_info_directory_answering_no_content_is_unknown_and_never_cached(monkeypatch, mod):
+    """The layout-info lookup (fetched through a transport passed as an argument) is unknown on a 204; lru_cache
+    never stores it, so the next call fetches again."""
+    R = _mod(mod)
+    R._directory.cache_clear()
+    calls: List[int] = []
+
+    def answer(*args: Any, **kwargs: Any) -> Any:
+        calls.append(1)
+        raise _NoContent("answered HTTP 204: no content")
+
+    monkeypatch.setattr(R, "_fetch", answer)
+    for _ in range(2):
+        with pytest.raises(AssetFetchError, match=_UNKNOWN):
+            R._directory()
+    assert len(calls) == 2
+    R._directory.cache_clear()
+
+
+def test_kbl_final_game_proof_answering_no_content_is_unknown_on_the_header_route(
+    monkeypatch,
+):
+    """The text-cast proves an unfinished-looking game final: a lookup, even for the header route."""
+    R = _mod("basketball.kbl.kbl_runtime")
+    monkeypatch.setattr(R, "_CACHE", {})
+    monkeypatch.setattr(
+        R,
+        "_context",
+        lambda gmkey, header: {"is_ended": 0, "date": "2020-01-01", "totals": {"a": 1}},
+    )
+    monkeypatch.setattr(
+        R,
+        "_fetch",
+        lambda path, *a, **k: _no_content() if "text-cast" in path else {"header": 1},
+    )
+    with pytest.raises(AssetFetchError, match=r"final-game proof\): the lookup answered HTTP 204"):
+        R._get(R.BASE + "/match/S47G01N49")
+
+
+def test_pleague_game_and_box_routes_answer_no_content_as_their_own_empty_answer(
+    monkeypatch,
+):
+    R = _mod("basketball.plg.pleague_runtime")
+    R.clear_cache()
+    monkeypatch.setattr(R, "_page", _no_content)
+    monkeypatch.setattr(R, "_json", _no_content)
+    assert R._get(f"{R.HOST}/game/1") == {}
+    with pytest.raises(AssetFetchError, match=_UNKNOWN):  # the same page as a lookup
+        R.game_record(1)
+    monkeypatch.setattr(R, "game_record", lambda gid: {"gid": gid})
+    assert R._get(f"{R.HOST}/api/boxscore.preciser.php", {"gid": 1}) == {}  # never a stamped empty dict
+    assert R.box_data(1) == {}
+    R.clear_cache()
+
+
+def test_preciser_site_box_check_answering_no_content_is_unknown(monkeypatch):
+    """The site's box verifies a Preciser uuid: a lookup, never a ``KeyError`` on ``{}["data"]``."""
+    R = _mod("basketball.plg.pleague_preciser_runtime")
+    uuid = "e6f98675-3e5b-11ed-949e-5d17350689cf"
+    monkeypatch.setattr(R.SITE, "game_record", lambda gid: {"uuid": uuid})
+    monkeypatch.setattr(R.SITE, "_box_data", _no_content)
+    with pytest.raises(AssetFetchError, match=r"box and summary checks\): the lookup answered HTTP 204"):
+        R._get(f"{R.HOST}/v1/chart-data/id/{uuid}", {"gid": 1})
+
+
+@pytest.mark.parametrize(
+    ("route", "what"),
+    [("_results", "the season index"), ("_standings", "the season index")],
+)
+def test_lkl_season_index_answering_no_content_is_unknown(monkeypatch, route, what):
+    R = _mod("basketball.lkl.lkl_runtime")
+    monkeypatch.setattr(R, "_html", _no_content)
+    with pytest.raises(AssetFetchError, match=rf"{what}\): the lookup answered HTTP 204"):
+        getattr(R, route)(2026)
+
+
+def test_lkl_results_page_answering_no_content_is_unknown(monkeypatch):
+    R = _mod("basketball.lkl.lkl_runtime")
+    monkeypatch.setattr(R, "_season_id", lambda *a: 1)
+    monkeypatch.setattr(
+        R,
+        "_html",
+        lambda url, params=None: _no_content() if "loadResults" in url else "<html/>",
+    )
+    with pytest.raises(AssetFetchError, match=r"page 1 of the results\): the lookup answered HTTP 204"):
+        R._results(2026)
+
+
+def test_magnus_season_lookup_answering_no_content_is_unknown_and_never_cached(
+    monkeypatch,
+):
+    R = _mod("hockey.magnus.magnus_runtime")
+    R._live_seasons.cache_clear()
+    monkeypatch.setattr(R._eh, "_fetch_json", _no_content)
+    with pytest.raises(AssetFetchError, match=r"season lookup\): the lookup answered HTTP 204"):
+        R._live_seasons()
+    assert R._live_seasons.cache_info().currsize == 0
+    R._live_seasons.cache_clear()
+
+
+def test_vhl_game_number_calendar_answering_no_content_is_unknown(monkeypatch):
+    R = _mod("hockey.vhl.vhl_runtime")
+    monkeypatch.setattr(R, "_games", {})
+    monkeypatch.setattr(R, "_page", _no_content)
+    with pytest.raises(AssetFetchError, match=r"game-number check\): the lookup answered HTTP 204"):
+        R._game_number(1374, 5)
+
+
+def test_lkl_page_after_a_full_last_page_answering_no_content_is_unknown(monkeypatch):
+    """A full last page is confirmed by asking for the next one: that request is a lookup too."""
+    R = _mod("basketball.lkl.lkl_runtime")
+    monkeypatch.setattr(R, "_season_id", lambda *a: 1)
+    monkeypatch.setattr(R, "_results_page", lambda text: ([{}] * R.PAGE_SIZE, 1))
+    served: List[Any] = []
+
+    def html(url: str, params: Any = None) -> str:
+        served.append(params)
+        if params and params.get("page") == 2:
+            raise _NoContent("answered HTTP 204: no content")
+        return "<html/>"
+
+    monkeypatch.setattr(R, "_html", html)
+    with pytest.raises(AssetFetchError, match=r"the page after the last full one\): the lookup answered HTTP 204"):
+        R._results(2026)

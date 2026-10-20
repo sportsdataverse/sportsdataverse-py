@@ -697,7 +697,7 @@ NOTES = [
     "and side), team_id (one club team in one season) and club_id (across seasons). player_id is the registry id, "
     "person_id the person behind it.",
     "Errors are HTTP 400 for everything (an unknown id and a bad parameter alike), so the runtime raises "
-    "AssetFetchError for it, never ValueError or an empty frame. List routes default to 150 rows with no truncation "
+    "ValueError for it, never an empty frame. List routes default to 150 rows with no truncation "
     "signal: every list wrapper asks for a large limit and refuses a full page. The play-by-play and box-score "
     "wrappers, the leaderboards, teams, rounds and playing days each make one extra, cached request (the match "
     "header or the competition) to prove the answer is the one asked for and the game is final.",

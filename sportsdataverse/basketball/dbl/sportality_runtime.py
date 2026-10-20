@@ -205,6 +205,7 @@ def _fetch(url: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any) -> 
 
 
 @functools.lru_cache(maxsize=1)
+@_rt._no_content_is_unknown  # a lookup (layout-info): its 204 is unknown, never a cached {} (R4.1b-d-8)
 def _directory() -> Tuple[Dict[Tuple[int, str], Dict[str, Any]], str]:
     """``({(END season, game type): ids + teams}, active ssgt)`` from one layout-info call (cached)."""
     raw = _fetch(f"{BASE}/statistics-v2/layout-info")

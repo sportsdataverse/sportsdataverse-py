@@ -105,7 +105,10 @@ def _int(value: Any) -> Optional[int]:
 @functools.lru_cache(maxsize=1)
 def _live_seasons() -> Dict[int, int]:
     """``{season: competition_id}`` from one ``get_competition_by_type`` request (cached per process)."""
-    body = _get(AJAX_URL, {"action": "get_competition_by_type", "id_type": LIGUE_MAGNUS_TYPE})
+    # a lookup, read past the data getter's {} (an lru_cache never stores a {} made from a 204): unknown
+    params = {"action": "get_competition_by_type", "id_type": LIGUE_MAGNUS_TYPE}
+    with _rt._no_content_unknown(f"{_rt._where(AJAX_URL)} (the season lookup)"):
+        body = _check_ajax(AJAX_URL, _eh._fetch_json(AJAX_URL, params), params)
     out: Dict[int, int] = {}
     for row in _at(body, "data", "data") or []:
         season, cid = _int(_at(row, "saison")), _int(_at(row, "id"))

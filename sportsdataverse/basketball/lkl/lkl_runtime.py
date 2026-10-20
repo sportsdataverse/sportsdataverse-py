@@ -354,14 +354,17 @@ def _season_id(index_html: str, select_id: str, season: int, what: str) -> int:
 
 def _results(season: int) -> Dict[str, Any]:
     index_url = f"{SITE}/rezultatai"
-    index = _html(index_url)
+    with _rt._no_content_unknown(f"{_rt._where(index_url)} (the season index)"):  # a lookup
+        index = _html(index_url)
     sid = _season_id(index, "season-lkl", season, _rt._where(index_url))
     url = f"{SITE}/loadResults"
     q = {"team": "-", "opponent": "-", "month": "-", "season": sid}
     pages: List[str] = []
     last = 1
     while len(pages) < min(last, MAX_PAGES):
-        pages.append(_html(url, {**q, "page": len(pages) + 1}))
+        # several pages make one list: a 204 on any leaves it partial, an unknown answer (R4.1b-d-8)
+        with _rt._no_content_unknown(f"{_rt._where(url)} (page {len(pages) + 1} of the results)"):
+            pages.append(_html(url, {**q, "page": len(pages) + 1}))
         if len(pages) == 1:
             try:
                 last = _results_page(pages[0])[1] or 1
@@ -370,7 +373,8 @@ def _results(season: int) -> Dict[str, Any]:
     after = None
     try:
         if pages and len(_results_page(pages[-1])[0]) == PAGE_SIZE:  # a full last page: confirm nothing follows
-            after = _html(url, {**q, "page": len(pages) + 1})
+            with _rt._no_content_unknown(f"{_rt._where(url)} (the page after the last full one)"):
+                after = _html(url, {**q, "page": len(pages) + 1})
         rec = _page_record("results", sid, index, pages, after)
     except _NotParsed as exc:
         if exc.empty:
@@ -382,7 +386,8 @@ def _results(season: int) -> Dict[str, Any]:
 
 def _standings(season: int) -> Dict[str, Any]:
     index_url = f"{SITE}/turnyrine-lentele"
-    index = _html(index_url)
+    with _rt._no_content_unknown(f"{_rt._where(index_url)} (the season index)"):  # a lookup
+        index = _html(index_url)
     sid = _season_id(index, "season", season, _rt._where(index_url))
     url = f"{SITE}/loadStandings/{sid}"
     text = _html(url)

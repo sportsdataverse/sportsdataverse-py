@@ -260,7 +260,8 @@ def _game(gmkey: str, **kw: Any) -> Tuple[Dict[str, Any], Any, Any]:
             raise AssetFetchError(
                 f"{where}: the game is not final (isEnded={ctx['is_ended']!r}, gameDate={date!r}, points={ctx['totals']})"
             )
-        text = _fetch(f"/match/{gmkey}/text-cast", {"quarterList": QUARTERS}, **kw)
+        with _rt._no_content_unknown(f"{where}/text-cast (the final-game proof)"):  # a lookup, even for the header
+            text = _fetch(f"/match/{gmkey}/text-cast", {"quarterList": QUARTERS}, **kw)
         _check_text_cast(where, ctx, text)  # raises unless it reached the end of the last period
     _CACHE[key] = ctx
     return ctx, header, text

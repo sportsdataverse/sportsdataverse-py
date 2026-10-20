@@ -154,8 +154,10 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Dict[str, An
         game = SITE.game_record(gid)
         if game.get("uuid") != uuid:
             raise AssetFetchError(f"game {gid} on the site has uuid {game.get('uuid')!r}, not {uuid!r}")
-        ctx["game"], ctx["box"] = game, SITE.box_data(gid)["data"]
-        if kind in ("shots", "injury"):  # these two are compared with the summary's team uuids
-            _vendor("summary", "/post/game/summary/o/plg/gameId/", uuid, ctx)
+        # the site's box and (for shots / injury) the summary verify the uuid: lookups, so a 204 is unknown
+        with _rt._no_content_unknown(f"game {gid} (the site box and summary checks)"):
+            ctx["game"], ctx["box"] = game, SITE._box_data(gid)["data"]
+            if kind in ("shots", "injury"):  # these two are compared with the summary's team uuids
+                _vendor("summary", "/post/game/summary/o/plg/gameId/", uuid, ctx)
     data = _vendor(kind, route, uuid, ctx)
     return {"data": data, REQUEST_KEY: {"kind": kind, "uuid": uuid, "verified": gid is not None, "gid": gid}}
