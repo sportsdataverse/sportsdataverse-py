@@ -155,6 +155,22 @@ def test_vocabulary_404_teams_never_trip_the_ban_suspect_abort(tmp_path, error, 
         assert rosters.capture_rosters(2015, league="wbb", root=tmp_path, fetch_fn=fetch, team_ids=teams) == (0, 0, 6)
 
 
+def test_vocabulary_a_404_team_does_not_reset_the_ban_suspect_count(tmp_path):
+    """R4.5-3: four failed teams, a 404, then one more failure is still five failures in a row."""
+
+    def fetch(arg):
+        team = int(str(arg).split("/")[1]) if "/" in str(arg) else int(arg)
+        if team == 5:
+            raise NoDataError("HTTP 404")
+        raise AssetFetchError("pool exhausted")
+
+    teams = [1, 2, 3, 4, 5, 6]
+    with pytest.raises(RuntimeError, match="5 consecutive teams failed"):
+        discover.discover_season(2015, league="wbb", fetch_fn=fetch, team_ids=teams, root=None)
+    with pytest.raises(RuntimeError, match="5 consecutive team failures"):
+        rosters.capture_rosters(2015, league="wbb", root=tmp_path, fetch_fn=fetch, team_ids=teams)
+
+
 def test_vocabulary_team_sweeps_do_not_swallow_a_bug(tmp_path):
     def fetch(arg):
         raise RuntimeError("a parser bug")

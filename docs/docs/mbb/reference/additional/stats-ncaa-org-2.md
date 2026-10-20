@@ -1275,7 +1275,7 @@ optionally aggregates across games.
 | `multi_games` | `bool` | `False` | When `True`, aggregate one row per `(player, clean_name, team)` -- counters summed, `g` = games played, rates recomputed from the sums (R's `multi.games`; grouping adapted per module docstring). |
 | `fetcher` | `Optional[_SupportsFetchIndividualStats]` | `None` | Optional injected fetcher exposing `fetch_game_individual_stats` (for offline replay/tests). Defaults to a fresh `NcaaFetcher.with_browser()` context per call -- stats.ncaa.org sits behind an Akamai challenge that the plain transport cannot clear. |
 | `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is skipped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every player row, plus one row per skipped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...` or `parse_failed: ...`). Not combinable with `multi_games`. |
+| `errors` | `Literal['raise', 'skip']` | `'raise'` | `"raise"` (default): a failed fetch (a ban, an exhausted proxy pool, an uncleared challenge) raises `AssetFetchError`. `"skip"`: it is skipped like a missing game, and the frame gains a `scrape_status` column -- `"ok"` on every player row, plus one row per skipped game (`game_id` and why: `fetch_failed: ...`, `no_data: ...`, `request_error: ...` or `parse_failed: ...`). Not combinable with `multi_games`. |
 
 **Returns**
 

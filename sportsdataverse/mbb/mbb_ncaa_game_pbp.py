@@ -1122,6 +1122,7 @@ def _fetch_and_parse(
     unless ``errors="skip"``; swallowing it made a ban read as a smaller season. A
     missing game (``NoDataError``) or a parser crash keeps R's tryCatch(-> NULL) parity.
     """
+    html = None
     try:
         html = fetcher.fetch_game_pbp(game_id)
         df = parse_ncaa_bb_game_pbp(html, str(game_id), period_model=_resolve_period_model(period_model, html))
@@ -1132,8 +1133,19 @@ def _fetch_and_parse(
         return _empty_pbp(), f"fetch_failed: {exc}"
     except Exception as exc:  # R tryCatch(-> NULL) parity (:1870-1872)
         logger.exception("scrape failed for game id %s", game_id)
-        return _empty_pbp(), f"{'no_data' if isinstance(exc, NoDataError) else 'parse_failed'}: {exc}"
+        return _empty_pbp(), f"{_failure_kind(exc, fetched=html is not None)}: {exc}"
     return df, "ok" if df.height else "empty"
+
+
+def _failure_kind(exc: BaseException, *, fetched: bool) -> str:
+    """``scrape_status`` label for a game dropped on a non-``AssetFetchError`` exception.
+
+    ``request_error``: the fetch itself raised, e.g. the fetch layer's ``ValueError`` for an
+    HTTP 400 / 422 -- not a parser problem, so it must not read as ``parse_failed``.
+    """
+    if isinstance(exc, NoDataError):
+        return "no_data"
+    return "parse_failed" if fetched else "request_error"
 
 
 def _with_status(out: pl.DataFrame, removed: "list[tuple[str, str]]") -> pl.DataFrame:
@@ -1330,7 +1342,8 @@ def ncaa_mbb_play_by_play(
             ``"skip"``: it is dropped like a missing game, and the frame gains a
             ``scrape_status`` column -- ``"ok"`` on every play row, plus one row per
             dropped game (``game_id`` and why: ``fetch_failed: ...``,
-            ``no_data: ...``, ``parse_failed: ...`` or ``empty``).
+            ``no_data: ...``, ``request_error: ...``, ``parse_failed: ...``
+            or ``empty``).
 
     Returns:
         Row-bound play-by-play for every game that scraped successfully

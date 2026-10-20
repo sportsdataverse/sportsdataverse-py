@@ -60,6 +60,7 @@ def test_atomic_write_success_leaves_only_the_json(tmp_path):
         ({"code": 500, "message": "Internal Server Error", "extra": 1}, True),
         ({"code": "ABC", "message": "a data field that happens to be named code"}, False),
         ({"code": True, "message": "a bool is not an HTTP status"}, False),
+        ({"code": 200, "items": []}, False),  # an int code alone is not an error body: "message" is required
         (PAYLOAD, False),
     ],
 )
@@ -115,6 +116,19 @@ def test_parse_errors_marker_makes_the_stage_exit_non_zero(tmp_path, monkeypatch
         assert exc.value.code == exit_code
     written = (tmp_path / "wbb" / "json" / "385627.json").read_text(encoding="utf-8")
     assert ('"parse_errors"' in written) is crash  # the game is written either way
+
+
+def test_parse_errors_marker_a_bundle_that_cannot_be_read_also_exits_non_zero(tmp_path, monkeypatch):
+    raw = tmp_path / "wbb" / "raw" / "2015"
+    raw.mkdir(parents=True)
+    shutil.copy(BUNDLE_GZ, raw / BUNDLE_GZ.name)
+    (raw / "385628.json.gz").write_bytes(BUNDLE_GZ.read_bytes()[:100])  # a truncated bundle
+    monkeypatch.setattr(sys, "argv", ["ncaa_parse", "--root", str(tmp_path), "--league", "wbb"])
+    with pytest.raises(SystemExit) as exc:
+        parse._main("wbb", str(tmp_path))
+    assert exc.value.code == 1
+    assert (tmp_path / "wbb" / "json" / "385627.json").exists()  # the readable one is still parsed
+    assert not (tmp_path / "wbb" / "json" / "385628.json").exists()
 
 
 # --- B-L3: a crosswalk written in this process is read back -------------------------------------

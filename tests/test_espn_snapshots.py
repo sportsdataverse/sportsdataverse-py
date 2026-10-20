@@ -545,6 +545,29 @@ def test_one_failed_team_warns_and_keeps_the_other_teams(monkeypatch):
     assert df.height == 39 * 2
 
 
+def test_a_parser_bug_is_not_swallowed_as_a_failed_team(monkeypatch):
+    """R4.5-5: only the two fetch errors are skipped; a bug in the parse step propagates."""
+    import sportsdataverse.espn_snapshots as mod
+
+    raw = load_fixture("espn", "depthcharts_nba")
+    odd = {"odd": "team 2's payload"}
+    monkeypatch.setattr(
+        "sportsdataverse.nba.espn_nba_team_depthcharts",
+        lambda team_id, return_parsed=False: odd if team_id == "2" else raw,
+    )
+    real = mod.parse_depthchart_snapshot
+
+    def buggy(payload, **kwargs):
+        if payload is odd:
+            raise KeyError("athletes")
+        return real(payload, **kwargs)
+
+    monkeypatch.setattr(mod, "parse_depthchart_snapshot", buggy)
+    # team 1 parses fine, so a catch-all would warn and return team 1 instead of raising
+    with pytest.raises(KeyError, match="athletes"):
+        espn_depthcharts_snapshot("nba", team_ids=[1, 2], as_of_date=STAMP, request_delay=0)
+
+
 def test_every_team_failing_raises_instead_of_an_empty_day(monkeypatch):
     from sportsdataverse.errors import AssetFetchError
 

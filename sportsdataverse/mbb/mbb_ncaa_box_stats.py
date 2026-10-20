@@ -379,8 +379,10 @@ def _scrape_many(
     frames: "list[pl.DataFrame]" = []
     removed: "list[str]" = []
     for gid in game_ids:
+        html = None
         try:
-            df = parse_ncaa_bb_box(fetcher.fetch_game_individual_stats(gid), gid)
+            html = fetcher.fetch_game_individual_stats(gid)
+            df = parse_ncaa_bb_box(html, gid)
         except Exception as exc:  # R tryCatch: report and continue (a failed fetch re-raises below)
             if isinstance(exc, AssetFetchError) and errors == "raise":
                 raise
@@ -393,6 +395,8 @@ def _scrape_many(
                     else "no_data"
                     if isinstance(exc, NoDataError)
                     else "parse_failed"
+                    if html is not None
+                    else "request_error"  # the fetch raised, e.g. a 400 / 422 ValueError
                 )
                 frames.append(pl.DataFrame({"game_id": [gid], "scrape_status": [f"{kind}: {exc}"]}))
             continue
@@ -465,7 +469,7 @@ def ncaa_mbb_box_scores(
             ``"skip"``: it is skipped like a missing game, and the frame gains a
             ``scrape_status`` column -- ``"ok"`` on every player row, plus one row per
             skipped game (``game_id`` and why: ``fetch_failed: ...``,
-            ``no_data: ...`` or ``parse_failed: ...``). Not combinable with
+            ``no_data: ...``, ``request_error: ...`` or ``parse_failed: ...``). Not combinable with
             ``multi_games``.
 
     Returns:
@@ -513,6 +517,8 @@ def ncaa_mbb_box_scores(
     else:
         frames = _scrape_many(ids, fetcher, errors)
 
+    if errors == "skip":
+        frames = [_empty_frame(), *frames]  # the contract columns even when every game was skipped
     df = pl.concat(frames, how="diagonal_relaxed") if frames else _empty_frame()
     if multi_games:
         df = _aggregate_multi_games(df)
