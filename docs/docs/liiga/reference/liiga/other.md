@@ -30,6 +30,14 @@ Current state of the league: game week of the season in progress and its last ga
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#liiga_tournament-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#liiga_tournament-example}
 
 ```python
@@ -119,6 +127,14 @@ Every game of a season and tournament: teams, score, xG, power plays, periods an
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#liiga_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#liiga_games-example}
 
 ```python
@@ -178,6 +194,14 @@ Every goal of a season and tournament: scorer, assists, strength codes and skate
 | `minus_jerseys` | character | Jersey NUMBERS of the other team's skaters on ice for the goal, space-separated. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#liiga_goals-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#liiga_goals-example}
 
@@ -244,6 +268,14 @@ Schedule of a season and tournament: game ids, teams, goals, xG, start and rink.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#liiga_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#liiga_schedule-example}
 
 ```python
@@ -276,6 +308,14 @@ Number of game weeks of a season and tournament.
 | `nb_weeks` | integer | Number of game weeks. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#liiga_gameweeks-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#liiga_gameweeks-example}
 
@@ -362,6 +402,14 @@ One game's header: teams, score, xG, power plays, periods, rink, referees and at
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#liiga_game-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#liiga_game-example}
 
 ```python
@@ -406,6 +454,14 @@ One game's shots with rink-image coordinates (pixels), shooter, blocker and skat
 | `other_team_players_on_ice` | integer | Defending team's skaters on ice. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#liiga_shotmap-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#liiga_shotmap-example}
 
@@ -484,6 +540,14 @@ Standings of a season: regular season, playoffs, preseason, playout and qualific
 | `win_percentage` | numeric | Share of games won, a 0-1 FRACTION sent as a STRING (e.g. "0.583"), season to date. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#liiga_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. Liiga has nothing for the request (an unknown game, a tournament not played that season, a shot map before 2016). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#liiga_standings-example}
 

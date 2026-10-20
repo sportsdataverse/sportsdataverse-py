@@ -76,9 +76,9 @@ def wjbl_leagues(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -138,9 +138,9 @@ def wjbl_game_months(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -204,9 +204,9 @@ def wjbl_schedule(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -268,9 +268,9 @@ def wjbl_game(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -330,9 +330,9 @@ def wjbl_period_scores(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -392,9 +392,9 @@ def wjbl_game_info(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -454,9 +454,9 @@ def wjbl_box_score(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -516,9 +516,9 @@ def wjbl_team_box_score(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -578,9 +578,9 @@ def wjbl_pbp(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -640,9 +640,9 @@ def wjbl_team_period_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -702,9 +702,9 @@ def wjbl_player_period_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -762,9 +762,9 @@ def wjbl_standing_seasons(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -822,9 +822,9 @@ def wjbl_team_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -884,9 +884,9 @@ def wjbl_head_to_head(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -946,9 +946,9 @@ def wjbl_team_ranking(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1006,9 +1006,9 @@ def wjbl_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1068,9 +1068,9 @@ def wjbl_roster(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1133,9 +1133,9 @@ def wjbl_staff(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1196,9 +1196,9 @@ def wjbl_player(
         A polars/pandas DataFrame by default; the raw body (``dict``): the route's JSON (a bare list as ``{'items': [...]}``) plus ``_request`` (the ids asked for, with ``season`` the END year) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
-        ValueError: a season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an empty list, an id it does not know, a game without play-by-play before 2018-19, a season without months or games).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is unknown or partial: an error envelope (HTTP 200), any other non-2xx, a game that is not final, a truncated play-by-play, or a body for another game, league edition, month, team, season phase or player than the one asked for.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A season that is not the END year of a W League edition, an id that is not an integer, a game_month that is not YYYY-MM (raised before the request), or the API's HTTP 400 / 422.
 
     Example:
         Quick start::

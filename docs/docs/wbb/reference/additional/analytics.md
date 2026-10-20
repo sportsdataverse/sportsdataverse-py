@@ -1,10 +1,10 @@
 ---
-title: "WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology"
-sidebar_label: "Analytics: ConcurrentClump–wbb_bracketology"
+title: "WBB — additional Python functions — Analytics: ConcurrentClump–using_roster"
+sidebar_label: "Analytics: ConcurrentClump–using_roster"
 sidebar_position: 10
-description: "WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — Analytics: ConcurrentClump–using_roster — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — Analytics: ConcurrentClump–wbb_bracketology
+# WBB — additional Python functions — Analytics: ConcurrentClump–using_roster
 
 ### ConcurrentClump {#ConcurrentClump}
 
@@ -547,6 +547,12 @@ result, matching upstream's "don't bother for all_lineups" comment.
 
 The aggregated team-total `LineupStatSet`, including a nested `all_lineups` key holding the `rapmRemove`-lineups-plus-team-total composite sub-aggregate.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | Propagated from `weighted_avg` / `complete_weighted_avg` if any lineup (or the accumulator) carries a `game_info` key -- see their docstrings. |
+
 **Example**
 
 ```python
@@ -667,6 +673,12 @@ than dividing their own weighted sum.
 **Returns**
 
 None. `mutable_acc` is mutated in place.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | If `mutable_acc` carries a `game_info` key -- that finishing branch is deliberately deferred (see module docstring). Not reachable via `calculate_aggregated_lineup_stats` today since `weighted_avg` already raises before a `game_info` key can land on the accumulator. |
 
 **Example**
 
@@ -949,6 +961,12 @@ input list) is deleted as a side effect while building the roster --
 **Returns**
 
 `{"playerMap": {code: id}, "players": [...], "error_code": ...}`. Each entry in `players` is `{"playerId", "playerCode", "teammates", "on", "off", "replacement"}` -- `on`/`off` are finished `LineupStatSet` averages (or, for a player who's always ON, an all-zero `off`); `replacement` is `None` unless `inc_replacement=True`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NotImplementedError` | Propagated from `weighted_avg` / `complete_weighted_avg` if any lineup carries a `game_info` key -- not exercised by this module's oracle fixtures (see module docstring). |
 
 **Example**
 
@@ -1529,6 +1547,12 @@ left at `0` to avoid widespread changes.
 
 The regressed feature value (or `stat` unchanged when the feature is not regressed, volume is sufficient, or the center-3s carve-out fires).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `player` lacks `total_off_fga` (faithful to the TS, which throws on the same missing field). |
+
 **Example**
 
 ```python
@@ -1563,6 +1587,12 @@ Per-team SoS + Quad 1-4 record + WAB from completed games and ratings.
 One row per (season, team_id): `season, team_id, sos, sos_rank, wab, quad1_w .. quad4_l, quality_wins`. `sos` is the mean opponent `adj_em` (rank 1 = hardest schedule); quads follow the NET venue-adjusted opponent-rank thresholds; `quality_wins` is Quad-1 + Quad-2 wins; `wab` is actual wins minus a bubble-quality team's expected wins against the same schedule. Empty input returns the schema with zero rows.
 
 No returns table is published for this function: no capture: it raises a join-key dtype mismatch on every real season (the schedule's home_team_id is Int32, the ratings' team_id is String).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the team-id dtypes of `results` and `ratings` disagree. |
 
 **Example**
 
@@ -1637,33 +1667,4 @@ A `(position, info)` tuple. `info` is `None` when no correction/explanation appl
 ```python
 from sportsdataverse.mbb.mbb_positions import using_roster_pos
 using_roster_pos("G?", "C")
-```
-
-### wbb_bracketology {#wbb_bracketology}
-
-`wbb_bracketology(season: 'int', *, as_of_date: 'Union[datetime.date, None]' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
-
-Women's projected tournament field for a season.
-
-Delegates to `sportsdataverse.mbb.mbb_bracketology.mbb_bracketology` with `league="womens"` (WBB loaders + women's constants).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `int` |  | Season to project (e.g. `2024`). |
-| `as_of_date` | `Union[date, None]` | `None` | Only use games strictly before this date; `None` uses every completed game. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per team: `season, team_id, resume_score, projected_seed, at_large_prob, auto_bid, bid` -- see the mbb core for the full contract.
-
-No returns table is published for this function: no capture: it raises a join-key dtype mismatch on every real season (the schedule's home_team_id is Int32, the ratings' team_id is String).
-
-**Example**
-
-```python
-from sportsdataverse.wbb import wbb_bracketology
-field = wbb_bracketology(2024)
 ```

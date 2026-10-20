@@ -100,9 +100,6 @@ def parse_espn_content(
         JSON-encoded. A zero-row frame when the payload is ``None``, empty or
         malformed.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 

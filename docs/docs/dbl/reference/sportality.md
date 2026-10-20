@@ -37,6 +37,13 @@ toc_max_heading_level: 2
 | [sportality_game_overview](sportality/game.md#sportality_game_overview) | Score, state, clock and the Genius ids of one game (2023/24 on). |
 | [sportality_game_summary](sportality/game.md#sportality_game_summary) | Points per period, team comparison and best scorers (2023/24 on). |
 
+## Player
+
+| Function | Summary |
+|---|---|
+| [sportality_player_box](sportality/player.md#sportality_player_box) | Box score with jersey and Genius shirt numbers (2023/24 on). |
+| [sportality_player_h2h](sportality/player.md#sportality_player_h2h) | Player head-to-head of a matchup with per-game and season lines. |
+
 ## Team
 
 | Function | Summary |
@@ -55,8 +62,6 @@ toc_max_heading_level: 2
 | [sportality_layout_info](sportality/other.md#sportality_layout_info) | Directory of every ssgt (season + series + game type) with its teams, and the stats modules. |
 | [sportality_next_game_day](sportality/other.md#sportality_next_game_day) | Games of the next match day of an ssgt. |
 | [sportality_pbp](sportality/other.md#sportality_pbp) | Play-by-play events with shot coordinates and the Genius ids (2023/24 on). |
-| [sportality_player_box](sportality/other.md#sportality_player_box) | Box score with jersey and Genius shirt numbers (2023/24 on). |
-| [sportality_player_h2h](sportality/other.md#sportality_player_h2h) | Player head-to-head of a matchup with per-game and season lines. |
 | [sportality_post_game_team_stats](sportality/other.md#sportality_post_game_team_stats) | Post-game team comparison (2023/24 on). |
 | [sportality_roster](sportality/other.md#sportality_roster) | Current roster of a team, grouped by position. |
 | [sportality_schedule](sportality/other.md#sportality_schedule) | Schedule and results of one season + series + game type. |

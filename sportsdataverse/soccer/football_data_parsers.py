@@ -64,9 +64,7 @@ def parse_football_data(
         payload is ``None``, blank or header-only. Text that is not CSV cannot be
         recognised as such -- a one-line HTML body is a valid one-column CSV -- so
         the runtime rejects an HTML response before it reaches here.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
+        Malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::

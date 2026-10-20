@@ -33,8 +33,8 @@ What the live API does (sdv-internal-refs ``kbl/``, probed 2026-10-12):
   bracket and round-MVP ``seasonCode``; schedule dates inside the window. ``/leagues/{glkey}/stats/players`` and
   ``team-tracks`` echo no season (team-tracks rounds are checked against the season's dates), and the current-season
   routes (``/league/rank/team``, ``/league/season-leader``, ``/players``) have no parameter to check.
-* **Nothing here** is ``NoDataError``: an empty list, a final game with no shot chart (none before 2006-07), no
-  schedule rows in a window.
+* **Nothing here** is ``NoDataError``: an empty list, a final game with no box score, no bracket, no rounds, no
+  schedule rows in a window. A final game with no shot chart (none before 2006-07) is not: it parses to zero rows.
 
 The text-cast always asks for ``quarterList=Q1,Q2,Q3,Q4,EQ1,EQ2,EQ3,EQ4``: without it only the last period comes back.
 """
@@ -460,8 +460,8 @@ def _get(url: str, params: Optional[dict] = None, **kwargs: Any) -> Any:
         :data:`REQUEST_KEY`; a bare list comes back as ``{"items": [...], "_request": {...}}``.
 
     Raises:
-        NoDataError: the API has nothing for the request (an empty list, a final game with no box score or shot
-            chart, no bracket, no rounds).
+        NoDataError: the API has nothing for the request (an empty list, a final game with no box score, no bracket,
+            no rounds). An empty shot chart (before 2006-07) is not an error: it parses to zero rows.
         ValueError: a malformed ``gmkey``, a ``season`` that is not an END year between 1997 and 2027, an unknown
             ``division`` or ``game_code``, or bad ``/match/list`` dates (raised before any request).
         AssetFetchError: any other failure: a non-2xx (the unknown-id 500 included), an empty or non-JSON body, the

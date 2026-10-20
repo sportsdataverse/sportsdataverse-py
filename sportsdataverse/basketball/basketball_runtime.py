@@ -13,7 +13,7 @@ datacenter IPs). The proxy URL can carry credentials, so it is never logged or p
 503 / 504) unless the provider uses 500 for a deterministic answer, in which case retrying only adds load. Not
 retried, because their refs captures show 500 for an unknown or rejected id, body or parameter: ``cba`` (a body it
 dislikes), ``cebl``, ``easl`` (an unknown fixture), ``fiba_hub`` (a missing parameter), ``genius`` (the 402-byte
-"A website error has occurred" page), ``ibba`` (the ASMX stack trace), ``kbl``, ``lba``, ``dbl`` (sportality),
+"A website error has occurred" page: intermittent, but sticky per URL, so an immediate retry fails too), ``ibba`` (the ASMX stack trace), ``kbl``, ``lba``, ``dbl`` (sportality),
 ``plg`` (both specs: an unknown id) and ``tbf``; ``tpbl`` retries 500 except on the player game log (an unknown
 ``division_id``). Retried: ``aba``, ``acb``, ``bleague``, ``bnxt``, ``feb``, ``lkl``, ``scb`` and the families on the package default (``atrium``,
 ``kzs``, ``nbl_au``, ``vtb``, ``wjbl``), whose captures show no 500 for an unknown id. A new family follows
@@ -147,11 +147,10 @@ def _get(url: str, params: Optional[dict] = None, *, proxy_env: Optional[str] = 
     proxy = proxy_from_env(proxy_env) if proxy_env else None
     if proxy is None:
         return _rt._get(url, params, **kwargs)
-    clean = {k: v for k, v in (params or {}).items() if v is not None}
     kwargs.setdefault("proxy", proxy)
     kwargs.setdefault("logger", _QUIET)
-    try:
-        return _rt._download_json(_rt.download, url, params=clean, **kwargs)
+    try:  # the shared getter: drops None params and maps a ``json`` body to download's ``json_body``
+        return _rt._get(url, params, **kwargs)
     except AssetFetchError as exc:
         cause = type(exc.__cause__).__name__ if exc.__cause__ is not None else "a non-2xx or unreadable answer"
         raise AssetFetchError(f"{_rt._where(url)}: the fetch through {proxy_env} failed ({cause})") from None

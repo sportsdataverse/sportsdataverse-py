@@ -4,6 +4,12 @@ Block-REPLACE is wrong here -- two generators contribute to the same loader
 (adv_* vocabulary plus the cfb-rest tail), so replacing the block makes the
 second generator erase the first one's columns. Existing entries win, so a
 hand-authored description is never clobbered by a composed one.
+
+``--replace``: the snippet's entries win instead (columns the snippet does not
+name are still kept). Use it for a generator-OWNED snippet such as
+``notes/cba_descriptions.yaml``, whose rows change when the generator does.
+
+Run: ``python tools/codegen/merge_column_descriptions.py [--replace] <snippet.yaml>...``
 """
 
 import re
@@ -11,7 +17,8 @@ import sys
 import pathlib
 import yaml
 
-files = sys.argv[1:]
+replace = "--replace" in sys.argv[1:]
+files = [a for a in sys.argv[1:] if a != "--replace"]
 new = {}
 for f in files:
     for k, v in (yaml.safe_load(pathlib.Path(f).read_text(encoding="utf-8")) or {}).items():
@@ -19,7 +26,7 @@ for f in files:
 
 p = pathlib.Path("tools/codegen/manual_column_descriptions.yaml")
 cur = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
-added = 0
+added = changed = 0
 for k, cols in new.items():
     # `or {}` not `.get(k, {})`: a loader can be present in the yaml with an
     # EMPTY block, which yaml parses to None. The two-arg default only covers a
@@ -29,6 +36,9 @@ for k, cols in new.items():
         if c not in have:
             have[c] = d
             added += 1
+        elif replace and have[c] != d:
+            have[c] = d
+            changed += 1
     cur[k] = have
 
 
@@ -55,4 +65,4 @@ while i < len(lines):
     i += 1
 block = "".join(dump(k) for k in sorted(new) if k not in placed and cur.get(k))
 p.write_text("".join(out).replace("\nload_contracts:", "\n" + block + "load_contracts:", 1), encoding="utf-8")
-print(f"additively merged: +{added} new entries across {len(new)} loaders")
+print(f"merged: +{added} new, {changed} replaced entries across {len(new)} loaders")

@@ -50,7 +50,7 @@ def kalshi_event(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -108,7 +108,7 @@ def kalshi_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -161,7 +161,7 @@ def kalshi_exchange_status(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -211,7 +211,7 @@ def kalshi_market(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -265,7 +265,7 @@ def kalshi_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -321,7 +321,7 @@ def kalshi_orderbook(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -373,7 +373,7 @@ def kalshi_series(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -423,7 +423,7 @@ def kalshi_series_list(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -479,7 +479,7 @@ def kalshi_trades(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Kalshi answered 404 (unknown series, event or market ticker).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Kalshi answered 404 (unknown series, event or market ticker).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

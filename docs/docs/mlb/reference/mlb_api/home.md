@@ -110,6 +110,14 @@ View a home run derby object based on gamePk.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_home_run_derby-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_home_run_derby-example}
 
 ```python
@@ -221,6 +229,14 @@ View a home run derby object based on bracket.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#mlb_home_run_derby_bracket-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#mlb_home_run_derby_bracket-example}
 
 ```python
@@ -331,6 +347,14 @@ View a home run derby object based on pool.
 | `current_team_parent_org_id` | double | The MLB Stats API numeric identifier for the parent organization of the pool participant's current team. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#mlb_home_run_derby_pool-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#mlb_home_run_derby_pool-example}
 
