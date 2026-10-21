@@ -2,9 +2,12 @@
 # Measured on the 1.2 branch point (36f7a02f1b). Rows are keyed on (file, scope, snippet) -- never a line
 # number -- with the exact count. id: the finding, or C-T3, the tier-C era-literal class, when the literal
 # has no graded finding of its own. rule: the sdv-internal-refs rules/*.yaml id, when the catalogue has one.
-# The list may only shrink: main's #778 removed the C-H4 touchback rows (_KICKOFF_2012_RULES_FROM); plan task
-# 3.11 removes the other CFB/NFL processor rows. A literal that moves into a constant fails the gate until its
-# row's count is lowered to the inline occurrences left, or the row is deleted when none remain.
+# The list may only shrink: main's #778 removed the C-H4 touchback rows (now cfb/model_vars.py
+# TOUCHBACK_YARDLINE_BY_SEASON, plan task 3.1); plan task 3.11 moved the CFB processor era cuts
+# (cfb/model_vars.py CFB_MODEL_ERA_CUTS, CFB_ESPN_TRY_ON_TD_ROW_FROM, CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM)
+# and the NFL nflfastR era bins (nfl/model_vars.py ERA_SEASON_CUTS) out, 71 -> 21 rows. A literal that moves
+# into a constant fails the gate until its row's count is lowered to the inline occurrences left, or the row
+# is deleted when none remain.
 - file: sportsdataverse/basketball/nbl_au/nbl_rosetta_runtime.py
   scope: 'start_year'
   snippet: 'season <= 1998'
@@ -12,73 +15,17 @@
   id: C-T3
   reason: 'Rosetta keys the NBL / WNBL winter seasons through 1998 by calendar year, then by START year; landed with main''s #859, reached this branch in the 10-18 main sync; no catalogue rule yet'
 - file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_play_type_flags'
-  snippet: 'pl.col("season") >= 2018'
-  count: 1
-  id: C-T3
-  rule: cfb-2018-kickoff-fair-catch-touchback
-  reason: 'a kickoff fair catch is a touchback from 2018. Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_xp_suffix_cols'
-  snippet: 'pl.col("season") >= 2014'
-  count: 1
-  id: C-T3
-  rule: cfb-2014-espn-participants-and-text-template
-  reason: 'the folded-try suffix gate keys on ESPN''s 2014 text template. Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__add_xp_suffix_cols'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: cfb-2014-espn-participants-and-text-template
-  reason: 'through 2013 the try is its own "Extra point by X is good" row (ESPN''s pre-2014 text template); landed with main''s #771 (81f9718458), reached this branch in the main sync. Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.__process_wpa'
-  snippet: 'pl.col("season") <= 2013'
-  count: 4
-  id: C-T3
-  rule: cfb-2014-model-era-cut
-  reason: 'WP-input era cut at 2014 (first-down era flags and the <= 2013 score-difference adjustment). Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.create_box_score'
-  snippet: '2006 < _qbr_season <= 2013'
-  count: 1
-  id: C-T3
-  rule: cfb-2007-model-era-cut
-  reason: 'QBR era one-hots (cuts 2006 / 2013 / 2020: cfb-2007-, cfb-2014-, cfb-2021-model-era-cut). Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.create_box_score'
-  snippet: '2013 < _qbr_season <= 2020'
-  count: 1
-  id: C-T3
-  rule: cfb-2007-model-era-cut
-  reason: 'QBR era one-hots (cuts 2006 / 2013 / 2020: cfb-2007-, cfb-2014-, cfb-2021-model-era-cut). Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.create_box_score'
-  snippet: '_qbr_season <= 2006'
-  count: 1
-  id: C-T3
-  rule: cfb-2007-model-era-cut
-  reason: 'QBR era one-hots (cuts 2006 / 2013 / 2020: cfb-2007-, cfb-2014-, cfb-2021-model-era-cut). Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
-  scope: 'CFBPlayProcess.create_box_score'
-  snippet: '_qbr_season > 2020'
-  count: 1
-  id: C-T3
-  rule: cfb-2007-model-era-cut
-  reason: 'QBR era one-hots (cuts 2006 / 2013 / 2020: cfb-2007-, cfb-2014-, cfb-2021-model-era-cut). Plan task 3.11'
-- file: sportsdataverse/cfb/cfb_pbp.py
   scope: '_derive_special_teams_from_field_position'
   snippet: 'pl.col("season") <= 2004'
   count: 1
   id: C-T3
-  reason: '2004 feeds spot every kickoff from the 35 (65 to go); no catalogue rule yet. Plan task 3.11'
+  reason: '2004 feeds spot every kickoff from the 35 (65 to go): a feed quirk with no rules/cfb.yaml entry (cfb-2004-release-coverage-floors is the loader floor), so task 3.11 left it inline'
 - file: sportsdataverse/cfb/cfb_pbp.py
   scope: '_derive_special_teams_from_field_position'
   snippet: 'pl.col("season") > 2004'
   count: 2
   id: C-T3
-  reason: '2004 feeds spot every kickoff from the 35 (65 to go); no catalogue rule yet. Plan task 3.11'
+  reason: '2004 feeds spot every kickoff from the 35 (65 to go): a feed quirk with no rules/cfb.yaml entry (cfb-2004-release-coverage-floors is the loader floor), so task 3.11 left it inline'
 - file: sportsdataverse/football/attribution.py
   scope: 'add_attribution_cols'
   snippet: 'pl.col("season") >= 2014'
@@ -107,244 +54,6 @@
   rule: nfl-2019-cbs-play-ids-gsis
   reason: 'CBS play ids carry GSIS ids from 2019'
 - file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_cp_features'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_cp_features'
-  snippet: 'pl.col("season") <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_cp_features'
-  snippet: 'pl.col("season") > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_cp_features'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_cp_features'
-  snippet: 'pl.col("season") > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") <= 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") <= 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") > 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_ep_features'
-  snippet: 'pl.col("season") > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_xyac_features'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_xyac_features'
-  snippet: 'pl.col("season") <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_xyac_features'
-  snippet: 'pl.col("season") > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_xyac_features'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_espn_xyac_features'
-  snippet: 'pl.col("season") > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_cp_mutations'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_cp_mutations'
-  snippet: 'pl.col("season") <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_cp_mutations'
-  snippet: 'pl.col("season") > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_cp_mutations'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_cp_mutations'
-  snippet: 'pl.col("season") > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") <= 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") <= 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") > 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: '_make_model_mutations'
-  snippet: 'pl.col("season") > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: 'calculate_xpass'
-  snippet: 'pl.col("season") <= 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: 'calculate_xpass'
-  snippet: 'pl.col("season") <= 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
-  scope: 'calculate_xpass'
-  snippet: 'pl.col("season") > 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots (cuts 2001 / 2005 / 2013 / 2017), inline in six functions beside model_vars.ERA_SEASON_CUTS'
-- file: sportsdataverse/nfl/ep_wp.py
   scope: 'calculate_xpass'
   snippet: 'pl.col("season") >= 2006'
   count: 1
@@ -370,62 +79,6 @@
   count: 2
   id: C-T3
   reason: 'nflfastR clean_pbp name fix: ''Van Pelt'' is A.Van Pelt through 2003, B.Van Pelt after (a roster fact, not a rule)'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season <= 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season <= 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season <= 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season <= 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season > 2001'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season > 2005'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season > 2013'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
-- file: sportsdataverse/nfl/nfl_fourth_down.py
-  scope: '_prepare'
-  snippet: 'season > 2017'
-  count: 1
-  id: C-T3
-  rule: nfl-2002-nflfastr-era-bins
-  reason: 'nflfastR era one-hots for the fourth-down models'
 - file: sportsdataverse/nfl/nfl_ngs.py
   scope: 'scrape_ngs_season'
   snippet: 'season >= 2021'
@@ -438,7 +91,7 @@
   snippet: 'pl.col("season") <= 2013'
   count: 3
   id: C-T3
-  reason: 'defensive-score EP adjustment era cut at 2014 (the CFB twin is in __process_wpa). Plan task 3.11'
+  reason: 'the +0.92 expected-try adjustment while ESPN writes the try as its own row (through 2013), ported from the CFB processor, whose twin reads cfb/model_vars.py CFB_ESPN_TRY_ON_TD_ROW_FROM; no rules/nfl.yaml entry yet, so it stays inline'
 - file: sportsdataverse/nfl/nfl_roster_builder.py
   scope: '_relocate_team'
   snippet: 'season >= 2016'

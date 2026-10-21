@@ -15,7 +15,9 @@
     2004,
     2025
   ],
-  "n_training_rows": 2219971,
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/model_training/cli.py train-fg on the rows of the training_frame (artifacts/pbp_full_v2.parquet: 22 seasons, 2004-2025, 2,219,971 rows) that fg_matrix(era_onehot=True) (field-goal attempts, yards_to_goal 1-55) keeps; no season was withheld, so every 2004-2025 score this booster produces is in-sample. n_training_rows = 42,617 is computed: that filter applied to the frame (the card previously carried the frame height). Out-of-season error is measured by leave-one-season-out CV (model_training/validate.py loso_cv), not by a holdout of this artifact.",
+  "n_training_rows": 42617,
   "hyperparameters": {
     "objective": "binary:logistic",
     "eval_metric": "logloss",

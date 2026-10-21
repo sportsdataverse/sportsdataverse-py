@@ -1386,7 +1386,6 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "fox.fox_api_parsers.parse_fox_api_search": {"list": AssertionError},
     "fox.fox_api_parsers.parse_fox_api_standings": {"list": AssertionError},
     "fox.fox_api_parsers.parse_fox_api_trending": {"list": AssertionError},
-    "hockeytech._parsers.parse_game_info": {"list": AttributeError},
     "hockeytech._parsers.parse_game_summary": {
         "dict": AssertionError,
         "empty_str": AssertionError,
@@ -1396,9 +1395,7 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     },
     "hockeytech._parsers.parse_leaders": {"list": AttributeError},
     "hockeytech._parsers.parse_pbp": {"list": AssertionError},
-    "hockeytech._parsers.parse_player_box": {"list": AttributeError},
     "hockeytech._parsers.parse_player_game_log": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_info": {"list": AttributeError},
     "hockeytech._parsers.parse_player_search": {"list": AttributeError},
     "hockeytech._parsers.parse_player_stats": {"list": AttributeError},
     "hockeytech._parsers.parse_playoff_bracket": {"list": AttributeError},

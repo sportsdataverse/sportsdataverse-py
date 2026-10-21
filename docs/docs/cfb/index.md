@@ -17,7 +17,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 | [247Sports Recruit Database](#247sports-recruit-database) | `247sports.com`, `ipa.247sports.com` | 47 | none |
 | [Yahoo Sports Shangrila](#yahoo-sports-shangrila) | `graphite-secure.sports.yahoo.com` | 7 | none |
 | [Fox Sports API](#fox-sports-api) | `api.foxsports.com` | 29 | none |
-| [Additional functions](reference/additional) | hand-written wrappers & helpers | 105 | — |
+| [Additional functions](reference/additional) | hand-written wrappers & helpers | 107 | — |
 
 ## ESPN {#espn}
 
@@ -94,11 +94,13 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
 - [`cfb_field_position`](reference/additional/models-and-calculators-2#cfb_field_position)
+- [`cfb_kickoff_out_of_bounds_spot_expr`](reference/additional/models-and-calculators-2#cfb_kickoff_out_of_bounds_spot_expr)
 - [`cfb_predict_games`](reference/additional/models-and-calculators-2#cfb_predict_games)
 - [`cfb_ratings`](reference/additional/models-and-calculators-2#cfb_ratings)
 - [`cfb_recruiting_projection`](reference/additional/models-and-calculators-2#cfb_recruiting_projection)
 - [`cfb_roster_talent`](reference/additional/models-and-calculators-2#cfb_roster_talent)
 - [`cfb_simulations`](reference/additional/models-and-calculators-2#cfb_simulations)
+- [`cfb_touchback_yardline_expr`](reference/additional/models-and-calculators-2#cfb_touchback_yardline_expr)
 - [`efficiency_ratings`](reference/additional/models-and-calculators-2#efficiency_ratings)
 - [`fei_ratings`](reference/additional/models-and-calculators-2#fei_ratings)
 - [`fit_field_position_ep`](reference/additional/models-and-calculators-2#fit_field_position_ep)

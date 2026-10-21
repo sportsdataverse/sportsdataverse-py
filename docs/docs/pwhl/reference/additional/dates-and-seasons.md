@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Dates and seasons"
 sidebar_label: "Dates and seasons"
-sidebar_position: 5
+sidebar_position: 6
 description: "PWHL — additional Python functions — Dates and seasons — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Dates and seasons
@@ -25,6 +25,17 @@ The newest regular season's END year (2026 = the 2025-26 season).
 |---|---|
 | `NoDataError` | The seasons feed lists no regular season. |
 | `AssetFetchError` | The seasons feed failed. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import most_recent_pwhl_season
+season = most_recent_pwhl_season()
+
+# Next step
+
+print(season)
+```
 
 ### pwhl_season_id {#pwhl_season_id}
 
@@ -60,3 +71,15 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 |---|---|
 | `NoDataError` | The feed answered 404. |
 | `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
+**Example**
+
+```python
+from sportsdataverse.pwhl import pwhl_season_id
+df = pwhl_season_id()
+
+# Next step
+
+import polars as pl
+df.filter(pl.col("game_type_label") == "regular")
+```

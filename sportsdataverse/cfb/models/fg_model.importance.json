@@ -1,0 +1,47 @@
+{
+  "model": "fg_model",
+  "sha256": "0da7e487cbda215447c88c8997e9e3872ad18033ba4115f735b40b4e946ff0a8",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "yards_to_goal",
+      "gain": 77.8476944,
+      "total_gain": 20006.85742,
+      "weight": 257.0,
+      "cover": 3125.262939,
+      "share_total_gain": 0.9599428146
+    },
+    {
+      "feature": "era0",
+      "gain": 5.622926712,
+      "total_gain": 202.425354,
+      "weight": 36.0,
+      "cover": 2607.102783,
+      "share_total_gain": 0.009712508065
+    },
+    {
+      "feature": "era1",
+      "gain": 2.672394991,
+      "total_gain": 56.12029648,
+      "weight": 21.0,
+      "cover": 3197.692383,
+      "share_total_gain": 0.002692690522
+    },
+    {
+      "feature": "era2",
+      "gain": 2.206567764,
+      "total_gain": 35.30508423,
+      "weight": 16.0,
+      "cover": 1488.385986,
+      "share_total_gain": 0.001693962285
+    },
+    {
+      "feature": "era3",
+      "gain": 9.169657707,
+      "total_gain": 541.0098267,
+      "weight": 59.0,
+      "cover": 1978.383301,
+      "share_total_gain": 0.02595802453
+    }
+  ]
+}

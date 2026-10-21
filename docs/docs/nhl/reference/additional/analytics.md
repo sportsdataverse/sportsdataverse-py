@@ -289,7 +289,7 @@ out_pwhl = nhl_penalty_value(pwhl_pbp, league="pwhl")
 
 ### nhl_player_props {#nhl_player_props}
 
-`nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+`nhl_player_props(seasons: 'Union[int, list[int]]', *, league: 'str' = 'nhl', as_of_date: '_dt.date | None' = None, stats: 'tuple[str, ...]' = ('shots', 'points'), load_skater_boxscores: 'Callable[[Any], pl.DataFrame] | None' = None, team_ratings: 'Callable[..., pl.DataFrame] | None' = None, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
 
 Empirical-Bayes shots/points player-prop projections.
 
@@ -311,6 +311,8 @@ per-projected-game ratings.
 | `league` | `str` | `'nhl'` | resolves `prop_kappa`/`pos_priors`/`prop_team_volume_slope` via `get_constants`. |
 | `as_of_date` | `date \| None` | `None` | if given, only games strictly before this date are projected AND the matchup/game-script ratings snapshot is computed as-of this cutoff. NOTE: the per-player usage rate is strictly-prior regardless of this arg (it never needed a cutoff); this arg tightens *which* games are projected and the *single* ratings snapshot, but does not make the ratings per-projected-game as-of (a documented approximation -- see the module docstring). |
 | `stats` | `tuple[str, ...]` | `('shots', 'points')` | which stat families to project (`"shots"`, `"points"`). |
+| `load_skater_boxscores` | `Callable[[Any], DataFrame] \| None` | `None` | the per-player-game box loader, called as `f(seasons)`; `None` reads `load_nhl_skater_boxscores`. Another league binds its own loader here (columns `game_id`, `player_id`, `game_date`, `season`, `position`, `team_abbrev`, `shots_on_goal`, `points`). |
+| `team_ratings` | `Callable[..., DataFrame] \| None` | `None` | the matchup/game-script ratings builder, called as `f(seasons, as_of_date=as_of_date)`; `None` runs `nhl_team_ratings` with `league`. Its `team` values must match the box's `team_abbrev`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
 
 **Returns**
@@ -375,7 +377,7 @@ print(preds.sort("home_win_prob", descending=True).head())
 
 ### nhl_special_teams_value {#nhl_special_teams_value}
 
-`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
+`nhl_special_teams_value(pbp: 'pl.DataFrame', shifts: 'pl.DataFrame', *, model_dir: "'str | None'" = None, league: 'str' = 'nhl', return_as_pandas: 'bool' = False, xg_scored: 'bool' = False, _stints: 'pl.DataFrame | None' = None) -> "'pl.DataFrame | pd.DataFrame'"`
 
 Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 
@@ -388,6 +390,7 @@ Per-skater power-play/penalty-kill value (goals) above/below league baseline.
 | `model_dir` | `str \| None` | `None` | passed through to `nhl_xg`. |
 | `league` | `str` | `'nhl'` | `"nhl"` or `"pwhl"` -- selects `league_xg_rate_pp`/`_pk` via `LEAGUE_CONSTANTS`. |
 | `return_as_pandas` | `bool` | `False` | return a pandas DataFrame instead of polars. |
+| `xg_scored` | `bool` | `False` | `pbp` already carries the shot `xg` to use (another league's own xG model); skip re-scoring with the NHL boosters, which would replace it. |
 | `_stints` | `DataFrame \| None` | `None` | internal test hook -- inject a pre-built stints frame. |
 
 **Returns**

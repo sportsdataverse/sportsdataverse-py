@@ -25,16 +25,12 @@ TESTS = Path(__file__).parent.parent
 
 def _cfb(gid: int) -> CFBPlayProcess:
     summary = json.loads((TESTS / "cfb" / "fixtures" / f"summary_{gid}.json").read_text(encoding="utf-8"))
-
-    class _Resp:
-        def json(self):
-            return summary
-
-    with pytest.MonkeyPatch.context() as mp:
-        mp.setattr("sportsdataverse.cfb.cfb_pbp.download", lambda *a, **k: _Resp())
-        proc = CFBPlayProcess(gameId=gid, join_participants=False)
-        proc.espn_cfb_pbp()
-        proc.run_processing_pipeline()
+    # the offline path reads the capture's own pickcenter (one provider carries the market line), so the
+    # odds are the game's, not the defaults a routed core-odds request would fall back to
+    proc = CFBPlayProcess(gameId=gid, join_participants=False)
+    proc.espn_cfb_pbp(summary=summary)
+    proc.run_processing_pipeline()
+    assert proc.odds_source == "summary_pickcenter"
     return proc
 
 
