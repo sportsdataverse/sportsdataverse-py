@@ -68,7 +68,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _object_rows, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -160,7 +160,7 @@ def parse_edge_top10(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
         # Last-ditch: if the payload itself is wrapped one level deep, look
         # for the first list-valued attribute that contains dicts.
         for val in payload.values():
-            if isinstance(val, list) and val and isinstance(val[0], dict):
+            if isinstance(val, list) and isinstance(_first_row(val), dict):
                 rows = val
                 break
     rows = [row for row in rows or [] if row not in (None, {})]  # an empty object carries no row
@@ -504,7 +504,7 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     best_key = None
     best_len = 0
     for key, val in payload.items():
-        if isinstance(val, list) and val and isinstance(val[0], dict):
+        if isinstance(val, list) and isinstance(_first_row(val), dict):  # a leading null row too (R953-2)
             if len(val) > best_len:
                 best_len = len(val)
                 best_key = key

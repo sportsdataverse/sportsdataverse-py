@@ -91,7 +91,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _object_rows, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -146,13 +146,14 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         return pl.from_pandas(df)
 
 
-def _drifted(entries: list, where: str) -> bool:
-    """Whether a row list holds something other than objects; if so, warn :class:`SchemaDriftWarning` (A-L60)."""
-    bad = next((e for e in entries if not isinstance(e, dict)), None)
-    if bad is None:
-        return False
-    _warn_schema_drift(where, TypeError(f"an entry is {type(bad).__name__}, not an object"))
-    return True
+def _rows_or_drift(entries: list, where: str) -> list[dict] | None:
+    """``entries`` under the row rule (:func:`~sportsdataverse.errors._object_rows`: null rows dropped), or
+    ``None`` after a :class:`SchemaDriftWarning` when another entry is not an object (A-L60, R953-1)."""
+    try:
+        return _object_rows(entries)
+    except TypeError as exc:
+        _warn_schema_drift(where, exc)
+        return None
 
 
 def _empty_frame(return_as_pandas: bool = False):
@@ -353,7 +354,7 @@ def parse_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         # Strip heavy sub-objects that polars can't handle and we don't need
         _drop = {"record", "links", "nextEvent", "standingSummary"}
         cleaned = []
-        for entry in teams_raw:
+        for entry in _object_rows(teams_raw):  # the row rule: a null team is dropped (4.13)
             t = dict(entry.get("team") or entry)
             for k in _drop:
                 t.pop(k, None)
@@ -1020,7 +1021,8 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     items = payload.get("items") or payload.get("coaches") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    if _drifted(items, "parse_coaches: items"):
+    items = _rows_or_drift(items, "parse_coaches: items")
+    if items is None:
         return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
@@ -1127,7 +1129,8 @@ def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False)
     entries = payload.get("entries") or payload.get("items") or []
     if not entries:
         return _empty_frame(return_as_pandas)
-    if _drifted(entries, "parse_event_competitor_roster: entries"):
+    entries = _rows_or_drift(entries, "parse_event_competitor_roster: entries")
+    if entries is None:
         return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
@@ -1288,7 +1291,8 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     items = payload.get("items") or payload.get("plays") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    if _drifted(items, "parse_event_plays: items"):
+    items = _rows_or_drift(items, "parse_event_plays: items")
+    if items is None:
         return _empty_frame(return_as_pandas)
 
     # Drop keys that are too deeply nested or too large for a flat frame
@@ -1471,16 +1475,19 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     # Detect grouped shape: first element has ``position`` + ``items``
     # keys, and ``items`` is a list. MLB / NFL / NHL use this shape;
     # NBA / WNBA / MBB / WBB / CFB use the flat shape.
-    first = athletes[0] if athletes else {}
+    first = _first_row(athletes)  # a leading null row must not decide the shape (R953-2)
     is_grouped = isinstance(first, dict) and "position" in first and isinstance(first.get("items"), list)
 
     if is_grouped:
-        if _drifted(athletes, "parse_team_roster: athletes"):
+        groups = _rows_or_drift(athletes, "parse_team_roster: athletes")
+        if groups is None:
             return _empty_frame(return_as_pandas)
         rows = []
-        for group in athletes:
-            players = group.get("items") or []
-            if _drifted(players, f"parse_team_roster: athletes[{group.get('position')}].items"):
+        for group in groups:
+            players = _rows_or_drift(
+                group.get("items") or [], f"parse_team_roster: athletes[{group.get('position')}].items"
+            )
+            if players is None:
                 return _empty_frame(return_as_pandas)
             rows += [{"position_group": group.get("position"), **player} for player in players]
         if not rows:

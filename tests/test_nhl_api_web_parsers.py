@@ -342,7 +342,7 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, 
     parse, raw = getattr(mod, parser), _load(fixture)
     assert parse(raw).height > 0
     # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
-    assert parse({**raw, key: [None, *raw[key], None]}).height == parse(raw).height
+    assert parse({**raw, key: [None, *raw[key], None]}).equals(parse(raw))  # order kept (R953-3)
     assert parse({**raw, key: [None] * len(raw[key])}).height == 0
     with pytest.warns(SchemaDriftWarning, match=f"{parser}: {key}"):
         assert parse({**raw, key: [str(row) for row in raw[key]]}).height == 0

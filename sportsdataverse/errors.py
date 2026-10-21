@@ -355,15 +355,26 @@ def _object_rows(rows: list) -> list[dict]:
     an object is schema drift, which pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1).
     Call it on the rows handed to ``pd.json_normalize``, inside the parser's ``_SHAPE_ERRORS`` catch.
     """
-    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
-
     kept: list[dict] = []
     for row in rows:
         if isinstance(row, dict):
             kept.append(row)
-        elif not (pd.api.types.is_scalar(row) and pd.isna(row)):
+        elif not _is_null(row):
             raise TypeError(f"a row is {type(row).__name__}, not an object")
     return kept
+
+
+def _is_null(row: Any) -> bool:
+    """Whether a row is a null one (``None``, ``NaN``, ``pd.NA``): no data, which the row rule drops."""
+    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
+
+    return bool(pd.api.types.is_scalar(row) and pd.isna(row))
+
+
+def _first_row(rows: list) -> Any:
+    """The first row that is not null, or ``None``: a parser that picks a shape from a row must skip the
+    null rows the row rule drops, or a leading null reshapes the frame (R953-2)."""
+    return next((row for row in rows if not _is_null(row)), None)
 
 
 def _warn_schema_drift(where: str, exc: BaseException) -> None:

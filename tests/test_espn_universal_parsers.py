@@ -1938,8 +1938,9 @@ _ESPN_DRIFT = [
 ]
 
 
-def _nulled(raw: Any, path: tuple, keep: bool) -> Any:
-    """A deep copy of the real capture whose list at ``path`` gains null rows (``keep``) or holds only nulls."""
+def _nulled(raw: Any, path: tuple, keep: bool, nulls: bool = True) -> Any:
+    """A deep copy of the real capture whose list at ``path`` gains null rows (``keep``), holds only nulls, or
+    (``nulls=False``) is empty."""
     import copy
 
     out = copy.deepcopy(raw)
@@ -1947,30 +1948,32 @@ def _nulled(raw: Any, path: tuple, keep: bool) -> Any:
     for step in path[:-1]:
         node = node[step]
     rows = node[path[-1]]
-    node[path[-1]] = [None, *rows, None] if keep else [None] * len(rows)
+    node[path[-1]] = [None, *rows, None] if keep else [None] * len(rows) if nulls else []
     return out
 
 
 # The _ESPN_DRIFT rows whose parser hands its rows to errors._object_rows (#941's sites). The others walk
 # their rows themselves (_drifted), so the row rule does not reach them yet.
-_ESPN_ROW_RULE = [
-    entry
-    for entry in _ESPN_DRIFT
-    if entry[0]
-    not in {"parse_teams", "parse_groups", "parse_coaches", "parse_event_competitor_roster", "parse_event_plays"}
-    and entry[2] != ("athletes", 0, "items")  # the grouped roster
+_ESPN_ROW_RULE = [entry for entry in _ESPN_DRIFT if entry[0] != "parse_groups"] + [
+    # the grouped roster's position groups themselves (the players inside one are in _ESPN_DRIFT)
+    ("parse_team_roster", "team_roster_nfl", ("athletes",), "parse_team_roster: athletes"),
 ]
 
 
 @pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_ROW_RULE, ids=str)
 def test_espn_null_rows_are_dropped(parser, fixture, path, where):
-    """4.13: a null row is no data. It is dropped (not an all-null row), and a list of nulls is zero rows, with
-    no warning (pytest.ini makes warnings errors). No committed capture holds a null row, so nulls are added."""
+    """4.13: a null row is no data. It is dropped, wherever it sits: the frame is the capture's own, row for row
+    (R953-2: a leading null must not decide the shape; R953-3: order kept). A list of nulls is zero rows. Neither
+    warns (pytest.ini makes warnings errors). No committed capture holds a null row, so nulls are added."""
     import sportsdataverse._common_espn_parsers as mod
 
     parse, raw = getattr(mod, parser), _load(fixture)
-    assert parse(_nulled(raw, path, keep=True)).height == parse(raw).height > 0
-    assert parse(_nulled(raw, path, keep=False)).height == 0
+    expected = parse(raw)
+    assert expected.height > 1
+    assert parse(_nulled(raw, path, keep=True)).equals(expected)
+    # a list of nulls reads as an empty list (zero rows; for one group's players, the other groups' rows)
+    assert parse(_nulled(raw, path, keep=False)).height == parse(_nulled(raw, path, keep=False, nulls=False)).height
+    assert parse(_nulled(raw, path, keep=False)).height < expected.height
 
 
 @pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))

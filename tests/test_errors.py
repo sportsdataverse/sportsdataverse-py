@@ -105,12 +105,16 @@ def test_object_rows_drops_null_rows_and_rejects_other_non_objects():
     pd.NA) is no data: it is dropped (4.13), and never hides a bad row after it (R941-1)."""
     import pandas as pd
 
-    from sportsdataverse.errors import _object_rows
+    from sportsdataverse.errors import _first_row, _object_rows
 
     for na in (None, float("nan"), pd.NA):
         assert _object_rows([{"a": 1}, na]) == [{"a": 1}]
         assert _object_rows([na, {}, na]) == [{}]
         assert _object_rows([na, na]) == []
+        rows = [{"a": 1}, na, {"b": 2}, {"a": 1}, {"c": 3}]
+        assert _object_rows(rows) == [{"a": 1}, {"b": 2}, {"a": 1}, {"c": 3}]  # order kept, no dedup (R953-3)
+        assert _first_row([na, na, {"b": 2}, {"a": 1}]) == {"b": 2}
+        assert _first_row([na]) is None
     for bad in ("x", 1, [1]):
         with pytest.raises(TypeError, match=f"a row is {type(bad).__name__}, not an object"):
             _object_rows([{"a": 1}, bad])
