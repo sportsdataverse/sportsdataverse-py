@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # KHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.khl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.khl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## KHL (site REST + webcaster API)
 
@@ -33,6 +33,14 @@ headers (about 15 requests, each waiting its polite second) and maps the ids the
 
 polars.DataFrame | pandas.DataFrame: `tournament_id`, `club_id` (stable), `team_season_id` (this tournament's), one row per club.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.AssetFetchError` | Khl.ru answered an error, or a wrong page. |
+| `sportsdataverse.errors.NoDataError` | No schedule rows, or a club the headers give no team-season id. |
+| `ValueError` | Two sources disagree on an id pair. |
+
 **Example**
 
 ```python
@@ -56,6 +64,12 @@ Club id <-> team-season id from frames that carry both (game header / info, play
 **Returns**
 
 polars.DataFrame | pandas.DataFrame: one row per (`tournament_id`, `club_id`, `team_season_id`), all `Int64`, sorted; zero rows when no frame carries a pair.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A team-season id maps to two clubs, or a club has two team-season ids in one tournament (the sources disagree; nothing is picked). |
 
 **Example**
 

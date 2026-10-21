@@ -1,7 +1,7 @@
 ---
 title: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Player"
 sidebar_label: "Player"
-sidebar_position: 6
+sidebar_position: 7
 description: "YAHOO — Yahoo Sports Shangrila (graphite-secure.sports.yahoo.com) — Player — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -50,6 +50,14 @@ Yahoo shangrila persisted query `playerBasic` -> tables: players, leagues
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_player_basic-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_player_basic-example}
 
 ```python
@@ -88,6 +96,14 @@ Yahoo shangrila persisted query `playerCareerStats` -> one row per `players` ent
 | `career_stats` | character | JSON-encoded career statistical totals for the player across every season. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_player_career_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_player_career_stats-example}
 
@@ -132,6 +148,14 @@ Yahoo shangrila persisted query `playerGameLog` -> one row per `players` entry
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#yahoo_player_game_log-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#yahoo_player_game_log-example}
 
 ```python
@@ -163,6 +187,14 @@ Yahoo shangrila persisted query `playerProps` -> one row per `players` entry
 | `display_name` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_player_props-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_player_props-example}
 
@@ -206,6 +238,14 @@ Yahoo shangrila persisted query `playerSearch` -> one row per `leagues.players` 
 | `team` | character |  |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_player_search-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_player_search-example}
 
@@ -252,6 +292,14 @@ Yahoo shangrila persisted query `playerSeasonStats` -> one row per `players` ent
 | `player_season_stats` | character | JSON-encoded season statistical totals for the player. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#yahoo_player_season_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#yahoo_player_season_stats-example}
 

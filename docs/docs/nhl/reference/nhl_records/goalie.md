@@ -1,7 +1,7 @@
 ---
 title: "NHL — NHL Records API — Goalie"
 sidebar_label: "Goalie"
-sidebar_position: 4
+sidebar_position: 5
 description: "NHL — NHL Records API — Goalie — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -64,6 +64,14 @@ Goaltender career statistics (regular season).
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_records_goalie_career_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_records_goalie_career_stats-example}
 
 ```python
@@ -113,6 +121,14 @@ Goaltender career stats inclusive of regular season and playoffs.
 | `wins` | integer | Wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_records_goalie_career_stats_with_playoffs-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_records_goalie_career_stats_with_playoffs-example}
 
@@ -176,6 +192,14 @@ Goaltender single-season statistics.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_records_goalie_season_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_records_goalie_season_stats-example}
 
 ```python
@@ -219,6 +243,14 @@ Goaltenders with the longest consecutive-win streaks.
 | `win_streak` | integer | Number of consecutive wins recorded by the goalie in this streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_records_goalie_win_streak-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_records_goalie_win_streak-example}
 
@@ -265,6 +297,14 @@ Goaltenders with the longest consecutive-shutout streaks.
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
+### Raises {#nhl_records_goalie_shutout_streak-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
 ### Example {#nhl_records_goalie_shutout_streak-example}
 
 ```python
@@ -304,6 +344,14 @@ Goaltenders who reached each win plateau (100, 200, 300 …).
 | `twenty_win_seasons` | integer | Number of seasons in which the goalie recorded 20 or more wins. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_records_goalie_win_plateaus-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_records_goalie_win_plateaus-example}
 
@@ -345,6 +393,14 @@ Goaltender consecutive playoff-win streaks.
 | `team_abbrevs` | character | Team abbreviation(s). |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_records_goalie_playoff_streak-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_records_goalie_playoff_streak-example}
 
@@ -388,6 +444,14 @@ Goaltender longest undefeated streaks (wins + ties).
 | `undefeated_streak` | integer | Number of consecutive games without a regulation loss (wins plus overtime or shootout losses) in the goalie's record streak. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_records_goalie_undefeated_streak-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_records_goalie_undefeated_streak-example}
 

@@ -94,7 +94,7 @@ columns:
   type: character
 - description: ''
   name: plus_minus
-  type: character
+  type: integer
 - description: ''
   name: team_short_name_ru
   type: character

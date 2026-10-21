@@ -122,9 +122,7 @@ def parse_fox_api(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     Returns:
         Flattened rows (nested dicts joined with ``_``, lists JSON-encoded); an
         empty frame when the body holds no record list.
-
-    Raises:
-        None: empty or malformed input returns an empty frame.
+        Empty or malformed input returns an empty frame.
 
     Example:
         Flatten any Fox body::

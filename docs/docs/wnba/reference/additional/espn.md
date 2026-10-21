@@ -44,6 +44,13 @@ Polars (or pandas) DataFrame with the same columns documented in `sportsdatavers
 | `position_display_name` | character | Position display name. |
 | `order` | integer | Display order within the result set. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -161,6 +168,13 @@ Polars Data frame of game roster data with columns: 'athlete_id', 'athlete_uid',
 | `logo_href` | character | Team or league logo URL. |
 | `logo_dark_href` | character | Logo URL for dark backgrounds. |
 | `game_id` | integer | Unique game identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
 
 **Example**
 
@@ -385,6 +399,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+
 **Example**
 
 ```python
@@ -529,6 +550,13 @@ set, and the `"Other"` fallback bucket.
 
 Dict with one DataFrame per stat category — see `sportsdataverse.wbb.espn_wbb_team_stats` for the full column / key documentation. If `raw=True`, returns the raw response dict.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `requests.exceptions.RequestException` | Other network failures after retries. |
+
 **Example**
 
 ```python
@@ -582,6 +610,13 @@ Polars dataframe of the WNBA teams, one row per team, with the columns in the re
 | `team_short_display_name` | character | Short team display name (e.g. 'Aces'). |
 | `team_slug` | character | URL-safe team identifier (e.g. 'lasvegas-aces' / 'aces'). |
 | `team_uid` | character | ESPN universal team identifier (UID format 's:40~l:...~t:...'). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 

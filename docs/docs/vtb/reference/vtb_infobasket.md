@@ -25,6 +25,15 @@ toc_max_heading_level: 2
 
 > **Note:** Stage CompIDs: the team routes (TeamRoster, TeamStats, TeamGames) also accept a stage CompID; pass it as params={'compId': 50720} instead of season. Other tags (vtbyouth, wbc, wpremier, rfb) answer through the tag argument; only vtb was captured.
 
+## Best
+
+| Function | Summary |
+|---|---|
+| [vtb_infobasket_best_players](vtb_infobasket/best.md#vtb_infobasket_best_players) | Player leaders of a season for the first `count` leader categories. |
+| [vtb_infobasket_best_teams](vtb_infobasket/best.md#vtb_infobasket_best_teams) | Team leaders of a season for the first `count` leader categories. |
+| [vtb_infobasket_best_player_parameters](vtb_infobasket/best.md#vtb_infobasket_best_player_parameters) | Player leader categories (a code table). |
+| [vtb_infobasket_best_team_parameters](vtb_infobasket/best.md#vtb_infobasket_best_team_parameters) | Team leader categories (a code table). |
+
 ## Player
 
 | Function | Summary |
@@ -48,8 +57,8 @@ toc_max_heading_level: 2
 | [vtb_infobasket_team_comps](vtb_infobasket/team.md#vtb_infobasket_team_comps) | The competitions a club played in one season. |
 | [vtb_infobasket_team_games](vtb_infobasket/team.md#vtb_infobasket_team_games) | A club's games in one season (the calendar's row shape). |
 | [vtb_infobasket_team_season_stats](vtb_infobasket/team.md#vtb_infobasket_team_season_stats) | A club's season totals in one season. |
-| [vtb_infobasket_team_player_stats](vtb_infobasket/team.md#vtb_infobasket_team_player_stats) | Season totals of every player of a club in one season. |
-| [vtb_infobasket_team_coach_stats](vtb_infobasket/team.md#vtb_infobasket_team_coach_stats) | Technical fouls and games of every coach of a club in one season. |
+| [vtb_infobasket_team_player_stats](vtb_infobasket/team-2.md#vtb_infobasket_team_player_stats) | Season totals of every player of a club in one season. |
+| [vtb_infobasket_team_coach_stats](vtb_infobasket/team-2.md#vtb_infobasket_team_coach_stats) | Technical fouls and games of every coach of a club in one season. |
 
 ## Other
 
@@ -57,8 +66,6 @@ toc_max_heading_level: 2
 |---|---|
 | [vtb_infobasket_seasons](vtb_infobasket/other.md#vtb_infobasket_seasons) | Season END year -> season-level CompID for a competition tag (the table every season-keyed wrapper maps with). |
 | [vtb_infobasket_calendar](vtb_infobasket/other.md#vtb_infobasket_calendar) | Every game of a season (finished, live and planned): teams, scores, date, venue, attendance. |
-| [vtb_infobasket_best_players](vtb_infobasket/other.md#vtb_infobasket_best_players) | Player leaders of a season for the first `count` leader categories. |
-| [vtb_infobasket_best_teams](vtb_infobasket/other.md#vtb_infobasket_best_teams) | Team leaders of a season for the first `count` leader categories. |
 | [vtb_infobasket_game](vtb_infobasket/other.md#vtb_infobasket_game) | Header of a finished game: stage, venue, rules, the two teams and their scores. |
 | [vtb_infobasket_box_score](vtb_infobasket/other.md#vtb_infobasket_box_score) | Player box score of a finished game (one row per player of each team, DNPs included). |
 | [vtb_infobasket_pbp](vtb_infobasket/other.md#vtb_infobasket_pbp) | Play-by-play of a finished game with shot x/y (2022-23 onwards; earlier games have no plays). |
@@ -69,8 +76,6 @@ toc_max_heading_level: 2
 | [vtb_infobasket_cross_table](vtb_infobasket/other.md#vtb_infobasket_cross_table) | Head-to-head results grid of a round-robin stage (every game twice, once from each side). |
 | [vtb_infobasket_playoff](vtb_infobasket/other.md#vtb_infobasket_playoff) | Playoff bracket of a playoff stage, one row per series. |
 | [vtb_infobasket_playoff_games](vtb_infobasket/other.md#vtb_infobasket_playoff_games) | The games of every series of a playoff stage. |
-| [vtb_infobasket_best_player_parameters](vtb_infobasket/other.md#vtb_infobasket_best_player_parameters) | Player leader categories (a code table). |
-| [vtb_infobasket_best_team_parameters](vtb_infobasket/other.md#vtb_infobasket_best_team_parameters) | Team leader categories (a code table). |
 | [vtb_infobasket_coach](vtb_infobasket/other.md#vtb_infobasket_coach) | Coach profile: names, height, weight (no birth data). |
 | [vtb_infobasket_roster](vtb_infobasket/other.md#vtb_infobasket_roster) | A club's player roster in one season. |
 | [vtb_infobasket_roster_coaches](vtb_infobasket/other.md#vtb_infobasket_roster_coaches) | A club's coaches in one season (no birth data). |

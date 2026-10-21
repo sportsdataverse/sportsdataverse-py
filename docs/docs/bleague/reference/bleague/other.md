@@ -132,6 +132,14 @@ Game header: competition, round, venue, officials, tip-off, both teams and the s
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_game_info-example}
 
 ```python
@@ -168,6 +176,14 @@ Points each team scored in each period of a game, overtime included.
 | `points` | integer | Points the team scored IN this period (not cumulative); from the header's score slots. |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_period_scores-example}
 
@@ -249,6 +265,14 @@ Player box score per period category: minutes, points, shooting, rebounds, assis
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_player_box-example}
 
 ```python
@@ -316,6 +340,14 @@ Play-by-play of a finished game in game order, with decoded action codes and x /
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_pbp-example}
 
 ```python
@@ -369,6 +401,14 @@ Field-goal attempts with court position (2022-23 onward, v2 feed).
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_shots-example}
 
 ```python
@@ -416,6 +456,14 @@ Team leaders per statistic and period category (v1 feed only).
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
 
+### Raises {#bleague_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
+
 ### Example {#bleague_leaders-example}
 
 ```python
@@ -452,6 +500,14 @@ Running score after each scoring event (v1 feed only).
 | `away_points` | integer | Away running total after the event. |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_score_track-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_score_track-example}
 
@@ -504,6 +560,14 @@ Standings of one season and division, per conference / division table and wild c
 | `division_title` | character | Division-title mark (地区優勝) as printed; null when none ('--'). |
 
 **`return_parsed=False`** — the raw body (`dict`): the game context (`Game`, `PlayByPlays`, `HomeBoxscores`, `AwayBoxscores`, `Summaries` and on v1 `Leaders`, `Points`) stamped `_request` (`schedule_key`, `feed`), or the schedule / standings page record.
+
+### Raises {#bleague_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422. |
 
 ### Example {#bleague_standings-example}
 

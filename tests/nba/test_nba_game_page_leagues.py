@@ -541,3 +541,12 @@ def test_contradicting_league_and_league_id_raise(monkeypatch: pytest.MonkeyPatc
     final = _final(monkeypatch, "mbb", "summary_mbb.json")
     with pytest.raises(ValueError, match="contradicts"):
         gp.game_page_frames(final, league="mbb", league_id="10")
+
+
+@pytest.mark.parametrize("fmt", ["4 quarters", {"regulation": "4"}, None])
+def test_a_format_that_is_not_an_object_falls_back_to_the_season_era(
+    monkeypatch: pytest.MonkeyPatch, fmt: object
+) -> None:
+    final = _final(monkeypatch, "wnba", "summary_wnba.json")
+    final["format"] = fmt  # game-on-paper-app's route test sends a string here; it used to raise AttributeError
+    assert gp.game_page_frames(final, league="wnba")["regulation_periods"] == 4  # WNBA 2024: quarters

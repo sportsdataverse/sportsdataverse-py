@@ -232,6 +232,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_is_active` | logical | Team is active. |
 | `team_logo_href` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+
 **Example**
 
 ```python
@@ -335,6 +342,13 @@ Polars dataframe of the MLB teams, one row per team, with the columns in the ret
 | `team_short_display_name` | character | Short team display name. |
 | `team_slug` | character | URL-safe team identifier. |
 | `team_uid` | character | ESPN universal team identifier (UID). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 

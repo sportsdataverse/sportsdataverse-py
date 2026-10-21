@@ -437,8 +437,9 @@ def test_unverified_caveats_stay_in_the_descriptions():
 def test_every_public_parser_has_a_documented_example_and_helpers_are_private():
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        for part in ("Args:", "Returns:", "Raises:", "Example:", "Quick start::"):
+        for part in ("Args:", "Returns:", "Example:", "Quick start::"):
             assert part in doc, (name, part)
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc
     assert set(P.__all__) <= set(lkl_pkg.__all__ if hasattr(lkl_pkg, "__all__") else dir(lkl_pkg))
     assert len(P.__all__) == 14

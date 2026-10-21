@@ -28,7 +28,7 @@ columns:
   type: character
 - description: ''
   name: rank
-  type: character
+  type: integer
 - description: ''
   name: is_active
   type: logical

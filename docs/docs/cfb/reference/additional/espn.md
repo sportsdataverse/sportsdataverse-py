@@ -102,6 +102,13 @@ Polars dataframe of game roster data with columns: 'athlete_id', 'athlete_uid', 
 | `logo_dark_href` | character | URL of the dark-variant team logo. |
 | `game_id` | integer | ESPN game identifier. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN has no competitors, roster or athlete resource for the game (404), or every rostered athlete's `$ref` answered 404. A single 404 athlete is left out with a `UserWarning` and the rest of the roster is returned. |
+| `AssetFetchError` | A fetch failed (403, 429, 5xx, a dropped connection); never treated as a missing athlete. |
+
 **Example**
 
 ```python
@@ -249,6 +256,13 @@ Polars dataframe of the college football teams, one row per team, with the colum
 | `team_short_display_name` | character | Short team display name. |
 | `team_slug` | character | Team slug for the stat row. |
 | `team_uid` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | ESPN answered 404 for the teams resource. |
+| `AssetFetchError` | The fetch failed (403, 429, 5xx, a dropped connection); never returned as an empty frame. |
 
 **Example**
 
