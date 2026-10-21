@@ -224,6 +224,28 @@ def patch_espn_fetch(monkeypatch, payload):
     monkeypatch.setattr(rt, "download", lambda url, params=None, **kwargs: _Resp(resolve(url)))
 
 
+@pytest.fixture(params=["installed", "pandas2"])
+def json_normalize_flavour(request, monkeypatch):
+    """Run a schema-drift test on the installed pandas and again on pandas 2's ``json_normalize`` (WB-1).
+
+    pandas 3 raises on a row that is not an object; pandas 2 (resolved on Python 3.10) reads it as an
+    empty row, so drift came back as an N x 0 frame with no warning. CI's parser tests run on pandas 3,
+    where the ``pandas2`` run is the only one that sees whether a parser checks its rows itself.
+    """
+    import pandas as pd
+
+    if request.param == "pandas2" and int(pd.__version__.split(".")[0]) >= 3:
+        real = pd.json_normalize
+
+        def pandas2_json_normalize(data, *args, **kwargs):
+            if isinstance(data, list):
+                data = [row if row is None or isinstance(row, dict) else {} for row in data]
+            return real(data, *args, **kwargs)
+
+        monkeypatch.setattr(pd, "json_normalize", pandas2_json_normalize)
+    return request.param
+
+
 def load_fixture(category: str, stem: str) -> dict:
     """Load a JSON fixture from ``tests/fixtures/{category}/{stem}.json``.
 

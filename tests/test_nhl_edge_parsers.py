@@ -251,3 +251,94 @@ def test_top10_parses_the_bare_list_the_live_boards_send(board):
     assert isinstance(raw, list) and raw
     df = parse_edge_top10(raw)
     assert df.height == len(raw) and df.width > 0
+
+
+# ===========================================================================
+# Schema drift warns instead of reading as "no data" (task 4.9, A-L60)
+# ===========================================================================
+
+
+def _drifted(raw, key=None):
+    """The real capture with the row list at ``key`` (or the bare list) turned into a list of strings."""
+    if key is None:
+        return [str(row) for row in raw]
+    return {**raw, key: [str(row) for row in raw[key]]}
+
+
+def _nulled(raw, key, keep):
+    """The real capture with null rows added to the row list at ``key`` (``keep``), or only nulls left (4.13)."""
+    rows = raw if key is None else raw[key]
+    nulled = [None, *rows, None] if keep else [None] * len(rows)
+    return nulled if key is None else {**raw, key: nulled}
+
+
+@pytest.mark.parametrize(
+    ("parser", "fixture", "key", "where"),
+    [
+        ("parse_edge_top10", "skater_speed_top_10", None, "parse_edge_top10: rows"),
+        ("parse_edge_sog_details", "skater_detail", "sogDetails", "parse_edge_sog_details: sogDetails"),
+        ("parse_edge_sog_summary", "skater_detail", "sogSummary", "parse_edge_sog_summary: sogSummary"),
+        ("parse_edge_hardest_shots", "skater_shot_speed", "hardestShots", "parse_edge_hardest_shots: hardestShots"),
+        (
+            "parse_edge_shot_location",
+            "team_shot_loc",
+            "shotLocationDetails",
+            "parse_edge_shot_location: shotLocationDetails",
+        ),
+        ("parse_edge_zone_time", "skater_zone_time", "zoneTimeDetails", "parse_edge_zone_time: zoneTimeDetails"),
+    ],
+)
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, where, json_normalize_flavour):
+    """A drifted row list still yields zero rows (the parser contract) but now SAYS so (A-L60)."""
+    import sportsdataverse.nhl.nhl_edge_parsers as mod
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    assert parse(raw).height > 0  # the real capture parses to rows, with no warning (pytest.ini: warnings are errors)
+    # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
+    assert parse(_nulled(raw, key, keep=True)).equals(parse(raw))  # a leading null too, order kept (R953-2/-3)
+    assert parse(_nulled(raw, key, keep=False)).height == 0
+    with pytest.warns(SchemaDriftWarning, match=where):
+        out = parse(_drifted(raw, key))
+    if parser != "parse_edge_zone_time":  # zone_time moves on to the next zone key (zoneStarts) after warning
+        assert out.height == 0
+
+
+def test_edge_top10_finds_a_wrapped_list_behind_a_leading_null():
+    """R953-2: the last-ditch lookup (a list under a key top10 does not know) decides by the first NON-null row."""
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
+
+    rows = _load("skater_speed_top_10")
+    expected = parse_edge_top10(rows)
+    assert expected.height > 1
+    assert parse_edge_top10({"wrapped": [None, *rows]}).equals(expected)
+
+
+def test_edge_payload_later_row_drift_warns(json_normalize_flavour):
+    """parse_edge_payload picks its row list by the FIRST row, so only a later row can drift: it warns and
+    falls back to the single detail row (pandas 2 read the string rows as empty ones, silently; WB-1)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_payload
+
+    raw = _load("skater_skating_speed_detail")
+    rows = raw["topSkatingSpeeds"]
+    assert parse_edge_payload(raw).height == len(rows) > 1
+    # 4.13 / R953-2: null rows are dropped wherever they sit; a leading one must not hide the list.
+    assert parse_edge_payload({**raw, "topSkatingSpeeds": [None, *rows, None]}).equals(parse_edge_payload(raw))
+    with pytest.warns(SchemaDriftWarning, match="parse_edge_payload: topSkatingSpeeds"):
+        assert parse_edge_payload({**raw, "topSkatingSpeeds": [rows[0], *map(str, rows[1:])]}).height == 1
+
+
+def test_edge_nested_shot_location_drift_warns(json_normalize_flavour):
+    """The nested (dict-of-sections) shot-location shape: no committed capture has it, so the real
+    team_shot_loc zone list is moved under one section. A later zone that is not an object warns (WB-1)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_shot_location
+
+    zones = _load("team_shot_loc")["shotLocationDetails"]
+    assert parse_edge_shot_location({"all": {"shotLocationDetails": zones}}).height == len(zones)
+    nested = parse_edge_shot_location({"all": {"shotLocationDetails": zones}})
+    assert parse_edge_shot_location({"all": {"shotLocationDetails": [None, *zones, None]}}).equals(nested)  # 4.13
+    drifted = {"all": {"shotLocationDetails": [zones[0], *map(str, zones[1:])]}}
+    with pytest.warns(SchemaDriftWarning, match=r"parse_edge_shot_location: all\.shotLocationDetails"):
+        assert parse_edge_shot_location(drifted).height == 0

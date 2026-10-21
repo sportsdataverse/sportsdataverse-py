@@ -4,14 +4,15 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict, List, Optional, Union  # noqa: F401
+from typing import Dict, List, Optional, Union  # noqa: F401
+
+# Imported at runtime, not under TYPE_CHECKING: typing.get_type_hints() evaluates the
+# annotations below and raised NameError on ``pl`` / ``pd`` (R858-4).
+import pandas as pd  # noqa: F401
+import polars as pl  # noqa: F401
 
 from sportsdataverse.nfl.pff_api_runtime import _get
 from sportsdataverse.nfl.pff_parsers import parse_pff_player_detail, parse_pff_report, parse_pff_v2_table
-
-if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
-    import pandas as pd
-    import polars as pl
 
 __all__ = [
     "pff_api_ref_leagues",
@@ -2747,7 +2748,7 @@ def pff_api_facet_receiving_coverage(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """League-wide receiving-versus-coverage leaderboard
 
     Endpoint: ``GET https://api.pff.com/v1/facet/receiving/coverage``
@@ -3331,7 +3332,7 @@ def pff_api_facet_defense_coverage_matchup(
     return_parsed: bool = True,
     return_as_pandas: bool = False,
     **kwargs,
-) -> Union[pl.DataFrame, pd.DataFrame, Dict]:
+) -> Union[Dict[str, pl.DataFrame], Dict[str, pd.DataFrame], Dict]:
     """League-wide coverage matchup leaderboard
 
     Endpoint: ``GET https://api.pff.com/v1/facet/defense/coverage_matchup``

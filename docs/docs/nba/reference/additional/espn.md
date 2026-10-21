@@ -6,6 +6,58 @@ description: "NBA — additional Python functions — ESPN — function referenc
 ---
 # NBA — additional Python functions — ESPN
 
+### espn_nba_calendar {#espn_nba_calendar}
+
+`espn_nba_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_nba_calendar - look up the NBA calendar for a given season from ESPN
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+Polars dataframe containing calendar dates for the requested season.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | Season year. |
+| `datetime` | character | The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string. |
+| `date` | character | Date in YYYY-MM-DD format. |
+| `year` | character | 4-digit year. |
+| `month` | character | Month of the calendar day as a two-digit string. |
+| `day` | character | Day number within the month. |
+| `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
+| `url` | character | RotoWire player page URL. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
+**Example**
+
+```python
+from sportsdataverse.nba import espn_nba_calendar
+cal = espn_nba_calendar(season=2023)
+print(cal.shape)
+
+# Use ondays to get every scheduled date for the season
+
+ondays = espn_nba_calendar(season=2023, ondays=True)
+
+# Pipeline next step (loop the URLs to scrape day-by-day)
+
+cal = espn_nba_calendar(season=2023, ondays=True)
+urls = cal["url"].to_list()  # feed each into espn_nba_schedule
+```
+
 ### espn_nba_game_rosters {#espn_nba_game_rosters}
 
 `espn_nba_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`

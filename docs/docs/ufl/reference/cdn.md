@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UFL — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.ufl` — 1 endpoint.
+`sportsdataverse.football.ufl` — 1 endpoint.
 
 ## espn_ufl_cdn_schedule
 

@@ -1,11 +1,11 @@
 ---
-title: "NFL — nflpro — Players"
+title: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Players"
 sidebar_label: "Players"
 sidebar_position: 3
-description: "NFL — nflpro — Players — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Players — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NFL — nflpro — Players
+# NFL — NFL Pro API (pro.nfl.com, NFL+ Premium account) — Players
 
 ## nfl_pro_players_offense_passing_season
 

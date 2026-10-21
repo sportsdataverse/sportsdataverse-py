@@ -177,7 +177,7 @@ def fit_shrinkage_k(scored: pl.DataFrame, *, seed: int = 0) -> float:
             from sportsdataverse.mbb.mbb_shooter_talent import fit_shrinkage_k
             k = fit_shrinkage_k(scored)
     """
-    from scipy.optimize import minimize_scalar  # noqa: PLC0415 - optional heavy import
+    from scipy.optimize import minimize_scalar  # optional heavy import
 
     res = minimize_scalar(
         lambda k: talent_split_mse(scored, k=float(k), seed=seed), bounds=(1.0, 5000.0), method="bounded"

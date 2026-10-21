@@ -99,7 +99,10 @@ def _all_manual_entries():
 
 
 def test_no_orphan_manual_entries():
-    valid = {(r["schema"], r["col"]) for r in extract.iter_schema_columns()}
+    rows = extract.iter_schema_columns()
+    valid = {(r["schema"], r["col"]) for r in rows} | {
+        (r["schema"], f"{r['section']}.{r['col']}") for r in rows if r.get("section")
+    }
     valid_cols = {r["col"] for r in extract.iter_schema_columns()}
     orphans = []
     for schema, col, _ in _all_manual_entries():

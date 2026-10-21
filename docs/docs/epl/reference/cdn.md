@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # EPL — ESPN CDN API (cdn.espn.com)
 
-`sportsdataverse.epl` — 1 endpoint.
+`sportsdataverse.soccer.epl` — 1 endpoint.
 
 ## espn_epl_cdn_scoreboard
 

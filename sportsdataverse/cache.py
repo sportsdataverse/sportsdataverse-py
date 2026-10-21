@@ -61,12 +61,13 @@ Invalidation
 
 from __future__ import annotations
 
+import copy
 import fnmatch
 import hashlib
 import json
 import os
 import re
-import shutil
+import warnings
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
@@ -92,7 +93,7 @@ DEFAULT_TTL = MODERATE
 # in order; first match wins.
 _TIER_RULES = [
     # LIVE — never cache anything that's actively updating
-    (re.compile(r"/scoreboard/now\b"), LIVE),
+    (re.compile(r"/scoreboard/(?:[^/?#]+/)?now\b"), LIVE),  # NHL serves /scoreboard/{team}/now too (B-M11)
     (re.compile(r"/score/now\b"), LIVE),
     (re.compile(r"/standings/now\b"), LIVE),
     (re.compile(r"/playerstatusupdate\b"), LIVE),
@@ -218,11 +219,18 @@ def set_default_ttl(ttl: Optional[Union[timedelta, int]]) -> None:
 
 def _resolve_ttl(
     url: str,
-    override: Optional[timedelta] = None,
+    override: timedelta | float | None = None,
     *,
     params: Optional[Dict[str, Any]] = None,
 ) -> timedelta:
-    """Apply override → default-override → tier-rule fallback chain."""
+    """Apply override → default-override → tier-rule fallback chain.
+
+    ``override`` is a ``timedelta`` or seconds: the runtimes spell "never cache" as
+    ``cache_ttl=0``, which reached ``.total_seconds()`` on an ``int`` and raised whenever a
+    cache mode was on.
+    """
+    if isinstance(override, (int, float)) and not isinstance(override, bool):
+        return timedelta(seconds=override)
     if override is not None:
         return override
     if params:
@@ -234,6 +242,26 @@ def _resolve_ttl(
     if ttl == DEFAULT_TTL and _DEFAULT_TTL_OVERRIDE is not None:
         return _DEFAULT_TTL_OVERRIDE
     return ttl
+
+
+#: Stem of every filesystem entry (:func:`_cache_key`); ``clear_cache`` deletes nothing else.
+_ENTRY_STEM = re.compile(r"[0-9a-f]{32}")
+#: How every entry :func:`cache_set` writes begins (``saved_at`` is the first key it dumps).
+_ENTRY_HEAD = b'{"saved_at":'
+
+
+def _is_entry(path: Path) -> bool:
+    """A file this cache wrote: a key-named ``.json`` that opens like a cache entry.
+
+    The content check keeps a user's own md5-named JSON in a shared ``SDV_PY_CACHE_DIR``.
+    """
+    if not _ENTRY_STEM.fullmatch(path.stem):
+        return False
+    try:
+        with path.open("rb") as fh:
+            return fh.read(len(_ENTRY_HEAD)) == _ENTRY_HEAD
+    except OSError:
+        return False
 
 
 def _cache_dir() -> Path:
@@ -310,7 +338,7 @@ def cache_get(
     url: str,
     params: Optional[Dict[str, Any]] = None,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: timedelta | float | None = None,
 ) -> Optional[Dict[str, Any]]:
     """Fetch a cached body. Returns ``None`` on miss / expiry / mode=off."""
     if _MODE == "off":
@@ -343,24 +371,23 @@ def cache_get(
     age = datetime.now(timezone.utc) - saved
     if age > effective_ttl:
         return None
-    return entry.get("body")
+    # A memory hit is the stored object: copy it, or one caller's edit reaches every later hit.
+    return copy.deepcopy(entry.get("body")) if _MODE == "memory" else entry.get("body")
 
 
 def _scrub_body(node: Any, secrets: "list[str]") -> Any:
-    """Copy of ``node`` with credentials removed (the live response is left untouched).
+    """Copy of ``node`` with the request's own credentials removed (the live response is untouched).
 
     Every string leaf has each collected credential value (:func:`_request_secrets`) replaced
-    exactly; only URL-like leaves (``http...``) also go through ``_redact_secrets``, for echoed
-    ``?apiKey=...`` links. Ordinary text (``"key: 1234"``) is never pattern-matched, dict keys
-    and non-string leaves are never rewritten, so a cache hit equals a live call for any body
-    that does not carry the request's own credential.
+    exactly. Nothing is pattern-matched: a signed media URL in the body (``Signature=``,
+    ``X-Amz-Signature=``) is data the caller needs, and a pattern pass came back ``REDACTED`` on a
+    cache hit (R897-4). Dict keys and non-string leaves are never rewritten, so a cache hit equals
+    a live call for any body that does not carry the request's own credential.
     """
-    from sportsdataverse.errors import _redact_secrets
-
     if isinstance(node, str):
         for sec in secrets:
             node = node.replace(sec, "REDACTED")
-        return _redact_secrets(node) if node.lstrip().lower().startswith("http") else node
+        return node
     if isinstance(node, dict):
         return {k: _scrub_body(v, secrets) for k, v in node.items()}
     if isinstance(node, list):
@@ -370,13 +397,20 @@ def _scrub_body(node: Any, secrets: "list[str]") -> Any:
 
 def _request_secrets(url: str, params: Optional[Dict[str, Any]] = None) -> "list[str]":
     """The credential values a request carried: URL query pairs, key-as-path-segment, and
-    ``params`` entries whose NAME is a credential name (``apiKey``, ``token``, ...)."""
+    ``params`` entries whose NAME ends in a credential name (``apiKey``, ``api_token``,
+    ``user_key``, ...)."""
     from sportsdataverse.errors import _PATH_KEY, _SECRET_PAIR
 
     found = [m.group(3).rstrip(",;)]}") for m in _SECRET_PAIR.finditer(url)]
     found += [m.group(0)[len(m.group(1)) :] for m in _PATH_KEY.finditer(url)]
     for k, v in (params or {}).items():
-        if isinstance(v, (str, int)) and not isinstance(v, bool) and _SECRET_PAIR.fullmatch(f"{k}={v}"):
+        if not isinstance(v, (str, int)) or isinstance(v, bool):
+            continue
+        # The name matches when a credential name ends exactly where ``k`` does (``api_token``,
+        # ``user_key``); a fullmatch missed every prefixed name (R897-5).
+        probe = f"?{k}=x"
+        m = _SECRET_PAIR.search(probe)
+        if m is not None and m.end() == len(probe):
             found.append(str(v))
     return [v for v in dict.fromkeys(found) if len(v) >= 8]  # a short value would shred ordinary text
 
@@ -386,7 +420,7 @@ def cache_set(
     params: Optional[Dict[str, Any]],
     body: Any,
     *,
-    ttl: Optional[timedelta] = None,
+    ttl: timedelta | float | None = None,
 ) -> None:
     """Persist a body to the cache. No-op when mode=off or TTL=LIVE."""
     if _MODE == "off":
@@ -446,6 +480,25 @@ def clear_cache(
     return _drop_matching(glob)
 
 
+def _remove(path: Path) -> bool:
+    """Delete one cache file; ``False`` when it is already gone or locked (a Windows handle), never a raise.
+
+    A locked entry warns: the caller asked for it to be gone, and it is still served.
+    """
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        return False
+    except PermissionError:
+        warnings.warn(
+            f"clear_cache: {path} is in use by another process and was not deleted; it stays cached",
+            RuntimeWarning,
+            stacklevel=4,  # _remove <- _drop_one/_drop_matching <- clear_cache <- the caller
+        )
+        return False
+    return True
+
+
 def _drop_one(key: str) -> int:
     if _MODE == "memory":
         if key in _MEMORY_CACHE:
@@ -453,10 +506,7 @@ def _drop_one(key: str) -> int:
             return 1
         return 0
     if _MODE == "filesystem":
-        path = _cache_dir() / f"{key}.json"
-        if path.exists():
-            path.unlink()
-            return 1
+        return int(_remove(_cache_dir() / f"{key}.json"))
     return 0
 
 
@@ -470,16 +520,13 @@ def _drop_matching(glob: str) -> int:
         cache_dir = _cache_dir()
         if not cache_dir.exists():
             return 0
-        if glob == "*":
-            # Nuke fast path — remove the whole directory tree.
-            count = sum(1 for _ in cache_dir.glob("*.json"))
-            shutil.rmtree(cache_dir, ignore_errors=True)
-            return count
+        # Only the files this cache wrote (``<32-hex key>.json``): ``cache_dir`` defaults to
+        # ~/.cache/sportsdataverse, which also holds the NFL cache and its downloaded models,
+        # and an SDV_PY_CACHE_DIR may hold anything. Never rmtree it.
         count = 0
         for path in cache_dir.glob("*.json"):
-            if fnmatch.fnmatch(path.stem, glob):
-                path.unlink()
-                count += 1
+            if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):
+                count += _remove(path)  # a locked entry is skipped, not counted
         return count
     return 0
 

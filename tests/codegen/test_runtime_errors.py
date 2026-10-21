@@ -92,6 +92,44 @@ def test_empty_200_is_a_failed_fetch(monkeypatch):
         _get("https://example.test/x")
 
 
+def test_a_json_array_where_a_yahoo_object_belongs_is_a_failed_fetch(monkeypatch):
+    # A-L18: it became {} ("nothing here").
+    from sportsdataverse.yahoo import yahoo_shangrila_runtime as rt
+
+    _serve(monkeypatch, 200, "[]")
+    with pytest.raises(AssetFetchError, match="JSON array where an object was expected"):
+        rt._get("https://graphite-secure.sports.yahoo.com/v1/query/shangrila/leagueNames")
+
+
+def test_statcast_html_leaderboards_still_return_their_page(monkeypatch):
+    # A-L63 refuses a page from a CSV endpoint; the two HTML leaderboards keep theirs.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    page = (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8")
+    _serve(monkeypatch, 200, page, "text/html")
+    assert rt._get("https://baseballsavant.mlb.com/leaderboard/fielding-run-value") == page
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get("https://baseballsavant.mlb.com/leaderboard/expected_statistics")
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://baseballsavant.mlb.com/leaderboard/expected_statistics?next=/leaderboard/fielding-run-value",
+        "https://baseballsavant.mlb.com/leaderboard/fielding-run-value-extra",
+    ],
+)
+def test_statcast_html_allowance_is_the_path_not_a_substring(monkeypatch, url):
+    # A query or a longer path that merely names an HTML leaderboard is still a CSV endpoint.
+    from sportsdataverse.mlb import mlb_statcast_runtime as rt
+
+    _serve(
+        monkeypatch, 200, (FIX.parent / "mlb_statcast" / "player_page.html").read_text(encoding="utf-8"), "text/html"
+    )
+    with pytest.raises(AssetFetchError, match="a page, not data"):
+        rt._get(url)
+
+
 @pytest.mark.parametrize(
     ("fixture", "ctype", "call"),
     [
@@ -513,36 +551,8 @@ _KWARGS: Dict[str, Callable[[], Dict[str, Any]]] = {
     "ibba_segev_runtime": lambda: {"params": {"method": "getGameInfo", "game_id": 1}},
 }
 _HTML_IS_DATA = {"kenpom_runtime"}  # its pages are the payload
-_SCALAR = "B-GB-16: a 2xx scalar JSON body is returned as data; task 4.1 (_json_body: dict or list only)"
-_SCALAR_EMPTY = "A-L18: a 2xx scalar body becomes {} ('nothing here'); task 4.1"
 _NFLPRO = "A-M4: nflpro_runtime._fetch skips _check_status/_json_body; task 4.1b"
 _KNOWN: Dict[Tuple[str, str], str] = {
-    **{
-        (rt, "scalar_200"): _SCALAR
-        for rt in (
-            "_codegen_runtime",
-            "euroleague_runtime",
-            "football_data_runtime",
-            "mls_api_runtime",
-            "mlb_statcast_runtime",
-            "nba_stats_runtime",
-            "nfl_api_runtime",
-            "nwsl_api_runtime",
-            "thesportsdb_runtime",
-            "torvik_runtime",
-            "uefa_runtime",
-            "wnba_stats_runtime",
-        )
-    },
-    **{
-        (rt, "scalar_200"): _SCALAR_EMPTY
-        for rt in ("on3_runtime", "sports247_runtime", "sports247_site_pages_runtime", "yahoo_shangrila_runtime")
-    },
-    ("pff_runtime", "scalar_200"): "B-L75: the LEGACY PFF runtime turns a 200 non-object into {}; task 4.1b",
-    **{
-        (rt, "html_200"): "A-L63: _text_body accepts an HTML challenge page as CSV text; task 4.1"
-        for rt in ("mlb_statcast_runtime", "torvik_runtime")
-    },
     **{
         ("nflpro_runtime", case): _NFLPRO
         for case in ("400", "403", "429", "503", "204", "empty_200", "html_200", "scalar_200")
@@ -559,7 +569,6 @@ _SYNC_204 = (
     "EX-SYNC-a: a 204 No Content raises instead of returning {} ('nothing'); task providers 4.1b runtime vocabulary"
 )
 _SYNC_400 = "EX-SYNC-b: an HTTP 400 is AssetFetchError, not ValueError; task providers 4.1b runtime vocabulary"
-_SYNC_SCALAR = "EX-SYNC-c: a 2xx scalar JSON body is data or NoDataError, not AssetFetchError; task providers 4.1b runtime vocabulary"
 _SYNC_EMPTY = (
     "EX-SYNC-d: an empty 200 is NoDataError ('unknown id'), not AssetFetchError; task providers 4.1b runtime vocabulary"
 )
@@ -601,21 +610,6 @@ _SYNC_1018: Dict[Tuple[str, str], Tuple[Any, str]] = {
     **{
         (f"{rt}_runtime", "400"): (AssetFetchError, _SYNC_400) for rt in ("easl", "kbl", "kzs", "scb", "vtb_infobasket")
     },
-    **{
-        (f"{rt}_runtime", "scalar_200"): (_FAILED, _SYNC_SCALAR)
-        for rt in (
-            "basketball",
-            "elh",
-            "euro_hockey",
-            "kbl",
-            "khl_webcaster",
-            "nationalleague",
-            "shl",
-            "sihf",
-            "sportality",
-        )
-    },
-    **{(f"{rt}_runtime", "scalar_200"): (NoDataError, _SYNC_SCALAR) for rt in ("esports", "liiga", "wjbl")},
     ("ibba_runtime", "empty_200"): (NoDataError, _SYNC_EMPTY),
 }
 
@@ -763,3 +757,29 @@ def test_discovered_runtime_speaks_the_vocabulary(monkeypatch, mod, case):
                 call()
     assert calls, f"{mod}._get never reached the transport"
     assert blocked == [], f"{mod}._get tried the network below the patched transports: {blocked}"
+
+
+def test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises():
+    """A-L13: a getter whose every matrix row passes raises the vocabulary, so its generated
+    wrappers must say so (``generate._VOCAB_GETTERS`` adds the ``Raises:`` lines)."""
+    from tools.codegen import generate
+
+    known = {stem for stem, _case in (*_KNOWN, *_SYNC_1018)}
+    green = {mod for mod in _RUNTIMES if mod.rsplit(".", 1)[1] not in known}
+    assert sorted(green - generate._VOCAB_GETTERS) == []
+
+
+def test_the_stats_wrappers_name_the_missing_curl_cffi_import_error():
+    """R901-7: the stats.nba.com / stats.wnba.com runtime raises ImportError without curl_cffi; every
+    generated wrapper on it says so, once (drafthistory's YAML ``raises:`` already names it)."""
+    import inspect
+
+    from sportsdataverse.nba import nba_stats
+    from sportsdataverse.wnba import wnba_stats
+
+    for mod, prefix in ((nba_stats, "nba_stats_"), (wnba_stats, "wnba_stats_")):
+        fns = [f for n, f in inspect.getmembers(mod, inspect.isfunction) if n.startswith(prefix)]
+        assert fns
+        for fn in fns:
+            raises = (fn.__doc__ or "").split("Raises:")[1].split("Example:")[0]
+            assert raises.count("ImportError:") == 1, fn.__name__

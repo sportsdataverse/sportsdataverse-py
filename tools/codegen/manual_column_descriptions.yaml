@@ -1364,6 +1364,149 @@ as_of_split:
   pitcher: MLBAM player id of the pitcher.
   player_name: Player name carried through from the input Statcast frame, `Last, First` -- the batter for a default
     mlb_statcast_search pull, the pitcher for a `player_type="pitcher"` search.
+athlete_stats:
+  category: ESPN stat category the row belongs to (e.g., basketball "averages" / "totals" / "miscellaneous", NFL
+    "passing", MLB "career-batting"). The stat columns after `position` are named from each category's own `names`
+    list, so they differ by sport, and the other categories' columns are null on a row.
+  split_name: Season label of the row (e.g., "2010-11") on the Web v3 payload, or "Career" on the row built from the
+    category's career totals; the split's name on payloads that ship named splits.
+  split_category: Category of a named split; null on the Web v3 per-season rows.
+  split_value: Value of a named split; null on the Web v3 per-season rows.
+  season: Season end year of the row (e.g., 2011 for 2010-11); null on the "Career" row.
+  team_id: ESPN team id (Int64) the athlete played that season for; a traded player has one row per team. Null on the
+    "Career" row.
+  position: Position abbreviation the athlete was listed at for that season and team (e.g., "G"); null on the "Career"
+    row.
+  games_played: Games played (GP), as ESPN ships it (a string).
+  games_started: Games started (GS).
+  avg_minutes: Minutes per game (MIN).
+  avg_field_goals_made_avg_field_goals_attempted: Field goals made-attempted per game (FG), one "made-attempted"
+    string (e.g., "3.9-9.0").
+  field_goal_pct: Field goal percentage (FG%), FGM / FGA x 100.
+  avg_three_point_field_goals_made_avg_three_point_field_goals_attempted: Three-point field goals made-attempted per
+    game (3PT), one "made-attempted" string.
+  three_point_field_goal_pct: Three-point field goal percentage (3P%), 3PM / 3PA x 100.
+  avg_free_throws_made_avg_free_throws_attempted: Free throws made-attempted per game (FT), one "made-attempted" string.
+  free_throw_pct: Free throw percentage (FT%), FTM / FTA x 100.
+  avg_offensive_rebounds: Offensive rebounds per game (OR).
+  avg_defensive_rebounds: Defensive rebounds per game (DR).
+  avg_rebounds: Rebounds per game (REB).
+  avg_assists: Assists per game (AST).
+  avg_blocks: Blocks per game (BLK).
+  avg_steals: Steals per game (STL).
+  avg_fouls: Personal fouls per game (PF).
+  avg_turnovers: Turnovers per game (TO).
+  avg_points: Points per game (PTS).
+  field_goals_made_field_goals_attempted: Season field goals made-attempted (FG), one "made-attempted" string.
+  three_point_field_goals_made_three_point_field_goals_attempted: Season three-point field goals made-attempted (3PT),
+    one "made-attempted" string.
+  free_throws_made_free_throws_attempted: Season free throws made-attempted (FT), one "made-attempted" string.
+  offensive_rebounds: Season offensive rebounds (OR).
+  defensive_rebounds: Season defensive rebounds (DR).
+  total_rebounds: Season rebounds (REB).
+  assists: Season assists (AST).
+  blocks: Season blocked shots (BLK).
+  steals: Season steals (STL).
+  fouls: Season personal fouls (PF).
+  turnovers: Season turnovers (TO).
+  points: Season points (PTS).
+  double_double: Games with double figures in two of points, rebounds, assists, steals and blocks (DD2).
+  triple_double: Games with double figures in three of points, rebounds, assists, steals and blocks (TD3).
+  disqualifications: Times the athlete fouled out (DQ).
+  ejections: Times the athlete was ejected (EJECT).
+  technical_fouls: Technical fouls called on the athlete (TECH).
+  flagrant_fouls: Flagrant fouls called on the athlete (FLAG).
+  assist_turnover_ratio: Assists per turnover (AST/TO).
+  steal_turnover_ratio: Steals per turnover (STL/TO).
+  scoring_efficiency: ESPN's scoring efficiency (SC-EFF).
+  shooting_efficiency: ESPN's shooting efficiency (SH-EFF).
+  rating: Player rating (RAT) as ESPN publishes it for college basketball.
+  off_warbr: Offensive wins above replacement (OWAR); ESPN's stat key `offWARBR`, snake-cased.
+  runs_created: Runs created (RC), an estimate of the runs a batter produced.
+  runs_created_per27_outs: Runs created per 27 outs (RC/27).
+  isolated_power: Isolated power (ISOP), slugging percentage minus batting average.
+  secondary_avg: Secondary average (SECA), extra bases from hits plus walks and stolen bases, per at bat.
+  at_bats_per_home_run: At bats per home run (AB/HR).
+  walks_per_plate_appearance: Walks per plate appearance (BB/PA).
+  walk_to_strikeout_ratio: Walks per strikeout (BB/K).
+  ground_balls: Ground-ball outs (GO).
+  fly_balls: Fly-ball outs (FO).
+  ground_to_fly_ratio: Ground outs per fly out (GO/FO).
+  at_bats: At bats (AB), plate appearances minus walks, hit-by-pitches and sacrifices.
+  runs: Runs scored (R).
+  hits: Hits (H), singles through home runs.
+  doubles: Doubles (2B), two-base hits.
+  triples: Triples (3B), three-base hits.
+  home_runs: Home runs (HR).
+  rb_is: Runs batted in (RBI); ESPN's stat key `RBIs`, snake-cased.
+  walks: Walks (BB), bases on balls.
+  hit_by_pitch: Times hit by a pitch (HBP).
+  strikeouts: Strikeouts (SO).
+  stolen_bases: Stolen bases (SB).
+  caught_stealing: Times caught stealing (CS).
+  avg: Batting average (AVG), hits / at bats.
+  on_base_pct: On-base percentage (OBP), (hits + walks + hit-by-pitches) / plate appearances.
+  slug_avg: Slugging percentage (SLG), total bases / at bats.
+  ops: On-base plus slugging (OPS).
+  warbr: Wins above replacement (WAR); ESPN's stat key `WARBR`, snake-cased.
+  plate_appearances: Plate appearances (PA).
+  pitches: Pitches seen (P).
+  pitches_per_plate_appearance: Pitches seen per plate appearance (P/PA).
+  extra_base_hits: Extra-base hits (XBH), doubles plus triples plus home runs.
+  total_bases: Total bases (TB), 1 per single, 2 per double, 3 per triple, 4 per home run.
+  intentional_walks: Intentional walks (IBB).
+  gid_ps: Grounded into double play (GIDP); ESPN's stat key `GIDPs`, snake-cased.
+  sac_hits: Sacrifice bunts (SH).
+  sac_flies: Sacrifice flies (SF).
+  stolen_base_pct: Stolen-base success percentage (SB%).
+  total_tackles: Total tackles (TOT), solo plus assisted.
+  solo_tackles: Unassisted tackles (SOLO).
+  assist_tackles: Assisted tackles (AST).
+  fumbles_forced: Forced fumbles (FF).
+  fumbles_recovered: Fumbles recovered (FR).
+  fumbles_recovered_yards: Return yards after fumble recoveries (YDS).
+  interception_yards: Return yards after interceptions (YDS).
+  avg_interception_yards: Average return yards per interception (AVG).
+  interception_touchdowns: Interceptions returned for a touchdown (TD).
+  long_interception: Longest interception return in yards (LNG).
+  passes_defended: Passes defended (PD).
+  stuffs: Runners stopped at or behind the line of scrimmage (STF).
+  stuff_yards: Yards lost on stuffs (STFYDS).
+  kicks_blocked: Kicks blocked (KB).
+  completions: Pass completions (CMP).
+  passing_attempts: Pass attempts (ATT).
+  completion_pct: Completion percentage (CMP%).
+  passing_yards: Passing yards (YDS).
+  yards_per_pass_attempt: Passing yards per attempt (AVG).
+  passing_touchdowns: Passing touchdowns (TD).
+  interceptions: Passes thrown that were intercepted (INT).
+  long_passing: Longest completed pass in yards (LNG).
+  sacks: Times sacked (SACK) on the passing line; a defender's sacks on the defensive line.
+  qb_rating: NFL passer rating (RTG).
+  adj_qbr: ESPN's adjusted Total QBR (QBR).
+  receptions: Receptions (REC).
+  receiving_targets: Times targeted by a pass (TGTS).
+  receiving_yards: Receiving yards (YDS).
+  yards_per_reception: Receiving yards per reception (AVG).
+  receiving_touchdowns: Receiving touchdowns (TD).
+  long_reception: Longest reception in yards (LNG).
+  receiving_first_downs: First downs gained by reception (FD).
+  receiving_fumbles: Fumbles after a reception (FUM).
+  receiving_fumbles_lost: Fumbles after a reception that the opponent recovered (LST).
+  rushing_attempts: Rushing attempts (CAR).
+  rushing_yards: Rushing yards (YDS).
+  yards_per_rush_attempt: Rushing yards per attempt (AVG).
+  rushing_touchdowns: Rushing touchdowns (TD).
+  long_rushing: Longest run in yards (LNG).
+  rushing_first_downs: First downs gained by rushing (FD).
+  rushing_fumbles: Fumbles on rushing plays (FUM).
+  rushing_fumbles_lost: Fumbles on rushing plays that the opponent recovered (LST).
+  return_touchdowns: Kick and punt return touchdowns (RET).
+  total_touchdowns: Touchdowns of every kind (TD).
+  total_two_point_convs: Successful two-point conversions (2PT).
+  kick_extra_points: Kicked extra points made (PAT).
+  field_goals: Field goals made (FG).
+  total_points: Points scored (PTS).
 away_team_record:
   goals_per_game: Average number of goals the team scored per road game over the recorded period.
 bchl_standings:
@@ -4307,6 +4450,14 @@ espn_wnba_schedule:
   home_linescores: Period-by-period point totals for the home team, stored as a list of integer scores.
   home_records: Win-loss record strings for the home team across relevant splits (e.g., overall, home/away, conference).
   season: Season as a 4-digit starting year (integer). A 'YYYY-YY' string is not accepted.
+event_competitor_statistics:
+  split_name: Name of the stat split (Core v2 answers one, "All Splits").
+  category_name: ESPN stat category of the row (e.g., "defensive", "general", "offensive").
+  stat_name: ESPN stat key in camelCase (e.g., "blocks", "defensiveRebounds").
+  stat_abbreviation: Short label of the stat (e.g., "BLK").
+  stat_value: Numeric value of the team's stat in this game.
+  stat_display_value: The value as ESPN displays it (a string, e.g., "7").
+  stat_description: ESPN's one-sentence definition of the stat.
 expansion_draft_picks:
   draft_picks: JSON-serialized list of players selected by this franchise in the NHL expansion draft.
 fantasywidget:
@@ -16725,6 +16876,20 @@ qmjhl_season_id:
   season_yr: 'End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026,
     "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the
     next season ("2026 Pre-season" is 2027). Null when the name holds no year.'
+season_draft:
+  $ref: Core v2 URL of this draft resource.
+  display_name: Full name of the draft (e.g., "2024 National Basketball Association Draft").
+  links: JSON-encoded list of ESPN web links for the draft (href, rel, text).
+  number_of_rounds: Number of rounds in the draft.
+  positions: JSON-encoded list of the position resources the draft uses (Core v2 $ref links with abbreviations).
+  short_display_name: Short name of the draft (e.g., "2024 NBA Draft").
+  uid: ESPN universal id of the draft (e.g., "s:40~l:46~e:draft~y:2024").
+  year: Year the draft was held (e.g., 2024), the season in its Core v2 path.
+  needs: JSON-encoded list of the NFL teams' draft needs, one entry per team (its Core v2 team link and the positions it
+    needs, with abbreviations); NFL only.
+  athletes_$ref: Core v2 URL of the draft's athlete (prospect) collection.
+  rounds_$ref: Core v2 URL of the draft's rounds, which hold the picks.
+  status_$ref: Core v2 URL of the draft's status resource.
 sihf_game_goalie_stats:
   game_id: SIHF game id (Int64 join key; the details link of sihf_results, the searchQuery of the game wrappers).
   team_side: 'Side of the game the row belongs to: "home" or "away".'
@@ -58898,6 +59063,8 @@ season_teams:
     parameter.
   ticket_url: StubHub ticket-purchase URL for the team, either a bare /performer/{id} link or a slugged team-tickets link;
     an empty string for the leagues where CBS carries no StubHub performer.
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
 shiftcharts:
   detail_code: Numeric code identifying the specific detail type or sub-category within the shift or event record.
   event_details: Serialized details describing the on-ice event associated with the shift, such as play type and participants.
@@ -70356,3 +70523,194 @@ ibba_segev_game_crosswalk:
 pleague_team_crosswalk:
   team_id: P. LEAGUE+ site team id (1-8), stable across seasons and renames.
   team_uuid: Preciser team uuid of the same club (team_uuid of the pleague_preciser frames).
+espn_cfb_calendar:
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
+  week_label: Week label as ESPN's calendar names it, e.g. Week 1.
+  week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
+  week_detail: Date span of the week as display text, e.g. Aug 22-Sep 7.
+  week_start_date: Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z).
+  week_end_date: End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week).
+  season_type_label: Name of the season segment the week belongs to, e.g. Regular Season or Postseason.
+  season_type_start_date: Start of that season segment, an ISO 8601 UTC timestamp string.
+  season_type_end_date: End of that season segment, an ISO 8601 UTC timestamp string.
+espn_nfl_calendar:
+  season: The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url).
+  week_label: Week label as ESPN's calendar names it, e.g. Week 1.
+  week_alternate_label: Alternate week label ESPN ships next to week_label; usually the same text.
+  week_detail: Date span of the week as display text.
+  week_start_date: Start of the week window, an ISO 8601 UTC timestamp string.
+  week_end_date: End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week).
+  season_type_label: Name of the season segment the week belongs to, e.g. Regular Season.
+  season_type_start_date: Start of that season segment, an ISO 8601 UTC timestamp string.
+  season_type_end_date: End of that season segment, an ISO 8601 UTC timestamp string.
+espn_mbb_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z).
+  month: Month of the calendar day as a two-digit string, e.g. 11.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_wbb_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string (e.g. 2024-11-04T08:00Z).
+  month: Month of the calendar day as a two-digit string, e.g. 11.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_nba_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string.
+  month: Month of the calendar day as a two-digit string.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_wnba_calendar:
+  datetime: The calendar day as ESPN sends it, an ISO 8601 UTC timestamp string.
+  month: Month of the calendar day as a two-digit string.
+  dateURL: The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request.
+espn_mlb_calendar:
+  month: Month of the game day, as an integer (1-12).
+  day: Day of the month of the game day, as an integer.
+espn_wbb_standings:
+  conference_abbreviation: Abbreviation of the team's conference as ESPN's standings name it.
+  games_back: Games behind the conference leader (0 for the leader).
+  avg_points_for: Points the team scored per game.
+  avg_points_against: Points the team allowed per game.
+  division_wins: Wins against division opponents, as ESPN's standings report them.
+  division_losses: Losses against division opponents, as ESPN's standings report them.
+espn_wnba_standings:
+  conference_abbreviation: Conference abbreviation, E (Eastern) or W (Western).
+  games_back: Games behind the conference leader (0 for the leader).
+  avg_points_for: Points the team scored per game.
+  avg_points_against: Points the team allowed per game.
+  division_wins: Wins against division opponents; the WNBA has no divisions, so ESPN sends 0.
+  division_losses: Losses against division opponents; the WNBA has no divisions, so ESPN sends 0.
+espn_wnba_draft:
+  athlete_first_name: Drafted player's first name; null when ESPN's draft feed omits it (display_name carries the name).
+  athlete_last_name: Drafted player's last name; null when ESPN's draft feed omits it.
+  athlete_full_name: Drafted player's full name; null when ESPN's draft feed omits it.
+  athlete_position_id: ESPN position id of the drafted player.
+  athlete_height: Drafted player's height as display text, e.g. 6'0".
+  athlete_weight: Drafted player's weight in pounds; null when ESPN does not list it.
+  athlete_age: Drafted player's age at the draft; null when ESPN does not list it.
+  athlete_birth_city: Drafted player's birth city; null when ESPN does not list it.
+  athlete_birth_state: Drafted player's birth state; null when ESPN does not list it.
+  school_name: Name of the player's school or club before the draft, e.g. Huskies, or a country for an international pick.
+  school_abbreviation: Abbreviation of that school or club, e.g. CONN or ND.
+blue_chip_ratio:
+  blue_chip_ratio: Share of the team's recruits in the trailing window rated at or above the division's blue-chip star floor (4+ stars for FBS).
+  n_recruits: Recruits in the trailing window of classes eligible for this season.
+  n_blue_chip: Recruits in that window rated at or above the blue-chip star floor.
+x_era:
+  x_woba: Expected wOBA allowed, the mean of Statcast estimated_woba_using_speedangle over the pitcher's pitches that carry one (batted balls).
+  x_era: Parametric xERA, league ERA + (x_woba - league wOBA) / wOBA scale * PA per 9, from the season's league baselines.
+leverage_index:
+  inning_capped: Inning of the state bucket, capped at 9 (extra innings share the ninth's bucket).
+  half: Half inning of the state bucket, top or bottom.
+  base_state: Base occupancy of the state as three characters (first, second, third), e.g. 1_3 for runners on first and third.
+  outs_start: Outs before the play, 0-2.
+  score_diff_bucket: Home minus away score at the state, clipped to [-6, 6].
+load_rosters:
+  status: Roster status code nflverse assigns the player for that season, e.g. ACT (active), RES (reserve) or INA (inactive).
+elh_game_ids:
+  hokejcz_game_id: hokej.cz game id, the file name of the match/{season}/full/{id}.json key.
+  season: Season as its END year (the season the call asked for).
+  key: Full S3 object key of the play-by-play file.
+  last_modified: Time the file was last written, an ISO 8601 UTC timestamp string from the S3 listing.
+  size: File size in bytes; a file of a few hundred bytes is written ahead of a game and holds no events.
+athlete_contracts:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+athlete_seasons:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+athlete_statisticslog:
+  count: Always null, since the statisticslog payload ships its rows under entries with no page envelope.
+  page_count: Always null, since the statisticslog payload ships its rows under entries with no page envelope.
+athletes_index:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+awards:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+event_broadcasts:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+event_competitors:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+event_odds:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+event_officials:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+event_probabilities:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+events:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+franchises:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+positions:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+recruiting_athletes:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+recruiting_rankings:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+recruiting_years:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_athletes:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_awards:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_futures:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_group_children:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_group_teams:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_groups:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_powerindex:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_powerindex_leaders:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_qbr_week:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_recruits:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_type_corrections:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_types:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_week_events:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_week_rankings:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+season_weeks:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+seasons:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+talentpicks:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+tournaments:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.
+venues:
+  count: Total items in the ESPN collection across every page (the page envelope's count), the same on every row; more than the row count means this is one page of several (pass the wrapper's limit= or page=).
+  page_count: Pages the collection spans at the requested limit (the page envelope's pageCount), the same on every row; above 1 means rows are missing from this frame.

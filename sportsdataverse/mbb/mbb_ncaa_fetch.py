@@ -598,7 +598,7 @@ _DROPPED_FETCH = "TypeError: Failed to fetch"
 def _fetch_in_page(page: Any, url: str) -> "tuple[int, str]":
     try:
         result = page.evaluate(_RAW_FETCH_JS, url)
-    except Exception as exc:  # noqa: BLE001 - only a dropped request is retried
+    except Exception as exc:  # only a dropped request is retried
         if _DROPPED_FETCH not in str(exc):
             raise
         logger.debug("in-page fetch dropped, retrying once on the same browser: %s", url)
@@ -1114,7 +1114,7 @@ class NcaaFetcher:
                 raise
             except _TermsGateError:
                 raise  # same reasoning: no proxy rotation gets past the Terms gate
-            except Exception as exc:  # noqa: BLE001 - rotate on any transport failure
+            except Exception as exc:  # rotate on any transport failure
                 last_err = str(exc)
                 # Which error rotated (and relaunched the browser) is otherwise
                 # invisible until the pool is exhausted. Scrub any user:pass@.

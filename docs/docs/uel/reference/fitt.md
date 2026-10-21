@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # UEL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.uel` — 1 endpoint.
+`sportsdataverse.soccer.uel` — 1 endpoint.
 
 ## espn_uel_fpi
 

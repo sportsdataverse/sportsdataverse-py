@@ -1,0 +1,18 @@
+schema: espn_mlb_calendar
+kind: dataframe
+columns:
+- name: event_date
+  type: character
+  description: ''
+- name: year
+  type: integer
+  description: ''
+- name: month
+  type: integer
+  description: ''
+- name: day
+  type: integer
+  description: ''
+- name: season
+  type: integer
+  description: ''

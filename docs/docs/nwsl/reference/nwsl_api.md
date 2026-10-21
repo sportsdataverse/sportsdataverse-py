@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NWSL — NWSL official web API (StatsPerform SDP)
 
-`sportsdataverse.nwsl` — 9 endpoints.
+`sportsdataverse.soccer.nwsl` — 9 endpoints.
 
 ## nwsl_competitions
 

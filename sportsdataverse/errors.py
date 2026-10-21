@@ -5,7 +5,9 @@ Custom exceptions for sportsdataverse module
 from __future__ import annotations
 
 import re as _re
-from typing import TYPE_CHECKING
+import warnings as _warnings
+from typing import TYPE_CHECKING, Any
+from urllib.parse import urlsplit
 
 if TYPE_CHECKING:
     import requests
@@ -19,8 +21,8 @@ if TYPE_CHECKING:
 # lookahead (every name's first letter) only makes the scan cheaper.
 _SECRET_PAIR = _re.compile(
     r"(?=[ACIJKPRSTacijkprst])(?:(?<![A-Za-z0-9])|(?<=%[0-9A-Fa-f]{2}))"
-    r"((password|passwd|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
-    r"|api[_-]?key|key|jwt)"
+    r"((password|passwd|pass|pwd|(?:(?:access|refresh|id|auth|session)[_-]?)?token|client[_-]?secret|secret"
+    r"|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth|cookie)"
     r"[\"']?\s*(?:[:=]|%3[AD])\s*[\"']?)"
     # A quoted value runs to its closing quote (it may hold spaces); an unquoted one
     # stops at the first separator.
@@ -34,6 +36,14 @@ _SECRET_PAIR = _re.compile(
 # ``name=value`` shapes -- never sees it, and the key would survive into every error message,
 # every ``download`` retry log line and every chained traceback.
 _PATH_KEY = _re.compile(r"(/api/v[12]/json/)[^/\s?#\"']+")
+
+# A password in a URL's userinfo (``http://user:pw@proxy:8080``, the proxy shape ``download``
+# documents and ``mbb_ncaa_fetch`` builds), a bearer / basic credential quoted from a header
+# (``Authorization: Bearer <jwt>``, whose unquoted value ``_SECRET_PAIR`` stops at the space), and
+# an unquoted ``Cookie:`` header line, every cookie on it.
+_USERINFO = _re.compile(r"(://[^\s/?#@:\"']*:)[^\s/?#@\"']+@")
+_BEARER = _re.compile(r"(?<![A-Za-z0-9])((?:bearer|basic)\s+)[A-Za-z0-9._~+/=-]{8,}", _re.IGNORECASE)
+_COOKIE_LINE = _re.compile(r"(?<![A-Za-z0-9])(cookie\s*:\s*)[^\r\n\"']+", _re.IGNORECASE)
 
 
 def _redact_pair(match: _re.Match[str]) -> str:
@@ -54,14 +64,23 @@ def _redact_pair(match: _re.Match[str]) -> str:
 def _redact_secrets(text: str) -> str:
     """Replace the value of every credential pair in ``text`` with ``REDACTED``.
 
-    Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``key`` / ``token`` /
-    ``access_token`` / ``password`` / ``secret`` / ``client_secret`` (and the other
-    names sportsdataverse-js redacts), case-insensitively, as ``name=value``, as
-    ``name%3Dvalue``, and as ``'name': 'value'``. Everything else -- host, path,
+    Covers ``apiKey`` / ``api_key`` / ``apikey`` / ``appkey`` / ``access_key`` /
+    ``subscription-key`` / ``key`` / ``token`` / ``access_token`` / ``password`` /
+    ``secret`` / ``client_secret`` / ``sig`` / ``signature`` / ``auth`` /
+    ``Authorization`` / ``pass`` / ``cookie`` (and the other names sportsdataverse-js
+    redacts), case-insensitively, as ``name=value``, as ``name%3Dvalue``, and as
+    ``'name': 'value'``; a key as a TheSportsDB path segment; the password of a
+    ``user:pw@host`` URL; a ``Bearer`` / ``Basic`` credential; and a whole
+    ``Cookie:`` header line. Everything else -- host, path,
     status, the other params -- is left as it was, so the line still says which
     request failed.
     """
-    return _PATH_KEY.sub(r"\1REDACTED", _SECRET_PAIR.sub(_redact_pair, text))
+    # Bearer first: ``Authorization: Bearer <jwt>`` as a pair would redact only the word "Bearer".
+    text = _BEARER.sub(r"\1REDACTED", text)
+    text = _COOKIE_LINE.sub(r"\1REDACTED", text)
+    text = _SECRET_PAIR.sub(_redact_pair, text)
+    text = _USERINFO.sub(r"\1REDACTED@", text)
+    return _PATH_KEY.sub(r"\1REDACTED", text)
 
 
 class SportsDataverseError(Exception):
@@ -307,6 +326,131 @@ class EraCoverageWarning(UserWarning):
     """
 
 
+class SchemaDriftWarning(UserWarning):
+    """Warned when a parser meets a payload whose shape it does not recognise and returns zero rows.
+
+    The parser contract keeps a malformed payload from raising: the result is a zero-row
+    frame. Without this warning that frame reads exactly like "the source has no data", so an
+    upstream schema change would pass unnoticed (A-L60). The message names the parser, the
+    payload path it was reading, and the exception the shape caused. Turn it into an error in a
+    pipeline that must never publish a drifted parse with
+    ``warnings.filterwarnings("error", category=SchemaDriftWarning)``.
+
+    Example:
+        Fail a build on drift::
+
+            import warnings
+            from sportsdataverse.errors import SchemaDriftWarning
+            warnings.filterwarnings("error", category=SchemaDriftWarning)
+    """
+
+
+#: What flattening a payload of the wrong shape raises (a row that is not an object: ``TypeError``
+#: from :func:`_object_rows`; a missing key; an unparseable value).
+#: Parsers catch exactly these, warn :class:`SchemaDriftWarning` and return zero rows.
+_SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
+
+
+def _object_rows(rows: list) -> list[dict]:
+    """The row rule: drop null rows, and raise ``TypeError`` on any other row that is not an object.
+
+    A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped: ``pd.json_normalize`` would
+    read it as an all-null row, and a list of nulls as an N x 0 frame (4.13). Any other row that is not
+    an object is schema drift, which pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1).
+    Call it on the rows handed to ``pd.json_normalize``, inside the parser's ``_SHAPE_ERRORS`` catch.
+    """
+    kept: list[dict] = []
+    for row in rows:
+        if isinstance(row, dict):
+            kept.append(row)
+        elif not _is_null(row):
+            raise TypeError(f"a row is {type(row).__name__}, not an object")
+    return kept
+
+
+def _is_null(row: Any) -> bool:
+    """Whether a row is a null one (``None``, ``NaN``, ``pd.NA``): no data, which the row rule drops."""
+    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
+
+    return bool(pd.api.types.is_scalar(row) and pd.isna(row))
+
+
+def _first_row(rows: list) -> Any:
+    """The first row that is not null, or ``None``: a parser that picks a shape from a row must skip the
+    null rows the row rule drops, or a leading null reshapes the frame (R953-2)."""
+    return next((row for row in rows if not _is_null(row)), None)
+
+
+def _warn_schema_drift(where: str, exc: BaseException) -> None:
+    """Warn that ``where`` (``"<parser>: <payload path>"``) met an unrecognised shape (A-L60)."""
+    _warnings.warn(
+        f"{where}: unexpected payload shape ({type(exc).__name__}: {exc}); no rows read from it",
+        SchemaDriftWarning,
+        stacklevel=3,
+    )
+
+
+def _error_envelope_code(body: Any) -> int | None:
+    """The status of an ESPN-style ``{"code": <4xx/5xx>, "message": ...}`` error body, else ``None``.
+
+    Only a dict holding exactly those two keys counts, so a payload that merely carries a
+    ``code`` field next to its data is never mistaken for one (A-M13), and only an HTTP-shaped
+    code (400-599): a provider's own business code such as 1001 is not an HTTP status.
+    """
+    if isinstance(body, dict) and set(body) == {"code", "message"}:
+        code = body["code"]
+        if isinstance(code, int) and not isinstance(code, bool) and 400 <= code <= 599:
+            return code
+    return None
+
+
+#: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other
+#: route's JSON scalar is a failed fetch (B-GB-16). OpenLigaDB's last-change timestamp answers
+#: ``"2025-08-24T19:25:06.787"`` (tools/codegen/endpoints/openligadb.yaml, R880-1).
+_STRING_ROUTES = ("api.openligadb.de/getlastchangedate/",)
+
+
+def _string_route(url: str) -> bool:
+    """Whether ``url`` is one of :data:`_STRING_ROUTES`, the routes allowed a bare string body."""
+    parts = urlsplit(str(url))
+    return f"{parts.netloc}{parts.path}".startswith(_STRING_ROUTES)
+
+
+def _is_data_body(url: str, body: Any) -> bool:
+    """A decoded 2xx body a parser can read: an object or array that is not an error envelope,
+    or a string from a :data:`_STRING_ROUTES` route. Anything else is a failed fetch."""
+    if isinstance(body, str):
+        return _string_route(url)
+    return isinstance(body, (dict, list)) and _error_envelope_code(body) is None
+
+
+# Content-Type prefixes of a body that is never JSON. ponytail: a deny-list, not "JSON only" --
+# plenty of hosts serve JSON as text/plain, text/html or text/javascript; add a type here when a
+# binary download turns up under another name.
+_BINARY_TYPES = (
+    "application/octet-stream",
+    "application/zip",
+    "application/gzip",
+    "application/x-gzip",
+    "application/pdf",
+    "application/vnd.apache.parquet",
+    "application/x-parquet",
+    "image/",
+    "audio/",
+    "video/",
+    "font/",
+)
+
+
+def _may_be_json(response: Any) -> bool:
+    """False only when the response's Content-Type names a binary body, which is never decoded."""
+    try:
+        ctype = response.headers.get("Content-Type") or ""
+    except AttributeError:
+        return True
+    return not (isinstance(ctype, str) and ctype.strip().lower().startswith(_BINARY_TYPES))
+
+
 class DefaultOddsWarning(UserWarning):
     """Warned when a CFB game is processed with no pregame spread, or a market spread with no total.
 
@@ -400,7 +544,9 @@ def no_espn_data(response: "requests.Response") -> "requests.Response":
     # paginated payloads) return JSON arrays at the top level, where
     # ``.get("code")`` would raise AttributeError. Only probe for the
     # ESPN envelope when the body is a dict; non-dict bodies pass
-    # through unchanged.
+    # through unchanged. A binary body (a release asset) is never decoded.
+    if not _may_be_json(response):
+        return response
     try:
         body = response.json()
     except ValueError:

@@ -1,10 +1,45 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: build_productivity–score_to"
-sidebar_label: "Models and calculators: build_productivity–score_to"
+title: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit"
+sidebar_label: "Models and calculators: build_priors–ridge_fit"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: build_productivity–score_to — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: build_productivity–score_to
+# MBB — additional Python functions — Models and calculators: build_priors–ridge_fit
+
+### build_priors {#build_priors}
+
+`build_priors(players_baseline: 'dict[PlayerId, IndivStatSet]', stats_averages: 'PureStatSet', avg_efficiency: 'float', col_to_player: 'list[str]', prior_mode: 'float', value_key: 'ValueKey' = 'value') -> 'RapmPriorInfo'`
+
+Build strong/weak per-player RAPM priors for every column.
+
+Faithful port of `RapmUtils.buildPriors` (`RapmUtils.ts:237-407`).
+See the module docstring's landmine list, item 1, for the critical
+Python-vs-JS `{}`-truthiness gotcha this function's implementation
+deliberately avoids.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `players_baseline` | `dict[PlayerId, IndivStatSet]` |  | `{player_id: IndivStatSet}` -- the most-general per-player baseline info (in production, sourced from `mbb_ratings.build_productivity`'s output; see the module docstring's "RAPM prior source" note). |
+| `stats_averages` | `PureStatSet` |  | League/context average stat set, used by the (currently dead-code, see landmine 4) `get_prior_basis` fallback and by `with_avg_or_undef`'s nil-check gate. |
+| `avg_efficiency` | `float` |  | League/context average efficiency. |
+| `col_to_player` | `list[str]` |  | The player ids, in column order -- `playersStrong`/ `playersWeak` are index-aligned with this list. |
+| `prior_mode` | `float` |  | `-1` for adaptive mode, `-2` (or lower) for no prior, `0`-`1` for a fixed strong-prior weight. |
+| `value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- allows priors to be built from luck-adjusted parameters. |
+
+**Returns**
+
+A `RapmPriorInfo`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_rapm import build_priors
+
+priors = build_priors({}, {}, 100.0, ["Wiggins, Aaron"], -1)
+print(priors["players_weak"][0])
+```
 
 ### build_productivity {#build_productivity}
 
@@ -1684,80 +1719,4 @@ Coefficient vector of length `d + 1` (intercept first).
 import numpy as np
 from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
 beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
-```
-
-### roc_auc {#roc_auc}
-
-`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
-
-Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
-| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
-
-**Returns**
-
-AUC in `[0, 1]`; `nan` when only one class is present.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
-roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
-```
-
-### save_artifact {#save_artifact}
-
-`save_artifact(name: 'str', obj: 'dict') -> 'None'`
-
-Write a bundled artifact (dev/fitter use -- writes into the source tree).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
-| `obj` | `dict` |  | JSON-serializable artifact payload. |
-
-**Example**
-
-```python
-save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
-```
-
-### score_to_tuple {#score_to_tuple}
-
-`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
-
-Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
-
-`ExtractorUtils.scala:107-113`).
-
-Scala's `str match { case regex(s1, s2) => ... }` on a compiled
-`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
-`Matcher.matches()`, not `find()`) -- ported here as
-`re.fullmatch`, not `re.match`/`re.search`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
-
-**Returns**
-
-`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
-
-score_to_tuple("55-68")   # (55, 68)
-score_to_tuple("garbage")  # (0, 0)
 ```

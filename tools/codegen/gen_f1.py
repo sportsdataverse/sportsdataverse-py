@@ -45,6 +45,7 @@ from gen_soccer_common import (
     rewrite_schema_dir,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.f1.f1_parsers import parse_f1_mrdata
@@ -152,19 +153,6 @@ def _path_params(op: dict) -> List[Dict[str, Any]]:
     ]
 
 
-def _query_params(op: dict) -> List[Dict[str, Any]]:
-    return [
-        {
-            "name": underscore(prm["name"]),
-            "query_key": prm["name"],
-            "type": "str",
-            "description": str(prm.get("description") or "").strip(),
-        }
-        for prm in op.get("parameters", [])
-        if prm.get("in") == "query"
-    ]
-
-
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     short = _short(path)
     pps = _path_params(op)
@@ -184,7 +172,7 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     }
     if pps:
         entry["path_params"] = pps
-    qps = _query_params(op)
+    qps = _query_params(op, keep_empty_description=True)
     if qps:
         entry["extra_params"] = qps
     return entry

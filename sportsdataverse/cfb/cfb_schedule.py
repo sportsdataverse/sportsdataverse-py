@@ -201,7 +201,10 @@ def espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=Fa
 
     Returns:
 
-        pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
+        pl.DataFrame: One row per calendar week of the requested season (``week``, ``week_label``,
+        ``week_start_date``, ``season_type``, ...); ``season`` is the ``season`` argument as passed (null
+        when omitted). With ``ondays=True`` it is a different frame: one row per date with games
+        (``dates``, ``dateURL``, ``url``).
 
 
     Raises:

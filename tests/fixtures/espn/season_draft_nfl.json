@@ -1,0 +1,2196 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/draft?lang=en&region=us",
+ "athletes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/draft/athletes?lang=en&region=us"
+ },
+ "displayName": "2024 National Football League Draft",
+ "links": [
+  {
+   "href": "https://www.espn.com/nfl/draft",
+   "isExternal": false,
+   "isPremium": false,
+   "language": "en-US",
+   "rel": [
+    "index",
+    "desktop",
+    "draft"
+   ],
+   "shortText": "NFL Draft",
+   "text": "NFL Draft"
+  }
+ ],
+ "needs": [
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+     "abbreviation": "LB",
+     "displayName": "Linebacker",
+     "id": "30",
+     "leaf": true,
+     "name": "Linebacker",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/1?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/2?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/3?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/4?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+     "abbreviation": "LB",
+     "displayName": "Linebacker",
+     "id": "30",
+     "leaf": true,
+     "name": "Linebacker",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/5?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/6?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/7?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/8?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+     "abbreviation": "LB",
+     "displayName": "Linebacker",
+     "id": "30",
+     "leaf": true,
+     "name": "Linebacker",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/9?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+     "abbreviation": "LB",
+     "displayName": "Linebacker",
+     "id": "30",
+     "leaf": true,
+     "name": "Linebacker",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/10?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/11?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/12?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/13?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/14?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/15?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/16?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/17?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/18?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/19?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/20?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+     "abbreviation": "LB",
+     "displayName": "Linebacker",
+     "id": "30",
+     "leaf": true,
+     "name": "Linebacker",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/21?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/22?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/23?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/24?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/25?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/26?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/27?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+     "abbreviation": "QB",
+     "displayName": "Quarterback",
+     "id": "8",
+     "leaf": true,
+     "name": "Quarterback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/28?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+     "abbreviation": "C",
+     "displayName": "Center",
+     "id": "91",
+     "leaf": true,
+     "name": "Center",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+     "abbreviation": "RB",
+     "displayName": "Running Back",
+     "id": "9",
+     "leaf": true,
+     "name": "Running Back",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/29?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+     "abbreviation": "OT",
+     "displayName": "Offensive Tackle",
+     "id": "46",
+     "leaf": true,
+     "name": "Offensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/30?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+     "abbreviation": "WR",
+     "displayName": "Wide Receiver",
+     "id": "1",
+     "leaf": true,
+     "name": "Wide Receiver",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+     "abbreviation": "S",
+     "displayName": "Safety",
+     "id": "36",
+     "leaf": true,
+     "name": "Safety",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/33?lang=en&region=us"
+   }
+  },
+  {
+   "positions": [
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+     "abbreviation": "DT",
+     "displayName": "Defensive Tackle",
+     "id": "32",
+     "leaf": true,
+     "name": "Defensive Tackle",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+     "abbreviation": "CB",
+     "displayName": "Cornerback",
+     "id": "29",
+     "leaf": true,
+     "name": "Cornerback",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+     "abbreviation": "OG",
+     "displayName": "Offensive Guard",
+     "id": "47",
+     "leaf": true,
+     "name": "Offensive Guard",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+     "abbreviation": "TE",
+     "displayName": "Tight End",
+     "id": "7",
+     "leaf": true,
+     "name": "Tight End",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+     }
+    },
+    {
+     "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+     "abbreviation": "EDGE",
+     "displayName": "EDGE",
+     "id": "264",
+     "leaf": true,
+     "name": "EDGE",
+     "parent": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+     }
+    }
+   ],
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/teams/34?lang=en&region=us"
+   }
+  }
+ ],
+ "numberOfRounds": 7,
+ "positions": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/8?lang=en&region=us",
+   "abbreviation": "QB",
+   "displayName": "Quarterback",
+   "id": "8",
+   "leaf": true,
+   "name": "Quarterback",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us",
+   "abbreviation": "RB",
+   "displayName": "Running Back",
+   "id": "9",
+   "leaf": true,
+   "name": "Running Back",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/1?lang=en&region=us",
+   "abbreviation": "WR",
+   "displayName": "Wide Receiver",
+   "id": "1",
+   "leaf": true,
+   "name": "Wide Receiver",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/7?lang=en&region=us",
+   "abbreviation": "TE",
+   "displayName": "Tight End",
+   "id": "7",
+   "leaf": true,
+   "name": "Tight End",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/10?lang=en&region=us",
+   "abbreviation": "FB",
+   "displayName": "Fullback",
+   "id": "10",
+   "leaf": true,
+   "name": "Fullback",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/9?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/46?lang=en&region=us",
+   "abbreviation": "OT",
+   "displayName": "Offensive Tackle",
+   "id": "46",
+   "leaf": true,
+   "name": "Offensive Tackle",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/47?lang=en&region=us",
+   "abbreviation": "OG",
+   "displayName": "Offensive Guard",
+   "id": "47",
+   "leaf": true,
+   "name": "Offensive Guard",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/70?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/91?lang=en&region=us",
+   "abbreviation": "C",
+   "displayName": "Center",
+   "id": "91",
+   "leaf": true,
+   "name": "Center",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/45?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/32?lang=en&region=us",
+   "abbreviation": "DT",
+   "displayName": "Defensive Tackle",
+   "id": "32",
+   "leaf": true,
+   "name": "Defensive Tackle",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/30?lang=en&region=us",
+   "abbreviation": "LB",
+   "displayName": "Linebacker",
+   "id": "30",
+   "leaf": true,
+   "name": "Linebacker",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/264?lang=en&region=us",
+   "abbreviation": "EDGE",
+   "displayName": "EDGE",
+   "id": "264",
+   "leaf": true,
+   "name": "EDGE",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/71?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/29?lang=en&region=us",
+   "abbreviation": "CB",
+   "displayName": "Cornerback",
+   "id": "29",
+   "leaf": true,
+   "name": "Cornerback",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/36?lang=en&region=us",
+   "abbreviation": "S",
+   "displayName": "Safety",
+   "id": "36",
+   "leaf": true,
+   "name": "Safety",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/35?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/96?lang=en&region=us",
+   "abbreviation": "LS",
+   "displayName": "Long Snapper",
+   "id": "96",
+   "leaf": true,
+   "name": "Long Snapper",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/72?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/80?lang=en&region=us",
+   "abbreviation": "PK",
+   "displayName": "Place Kicker",
+   "id": "80",
+   "leaf": true,
+   "name": "Place Kicker",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/72?lang=en&region=us"
+   }
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/94?lang=en&region=us",
+   "abbreviation": "P",
+   "displayName": "Punter",
+   "id": "94",
+   "leaf": true,
+   "name": "Punter",
+   "parent": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/positions/72?lang=en&region=us"
+   }
+  }
+ ],
+ "rounds": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/draft/rounds?lang=en&region=us"
+ },
+ "shortDisplayName": "2024 NFL Draft",
+ "status": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/2024/draft/status?lang=en&region=us"
+ },
+ "uid": "s:20~l:28~e:draft~y:2024",
+ "year": 2024
+}

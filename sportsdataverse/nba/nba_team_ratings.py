@@ -341,7 +341,7 @@ def _league_loaders(league_id: str):  # type: ignore[no-untyped-def]
     source differ by ``league_id``.
     """
     if league_id == "10":
-        from sportsdataverse.wnba.wnba_loaders import (  # noqa: PLC0415
+        from sportsdataverse.wnba.wnba_loaders import (
             load_wnba_schedule,
             load_wnba_team_boxscore,
         )

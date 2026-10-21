@@ -13,6 +13,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 
 | Function | Summary |
 |---|---|
+| [espn_mlb_calendar](additional/espn.md#espn_mlb_calendar) | espn_mlb_calendar - look up the MLB game-day calendar for a season. |
 | [espn_mlb_game_rosters](additional/espn.md#espn_mlb_game_rosters) | espn_mlb_game_rosters - pull the active game rosters for both teams. |
 | [espn_mlb_pbp](additional/espn.md#espn_mlb_pbp) | espn_mlb_pbp - pull the full ESPN game-summary payload for one MLB game. |
 | [espn_mlb_player_stats](additional/espn.md#espn_mlb_player_stats) | Pull an MLB athlete's ESPN **season** stat line as one wide row. |
@@ -84,6 +85,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [build_we_table](additional/models-and-calculators.md#build_we_table) | Empirical, Laplace-smoothed home win-expectancy table. |
 | [count_strike_run_value](additional/models-and-calculators.md#count_strike_run_value) | Ball-to-strike run-expectancy delta per count, from `delta_run_exp`. |
 | [event_run_value](additional/models-and-calculators.md#event_run_value) | Empirical run value of an event set, from mean `delta_run_exp`. |
+| [leverage_index](additional/models-and-calculators.md#leverage_index) | Empirical (Tango) leverage index per base-out-score-inning state bucket. |
 | [mae](additional/models-and-calculators.md#mae) | Mean absolute error between two arrays. |
 | [mlb_batter_projection](additional/models-and-calculators.md#mlb_batter_projection) | Next-season xwOBA projection (Marcel + delta-method aging) for every batter. |
 | [mlb_command_plus](additional/models-and-calculators.md#mlb_command_plus) | Score pitches with the bundled Command+/Location+ (②) run-value model. |
@@ -105,6 +107,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [pbp_base_out_states](additional/models-and-calculators.md#pbp_base_out_states) | Reconstruct pre-play base-out state from statsapi play-by-play. |
 | [pearson_corr](additional/models-and-calculators.md#pearson_corr) | Pearson correlation coefficient between two 1-D arrays. |
 | [prop_over_prob](additional/models-and-calculators.md#prop_over_prob) | P(realized count > line) under a Poisson(expected) model. |
+| [run_value](additional/models-and-calculators.md#run_value) | Run value of a single event: `re[after] - re[before] + runs_on_play`. |
 | [spearman_corr](additional/models-and-calculators.md#spearman_corr) | Spearman rank correlation between two arrays. |
 
 ## Analytics
@@ -137,6 +140,7 @@ generated API-endpoint wrappers (those have their own reference pages).
 | [sb_success_surface](additional/analytics.md#sb_success_surface) | Empirical P(stolen-base success) surface over `(sprint speed, pop time, base)`. |
 | [siera_like](additional/analytics.md#siera_like) | SIERA-like ERA estimator from K%/BB%/GB% (**experimental / provisional**). |
 | [tto_penalty_table](additional/analytics.md#tto_penalty_table) | Observed mean run value by times-through-order, with the penalty vs TTO=1. |
+| [x_era](additional/analytics.md#x_era) | Parametric xERA from Statcast expected wOBA allowed. |
 
 ## Dates and seasons
 

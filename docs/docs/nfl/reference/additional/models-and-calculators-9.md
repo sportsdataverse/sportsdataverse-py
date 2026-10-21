@@ -1,7 +1,7 @@
 ---
 title: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings"
 sidebar_label: "Models and calculators: get_fg–nfl_ratings"
-sidebar_position: 22
+sidebar_position: 23
 description: "NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # NFL — additional Python functions — Models and calculators: get_fg–nfl_ratings
@@ -410,6 +410,14 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 | `miss_fg_wp` | double |  |
 | `fg_wp` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `SDV_PY_MODELS_STRICT=1` and an nfl4th model cannot be obtained. |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
+
 **Example**
 
 ```python
@@ -447,6 +455,14 @@ A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `firs
 
 No returns table is published for this function: no capture: it skips its own input preparation when posteam_spread is present, so it raises KeyError on enriched play-by-play, and a full unenriched season does not fit in memory.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `SDV_PY_MODELS_STRICT=1` and an nfl4th model cannot be obtained. |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
+
 **Example**
 
 ```python
@@ -483,6 +499,14 @@ prob-weighted WP from the punting team's perspective.
 A pandas copy of `pbp_df` plus `punt_wp`. `punt_wp` is NaN where the punt distribution has no support for the play's `yardline_100` (inside the punting team's own 31, where the table is empty — matching the R reference's left-join NA behavior) or when the WP model is unavailable.
 
 No returns table is published for this function: no capture: it skips its own input preparation when posteam_spread is present, so it raises KeyError on enriched play-by-play, and a full unenriched season does not fit in memory.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `SDV_PY_MODELS_STRICT=1` and an nfl4th model cannot be obtained. |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
 
 **Example**
 

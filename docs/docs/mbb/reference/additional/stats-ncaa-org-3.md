@@ -6,6 +6,79 @@ description: "MBB — additional Python functions — stats.ncaa.org: ncaa_mbb�
 ---
 # MBB — additional Python functions — stats.ncaa.org: ncaa_mbb–validate_lineup
 
+### ncaa_mbb_possessions {#ncaa_mbb_possessions}
+
+`ncaa_mbb_possessions(pbp: 'pl.DataFrame', *, simple: 'bool' = False, fix_cross_game_leak: 'bool' = True, return_as_pandas: 'bool' = False) -> 'Union[pl.DataFrame, pd.DataFrame]'`
+
+Aggregate bigballR-contract play-by-play into one row per possession.
+
+Port of bigballR `get_possessions` (`all_functions.R:3686-3745`).
+Groups by the possession keys stamped upstream by the scrape engine
+(`poss_num`, `poss_team`, the ten on-court lineup columns, plus game
+identity), drops possessions with any missing on-court player, and — in
+the full variant — sorts each row's home/away lineup alphabetically so a
+given lineup always occupies the same columns.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pbp` | `DataFrame` |  | Play-by-play frame in the sdv-py 35-column snake_case bigballR contract (`parse_ncaa_bb_game_pbp` output). May span multiple games; rows must be in scrape order. |
+| `simple` | `bool` | `False` | When True, return only the 17-column possession/points frame (`all_functions.R:3687-3694`) with lineups in on-court order. When False (default), return the full 28-column frame with per-possession context columns and alpha-sorted lineups. |
+| `fix_cross_game_leak` | `bool` | `True` | When True (default, and the CORRECT behavior), window the `start_event_type` lag with `.over("game_id")` so a game's first possession has a null start event instead of inheriting the PREVIOUS game's last event. When False, reproduce R's ungrouped `dplyr::lag` (`all_functions.R:3698`) and its cross-game leak. Parity tests pass False. Ignored when `simple=True` (that variant emits no `start_event_type`). |
+| `return_as_pandas` | `bool` | `False` | Return a `pandas.DataFrame` instead of polars. |
+
+**Returns**
+
+`pl.DataFrame` (or `pd.DataFrame`) with one row per possession — 28 columns per `POSSESSION_SEG_SCHEMA` (full) or 17 per `POSSESSIONS_SIMPLE_SCHEMA` (simple). Empty input yields an empty frame carrying the documented schema.
+
+| col_name | type | description |
+|---|---|---|
+| `game_id` | character | Unique game identifier. |
+| `game_date` | character | Game date (YYYY-MM-DD). |
+| `home` | character | Home. |
+| `away` | character | Away record. |
+| `period` | integer | Period of the game (1-4 quarters; 5+ for OT). |
+| `poss_num` | integer |  |
+| `poss_team` | character |  |
+| `home_1` | character |  |
+| `home_2` | character |  |
+| `home_3` | character |  |
+| `home_4` | character |  |
+| `home_5` | character |  |
+| `away_1` | character |  |
+| `away_2` | character |  |
+| `away_3` | character |  |
+| `away_4` | character |  |
+| `away_5` | character |  |
+| `home_score` | integer | Home team score at the time of the play. |
+| `away_score` | integer | Away team score at the time of the play. |
+| `pts` | integer | Points scored. |
+| `is_assisted` | integer |  |
+| `is_transition` | integer |  |
+| `is_garbage_time` | integer |  |
+| `start_event_type` | character |  |
+| `first_shot_time` | integer |  |
+| `first_shot_type` | character |  |
+| `last_event_time` | integer |  |
+| `last_event_type` | character |  |
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_possession_seg import ncaa_mbb_possessions
+poss = ncaa_mbb_possessions(pbp)
+print(poss.shape)
+
+# Simple points-per-possession variant
+
+poss_pd = ncaa_mbb_possessions(pbp, simple=True, return_as_pandas=True)
+
+# Pipeline next step (one line)
+
+poss.group_by("poss_team").agg(pl.col("pts").mean())
+```
+
 ### ncaa_mbb_shot_locations {#ncaa_mbb_shot_locations}
 
 `ncaa_mbb_shot_locations(game_ids: "'Sequence[object]'", *, fetcher: 'Optional[_SupportsFetchGameBox]' = None, return_as_pandas: 'bool' = False) -> "'Union[pl.DataFrame, Any]'"`
@@ -633,6 +706,37 @@ The `circle.shot` elements reconstructed from every matching line (non-matching 
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
 js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
+```
+
+### shot_value {#shot_value}
+
+`shot_value(event_str: 'str') -> 'int'`
+
+Classify a play-by-play event string as a 3, a 2, or an assist
+
+(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+
+Ported as an ordered first-match cascade, exactly mirroring the Scala
+`match` arm order (assist is tested first, so an assist string never
+falls through to a shot classifier).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_str` | `str` |  | The raw play-by-play event string. |
+
+**Returns**
+
+`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
+shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
+shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
+shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
 ### start_time_from_period {#start_time_from_period}

@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # MCH — ESPN FPI API (fitt v3)
 
-`sportsdataverse.mch` — 1 endpoint.
+`sportsdataverse.hockey.mch` — 1 endpoint.
 
 ## espn_mch_fpi
 

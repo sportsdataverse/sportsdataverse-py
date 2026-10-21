@@ -858,15 +858,19 @@
     Flipped by task 2.1: the decomposition-sum xfails are plain asserts now, so a half-yard short
     in the other direction (the pre-2.1 C-H1 shape) goes red.
 
-# --- A-M10: the release read must stay use_pyarrow=True (polars 2.0 suffix-range -> HTTP 501) ----
+# --- A-M10: the release parse stays use_pyarrow=True (pyarrow parses; R898-21) --------------------
 - id: codegen-runtime-use-pyarrow
   finding: A-M10
   file: sportsdataverse/_codegen_runtime.py
-  snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
-  mutant: 'return pl.read_parquet(url)'
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(data)'
   test: tests/codegen/test_runtime_release.py -k pyarrow
   expected: kill
-  note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
+  note: >-
+    1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned). Since R898-9 polars
+    gets a BytesIO, never a URL, so the original suffix-range 501 cannot recur; the pin now keeps
+    pyarrow as the parser, the parser the release frames have always come from and the one
+    whose Arrow-FFI import the PanicException (arrow.r.vctrs) fallback is written for
 
 # --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
 - id: ncaa-capture-is-clean-always-true
@@ -2091,6 +2095,1776 @@
   note: >-
     In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
     history still shallow after the fetch must add no allowance (review R824-1).
+
+# --- A-M21 / A-M22 / A-M23: the generator documents what runs (task 3.9 PR 1) ---------------------
+- id: codegen-sport-parser-override-before-view
+  group: codegen-runtime
+  finding: A-M21
+  file: tools/codegen/generate.py
+  snippet: '            ep = dataclasses.replace(ep, parser=overrides[ep.short])'
+  mutant: '            pass'
+  test: tests/codegen/test_league_param_mode.py::test_headline_soccer_league_documents_the_parser_it_calls
+  expected: kill
+  note: >-
+    Without the override on the endpoint the view is built from, 68 soccer/cricket wrappers name
+    parse_scoreboard (and its siblings) in their docstrings while calling parse_soccer_* / parse_cricket_*.
+
+- id: codegen-sport-override-uses-sport-schema
+  group: codegen-runtime
+  finding: A-M21
+  file: tools/codegen/generate.py
+  snippet: '            schema_league = league.sport'
+  mutant: '            schema_league = None'
+  test: tests/codegen/test_league_param_mode.py::test_headline_soccer_league_documents_the_parser_it_calls
+  expected: kill
+  note: >-
+    The 12 headline soccer leagues have no per-prefix schema, so keyed by prefix they publish the
+    generic cross-league returns tables (boxscore_player, plays, ...) instead of the soccer parser's.
+
+- id: codegen-espn-wrapper-frame-union-annotation
+  group: codegen-runtime
+  finding: A-M22
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: ') -> {{ ep.parsed_annotation }}:'
+  mutant: ') -> Dict:'
+  test: tests/codegen/test_league_param_mode.py::test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union
+  expected: kill
+  note: >-
+    Every ESPN wrapper returns a frame (or a dict of frames) by default; `-> Dict` was the annotation
+    before 3.9. No wrapper count here: it grows with every league and went stale once (R858-6).
+
+- id: codegen-query-params-required-flag
+  group: codegen-runtime
+  finding: A-M23
+  file: tools/codegen/openapi_params.py
+  snippet: '        if is_required and required in ("flag", "both"):'
+  mutant: '        if is_required and required in ("both",):'
+  test: tests/codegen/test_query_params.py::test_required_policies
+  expected: kill
+  note: >-
+    The one _query_params carries the spec's required flag by an explicit policy; Euroleague's live
+    host passes "both" (its codes must be positional). Yahoo/NWSL stay "ignore" pending the owner (A-M23).
+
+- id: codegen-query-params-path-clash-prefix
+  group: codegen-runtime
+  finding: A-M23
+  file: tools/codegen/openapi_params.py
+  snippet: '            name = f"filter_{name}"'
+  mutant: '            pass'
+  test: tests/codegen/test_query_params.py::test_names_types_skip_and_clash
+  expected: kill
+  note: MLS and NWSL rename a query param that clashes with a path token to filter_<name>; CBS/On3 drop it.
+
+# --- task 4.1: runtime chokepoints speak the vocabulary (ledger gates json-body-rejects-scalars,
+# envelope-parsers-zero-rows, parse-items-short-page-warns; plus the chokepoints' own findings) ------
+- id: json-body-accepts-scalar
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if not isinstance(body, (dict, list)):'
+  mutant: '    if False:'
+  test: tests/test_runtime_body_vocabulary.py -k scalar_body
+  expected: kill
+  note: returning the parsed scalar (the original) is data reaching a parser
+
+- id: json-body-ignores-error-envelope
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    code = _error_envelope_code(body)'
+  mutant: '    code = None'
+  test: tests/test_runtime_body_vocabulary.py -k error_envelope
+  expected: kill
+
+- id: text-body-accepts-html-page
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if not html and text.lstrip('
+  mutant: '    if False and text.lstrip('
+  test: tests/codegen/test_runtime_errors.py -k "statcast_html or (discovered and html_200)"
+  expected: kill
+
+- id: espn-parsers-envelope-to-rows
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        if not isinstance(payload, dict) or _error_envelope_code(payload) is not None:'
+  mutant: '        if False:'
+  test: tests/test_espn_universal_parsers.py -k "hostile and _common_espn_parsers"
+  expected: kill
+  note: json_normalize on the envelope again yields a 1 x 2 frame; a list body raises AttributeError (A-L17)
+
+- id: parse-items-short-page-silent
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if isinstance(pages, int) and pages > 1:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k parse_items_short_page
+  expected: kill
+
+- id: yahoo-array-becomes-empty-dict
+  group: codegen-runtime
+  finding: A-L18
+  file: sportsdataverse/yahoo/yahoo_shangrila_runtime.py
+  snippet: '    if not isinstance(body, dict):  # every Shangrila route answers {"data": ...}'
+  mutant: '    if False:'
+  test: tests/codegen/test_runtime_errors.py -k yahoo_object
+  expected: kill
+
+- id: download-retries-permanent-403
+  group: codegen-runtime
+  finding: A-L19
+  file: sportsdataverse/dl_utils.py
+  snippet: 'retryable = status in retry_statuses and not (status == 403 and permanent_403)'
+  mutant: 'retryable = status in retry_statuses'
+  test: tests/test_dl_utils.py -k permanent_403
+  expected: kill
+
+- id: download-retries-malformed-url
+  group: codegen-runtime
+  finding: A-L30
+  file: sportsdataverse/dl_utils.py
+  snippet: '        except ValueError as e:'
+  mutant: '        except UnicodeError as e:'
+  test: tests/test_dl_utils.py -k malformed_url
+  expected: kill
+
+- id: download-retry-wait-unbudgeted
+  group: codegen-runtime
+  finding: A-N11
+  file: sportsdataverse/dl_utils.py
+  snippet: '                and waited + delay <= _MAX_TOTAL_RETRY_WAIT'
+  mutant: '                and True'
+  test: tests/test_dl_utils.py -k retry_after_waits
+  expected: kill
+
+- id: cache-team-scoreboard-not-live
+  group: codegen-runtime
+  finding: B-M11
+  file: sportsdataverse/cache.py
+  snippet: 'r"/scoreboard/(?:[^/?#]+/)?now\b"'
+  mutant: 'r"/scoreboard/now\b"'
+  test: tests/test_cache.py -k pick_ttl_classifies_by_url
+  expected: kill
+
+# --- 3.9 PR 2: the #858 review follow-ups (R858-2, R858-3, R858-4, R858-7) -------------------------
+- id: codegen-docs-index-sport-schema-league
+  group: codegen-runtime
+  finding: R858-2
+  file: tools/codegen/build_docs_index.py
+  snippet: '            doc = G._schema_doc(w.schema, w.schema_league or w.league) if w.schema else {}'
+  mutant: '            doc = G._schema_doc(w.schema, w.league) if w.schema else {}'
+  test: tests/codegen/test_docs_index.py::test_soccer_wrapper_columns_come_from_the_sport_schema
+  expected: kill
+  note: >-
+    The sdv-docs index stored the generic cross-league summary sections (boxscore_player, plays) for
+    the 12 headline soccer leagues' wrappers, which return the soccer parser's sections.
+
+- id: codegen-docs-index-wrapper-carries-schema-league
+  group: codegen-runtime
+  finding: R858-2
+  file: tools/codegen/build_docs_index.py
+  snippet: '                    v.schema_league,'
+  mutant: '                    None,'
+  test: tests/codegen/test_docs_index.py::test_soccer_wrapper_columns_come_from_the_sport_schema
+  expected: kill
+  note: codegen_wrappers must hand the view's schema key to the Wrapper, or python_columns falls back to the prefix.
+
+- id: codegen-test-loader-restores-sys-path
+  group: codegen-runtime
+  finding: R858-3
+  file: tests/codegen/test_gen_on3.py
+  snippet: '            sys.path.remove(codegen)'
+  mutant: '            pass'
+  test: tests/codegen/test_gen_on3.py::test_loading_the_generator_leaves_sys_path_alone
+  expected: kill
+  note: Loading gen_on3 left tools/codegen on sys.path for every later test in the session.
+
+- id: codegen-dict-of-frames-annotation
+  group: codegen-runtime
+  finding: R858-4
+  file: tools/codegen/generate.py
+  snippet: '            if (self.parsed_doc_md or self.returns_dict)'
+  mutant: '            if False'
+  test: tests/codegen/test_league_param_mode.py::test_every_parsed_espn_wrapper_is_annotated_with_the_frame_union
+  expected: kill
+  note: >-
+    summary and the CDN game payloads return a dict of frames (their docstrings say so) but were
+    annotated as returning one frame.
+
+- id: codegen-wrapper-annotations-import-at-runtime
+  group: codegen-runtime
+  finding: R858-4
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: |-
+    import pandas as pd  # noqa: F401
+    import polars as pl  # noqa: F401
+  mutant: |-
+    from typing import TYPE_CHECKING
+    if TYPE_CHECKING:
+        import pandas as pd
+        import polars as pl
+  test: tests/codegen/test_league_param_mode.py::test_generated_wrapper_annotations_resolve
+  expected: kill
+  note: >-
+    With pl/pd imported only under TYPE_CHECKING, typing.get_type_hints() on any generated wrapper
+    raised NameError (the test renders the module from the template, so no regeneration is needed).
+
+- id: codegen-route-getter-example-url
+  group: codegen-runtime
+  finding: R858-7
+  file: tools/codegen/generate.py
+  snippet: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module, route_module)'
+  mutant: '        self.example_url = _example_request(ep_host, ep, league.sport, league.league, getter_module)'
+  test: tests/codegen/test_api_module.py::test_per_route_getter_documents_the_url_its_own_module_requests
+  expected: kill
+  note: >-
+    A pkg.module:fn route's documented URL must come from that module's _build_query; only
+    test_per_route_getter (which callable runs) guarded route_getter before.
+
+- id: codegen-parsed-doc-dict-annotation
+  group: codegen-runtime
+  finding: R891-2
+  file: tools/codegen/generate.py
+  snippet: '            if (self.parsed_doc_md or self.returns_dict)'
+  mutant: '            if self.returns_dict'
+  test: tests/codegen/test_league_param_mode.py::test_generated_wrapper_annotations_resolve
+  expected: kill
+  note: >-
+    A family-level parsed_doc alone (KenPom: a dict of frames, one per HTML table) makes the parsed
+    return a dict; kenpom_win_probability's schema is a single table, so without it that wrapper is
+    annotated as returning one frame. Only --check caught this before.
+
+# --- the three ESPN parsers repaired against their first real captures (fix/espn-parsers-real-payloads,
+# the coverage prerequisite of task 4.1) --------------------------------------------------------------
+- id: athlete-stats-ignores-statistics-rows
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'splits = cat.get("splits") or cat.get("statistics") or []'
+  mutant: 'splits = cat.get("splits") or []'
+  test: tests/test_espn_universal_parsers.py -k web_v3_per_season
+  expected: kill
+
+- id: competitor-statistics-split-object
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |2-
+        if isinstance(splits, dict):  # Core v2 answers one split object ("All Splits"), not a list
+            splits = [splits]
+  mutant: '    pass'
+  test: tests/test_espn_universal_parsers.py -k one_split_object
+  expected: kill
+
+- id: season-draft-rounds-ref
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if isinstance(rounds, dict):  # Core v2: the rounds are a $ref, so this is the draft''s index row'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k season_draft_index
+  expected: kill
+
+- id: athlete-stats-season-columns-on-named-splits
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if season:'
+  mutant: '    if True:'
+  test: tests/test_espn_universal_parsers.py -k named_splits_carry_no_season
+  expected: kill
+
+- id: athlete-stats-career-line-dropped
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if "statistics" in cat and isinstance(totals, list) and totals:'
+  mutant: '    if False:'
+  test: tests/test_espn_universal_parsers.py -k career_line
+  expected: kill
+
+- id: athlete-stats-season-not-a-dict
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    season = season if isinstance(season, dict) else {}'
+  mutant: '    pass'
+  test: tests/test_espn_universal_parsers.py -k wrong_typed_containers
+  expected: kill
+
+- id: athlete-stats-ids-cast-on-pandas-branch
+  group: codegen-runtime
+  finding: A-M15
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '            df[col] = pd.to_numeric(df[col], errors="coerce").astype("Int64")'
+  mutant: '            pass'
+  test: tests/test_espn_universal_parsers.py -k ids_are_int64_on_both
+  expected: kill
+
+- id: athlete-stats-non-dict-split-parsed
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '[_stat_split_row(cat_name, names, sp) for sp in splits if isinstance(sp, dict)]'
+  mutant: '[_stat_split_row(cat_name, names, sp) for sp in splits]'
+  test: tests/test_espn_universal_parsers.py -k wrong_typed_containers
+  expected: kill
+
+- id: athlete-stats-empty-totals-career-row
+  group: codegen-runtime
+  finding: A-L17
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    if "statistics" in cat and isinstance(totals, list) and totals:'
+  mutant: '    if "statistics" in cat and isinstance(totals, list):'
+  test: tests/test_espn_universal_parsers.py -k empty_totals_add_no_career
+  expected: kill
+
+- id: download-reuses-stale-retry-after
+  group: codegen-runtime
+  finding: A-N11
+  file: sportsdataverse/dl_utils.py
+  snippet: |2-
+            response = None
+            try:
+  mutant: '        try:'
+  test: tests/test_dl_utils.py -k does_not_reuse_the_previous_retry_after
+  expected: kill
+
+- id: statcast-html-allowance-substring
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/mlb/mlb_statcast_runtime.py
+  snippet: 'html=urlsplit(url).path.rstrip("/") in _HTML_PAGES'
+  mutant: 'html=any(page in url for page in _HTML_PAGES)'
+  test: tests/codegen/test_runtime_errors.py -k path_not_a_substring
+  expected: kill
+
+# --- review-880 round 2 (R880-1..5) -------------------------------------------------------------------
+- id: openligadb-string-route-refused
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |2-
+        if isinstance(body, str) and _string_route(url):
+            return body
+  mutant: '    pass'
+  test: tests/test_runtime_body_vocabulary.py -k bare_iso_string
+  expected: kill
+  note: R880-1, OpenLigaDB's /getlastchangedate answers a bare ISO string by design
+
+- id: download-permanent-403-host-stops-all-retries
+  group: codegen-runtime
+  finding: A-L19
+  file: sportsdataverse/dl_utils.py
+  snippet: 'retryable = status in retry_statuses and not (status == 403 and permanent_403)'
+  mutant: 'retryable = status in retry_statuses and not permanent_403'
+  test: tests/test_dl_utils.py -k still_retries_its_transient
+  expected: kill
+  note: R880-2
+
+- id: text-body-html-check-without-strip
+  group: codegen-runtime
+  finding: A-L63
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'text.lstrip("\ufeff \t\r\n").startswith("<")'
+  mutant: 'text.startswith("<")'
+  test: tests/test_runtime_body_vocabulary.py -k whitespace_or_a_bom
+  expected: kill
+  note: R880-3
+
+- id: download-caches-refused-body
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/dl_utils.py
+  snippet: '                    if _is_data_body(url, body):'
+  mutant: '                    if True:'
+  test: tests/test_runtime_body_vocabulary.py -k never_cached
+  expected: kill
+  note: R880-4, a cached 2xx error envelope or scalar re-raised for the whole TTL
+
+- id: error-envelope-code-unbounded
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/errors.py
+  snippet: 'and 400 <= code <= 599:'
+  mutant: 'and code >= 400:'
+  test: tests/test_runtime_body_vocabulary.py -k business_code
+  expected: kill
+  note: R880-5
+
+# --- review-880 round 3 (R880-6) -----------------------------------------------------------------------
+- id: string-route-path-only
+  group: codegen-runtime
+  finding: B-GB-16
+  file: sportsdataverse/errors.py
+  snippet: 'return f"{parts.netloc}{parts.path}".startswith(_STRING_ROUTES)'
+  mutant: 'return parts.path.startswith("/getlastchangedate/")'
+  test: tests/test_runtime_body_vocabulary.py -k route_only
+  expected: kill
+  note: R880-6a, the string allowance is OpenLigaDB's host and path, not that path on any host
+
+- id: data-body-accepts-any-string
+  group: codegen-runtime
+  finding: A-M13
+  file: sportsdataverse/errors.py
+  snippet: '        return _string_route(url)'
+  mutant: '        return True'
+  test: tests/test_runtime_body_vocabulary.py -k never_cached
+  expected: kill
+  note: R880-6b, a JSON string from any other route is refused and must not be cached
+
+# --- Task 4.7: secrets never cached or logged (A-M8, A-L64, A-L65, A-L71) -------------------------
+- id: redact-userinfo-password
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _USERINFO.sub(r"\1REDACTED@", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k proxy_password
+  expected: kill
+  note: a proxy URL's password (http://user:pw@host) reached error messages and log lines
+
+- id: redact-extra-credential-names
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: '|(?:api|app|access|subscription)[_-]?key|key|jwt|signature|sig|authorization|auth|cookie)'
+  mutant: '|api[_-]?key|key|jwt)'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: appkey / access_key / subscription-key / sig / signature / auth / Authorization were not redacted
+
+- id: redact-bearer-token
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _BEARER.sub(r"\1REDACTED", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: an Authorization header line redacted only the word Bearer, not the jwt after it
+
+- id: redact-exception-drops-every-credential-header
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/dl_utils.py
+  snippet: 'for name in [h for h in headers if _SECRET_HEADER.search(str(h))]:'
+  mutant: 'for name in [h for h in headers if str(h).lower() in ("authorization", "proxy-authorization", "cookie")]:'
+  test: tests/test_errors.py -k exception_drops
+  expected: kill
+  note: X-Api-Key / x-api-secret / X-Authorization survived on a failed request's headers
+
+- id: download-never-caches-a-credential-header
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: '        and not credentialed'
+  mutant: '        and True'
+  test: tests/test_cache.py -k no_cache_authenticated_request
+  expected: kill
+  note: the cache key holds no credential, so a second credential was served the first one's body
+
+- id: download-never-caches-a-cookie-session
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: 'if getattr(session, "auth", None) or getattr(session, "cookies", None):'
+  mutant: 'if False:'
+  test: tests/test_cache.py -k "no_cache_authenticated_request and session"
+  expected: kill
+  note: a subscription session's cookies authenticate the request (KenPom / Her Hoop Stats)
+
+- id: cache-ttl-accepts-seconds
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/cache.py
+  snippet: '        return timedelta(seconds=override)'
+  mutant: '        pass'
+  test: tests/test_cache.py -k spell_it_cache_ttl_0
+  expected: kill
+  note: cache_ttl=0 (the basketball runtimes) raised AttributeError whenever a cache mode was on
+
+- id: subscription-session-key-has-password-digest
+  group: codegen-runtime
+  finding: A-L64
+  file: sportsdataverse/_subscription_http.py
+  snippet: 'key = (site.name, resolved_email, pw_digest, repr('
+  mutant: 'key = (site.name, resolved_email, "", repr('
+  test: tests/test_subscription_http.py -k changed_password
+  expected: kill
+  note: a changed or wrong password reused the old session for 30 minutes
+
+- id: subscription-concurrent-misses-log-in-once
+  group: codegen-runtime
+  finding: A-L64
+  file: sportsdataverse/_subscription_http.py
+  snippet: '    with _login_lock:'
+  mutant: '    if True:'
+  test: tests/test_subscription_http.py -k concurrent_cache_misses
+  expected: kill
+  note: two threads that missed the cache both logged in; a second login can invalidate the first
+
+- id: sports247-jwt-mint-locked
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/sports247_runtime.py
+  snippet: '    with _jwt_lock:'
+  mutant: '    if True:'
+  test: tests/test_sports247_parsers.py -k concurrent_jwt
+  expected: kill
+  note: A-N12, unlocked module global minted by every thread that missed it
+
+- id: sports247-refresh-reuses-another-threads-token
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/sports247_runtime.py
+  snippet: 'if _jwt is None or (refresh and _jwt == stale):'
+  mutant: 'if _jwt is None or refresh:'
+  test: tests/test_sports247_parsers.py -k reminted
+  expected: kill
+  note: a 401 after another thread re-minted would mint again
+
+- id: on3-build-id-discovery-locked
+  group: codegen-runtime
+  finding: A-L71
+  file: sportsdataverse/cfb/on3_runtime.py
+  snippet: '    with _build_id_lock:'
+  mutant: '    if True:'
+  test: tests/test_on3_rdb.py -k concurrent_build_id
+  expected: kill
+  note: A-N12, every thread that found no buildId scraped a page for one
+
+# --- Task 4.7 review-897 (R897-2..5) --------------------------------------------------------------
+- id: download-decodes-only-a-cacheable-body
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/dl_utils.py
+  snippet: 'if cacheable and status is not None and 200 <= status < 300 and _may_be_json(response):'
+  mutant: 'if get_cache_mode() != "off" and status is not None and 200 <= status < 300 and _may_be_json(response):'
+  test: tests/test_cache.py -k not_decoded_for_the_cache
+  expected: kill
+  note: R897-2, every 2xx body was JSON-decoded for the cache even when it could not be stored
+
+- id: binary-body-never-decoded
+  group: codegen-runtime
+  finding: A-M8
+  file: sportsdataverse/errors.py
+  snippet: 'return not (isinstance(ctype, str) and ctype.strip().lower().startswith(_BINARY_TYPES))'
+  mutant: 'return True'
+  test: tests/test_cache.py -k binary_body_is_never_decoded
+  expected: kill
+  note: R897-2, a multi-MB release asset was decoded by the envelope probe and the cache (~420 ms per 5 MB)
+
+- id: redact-basic-auth
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: '((?:bearer|basic)\s+)'
+  mutant: '(bearer\s+)'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, an Authorization Basic credential was not redacted
+
+- id: redact-cookie-header-line
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'text = _COOKIE_LINE.sub(r"\1REDACTED", text)'
+  mutant: 'text = text'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, an unquoted Cookie header line kept every cookie after the first
+
+- id: redact-pass-param
+  group: codegen-runtime
+  finding: A-L65
+  file: sportsdataverse/errors.py
+  snippet: 'password|passwd|pass|pwd|'
+  mutant: 'password|passwd|pwd|'
+  test: tests/test_errors.py -k other_credential_names
+  expected: kill
+  note: R897-3, a pass= param was not redacted
+
+- id: scrub-body-never-pattern-matches
+  group: codegen-runtime
+  finding: A-N1
+  file: sportsdataverse/cache.py
+  snippet: '    if isinstance(node, str):'
+  mutant: "    if isinstance(node, str) and node.startswith(\"http\"):\n        return __import__(\"sportsdataverse.errors\").errors._redact_secrets(node)\n    if isinstance(node, str):"
+  test: tests/test_cache.py -k signed_media_urls
+  expected: kill
+  note: R897-4, a signed media URL (X-Amz-Signature=, Signature=) came back REDACTED on a cache hit
+
+- id: request-secrets-prefixed-param-names
+  group: codegen-runtime
+  finding: A-N1
+  file: sportsdataverse/cache.py
+  snippet: 'if m is not None and m.end() == len(probe):'
+  mutant: 'if m is not None and m.start() == 1 and m.end() == len(probe):'
+  test: tests/test_cache.py -k prefixed_credential
+  expected: kill
+  note: R897-5, api_token= / user_key= values echoed in the body reached the filesystem entry
+
+# --- 4.8: wire-value coercion at the shared runtime boundary (A-M6, A-M16, A-M17, A-N2, A-N3) -----
+# Killer: tests/test_runtime_coercion.py (gate wire-values-coerced).
+- id: csv-iterable-only-list-tuple-set
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return not isinstance(value, (str, bytes)) and hasattr(value, "__iter__")'
+  mutant: 'return isinstance(value, (list, tuple, set))'
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: the original test; a numpy array, a polars Series and a range went to the wire as their repr
+
+- id: csv-float-id-not-through-int
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'if isinstance(value, numbers.Real) and float(value).is_integer():'
+  mutant: 'if False:'
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: 2024.0 reaches the wire as "2024.0"
+
+- id: csv-set-in-hash-order
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'items = sorted(values) if isinstance(values, (set, frozenset)) else values'
+  mutant: 'items = values'
+  test: tests/test_runtime_coercion.py -k csv_exact_query_string
+  expected: kill
+  note: '{104, 103} iterates 104 first, so the query string depends on hash order'
+
+- id: season-list-numpy-integer-rejected
+  group: codegen-runtime
+  finding: A-M6
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    if _is_many(seasons):'
+  mutant: '    if not isinstance(seasons, (int, str)):'
+  test: tests/test_runtime_coercion.py -k "season_list_accepts or numpy_or_float"
+  expected: kill
+  note: >-
+    the original dispatch; np.int64(2024) and 2024.0 were iterated and raised TypeError in every generated
+    loader (278 call sites). (Narrowing the Integral check alone is an equivalent mutant: the Real branch
+    still takes a numpy integer.)
+
+- id: season-list-fraction-truncated
+  group: codegen-runtime
+  finding: A-M6
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    """One season as an ``int`` year (see :func:`_as_season_list`)."""'
+  mutant: '    """One season."""; value = int(value) if isinstance(value, float) else value'
+  test: tests/test_runtime_coercion.py -k "rejects_non_years or fractional_season"
+  expected: kill
+  note: the original `int(s)` truncated 2024.5 to 2024 and loaded the wrong season
+
+- id: bool-str-truthy-string
+  group: codegen-runtime
+  finding: A-M17
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        text = value.strip().lower()'
+  mutant: '        return "true" if value else "false"'
+  test: tests/test_runtime_coercion.py -k "bool_str or string_false or bad_flag"
+  expected: kill
+  note: the original; bool_str("false") was "true"
+
+- id: espn-path-param-unquoted
+  group: codegen-runtime
+  finding: A-N2
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return quote(_wire_text(value), safe="")'
+  mutant: 'return _wire_text(value)'
+  test: tests/test_runtime_coercion.py -k "path_param_is_quoted or league_is_quoted"
+  expected: kill
+  note: team_id="13/roster" changed the route
+
+- id: espn-misspelled-kwarg-unchecked
+  group: codegen-runtime
+  finding: A-N3
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'bad = sorted(set(kwargs) - _GET_KWARGS)'
+  mutant: 'bad = []'
+  test: tests/test_runtime_coercion.py -k misspelled_kwarg
+  expected: kill
+  note: date= for dates= reached download and failed naming download(), after the wrapper had run
+
+- id: wire-text-bool-as-python-repr
+  group: codegen-runtime
+  finding: A-M16
+  file: sportsdataverse/_codegen_runtime.py
+  # block scalars: the first line sets the indent, the later line keeps its 4 spaces
+  snippet: |-
+    return "true" if value else "false"
+        whole = _integral(value)
+  mutant: |-
+    pass
+        whole = _integral(value)
+  test: tests/test_runtime_coercion.py -k csv_wire_value
+  expected: kill
+  note: R896-3, a bool in a list-valued param went to the wire as "True" rather than "true"
+
+# --- Task 4.6: helper layer and model availability (codegen-runtime) ---------------------------
+- id: find-athlete-catches-no-data-only
+  group: codegen-runtime
+  finding: C-M16
+  file: sportsdataverse/find.py
+  snippet: '        except NoDataError:'
+  mutant: '        except Exception:'
+  test: tests/test_find.py -k forbidden
+  expected: kill
+  note: the original `except Exception - continue` read a 403 roster as "no such player"
+
+- id: find-unknown-league-value-error
+  group: codegen-runtime
+  finding: C-L48
+  file: sportsdataverse/find.py
+  snippet: '    except KeyError:'
+  mutant: '    except IndexError:'
+  test: tests/test_find.py -k unknown_league
+  expected: kill
+  note: a bad league escaped as KeyError, not the documented ValueError
+
+- id: crosswalk-absent-only-is-empty
+  group: codegen-runtime
+  finding: C-M17
+  file: sportsdataverse/nfl/nfl_players.py
+  snippet: '    except NoDataError:  # the asset is absent'
+  mutant: '    except Exception:  # the asset is absent'
+  test: tests/nfl/test_nfl_players.py -k asset_fetch_error
+  expected: kill
+  note: the original returned a (0, 12) frame on a 403 ("never a raise")
+
+- id: crosswalk-ff-fallback-warns
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/nfl/nfl_players.py
+  snippet: "        warnings.warn(\n            f\"nfl_players_crosswalk: yahoo_id"
+  mutant: "        (lambda *a, **k: None)(\n            f\"nfl_players_crosswalk: yahoo_id"
+  test: tests/nfl/test_nfl_players.py -k survives_ff_failure
+  expected: kill
+  note: a degraded fallback on a failed fetch must warn, never be silent
+
+- id: cli-catches-sdv-errors
+  group: codegen-runtime
+  finding: C-L57
+  file: sportsdataverse/cli.py
+  snippet: 'except (ValueError, RuntimeError, SportsDataverseError) as e:'
+  mutant: 'except (ValueError, RuntimeError) as e:'
+  test: tests/test_cli.py -k exit_2
+  expected: kill
+  note: NoDataError / AssetFetchError gave a traceback and exit 1
+
+- id: validate-game-float-score-delta
+  group: codegen-runtime
+  finding: C-M9
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '~c("__dh").cast(pl.Float64).is_in(_SCORE_DELTAS)'
+  mutant: '~c("__dh").is_in([0, 1, 2, 3, 6, 7, 8])'
+  test: tests/validation/test_validate_game.py -k float_scores
+  expected: kill
+  note: polars 2.0 raises InvalidOperationError on an Int list against a Float64 column
+
+- id: box-standing-builder-crash-marker
+  group: codegen-runtime
+  finding: C-L52
+  file: sportsdataverse/validation/box_reconcile.py
+  snippet: '        *marker,'
+  mutant: '        # the marker dropped'
+  test: tests/validation/test_box_reconcile.py -k standing_builder
+  expected: kill
+  note: a builder crash lowered coverage (106 -> 88 checks) with no trace
+
+- id: upload-stops-on-permanent-gh-error
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: 'if attempt == max_times or _gh_permanent(exc):'
+  mutant: 'if attempt == max_times:'
+  test: tests/release/test_release_parity.py -k retries_only_transient
+  expected: kill
+  note: every gh error was retried 20 times (~645 s of sleeps on a 404)
+
+- id: fourth-down-missing-model-warns
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '        if name not in _WARNED_MISSING:'
+  mutant: '        if False:'
+  test: tests/nfl/test_models_offline.py -k warns_once_per_missing_model
+  expected: kill
+  note: the original `_try_load` returned None silently -> all-null go/fg/punt_wp, no warning
+
+- id: fourth-down-try-load-strict-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '        if _models_strict():'
+  mutant: '        if False:'
+  test: tests/nfl/test_models_offline.py -k strict_fourth_down_names
+  expected: kill
+  note: SDV_PY_MODELS_STRICT=1 must raise for direct get_4th_down_probs callers (the ESPN path)
+
+- id: enrich-strict-preloads-fourth-down-models
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '    if strict:  # resolve both up front'
+  mutant: '    if False:  # resolve both up front'
+  test: tests/nfl/test_models_offline.py -k strict_fourth_down_names
+  expected: kill
+  note: enrich_nfl_pbp(strict=True) must refuse to null the decision columns
+
+- id: enrich-strict-xyac-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '        if strict and isinstance(exc, FileNotFoundError):'
+  mutant: '        if False:'
+  test: tests/nfl/test_models_offline.py -k strict_xyac
+  expected: kill
+  note: strict mode covers the xYAC step on its own
+
+- id: nfl-cache-loader-copy-on-hit
+  group: codegen-runtime
+  finding: C-M23
+  file: sportsdataverse/nfl/cache.py
+  snippet: '                    return frame.to_pandas() if return_as_pandas else frame.clone()'
+  mutant: '                    return frame.to_pandas() if return_as_pandas else frame'
+  test: tests/nfl/test_nfl_cache.py -k memory_loader_copy_on_hit
+  expected: kill
+  note: the memory cache returned the stored frame (`a is b`)
+
+- id: nfl-cache-loader-copy-on-miss
+  group: codegen-runtime
+  finding: C-M23
+  file: sportsdataverse/nfl/cache.py
+  snippet: "            _MEMORY[key] = (time.time(), frame)\n            return frame.to_pandas() if return_as_pandas else frame.clone()"
+  mutant: "            _MEMORY[key] = (time.time(), frame)\n            return frame.to_pandas() if return_as_pandas else frame"
+  test: tests/nfl/test_nfl_cache.py -k memory_loader_copy_on_hit
+  expected: kill
+  note: the first caller got the stored object, so its edit reached the next hit
+
+- id: nfl-cache-get-copy-on-hit
+  group: codegen-runtime
+  finding: C-M23
+  file: sportsdataverse/nfl/cache.py
+  snippet: "return frame.clone()  # a caller's in-place edit"
+  mutant: "return frame  # a caller's in-place edit"
+  test: tests/nfl/test_nfl_cache.py -k cache_get_put_copy_on_hit
+  expected: kill
+  note: nfl_build's per-game cache
+
+- id: nfl-cache-put-stores-a-copy
+  group: codegen-runtime
+  finding: C-M23
+  file: sportsdataverse/nfl/cache.py
+  snippet: '_MEMORY[key] = (time.time(), frame.clone())'
+  mutant: '_MEMORY[key] = (time.time(), frame)'
+  test: tests/nfl/test_nfl_cache.py -k cache_get_put_copy_on_hit
+  expected: kill
+  note: the caller keeps the frame it put; editing it must not edit the entry
+
+- id: nfl-clear-cache-owned-entries-only
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/nfl/cache.py
+  snippet: 'if child.is_file() and _ENTRY_NAME.fullmatch(child.name):'
+  mutant: 'if child.is_file():'
+  test: tests/nfl/test_nfl_cache.py -k removes_only_key_named
+  expected: kill
+  note: clear_cache emptied any cache_dir (a user's thesis.docx and sub/data.csv)
+
+- id: nfl-config-rejects-unknown-cache-mode
+  group: codegen-runtime
+  finding: C-L42
+  file: sportsdataverse/nfl/config.py
+  snippet: 'if key == "cache_mode" and value not in _CACHE_MODES:'
+  mutant: 'if False:'
+  test: tests/nfl/test_nfl_cache.py -k invalid_mode
+  expected: kill
+  note: cache_mode="disk" was accepted and switched caching off silently
+
+- id: nfl-cache-corrupt-unlink-guarded
+  group: codegen-runtime
+  finding: C-L43
+  file: sportsdataverse/nfl/cache.py
+  snippet: '                    with contextlib.suppress(OSError):'
+  mutant: '                    with contextlib.suppress(ImportError):'
+  test: tests/nfl/test_nfl_cache.py -k corrupt_parquet_with_a_locked
+  expected: kill
+  note: a locked corrupt entry escaped as PermissionError
+
+- id: http-cache-copy-on-hit
+  group: codegen-runtime
+  finding: A-M20
+  file: sportsdataverse/cache.py
+  snippet: 'return copy.deepcopy(entry.get("body")) if _MODE == "memory" else entry.get("body")'
+  mutant: 'return entry.get("body")'
+  test: tests/test_cache.py -k copy_on_hit
+  expected: kill
+  note: a memory hit returned the stored dict
+
+- id: http-clear-cache-owned-entries-only
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: 'if _is_entry(path) and fnmatch.fnmatch(path.stem, glob):'
+  mutant: 'if fnmatch.fnmatch(path.stem, glob):'
+  test: tests/test_cache.py -k removes_only_key_named
+  expected: kill
+  note: the bare clear_cache() rmtree'd ~/.cache/sportsdataverse (the NFL cache and its models included)
+
+- id: http-clear-cache-entry-shape
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: 'return fh.read(len(_ENTRY_HEAD)) == _ENTRY_HEAD'
+  mutant: 'return True'
+  test: tests/test_cache.py -k removes_only_key_named
+  expected: kill
+  note: R899-6, a user's md5-named JSON in a shared SDV_PY_CACHE_DIR is not a cache entry
+
+- id: upload-permission-403-is-permanent
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: 'return not re.search(r"rate limit", err, re.IGNORECASE)'
+  mutant: 'return False'
+  test: tests/release/test_release_parity.py -k retries_only_transient
+  expected: kill
+  note: R899-4, "Resource not accessible by integration" retried 20x; a rate-limit 403 still retries
+
+- id: upload-422-already-exists-retries
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: 'return "already_exists" not in err'
+  mutant: 'return True'
+  test: tests/release/test_release_parity.py -k retries_only_transient
+  expected: kill
+  note: R899-4, the clobbering retry is what recovers an asset an earlier attempt landed
+
+- id: upload-classifies-gh-stderr-only
+  group: codegen-runtime
+  finding: C-L56
+  file: sportsdataverse/release.py
+  snippet: '            proc.stderr,'
+  mutant: '            f"{args} {proc.stderr}",'
+  test: tests/release/test_release_parity.py -k carries_stderr
+  expected: kill
+  note: R899-4, a tag or path in the command line must not decide the retry
+
+- id: espn-path-strict-xpass-reraises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing xpass model raises'
+  mutant: 'if False:  # SDV_PY_MODELS_STRICT=1: a missing xpass model raises'
+  test: tests/nfl/test_models_offline.py -k strict_env_raises_on_missing_xpass
+  expected: kill
+  note: R899-3, NFLPlayProcess swallowed the strict raise into a RuntimeWarning
+
+- id: espn-path-strict-fourth-down-reraises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if _models_strict():  # SDV_PY_MODELS_STRICT=1: a missing nfl4th model raises'
+  mutant: 'if False:  # SDV_PY_MODELS_STRICT=1: a missing nfl4th model raises'
+  test: tests/nfl/test_models_offline.py -k strict_env_raises_on_missing_fourth_down
+  expected: kill
+  note: R899-3, NFLPlayProcess swallowed the strict raise into a RuntimeWarning
+
+# --- Task 4.6 review round 899b (codegen-runtime) ----------------------------------------------
+- id: enrich-strict-xpass-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: "        if strict:\n            raise\n        import warnings\n\n        warnings.warn(\n            f\"enrich_nfl_pbp: skipping xpass step"
+  mutant: "        if False:\n            raise\n        import warnings\n\n        warnings.warn(\n            f\"enrich_nfl_pbp: skipping xpass step"
+  test: tests/nfl/test_models_offline.py -k missing_xpass_strict_raises
+  expected: kill
+  note: R899-9, strict mode refuses a missing xpass model in enrich_nfl_pbp
+
+- id: enrich-strict-preloads-wp-model
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '        _load_model(_fd._WP_MODEL_FILE)'
+  mutant: '        pass'
+  test: tests/nfl/test_models_offline.py -k names_a_missing_wp_model
+  expected: kill
+  note: R899-9, fd_model resolves but wp_model does not -- strict must still refuse
+
+- id: enrich-strict-fourth-down-scoring-error-raises
+  group: codegen-runtime
+  finding: C-M15
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: "        if strict:\n            raise\n        # The 4th-down models"
+  mutant: "        if False:\n            raise\n        # The 4th-down models"
+  test: tests/nfl/test_models_offline.py -k lets_a_scoring_error_through
+  expected: kill
+  note: R899-9, a card mismatch or corrupt booster is not swallowed in strict mode
+
+- id: http-clear-cache-skips-locked-entry
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: '    except PermissionError:'
+  mutant: '    except IsADirectoryError:'
+  test: tests/test_cache.py -k skips_a_locked_entry
+  expected: kill
+  note: R899-11, a file another process holds open crashed clear_cache
+
+- id: nfl-clear-cache-skips-locked-entry
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/nfl/cache.py
+  snippet: '                except PermissionError:'
+  mutant: '                except IsADirectoryError:'
+  test: tests/nfl/test_nfl_cache.py -k skips_a_locked_key_named_entry
+  expected: kill
+  note: R899-11, a file another process holds open crashed clear_cache
+
+- id: http-clear-cache-locked-entry-warns
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/cache.py
+  snippet: "        warnings.warn(\n            f\"clear_cache: {path} is in use"
+  mutant: "        (lambda *a, **k: None)(\n            f\"clear_cache: {path} is in use"
+  test: tests/test_cache.py -k skips_a_locked_entry
+  expected: kill
+  note: R899-16, a locked entry stays cached, so clear_cache says so
+
+- id: nfl-clear-cache-locked-entry-warns
+  group: codegen-runtime
+  finding: C-M24
+  file: sportsdataverse/nfl/cache.py
+  snippet: "                    warnings.warn(\n                        f\"clear_cache: {child} is in use"
+  mutant: "                    (lambda *a, **k: None)(\n                        f\"clear_cache: {child} is in use"
+  test: tests/nfl/test_nfl_cache.py -k skips_a_locked_key_named_entry
+  expected: kill
+  note: R899-16, clear_cache promises a fresh fetch; a locked entry breaks that, so it warns
+# --- R896-11: redaction linearity is a size ratio, not a wall-clock budget -----------------------------
+- id: redact-pair-separator-quadratic
+  group: codegen-runtime
+  finding: R896-11
+  file: sportsdataverse/errors.py
+  snippet: 'r"[\"'']?\s*(?:[:=]|%3[AD])'
+  mutant: 'r"[\"'']?.*?(?:[:=]|%3[AD])'
+  test: tests/test_credential_redaction.py -k is_linear
+  expected: kill
+  note: an unbounded lazy repeat before the separator rescans the rest of the line from every name, so 4x the input costs ~16x
+
+- id: redact-userinfo-quadratic
+  group: codegen-runtime
+  finding: R896-11
+  file: sportsdataverse/errors.py
+  snippet: '_USERINFO = _re.compile(r"(://[^\s/?#@:\"'']*:)'
+  mutant: '_USERINFO = _re.compile(r"(://.*?:)'
+  test: tests/test_errors.py -k stay_linear
+  expected: kill
+  note: a userinfo user part that may cross colons rescans the rest of the text from every ://, so 4x the input costs ~16x
+
+# --- codegen 3.9 PR3: the generator documents what runs (A-M3, B-M31, B-M32, A-L10, A-L13, A-L40-A-L43, A-L45, B-GB-02)
+- id: codegen-is-documented-needs-a-heading
+  group: codegen-runtime
+  finding: A-M3
+  file: tools/codegen/generate.py
+  snippet: '    return name in _corpus_headings(corpus)'
+  mutant: '    return re.search(r"\b" + re.escape(name) + r"\b", corpus) is not None'
+  test: tests/codegen/test_is_documented.py tests/codegen/test_check.py -k "heading or reference_block"
+  expected: kill
+  note: a word mention (a returns-table cell, a note) counted as documentation and left 21 public names with no reference block
+
+- id: codegen-docs-skip-shadowed-espn-views
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '    return [v for v in _espn_league_views(league, apis, hosts) if v.fn_name not in shadowed]'
+  mutant: '    return _espn_league_views(league, apis, hosts)'
+  test: tests/codegen/test_docs.py::test_a_shadowed_espn_view_is_kept_off_the_reference_page
+  expected: kill
+  note: the site pages documented the generated espn_<lg>_calendar signature under a name that runs the hand-written function; after 3.9 PR4 nothing is shadowed, so the test undoes the calendar rename (R903-1)
+
+- id: codegen-autodoc-dict-of-frames-tables
+  group: codegen-runtime
+  finding: B-M32
+  file: tools/codegen/generate.py
+  snippet: '    return list(d.get("frames") or []) if d.get("kind") == "frames" else []'
+  mutant: '    return []'
+  test: tests/codegen/test_docs.py::test_a_dict_of_frames_autodoc_function_renders_one_table_per_frame
+  expected: kill
+  note: the live boxscore returns six frames; its Returns section must be six tables
+
+- id: codegen-one-run-converges
+  group: codegen-runtime
+  finding: A-L10
+  file: tools/codegen/generate.py
+  snippet: '    subprocess.run([sys.executable, str(Path(__file__).resolve()), "--parsed-and-docs"], check=True)'
+  mutant: '    main(["--parsed-and-docs"])'
+  test: tests/codegen/test_check.py::test_a_full_run_renders_parsed_and_docs_in_a_fresh_interpreter
+  expected: kill
+  note: rendering parsed/docs in the process that imported the package before rewriting it took a second run
+
+- id: codegen-vocab-getters-nba-stats
+  group: codegen-runtime
+  finding: A-L13
+  file: tools/codegen/generate.py
+  snippet: '        "sportsdataverse.nba.nba_stats_runtime",'
+  mutant: '        "sportsdataverse.nba.nba_stats_runtime_",'
+  test: tests/codegen/test_runtime_errors.py::test_a_runtime_with_a_green_vocabulary_matrix_documents_its_raises
+  expected: kill
+  note: 237 of 239 nba_stats / wnba_stats wrappers documented no Raises while their runtime raised the vocabulary
+
+- id: codegen-docstring-escapes-yaml-text
+  group: codegen-runtime
+  finding: A-L40
+  file: tools/codegen/generate.py
+  snippet: '    return re.sub(r''"{3,}'', lambda m: ''\\"'' * len(m.group()), text.replace("\\", "\\\\"))'
+  mutant: '    return text.replace("\\", "\\\\").replace(''"""'', ''\\"""'')'
+  test: tests/codegen/test_check.py::test_build_docstring_yaml_text_with_a_backslash_or_triple_quote_compiles_verbatim
+  expected: kill
+  note: a backslash in YAML text warned, and a triple quote closed the docstring early; the mutant is the first fix, which a run of four quotes still broke (R901-3)
+
+- id: summary-docstring-section-count
+  group: codegen-runtime
+  finding: A-L41
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    sub-frame keyed by section name (21 sections currently). Sections'
+  mutant: '    sub-frame keyed by section name (17 sections currently). Sections'
+  test: tests/test_espn_universal_parsers.py::test_summary_docstring_counts_the_registered_sections
+  expected: kill
+  note: the docstring said 17 sections while SUMMARY_SECTION_PARSERS held 21
+
+- id: codegen-home-module-names-the-home
+  group: codegen-runtime
+  finding: A-L42
+  file: tools/codegen/generate.py
+  snippet: '    return f"sportsdataverse.{_league_module(prefix)}"'
+  mutant: '    return f"sportsdataverse.{_NESTED_HOMES.get(prefix, prefix)}"'
+  test: tests/codegen/test_league_registry.py::test_no_generated_page_or_example_names_a_deprecated_import_path
+  expected: kill
+  note: 21 generated Examples imported, and 146 pages named, a deprecated top-level alias
+
+- id: codegen-flat-api-doc-nflpro-label
+  group: codegen-runtime
+  finding: A-L43
+  file: tools/codegen/generate.py
+  snippet: '    "nflpro": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",'
+  mutant: '    "nflpro_": "NFL Pro API (pro.nfl.com, NFL+ Premium account)",'
+  test: tests/codegen/test_league_registry.py::test_every_flat_api_page_has_a_label_and_every_label_a_page
+  expected: kill
+  note: the nflpro page was titled "NFL — nflpro"
+
+- id: codegen-hockeytech-one-league-list
+  group: codegen-runtime
+  finding: A-L45
+  file: tools/codegen/generate.py
+  snippet: '    **{lg: "fastRhockey" for lg in ("pwhl", "phf", *_HOCKEYTECH_MODULE_LEAGUES)},'
+  mutant: '    **{lg: "fastRhockey" for lg in ("pwhl", "phf", "ahl")},'
+  test: tests/codegen/test_league_registry.py::test_hockeytech_module_leagues_are_the_registry_minus_pwhl
+  expected: kill
+  note: the HockeyTech league list was hand-copied twice
+
+- id: fox-empty-dedicated-table-is-zero-rows
+  group: codegen-runtime
+  finding: B-GB-02
+  file: sportsdataverse/fox/fox_api_parsers.py
+  snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
+  mutant: '        if rows:'
+  test: tests/fox/test_fox_api.py::test_an_empty_standings_table_is_a_zero_row_frame_not_the_page_nav
+  expected: kill
+  note: an emptied real standings table returned the page's nav/section lists (11 x 7) through the flattener
+
+- id: fox-dedicated-any-layout-key
+  group: codegen-runtime
+  finding: B-GB-02
+  file: sportsdataverse/fox/fox_api_parsers.py
+  snippet: '        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):'
+  mutant: '        if rows or (rows is not None and isinstance(raw, dict) and all(k in raw for k in keys)):'
+  test: tests/fox/test_fox_api.py::test_an_empty_nav_layout_is_a_zero_row_frame
+  expected: kill
+  note: R901-4, the nav parser reads navItems OR groups; conferences carries only groups
+
+- id: codegen-atrium-parsers-autodoc-exception
+  group: codegen-runtime
+  finding: A-M3
+  file: tools/codegen/generate.py
+  snippet: '        "sportsdataverse.basketball.atrium.atrium_parsers",'
+  mutant: '        "sportsdataverse.basketball.atrium.atrium_parsers_",'
+  test: tests/codegen/test_docs.py::test_atrium_end_year_is_documented_not_allowlisted
+  expected: kill
+  note: R901-2, atrium_end_year is user-facing and must get a reference block, not an allowlist entry
+
+# codegen 3.9 PR4
+- id: codegen-espn-shadowed-view-renamed
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        if fn_name in handwritten:'
+  mutant: '        if False:'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_the_generator_renames_exactly_the_twelve_shadowed_views
+  expected: kill
+  note: a generated view whose package name a hand-written function holds must be version-qualified
+
+- id: codegen-espn-collision-calendar-site
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '    "calendar": "calendar_site",'
+  mutant: '    "calendar_": "calendar_site",'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_the_generator_renames_exactly_the_twelve_shadowed_views
+  expected: kill
+  note: without the collision entry the 7 shadowed calendars keep their unreachable bare name
+
+- id: codegen-espn-ext-rename-shim-map
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        renamed={v.renamed_from: v.fn_name for v in views if v.renamed_from},'
+  mutant: '        renamed={},'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_freshly_rendered_ext_module_carries_the_deprecation_shim
+  expected: kill
+  note: the old ext-module import must keep working for one release
+
+- id: codegen-espn-ext-rename-shim-warns
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/templates/espn_league_module.py.jinja
+  snippet: '        DeprecationWarning,'
+  mutant: '        FutureWarning,'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_freshly_rendered_ext_module_carries_the_deprecation_shim
+  expected: kill
+  note: the old ext-module name warns DeprecationWarning naming the new name
+
+- id: sources-handwritten-wnba-standings-rule
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/sources.yaml
+  snippet: '      - sportsdataverse.wnba.wnba_standings'
+  mutant: '      - sportsdataverse.wnba.wnba_standings_gone'
+  test: tests/codegen/test_source_gate.py::test_no_public_function_is_unmapped_or_ambiguous
+  expected: kill
+  note: hand-written espn_wnba_standings resolved through the generated name; after the rename it needs its own rule
+
+- id: codegen-espn-shadowed-view-keeps-bare-name
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '                renamed_from, fn_name = fn_name, versioned'
+  mutant: '                renamed_from = fn_name'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_no_generated_view_is_shadowed_by_a_hand_written_function_in_any_league
+  expected: kill
+  note: R903-2, no generated view may keep a name a hand-written function holds at package level
+
+- id: codegen-handwritten-names-import-failure-raises
+  group: codegen-runtime
+  finding: B-M31
+  file: tools/codegen/generate.py
+  snippet: '        if e.name and (target == e.name or target.startswith(f"{e.name}.")):'
+  mutant: '        if True:'
+  test: tests/codegen/test_espn_shadowed_rename.py::test_a_league_package_that_fails_to_import_is_an_error_not_an_empty_set
+  expected: kill
+  note: R903-3, a failed league import returned an empty set and quietly undid the renames on a local regen
+# --- Task 4.3: release loaders classify every failure (A-M9, A-N10, B-L74, A-M11, A-L29, B-GB-14) ---
+- id: release-classify-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    with _transport_errors(url):
+            resp = download(url, headers=_PROBE_HEADERS)
+  mutant: |-
+    if True:
+            resp = download(url, headers=_PROBE_HEADERS)
+  test: tests/test_runtime_release_classify.py -k connection_error_is_asset
+  expected: kill
+  note: a dead connection leaked requests.ConnectionError from every release loader
+
+- id: release-panic-refetch-outside-transport-errors
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    with _transport_errors(url):  # A-M9: a dead connection is a failed fetch, not a requests error'
+  mutant: '    if True:'
+  test: tests/test_runtime_release_classify.py -k panic_refetch_is_asset
+  expected: kill
+  note: the metadata-stripped refetch issues its own request
+
+- id: release-probe-downloads-the-whole-asset
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_PROBE_HEADERS = {"Range": "bytes=0-0"}'
+  mutant: '_PROBE_HEADERS = {}'
+  test: tests/test_runtime_release_classify.py -k one_byte
+  expected: kill
+  note: the failure classification re-downloaded a 20-59 MB asset
+
+- id: release-transient-read-reraises
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '_classify_release_failure(url, original)'
+  mutant: '_classify_release_failure(url, original); raise original'
+  test: tests/test_runtime_release_classify.py -k one_byte
+  expected: kill
+  note: a reachable asset whose read failed in transit re-raised the raw reader error
+
+- id: fetch-csv-accepts-a-page
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    _text_body(resp, url, html=False)'
+  mutant: '    _text_body(resp, url)'
+  test: tests/test_runtime_release_classify.py -k challenge_page
+  expected: kill
+  note: a challenge page parsed as a one-column CSV
+
+- id: nfl-teams-csv-read-by-polars
+  group: codegen-runtime
+  finding: A-M11
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    data = _fetch_csv(NFL_TEAM_LOGO_URL)'
+  mutant: '    data = pl.read_csv(NFL_TEAM_LOGO_URL)'
+  test: tests/test_runtime_release_classify.py -k teams_404
+  expected: kill
+  note: on polars 2.0 pl.read_csv(url) answers a 404 with a bare OSError
+
+- id: no-espn-data-decodes-binary
+  group: codegen-runtime
+  finding: A-L29
+  file: sportsdataverse/errors.py
+  snippet: '    if not _may_be_json(response):'
+  mutant: '    if False:'
+  test: tests/test_runtime_release_classify.py -k binary_body
+  expected: kill
+  note: every 2xx release asset was charset-scanned as JSON (the guard is #897's _may_be_json; this row pins it in no_espn_data)
+
+- id: nfl-schedule-empty-seasons-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    data = pl.DataFrame() if season_list == [] else _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  mutant: '    data = _fetch_release_parquet(NFL_TEAM_SCHEDULE_URL)'
+  test: tests/test_runtime_release_classify.py -k seasons_empty_schedule
+  expected: kill
+  note: seasons=[] returned every season since 1999; now an empty frame with no request (R898-2)
+
+- id: nfl-implicit-seasons-skip-any-gap
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '            if not every or season != season_list[-1]:'
+  mutant: '            if not every:'
+  test: tests/test_runtime_release_classify.py -k gap_before_the_current
+  expected: kill
+  note: seasons=True skips only the unpublished current season; a hole in history still raises
+
+- id: nfl-seasons-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: '    if seasons is True:'
+  mutant: '    if seasons is True or seasons is None:'
+  test: tests/test_runtime_release_classify.py -k seasons_none
+  expected: kill
+  note: owner ruling R898-2 (nflreadpy) -- None is the current season, True every season
+
+- id: release-second-read-use-pyarrow
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '    return _parse_release(url, data)  # the asset, read after the probe'
+  mutant: '    return pl.read_parquet(data)'
+  test: tests/test_runtime_release_classify.py -k second_read_goes_through_pyarrow
+  expected: kill
+  note: R898-1 / R898-21, the read after the probe parses with pyarrow too (same parser, same frames, same panic fallback as the first read)
+
+- id: release-second-read-http-error-raw
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'raise AssetFetchError(f"release asset fetch failed with HTTP {e.code}: {url}") from e'
+  mutant: 'raise'
+  test: tests/test_runtime_release_classify.py -k second_read_rate_limit
+  expected: kill
+  note: R898-4, a 429 on the second read leaked a raw urllib HTTPError
+
+- id: release-second-read-404-not-no-data
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: '        if e.code == 404:'
+  mutant: '        if False:'
+  test: tests/test_runtime_release_classify.py -k second_read_404
+  expected: kill
+  note: R898-4, a 404 on the second read is still an absent asset
+
+- id: release-parse-error-refetched
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |-
+    data = _release_bytes(url)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  mutant: |-
+    data = _release_bytes(url); _parse_release(url, data)
+        except (OSError, http.client.HTTPException) as e:  # a transport failure: classified below
+  test: tests/test_runtime_release_classify.py -k "parse_error_is_not_refetched or corrupt_footer"
+  expected: kill
+  note: >-
+    R898-5 / R898-9, the parse inside the transport try: pyarrow's corrupt-footer OSError read as a
+    failed fetch, so a corrupt asset was probed, fetched a second time and reported AssetFetchError
+
+- id: release-probe-416-not-reachable
+  group: codegen-runtime
+  finding: A-N10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'not (200 <= status < 300 or status == 416)'
+  mutant: 'not (200 <= status < 300)'
+  test: tests/test_runtime_release_classify.py -k zero_byte
+  expected: kill
+  note: R898-6, a zero-byte asset answers the probe 416 and is reachable
+
+- id: roster-calendar-for-rosters
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'lambda s: base_url.format(season=s), roster=True)'
+  mutant: 'lambda s: base_url.format(season=s))'
+  test: tests/test_runtime_release_classify.py -k roster_year_none
+  expected: kill
+  note: R898-10, nflreadpy load_rosters takes the roster year, which turns on March 15
+
+- id: release-first-read-http-error-left-open
+  group: codegen-runtime
+  finding: B-L74
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: "        original.close()  # the first read's error response holds its socket open (R898-13)"
+  mutant: '        pass'
+  test: tests/test_runtime_release_classify.py -k first_read_http_error_is_closed
+  expected: kill
+  note: R898-13, an unclosed HTTPError leaks its socket (a ResourceWarning, an error under pytest.ini)
+
+- id: nfl-player-stats-none-is-every-season
+  group: codegen-runtime
+  finding: B-GB-14
+  file: sportsdataverse/nfl/nfl_loaders.py
+  snippet: 'for raw in _fetch_nfl_seasons(seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  mutant: 'for raw in _fetch_nfl_seasons(True if seasons is None else seasons, 1999, lambda s: NFL_PLAYER_STATS_WEEK_URL.format(season=s))'
+  test: tests/nfl/test_nfl_player_stats_weekly.py -k seasons_none_is_the_current
+  expected: kill
+  note: owner ruling (round 3) -- load_nfl_player_stats() is the current season, not ~28 assets since 1999
+
+- id: release-parse-copies-the-buffer
+  group: codegen-runtime
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return pl.read_parquet(data, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(io.BytesIO(data.getvalue()), use_pyarrow=True)'
+  test: tests/test_runtime_release_classify.py -k parse_reads_the_buffer_the_fetch_returned
+  expected: kill
+  note: R898-14, a second reference to the bytes made polars copy the whole asset (+31 MB on play_by_play_2025)
+
+- id: release-read-without-timeout
+  group: codegen-runtime
+  finding: A-M9
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'with urllib.request.urlopen(url, timeout=_env_int(_ENV_TIMEOUT, _DEFAULT_TIMEOUT)) as f:'
+  mutant: 'with urllib.request.urlopen(url) as f:'
+  test: tests/test_runtime_release_classify.py -k passes_the_http_timeout
+  expected: kill
+  note: R898-15, a server that accepted and never answered hung the release read
+
+# codegen 4.2: parse_items page envelope columns (A-H1, R-028)
+- id: parse-items-page-columns-dropped
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'for col, key in (("count", "count"), ("page_count", "pageCount")):'
+  mutant: 'for col, key in ():'
+  test: tests/test_espn_universal_parsers.py -k page_envelope
+  expected: kill
+  note: the frame says nothing about count 610 / pageCount 7 on espn_nba_athletes_index's first page
+
+- id: parse-items-page-columns-untyped
+  group: codegen-runtime
+  finding: A-H1
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'df[col] = pd.array([value if type(value) is int else None] * len(df), dtype="Int64")'
+  mutant: 'df[col] = [value] * len(df)'
+  test: tests/test_espn_universal_parsers.py -k page_envelope
+  expected: kill
+  note: an untyped column is int64 on pandas and a Null-dtype column on an unpaginated payload
+
+# Task 4.9 (codegen-runtime): swallowed errors visible, then BLE001
+- id: nhl-edge-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '        _warn_schema_drift("parse_edge_top10: rows", exc)'
+  mutant: '        pass'
+  test: tests/test_nhl_edge_parsers.py -k "schema_drift and top10"
+  expected: kill
+  note: a drifted leaderboard read as "no data" with no warning
+
+- id: nhl-edge-top10-empty-object-is-no-row
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nhl/nhl_edge_parsers.py
+  snippet: '    rows = [row for row in rows or [] if row not in (None, {})]  # an empty object carries no row'
+  mutant: '    rows = rows or []'
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_edge_top10"
+  expected: kill
+  note: a bare [{}] board parsed to a one-row frame
+
+- id: nhl-web-flatten-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: |-
+    df = pd.json_normalize(_object_rows(items), sep="_")
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    df = pd.json_normalize(_object_rows(items), sep="_")
+        except _SHAPE_ERRORS as exc:
+            pass
+  test: tests/test_nhl_api_web_parsers.py -k schema_drift
+  expected: kill
+  note: a drifted api-web row list read as "no data" with no warning
+
+- id: nhl-web-envelope-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nhl/nhl_api_web_parsers.py
+  snippet: '    return payload if isinstance(payload, dict) and _error_envelope_code(payload) is None else {}'
+  mutant: '    return payload if isinstance(payload, dict) else {}'
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_nhl_web_landing"
+  expected: kill
+  note: an error envelope flattened into a one-row game profile
+
+- id: mlb-api-flatten-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/mlb/mlb_api_parsers.py
+  snippet: |-
+    df = pd.json_normalize(_object_rows(items), sep="_")
+        except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    df = pd.json_normalize(_object_rows(items), sep="_")
+        except _SHAPE_ERRORS as exc:
+            pass
+  test: tests/test_mlb_api_parsers.py -k schema_drift
+  expected: kill
+  note: a drifted Stats API row list read as "no data" with no warning
+
+- id: mlb-api-timecodes-non-string-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/mlb/mlb_api_parsers.py
+  snippet: '    if len(codes) < len(payload):'
+  mutant: '    if False:'
+  test: tests/test_mlb_api_parsers.py -k schema_drift
+  expected: kill
+  note: timecodes that stop being strings became rows of objects
+
+- id: nhl-stats-rest-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nhl/nhl_stats_rest_parsers.py
+  snippet: '        _warn_schema_drift("parse_nhl_stats_rest: data", exc)'
+  mutant: '        pass'
+  test: tests/test_nhl_aux_parsers.py -k "schema_drift and stats_rest"
+  expected: kill
+  note: a drifted Stats REST data list read as "no data" with no warning
+
+- id: nba-stats-frame-failure-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: "            _warn_schema_drift(f\"parse_nba_stats_result_sets: {rs.get('name', 'resultSet')}.rowSet\", exc)"
+  mutant: '            pass'
+  test: tests/nba/test_nba_stats_parsers.py -k schema_drift
+  expected: kill
+  note: a result set polars could not build read as an empty frame with no warning
+
+- id: nba-stats-non-dict-body-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: |-
+    if not isinstance(raw, dict):
+            return []
+  mutant: |-
+    if raw is None:
+            return []
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_nba_stats_result_sets"
+  expected: kill
+  note: a "" or list body raised AttributeError instead of zero rows
+
+- id: safe-json-failed-fetch-raises
+  group: codegen-runtime
+  finding: B-M1
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: |-
+    except NoDataError:
+            return None
+  mutant: |-
+    except Exception:
+            return None
+  test: tests/test_common_espn_player_stats.py -k safe_json_raises
+  expected: kill
+  note: a 403 / 429 / 5xx / dead connection on the athlete node became a null-identity row
+
+- id: espn-parser-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift("parse_news: articles", exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_news"
+  expected: kill
+  note: a drifted ESPN news list read as "no data" with no warning
+
+- id: espn-parse-teams-non-dict-is-zero-rows
+  group: codegen-runtime
+  finding: EX-1.3-a
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |-
+    @_zero_rows_unless_dict
+    def parse_teams(
+  mutant: 'def parse_teams('
+  test: tests/test_espn_universal_parsers.py -k "hostile and parse_teams-list"
+  expected: kill
+  note: a list body reached payload.get; the old blind except hid the AttributeError
+
+- id: codegen-league-import-failure-raises
+  group: codegen-runtime
+  finding: A-L11
+  file: tools/codegen/generate.py
+  snippet: |-
+    if e.name and (target == e.name or target.startswith(f"{e.name}.")):
+                return None
+            raise
+  mutant: 'return None'
+  test: tests/codegen/test_generate.py -k league_import_failure
+  expected: kill
+  note: a syntax error or missing optional dependency silently emptied reserved names / param docs
+
+- id: codegen-ruff-exit-code-raises
+  group: codegen-runtime
+  finding: A-L9
+  file: tools/codegen/generate.py
+  snippet: '    if proc.returncode != 0:'
+  mutant: '    if False:'
+  test: tests/codegen/test_check.py -k ruff_failure_is_raised
+  expected: kill
+  note: a rendered file ruff could not parse was written unformatted
+
+- id: codegen-native-schema-crash-reported
+  group: codegen-runtime
+  finding: A-N14
+  file: tools/codegen/generate.py
+  snippet: '                    failed.append(f"{api}/{short} ({fname}): {type(e).__name__}: {e}")'
+  mutant: '                    pass'
+  test: tests/codegen/test_generate.py -k native_schema_parser_crash
+  expected: kill
+  note: a parser crash on its committed capture was a printed skip and --schemas exited 0
+
+- id: codegen-loader-schema-failed-read-not-absent
+  group: codegen-runtime
+  finding: A-L11
+  file: tools/codegen/generate.py
+  snippet: "            except FileNotFoundError:  # fsspec's HTTP 404: this season is not published"
+  mutant: "            except Exception:  # fsspec's HTTP 404: this season is not published"
+  test: tests/codegen/test_generate.py -k failed_read_is_not_an_absent_season
+  expected: kill
+  note: a 403 on a footer read as an unpublished season and rebuilt the schema from an older one
+
+- id: crosswalk-bug-is-not-a-fallback
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  mutant: '    except Exception as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k bug_in_the_release_read
+  expected: kill
+  note: any error, a bug included, fell back to the stale bundled crosswalk
+
+- id: ncaa-box-failed-game-logged
+  group: codegen-runtime
+  finding: B-L41
+  file: sportsdataverse/mbb/mbb_ncaa_box_stats.py
+  snippet: '            logger.warning("Error with game id: %s // %s", gid, exc)'
+  mutant: '            print(f"Error with game id: {gid} // {exc}")'
+  test: tests/mbb/test_mbb_ncaa_box_stats_parity.py -k logged_not_printed
+  expected: kill
+  note: the dropped game went to stdout instead of the module logger
+
+- id: espn-parse-items-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '        _warn_schema_drift("parse_items: items", exc)'
+  mutant: '        pass'
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_items"
+  expected: kill
+  note: a drifted Core v2 items list read as "no data" with no warning (narrowed after 4.2 merged)
+
+# Task 4.9 review round (R907-1, R907-2, R907-5)
+- id: espn-row-per-item-drift-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |-
+    except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    except _SHAPE_ERRORS as exc:
+            pass
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_summary_officials"
+  expected: kill
+  note: R907-1, a drifted summary sub-list (officials) read as "no data" with no warning
+
+- id: espn-entries-not-objects-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: |-
+    _warn_schema_drift(where, exc)
+            return None
+  mutant: return entries
+  test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and (parse_coaches or parse_event_plays or parse_team_roster)"
+  expected: kill
+  note: R907-1 / R953-1, _rows_or_drift; a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
+
+- id: nba-stats-non-object-result-set-warns
+  group: codegen-runtime
+  finding: A-L60
+  file: sportsdataverse/nba/nba_stats_parsers.py
+  snippet: '        else:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  mutant: '        elif False:  # a result set that is not an object is dropped, but never silently (A-L60)'
+  test: tests/nba/test_nba_stats_parsers.py -k not_an_object_warns
+  expected: kill
+  note: R907-2, a result set that is not an object was dropped silently
+
+- id: crosswalk-corrupt-asset-falls-back
+  group: codegen-runtime
+  finding: MD-4
+  file: sportsdataverse/mbb/mbb_ncaa_espn_crosswalk.py
+  snippet: '    except (AssetFetchError, NoDataError, pa.ArrowException, pl.exceptions.PolarsError) as e:'
+  mutant: '    except (AssetFetchError, NoDataError, pl.exceptions.PolarsError) as e:'
+  test: tests/mbb/test_ncaa_espn_team_crosswalk.py -k corrupt
+  expected: kill
+  note: R907-5, a corrupt or truncated release asset raised instead of falling back to the bundled copy
 
 # --- task 2.9: ESPN schedule family (group espn-schedule) ----------------------------------------
 - id: mlb-schedule-empty-returns-none

@@ -1,5 +1,24 @@
-columns: []
+columns:
+- name: category
+  type: character
+  description: ''
+- name: split_name
+  type: character
+  description: ''
+- name: split_category
+  type: character
+  description: ''
+- name: split_value
+  type: character
+  description: ''
+- name: season
+  type: integer
+  description: ''
+- name: team_id
+  type: integer
+  description: ''
+- name: position
+  type: character
+  description: ''
 kind: dataframe
 schema: athlete_stats
-unverified: 'parser: parse_athlete_stats returns no columns on the live payload (nba, mlb, mbb, 2026-10-07); its rows sit
-  under keys it does not read (top level: categories, filters, glossary, teams)'

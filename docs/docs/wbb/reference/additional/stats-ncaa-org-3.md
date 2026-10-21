@@ -1,10 +1,53 @@
 ---
-title: "WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup"
-sidebar_label: "stats.ncaa.org: playwright_transport–validate_lineup"
+title: "WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup"
+sidebar_label: "stats.ncaa.org: phase1_shot–validate_lineup"
 sidebar_position: 4
-description: "WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
+description: "WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# WBB — additional Python functions — stats.ncaa.org: playwright_transport–validate_lineup
+# WBB — additional Python functions — stats.ncaa.org: phase1_shot–validate_lineup
+
+### phase1_shot_event_enrichment {#phase1_shot_event_enrichment}
+
+`phase1_shot_event_enrichment(sorted_very_raw_events: 'list[tuple[int, ShotEvent]]', second_half_override: 'Optional[set[int]]' = None) -> 'list[ShotEvent]'`
+
+The court-geometry enrichment pass: ascending time, coordinate
+
+transform + geo synthesis, and the self-correcting side-flip re-run
+(`ShotEventParser.phase1_shot_event_enrichment`, `:415-528`).
+
+For each shot: compute the ascending game time, decide (from
+`is_team_shooting_left_to_start` + which half the period falls in)
+whether the shot's side needs flipping, run `transform_shot_location`
+to get both the believed-correct and alternative (mirrored) locations,
+keep whichever is closer to the basket (a >1.2x distance advantage for
+the "alternative" wins, or ANY shot taken with <0.1 min left on the
+clock always keeps the original -- a half-court heave near the buzzer
+is plausible, so the tie-break favors trusting the raw geometry there),
+then synthesize a lat/lon.
+
+After all shots are processed, if any period had >=6 shots AND more than
+75% of them came back implausibly long-distance (>50ft), the whole pass
+re-runs ONCE with those periods' orientation flipped (the self-correcting
+part) -- `second_half_override` is `None` on the initial call and a
+non-`None` set on the one allowed retry, preventing infinite recursion.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `sorted_very_raw_events` | `list[tuple[int, ShotEvent]]` |  | The chronologically-sorted (period, shot) pairs from `parse_shot_html`, pre-geometry-transform. |
+| `second_half_override` | `Optional[set[int]]` | `None` | The set of periods whose `second_half_switch` orientation should be inverted (the self-correction re-run's input); `None` on the first call. |
+
+**Returns**
+
+The fully court-geometry-enriched shots, in the same order as `sorted_very_raw_events`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_shot_parser import phase1_shot_event_enrichment
+shots = phase1_shot_event_enrichment([(1, very_raw_shot)])
+```
 
 ### playwright_transport {#playwright_transport}
 
@@ -357,6 +400,37 @@ The `circle.shot` elements reconstructed from every matching line (non-matching 
 from sportsdataverse.mbb.mbb_ncaa_shot_parser import shot_js_to_html
 js = "addShot(27.0, 77.0, 392, false, 1, 'title text', 'class', false);"
 circles = shot_js_to_html(js)
+```
+
+### shot_value {#shot_value}
+
+`shot_value(event_str: 'str') -> 'int'`
+
+Classify a play-by-play event string as a 3, a 2, or an assist
+
+(`ShotEnrichmentUtils.shot_value`, `PlayByPlayUtils.scala:534-542`).
+
+Ported as an ordered first-match cascade, exactly mirroring the Scala
+`match` arm order (assist is tested first, so an assist string never
+falls through to a shot classifier).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `event_str` | `str` |  | The raw play-by-play event string. |
+
+**Returns**
+
+`0` for an assist, `3` for any 3-pointer (made or missed), `2` for any 2-pointer (made or missed), or `-1` for anything else (rebounds, turnovers, unparseable, ...).
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_pbp_glue import shot_value
+shot_value("18:28:00,0-0,Eric Ayala, 3pt jumpshot made")   # 3
+shot_value("18:28:00,0-0,Kyle Guy, assist")                # 0
+shot_value("04:28:0,52-59,Team, rebound deadballdeadball")  # -1
 ```
 
 ### start_time_from_period {#start_time_from_period}

@@ -22,6 +22,7 @@ tests can run offline.
 | `db_playerids_slice.csv` | header + 6 verbatim data lines (0-based data rows 0, 634, 5545, 7667, 3032, 11014, in that order) of `NFL_FF_PLAYERIDS_URL` — `github.com/dynastyprocess/data/raw/master/files/db_playerids.csv` | 2026-09-17 |
 | `db_fpecr_latest_slice.csv` | header + 3 verbatim data lines (0-based data rows 211, 505, 560) of `NFL_FF_RANKINGS_DRAFT_URL` — `.../files/db_fpecr_latest.csv` | 2026-09-17 |
 | `fp_latest_weekly_slice.csv` | header + 2 verbatim data lines (0-based data rows 0, 550) of `NFL_FF_RANKINGS_WEEK_URL` — `.../files/fp_latest_weekly.csv` | 2026-09-17 |
+| `games_2023_2024_head3.parquet` | first 3 rows of season 2023 and of 2024 from `NFL_TEAM_SCHEDULE_URL` (nflverse `schedules/games.parquet`, 7,548 rows x 46 columns on capture), read with `use_pyarrow=True` | 2026-10-18 |
 
 Why this pair: the two seasons of the same release dataset differ in **both**
 ways a `pl.concat(..., how="vertical")` cannot survive.

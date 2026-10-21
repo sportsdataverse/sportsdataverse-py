@@ -1223,7 +1223,7 @@ def _yahoo_adapter(league: str, espn_id: int, ctx: Any) -> Any:
         live = str(row.get("status") or "").upper() not in ("FINAL", "FINAL_OVERTIME")
         try:
             payload = _fetch_playbook_boxscore(game_id, live=live)
-        except Exception as exc:  # noqa: BLE001 -- network / JSON -> the next source
+        except Exception as exc:  # network / JSON -> the next source
             raise SourceUnavailable(f"yahoo playbookBoxscore fetch failed: {type(exc).__name__}: {exc}") from exc
     else:
         row = dict(ctx.idmap_row or {})

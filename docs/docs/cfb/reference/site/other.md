@@ -484,7 +484,7 @@ espn_cfb_summary()
 
 _Last validated n/a._
 
-## espn_cfb_calendar
+## espn_cfb_calendar_site
 
 ESPN endpoint.
 
@@ -495,7 +495,7 @@ ESPN endpoint.
 | API Parameter | Python | Pattern | Required | Nullable | Description |
 |---|---|:---:|:---:|:---:|---|
 
-### Returns {#espn_cfb_calendar-returns}
+### Returns {#espn_cfb_calendar_site-returns}
 
 **`return_parsed=True`** (default) — the output of `parse_items`; pass `return_as_pandas=True` for a `pandas.DataFrame`.
 
@@ -503,7 +503,7 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
 
-### Raises {#espn_cfb_calendar-raises}
+### Raises {#espn_cfb_calendar_site-raises}
 
 | Exception | Description |
 |---|---|
@@ -511,10 +511,10 @@ No returns table is published for this endpoint: no capture: 404 in nba, nfl, ml
 | `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 | `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
-### Example {#espn_cfb_calendar-example}
+### Example {#espn_cfb_calendar_site-example}
 
 ```python
-espn_cfb_calendar()
+espn_cfb_calendar_site()
 ```
 
 _Last validated n/a._

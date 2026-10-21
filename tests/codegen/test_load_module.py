@@ -63,7 +63,7 @@ def test_generated_loader_min_season_guard(tmp_path):
     try:
         ns["load_wnba_shots"](seasons=1999)
         raise AssertionError("expected SeasonNotFoundError")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:  # noqa: BLE001 -- the exec'd module's own SeasonNotFoundError class: asserted by its message
         assert "2002" in str(e)
 
 

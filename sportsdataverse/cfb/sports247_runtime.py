@@ -41,6 +41,7 @@ non-feed criteria query), ``sports``, ``year`` (global class-year list),
 
 from __future__ import annotations
 
+import threading
 from typing import Any, Callable, Dict, List, Optional, Union
 
 from sportsdataverse._codegen_runtime import _json_text, _transport_errors
@@ -50,8 +51,20 @@ __all__ = ["_get", "rdb_headers"]
 Transport = Callable[[str, dict, dict, Optional[str]], tuple]
 
 _SITE_ROOT = "https://247sports.com/"
-# Process-lifetime cache of the guest bearer JWT; re-minted on a 401/403.
+# Process-lifetime cache of the guest bearer JWT; re-minted on a 401/403. Minted under
+# ``_jwt_lock`` so threads that miss together share one mint (A-L71).
 _jwt: Optional[str] = None
+_jwt_lock = threading.Lock()
+
+
+def _guest_jwt(stale: str | None = None, *, refresh: bool = False) -> str | None:
+    """The cached guest JWT, minted when there is none (or, with ``refresh``, when it is still
+    the ``stale`` one a 401/403 refused -- another thread may have re-minted it already)."""
+    global _jwt
+    with _jwt_lock:
+        if _jwt is None or (refresh and _jwt == stale):
+            _jwt = _mint_guest_jwt()
+        return _jwt
 
 
 def rdb_headers() -> Dict[str, str]:
@@ -179,8 +192,6 @@ def _get(
                 return 200, '{"players": []}'
             data = rt._get("https://ipa.247sports.com/rdb/v1/recruits/", transport=fake)
     """
-    global _jwt
-
     clean: Dict[str, Any] = {k: v for k, v in (params or {}).items() if v is not None}
     base, sep, query = url.partition("?")
     if not base.endswith("/"):
@@ -190,19 +201,14 @@ def _get(
     _transport = transport or _curl_transport
     for attempt in range(2):
         hdrs = dict(headers or rdb_headers())
-        if auth:
-            if _jwt is None:
-                _jwt = _mint_guest_jwt()
-            if _jwt:
-                hdrs["Authorization"] = f"Bearer {_jwt}"
+        token = _guest_jwt() if auth else None
+        if token:
+            hdrs["Authorization"] = f"Bearer {token}"
         with _transport_errors(full):
             status, text = _transport(full, clean, hdrs, proxy_url)
         # 401/403 == the guest token expired (or was never minted). Re-mint once;
         # a second refusal (or a failed mint) is a failed fetch, raised below.
-        if auth and status in (401, 403) and attempt == 0:
-            _jwt = _mint_guest_jwt()
-            if _jwt is not None:
-                continue
-        body = _json_text(full, status, text)
-        return body if isinstance(body, (dict, list)) else {}
+        if auth and status in (401, 403) and attempt == 0 and _guest_jwt(token, refresh=True) is not None:
+            continue
+        return _json_text(full, status, text)
     return {}  # unreachable: the second attempt always returns or raises

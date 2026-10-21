@@ -870,7 +870,7 @@ def _ncaa_adapter(league: str, espn_id: int, ctx: Any) -> Any:
             try:
                 bundle = _fetch_bundle(contest_id)
                 source = "live"
-            except Exception as exc:  # noqa: BLE001 -- network / browser / proxy -> the next source
+            except Exception as exc:  # network / browser / proxy -> the next source
                 raise SourceUnavailable(
                     f"cfb {espn_id}: stats.ncaa.org contest {contest_id} is in neither the local archive "
                     f"nor the Data API, and the live fetch failed: {type(exc).__name__}: {exc}"

@@ -182,9 +182,9 @@ def _load_league_frames(season: int, league: str) -> tuple[pl.DataFrame, pl.Data
     """(pbp, normalized schedule, team_box) for a season -- the mockable I/O seam."""
     load_schedule, load_team_box = _league_loaders(league)
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp as load_pbp  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_pbp as load_pbp
     else:
-        from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp as load_pbp  # noqa: PLC0415
+        from sportsdataverse.mbb.mbb_loaders import load_mbb_pbp as load_pbp
     return load_pbp([season]), _normalize_schedule(load_schedule([season])), load_team_box([season])
 
 

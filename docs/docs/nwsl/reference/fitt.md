@@ -7,7 +7,7 @@ toc_max_heading_level: 2
 ---
 # NWSL — ESPN FPI API (fitt v3)
 
-`sportsdataverse.nwsl` — 1 endpoint.
+`sportsdataverse.soccer.nwsl` — 1 endpoint.
 
 ## espn_nwsl_fpi
 

@@ -4,7 +4,8 @@ Fox's Bifrost API is a layout API (sections -> tables -> rows -> cells), so a
 handful of payload shapes cover the 38 endpoints. The dedicated parsers here are
 thin adapters over the proven row builders in :mod:`sportsdataverse._fox_layout`
 (the hand-written ``fox_<league>_*`` wrappers use the same ones); everything else
-falls through to :func:`parse_fox_api`, a generic "largest record list" flattener.
+falls through to :func:`parse_fox_api`, a generic "largest record list" flattener. A dedicated parser falls
+through only when the body lacks the keys it reads; present but empty is a zero-row frame.
 
 Parser contract: polars by default, pandas via ``return_as_pandas=True``, a
 zero-row frame (never an exception) on empty / malformed input, snake_case
@@ -102,16 +103,6 @@ def _out(rows: List[Dict[str, Any]], return_as_pandas: bool) -> _Frame:
     return _fx.frame(_homogenize(rows), return_as_pandas)
 
 
-def _safe(fn: Callable[[Dict], List[Dict]], raw: Any) -> List[Dict[str, Any]]:
-    """Run a layout row-builder; a malformed payload yields ``[]`` rather than raising."""
-    if not isinstance(raw, dict):
-        return []
-    try:
-        return fn(raw)
-    except (AttributeError, KeyError, IndexError, TypeError, ValueError, RecursionError):
-        return []
-
-
 def parse_fox_api(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     """Generic Bifrost / Fox payload -> one row per record of the largest record list.
 
@@ -137,10 +128,22 @@ def parse_fox_api(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
     return _out(rows, return_as_pandas)
 
 
-def _dedicated(builder: Callable[[Dict], List[Dict]]) -> Callable[..., _Frame]:
+def _dedicated(builder: Callable[[Dict], List[Dict]], keys: tuple) -> Callable[..., _Frame]:
+    """A layout parser that falls back to :func:`parse_fox_api` only when ``builder`` cannot read the body.
+
+    It cannot when the body carries none of ``keys`` (the top-level keys ``builder`` reads) or
+    ``builder`` raised. A body that carries them with an empty table is a zero-row frame: the
+    largest-record-list flattener would return rows of whatever other list the body holds, the
+    nav and section lists of a standings page (B-GB-02)."""
+
     def parse(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-        rows = _safe(builder, raw)
-        return _out(rows, return_as_pandas) if rows else parse_fox_api(raw, return_as_pandas=return_as_pandas)
+        try:
+            rows = builder(raw) if isinstance(raw, dict) else []
+        except (AttributeError, KeyError, IndexError, TypeError, ValueError, RecursionError):
+            rows = None
+        if rows or (rows is not None and isinstance(raw, dict) and any(k in raw for k in keys)):
+            return _out(rows, return_as_pandas)
+        return parse_fox_api(raw, return_as_pandas=return_as_pandas)
 
     return parse
 
@@ -150,28 +153,40 @@ def _roster_rows(raw: Dict) -> List[Dict]:
     return [{k: v for k, v in r.items() if k != "team_id"} for r in rows]
 
 
-_events = _dedicated(_fx.parse_segment_events)
-_standings = _dedicated(_fx.parse_standings)
-_polls = _dedicated(_fx.parse_polls)
-_nav = _dedicated(_fx.parse_nav_items)
-_header = _dedicated(_fx.parse_header)
-_search = _dedicated(_fx.parse_search_results)
-_trending = _dedicated(_fx.parse_trending)
-_roster = _dedicated(_roster_rows)
+_events = _dedicated(_fx.parse_segment_events, ("sectionList",))
+_standings = _dedicated(_fx.parse_standings, ("standingsSections",))
+_polls = _dedicated(_fx.parse_polls, ("standingsSections",))
+_nav = _dedicated(_fx.parse_nav_items, ("navItems", "groups"))
+_header = _dedicated(_fx.parse_header, ("title", "contentUri"))
+_search = _dedicated(_fx.parse_search_results, ("results",))
+_trending = _dedicated(_fx.parse_trending, ("data",))
+_roster = _dedicated(_roster_rows, ("groups",))
 
 
 def parse_fox_api_events(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """Scoreboard / schedule / segment payloads -> one row per game (generic fallback for the nav shell)."""
+    """Scoreboard / schedule / segment payloads -> one row per game.
+
+    A body carrying ``sectionList`` with no games is zero rows; only a body without it (the nav shell) goes to
+    :func:`parse_fox_api`, the largest-record-list flattener.
+    """
     return _events(raw, return_as_pandas=return_as_pandas)
 
 
 def parse_fox_api_standings(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """``standingsSections`` tables -> wide rows (one per team), generic fallback otherwise."""
+    """``standingsSections`` tables -> wide rows (one per team).
+
+    Zero rows when ``standingsSections`` is present but its tables are empty; :func:`parse_fox_api` only when the
+    key is absent.
+    """
     return _standings(raw, return_as_pandas=return_as_pandas)
 
 
 def parse_fox_api_polls(raw: Any, *, return_as_pandas: bool = False) -> _Frame:
-    """League poll tables -> one row per ranked team, generic fallback otherwise."""
+    """League poll tables -> one row per ranked team.
+
+    Zero rows when ``standingsSections`` is present but its tables are empty; :func:`parse_fox_api` only when the
+    key is absent.
+    """
     return _polls(raw, return_as_pandas=return_as_pandas)
 
 

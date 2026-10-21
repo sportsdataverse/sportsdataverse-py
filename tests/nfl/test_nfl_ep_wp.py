@@ -1195,15 +1195,16 @@ class TestXyacModelCacheResolution:
 
         update_config(cache_mode="filesystem", cache_dir=str(tmp_path))
         try:
-            # A data-cache parquet alongside a downloaded model.
-            (tmp_path / "deadbeef.parquet").write_bytes(b"stale")
+            # A data-cache parquet (named like a cache key) alongside a downloaded model.
+            entry = tmp_path / ("a" * 64 + ".parquet")
+            entry.write_bytes(b"stale")
             model_file = tmp_path / "models" / "xyac_model.ubj"
             model_file.parent.mkdir(parents=True, exist_ok=True)
             model_file.write_bytes(b"pretend-model")
 
             clear_cache()
 
-            assert not (tmp_path / "deadbeef.parquet").exists(), "data entry should be wiped"
+            assert not entry.exists(), "data entry should be wiped"
             assert model_file.exists(), "models/ must survive clear_cache()"
             assert model_file.read_bytes() == b"pretend-model"
         finally:

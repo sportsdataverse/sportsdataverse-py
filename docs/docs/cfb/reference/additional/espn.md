@@ -6,6 +6,62 @@ description: "CFB — additional Python functions — ESPN — function referenc
 ---
 # CFB — additional Python functions — ESPN
 
+### espn_cfb_calendar {#espn_cfb_calendar}
+
+`espn_cfb_calendar(season=None, groups=None, ondays=None, return_as_pandas=False, **kwargs) -> 'pl.DataFrame'`
+
+espn_cfb_calendar - look up the men's college football calendar for a given season
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `int` | `None` | Used to define different seasons. 2002 is the earliest available season. |
+| `groups` | `int` | `None` | Used to define different divisions. 80 is FBS, 81 is FCS. |
+| `ondays` | `boolean` | `None` | Used to return dates for calendar ondays |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
+
+**Returns**
+
+One row per calendar week of the requested season (`week`, `week_label`, `week_start_date`, `season_type`, ...); `season` is the `season` argument as passed (null when omitted). With `ondays=True` it is a different frame: one row per date with games (`dates`, `dateURL`, `url`).
+
+| col_name | type | description |
+|---|---|---|
+| `week_label` | character | Week label as ESPN's calendar names it, e.g. Week 1. |
+| `week_alternate_label` | character | Alternate week label ESPN ships next to week_label; usually the same text. |
+| `week_detail` | character | Date span of the week as display text, e.g. Aug 22-Sep 7. |
+| `week` | character | Game week of the season. |
+| `week_start_date` | character | Start of the week window, an ISO 8601 UTC timestamp string (e.g. 2026-08-22T07:00Z). |
+| `week_end_date` | character | End of the week window, an ISO 8601 UTC timestamp string (the last minute before the next week). |
+| `season_type_label` | character | Name of the season segment the week belongs to, e.g. Regular Season or Postseason. |
+| `season_type` | character | ESPN season type (2 = regular, 3 = postseason). |
+| `season_type_start_date` | character | Start of that season segment, an ISO 8601 UTC timestamp string. |
+| `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
+| `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
+**Example**
+
+```python
+from sportsdataverse.cfb import espn_cfb_calendar
+cal = espn_cfb_calendar(season=2023)
+print(cal.shape)
+
+# Use ondays to get every scheduled date for the season
+
+ondays = espn_cfb_calendar(season=2023, ondays=True)
+
+# Pipeline next step (loop the URLs to scrape day-by-day)
+
+cal = espn_cfb_calendar(season=2023, ondays=True)
+urls = cal["url"].to_list()  # feed each into espn_cfb_schedule
+```
+
 ### espn_cfb_game_rosters {#espn_cfb_game_rosters}
 
 `espn_cfb_game_rosters(game_id: 'int', raw=False, return_as_pandas=False, **kwargs) -> 'pl.DataFrame | pd.DataFrame | dict'`

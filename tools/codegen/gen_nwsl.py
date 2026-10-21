@@ -39,6 +39,7 @@ from gen_soccer_common import (
     spec_descriptions,
     write_yaml,
 )
+from openapi_params import _query_params
 
 from sportsdataverse.dl_utils import underscore
 from sportsdataverse.soccer.nwsl.nwsl_api_parsers import (
@@ -154,26 +155,6 @@ def _path_params(path: str) -> List[Dict[str, Any]]:
     return [{"name": underscore(t), "type": "str", "required": True} for t in _TOKEN.findall(path)]
 
 
-def _query_params(op: dict, path_names: set) -> List[Dict[str, Any]]:
-    out: List[Dict[str, Any]] = []
-    for prm in op.get("parameters", []):
-        if prm.get("in") != "query":
-            continue
-        wire = prm["name"]
-        name = underscore(wire)
-        if name in path_names:
-            name = f"filter_{name}"
-        jtype = (prm.get("schema") or {}).get("type", "string")
-        entry: Dict[str, Any] = {"name": name, "query_key": wire, "type": _PYTYPE.get(jtype, "str")}
-        if name in _QUERY_DEFAULTS:
-            entry["default"] = _QUERY_DEFAULTS[name]
-        desc = str(prm.get("description") or "").strip()
-        if desc:
-            entry["description"] = desc
-        out.append(entry)
-    return out
-
-
 def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
     short, parser, _primary, _capture, _fallback = _ROUTES[path]
     pps = _path_params(path)
@@ -189,7 +170,11 @@ def _endpoint_entry(path: str, op: dict) -> Dict[str, Any]:
         example = {p["name"]: _EXAMPLE[p["name"]] for p in pps if p["name"] in _EXAMPLE}
         if example:
             entry["example_args"] = example
-    qps = _query_params(op, {p["name"] for p in pps})
+    # required="ignore" until the owner rules on A-M23 (season_matches.season_ids is spec-required)
+    qps = _query_params(op, path_names={p["name"] for p in pps}, on_clash="prefix", pytypes=_PYTYPE)
+    for qp in qps:
+        if qp["name"] in _QUERY_DEFAULTS:
+            qp["default"] = _QUERY_DEFAULTS[qp["name"]]
     if qps:
         entry["extra_params"] = qps
     return entry

@@ -3,7 +3,7 @@ title: NWSL
 sidebar_label: NWSL
 description: "sdv-py NWSL: endpoint references, dataset loaders and parsers for NWSL in the SportsDataverse Python package."
 ---
-# NWSL (`sportsdataverse.nwsl`)
+# NWSL (`sportsdataverse.soccer.nwsl`)
 
 ## Data sources
 

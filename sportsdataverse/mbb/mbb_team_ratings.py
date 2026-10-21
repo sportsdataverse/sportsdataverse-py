@@ -409,7 +409,7 @@ _RATINGS_SCHEMA = {
 def _league_loaders(league: str):  # type: ignore[no-untyped-def]
     """(schedule, team_box) loaders for a league -- the mens cores serve wbb too."""
     if league == "womens":
-        from sportsdataverse.wbb.wbb_loaders import load_wbb_schedule, load_wbb_team_boxscore  # noqa: PLC0415
+        from sportsdataverse.wbb.wbb_loaders import load_wbb_schedule, load_wbb_team_boxscore
 
         return load_wbb_schedule, load_wbb_team_boxscore
     return load_mbb_schedule, load_mbb_team_boxscore
