@@ -132,7 +132,8 @@ def parse_html(html: str) -> BeautifulSoup:
             from sportsdataverse.mbb.mbb_ncaa_html import parse_html
             soup = parse_html("<table><tr><td>1</td></tr></table>")
     """
-    return BeautifulSoup(html, "lxml")
+    # None / list / dict (a failed fetch) parse as an empty document, so every parser returns zero rows.
+    return BeautifulSoup(html if isinstance(html, (str, bytes)) else "", "lxml")
 
 
 def jsoup_text(el: Optional[Tag]) -> str:

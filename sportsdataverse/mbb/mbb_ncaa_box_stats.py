@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import math
 import re
+import warnings
 from fractions import Fraction
 from typing import TYPE_CHECKING, Iterable, Literal, Optional, Protocol, Union, overload
 
@@ -254,7 +255,8 @@ def parse_ncaa_bb_box(html: str, game_id: str) -> pl.DataFrame:
         ``game_id, box_id, player, clean_name, team, mp, pts, orb, drb, trb,
         ast, to, stl, blk, fga, fgm, fg_pct, tpa, tpm, tp_pct, fta, ftm,
         ft_pct, ts_pct, efg_pct, fouls, dq, tech``. Zero-row frame with that
-        schema when the page has no tables.
+        schema when the page has no tables, and (with a ``UserWarning`` naming
+        the game id) when it is another page type.
 
     Example:
         Parse a saved page::
@@ -277,6 +279,15 @@ def parse_ncaa_bb_box(html: str, game_id: str) -> pl.DataFrame:
         return _empty_frame()
 
     background = _table_rows(tables[0])
+    # Another page type (lineups, a football box score) has >= 5 tables but not this layout: zero rows, not a raise.
+    if len(background) < 4 or not all(rows and "Name" in rows[0] for rows in map(_table_rows, tables[3:5])):
+        # bigballR's get_box_scores tryCatch reports this game as "Error with game id ... removed"; say so too.
+        warnings.warn(
+            f"parse_ncaa_bb_box: game id {game_id} is not an individual_stats page; returning zero rows",
+            UserWarning,
+            stacklevel=2,
+        )
+        return _empty_frame()
     away_team = background[2][0]  # R background[3,1] (issue96, 10/17/2025)
     home_team = background[3][0]  # R background[4,1]
 

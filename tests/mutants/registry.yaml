@@ -206,83 +206,565 @@
   note: the pre-2.1 cap of 8 with the line capped at 7 over-credits every 11+ carry by one yard
 
 # --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
+# Killer (3.2): tests/cfb/test_cfb_overtime_eras.py on the OT-era captures. The floor's mutants die on
+# 401628439 (2024), whose shootout attempts ESPN labels period 5.
 - id: cfb-ot-shootout-threshold-6
   group: cfb-ot-thresholds
   finding: C-M6
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
-  mutant: 'return (pl.col("period.number") >= 6) & ~last_td'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
-  expected:
-    survive_until: "3.2"
-  note: rt-C-processing-002; 1.2 commits one capture per OT rule set, 3.2 adds test_cfb_overtime_eras.py
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 6) & ((period >= shootout_from) | ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
+  expected: kill
+  note: rt-C-processing-002; the nine period-5 attempts of 401628439 would weigh a kick
 
 - id: cfb-ot-shootout-threshold-7
   group: cfb-ot-thresholds
   finding: C-M6
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
-  mutant: 'return (pl.col("period.number") >= 7) & ~last_td'
-  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
-  expected:
-    survive_until: "3.2"
-  note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 7) & ((period >= shootout_from) | ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2021_on_every"
+  expected: kill
+  note: the only shootout fixture before 3.2 (401282146) has its first attempt in period 7, so >= 7 survived there
 
-# --- C-M13 / C-NF-2: the CFB opening-kickoff team can be inverted unnoticed ------------------------
+# The rule table itself, one row per rule set, and the period half of the gate (a shootout-period row
+# after a misfiled touchdown).
+- id: cfb-ot-table-shootout-from-2004
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2004, 9), (2021, 7))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "before_2019"
+  expected: kill
+  note: the pre-3.2 behaviour before 2019; 272870068's forced third-overtime try (filed before its touchdown) would be a shootout attempt
+
+- id: cfb-ot-table-2021-cut-9
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 9))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "third_overtime_attempt_after"
+  expected: kill
+  note: the 2019-20 cut in 2021+; 401524025's third-overtime attempt after the second-overtime touchdown would be that touchdown's try
+
+- id: cfb-ot-table-drops-2019
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2019, 9), (2021, 7))'
+  mutant: 'OT_SHOOTOUT_FROM_PERIOD: tuple[tuple[int, int], ...] = ((2021, 7),)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2019_20"
+  expected: kill
+  note: 401112489's sixth-overtime try would be the misfiled touchdown's try again
+
+- id: cfb-ot-gate-ignores-period
+  group: cfb-ot-rule-table
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'in_shootout = (period >= 5) & ((period >= shootout_from) | ~last_td)'
+  mutant: 'in_shootout = (period >= 5) & (shootout_from.is_not_null() & ~last_td)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "2019_20"
+  expected: kill
+  note: the pre-3.2 touchdown-before test, season-gated; 401112489 and 401628439 attempts after a misfiled touchdown
+
+# --- R792-7 (task 3.4 g): shootout attempts ESPN leaves untyped, and attempts on impossible scores ----
+# Killers: tests/cfb/test_cfb_overtime_eras.py on 401112489 (three "Two-Point ... Attempt Failed"
+# rows typed Unknown), 401628439 (50-42 on all twelve attempts) and 401866418 (ESPN's 17-34 "End of
+# OT." marker reaching three attempts).
+- id: cfb-ot-untyped-attempt-not-retyped
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '& pl.col("text").str.contains(r"(?i)two-point (?:pass|rush) attempt failed").fill_null(False)'
+  mutant: '& pl.lit(False)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: the pre-fix state; 401112489's three untyped missed attempts stay Unknown scrimmage snaps
+
+- id: cfb-ot-shootout-untied-period-kept
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'impossible = f["untied"].to_numpy()'
+  mutant: 'impossible = np.zeros(f.height, dtype=bool)'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "impossible_espn_scores"
+  expected: kill
+  note: the pre-fix state; 401628439's attempts read 0.0 or 1.0 from ESPN's 50-42
+
+- id: cfb-ot-shootout-untied-whole-game
+  group: cfb-ot-shootout-attempts
+  finding: R890-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    .any()
+                .over("period.number"),
+  mutant: |-
+    .any()
+                .over(pl.lit(1)),
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: one untied period nulls the whole game; 401112489's sixth-overtime attempt (period 10, opens tied) loses its value
+
+- id: cfb-ot-shootout-untied-only-beyond-2
+  group: cfb-ot-shootout-attempts
+  finding: R890-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 2))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "does_not_open_tied"
+  expected: kill
+  note: a margin-beyond-2 guard (the first version of this fix); 401677180's fifth overtime opens on -2 and keeps 0.12
+
+- id: cfb-ot-shootout-untied-margin-3-kept
+  group: cfb-ot-shootout-attempts
+  finding: R890-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("m0") != 0))'
+  mutant: '(pl.col("m0").abs() > 3))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "untyped_shootout"
+  expected: kill
+  note: a margin of 3 passes; 401112489's three retyped attempts at 37-34 (41-41 by the linescore) keep a value
+
+- id: cfb-ot-shootout-unknown-as-nan
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'pl.lit(wp_before_raw).fill_nan(None).alias(wb),'
+  mutant: 'pl.lit(wp_before_raw).alias(wb),'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "impossible_espn_scores"
+  expected: kill
+  note: the unknown board published as NaN, not null
+
+- id: cfb-ot-shootout-unknown-borrows-board
+  group: cfb-ot-shootout-attempts
+  finding: R792-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.when(pl.lit(wp_after_raw).is_nan())'
+  mutant: '.when(pl.lit(False))'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "borrow"
+  expected: kill
+  note: 401866418's third-overtime attempts take wp_after 0.1 / 0.9 from a later row past the null boards
+
+- id: cfb-ot-shootout-unknown-in-progress-fallback
+  group: cfb-ot-shootout-attempts
+  finding: R890-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.lit(wp_after_raw).is_not_nan()),  # a shootout attempt left unknown stays unknown'
+  mutant: '.and_(pl.lit(True)),'
+  test: tests/cfb/test_cfb_overtime_eras.py -k "in_progress"
+  expected: kill
+  note: a game in progress; the last-row fallback writes 1 - the restated end state onto 401866418's unknown last attempt (possession changes on it)
+
+- id: validation-final-wp-reads-one-sided-last-row
+  group: cfb-ot-shootout-attempts
+  finding: R890-1
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: 'after = df.get_column("home_wp_after").drop_nulls()'
+  mutant: 'after = nn.get_column("home_wp_after")'
+  test: tests/contracts/test_pbp_invariants.py -k "test_ep_wp"
+  expected: kill
+  note: the both-not-null filter drops a last row with wp_after only and reads the row before (401309856, 0.354)
+
+# --- C-M19: the summary_pickcenter odds are Python scalars, so they round trip as odds_override ----
+# Killer (3.4(b1)): tests/cfb/test_cfb_pbp.py, the offline type + ESPN-value + JSON round trip on
+# 401301042 (the whole-game frame round trip in test_cfb_whole_game_oracle.py kills both as well).
+- id: cfb-pickcenter-home-favorite-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'homeFavorite = bool(np.asarray(homeFavorite).item())'
+  mutant: 'homeFavorite = np.asarray(homeFavorite)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: keeps homeFavorite the shape-(1,) row pandas returns, which json.dumps rejects (the pre-fix state)
+
+- id: cfb-pickcenter-game-spread-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'gameSpread = float(np.asarray(gameSpread).item())'
+  mutant: 'gameSpread = np.asarray(gameSpread)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: the gate's MUTATION line; a shape-(1,) gameSpread cannot persist as JSON odds_override
+
+- id: cfb-pickcenter-over-under-ndarray
+  group: cfb-pickcenter
+  finding: C-M19
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnder = float(np.asarray(overUnder).item())'
+  mutant: 'overUnder = np.asarray(overUnder)'
+  test: tests/cfb/test_cfb_pbp.py -k "pickcenter_round_trip"
+  expected: kill
+  note: the third unwrap (review R828-8); a shape-(1,) overUnder cannot persist as JSON odds_override
+
+# --- R828-9: DefaultOddsWarning never fires when the core odds endpoint has a spread ----------------
+# Killer (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py, `_download_json` mocked to an ESPN BET spread
+# with the warning set to error.
+- id: cfb-default-odds-warn-core-api-always
+  group: cfb-default-odds
+  finding: R828-9
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if not gameSpreadAvailable:'
+  mutant: 'if True:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "default_odds_warning_not_on_core_odds_api_spread"
+  expected: kill
+  note: >-
+    an unconditional warning at the default/core site survived both earlier tests (review PR-828 M4);
+    live 2024+ games with an ESPN BET spread would then warn, or fail in strict mode
+
+# --- C-L1: lag_half and game_play_number follow the final row order -------------------------------
+# Killer (3.4(b2)): test_cfb_whole_game_oracle.py's row-order check, now a plain assert on every capture.
+- id: cfb-lag-half-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'lag_half=pl.col("half").shift(1),  # C-L1'
+  mutant: 'lag_half=pl.col("lag_half"),  # C-L1'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401754585"
+  expected: kill
+  note: keeps the lag_half set before the re-sort and the marker drop (stale on rows 40, 51, 191)
+
+- id: cfb-game-play-number-after-final-sort
+  group: cfb-row-order
+  finding: C-L1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'game_play_number=pl.col("game_play_number").sort(),'
+  mutant: 'game_play_number=pl.col("game_play_number"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "game_play_number_and_lag_half and 401525903"
+  expected: kill
+  note: the two-point try the re-sort moves ahead of its kickoff keeps its larger number (row 117)
+
+# --- C-M18: row order rests on the play id and the period label ------------------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on 401425418 (out-of-scheme id placed by its
+# clock, PlayOrderWarning as error); test_cfb_whole_game_oracle.py on 401628439 (a wrong period label warns).
+- id: cfb-out-of-scheme-id-placed-by-clock
+  group: cfb-row-order
+  finding: C-M18
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'plays_df = _place_out_of_scheme_plays(plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True))'
+  mutant: 'plays_df = plays_df.sort(["id", "start.adj_TimeSecsRem"], maintain_order=True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "out_of_scheme_play_id"
+  expected: kill
+  note: the Q3 kickoff filed under id 4014254180 sorts back to row 0, against the opening state
+
+- id: cfb-period-order-warning-silent
+  group: cfb-row-order
+  finding: C-M18
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    if back.height:'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "period_monotonic and 401628439"
+  expected: kill
+  note: the overtime touchdown ESPN labels period 2 would go unreported
+
+# --- C-NF-10(a): a play field absent from every play (no column at all) ---------------------------
+# Killers (3.4(b2)): real captures with the block stripped from every play (CFB 401628455, NFL 401872922).
+- id: cfb-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent `end` block or score raises ColumnNotFoundError on end.down / homeScore
+
+- id: nfl-missing-play-fields-materialized
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        if _missing:'
+  mutant: '        if False:'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "absent_from_every_play"
+  expected: kill
+  note: an absent start / end block, clock or score raises ColumnNotFoundError
+
+# --- C-NF-10(b) / R828-3: pickcenter fields that every provider leaves null -------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on the 401301042 / 400869817 pickcenters.
+- id: cfb-pickcenter-null-spread-falls-through
+  group: cfb-crash-guards
+  finding: C-NF-10
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if pickcenter is not None and _first("spread", None) is not None:'
+  mutant: 'if pickcenter is not None:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "all_null_spread"
+  expected: kill
+  note: a spread-less pickcenter would publish the 2.5 default as an available market spread
+
+- id: cfb-default-total-one-constant
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_DEFAULT_TOTAL = 55.5'
+  mutant: '_DEFAULT_TOTAL = 55.0'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: the pickcenter path's old 55.0 against 55.5 on every other path
+
+- id: cfb-default-total-warns-pickcenter
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_warn_default_total(self.gameId, "summary_pickcenter", overUnder)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: 400869817 (and 322590228, 401761665) would record the default total as summary_pickcenter, unwarned
+
+- id: cfb-default-total-warns-core-api
+  group: cfb-default-odds
+  finding: R828-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'if gameSpreadAvailable and ou_raw is None:'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "core_odds_api_spread_without_a_total"
+  expected: kill
+  note: an ESPN BET item with a spread and no total would default the total silently
+
+# --- C-L6 / C-L16: the lows ------------------------------------------------------------------------
+# Killers (3.4(b2)): tests/cfb/test_cfb_pbp_offline.py on 401628559 (literal "null" text) and
+# 401628334 (its sacked-and-recovered fumble with the text upper-cased).
+- id: cfb-player-name-literal-null
+  group: cfb-lows
+  finding: C-L6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '^.$|^null$"'
+  mutant: '^.$"'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "literal_null_play_text"
+  expected: kill
+  note: 401628559's blocked punt names a punter "null"
+
+- id: cfb-pass-flag-literals-fold-case
+  group: cfb-lows
+  finding: C-L16
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("(?i)sacked"))'
+  mutant: '(pl.col("type.text") == "Fumble Recovery (Own)").and_(pl.col("text").str.contains("sacked"))'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pass_flag_literals_fold_case"
+  expected: kill
+  note: a "SACKED" text on a recovered fumble would not be a pass play (R matches with ignore_case)
+
+# --- C-M13 / C-NF-2: the CFB opening-kickoff team and the 2H-kickoff flag ------------------------
 - id: cfb-first-half-kickoff-team-swap
   finding: C-M13
   file: sportsdataverse/cfb/cfb_pbp.py
-  # the live frame expression (cfb_pbp.py:2865-2873) that start/end.pos_team_receives_2H_kickoff read;
-  # block scalars: the first line sets the indent, the later lines keep their 16 spaces
-  snippet: |-
-    .then(pl.col("homeTeamId"))
-                    .otherwise(pl.col("awayTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  mutant: |-
-    .then(pl.col("awayTeamId"))
-                    .otherwise(pl.col("homeTeamId"))
-                    .alias("firstHalfKickoffTeamId"),
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865)"
+  # the game-wide constant (task 2.6) that start/end.pos_team_receives_2H_kickoff read
+  snippet: 'pl.lit(opening_kicker, dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  mutant: 'pl.lit(init["awayTeamId"] if opening_kicker == init["homeTeamId"] else init["homeTeamId"], dtype=pl.Int32).alias("firstHalfKickoffTeamId"),'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865 or 400547866)"
   expected: kill
   note: >-
-    C-NF-2. The row used to mutate the pbp_txt["firstHalfKickoffTeamId"] np.where at :3323-3330, a
-    dict key nothing reads or returns, so no test could ever kill it (tier C M13's "survives 242
-    tests" was measured there). The swap of the live expression makes the home-kicked captures
-    right, so their strict-xfail truth tests XPASS (red). Task 2.6 deletes the dead np.where block
-    and flips the test to a plain assert, which then kills the swap on every capture.
+    C-NF-2. The home/away swap of the opening kicker. Before task 2.6 the row mutated the per-row
+    expression at cfb_pbp.py:2865-2873 (and, earlier still, the pbp_txt["firstHalfKickoffTeamId"]
+    np.where nothing in the frame read); task 2.6 made the column one game-wide constant and turned
+    the strict xfails into plain asserts, so the swap is red on every one of the 85 captures (two
+    home-kicked, one away-kicked selected here).
+
+- id: cfb-opening-kicker-reads-the-receiver
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'select("type.text", "text", "start.team.id", "start.down")'
+  mutant: 'select("type.text", "text", "start.pos_team.id", "start.down")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400756970 or 401752844)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: reading start.pos_team.id (the receiver) on the kickoff row.
+    The first-snap check in _opening_kicker repairs a receiver label whenever the receiver snaps
+    first, so this mutant is red only where the kick ends in a turnover or a second kickoff comes
+    before any snap: 6 of the 85 captures (400756970, 400869817, 401032062, 401309854, 401752844,
+    401761665), not on 400547866 as the ledger line guessed.
+
+- id: cfb-receives-2h-kickoff-period-gate
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'pl.when((pl.col("period") <= 2).and_(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId")))'
+  mutant: 'pl.when(pl.col("start.pos_team.id") == pl.col("firstHalfKickoffTeamId"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "receives_2h_kickoff_is_false_after_the_first_half and (400547866 or 400547699)"
+  expected: kill
+  note: >-
+    Ledger gate cfb-2h-kickoff-flag-truth: dropping the period <= 2 gate (nflfastR's receive_2h_ko,
+    task 2.6) flags the opening kicker's second-half possessions again.
+
+- id: cfb-opening-kicker-fallback-reads-the-offense
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  # _opening_kicker's fallback when period 1 files a snap before any kickoff: the first snap's DEFENSE kicked
+  snippet: 'return away_id if int(team) == home_id else home_id'
+  mutant: 'return home_id if int(team) == home_id else away_id'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "received_the_second_half and (243040130 or 293182305 or 401628455)"
+  expected: kill
+  note: >-
+    Review R781-3: the period-1 kickoff oracle asserts nothing on the 41 captures without an opening
+    kickoff, so this branch went unchecked. The period-3 oracle (the opening kicker takes the first
+    second-half snap) covers 34 of them; the mutant (the first snap's offense) is red there.
+
+# --- C-NF-2 booster-input shim (review R781-1; removed by a retrain on the corrected flag (owner decision)) ------------------
+- id: cfb-wp-shim-pipeline
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'tb, start, end = (_as_trained_2h_flag(x) for x in (tb, start, end))'
+  mutant: 'tb, start, end = tb, start, end'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and wp_before"
+  expected: kill
+  note: >-
+    The bundled WP boosters were trained with the flag equal to 1 - is_home on every row. Fed the
+    corrected flag, the pinned 401754554 wp_before / wp_before_naive move off their base values.
+
+- id: cfb-wp-shim-fourth-down
+  finding: C-NF-2
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'out["pos_team_receives_2H_kickoff"] = ~out["is_home"].astype(bool)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "regulation_surfaces and (punt_wp or go_wp or fg_wp)"
+  expected: kill
+  note: >-
+    The fourth-down state's WP input: fed the corrected flag, the pinned 401754554 punt/go/FG
+    values move off their base values.
+
+- id: cfb-wp-shim-calculator
+  finding: C-NF-2
+  file: sportsdataverse/cfb/model_calculators.py
+  snippet: 'scored = prepared.with_columns(flag)'
+  mutant: 'scored = prepared'
+  test: tests/cfb/test_model_calculators.py -k "as_the_boosters_were_trained"
+  expected: kill
+  note: calculate_win_probability scores the flag as 1 - is_home, whatever the caller's column says.
 
 # --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012; main's #778) ------
-- id: cfb-kickoff-touchback-75-from-2014
+- id: cfb-kickoff-touchback-75-from-2012
   group: cfb-touchback
   finding: C-H4
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: |-
-    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
-                    .then(75)
-  mutant: |-
-    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
-                    .then(80)
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 80), (0, 80))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (322590228 or 400547866 or 401628455)"
   expected: kill
   note: >-
     a regression of the 75 spot from 2012 (2012's 322590228, 2014+'s 400547866 / 401628455 go red).
-    Re-keyed on main's #778 (2b73fa5a5e) snippet; the id keeps its old name so ledgers still resolve.
+    Renamed from cfb-kickoff-touchback-75-from-2014 (the spot is 75 from 2012, R807-2) and re-keyed on the
+    catalogued table in cfb/model_vars.py (plan task 3.1), which every former _KICKOFF_2012_RULES_FROM site reads.
 
 - id: cfb-kickoff-touchback-80-through-2011
   group: cfb-touchback
   finding: C-H4
-  file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: |-
-    .when(kick_mask)
-                    .then(80)
-  mutant: |-
-    .when(kick_mask)
-                    .then(75)
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 75))'
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130)"
   expected: kill
   note: >-
     cfbfastR's unconditional 75 (create_epa.R:233), the parity "fix" the owner ruled against: 2011's
-    313090025 and 2004's 243040130 go red. Re-keyed on main's #778 (2b73fa5a5e) snippet.
+    313090025 and 2004's 243040130 go red. Re-keyed on the catalogued table (plan task 3.1).
+
+- id: cfb-kickoff-touchback-cut-2012
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2012, 75), (0, 80))'
+  mutant: 'TOUCHBACK_YARDLINE_BY_SEASON: tuple[tuple[int, int], ...] = ((2014, 75), (0, 80))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "kickoff_touchback_spot and (322590228 or 332570254)"
+  expected: kill
+  note: >-
+    the rule's first season moved off 2012 (the C-H4 bug's shape: 2012-13 scored at 80): 2012's 322590228 and
+    2013's 332570254 go red in test_kickoff_touchback_spot_follows_the_rule (gate cfb-touchback-constant).
+
+# --- R829-5 / EX-3.1-a: the post-score kickoff in the CFB decision surfaces (plan task 3.11) -----
+# Each state reads TOUCHBACK_YARDLINE_BY_SEASON per row; the mutant restores cfb4th's unconditional 75,
+# which the owner ruled against (80 through 2011). The 2011 parametrisation goes red.
+- id: cfb-4th-go-touchdown-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'ytg = np.where(td_mask, _cfb_touchback_yardline_np(state["season"]), ytg)'
+  mutant: 'ytg = np.where(td_mask, 75, ytg)'
+  test: tests/cfb/test_cfb_fourth_down.py -k "go_touchdown_kicks_off"
+  expected: kill
+  note: the go-for-it touchdown outcome's kickoff (get_go_wp)
+
+- id: cfb-4th-punt-return-td-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'new_ytg = np.where(return_td, _cfb_touchback_yardline_np(flipped_state["season"]), new_ytg)'
+  mutant: 'new_ytg = np.where(return_td, 75, new_ytg)'
+  test: tests/cfb/test_cfb_fourth_down.py -k "punt_return_touchdown_kicks_off"
+  expected: kill
+  note: the punt-return-touchdown outcome's kickoff (get_punt_wp)
+
+- id: cfb-4th-made-fg-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: 'make_state["yards_to_goal"] = _cfb_touchback_yardline_np(make_state["season"])'
+  mutant: 'make_state["yards_to_goal"] = 75'
+  test: tests/cfb/test_cfb_fourth_down.py -k "fg_make_state_kicks_off"
+  expected: kill
+  note: the made-field-goal outcome's kickoff (get_fg_wp)
+
+- id: cfb-2pt-kickoff-touchback-by-season
+  group: cfb-decision-touchback
+  finding: R829-5
+  file: sportsdataverse/cfb/cfb_two_point.py
+  snippet: 'flipped["yards_to_goal"] = _cfb_touchback_yardline_np(flipped["season"])'
+  mutant: 'flipped["yards_to_goal"] = 75'
+  test: tests/cfb/test_cfb_fourth_down.py -k "two_point_states_kick_off"
+  expected: kill
+  note: the kickoff after every try outcome (get_2pt_probs)
+
+# --- C-T3 / R-010: the era literals plan task 3.11 moved into catalogued constants -----------------
+- id: cfb-model-era-cuts-match-the-cards
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2013, 2020)'
+  mutant: 'CFB_MODEL_ERA_CUTS: tuple[int, int, int] = (2006, 2012, 2020)'
+  test: tests/cfb/test_model_cards.py -k "catalogued_era_cuts"
+  expected: kill
+  note: the QBR one-hots and FD_ERA_BOUNDS read the constant; the bundled cards' era.cuts pin it
+
+- id: cfb-try-on-td-row-from-2014
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2014'
+  mutant: 'CFB_ESPN_TRY_ON_TD_ROW_FROM: int = 2004'
+  test: tests/cfb/test_cfb_pbp_processor_fixes.py -k "standalone_pat_rows"
+  expected: kill
+  note: the 2004 standalone "Extra point by X is good" rows lose their xp flags (__add_xp_suffix_cols)
+
+- id: cfb-kickoff-fair-catch-touchback-from-2018
+  group: cfb-era-literals
+  finding: C-T3
+  file: sportsdataverse/cfb/model_vars.py
+  snippet: 'CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2018'
+  mutant: 'CFB_KICKOFF_FAIR_CATCH_TOUCHBACK_FROM: int = 2025'
+  test: tests/cfb/test_cfb_036_reconciliation.py -k "b1_kickoff_fair_catch"
+  expected: kill
+  note: 2024's 401677179 fair-caught kickoffs stop being touchbacks (__add_play_type_flags)
+
+- id: nfl-ep-wp-era-cuts-off-by-one
+  group: nfl-era-literals
+  finding: C-T3
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS'
+  mutant: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = (c - 1 for c in ERA_SEASON_CUTS)'
+  test: tests/nfl/test_nfl_ep_wp.py -k "era_bins"
+  expected: kill
+  note: every boundary season (2001/2005/2013/2017) lands in the next era; the ep_wp era helpers read the unpack
+
+- id: nfl-4th-era-cuts-off-by-one
+  group: nfl-era-literals
+  finding: C-T3
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS'
+  mutant: '_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = (c - 1 for c in ERA_SEASON_CUTS)'
+  test: tests/nfl/test_nfl_fourth_down.py -k "era_one_hots_break"
+  expected: kill
+  note: nfl_fourth_down._prepare's era one-hots read the unpack (no other nfl_fourth_down test sits on a cut season)
 
 # --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
 - id: cfb-second-level-yards-offset
@@ -404,14 +886,63 @@
   group: provider-gates
   finding: B-M37
   file: sportsdataverse/cfb/cfb_pbp_fox.py
-  snippet: 'return int(e["yardStart"])'
-  mutant: 'return 100 - int(e["yardStart"])'
+  snippet: 'ytg = None if spot is None else (spot if is_home_poss else 100 - spot)'
+  mutant: 'ytg = spot'
   test: tests/cfb/test_cfb_pbp_fox_offline.py
   expected: kill
   note: >-
-    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps kept
-    test_fox_cfb_pbp_full_pipeline green. 1.4's home-snap assert goes red and its strict-xfail
-    away-snap assert goes XPASS(strict) under this mutant (ledger gate fox-away-snap-xfail).
+    Reading Fox's absolute yardStart as yards-to-endzone again (the B-H3 defect) mirrors every
+    away snap; test_fox_cfb_pbp_full_pipeline stayed green under it. Task 2.8 fixed B-H3 and
+    flipped 1.4's strict xfail: the away-snap assert goes red under this mutant (ledger gate
+    fox-cfb-field-position).
+
+- id: fox-cfb-no-coverage-completed
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: '(h.get("eventStatus") == 3) and covered'
+  mutant: '(h.get("eventStatus") == 3)'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    The committed uncovered-game capture (FINAL header, pbp.sections == []) reports a completed
+    0-play game under this mutant (ledger gate fox-no-coverage-not-final).
+
+- id: fox-cfb-no-coverage-raises
+  group: provider-gates
+  finding: B-M6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'if not _has_pbp(fox_data):'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_no_coverage_final_header_is_not_a_completed_game
+  expected: kill
+  note: >-
+    Without the coverage branch fox_cfb_play_process runs the processor on the uncovered capture
+    instead of raising NoDataError (ledger gate fox-no-coverage-not-final).
+
+- id: fox-cfb-backup-joins-espn-participants
+  group: provider-gates
+  finding: B-M28
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'join_participants=False,'
+  mutant: 'join_participants=True,'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py::test_backup_makes_no_espn_request
+  expected: kill
+  note: >-
+    The backup fetches ESPN participants for the Fox id again (the recorded requests list is
+    non-empty).
+
+- id: contract-mirrored-field-position
+  group: provider-gates
+  finding: B-GB-08
+  file: sportsdataverse/football/sources/contract.py
+  snippet: '_MIRRORED_SHARE = 0.25'
+  mutant: '_MIRRORED_SHARE = 1.0'
+  test: tests/football/sources/test_contract.py::test_mirrored_field_position_is_invalid
+  expected: kill
+  note: >-
+    With the rule disabled the contract accepts a real ESPN summary with every yardLine
+    mirrored (ledger gate fox-cfb-field-position).
 
 # --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
 - id: nhl-faceoff-skip-fit
@@ -1473,25 +2004,31 @@
   group: nfl-end-of-half
   finding: C-NF-12
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.and_(pl.col("start.pos_team.id") == _next_play(pl.col("start.pos_team.id")))'
+  snippet: '.and_(pl.col("start.pos_team.id") == lead_team)'
   mutant: '.and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))'
-  test: tests/cfb/test_cfb_whole_game_oracle.py -k "regulation_wp_after"
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "regulation_wp_after or half_end_possession_change"
   expected: kill
   note: >-
     401761665's Timeout row before overtime is filed to the other team; reading the next ROW's team
-    took the model's wp_after (0.392) instead of overtime's first wp_before (0.466).
+    took the model's wp_after (0.392) instead of overtime's first wp_before (0.466). Re-keyed at the
+    10-21 main -> devel-cfb sync onto cfb's `lead_team` (WB-nfl-6: one next-non-Timeout read).
+    With cfb's `lwb` the
+    401761665 row survives (the generic `lead_team` branch further down gives the same board), so the
+    killer is the edited-401234617 possession-change case, measured.
 
 - id: cfb-half-end-wp-possession-change-borrows-next-real-play
   group: nfl-end-of-half
   finding: C-NF-12
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: '.then(1 - _next_play(pl.col(wb)))'
-  mutant: '.then(1 - pl.col(lwb))'
+  snippet: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(lwb))"
+  mutant: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(wb).shift(-1))"
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "half_end_possession_change"
   expected: kill
   note: >-
     R832-4: a half-ending play that changes possession takes 1 - the next real play's wp_before. On the
     edited 401234617 (its End of Half marker retyped as a Timeout row) the next ROW is the Timeout.
+    Re-keyed at the 10-21 main -> devel-cfb sync: the read is cfb's `lwb` (next non-Timeout row), so
+    the mutant reads the next ROW's wp_before.
 
 - id: nfl-end-of-half-try-keeps-its-epa
   group: nfl-end-of-half
@@ -1958,6 +2495,694 @@
   expected: kill
   note: >-
     Game seconds remaining count down from 3600: period p adds (3 - p) * 1200 to its period clock.
+
+# --- supp-002 (3.4(a)): a degenerate ESPN end block takes the next snap's start ------------------
+# Killer: 41 candidates (the 23 published "Fumble Recovery (Own)" signature rows, the 20 rows the rule
+# moves across all 20,719 cfb-raw games, 401778310647); exactly the 20 move, the rest stay byte-stable.
+# Retired: cfb-supp002-possession-from-change-of-pos-team (the rule took the fumble-recovery
+# attribution and the row swapped in change_of_pos_team). Owner ruling R834-7 made change_of_pos_team
+# the rule's own predicate once EX-3.4-b made it right at the source, so the mutant is the code; as
+# with EX-2.3-c, an equivalent row is deleted with the reason recorded, not kept as a survivor.
+# Retired: cfb-supp002-no-same-team-check (the same-team guard replaced by pl.lit(True)). Its killer
+# 401778310647 (an interception return that fumbles; the other team snaps next) carries
+# change_of_pos_team True, so under R834-7 the possession predicate already excludes it: measured, the
+# mutant survives on all 41 candidates (every degenerate-end fumble row of the 43 corpus reach games
+# whose next snap is the other team's has change_of_pos_team True). The guard stays as a defence for
+# rows the two lookaheads read differently (End of Game / official rows, more than two admin rows).
+- id: cfb-supp002-no-degenerate-check
+  group: cfb-supp002
+  finding: supp-002
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "_supp_002=(pl.col(\"end.yardLine\") == 0)\n                .and_(pl.col(\"end.yardsToEndzone\") == 0)\n"
+  mutant: "_supp_002=pl.lit(True)\n"
+  test: tests/cfb/test_cfb_supp002_degenerate_end.py::test_exactly_the_rule_rows_move
+  expected: kill
+  note: >-
+    without the yardLine 0 / yardsToEndzone 0 test every play that kept the ball takes the next
+    snap's start; 401752886558 and 40176244395 (stated ends; 401856797637 was the killer until EX-3.4-a
+    fixed its mirrored end) move and the count breaks
+# --- EX-3.4-b (3.4(a), PR #834): a Timeout row is no change of possession ------------------------
+# Killers: tests/cfb/test_cfb_timeout_possession.py on committed captures (401752753, 401754571,
+# 401756960, 401761656 penalty rows; 401628559 punt -> receiver's timeout -> snap; 401643775 score ->
+# timeout -> kickoff; 401856679 interception -> timeout -> snap).
+- id: cfb-ex34b-timeout-row-no-possession-change
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "change_of_pos_team=pl.when(pl.col(\"type.text\") == \"Timeout\")\n                .then(False)\n                .when("
+  mutant: "change_of_pos_team=pl.when("
+  test: tests/cfb/test_cfb_timeout_possession.py -k "penalty_after_a_defensive_timeout or defensive_timeout_row"
+  expected: kill
+  note: "a Timeout row reads as a change of possession again (since R834-13 a defensive timeout is the offense's row, so the killer is a timeout between possessions filed under the team that does not snap next)"
+- id: cfb-ex34b-lagged-possession-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "lag_change_of_pos_team=pl.when(pl.col(\"type.text\") == \"Timeout\")\n                .then(None)\n                .otherwise(pl.col(\"change_of_pos_team\"))\n                .forward_fill()\n                .shift(1),"
+  mutant: "lag_change_of_pos_team=pl.col(\"change_of_pos_team\").shift(1),"
+  test: tests/cfb/test_cfb_timeout_possession.py::test_punt_then_receiver_timeout_then_snap_is_a_change_of_possession
+  expected: kill
+  note: "the snap after punt + the receiver's timeout reads the timeout's (False) possession flag (EP_between 2.50)"
+- id: cfb-ex34b-lagged-score-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "pl.when(pl.col(\"type.text\") == \"Timeout\")\n                    .then(None)\n                    .otherwise(pl.col(\"scoringPlay\"))\n                    .forward_fill()\n                    .shift(1)\n                    == True"
+  mutant: "pl.col(\"lag_scoringPlay\") == True"
+  test: tests/cfb/test_cfb_timeout_possession.py::test_score_then_timeout_then_kickoff_reads_the_score
+  expected: kill
+  note: "the kickoff after score + timeout gets a phantom EP_between (-5.54 / +8.46)"
+- id: cfb-ex34b-lead-wp-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_next(pl.col(wb), pl.col("type.text") == "Timeout").alias(lwb),'
+  mutant: 'pl.col(wb).shift(-1).alias(lwb),'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: the interception reads the timeout row's stale board (0.52) instead of Michigan's (0.37 for OU)
+- id: cfb-ex34b-lead-team-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'lead_team = _next(team, t == "Timeout")'
+  mutant: 'lead_team = pl.col("lead_pos_team")'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: the board is stated for the timeout's team (the caller, OU) and taken unflipped (0.63)
+- id: cfb-ex34b-lead-wp2-skips-timeouts
+  group: cfb-ex34b
+  finding: EX-3.4-b
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_next(_next(pl.col(wb), pl.col("type.text") == "Timeout"), pl.col("type.text") == "Timeout").alias(lwb2),'
+  mutant: 'pl.col(wb).shift(-2).alias(lwb2),'
+  test: tests/cfb/test_cfb_timeout_possession.py::test_wp_after_reads_the_next_real_board_across_a_timeout
+  expected: kill
+  note: R834-15, the published lead_wp_before2 reads shift(-2) (the snap after the timeout) again
+
+# --- C-M11 / C-L28: CFB model cards carry holdout status + importance artifacts (task 3.8) --------
+- id: cfb-card-in-sample-dropped
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/ep_model.card.json
+  snippet: '"in_sample": true,'
+  mutant: '"in_sample_dropped": true,'
+  test: tests/cfb/test_model_cards.py -k "holdout_status"
+  expected: kill
+  note: the gate cfb-model-cards-holdout-status MUTATION (a card with neither holdout_seasons nor in_sample)
+
+- id: cfb-card-holdout-overlaps-training
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/qbr_model.card.json
+  snippet: "  \"holdout_seasons\": [\n    2026,"
+  mutant: "  \"holdout_seasons\": [\n    2025,"
+  test: tests/cfb/test_model_cards.py -k "holdout_status"
+  expected: kill
+  note: a holdout inside the training span is an in-sample score labelled as validation
+
+- id: cfb-importance-hand-edited
+  group: cfb-model-cards
+  finding: C-L28
+  file: sportsdataverse/cfb/models/ep_model.importance.json
+  snippet: '"total_gain": 8884716.0,'
+  mutant: '"total_gain": 8884717.0,'
+  test: tests/cfb/test_model_cards.py -k "boosters_own"
+  expected: kill
+  note: every importance number is recomputed from the shipped booster by tools/cfb_model_importance.py
+
+- id: cfb-endgame-base-wp-marked-out-of-sample
+  group: cfb-model-cards
+  finding: C-M11
+  file: sportsdataverse/cfb/models/wp_spread.card.json
+  snippet: '"in_sample": true,'
+  mutant: '"in_sample": false,'
+  test: tests/cfb/test_cfb_wp_endgame.py -k "tied_late_holdout"
+  expected: kill
+  note: the 2022-25 endgame rows are a holdout for wp_ot_reach only; wp_before is scored in-sample
+
+# --- 3.4 (b3): nfl_clean play-key cast + NFL pickcenter twin --------------------------------------
+- id: nfl-clean-weird-pass-key-float-play-id
+  group: nfl-clean-play-key
+  finding: C-NF-8
+  file: sportsdataverse/nfl/nfl_clean.py
+  snippet: 'pl.col("play_id").cast(pl.Int64).cast(pl.Utf8)'
+  mutant: 'pl.col("play_id").cast(pl.Utf8)'
+  test: tests/nfl/test_nfl_clean.py -k "float_play_id"
+  expected: kill
+  note: nflverse's Float64 play_id stringifies as "1611.0" and the 15 fix_weird_pass_plays keys never match
+
+- id: nfl-pickcenter-spread-ndarray
+  group: nfl-pickcenter-scalars
+  finding: C-M19
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'gameSpread = float(_first("spread", 2.5))'
+  mutant: 'gameSpread = pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "round_trip_odds"
+  expected: kill
+  note: the shape-(1,) ndarray spread is not JSON-safe, so the payload odds cannot round-trip through odds_override
+
+- id: nfl-pickcenter-home-favorite-ndarray
+  group: nfl-pickcenter-scalars
+  finding: C-M19
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'homeFavorite = bool(_first("homeTeamOdds.favorite", True))'
+  mutant: 'homeFavorite = pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "round_trip_odds"
+  expected: kill
+  note: an ndarray homeFavorite is not a bool and not JSON-safe
+
+- id: nfl-pickcenter-all-null-spread
+  group: nfl-pickcenter-scalars
+  finding: C-NF-10
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'if pickcenter is not None and _first("spread", None) is not None:'
+  mutant: 'if pickcenter is not None:'
+  test: tests/nfl/test_nfl_offline_inputs.py -k "all_null_spread"
+  expected: kill
+  note: a pickcenter with no spread on any provider is no spread; without the guard it reads as an available 2.5
+
+# --- EX-1.2-a: rush yardage text forms (task 3.4(f)) ---------------------------------------------
+# Killer: test_stated_rush_yardage_is_read, one row per form, each pinned to the feed's statYardage
+# (or, on the 2005 feed whose statYardage is 0, the next snap's yards to go).
+- id: cfb-rushed-for-one-yard-singular
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(_gain_text.str.extract(r"(?i)for (-?\d+) yards?\b").cast(pl.Int32))'
+  mutant: '.then(_gain_text.str.extract(r"(?i)for (-?\d+) yards\b").cast(pl.Int32))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 242972641"
+  expected: kill
+  note: 2004-05 "rushed up the middle for 1 yard." (44 capture rows) needs the singular
+
+- id: cfb-rush-for-loss-without-a
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains("(?i)rush for (?:a )?loss of")'
+  mutant: 'str.contains("(?i)rush for a loss of")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 252532751"
+  expected: kill
+  note: 2005 "rush for loss of 8 yards to the LaMon37"; without the optional "a" it falls to the null
+
+- id: cfb-yard-rush-needs-its-number
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains(r"(?i)\d+ Yard Rush")'
+  mutant: 'str.contains(r"(?i)Yard Rush")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 303102638101"
+  expected: kill
+  note: case-folded "Yard Rush" matches the surname in "Joseph Banyard rush", whose reader then finds no number
+
+- id: cfb-run-for-needs-its-number
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'str.contains(r"(?i)run for -?\d")'
+  mutant: 'str.contains(r"(?i)run for")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 400756970"
+  expected: kill
+  note: '"1 Yd Run (X Run for Two-Point Conversion)" stopped on "run for" with no number'
+
+- id: cfb-directional-rush-gain-on-flagged-or-fumbled
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for -?\d+ yards?\b")'
+  mutant: '_gain_text.str.contains(r"(?i)\bNEVER_A_RUSH\b")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and (303102638009 or 313090025162)"
+  expected: kill
+  note: '"rush over left tackle for 3 yards, ... penalty" / "for 11 yards, fumbled": the statYardage stand-in skips flags and fumbles'
+
+- id: cfb-directional-rush-loss-on-flagged-or-fumbled
+  group: cfb-rush-yardage-forms
+  finding: EX-1.2-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_gain_text.str.contains(r"(?i)\b(?:rush|run)\b[^,]*? for (?:a )?loss of \d")'
+  mutant: '_gain_text.str.contains(r"(?i)\bNEVER_A_RUSH_LOSS\b")'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "stated_rush and 282782655"
+  expected: kill
+  note: '"rush over right end for a loss of 5 yards, ... penalty declined" (rush_forms/ fixture): 30 corpus rows / 25 games'
+
+# --- cfb 3.4 follow-ups (R837-2 / R837-3 / R828-5): total provenance + module logger ------------------
+# Killers: tests/cfb/test_cfb_pbp_offline.py on 400869817 (a real pickcenter with a spread and no total)
+# and 401301042 (a real pickcenter with both); the logger row runs a subprocess on 401301042.
+- id: cfb-ou-available-pickcenter
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnderAvailable = overUnder is not None'
+  mutant: 'overUnderAvailable = True'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pickcenter_without_a_total"
+  expected: kill
+  note: 400869817's defaulted 55.5 would read as a market total (gameSpreadAvailable alone passes it)
+
+- id: cfb-ou-available-core-api
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, ou_raw is not None)'
+  mutant: 'return (gameSpread, overUnder, homeFavorite, gameSpreadAvailable, gameSpreadAvailable)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "core_odds_api_spread_without_a_total"
+  expected: kill
+  note: an ESPN BET item with a spread and no total would flag its default total as a market one
+
+- id: cfb-ou-available-play-column
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'overUnderAvailable=pl.lit(init["overUnderAvailable"], dtype=pl.Boolean)'
+  mutant: 'overUnderAvailable=pl.lit(True, dtype=pl.Boolean)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: the play column is the per-game record a REPROCESS gate reads; 400869817's plays would claim a market total
+
+- id: cfb-ou-available-injected-warns
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_warn_default_total(self.gameId, self.odds_source, self.overUnder)'
+  mutant: 'pass'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: an odds_override rebuild of 400869817 relabelled its default total "injected", unwarned
+
+- id: cfb-ou-available-override-reads-the-key
+  group: cfb-total-provenance
+  finding: R837-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_optional_flag(odds_override.get("overUnderAvailable"), "overUnderAvailable")'
+  mutant: 'None'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "defaulted_total_is_flagged"
+  expected: kill
+  note: the persisted overUnderAvailable False would be dropped on the rebuild
+
+- id: cfb-override-home-favorite-read-strictly
+  group: cfb-total-provenance
+  finding: WB-cfb-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_required_flag(odds_override["homeFavorite"], "homeFavorite")'
+  mutant: 'bool(odds_override["homeFavorite"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "required_override_flags"
+  expected: kill
+  note: bool("False") is True, so an override persisted as text would make the away favourite the home one
+
+- id: cfb-override-spread-available-read-strictly
+  group: cfb-total-provenance
+  finding: WB-cfb-8
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_required_flag(odds_override["gameSpreadAvailable"], "gameSpreadAvailable")'
+  mutant: 'bool(odds_override["gameSpreadAvailable"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "required_override_flags"
+  expected: kill
+  note: bool("False") is True, so a defaulted spread persisted as text would read as a market one
+
+- id: cfb-ou-available-missing-is-unknown
+  group: cfb-total-provenance
+  finding: R895-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'odds_override.get("overUnderAvailable")'
+  mutant: 'odds_override.get("overUnderAvailable", odds_override["gameSpreadAvailable"])'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "override_without_the_flag_is_unknown"
+  expected: kill
+  note: the cfb-raw / cfb-data overrides fill 55.5 and keep gameSpreadAvailable True; a guess marks 400869817's default total as a market one
+
+- id: cfb-ou-available-unknown-does-not-warn
+  group: cfb-total-provenance
+  finding: R895-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'elif self.overUnderAvailable is False:'
+  mutant: 'elif not self.overUnderAvailable:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "override_without_the_flag_is_unknown"
+  expected: kill
+  note: an override that does not say (None) is unknown, not a defaulted total; it must not warn
+
+- id: cfb-ou-available-strict-text
+  group: cfb-total-provenance
+  finding: R895-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'flag = _FLAG_TEXT.get(str(value).strip().lower())'
+  mutant: 'flag = bool(value)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "flag_is_read_strictly"
+  expected: kill
+  note: bool("False") is True
+
+- id: cfb-ou-available-core-api-fetch-failed
+  group: cfb-total-provenance
+  finding: R895-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |2-
+                return (2.5, _DEFAULT_TOTAL, True, False, False)
+
+            items = odds.get("items", []) if isinstance(odds, dict) else []
+  mutant: |2-
+                return (2.5, _DEFAULT_TOTAL, True, False, True)
+
+            items = odds.get("items", []) if isinstance(odds, dict) else []
+  test: tests/cfb/test_cfb_pbp_offline.py -k "failed_core_odds_fetch"
+  expected: kill
+  note: a failed core-odds fetch would flag its default total as a market one
+
+- id: cfb-ou-available-core-api-no-items
+  group: cfb-total-provenance
+  finding: R895-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |2-
+            if not items:
+                return (2.5, _DEFAULT_TOTAL, True, False, False)
+  mutant: |2-
+            if not items:
+                return (2.5, _DEFAULT_TOTAL, True, False, True)
+  test: tests/cfb/test_cfb_pbp_offline.py -k "empty_core_odds_collection"
+  expected: kill
+  note: an empty odds collection would flag its default total as a market one
+
+- id: cfb-pbp-root-logger
+  group: cfb-total-provenance
+  finding: R828-5
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'logger.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")'
+  mutant: 'logging.debug(f"{self.gameId}: full cfb_pbp data requested, returning keys: {summary.keys()}")'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "root_logger_alone"
+  expected: kill
+  note: one root-module call runs logging.basicConfig() and installs a stderr handler on the host's root logger
+
+- id: cfb-ou-available-fox-neutral-odds
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: '    "overUnderAvailable": False,'
+  mutant: '    "overUnderAvailable": None,'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py -k "without_odds_has_no_market_total"
+  expected: kill
+  note: the neutral pick'em line's 55.5 is the default total; null would call it unknown
+
+- id: cfb-ou-available-idmap-override
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/football/sources/idmap.py
+  snippet: '"overUnderAvailable": True,  # None is returned above without a total_line'
+  mutant: '"overUnderAvailableX": True,'
+  test: tests/football/sources/test_idmap.py -k "market_total_through_the_processor"
+  expected: kill
+  note: a failover game's stored closing total would rebuild as unknown
+
+- id: cfb-ou-available-fox-common-override
+  group: cfb-total-provenance
+  finding: R895-6
+  file: sportsdataverse/football/fox_common.py
+  snippet: '"overUnderAvailable": True,  # None is returned above without a total'
+  mutant: '"overUnderAvailableX": True,'
+  test: tests/nfl/fox_pbp/test_fox_nfl_adapter.py -k "odds_payload_yields_the_closing_line"
+  expected: kill
+  note: Fox's six-pack total would rebuild as unknown
+
+- id: cfb-ou-available-pandas-missing
+  group: cfb-total-provenance
+  finding: R895-7
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    if pd.api.types.is_scalar(value) and pd.isna(value):'
+  mutant: '    if False:'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "pandas_missing_override_flag"
+  expected: kill
+  note: an override from a pandas row of older data (NaN / pd.NA for the absent column) would raise
+
+# --- cfb 3.4 follow-ups (EX-3.4-a, EX-3.4-c, R834-13; fix/cfb-3-4-end-states) ---------------------
+# Killers on committed captures: tests/cfb/test_cfb_end_state_ex34.py (the 7 EX-3.4-c rows, 401856797637,
+# and the two ex34/ guard rows), tests/cfb/test_cfb_timeout_possession.py (defensive timeouts in 4 games).
+- id: cfb-ex34c-no-rule
+  group: cfb-ex34-end-states
+  finding: EX-3.4-c
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '_ex34c=pl.col("_end_degenerate")'
+  mutant: '_ex34c=pl.lit(False)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "unstated_end"
+  expected: kill
+  note: the seven degenerate ends on a rush, a pass or a penalty keep down 0 (and the own 99) again
+
+- id: cfb-ex34c-next-snap-same-team
+  group: cfb-ex34-end-states
+  finding: EX-3.4-c
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(_next_real_play(\"start.pos_team.id\") == pl.col(\"start.pos_team.id\"))\n                .and_(_next_real_play(\"start.down\").is_between(1, 4))"
+  mutant: ".and_(_next_real_play(\"start.down\").is_between(1, 4))"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "other_teams_snap"
+  expected: kill
+  note: 401403973 / 401520162's declined flags after a turnover would take the other team's next start
+
+- id: cfb-ex34a-no-admin-crossing
+  group: cfb-ex34-end-states
+  finding: EX-3.4-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)'
+  mutant: '    return nxt'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "401856797637"
+  expected: kill
+  note: 401856797's Q3-closing rush keeps the mirrored 99 (EPA -4.62) behind the End Period row
+
+- id: cfb-ex34a-stated-yardage
+  group: cfb-ex34-end-states
+  finding: EX-3.4-a
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '    return pl.when(admin_next & _in_same_half(_next_real_play) & agrees).then(_next_real_play(col)).otherwise(nxt)'
+  mutant: '    return pl.when(admin_next & _in_same_half(_next_real_play)).then(_next_real_play(col)).otherwise(nxt)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "admin_row"
+  expected: kill
+  note: 401282772 and 401761589 would mirror a right end toward a next snap whose own start is the mirror
+
+- id: cfb-r834-13-offense-on-timeout
+  group: cfb-ex34-end-states
+  finding: R834-13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".then(_next_real_play(\"start.pos_team.id\"))\n                .otherwise(pl.col(\"start.pos_team.id\"))\n                .alias(\"start.pos_team.id\"),"
+  mutant: ".then(pl.col(\"start.pos_team.id\"))\n                .otherwise(pl.col(\"start.pos_team.id\"))\n                .alias(\"start.pos_team.id\"),"
+  test: tests/cfb/test_cfb_timeout_possession.py -k "defensive_timeout"
+  expected: kill
+  note: a defensive timeout reads as the caller's possession again, with the offense's EP
+
+- id: cfb-r834-13-one-team-around
+  group: cfb-ex34-end-states
+  finding: R834-13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                    & (_prev_real_play("start.pos_team.id") == _next_real_play("start.pos_team.id"))'
+  mutant: '                    & pl.lit(True)'
+  test: tests/cfb/test_cfb_timeout_possession.py
+  expected: kill
+  note: a timeout between two possessions would be handed to the team that snaps next
+
+# --- review of #905 (R905-1, R905-2) ---------------------------------------------------------------
+- id: cfb-r905-1-fourth-down-short-excluded
+  group: cfb-ex34-end-states
+  finding: R905-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: "((pl.col(\"type.text\") != \"Penalty\") & (pl.col(\"start.down\") == 4))"
+  mutant: "(pl.lit(False))"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "fourth_down_short"
+  expected: kill
+  note: 401760417's ghost 4th & 1 takes the same team's next snap while downs_turnover flips its margin (EPA +0.82)
+
+- id: cfb-r905-2-same-half-regulation-only
+  group: cfb-ex34-end-states
+  finding: R905-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '((pl.col("period.number") < 5) & (other("period.number") < 5) & (other("half") == pl.col("half")))'
+  mutant: '((pl.col("period.number") < 5) & (other("half") == pl.col("half")))'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "same_half"
+  expected: kill
+  note: Q4 and an overtime period read as one half again
+
+- id: cfb-r905-3-wiped-interception-not-excluded
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.and_(pl.col("text").str.contains(r"(?i)fumbl") == False)'
+  mutant: '.and_(pl.col("text").str.contains(r"(?i)fumbl|intercept") == False)'
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "401752832104944503"
+  expected: kill
+  note: an interception a flag wiped out keeps down 0 again (401752832 EPA 0.97 -> 0.17, the next snap's EP_between 0.80)
+
+- id: cfb-ex34c-same-period-or-half
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(_next_real_play(\"type.text\").str.contains(_NOT_A_SNAP_RE) == False)\n                .and_(_in_same_half(_next_real_play))"
+  mutant: ".and_(_next_real_play(\"type.text\").str.contains(_NOT_A_SNAP_RE) == False)"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "another_overtime"
+  expected: kill
+  note: a degenerate end takes a snap filed in the next overtime period (400548284, the clause's only EPA row in the sweep)
+
+- id: cfb-ex34c-play-type-allowlist
+  group: cfb-ex34-end-states
+  finding: R905-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: ".and_(pl.col(\"type.text\").str.contains(_DEGENERATE_END_TYPES_RE))\n"
+  mutant: "\n"
+  test: tests/cfb/test_cfb_end_state_ex34.py -k "on_a_kick"
+  expected: kill
+  note: a stray punt record before the same team's snap would end at that snap (401752915 EPA 2.51 -> 2.15)
+
+# cfb 3.12 (R908-3): a play copy the id sort strands outside its drive. Killers:
+# tests/cfb/test_cfb_pbp_offline.py, the 401420836 capture and one case per guard.
+- id: cfb-stranded-copy-rule
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"]'
+  mutant: 'copy_of_home = stranded.drop_nulls(same).join(home.unique(), on=same, how="semi")["_pos"].clear()'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "outside_its_drive_is_counted_once"
+  expected: kill
+  note: 401420836 books Gonnella's 11:58 rush and Steindorf's 10:44 punt twice (7 carries / 4 punts vs ESPN's box 6 / 3)
+
+- id: cfb-stranded-copy-prev-neighbour
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)'
+  mutant: 'out_of_drive = (drive.shift(-1) != drive).fill_null(True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: a copy after its drive's last play is in its drive (a replayed down) and stays
+
+- id: cfb-stranded-copy-next-neighbour
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'out_of_drive = (drive.shift(1) != drive).fill_null(True) & (drive.shift(-1) != drive).fill_null(True)'
+  mutant: 'out_of_drive = (drive.shift(1) != drive).fill_null(True)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: a copy before its drive's first play is in its drive and stays
+
+- id: cfb-stranded-copy-home-inside-drive
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'home = df.filter(pl.col("_out") == False).select(same)'
+  mutant: 'home = df.select(same)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes"
+  expected: kill
+  note: with every row a home, each stranded row twins itself and every lone stranded play goes
+
+- id: cfb-stranded-copy-marker
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_blank") == False) & (pl.col("start.yardsToEndzone") != 0)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and marker"
+  expected: kill
+  note: timeouts and end-of-period rows are never dropped
+
+- id: cfb-stranded-copy-spotless
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_blank") == False) & ~marker & (pl.col("start.yardsToEndzone") != 0)'
+  mutant: '(pl.col("_blank") == False) & ~marker'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and spotless"
+  expected: kill
+  note: a row with no start spot has too little state to call it a copy
+
+- id: cfb-stranded-copy-text
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [*key, "start.adj_TimeSecsRem"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and text"
+  expected: kill
+  note: other text at the same clock and state is another play
+
+- id: cfb-stranded-copy-clock
+  group: cfb-stranded-copy
+  finding: R908-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [*key, "text"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "stranded_outside_its_drive_goes and clock"
+  expected: kill
+  note: the same text at another clock is another play
+
+- id: cfb-stranded-copy-key-drive-id
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "drive.id"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and drive"
+  expected: kill
+  note: 401636866's Q4 13:38 kickoff copy is filed in another drive; the rule only judges a row against its own drive
+
+- id: cfb-stranded-copy-key-period-number
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "period.number"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and period"
+  expected: kill
+  note: 252462426's Q3 15:00 kickoff and its Q2 0:00 twin share one adjusted clock
+
+- id: cfb-stranded-copy-key-type-text
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "type.text"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and type"
+  expected: kill
+  note: 401282272's kickoff text under two types (Kickoff, Kickoff Return (Offense))
+
+- id: cfb-stranded-copy-key-start-down
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.down"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and down"
+  expected: kill
+  note: 400548291's 3rd-and-10 incompletion at 1:05 and the 1st-and-10 one before it
+
+- id: cfb-stranded-copy-key-start-distance
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.distance"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and distance"
+  expected: kill
+  note: 401309834's 4th-and-12 punt and the 4th-and-8 one before the false start
+
+- id: cfb-stranded-copy-key-start-yardstoendzone
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return _drop_stranded_copies(df, [*key, "text", "start.adj_TimeSecsRem"], marker)'
+  mutant: 'return _drop_stranded_copies(df, [c for c in [*key, "text", "start.adj_TimeSecsRem"] if c != "start.yardsToEndzone"], marker)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and spot"
+  expected: kill
+  note: 401524051's 1st-and-10 incompletions at the 37 and the 25
+
+- id: cfb-stranded-copy-last-row
+  group: cfb-stranded-copy
+  finding: R312-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(drive.shift(-1) != drive).fill_null(True)'
+  mutant: '(drive.shift(-1) != drive).fill_null(False)'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and last"
+  expected: kill
+  note: the frame's last row has no next row; 292900218's last row is a field goal copy outside its drive
+
+- id: cfb-stranded-copy-blank-clock
+  group: cfb-stranded-copy
+  finding: R312-1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '(pl.col("_out") == True) & (pl.col("_blank") == False) & '
+  mutant: '(pl.col("_out") == True) & '
+  test: tests/cfb/test_cfb_pbp_offline.py -k "every_key_of_its_twin and blank"
+  expected: kill
+  note: 401327913 reads 0:00 on 95% of its rows; three real kickoffs (one per score in scoringPlays) would go
 
 # --- EX-2.3-a (task 2.21): a touchback kickoff ends at the season's touchback spot ----------------
 - id: nfl-kickoff-touchback-end-at-season-spot

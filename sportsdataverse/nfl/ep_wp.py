@@ -58,6 +58,7 @@ from sportsdataverse.errors import EraCoverageWarning
 from sportsdataverse.nfl.model_vars import (
     _EP_POINT_VALUES,
     ERA_MAX_KNOWN_SEASON,
+    ERA_SEASON_CUTS,
     OT_BOTH_POSSESS,
     OT_MODIFIED_SUDDEN_DEATH,
     OT_SUDDEN_DEATH,
@@ -71,6 +72,9 @@ from sportsdataverse.nfl.model_vars import (
     offense_score_vec,
     touchback_yardline_expr,
 )
+
+#: The nflfastR era one-hot cuts (rules/nfl.yaml#nfl-2002-nflfastr-era-bins), unpacked once for the era helpers.
+_ERA_CUT0, _ERA_CUT1, _ERA_CUT2, _ERA_CUT3 = ERA_SEASON_CUTS
 
 # ---------------------------------------------------------------------------
 # Feature lists — mirror nflfastR's ep_model_select / wp_*_model_select
@@ -474,11 +478,11 @@ def _make_model_mutations(df: pl.DataFrame) -> pl.DataFrame:
     _warn_if_season_beyond_known_eras(df)
     df = df.with_columns(
         # Era flags
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
         # Down dummies
         pl.when(pl.col("down") == 1).then(1).otherwise(0).alias("down1"),
         pl.when(pl.col("down") == 2).then(1).otherwise(0).alias("down2"),
@@ -566,9 +570,9 @@ def _make_cp_mutations(df: pl.DataFrame) -> pl.DataFrame:
     df = df.with_columns(
         pl.when(pl.col("air_yards") == 0).then(1).otherwise(0).alias("air_is_zero"),
         (pl.col("air_yards") - pl.col("ydstogo")).alias("distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("era4"),
     )
     if "home" not in df.columns:
         df = df.with_columns(
@@ -659,11 +663,11 @@ def _espn_ep_features(
     """
     _warn_if_season_beyond_known_eras(play_df)
     df = play_df.with_columns(
-        pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("_era0"),
-        pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("_era1"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("_era0"),
+        pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1)).then(1).otherwise(0).alias("_era1"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     roof = _roof_one_hots(_roof_expr(play_df, roof_col))
     return (
@@ -816,9 +820,9 @@ def _espn_cp_features(
     df = play_df.with_columns(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -896,9 +900,9 @@ def _espn_xyac_features(
         pl.when(pl.col(air_yards_col) == 0).then(1).otherwise(0).alias("_air_is_zero"),
         (pl.col(yardline_col) - pl.col(air_yards_col)).alias("_distance_to_goal"),
         (pl.col(air_yards_col) - pl.col(ydstogo_col)).alias("_distance_to_sticks"),
-        pl.when((pl.col("season") > 2005) & (pl.col("season") <= 2013)).then(1).otherwise(0).alias("_era2"),
-        pl.when((pl.col("season") > 2013) & (pl.col("season") <= 2017)).then(1).otherwise(0).alias("_era3"),
-        pl.when(pl.col("season") > 2017).then(1).otherwise(0).alias("_era4"),
+        pl.when((pl.col("season") > _ERA_CUT1) & (pl.col("season") <= _ERA_CUT2)).then(1).otherwise(0).alias("_era2"),
+        pl.when((pl.col("season") > _ERA_CUT2) & (pl.col("season") <= _ERA_CUT3)).then(1).otherwise(0).alias("_era3"),
+        pl.when(pl.col("season") > _ERA_CUT3).then(1).otherwise(0).alias("_era4"),
     )
     pass_mid = (
         pl.col(pass_middle_col).cast(pl.Int8)
@@ -1994,11 +1998,14 @@ def calculate_xpass(
         # _make_model_mutations / _espn_ep_features.
         if "era0" not in feats.columns:
             feats = feats.with_columns(
-                pl.when(pl.col("season") <= 2001).then(1).otherwise(0).alias("era0"),
+                pl.when(pl.col("season") <= _ERA_CUT0).then(1).otherwise(0).alias("era0"),
             )
         if "era1" not in feats.columns:
             feats = feats.with_columns(
-                pl.when((pl.col("season") > 2001) & (pl.col("season") <= 2005)).then(1).otherwise(0).alias("era1"),
+                pl.when((pl.col("season") > _ERA_CUT0) & (pl.col("season") <= _ERA_CUT1))
+                .then(1)
+                .otherwise(0)
+                .alias("era1"),
             )
         X = feats.select(XPASS_FEATURES).to_numpy(allow_copy=True).astype(np.float32)
         preds = _load_model(_XPASS_MODEL_FILE, models_dir=models_dir).predict(DMatrix(X, feature_names=XPASS_FEATURES))

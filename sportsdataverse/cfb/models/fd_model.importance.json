@@ -1,0 +1,79 @@
+{
+  "model": "fd_model",
+  "sha256": "31db81a09e6b03e4986df9cd5a401efee8fbc963588d1bf205ef1dc31b936504",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "down",
+      "gain": 4.668498039,
+      "total_gain": 17376.15039,
+      "weight": 3722.0,
+      "cover": 3672.78418,
+      "share_total_gain": 0.01913936467
+    },
+    {
+      "feature": "distance",
+      "gain": 13.09815121,
+      "total_gain": 284112.0,
+      "weight": 21691.0,
+      "cover": 3196.778076,
+      "share_total_gain": 0.3129417652
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 16.26761436,
+      "total_gain": 448254.0938,
+      "weight": 27555.0,
+      "cover": 2816.212158,
+      "share_total_gain": 0.493739889
+    },
+    {
+      "feature": "posteam_total",
+      "gain": 2.267968416,
+      "total_gain": 61427.92578,
+      "weight": 27085.0,
+      "cover": 1358.817749,
+      "share_total_gain": 0.06766121644
+    },
+    {
+      "feature": "posteam_spread",
+      "gain": 2.116167784,
+      "total_gain": 53981.32422,
+      "weight": 25509.0,
+      "cover": 1320.891113,
+      "share_total_gain": 0.05945898409
+    },
+    {
+      "feature": "era0",
+      "gain": 3.503222227,
+      "total_gain": 5303.878418,
+      "weight": 1514.0,
+      "cover": 2839.214355,
+      "share_total_gain": 0.005842080146
+    },
+    {
+      "feature": "era1",
+      "gain": 6.470801353,
+      "total_gain": 19282.98828,
+      "weight": 2980.0,
+      "cover": 2100.939697,
+      "share_total_gain": 0.02123969558
+    },
+    {
+      "feature": "era2",
+      "gain": 2.704754353,
+      "total_gain": 8568.662109,
+      "weight": 3168.0,
+      "cover": 1263.395386,
+      "share_total_gain": 0.009438152016
+    },
+    {
+      "feature": "era3",
+      "gain": 3.132927656,
+      "total_gain": 9567.960938,
+      "weight": 3054.0,
+      "cover": 2150.91333,
+      "share_total_gain": 0.01053885293
+    }
+  ]
+}
