@@ -39,6 +39,12 @@ One row per calendar week of the requested season (`week`, `week_label`, `week_s
 | `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
 | `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
 **Example**
 
 ```python

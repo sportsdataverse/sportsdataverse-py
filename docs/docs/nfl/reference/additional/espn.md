@@ -38,6 +38,12 @@ One row per calendar week of the requested season (`week`, `week_label`, `week_s
 | `season_type_end_date` | character | End of that season segment, an ISO 8601 UTC timestamp string. |
 | `season` | integer | The season argument as passed (null when the call omits it); ondays=True returns a different frame (dates, dateURL, url). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
 **Example**
 
 ```python
@@ -543,6 +549,14 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `passing_target_share_pct` | double | ESPN's targetSharePct stat (described upstream as '% of total team targets'); 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
 | `passing_yards_per_route_run` | double | ESPN's yardsPerRouteRun stat (yards per route run, YPRR) under the passing category; 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
 | `passing_avg_depth_of_target` | double | ESPN's avgDepthOfTarget stat (average depth of target, aDOT) under the passing category; 0.0 for every athlete checked, including a 175-target receiver (Ja'Marr Chase, 2024), so ESPN does not appear to populate it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 

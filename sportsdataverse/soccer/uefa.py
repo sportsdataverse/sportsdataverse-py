@@ -47,9 +47,9 @@ def uefa_competitions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -99,9 +99,9 @@ def uefa_livescore(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -157,9 +157,9 @@ def uefa_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -220,9 +220,9 @@ def uefa_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -279,9 +279,9 @@ def uefa_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -334,9 +334,9 @@ def uefa_team_statistics(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::
@@ -392,9 +392,9 @@ def uefa_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        NoDataError: The UEFA host answered 404 (unknown id or route).
-        ValueError: The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
-        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The UEFA host answered 404 (unknown id or route).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The UEFA host answered 400 / 422 -- the request is wrong; retrying cannot help.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed (a non-2xx answer or a connection failure after retries, e.g. a 403 from the edge, 429 or 5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
         Quick start::

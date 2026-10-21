@@ -34,6 +34,13 @@ One row per (game, team), sorted by `week` then `team_id`: `game_id`, `week`, `t
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column (incl. `week`, and `seasonType` unless `method="pre598"`). |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
+
 **Example**
 
 ```python
@@ -205,6 +212,12 @@ One row per game with `game_id`, `home_team_id`, `away_team_id`, `neutral_site`,
 | `home_win_prob` | double | Home win probability, Phi(exp_margin / margin_sd) under a Gaussian margin model. |
 | `exp_total` | double | Expected combined point total from the fitted efficiency + pace totals model. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssertionError` | If either team-id join key's dtype disagrees with `ratings["team_id"]`. |
+
 **Example**
 
 ```python
@@ -267,6 +280,13 @@ A DataFrame with one row per `team_id`, columns in this order: `season` (Int64 -
 | `fei_off_rank` | integer |  |
 | `fei_def_rank` | integer |  |
 | `fei_net_rank` | integer |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If the loaded plays frame is missing a required column. |
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 
@@ -366,6 +386,12 @@ Per `(season, team_id)`: `team` (Utf8), `talent_composite` (Float64), `talent_ra
 | `blue_chip_ratio` | double | Share of the trailing four signing classes rated 4+ stars. |
 | `n_recruits` | integer | Total signees across the trailing recruiting-class window. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `composite_247` is supplied without the documented schema. |
+
 **Example**
 
 ```python
@@ -418,6 +444,12 @@ Dict of frames mirroring the nflseedR summary list: * `"standings"` — per (sim
 | `first_round_bye` | double | Share of simulations in which the team earned a CFP first-round bye (seed 4 or better). |
 | `won_cfp` | double | Share of simulations in which the team won the College Football Playoff national championship. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On invalid `sim_include` / `tiebreaker_depth`, multi-season input, or missing columns. |
+
 **Example**
 
 ```python
@@ -460,6 +492,13 @@ its own games.
 A `polars.DataFrame` with one row per `team_id`: `team_id` (Utf8), `adj_off_epa` / `adj_def_epa` / `adj_net` (Float64), `games` (Int64), `off_pace` (Float64 -- scrimmage plays per game, the tempo input the totals model consumes). Empty (zero-row, correctly-typed) when `plays` has no competitive plays.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 
@@ -507,6 +546,12 @@ directly, matching `special_teams_ratings`.
 A `polars.DataFrame` with one row per `team_id` appearing as `pos_team_id` on at least one drive: `team_id` (Utf8), `fei_off` / `fei_def` / `fei_net` (Float64). The ridge's dropped reference team is re-added at the shared intercept (`fei_net == 0.0`). Zero-row (correctly-typed) when `plays` has no rows with a non-null `EPA`.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If `scikit-learn` is not installed. |
 
 **Example**
 

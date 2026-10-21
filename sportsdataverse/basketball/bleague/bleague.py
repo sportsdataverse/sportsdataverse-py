@@ -491,9 +491,9 @@ def bleague_game_info(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -554,9 +554,9 @@ def bleague_period_scores(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -619,9 +619,9 @@ def bleague_player_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -682,9 +682,9 @@ def bleague_team_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -745,9 +745,9 @@ def bleague_team_summary(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -810,9 +810,9 @@ def bleague_pbp(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -873,9 +873,9 @@ def bleague_shots(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -936,9 +936,9 @@ def bleague_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -999,9 +999,9 @@ def bleague_score_track(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1068,9 +1068,9 @@ def bleague_schedule(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1141,9 +1141,9 @@ def bleague_schedule_clubs(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1216,9 +1216,9 @@ def bleague_schedule_events(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1291,9 +1291,9 @@ def bleague_schedule_days(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::
@@ -1360,9 +1360,9 @@ def bleague_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): the game context (``Game``, ``PlayByPlays``, ``HomeBoxscores``, ``AwayBoxscores``, ``Summaries`` and on v1 ``Leaders``, ``Points``) stamped ``_request`` (``schedule_key``, ``feed``), or the schedule / standings page record when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
-        ValueError: a non-integer or out-of-range argument, or HTTP 400 / 422.
+        NoDataError: The host answered 404 -- the requested resource does not exist. B.LEAGUE has nothing for the request (a ScheduleKey no source holds, a schedule day without games, HTTP 404).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a context or page for another game, season, tab or day, an error or changed body, a truncated schedule list).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A non-integer or out-of-range argument, or HTTP 400 / 422.
 
     Example:
         Quick start::

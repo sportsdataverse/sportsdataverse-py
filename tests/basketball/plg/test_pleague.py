@@ -96,6 +96,15 @@ def test_free_throw_phrases_carry_the_trip_position():
     assert first and all(e["ft_number"] == 1 for e in first)
 
 
+def test_action_en_reads_each_rows_own_phrase():
+    pbp = P.parse_pleague_pbp(_stamp(_json("full/pbp_197.json"), 197))
+    labelled = pbp.filter(pl.col("action_zh").is_in(list(P.ACTIONS)))
+    assert labelled.height > 0
+    assert labelled["action_en"].to_list() == [P.ACTIONS[z][1] for z in labelled["action_zh"]]
+    fts = pbp.filter(pl.col("action").is_in(["ft_made", "ft_missed"]))["action_en"]
+    assert fts.n_unique() > 2 and not fts.str.contains("1 of 3").all()
+
+
 def test_pbp_never_keeps_a_clip_url_or_access_key():
     text = json.dumps(_json("full/pbp_197.json"), ensure_ascii=False)
     assert "key=" not in text and "http" not in text

@@ -49,6 +49,12 @@ A polars (or pandas) DataFrame with one row per (season, team): `conf`, `divisio
 | `div_pct` | double |  |
 | `conf_pct` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `tiebreaker_depth` is not `1`, `2`, or `3`. |
+
 **Example**
 
 ```python
@@ -378,6 +384,12 @@ One row per input game: `game_id` / `home_team_id` / `away_team_id` (Utf8), `neu
 | `exp_total` | double | Expected combined point total (avg_total + total_scale * the four-way efficiency matchup sum). |
 | `market_edge` | double | Display-only native-minus-market spread edge (exp_margin - close_spread_home); null when no odds frame is supplied. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssertionError` | If a join-key dtype disagrees (`home_team_id` / `away_team_id` vs `ratings.team_id`, or `game_id` vs `odds.game_id`). |
+
 **Example**
 
 ```python
@@ -484,6 +496,12 @@ A standings frame with one row per (sim/season, team) including records, `win_pc
 | `exit` | character | Round of the team's final game - REG, WC, DIV, CON, SB, or SB_WIN for the Super Bowl winner (returned with ranks="DRAFT"). |
 | `draft_rank` | integer | Draft pick position (1 = first overall pick) derived from postseason exit, win percentage, SOS and the draft tiebreaking procedures (returned with ranks="DRAFT"). |
 | `draft_tie_broken_by` | character | Tiebreaker step that resolved the team's draft rank; null when the rank needed no tiebreaker. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If required columns are missing, results contain missing values, an argument is out of range, or a team abbreviation is unknown. |
 
 **Example**
 

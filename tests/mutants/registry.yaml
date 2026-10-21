@@ -629,8 +629,8 @@
   group: provider-gates
   finding: test-harness R1 (progress.md 10-11 06:52)
   file: sportsdataverse/dl_utils.py
-  snippet: 'response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)'
-  mutant: 'response = session.get(url, params=params, proxies=proxy, headers=headers)'
+  snippet: 'response = send(url, params=params, proxies=proxy, headers=headers, timeout=timeout, **body)'
+  mutant: 'response = send(url, params=params, proxies=proxy, headers=headers, **body)'
   test: tests/test_dl_utils.py::TestDownload::test_download_valid_url_with_short_timeout
   expected: kill
   note: the short-timeout test is now offline and deterministic (an injected session raises the Timeout)

@@ -4,7 +4,7 @@ columns:
   type: integer
 - description: ''
   name: blocked_rate
-  type: character
+  type: numeric
 - description: ''
   name: blocked_rate_rank
   type: numeric
@@ -16,7 +16,7 @@ columns:
   type: character
 - description: ''
   name: fouls_rate
-  type: character
+  type: numeric
 - description: ''
   name: fouls_rate_rank
   type: numeric
@@ -55,7 +55,7 @@ columns:
   type: character
 - description: ''
   name: rebounds_defensive_rate
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_defensive_rate_rank
   type: numeric
@@ -64,7 +64,7 @@ columns:
   type: numeric
 - description: ''
   name: rebounds_offensive_rate
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_offensive_rate_rank
   type: numeric
@@ -79,7 +79,7 @@ columns:
   type: integer
 - description: ''
   name: steals_rate
-  type: character
+  type: numeric
 - description: ''
   name: steals_rate_rank
   type: numeric

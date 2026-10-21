@@ -116,6 +116,12 @@ GDAP_EXTRA: Dict[str, Dict[str, str]] = {
 }
 
 
+#: Texts that replace the md row on every GDAP route (the md states the wire type, not the parsed one).
+ALWAYS: Dict[str, str] = {
+    "utc_offset": "Venue UTC offset at tip-off, in hours (Float64: a half-hour zone such as India +5.5 or Adelaide "
+    "+9.5 is a fraction; whole hours in every sample).",
+}
+
 #: replaces a refs description shorter than 15 characters (or missing), by column name
 COMMON: Dict[str, str] = {
     "short_name": "Short team name: the country code for a national team, the club's short name for a club.",
@@ -196,6 +202,7 @@ def gdap_notes(
                 text = head_maps.get(col) or ""
             if len(text) < 15 or col.endswith("short_name"):
                 text = COMMON.get(col, text)
+            text = ALWAYS.get(col, text)
             notes[col] = " ".join(text.split())
         out[short] = notes
     return out

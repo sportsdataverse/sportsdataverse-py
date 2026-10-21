@@ -233,7 +233,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ba
 | [`mlb_all_star_final_vote`](reference/mlb_api/all#mlb_all_star_final_vote) | [`mlb_all_star_final_vote`](https://billpetti.github.io/baseballr/reference/mlb_all_star_final_vote.html) |
 | [`mlb_all_star_write_ins`](reference/mlb_api/all#mlb_all_star_write_ins) | [`mlb_all_star_write_ins`](https://billpetti.github.io/baseballr/reference/mlb_all_star_write_ins.html) |
 | [`mlb_attendance`](reference/additional/mlb-stats-api#mlb_attendance) | [`mlb_attendance`](https://billpetti.github.io/baseballr/reference/mlb_attendance.html) |
-| [`mlb_awards`](reference/mlb_api/other#mlb_awards) | [`mlb_awards`](https://billpetti.github.io/baseballr/reference/mlb_awards.html) |
+| [`mlb_awards`](reference/mlb_api/other-2#mlb_awards) | [`mlb_awards`](https://billpetti.github.io/baseballr/reference/mlb_awards.html) |
 | [`mlb_conferences`](reference/mlb_api/other-2#mlb_conferences) | [`mlb_conferences`](https://billpetti.github.io/baseballr/reference/mlb_conferences.html) |
 | [`mlb_divisions`](reference/additional/mlb-stats-api#mlb_divisions) | [`mlb_divisions`](https://billpetti.github.io/baseballr/reference/mlb_divisions.html) |
 | [`mlb_draft`](reference/mlb_api/draft#mlb_draft) | [`mlb_draft`](https://billpetti.github.io/baseballr/reference/mlb_draft.html) |

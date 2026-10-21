@@ -51,7 +51,7 @@ def openligadb_current_group(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -103,7 +103,7 @@ def openligadb_goalgetters(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -157,7 +157,7 @@ def openligadb_group_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -209,7 +209,7 @@ def openligadb_groups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -263,7 +263,7 @@ def openligadb_last_change_date(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -311,7 +311,7 @@ def openligadb_leagues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -361,7 +361,7 @@ def openligadb_match(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -413,7 +413,7 @@ def openligadb_next_match(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -465,7 +465,7 @@ def openligadb_season_matches(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -517,7 +517,7 @@ def openligadb_table(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -569,7 +569,7 @@ def openligadb_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
+        NoDataError: The host answered 404 -- the requested resource does not exist. OpenLigaDB answered 404 (unknown league, season, matchday or match id -- /getnextmatchbyleagueteam 404s once the season is over).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

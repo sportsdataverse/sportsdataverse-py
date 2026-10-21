@@ -22,6 +22,12 @@ Return the current NFL season year.
 
 The current season (or roster) year.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `roster` is not a bool. |
+
 **Example**
 
 ```python
@@ -55,6 +61,12 @@ Return the current NFL week (1-22).
 **Returns**
 
 The current week, capped at 22.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `use_date` or `roster` is not a bool. |
 
 **Example**
 
@@ -98,6 +110,12 @@ Return the current NFL season year.
 
 The current season (or roster) year.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `roster` is not a bool. |
+
 **Example**
 
 ```python
@@ -131,6 +149,12 @@ Return the current NFL week (1-22).
 **Returns**
 
 The current week, capped at 22.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If `use_date` or `roster` is not a bool. |
 
 **Example**
 

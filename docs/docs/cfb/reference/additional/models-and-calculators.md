@@ -537,6 +537,12 @@ the era boundary, both drifted to a 2017 cut the trainer never used, and
 | `two_pt_recommendation` | character | Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp". |
 | `two_pt_wp_diff` | double | two_pt_wp minus xp_wp; positive favors going for two. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When the model needs an era column but neither a `season` column nor a `season` argument is available to derive it. |
+
 **Example**
 
 ```python
@@ -647,6 +653,12 @@ through untouched.
 
 `df` with a `cp` column appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -675,6 +687,12 @@ difference and this function scores rows, not sequences.
 **Returns**
 
 `df` with `ep` (if it was absent) and `epa` appended.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `ep_end` is missing, or an EP feature is. |
 
 **Example**
 
@@ -706,6 +724,12 @@ probabilities to a points expectation using the package's own
 
 `df` with the seven class probability columns and an `ep` column appended.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing. |
+
 **Example**
 
 ```python
@@ -735,6 +759,12 @@ through untouched.
 **Returns**
 
 `df` with an `fg_make_prob` column appended. Named `fg_make_prob`, not `fg_prob`: `calculate_expected_points` emits `fg_prob` for the probability the NEXT SCORE is a field goal, which is a different quantity. Sharing the name made chaining the two silently lossy. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -766,6 +796,12 @@ through untouched.
 
 `df` with `fd_conversion_prob` (probability the gain reaches `distance`) and `fd_expected_yards` appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -795,6 +831,12 @@ through untouched.
 **Returns**
 
 `df` with a `qbr` column appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -826,6 +868,12 @@ through untouched.
 
 `df` with a `two_pt_prob` column appended. Input columns are preserved, so chaining two calculators is lossless.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
+
 **Example**
 
 ```python
@@ -856,6 +904,12 @@ by whether the caller has spread information at all.
 
 `df` with a `wp` column appended.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names the model actually selected, so a caller can tell which contract failed. |
+
 **Example**
 
 ```python
@@ -883,6 +937,12 @@ Recomputes `wp` when it is absent. Requires `wp_end` for the same reason
 **Returns**
 
 `df` with `wp` (if it was absent) and `wpa` appended.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `wp_end` is missing, or a WP feature is. |
 
 **Example**
 
@@ -913,6 +973,12 @@ through untouched.
 **Returns**
 
 `df` with an `xpass` column (probability the play is a pass) appended. Input columns are preserved, so chaining two calculators is lossless.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When a declared feature is missing; the message names each absent column and the model that wanted it. |
 
 **Example**
 
@@ -949,6 +1015,13 @@ fit uses the whole season); for leak-free per-game values use
 One row per team (>= 2 valid games): `team_id`, `pos_team`, `valid_games`, `adj_off_epa`, `adj_def_epa`, `off_strength_faced`, `def_strength_faced`, `net_adj_epa` and their `*_rank` columns.
 
 No returns table is published for this function: no capture: it needs play-by-play joined with schedule fields (home, neutral_site, pos_team_id) that neither load_cfb_pbp nor load_cfb_pbp_r carries; only cfb_ratings builds that join, internally.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `plays` is missing a required column. |
+| `ValueError` | If `method` is unknown, or (`"current"`) if `ridge_lambda` is not positive or no play falls in the `wp_before_naive` fit band. |
 
 **Example**
 

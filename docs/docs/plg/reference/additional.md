@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # PLG — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.basketball.plg` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## P. LEAGUE+ (Taiwan) and Preciser
 
@@ -26,6 +26,13 @@ The site's slug for a season END year (2025 -> `'2024-25'`).
 **Returns**
 
 `f"{season - 1}-{season % 100:02d}"`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | `season` is before 2021 (the site's first season is 2020-21). |
+| `ValueError` | `season` is not an integer. |
 
 **Example**
 
@@ -61,6 +68,12 @@ polars.DataFrame | pandas.DataFrame: eight rows, `team_id` (`Int64`) and `team_u
 |---|---|---|
 | `team_id` | integer | P. LEAGUE+ site team id (1-8), stable across seasons and renames. |
 | `team_uuid` | character | Preciser team uuid of the same club (team_uuid of the pleague_preciser frames). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `Nothing` | The table is a constant, no request is made. |
 
 **Example**
 

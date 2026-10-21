@@ -127,9 +127,6 @@ def parse_euroleague(
         ``*_code`` column pinned to ``Utf8``. A zero-row frame when the payload is
         ``None``, empty or malformed -- callers can chain without a null-check.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -210,9 +207,6 @@ def parse_euroleague_points(
         padding, the id / code columns pinned to ``Utf8``. A zero-row frame with the
         documented columns for ``{}``, ``None`` or a malformed payload.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 
@@ -255,9 +249,6 @@ def parse_euroleague_header(
         One row, snake_cased, string cells stripped of their space padding, the team
         codes pinned to ``Utf8``. A zero-row frame with the documented columns for
         ``{}``, ``None`` or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -302,9 +293,6 @@ def parse_euroleague_pbp(
         One row per play, snake_cased, string cells stripped of their space padding,
         ``codeteam`` / ``player_id`` / the team codes pinned to ``Utf8``. A zero-row
         frame with the documented columns for ``{}``, ``None`` or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::
@@ -384,9 +372,6 @@ def parse_euroleague_boxscore(
         their space padding, ``player_id`` / ``team`` pinned to ``Utf8``,
         ``is_starter`` / ``is_playing`` ``Int64``. A zero-row frame with the documented
         columns for ``{}``, ``None`` or a malformed payload.
-
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
 
     Example:
         Quick start::

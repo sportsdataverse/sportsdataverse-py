@@ -4,7 +4,7 @@ columns:
   type: integer
 - description: ''
   name: at_rim_made_rate
-  type: character
+  type: numeric
 - description: ''
   name: at_rim_made_rate_rank
   type: numeric
@@ -16,7 +16,7 @@ columns:
   type: character
 - description: ''
   name: free_rate
-  type: character
+  type: numeric
 - description: ''
   name: free_rate_rank
   type: numeric
@@ -25,7 +25,7 @@ columns:
   type: numeric
 - description: ''
   name: hit_at_rim_made_rate
-  type: character
+  type: numeric
 - description: ''
   name: hit_at_rim_made_rate_rank
   type: numeric
@@ -34,7 +34,7 @@ columns:
   type: numeric
 - description: ''
   name: hit_free_rate
-  type: character
+  type: numeric
 - description: ''
   name: hit_free_rate_rank
   type: numeric
@@ -43,7 +43,7 @@ columns:
   type: numeric
 - description: ''
   name: hit_middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: hit_middle_rate_rank
   type: numeric
@@ -52,7 +52,7 @@ columns:
   type: numeric
 - description: ''
   name: hit_rate
-  type: character
+  type: numeric
 - description: ''
   name: hit_rate_rank
   type: numeric
@@ -61,7 +61,7 @@ columns:
   type: numeric
 - description: ''
   name: hit_three_rate
-  type: character
+  type: numeric
 - description: ''
   name: hit_three_rate_rank
   type: numeric
@@ -73,7 +73,7 @@ columns:
   type: integer
 - description: ''
   name: middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: middle_rate_rank
   type: numeric
@@ -121,7 +121,7 @@ columns:
   type: integer
 - description: ''
   name: three_rate
-  type: character
+  type: numeric
 - description: ''
   name: three_rate_rank
   type: numeric

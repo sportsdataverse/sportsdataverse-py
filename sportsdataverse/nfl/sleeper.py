@@ -55,7 +55,7 @@ def sleeper_draft(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -105,7 +105,7 @@ def sleeper_draft_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -155,7 +155,7 @@ def sleeper_drafts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -205,7 +205,7 @@ def sleeper_league(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -257,7 +257,7 @@ def sleeper_matchups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -305,7 +305,7 @@ def sleeper_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -355,7 +355,7 @@ def sleeper_rosters(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -403,7 +403,7 @@ def sleeper_state(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -453,7 +453,7 @@ def sleeper_traded_picks(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -505,7 +505,7 @@ def sleeper_transactions(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -557,7 +557,7 @@ def sleeper_trending_adds(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -610,7 +610,7 @@ def sleeper_user(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -662,7 +662,7 @@ def sleeper_user_leagues(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -712,7 +712,7 @@ def sleeper_users(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -762,7 +762,7 @@ def sleeper_winners_bracket(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Sleeper API returned 404 (unknown user, league or draft id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Sleeper API returned 404 (unknown user, league or draft id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

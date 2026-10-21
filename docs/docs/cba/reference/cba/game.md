@@ -41,6 +41,14 @@ Game report header: both teams, score, tip-off time and colours.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_game_info-example}
 
 ```python
@@ -57,9 +65,9 @@ Shot-zone profile of the two teams of a game. NOT game data: the teams' current 
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/team-match-datas/schedule-shoot-list' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
 
 ### Returns {#cba_game_team_shots-returns}
 
@@ -67,51 +75,51 @@ Shot-zone profile of the two teams of a game. NOT game data: the teams' current 
 
 | col_name | type | description |
 |---|---|---|
-| `bout_no_points_sort` | character | Unobserved: null in every sample (numeric value behind 百回合失分 points allowed per 100 possessions). |
-| `bout_point_sort` | character | Unobserved: null in every sample (numeric value behind 百回合得分 points per 100 possessions). |
-| `bout_subtract_points_sort` | character | Unobserved: null in every sample (numeric value behind 百回合净胜分 net points per 100 possessions). |
-| `guard_field_goals_at_rim` | character | 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `bout_no_points_sort` | numeric | Unobserved: null in every sample (numeric value behind 百回合失分 points allowed per 100 possessions). Typed Float64 like the family's other routes. |
+| `bout_point_sort` | numeric | Unobserved: null in every sample (numeric value behind 百回合得分 points per 100 possessions). Typed Float64 like the family's other routes. |
+| `bout_subtract_points_sort` | numeric | Unobserved: null in every sample (numeric value behind 百回合净胜分 net points per 100 possessions). Typed Float64 like the family's other routes. |
+| `guard_field_goals_at_rim` | numeric | 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_field_goals_at_rim_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_field_goals_at_rim_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_hit_at_rim_made_rate` | character | 篮下命中率 at-rim shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_hit_at_rim_made_rate` | numeric | 篮下命中率 at-rim shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_hit_at_rim_made_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_hit_at_rim_made_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_hit_middle_rate` | character | 中距离命中率 mid-range shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_hit_middle_rate` | numeric | 中距离命中率 mid-range shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_hit_middle_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_hit_middle_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_middle_rate` | character | 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_middle_rate` | numeric | 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_middle_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_middle_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_real_point` | character | 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_real_point` | numeric | 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_real_point_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_real_point_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_three_goals_rate` | character | 三分命中率 three-point shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_three_goals_rate` | numeric | 三分命中率 three-point shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_three_goals_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 三分命中率 three-point shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_three_goals_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 三分命中率 three-point shooting percentage, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
-| `guard_three_rate` | character | 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A string percent ('36.3%'). |
+| `guard_three_rate` | numeric | 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `guard_three_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `guard_three_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the shots of the OPPONENTS against this team (守, defence; the 'guard' prefix is inferred from the site's 攻/防 offence/defence toggle). |
 | `is_avg` | integer | Row kind: 2 on every sampled row = a team's own row; 1 is presumed to mark a league-average row but is unobserved. |
 | `num` | numeric | Games the profile covers (the site's 场数 'games'), e.g. 42.0; a number typed as float. |
-| `offensive_field_goals_at_rim` | character | 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_field_goals_at_rim` | numeric | 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_field_goals_at_rim_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the team's own shots (攻, offence). |
 | `offensive_field_goals_at_rim_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 篮下占比 at-rim share: the share of field-goal attempts taken at the rim (inside the restricted area 合理冲撞区), for the team's own shots (攻, offence). |
-| `offensive_hit_at_rim_made_rate` | character | 篮下命中率 at-rim shooting percentage, for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_hit_at_rim_made_rate` | numeric | 篮下命中率 at-rim shooting percentage, for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_hit_at_rim_made_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 篮下命中率 at-rim shooting percentage, for the team's own shots (攻, offence). |
 | `offensive_hit_at_rim_made_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 篮下命中率 at-rim shooting percentage, for the team's own shots (攻, offence). |
-| `offensive_hit_middle_rate` | character | 中距离命中率 mid-range shooting percentage, for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_hit_middle_rate` | numeric | 中距离命中率 mid-range shooting percentage, for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_hit_middle_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 中距离命中率 mid-range shooting percentage, for the team's own shots (攻, offence). |
 | `offensive_hit_middle_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 中距离命中率 mid-range shooting percentage, for the team's own shots (攻, offence). |
-| `offensive_middle_rate` | character | 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_middle_rate` | numeric | 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_middle_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the team's own shots (攻, offence). |
 | `offensive_middle_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 中距离占比 mid-range share: the share of field-goal attempts that are two-pointers outside the restricted area, for the team's own shots (攻, offence). |
-| `offensive_real_point` | character | 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_real_point` | numeric | 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_real_point_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the team's own shots (攻, offence). |
 | `offensive_real_point_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 有效命中率 effective field-goal percentage (all field goals counted as two-point attempts), for the team's own shots (攻, offence). |
-| `offensive_three_goals_rate` | character | 三分命中率 three-point shooting percentage, for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_three_goals_rate` | numeric | 三分命中率 three-point shooting percentage, for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_three_goals_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 三分命中率 three-point shooting percentage, for the team's own shots (攻, offence). |
 | `offensive_three_goals_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 三分命中率 three-point shooting percentage, for the team's own shots (攻, offence). |
-| `offensive_three_rate` | character | 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the team's own shots (攻, offence). A string percent ('36.3%'). |
+| `offensive_three_rate` | numeric | 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the team's own shots (攻, offence). A FRACTION 0-1 (the API sends a percent string such as '39.4%'; the _sort column holds the same fraction). |
 | `offensive_three_rate_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the team's own shots (攻, offence). |
 | `offensive_three_rate_sort` | numeric | Unformatted fraction 0-1 behind the formatted string of the metric. Metric: 三分占比 three-point share: the share of field-goal attempts that are three-pointers, for the team's own shots (攻, offence). |
 | `season` | integer | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. |
@@ -119,6 +127,14 @@ Shot-zone profile of the two teams of a game. NOT game data: the teams' current 
 | `team_name` | character | Team name (Chinese) in that season; changes with the sponsor. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_game_team_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_game_team_shots-example}
 
@@ -136,9 +152,9 @@ Four-factors table of the two teams of a game. NOT game data: the teams' previou
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/teams/schedule-four-elements' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
 
 ### Returns {#cba_game_team_four-returns}
 
@@ -176,10 +192,10 @@ Four-factors table of the two teams of a game. NOT game data: the teams' previou
 | `points_hundred_round_average` | numeric | League average of the metric. Metric: 百回合得分 points scored per 100 possessions (offensive rating). |
 | `points_hundred_round_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 百回合得分 points scored per 100 possessions (offensive rating). |
 | `rhythm` | numeric | 节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数). |
-| `rhythm_num` | character | Pace as a STRING with one decimal ('96.3'); same value as rhythm. |
+| `rhythm_num` | numeric | Pace; same value as rhythm. A number (the API sends it as display text). |
 | `rhythm_rank` | numeric | Rank among the teams of that season (integer-valued number; direction per metric undocumented). Metric: 节奏 pace: possessions per 48 minutes (site definition: 每48分钟回合数). |
 | `schedule_season` | integer | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. The season of this table: one before the game's season (2025 game -> 2024). |
-| `season` | character | Season of the table as a STRING ('2024' = the START year of 2024-25; sdv END year = value + 1); equals scheduleSeason. NOT the season of the game: the table is the PREVIOUS season's. |
+| `season` | integer | Season of the table ('2024' = the START year of 2024-25; sdv END year = value + 1); equals scheduleSeason. NOT the season of the game: the table is the PREVIOUS season's. An integer (the API sends it as digit text). |
 | `team_id` | integer | teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 'Zhejiang Guangsha' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList and the team and player routes. Not a player or schedule id. |
 | `team_name` | character | Team name (Chinese) in the table's season (can differ from the game's: 四川锦城 in the 2016 table of a 2017 Sichuan game). |
 | `turnovers_rate` | numeric | 失误率 turnover rate: the share of the team's possessions ending in a turnover, in percent as a number (site definition). |
@@ -191,6 +207,14 @@ Four-factors table of the two teams of a game. NOT game data: the teams' previou
 | `wine_average` | numeric | League-average wins (field name sic); 0.0 in every sample. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_game_team_four-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_game_team_four-example}
 

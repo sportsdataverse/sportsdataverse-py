@@ -388,8 +388,8 @@ def ibba_configuration(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -451,8 +451,8 @@ def ibba_boards(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -514,8 +514,8 @@ def ibba_boards_ex(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -578,8 +578,8 @@ def ibba_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -644,8 +644,8 @@ def ibba_team(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -711,8 +711,8 @@ def ibba_players(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -776,8 +776,8 @@ def ibba_player(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -842,8 +842,8 @@ def ibba_coaches(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -907,8 +907,8 @@ def ibba_box_score(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -975,8 +975,8 @@ def ibba_player_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1037,8 +1037,8 @@ def ibba_stats_types(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1100,8 +1100,8 @@ def ibba_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1169,8 +1169,8 @@ def ibba_team_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1243,8 +1243,8 @@ def ibba_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1313,8 +1313,8 @@ def ibba_games_ex(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1378,8 +1378,8 @@ def ibba_games_by_team(
         A polars/pandas DataFrame by default; the raw body (``dict``): the ASMX body ``{"<key>": [row, ...]}`` (every value a string) plus ``_request`` (the op and the wire parameters sent) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

@@ -100,6 +100,12 @@ Dict of frames mirroring the nflseedR simulation list: `standings` (one row per 
 | `game_summary.away_percentage` | double | Share of played simulations won by the away team, with ties counted as half a win. |
 | `game_summary.home_percentage` | double | Share of played simulations won by the home team, with ties counted as half a win. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | On missing columns, more than one season, no games to simulate, or invalid argument values. |
+
 **Example**
 
 ```python

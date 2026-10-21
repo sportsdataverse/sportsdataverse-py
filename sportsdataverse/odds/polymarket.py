@@ -54,7 +54,7 @@ def polymarket_gamma_events(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -109,7 +109,7 @@ def polymarket_gamma_market(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -167,7 +167,7 @@ def polymarket_gamma_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -225,7 +225,7 @@ def polymarket_gamma_tags(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -278,7 +278,7 @@ def polymarket_clob_book(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -330,7 +330,7 @@ def polymarket_clob_markets(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -382,7 +382,7 @@ def polymarket_clob_midpoint(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -436,7 +436,7 @@ def polymarket_clob_price(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: Polymarket answered 404 (unknown market id or token id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Polymarket answered 404 (unknown market id or token id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

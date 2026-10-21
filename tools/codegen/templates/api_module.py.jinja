@@ -15,6 +15,9 @@ import polars as pl  # noqa: F401
 {% if runtime_imports %}
 from {{ getter_module }} import {{ runtime_imports|join(", ") }}
 {% endif %}
+{% if shared_imports %}
+from sportsdataverse._codegen_runtime import {{ shared_imports|join(", ") }}
+{% endif %}
 {% for mod, fn, alias in getter_imports %}
 from {{ mod }} import {{ fn }} as {{ alias }}
 {% endfor %}
@@ -111,6 +114,9 @@ def {{ ep.fn_name }}(
     }
     for _k in [_k for _k in _caller_params if _k in _body]:  # a caller override of a body field stays in the body
         _body[_k] = _params.pop(_k)
+{% if ep.body_builder %}
+    _body = {{ ep.body_builder }}(_body)
+{% endif %}
 {% endif %}
 {% if ep.has_dynamic_path %}
     {{ ep.path_build_expr }}

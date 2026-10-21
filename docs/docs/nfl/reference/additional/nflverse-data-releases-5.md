@@ -1,10 +1,104 @@
 ---
-title: "NFL — additional Python functions — nflverse data releases: rosters_weekly–trades"
-sidebar_label: "nflverse data releases: rosters_weekly–trades"
+title: "NFL — additional Python functions — nflverse data releases: rosters–trades"
+sidebar_label: "nflverse data releases: rosters–trades"
 sidebar_position: 9
-description: "NFL — additional Python functions — nflverse data releases: rosters_weekly–trades — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — nflverse data releases: rosters–trades — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — nflverse data releases: rosters_weekly–trades
+# NFL — additional Python functions — nflverse data releases: rosters–trades
+
+### load_rosters {#load_rosters}
+
+`load_rosters(seasons: 'List[int]', return_as_pandas=False, *, source: 'str' = 'nflverse') -> 'pl.DataFrame'`
+
+Load NFL season roster data for the requested seasons.
+
+Reads nflverse's published season-roster parquet (one row per player per
+season). nflverse's roster product is the union of three upstream tiers --
+NFL Next Gen Stats (2016+), the credentialed NFL Data Exchange (2002-2015),
+and the public NFL Shield endpoint (all seasons) -- so it carries densely
+populated cross-system identifier columns (`espn_id`, `sportradar_id`,
+`yahoo_id`, `pff_id`, `pfr_id`, ...) alongside biographical and
+depth-chart fields. This is the richest roster surface; prefer it whenever a
+network round trip to nflverse is acceptable.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `seasons` | `list` |  | Seasons to load (e.g. `[2024]` or `range(2020, 2025)`). A single `int` is accepted and wrapped. 1920 is the earliest available season. `None` loads the current roster year (it turns on March 15), `True` every published season, and `[]` an empty frame (no request). |
+| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe (default). |
+| `source` | `str` | `'nflverse'` | Which roster release to read. `"nflverse"` (the default, also accepts `None`) returns the nflverse season-roster releases described above -- the full multi-source product (1920+, densely populated cross-system IDs). `"sportsdataverse"` / `"sdv"` returns the SDV-native `nfl_rosters` release built by `sportsdataverse.nfl.build_nfl_rosters` from the **public NFL Shield / ESPN** surface, with cross-system IDs and `college` enriched by a best-effort join against the nflverse player master (`sportsdataverse.nfl.load_nfl_players`, on `gsis_id`; skipped if that load fails). The SDV tier is a partial build: its 30 columns are a subset of nflverse's 36, and cross-system IDs are sparser pre-2016. It covers only the published seasons (rosters 2022+). The default stays `"nflverse"`. Any other value raises `ValueError`. |
+
+**Returns**
+
+Polars dataframe of season rosters for the requested seasons (`pandas.DataFrame` when `return_as_pandas=True`). `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
+
+| col_name | type | description |
+|---|---|---|
+| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
+| `team` | character | NFL team. Uses official abbreviations as per NFL.com |
+| `position` | character | Primary position as reported by NFL.com |
+| `depth_chart_position` | character | Position assigned on depth chart. Not always accurate! |
+| `jersey_number` | integer | Jersey number. Often useful for joins by name/team/jersey. |
+| `status` | character | Roster status code nflverse assigns the player for that season, e.g. ACT (active), RES (reserve) or INA (inactive). |
+| `full_name` | character | Full name as per NFL.com |
+| `first_name` | character | First name of player |
+| `last_name` | character | Last name of player |
+| `birth_date` | character | Player birth date (sourced from NFL. Other sources may differ) |
+| `height` | double | Official height, in inches |
+| `weight` | integer | Official weight, in pounds |
+| `college` | character | Official college (usually the last one attended) |
+| `gsis_id` | character | Game Stats and Info Service ID: the primary ID for play-by-play data. |
+| `espn_id` | character | ESPN ID - usual format is an integer with ~5 digits |
+| `sportradar_id` | character | SportRadar ID - often also called sportsdata_id by other services. A UUID. |
+| `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
+| `rotowire_id` | character | Rotowire ID - usual format is an integer with ~four digits. Not to be confused with rotowire_id. |
+| `pff_id` | character | Pro Football Focus ID - usually an integer with between 3 and 6 digits. |
+| `pfr_id` | character | Pro-Football-Reference ID for player |
+| `fantasy_data_id` | character | FantasyData ID - usual format five digit integer |
+| `sleeper_id` | character | Sleeper ID - usually an integer with ~4 digits. |
+| `years_exp` | integer | Years played in league |
+| `headshot_url` | character | A URL string that points to player photos used by NFL.com (or sometimes ESPN) |
+| `ngs_position` | character | Primary position as reported by the NextGen stats API. |
+| `week` | integer | Season week. |
+| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
+| `status_description_abbr` | character | A code corresponding to a particular NFL status. |
+| `football_name` | character | Common player name (i.e. in most cases common_first_name last_name) |
+| `esb_id` | character | Player ID for Elias Sports Bureau |
+| `gsis_it_id` | character | Player ID for the GSIS IT API |
+| `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
+| `entry_year` | integer | The year a player first became eligible to play in the NFL. |
+| `rookie_year` | integer | The year a player lost their rookie eligibility. |
+| `draft_club` | character | The team that originally drafted a player. NA if a player went undrafted in their draft-eligible year. |
+| `draft_number` | integer | The number pick that was used to select a given player. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If a requested season precedes the earliest available season (1920). |
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+
+**Example**
+
+```python
+from sportsdataverse.nfl import load_nfl_rosters
+rosters = load_nfl_rosters(seasons=[2024])
+
+# Multi-season range
+
+rosters = load_nfl_rosters(seasons=range(2020, 2025))
+
+# Filter to a single team
+
+import polars as pl
+kc = load_nfl_rosters(seasons=[2024]).filter(pl.col("team") == "KC")
+
+# SDV-native rosters (public Shield/ESPN build; published seasons 2022+; 30-column subset of nflverse, sparser cross-IDs pre-2016)
+
+rosters_sdv = load_nfl_rosters(seasons=[2023], source="sdv")
+rosters_sdv.select(["season", "team", "full_name", "gsis_id"]).head()
+```
 
 ### load_rosters_weekly {#load_rosters_weekly}
 
@@ -73,6 +167,12 @@ Polars dataframe of weekly rosters for the requested seasons (`pandas.DataFrame`
 | `rookie_year` | integer | Calendar year of the player's rookie season. |
 | `draft_club` | character | Team abbreviation of the club that drafted the player. |
 | `draft_number` | integer | Overall pick number at which the player was selected in the NFL draft. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If a requested season precedes the earliest available season (2002). |
 
 **Example**
 
@@ -154,6 +254,12 @@ Polars dataframe containing the schedule for the requested seasons. `seasons=[]`
 | `referee` | character | Name of the game's referee (head official) |
 | `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
 | `stadium` | character | Name of the stadium |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999. |
 
 **Example**
 
@@ -387,6 +493,12 @@ Polars dataframe containing team stats available for the requested seasons. `sea
 | `pt_return_yards` | integer | Punt return yards gained by the opponent on the team's punts; can be negative (minimum -4 in the 2024 sample). |
 | `pt_return_tds` | integer | Number of the team's punts that the opponent returned for a touchdown. |
 | `pt_net_yards` | integer | Net punting yards: pt_yards minus pt_return_yards minus 20 yards per touchback. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 1999, if `summary_level` is not one of the allowed values, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
 
 **Example**
 

@@ -42,6 +42,14 @@ Season settings: the season label, round counters and the standings cut line.
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_configuration-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_configuration-example}
 
 ```python
@@ -76,6 +84,14 @@ Competitions (boards) of a season: league, cup, playoff rounds, play-in, Supercu
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_boards-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_boards-example}
 
 ```python
@@ -107,6 +123,14 @@ External competitions a club played in during a season (European cups, national 
 | `board_name_he` | character | Competition name in Hebrew, HTML-unescaped. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_boards_ex-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_boards_ex-example}
 
@@ -163,6 +187,14 @@ Teams of a board and season with their standings line and club profile fields.
 | `coaches_he` | character | Coaching staff as one Hebrew text ('מאמן: ..., עוזר מאמן: ...'). |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_teams-example}
 
@@ -228,6 +260,14 @@ One team-season: standings line and club profile (colours, sponsors, social link
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_team-example}
 
 ```python
@@ -272,6 +312,14 @@ The roster of a team-season: jersey, names, position, height and birth date.
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_players-example}
 
 ```python
@@ -310,6 +358,14 @@ One player-season row: jersey, team, names and photo.
 | `photo_path` | character | Site-relative path of the photo (team or player picture); prefix with https://www.basket.co.il. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_player-example}
 
@@ -350,6 +406,14 @@ The coaching staff of a team-season (birth dates are dropped).
 | `sort_order` | integer | Display order of the coach within the staff list (mOrder). |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_coaches-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_coaches-example}
 
@@ -414,6 +478,14 @@ Box score of a finished game: player lines, a team-credited line per side and th
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_box_score-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_box_score-example}
 
 ```python
@@ -475,6 +547,14 @@ A player-season's totals, or per-game averages with is_averages=True.
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_player_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_player_stats-example}
 
 ```python
@@ -504,6 +584,14 @@ The stat categories ibba_leaders accepts (the stat_type codes) with their Hebrew
 | `stat_name_he` | character | Stat category name in Hebrew. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_stats_types-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_stats_types-example}
 
@@ -543,6 +631,14 @@ The top five players of a season in one stat category, for all teams or one team
 | `photo_path` | character | Site-relative path of the photo (team or player picture); prefix with https://www.basket.co.il. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_leaders-example}
 
@@ -602,6 +698,14 @@ A team-season's totals, or per-game averages with is_averages=True.
 | `dunks` | numeric | Dunks made by the player or team. Season total, or the per-game average when is_averages is true. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_team_stats-example}
 
@@ -667,6 +771,14 @@ Games (schedule and results) of a season filtered by board, round, team and game
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
 
+### Raises {#ibba_games-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#ibba_games-example}
 
 ```python
@@ -713,6 +825,14 @@ A club's games of a season in external competitions (BoardsEx boards: European c
 | `venue_he` | character | Venue in Hebrew, HTML-unescaped; null in 2004-05. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_games_ex-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_games_ex-example}
 
@@ -773,6 +893,14 @@ Every game of a club in a season, domestic and external, in one frame.
 | `is_external` | logical | True when board_id >= 1001 (an external competition, whose team ids are not team-seasons). Derived by the parser. |
 
 **`return_parsed=False`** — the raw body (`dict`): the ASMX body `{"<key>": [row, ...]}` (every value a string) plus `_request` (the op and the wire parameters sent).
+
+### Raises {#ibba_games_by_team-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host has nothing for the request (HTTP 404, an empty body for an unknown id, an empty list). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a non-200, an error or changed envelope, a row for another season, team, player, board or game, a box score of an unfinished game). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#ibba_games_by_team-example}
 

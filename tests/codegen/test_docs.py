@@ -295,3 +295,73 @@ def test_atrium_end_year_is_documented_not_allowlisted():
     assert "atrium_end_year" in generate._autodoc_names("atrium", "")
     assert "atrium_end_year" not in generate._coverage_allowlist().get("atrium", set())
     assert generate._is_documented("atrium_end_year", generate._docs_corpus("atrium"))
+
+
+def test_doc_view_lists_the_docstring_raises():
+    def f(x):
+        """Do it.
+
+        Args:
+            x: a value.
+
+        Raises:
+            ValueError: a bad | value,
+                wrapped.
+            NoDataError: nothing there.
+        """
+
+    assert generate._doc_view(f)["raises"] == [
+        {"exc": "ValueError", "description": "A bad | value, wrapped."},  # each row starts with a capital
+        {"exc": "NoDataError", "description": "Nothing there."},
+    ]
+
+
+def _autodoc_fn(**over):
+    fn = {
+        "name": "f",
+        "signature": "()",
+        "short": "Do it.",
+        "long": "",
+        "params": [],
+        "returns": "A frame.",
+        "return_columns": [],
+        "return_frames": [],
+        "return_unverified": "",
+        "raises": [{"exc": "ValueError", "description": "bad."}],
+        "example": "",
+        "methods": [],
+    }
+    return {**fn, **over}
+
+
+def test_autodoc_page_renders_raises_after_returns():
+    from tools.codegen import render
+
+    md = render.ENV.get_template("autodoc_page.md.jinja").render(
+        title="T", module="m", sidebar_position=50, groups=[{"family": "F", "functions": [_autodoc_fn()]}], minted=False
+    )
+    assert "**Raises**\n\n| Exception | Description |\n|---|---|\n| `ValueError` | bad. |\n" in md
+    assert md.index("**Returns**") < md.index("**Raises**")
+    bare = render.ENV.get_template("autodoc_page.md.jinja").render(
+        title="T",
+        module="m",
+        sidebar_position=50,
+        groups=[{"family": "F", "functions": [_autodoc_fn(raises=[])]}],
+        minted=False,
+    )
+    assert "**Raises**" not in bare
+
+
+def test_autodoc_intro_names_minted_functions_only_where_there_are_some():
+    from tools.codegen import render
+
+    def page(minted):
+        return render.ENV.get_template("autodoc_page.md.jinja").render(
+            title="T", module="m", sidebar_position=50, groups=[], minted=minted
+        )
+
+    assert "Hand-written wrappers, loaders, and helpers in `m` that are not\ngenerated" in page(False)
+    assert "above" not in page(False) and "above" not in page(True)  # a standalone page: nothing is above it
+    assert "Hand-written wrappers" not in page(True)
+    assert "per-competition functions minted from the competition registry" in page(True)
+    assert "Hand-written wrappers, loaders, and helpers in `" in generate.render_autodoc_page("mbb", "")

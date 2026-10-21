@@ -754,8 +754,8 @@ def tpbl_seasons(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -814,8 +814,8 @@ def tpbl_divisions(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -874,8 +874,8 @@ def tpbl_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -938,8 +938,8 @@ def tpbl_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1001,8 +1001,8 @@ def tpbl_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1061,8 +1061,8 @@ def tpbl_standings_against(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1123,8 +1123,8 @@ def tpbl_game(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1183,8 +1183,8 @@ def tpbl_referees(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1243,8 +1243,8 @@ def tpbl_box_players(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1303,8 +1303,8 @@ def tpbl_box_player_periods(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1365,8 +1365,8 @@ def tpbl_box_teams(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1425,8 +1425,8 @@ def tpbl_box_team_periods(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1489,8 +1489,8 @@ def tpbl_roster(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1553,8 +1553,8 @@ def tpbl_team_shots(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1617,8 +1617,8 @@ def tpbl_player_shots(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1679,8 +1679,8 @@ def tpbl_player_games(
         A polars/pandas DataFrame by default; the raw body (``dict``): the API's JSON object, or a list body wrapped as ``{'data': [...]}``, plus ``_request`` (the season, game, division, team or player asked for and the ids the runtime resolved) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

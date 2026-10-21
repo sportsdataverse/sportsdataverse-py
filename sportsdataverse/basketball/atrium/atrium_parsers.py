@@ -108,9 +108,7 @@ def atrium_end_year(website_id: Any, year: Any) -> Optional[int]:
     Returns:
         ``year + 1`` for site 12 (2025 -> 2026 = 2025-26), ``year`` for the calendar-year sites,
         ``None`` for an unregistered site, site 236 (no season list) or a non-integer year.
-
-    Raises:
-        None: a value that cannot be mapped returns ``None``.
+        A value that cannot be mapped returns ``None``.
 
     Example:
         Quick start::
@@ -515,9 +513,7 @@ def parse_atrium_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``(season_id)``; ``is_default_season`` marks the season the body is about.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -551,9 +547,7 @@ def parse_atrium_fixtures(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``fixture_id``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -607,9 +601,7 @@ def parse_atrium_fixtures_ribbon(raw: Any, *, return_as_pandas: bool = False) ->
 
     Returns:
         One row per ``fixture_id``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -659,9 +651,7 @@ def parse_atrium_fixture(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per game (``fixture_id``).
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -712,9 +702,7 @@ def parse_atrium_fixture_periods(raw: Any, *, return_as_pandas: bool = False) ->
 
     Returns:
         One row per ``(fixture_id, period_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -765,9 +753,7 @@ def parse_atrium_box_score(raw: Any, *, return_as_pandas: bool = False) -> Frame
 
     Returns:
         One row per ``(fixture_id, person_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -819,9 +805,7 @@ def parse_atrium_team_box_score(raw: Any, *, return_as_pandas: bool = False) -> 
 
     Returns:
         One row per ``(fixture_id, entity_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -908,9 +892,7 @@ def parse_atrium_pbp(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``event_id``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -936,9 +918,7 @@ def parse_atrium_shots(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per shot (``event_id``).
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -967,9 +947,7 @@ def parse_atrium_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame
 
     Returns:
         One row per ``(season_id, group, entity_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1012,9 +990,7 @@ def parse_atrium_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``(season_id, entity_id)``; ``entity_id`` is stable across seasons.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1049,9 +1025,7 @@ def parse_atrium_team(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row for the team.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1107,9 +1081,7 @@ def parse_atrium_players(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``(season_id, person_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1160,9 +1132,7 @@ def parse_atrium_player(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row for the player (``person_id``).
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1197,9 +1167,7 @@ def parse_atrium_player_seasons(raw: Any, *, return_as_pandas: bool = False) -> 
 
     Returns:
         One row per ``(person_id, season_name, team_id)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1241,9 +1209,7 @@ def parse_atrium_player_game_log(raw: Any, *, return_as_pandas: bool = False) ->
 
     Returns:
         One row per game.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1295,9 +1261,7 @@ def parse_atrium_leaders(raw: Any, *, return_as_pandas: bool = False) -> Frame:
 
     Returns:
         One row per ``(season_id, stat_key, rank)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1349,9 +1313,7 @@ def parse_atrium_stat_tables(raw: Any, *, return_as_pandas: bool = False) -> Fra
 
     Returns:
         One row per ``(table_key, person_id or entity_name, stat_key)``.
-
-    Raises:
-        None: a malformed body returns a zero-row frame with the documented columns.
+        A malformed body returns a zero-row frame with the documented columns.
 
     Example:
         Quick start::

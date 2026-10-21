@@ -109,9 +109,9 @@ def pff_api_ref_leagues(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -171,9 +171,9 @@ def pff_api_ref_games(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -236,9 +236,9 @@ def pff_api_ref_players(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -302,9 +302,9 @@ def pff_api_team_list(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -369,9 +369,9 @@ def pff_api_team_overview(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -436,9 +436,9 @@ def pff_api_team_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -503,9 +503,9 @@ def pff_api_player_seasons(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -570,9 +570,9 @@ def pff_api_player_snaps_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -637,9 +637,9 @@ def pff_api_player_position_pivot(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -706,9 +706,9 @@ def pff_api_player_offense_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -776,9 +776,9 @@ def pff_api_player_offense_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -846,9 +846,9 @@ def pff_api_player_offense_pass_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -916,9 +916,9 @@ def pff_api_player_offense_run_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -986,9 +986,9 @@ def pff_api_player_passing_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1056,9 +1056,9 @@ def pff_api_player_passing_concept(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1126,9 +1126,9 @@ def pff_api_player_passing_depth(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1196,9 +1196,9 @@ def pff_api_player_passing_pressure(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1266,9 +1266,9 @@ def pff_api_player_rushing_direction(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1336,9 +1336,9 @@ def pff_api_player_rushing_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1406,9 +1406,9 @@ def pff_api_player_receiving_depth(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1476,9 +1476,9 @@ def pff_api_player_receiving_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1546,9 +1546,9 @@ def pff_api_player_defense_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1616,9 +1616,9 @@ def pff_api_player_field_goal_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1686,9 +1686,9 @@ def pff_api_player_kickoff_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1756,9 +1756,9 @@ def pff_api_player_punting_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1826,9 +1826,9 @@ def pff_api_player_return_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1896,9 +1896,9 @@ def pff_api_player_special_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -1968,9 +1968,9 @@ def pff_api_facet_offense_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2041,9 +2041,9 @@ def pff_api_facet_offense_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2114,9 +2114,9 @@ def pff_api_facet_offense_pass_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2187,9 +2187,9 @@ def pff_api_facet_offense_run_blocking(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2260,9 +2260,9 @@ def pff_api_facet_passing_allowed_pressure(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2333,9 +2333,9 @@ def pff_api_facet_passing_concept(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2406,9 +2406,9 @@ def pff_api_facet_passing_depth(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2479,9 +2479,9 @@ def pff_api_facet_passing_detail(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2552,9 +2552,9 @@ def pff_api_facet_passing_pressure(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2625,9 +2625,9 @@ def pff_api_facet_passing_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2698,9 +2698,9 @@ def pff_api_facet_receiving_concept(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2771,9 +2771,9 @@ def pff_api_facet_receiving_coverage(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2844,9 +2844,9 @@ def pff_api_facet_receiving_depth(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2917,9 +2917,9 @@ def pff_api_facet_receiving_scheme(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -2990,9 +2990,9 @@ def pff_api_facet_receiving_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3063,9 +3063,9 @@ def pff_api_facet_rushing_direction(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3136,9 +3136,9 @@ def pff_api_facet_rushing_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3209,9 +3209,9 @@ def pff_api_facet_defense_coverage(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3282,9 +3282,9 @@ def pff_api_facet_defense_coverage_scheme(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3355,9 +3355,9 @@ def pff_api_facet_defense_coverage_matchup(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3428,9 +3428,9 @@ def pff_api_facet_defense_pass_rush(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3501,9 +3501,9 @@ def pff_api_facet_defense_run(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3574,9 +3574,9 @@ def pff_api_facet_defense_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3647,9 +3647,9 @@ def pff_api_facet_field_goal_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3720,9 +3720,9 @@ def pff_api_facet_kickoff_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3793,9 +3793,9 @@ def pff_api_facet_punting_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3866,9 +3866,9 @@ def pff_api_facet_return_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -3939,9 +3939,9 @@ def pff_api_facet_special_summary(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4006,9 +4006,9 @@ def pff_api_signature_passing_time_in_pocket(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4070,9 +4070,9 @@ def pff_api_signature_pass_blocking_efficiency_line(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4134,9 +4134,9 @@ def pff_api_signature_defense_outside_pass_rush(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4198,9 +4198,9 @@ def pff_api_signature_defense_slot_coverage(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4251,9 +4251,9 @@ def pff_api_whoami(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4315,9 +4315,9 @@ def pff_api_position_report(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4378,9 +4378,9 @@ def pff_api_team_directory(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4446,9 +4446,9 @@ def pff_api_team_stats(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4512,9 +4512,9 @@ def pff_api_team_roster(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4574,9 +4574,9 @@ def pff_api_team_schedule(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4640,9 +4640,9 @@ def pff_api_team_leaders(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4706,9 +4706,9 @@ def pff_api_team_rushing_direction(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::
@@ -4777,9 +4777,9 @@ def pff_api_team_report(
 
     Raises:
         RuntimeError: No PFF API key (pass ``api_key=`` or set ``PFF_API_KEY``).
-        NoDataError: PFF answered 404 (no such route, report or team).
-        AssetFetchError: The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
-        ValueError: PFF rejected the parameters (400 ``invalid_parameter`` / 422).
+        NoDataError: The host answered 404 -- the requested resource does not exist. PFF answered 404 (no such route, report or team).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The request was refused or failed (401/403/429/5xx) -- the answer is unknown, never an empty frame.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. PFF rejected the parameters (400 ``invalid_parameter`` / 422).
 
     Example:
         Quick start::

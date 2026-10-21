@@ -7,7 +7,7 @@ columns:
   type: character
 - description: ''
   name: assists_percentage
-  type: character
+  type: numeric
 - description: ''
   name: assists_percentage_rank
   type: numeric
@@ -16,7 +16,7 @@ columns:
   type: numeric
 - description: ''
   name: blocked_percentage
-  type: character
+  type: numeric
 - description: ''
   name: blocked_percentage_rank
   type: numeric
@@ -64,7 +64,7 @@ columns:
   type: character
 - description: ''
   name: rebounds_defensive_percentage
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_defensive_percentage_rank
   type: numeric
@@ -73,7 +73,7 @@ columns:
   type: numeric
 - description: ''
   name: rebounds_offensive_percentage
-  type: character
+  type: numeric
 - description: ''
   name: rebounds_offensive_percentage_rank
   type: numeric
@@ -82,7 +82,7 @@ columns:
   type: numeric
 - description: ''
   name: steals_percentage
-  type: character
+  type: numeric
 - description: ''
   name: steals_percentage_rank
   type: numeric
@@ -94,7 +94,7 @@ columns:
   type: integer
 - description: ''
   name: true_shooting_percentage
-  type: character
+  type: numeric
 - description: ''
   name: true_shooting_percentage_rank
   type: numeric
@@ -103,7 +103,7 @@ columns:
   type: numeric
 - description: ''
   name: turn_share
-  type: character
+  type: numeric
 - description: ''
   name: turn_share_rank
   type: numeric
@@ -112,7 +112,7 @@ columns:
   type: numeric
 - description: ''
   name: turnovers_percentage
-  type: character
+  type: numeric
 - description: ''
   name: turnovers_percentage_rank
   type: numeric

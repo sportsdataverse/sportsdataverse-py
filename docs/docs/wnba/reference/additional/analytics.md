@@ -97,6 +97,12 @@ The input `shots` plus `shot_value:Int64, base_fg_pct:Float64, xpoints:Float64, 
 
 No returns table is published for this function: no capture: its input is the shots frame of wnba_shot_value, which reads stats.nba.com shotchartdetail; that host answers HTTP 403 to the datacenter IP the docs are built on.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A zone join key has a different dtype on the two frames. |
+
 **Example**
 
 ```python
@@ -424,6 +430,14 @@ A dict with keys `"officials"` and `"replay_center"` mapping to DataFrames. If `
 | `replay_center.game_date` | date | Date the replay-center official worked; a date-level staffing record, not tied to one game. |
 | `replay_center.official_id` | integer | Numeric replay-center official id from the feed. |
 | `replay_center.official_name` | character | Replay-center official's display name for that date. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `date` is not a valid "YYYY-MM-DD" date (checked before any request). |
+| `NoDataError` | Official.nba.com answered 404, or 403 with S3's `AccessDenied` body. A date without WNBA games is not this (see the Note). |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or Akamai WAF block), the 200 body is not a JSON object, or the `wnba` block's `Table`/`Table1` rows are missing or malformed (a row without `game_id` included). With `raw=True` all three leagues (nba, gl and wnba) are checked, since the whole payload is returned. |
 
 **Example**
 

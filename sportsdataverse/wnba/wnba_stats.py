@@ -1995,10 +1995,10 @@ def wnba_stats_drafthistory(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        ImportError: ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain ``requests``, so the live transport requires it (``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).
-        NoDataError: The host answered HTTP 404.
-        ValueError: The host answered HTTP 400 / 422 (it rejected a parameter value).
-        AssetFetchError: Any other non-2xx (401 / 403 / 429 / 5xx; a missing required ``Season`` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a connection failure (timeout, reset), once ``SDV_PY_NBA_STATS_RETRIES`` retries are exhausted.
+        ImportError: ``curl_cffi`` is not installed -- stats.nba.com / stats.wnba.com block plain ``requests``, so the transport needs it (``pip install curl_cffi`` or ``sportsdataverse[all]``). ``curl_cffi`` is not installed. stats.nba.com/stats.wnba.com TLS-fingerprint-block plain ``requests``, so the live transport requires it (``pip install curl_cffi``, or ``pip install sportsdataverse[all]``).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The host answered HTTP 404.
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. The host answered HTTP 400 / 422 (it rejected a parameter value).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. Any other non-2xx (401 / 403 / 429 / 5xx; a missing required ``Season`` draws an empty HTTP 500), a blank or non-JSON 2xx body, or a connection failure (timeout, reset), once ``SDV_PY_NBA_STATS_RETRIES`` retries are exhausted.
 
     Example:
         Quick start::
