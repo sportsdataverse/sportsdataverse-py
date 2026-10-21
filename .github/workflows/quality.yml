@@ -13,6 +13,18 @@
 # merged change to it. A PR into `devel-<topic>` is held to
 # `baseline/scoreboard-<topic>-base.json` (the topic's branch-point snapshot)
 # when the base branch has one, else to `baseline/scoreboard-devel.json`.
+#
+# A sync PR (the upstream branch merged into its topic: devel-program-setup ->
+# devel-test-harness -> devel-<topic>) carries metrics the upstream already
+# accepted and re-seeded, so tools/upstream_baseline.sh adds the UPSTREAM
+# branch's baseline too, and a metric fails only when it is worse than both.
+# It does so only when the PR head contains the upstream tip and the base does
+# not yet; an ordinary task PR gets no allowance. main keeps no baseline/, so
+# a main -> devel-program-setup sync still has the base's baseline only.
+# The allowance covers the WHOLE PR: one that merges the upstream tip AND
+# carries task commits is treated as a sync, so never merge the upstream into
+# a task PR. With two baselines the scoreboard table shows the change against
+# each, so whatever the allowance absorbs reads WORSE in the Base column.
 name: quality
 on:
   pull_request:
@@ -66,18 +78,21 @@ jobs:
           topic="${BASE_REF#devel-}"
           if [ "$topic" != "$BASE_REF" ] && git cat-file -e "FETCH_HEAD:baseline/scoreboard-$topic-base.json" 2>/dev/null; then
             git show "FETCH_HEAD:baseline/scoreboard-$topic-base.json" > /tmp/baseline/gate.json
-            echo "Scoreboard gate: baseline/scoreboard-$topic-base.json at $BASE_REF"
+            echo "Scoreboard gate: baseline/scoreboard-$topic-base.json at $BASE_REF" | tee -a "$GITHUB_STEP_SUMMARY"
           else
             cp /tmp/baseline/scoreboard-devel.json /tmp/baseline/gate.json
-            echo "Scoreboard gate: baseline/scoreboard-devel.json at ${BASE_REF}"
+            echo "Scoreboard gate: baseline/scoreboard-devel.json at ${BASE_REF}" | tee -a "$GITHUB_STEP_SUMMARY"
           fi
+          bash tools/upstream_baseline.sh scoreboard-devel.json /tmp/baseline/upstream-gate.json
       - name: quality scoreboard (no metric may get worse than the base branch's baseline)
         # Runs BEFORE `ruff lint`: the repo config sets `fix = true`, so that
         # step rewrites the checkout, and the scoreboard must measure the code
         # as pushed (it passes --no-fix itself).
         run: |
           set -o pipefail
-          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/gate.json | tee -a "$GITHUB_STEP_SUMMARY"
+          extra=()
+          if [ -f /tmp/baseline/upstream-gate.json ]; then extra=(--baseline /tmp/baseline/upstream-gate.json); fi
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/gate.json "${extra[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: warn when this pull request loosens baseline/scoreboard-devel.json
         if: github.event_name == 'pull_request'
         run: |
@@ -124,21 +139,25 @@ jobs:
             git fetch --depth=1 origin "$BASE_REF"
             if git cat-file -e "FETCH_HEAD:baseline/coverage-devel.json" 2>/dev/null; then
               git show "FETCH_HEAD:baseline/coverage-devel.json" > /tmp/baseline/coverage-devel.json
+              echo "Coverage gate: baseline/coverage-devel.json at $BASE_REF" | tee -a "$GITHUB_STEP_SUMMARY"
+              bash tools/upstream_baseline.sh coverage-devel.json /tmp/baseline/upstream-coverage.json
               exit 0
             fi
             echo "::warning::BOOTSTRAP: baseline taken from this PR (origin/$BASE_REF has no baseline/coverage-devel.json yet). This is the only case where the PR's own file is trusted; once merged, every later PR reads the base branch."
           fi
           cp baseline/coverage-devel.json /tmp/baseline/coverage-devel.json
+          echo "Coverage gate: baseline/coverage-devel.json of this checkout" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Run the offline suite with coverage
         run: >
           uv run --frozen pytest -n auto --dist loadgroup -q
           --ignore=tests/codegen
-          --deselect tests/test_mlb_statcast_codegen.py::test_codegen_drift_clean
           --cov=sportsdataverse --cov-report=json:coverage.json
       - name: coverage delta (no metric may get worse than the base branch's baseline)
         run: |
           set -o pipefail
-          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/coverage-devel.json --coverage-json coverage.json | tee -a "$GITHUB_STEP_SUMMARY"
+          extra=()
+          if [ -f /tmp/baseline/upstream-coverage.json ]; then extra=(--baseline /tmp/baseline/upstream-coverage.json); fi
+          uv run --frozen python tools/quality_scoreboard.py --check --baseline /tmp/baseline/coverage-devel.json --coverage-json coverage.json "${extra[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
       - name: snapshot the CI numbers (re-seed baseline/ from this artifact)
         if: ${{ !cancelled() && hashFiles('coverage.json') != '' }}
         run: uv run --frozen python tools/quality_scoreboard.py --write scoreboard-ci.json --coverage-json coverage.json > /dev/null
@@ -149,3 +168,46 @@ jobs:
           path: |
             coverage.json
             scoreboard-ci.json
+
+  mutants:
+    # The mutation registry (tests/mutants/registry.yaml): each row applies a text mutant to a
+    # source file and runs the test that must go red. A `kill` row whose test stays green fails
+    # the job; `survive_until` rows document audit-measured test gaps until their plan task lands.
+    # Per-row timings are printed. Every row runs on every PR, split round-robin into the matrix's
+    # shards (`run_mutants.py --shard I/N`, I/N taken from strategy.job-index/job-total; a shard that
+    # selects no rows fails; tests/tools/test_run_mutants.py asserts the shards partition the
+    # registry). Measured: 71 rows = 1023 s of rows serially (run 38156528933, 17m04s job), ~4-5 min per
+    # shard at 4 shards. By 10-18 the topic registries had grown and 4-shard jobs hit the 15-min timeout
+    # (EX-CI-a), so the matrix went to 6: 74 rows ran in 4-6 min per shard (#879). Add a shard when one
+    # nears ~10 min.
+    name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # pytest runs PR-controlled code; it must not inherit the checkout token
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+      - name: Set up Python
+        run: uv python install 3.13.2
+      - name: Install project + extras + dep groups
+        run: uv sync --all-extras --all-groups --locked --python 3.13.2
+      - name: run the registry (a `kill` row that survives fails the job)
+        env:
+          PYTHONUNBUFFERED: "1"
+          # I/N from the strategy itself, so editing the matrix list can never leave rows in no shard
+          SHARD: ${{ strategy.job-index }}/${{ strategy.job-total }}
+        run: |
+          set -o pipefail
+          SHARD="$(( ${SHARD%/*} + 1 ))/${SHARD#*/}"
+          uv run --frozen python tools/run_mutants.py --shard "$SHARD" | tee -a "$GITHUB_STEP_SUMMARY"

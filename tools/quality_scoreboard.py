@@ -6,7 +6,8 @@ Run from the sdv-py repository root, inside its uv environment (Python 3.10+):
     uv run --frozen python tools/quality_scoreboard.py --check --baseline baseline/scoreboard-devel.json
 
 ``--write`` records every metric. ``--check`` prints a before/after table against ``--baseline``
-and exits 1 when any metric is worse; when nothing got worse its last line is exactly
+and exits 1 when any metric is worse (given ``--baseline`` more than once, worse than every one of
+them: quality.yml adds the upstream branch's baseline for a sync PR, see compare()); when nothing got worse its last line is exactly
 ``SCOREBOARD OK: no metric regressed`` (the success marker the phase gates match on).
 
 Committed baselines live under ``baseline/``: ``scoreboard-devel.json`` (lint + size, the PR
@@ -268,30 +269,69 @@ def snapshot(root: Path, coverage_json: Path | None) -> dict:
     }
 
 
-def compare(baseline: dict, current: dict) -> list[str]:
-    print(f"Baseline {baseline['commit']} ({baseline['measured_at']})  vs  now {current['commit']}\n")
-    print("| Metric | Baseline | Now | Change | Status |\n|---|---:|---:|---:|---|")
+def judge(name: str, now: dict, before: dict) -> tuple[float, str]:
+    """(change, status) of one metric against one baseline value, by the metric's own ``better``."""
+    delta = round(now["value"] - before["value"], 2)
+    allowed = COVERAGE_TOLERANCE if name.startswith("coverage_") and name.endswith("_percent") else 0
+    if now["better"] == "info" or delta == 0:
+        return delta, "info" if now["better"] == "info" else "same"
+    if (delta < 0) == (now["better"] == "lower"):
+        return delta, "better"
+    return delta, "same (within noise)" if abs(delta) <= allowed else "WORSE"
+
+
+def compare(baseline: dict, current: dict, *upstream: dict) -> list[str]:
+    """Regressions of ``current``: metrics worse than EVERY baseline that tracks them.
+
+    ``baseline`` is the base branch's; ``upstream`` holds the extra baselines a sync PR may match
+    (the workflow passes one only when the PR brings in an upstream tip the base lacks). With one
+    baseline the table is the plain before/after one. With more, every row shows the change against
+    EACH baseline, so what an upstream allowance absorbs stays visible (a row allowed by the upstream
+    still reads WORSE in the base column), and each regression names the baseline it is least worse
+    than. A metric the BASE tracks may never be dropped, whatever the upstream holds.
+    """
+    baselines = [baseline, *upstream]
     regressions = []
+    if upstream:
+        for i, b in enumerate(baselines):
+            print(f"{'Upstream' if i else 'Base'} baseline {b['commit']} ({b['measured_at']})")
+        print(f"  vs  now {current['commit']}\n")
+        print("| Metric | Base | " + "Upstream | " * len(upstream) + "Now | Status |")
+        print("|---|---:|" + "---:|" * len(upstream) + "---:|---|")
+    else:
+        print(f"Baseline {baseline['commit']} ({baseline['measured_at']})  vs  now {current['commit']}\n")
+        print("| Metric | Baseline | Now | Change | Status |\n|---|---:|---:|---:|---|")
     for name, now in current["metrics"].items():
-        before = baseline["metrics"].get(name)
-        if before is None:
-            print(f"| {now['label']} | (new) | {now['value']} | | new |")
-            continue
-        delta = round(now["value"] - before["value"], 2)
-        allowed = COVERAGE_TOLERANCE if name.startswith("coverage_") and name.endswith("_percent") else 0
-        if now["better"] == "info" or delta == 0:
-            status = "info" if now["better"] == "info" else "same"
-        elif (delta < 0) == (now["better"] == "lower"):
-            status = "better"
-        elif abs(delta) <= allowed:
-            status = "same (within noise)"
+        verdicts = [judge(name, now, b["metrics"][name]) if name in b["metrics"] else None for b in baselines]
+        judged = [(b, *v) for b, v in zip(baselines, verdicts) if v is not None]
+        if not judged:
+            status = "new"
+        elif all(status == "WORSE" for _, _, status in judged):  # worse than every baseline
+            b, _, status = min(judged, key=lambda j: abs(j[1]))
+            vs = f" (vs baseline {b['commit']})" if upstream else ""
+            regressions.append(f"{now['label']}: {b['metrics'][name]['value']} -> {now['value']}{vs}")
         else:
-            status = "WORSE"
-            regressions.append(f"{now['label']}: {before['value']} -> {now['value']}")
-        print(f"| {now['label']} | {before['value']} | {now['value']} | {delta:+} | {status} |")
-    for name in sorted(baseline["metrics"].keys() - current["metrics"].keys()):
+            b, _, status = next(j for j in judged if j[2] != "WORSE")
+            if b is not baseline:
+                status = f"allowed by upstream {b['commit']}"
+        if upstream:
+            cells = [
+                "(not tracked)" if v is None else f"{b['metrics'][name]['value']} ({v[0]:+}, {v[1]})"
+                for b, v in zip(baselines, verdicts)
+            ]
+            print(f"| {now['label']} | " + " | ".join(cells) + f" | {now['value']} | {status} |")
+        elif verdicts[0] is None:
+            print(f"| {now['label']} | (new) | {now['value']} | | new |")
+        else:
+            delta, status = verdicts[0]
+            print(f"| {now['label']} | {baseline['metrics'][name]['value']} | {now['value']} | {delta:+} | {status} |")
+    for name in sorted(baseline["metrics"].keys() - current["metrics"].keys()):  # the base's metrics only
         before = baseline["metrics"][name]
-        print(f"| {before['label']} | {before['value']} | (not measured) | | WORSE |")
+        if upstream:
+            ups = [str(b["metrics"][name]["value"]) if name in b["metrics"] else "(not tracked)" for b in upstream]
+            print(f"| {before['label']} | {before['value']} | " + " | ".join(ups) + " | (not measured) | WORSE |")
+        else:
+            print(f"| {before['label']} | {before['value']} | (not measured) | | WORSE |")
         regressions.append(f"{before['label']}: {before['value']} -> not measured (a tracked metric cannot be dropped)")
     return regressions
 
@@ -301,7 +341,14 @@ def main() -> int:
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--write", type=Path, help="write a snapshot JSON to this path")
     action.add_argument("--check", action="store_true", help="fail when any metric is worse than --baseline")
-    parser.add_argument("--baseline", type=Path, help="with --check: the baseline snapshot to compare against")
+    parser.add_argument(
+        "--baseline",
+        type=Path,
+        action="append",
+        help="with --check: the baseline snapshot to compare against. Repeat it to add a baseline a metric may"
+        " match instead (a sync PR's upstream): a metric fails only when it is worse than every baseline given."
+        " The first one is the base branch's.",
+    )
     parser.add_argument("--coverage-json", type=Path, help="pytest-cov JSON report to read coverage from")
     parser.add_argument("--root", type=Path, default=Path.cwd(), help="sdv-py repository root (default: cwd)")
     parser.add_argument(
@@ -328,7 +375,8 @@ def main() -> int:
         print(f"\nSnapshot written to {args.write}")
         return 0
 
-    regressions = compare(json.loads(args.baseline.read_text(encoding="utf-8")), current)
+    base, *upstream = (json.loads(path.read_text(encoding="utf-8")) for path in args.baseline)
+    regressions = compare(base, current, *upstream)
     if regressions:
         print("\nSCOREBOARD FAILED: these metrics got worse:\n  " + "\n  ".join(regressions))
         return 1

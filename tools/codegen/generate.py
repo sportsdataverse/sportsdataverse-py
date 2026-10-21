@@ -11,6 +11,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -1996,12 +1997,19 @@ def build_loaders_live() -> list[Path]:
     return sorted(written)
 
 
+def _check_tmp(prefix: str) -> Path:
+    """A fresh temp dir inside ``OUT`` for one ``--check`` gate run.
+
+    Inside ``OUT`` so ruff discovers the repo config; unique per run, so two concurrent
+    ``--check`` runs never delete each other's files (a fixed name was rmtree'd on entry).
+    """
+    OUT.mkdir(parents=True, exist_ok=True)
+    return Path(tempfile.mkdtemp(prefix=prefix, dir=OUT))
+
+
 def _loaders_stale() -> list[str]:
     """Live generated {league}_loaders.py files that differ from a fresh render."""
-    tmp = OUT / "_check_loaders_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_loaders_")
     try:
         rendered = _render_loaders_all()
         for lg, src in rendered.items():
@@ -2693,10 +2701,7 @@ def build_flat_live() -> list[Path]:
 
 def _flat_stale() -> list[str]:
     """Live flat-API modules that differ from a fresh render."""
-    tmp = OUT / "_check_flat_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_flat_")
     try:
         rendered = _render_flat_all()
         prefixes = {}
@@ -2718,10 +2723,7 @@ def _flat_stale() -> list[str]:
 
 def _parsed_stale() -> list[str]:
     """Live ``parsed/{league}.py`` files that differ from a fresh render."""
-    tmp = OUT / "_check_parsed_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_parsed_")
     try:
         rendered = _render_parsed_all()
         for name, src in rendered.items():
@@ -2940,10 +2942,7 @@ def build_live() -> list[Path]:
 
 def _live_stale() -> list[str]:
     """Live ``{prefix}_espn_ext.py`` and container ``__init__.py`` files that differ from a fresh render."""
-    tmp = OUT / "_check_live_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_live_")
     try:
         rendered = _render_all()
         for name, src in rendered.items():
@@ -2978,10 +2977,7 @@ def _live_stale() -> list[str]:
 def check() -> int:
     # Render + format in a temp subdir *inside* OUT so ruff discovers the same repo
     # config, then compare byte-for-byte against the committed generated files.
-    tmp = OUT / "_check_tmp"
-    if tmp.exists():
-        shutil.rmtree(tmp)
-    tmp.mkdir(parents=True, exist_ok=True)
+    tmp = _check_tmp("_check_")
     try:
         rendered = _render_all()
         for name, src in rendered.items():

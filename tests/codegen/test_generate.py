@@ -16,8 +16,11 @@ def _load(mod_path: Path, name: str):
 
 
 def test_build_emits_one_module_per_league(espn_ext_dir):
-    for prefix in ("nba", "wnba", "mbb", "wbb", "cfb", "nfl", "mlb", "nhl"):
-        assert (espn_ext_dir / f"{prefix}_espn_ext.py").exists()
+    from tools.codegen import spec
+
+    prefixes = {lg.prefix for lg in spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues}
+    assert len(prefixes) >= 30  # A-L54: every league in leagues.yaml, not 8 hard-coded ones
+    assert {p.name for p in espn_ext_dir.glob("*_espn_ext.py")} == {f"{p}_espn_ext.py" for p in prefixes}
 
 
 def test_generated_nba_module_imports_and_exposes_functions(espn_ext_dir):

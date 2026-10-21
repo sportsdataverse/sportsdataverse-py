@@ -81,3 +81,29 @@ def test_delegates_with_womens_league(monkeypatch):
     assert seen["league"] == "womens"
     assert set(core._WP_COLS).issubset(out.columns)
     assert out.schema["home_win_prob"] == pl.Float64
+
+
+def test_real_season_slice_compiles_and_scores_against_real_outcomes(monkeypatch):
+    """supp-013: build_wbb_season_wp compiles the committed real 2023-24 corpus
+    (tests/fixtures/wbb_prediction/: the first 400 games of pbp_sample_2024, every 25th play, with the
+    full results_2024 + team_box_2024), scored against each game's real result. Observed 2026-10-11:
+    Brier in-game 0.11951, pregame 0.17037, base rate 0.24472; floors rounded to the safe side."""
+    from pathlib import Path
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "wbb_prediction"
+    pbp = pl.read_parquet(fix / "pbp_sample_2024.parquet")
+    pbp = pbp.filter(pl.col("game_id").is_in(pbp["game_id"].unique().sort()[:400].implode())).with_columns(
+        pl.int_range(pl.len())
+        .over("game_id", order_by=-pl.col("start_game_seconds_remaining"))
+        .alias("game_play_number")
+    )
+    sched, box = pl.read_parquet(fix / "results_2024.parquet"), pl.read_parquet(fix / "team_box_2024.parquet")
+    monkeypatch.setattr(core, "_load_league_frames", lambda season, league: (pbp, sched, box))
+    out = build_wbb_season_wp(2024)
+    assert out.height == pbp.height and set(pbp.columns) <= set(out.columns)
+    y = out["home_win"].cast(pl.Float64)
+    brier_wp = float(((out["home_win_prob"] - y) ** 2).mean())
+    brier_pre = float(((out["pregame_home_prob"] - y) ** 2).mean())
+    assert brier_wp <= 0.1196 and brier_pre <= 0.1704, (brier_wp, brier_pre)
+    assert brier_wp < brier_pre < float(((y.mean() - y) ** 2).mean())
+    print("WBB_SEASON_WP_REAL_OK", round(brier_wp, 5), round(brier_pre, 5))

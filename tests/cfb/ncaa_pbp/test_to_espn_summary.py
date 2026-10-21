@@ -739,3 +739,51 @@ def test_neither_archive_nor_data_api_fails_closed_naming_both(monkeypatch):
     with pytest.raises(SourceUnavailable, match="neither the local archive nor the Data API"):
         adapter(401762505, _Ctx(idmap_row=idmap_row("final_fbs_6386337")))
     assert _time.monotonic() - t0 < 1.0
+
+
+#: supp-012: observed 2026-10-11 against ESPN's own summaries (fbs 401762505: 191 / 191 plays, 159
+#: paired; fcs 401767513: 178 / 176, 139 paired). Floors, never lowered.
+ESPN_REFERENCE_PINNED = {
+    # agreement fbs / fcs: type.id .9811 / .9640, type.text .9811 / .9496, type.abbreviation .9874 /
+    # .9640, rush .9937 / .9856, pass 1.0 / .9928, td_play .9874 / 1.0, yardLine + end team 1.0
+    "final_fbs_6386337": {
+        "paired_share": 0.99,
+        "agreement": {
+            "type.id": 0.98,
+            "type.text": 0.98,
+            "type.abbreviation": 0.98,
+            "start.yardLine": 0.99,
+            "end.pos_team.id": 0.99,
+            "rush": 0.99,
+            "pass": 0.99,
+            "td_play": 0.98,
+        },
+        # corr EP_start 1.0, EP_end .9955, EPA .9925, wp_before 1.0, wp_after 1.0
+        "correlation": {"EP_start": 0.999, "EP_end": 0.995, "EPA": 0.99, "wp_before": 0.999, "wp_after": 0.999},
+    },
+    "final_fcs_6386315": {
+        "paired_share": 0.97,
+        "agreement": {
+            "type.id": 0.96,
+            "type.text": 0.94,
+            "type.abbreviation": 0.96,
+            "start.yardLine": 0.99,
+            "end.pos_team.id": 0.99,
+            "rush": 0.98,
+            "pass": 0.99,
+            "td_play": 0.99,
+        },
+        # corr EP_start .9998, EP_end .9993, EPA .9971, wp_before .9997, wp_after .9993
+        "correlation": {"EP_start": 0.999, "EP_end": 0.999, "EPA": 0.995, "wp_before": 0.999, "wp_after": 0.999},
+    },
+}
+
+
+@pytest.mark.parametrize("name", sorted(ESPN_REFERENCE_PINNED))
+def test_ncaa_espn_reference_parity(name):
+    """NCAA vs ESPN's own summary of the same contest (supp-012): per-play floors."""
+    from tests.football.sources._espn_reference import espn_reference_report
+
+    report = espn_reference_report("cfb", int(GAMES[name][0]), "ncaa", bundle(name), idmap_row(name), None)
+    assert report.check(ESPN_REFERENCE_PINNED[name]) == [], report.gates()
+    print("NCAA_ESPN_REFERENCE_OK", name, report.gates()["paired_share"])

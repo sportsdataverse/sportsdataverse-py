@@ -1,6 +1,6 @@
 {
-  "commit": "cd3ba44a91 (devel-program-setup after the second 10-18 main sync to 38a22f936d: #864, #866, #868, #870, #873, #892); CI run 39152844319",
-  "measured_at": "2026-10-18T18:29:20+00:00",
+  "commit": "6550127481 (devel-test-harness after the 10-20 sync of program-setup b544c68158, main b4229f1ced); CI run 39462042681",
+  "measured_at": "2026-10-20T17:14:11+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 848,
@@ -8,7 +8,7 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 322341,
+      "value": 322345,
       "better": "info",
       "label": "Hand-written lines"
     },
@@ -113,7 +113,7 @@
       "label": "Functions with over 50 statements (ruff PLR0915)"
     },
     "coverage_handwritten_percent": {
-      "value": 87.69,
+      "value": 89.29,
       "better": "higher",
       "label": "Line coverage of hand-written code (%)"
     },
@@ -148,7 +148,7 @@
       "label": "Line coverage of sportsdataverse/nfl/nfl_stats.py (%)"
     },
     "coverage__common_espn_parsers_percent": {
-      "value": 51.72,
+      "value": 79.84,
       "better": "higher",
       "label": "Line coverage of sportsdataverse/_common_espn_parsers.py (%)"
     },

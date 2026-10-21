@@ -40,12 +40,17 @@ from sportsdataverse.wbb.wbb_ncaa_schedule import ncaa_wbb_team_roster, ncaa_wbb
 from sportsdataverse.wbb.wbb_ncaa_scoreboard import ncaa_wbb_date_games
 from sportsdataverse.wbb.wbb_ncaa_stats_agg import ncaa_wbb_player_stats, ncaa_wbb_team_stats
 from sportsdataverse.wbb.wbb_ncaa_team_ids import ncaa_wbb_team_ids, resolve_ncaa_team_id
-from tests.mbb._bigballr_oracle import HTML_DIR, load_oracle_pbp
+from tests.mbb._bigballr_oracle import FIXTURES, HTML_DIR, load_oracle_pbp
 
 WBB_PERIOD_MODEL = (4, 600, 300)
 WBB_GAME = "5722355"
 WBB_TEAM_ID = 592003  # South Carolina 2024-25
 SCOREBOARD_HTML = "scoreboard_18423_12-05-2024.html"
+
+
+def _golden(name: str) -> pl.DataFrame:
+    """A committed wbigballR R-oracle output (``oracle/wbb/<name>.csv``; NA cells are the string NA)."""
+    return pl.read_csv(FIXTURES / "oracle" / "wbb" / f"{name}.csv", null_values="NA", infer_schema_length=None)
 
 
 class FakePbpFetcher:
@@ -97,7 +102,11 @@ def test_ncaa_wbb_game_pbp_matches_core_quarter_model() -> None:
 def test_ncaa_wbb_play_by_play_matches_core_quarter_model() -> None:
     expected = _ncaa_bb_play_by_play([WBB_GAME], fetcher=FakePbpFetcher(), period_model=WBB_PERIOD_MODEL)
     got = ncaa_wbb_play_by_play([WBB_GAME], fetcher=FakePbpFetcher())
-    assert got.height > 0
+    golden = _golden("play_by_play").filter(pl.col("ID") == int(WBB_GAME))
+    assert got.height == golden.height == 460
+    assert (
+        got.select("home_score", "away_score").row(-1) == golden.select("Home_Score", "Away_Score").row(-1) == (92, 60)
+    )
     assert_frame_equal(got, expected)
 
 
@@ -150,7 +159,9 @@ def test_ncaa_wbb_team_schedule_matches_core() -> None:
     html = (HTML_DIR / f"team_{WBB_TEAM_ID}.html").read_text(encoding="utf-8")
     expected = parse_ncaa_bb_team_schedule(html, WBB_TEAM_ID, league="wbb")
     got = ncaa_wbb_team_schedule(WBB_TEAM_ID, fetcher=FakeHtmlFetcher(f"team_{WBB_TEAM_ID}.html"))
-    assert got.height > 0
+    golden = _golden("team_schedule")
+    assert got.height == golden.height == 39
+    assert got["box_id"].cast(pl.Int64).to_list() == golden["Box_ID"].cast(pl.Int64).to_list()
     assert_frame_equal(got, expected)
 
 
@@ -183,7 +194,9 @@ def test_ncaa_wbb_team_roster_matches_core() -> None:
 
 
 def test_ncaa_wbb_lineups_delegates(wbb_pbp: pl.DataFrame, wbb_lineups: pl.DataFrame) -> None:
-    assert wbb_lineups.height > 0
+    golden = _golden("lineups")
+    assert wbb_lineups.height == golden.height == 99
+    assert wbb_lineups["pts"].sum() == golden["PTS"].sum()
     assert_frame_equal(ncaa_wbb_lineups(wbb_pbp), wbb_lineups)
 
 
@@ -212,19 +225,26 @@ def test_ncaa_wbb_on_off_delegates(wbb_lineups: pl.DataFrame) -> None:
 
 def test_ncaa_wbb_player_stats_delegates(wbb_pbp: pl.DataFrame) -> None:
     got = ncaa_wbb_player_stats(wbb_pbp)
-    assert got.height > 0
+    # per-game rows here; the R golden is the multi-game aggregate, so compare the totals
+    assert got.height == 74  # observed count (players x games); the golden has no per-game rows
+    assert got["pts"].sum() == _golden("player_stats")["PTS"].sum()
     assert_frame_equal(got, ncaa_mbb_player_stats(wbb_pbp))
 
 
 def test_ncaa_wbb_team_stats_delegates(wbb_pbp: pl.DataFrame) -> None:
     got = ncaa_wbb_team_stats(wbb_pbp)
-    assert got.height > 0
+    golden = _golden("team_stats")
+    assert sorted(zip(got["game_id"].cast(pl.Int64), got["team"], got["pts"])) == sorted(
+        zip(golden["ID"], golden["Team"], golden["PTS"].cast(pl.Float64))
+    )
     assert_frame_equal(got, ncaa_mbb_team_stats(wbb_pbp))
 
 
 def test_ncaa_wbb_possessions_delegates(wbb_pbp: pl.DataFrame) -> None:
     got = ncaa_wbb_possessions(wbb_pbp)
-    assert got.height > 0
+    golden = _golden("possessions")
+    assert got.height == golden.height == 652
+    assert got["pts"].sum() == golden["PTS"].sum()
     assert_frame_equal(got, ncaa_mbb_possessions(wbb_pbp))
 
 
@@ -232,8 +252,12 @@ def test_return_as_pandas_passthrough(wbb_pbp: pl.DataFrame) -> None:
     """Every shim's return_as_pandas kwarg reaches the core."""
     import pandas as pd
 
-    assert isinstance(ncaa_wbb_team_ids(return_as_pandas=True), pd.DataFrame)
-    assert isinstance(ncaa_wbb_possessions(wbb_pbp, return_as_pandas=True), pd.DataFrame)
+    ids = ncaa_wbb_team_ids(return_as_pandas=True)
+    assert isinstance(ids, pd.DataFrame)
+    pd.testing.assert_frame_equal(ids, ncaa_wbb_team_ids().to_pandas())
+    poss = ncaa_wbb_possessions(wbb_pbp, return_as_pandas=True)
+    assert isinstance(poss, pd.DataFrame)
+    pd.testing.assert_frame_equal(poss, ncaa_wbb_possessions(wbb_pbp).to_pandas())
 
 
 # -- era-aware period model (rules/wbb.yaml#wbb-2016-four-quarters) -------------

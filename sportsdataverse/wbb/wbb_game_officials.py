@@ -310,7 +310,7 @@ def helper_wbb_officials(payload: dict, *, season: int, game_id: int | str) -> p
     """Parse one game's officials sidecar into the released officials frame.
 
     Faithful polars port of the script-local ``parse_one_game`` /
-    ``parse_one_official`` in ``wehoop-wbb-data/R/espn_wbb_09_officials_creation.R``
+    ``parse_one_official`` in ``wehoop-wbb-data/R/espn_wbb_12_officials_creation.R``
     (no wehoop helper exists for this dataset). The stored sidecar is the ESPN
     Core v2 paginated page, so the officials source falls through to
     ``items``. The R-released parquet is the parity oracle (``game_id`` stays

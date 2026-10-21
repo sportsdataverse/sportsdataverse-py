@@ -9,6 +9,9 @@ over-header whose rendered names are useless.
 
 from __future__ import annotations
 
+import gzip
+import io
+from pathlib import Path
 from typing import Any, Dict, List
 
 import polars as pl
@@ -388,3 +391,44 @@ def test_throttle_sleeps_between_consecutive_requests(monkeypatch: pytest.Monkey
     monkeypatch.setattr(bref, "_LAST_REQUEST", bref.time.monotonic())
     bref._throttle()
     assert slept and 0 < slept[0] <= 3
+
+
+# ---------------------------------------------------------------------------
+# A real page (B-L93, B-M19): tests/fixtures/bref/teams_BOS_1986.html.gz is
+# basketball-reference.com/teams/BOS/1986.html as served on 2026-10-11. The oracle is the page's
+# own roster table read by pandas, with every cell kept as text.
+# ---------------------------------------------------------------------------
+
+_BOS_1986 = gzip.decompress(
+    (Path(__file__).resolve().parents[1] / "fixtures" / "bref" / "teams_BOS_1986.html.gz").read_bytes()
+).decode("utf-8")
+
+
+def _page_roster() -> Any:
+    import pandas as pd
+
+    (table,) = pd.read_html(io.StringIO(_BOS_1986), attrs={"id": "roster"}, converters={"No.": str})
+    return table
+
+
+def test_real_team_page_roster_matches_the_page(calls: _Transport) -> None:
+    calls.serve("/teams/BOS/1986.html", _BOS_1986)
+    df = bref.bref_team_roster(team="BOS", season=1986)
+    page = _page_roster()
+    assert df.height == len(page) == 13
+    assert df["player"].to_list() == page["Player"].tolist()
+    assert df["pos"].to_list() == page["Pos"].tolist()
+    assert df["college"].to_list()[:2] == page["College"].tolist()[:2]
+
+
+@pytest.mark.xfail(
+    strict=True,
+    raises=AssertionError,
+    reason='B-M19: _finish casts the all-numeric jersey column, so "00" (Robert Parish) collides with "0"; task 4.8',
+)
+def test_real_team_page_keeps_jersey_numbers_as_text(calls: _Transport) -> None:
+    calls.serve("/teams/BOS/1986.html", _BOS_1986)
+    df = bref.bref_team_roster(team="BOS", season=1986)
+    page = _page_roster()
+    assert "00" in page["No."].tolist()
+    assert df["number"].to_list() == page["No."].tolist()

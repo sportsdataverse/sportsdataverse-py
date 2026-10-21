@@ -76,6 +76,51 @@ def test_bundled_third_down_curves():
     )
 
 
+def test_nfl_third_down_curve_level_vs_nflverse():
+    """C-L38: the band above (0.5 < rate(1) < 0.85, rate(10) < 0.4) passes a curve scaled by 0.8.
+
+    Level oracle: nflverse's own third-down conversions (`third_down_converted` on run/pass third
+    downs, `ydstogo` capped at 25) aggregated from the nflverse-data `play_by_play_2022` and
+    `_2023` release assets, committed as `fixtures/nflverse_third_down_2022_2023.csv` (README
+    there). Observed 2026-10-11 over distances 1-10: max |bundled - nflverse| 0.0579 (3rd and 1:
+    0.628 vs 0.686), mean 0.0223. A 0.8-scaled curve reads 0.184 / 0.097.
+
+    The 0.058 gap is a data defect, not a definition difference (review PR-774, EX-1.5-b): sdv-py's own
+    fit_third_down_curve on 2022-23 ESPN pbp reads 0.677 at 3rd and 1, but the bundled curve's fit window
+    includes 2021 (0.417) and 2020 (0.588), whose end-of-play possession is wrong (EX-REV-774-a). The
+    floor here is that measured gap; the tighter level is the strict xfail below.
+    """
+    oracle = (
+        pl.read_csv(Path(__file__).parent / "fixtures" / "nflverse_third_down_2022_2023.csv")
+        .group_by("distance")
+        .agg(pl.col("attempts").sum(), pl.col("converted").sum())
+        .with_columns((pl.col("converted") / pl.col("attempts")).alias("nflverse_rate"))
+    )
+    c = load_third_down_curve("nfl").join(oracle, on="distance").filter(pl.col("distance") <= 10)
+    assert c.height == 10 and c["attempts"].min() >= 500
+    gap = (c["rate"] - c["nflverse_rate"]).abs()
+    assert gap.max() <= 0.0579, c
+    assert gap.mean() <= 0.0224, c
+    print("NFL_THIRD_DOWN_LEVEL_OK", round(gap.max(), 4), round(gap.mean(), 4))
+
+
+@pytest.mark.xfail(
+    strict=True,
+    raises=AssertionError,
+    reason="EX-1.5-b -> refit the bundled curve after the nfl/espn 2020-21 reprocess (EX-REV-774-a)",
+)
+def test_nfl_third_down_curve_matches_nflverse_within_two_points():
+    """The level the curve should hold once refit on clean seasons: the 2022-23 refit reads max gap 0.009."""
+    oracle = (
+        pl.read_csv(Path(__file__).parent / "fixtures" / "nflverse_third_down_2022_2023.csv")
+        .group_by("distance")
+        .agg(pl.col("attempts").sum(), pl.col("converted").sum())
+        .with_columns((pl.col("converted") / pl.col("attempts")).alias("nflverse_rate"))
+    )
+    c = load_third_down_curve("nfl").join(oracle, on="distance").filter(pl.col("distance") <= 10)
+    assert (c["rate"] - c["nflverse_rate"]).abs().max() <= 0.02, c
+
+
 def test_advbox_carries_the_usage_sections(game):
     _, out, _ = game
     box = out["advBoxScore"]

@@ -51,6 +51,18 @@ def test_read_release_parquet_returns_df_on_success():
     assert out is not None and out.shape == (3, 1)
 
 
+@pytest.mark.parametrize("read", [rt._fetch_release_parquet, rt._read_release_parquet])
+def test_release_read_goes_through_pyarrow(read):
+    """A-M10: polars' own reader asks the release CDN for a suffix range, which it answers 501.
+
+    Removing ``use_pyarrow=True`` brings that back on every release loader under polars 2.0,
+    so the kwarg itself is the contract (CLAUDE.md "Polars version").
+    """
+    with patch.object(rt.pl, "read_parquet", return_value=pl.DataFrame({"a": [1]})) as rp:
+        read("https://github.com/o/r/releases/download/t/x.parquet")
+    rp.assert_called_once_with("https://github.com/o/r/releases/download/t/x.parquet", use_pyarrow=True)
+
+
 def test_success_path_never_calls_the_transport():
     """The bytes must NOT be routed through ``download``.
 

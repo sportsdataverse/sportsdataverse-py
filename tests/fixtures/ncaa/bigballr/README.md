@@ -39,8 +39,10 @@ Scoreboards: `scoreboard_18703_11-11-2025.html` (MBB), `scoreboard_18423_12-05-2
 **Structural fact these captures settle:** WBB play-by-play ships one table per
 QUARTER (line score `1 2 3 4 [OT…] S`); MBB ships halves. wbigballR (an older fork
 of bigballR) applies the MBB halves clock math to WBB and therefore misreads a
-regulation WBB game as having two overtimes — see `oracle/wbb/README.md` for how
-parity scope is adjusted.
+regulation WBB game as having two overtimes. The parity scope that follows from it (which
+WBB play-by-play columns are compared against the oracle and which are excluded) is set out
+in the docstring of `tests/wbb/test_wbb_ncaa_game_pbp_parity.py`; `oracle/wbb/README.md`
+records only the oracle's provenance.
 
 ## `oracle/mbb/` (17 CSVs) and `oracle/wbb/` (15 CSVs)
 

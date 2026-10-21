@@ -1,0 +1,876 @@
+# Mutation registry: the "mutation that must go red" line of every gate in the quality program's
+# ledgers (ClaudeCowork plans/2026-10-08-sdv-py-quality-refactor/gates/*.md), run by
+# tools/run_mutants.py (CI: .github/workflows/quality.yml `mutants` job).
+#
+# Row fields:
+#   id        unique slug
+#   group     optional label for `--only <group>` and the "<group>: k/n mutants killed" summary
+#   finding   the audit finding id (CONSOLIDATED-TIER-{A,B,C}.md row)
+#   file      source file, relative to the repo root
+#   snippet   text that occurs EXACTLY ONCE in `file` (never a line number)
+#   mutant    the replacement text
+#   test      the pytest target that must go red (a file or node id, `-k` allowed)
+#   expected  `kill` -- the job fails if `test` stays green under `mutant`
+#             `{survive_until: <task>}` -- the audit measured that `test` stays green today; the
+#             row documents the gap until that plan task lands its killing test (then flip the
+#             row to `kill`, pointing `test` at it). An early kill is reported, never fatal.
+#   note      why the row exists / what flips it
+#
+# Seeding rule: every `MUTATION:` line of a ledger gate gets a row in the PR that lands that
+# gate's test (1.1-1.5 implementers add theirs; the 11 ledger lines without a row today are
+# 1.1-1.5 deliverables whose killing test does not exist yet). An unapplicable row (drifted or
+# duplicated snippet, missing test, non-compiling mutant) fails the job whatever `expected`
+# says: fix the row in the PR that moved the code.
+#
+# Every row was run on the branch point (36f7a02f1b): each `kill` row is killed, each
+# `survive_until` row survives (see the PR body of `ci: mutation registry and job`). The rows 1.1
+# added or flipped were run on its head (PR #758 body).
+
+# --- C-L12: cross-game `.over("game_id")` guards in nfl/ep_wp.py ---------------------------------
+# Killer (1.1): the frames the pipeline hands calculate_epa / calculate_wpa for two real captures
+# (401547449 + 401671740), stacked, must equal the per-game runs column by column.
+- id: ep-wp-lag-ep-end-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lag_EP_end=pl.col("EP_end").shift(1).over("game_id"),'
+  mutant: 'lag_EP_end=pl.col("EP_end").shift(1),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: >-
+    rt-C-models-001; ledger gate real-concat-test (1.1). Moved off the synthetic
+    test_ep_wp_epa.py::test_no_cross_game_leak, which 1.1 replaced with two real captures.
+
+- id: ep-wp-lag-change-of-pos-team-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1).over("game_id"),'
+  mutant: 'lag_change_of_pos_team=pl.col("change_of_pos_team").shift(1),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: rt-C-models-001 (survived 555 synthetic tests); killed by 1.1's real two-game concat
+
+- id: ep-wp-scoring-play-shift-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.col("scoring_play").shift(1).over("game_id") == True,'
+  mutant: 'pl.col("scoring_play").shift(1) == True,'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_reaches_the_post_score_clock_stoppage_guard
+  expected: kill
+  note: >-
+    rt-C-models-002 (the post-score clock-stoppage branch). No capture opens on a clock-stoppage
+    row, so the test reorders real rows: 401547449 truncated after its last scoring play,
+    401671740 with its own first official timeout moved to its head; the per-game run of the same
+    rows is the oracle. The mutant moves EP_start, EP_end, ep, ep_start and ep_end.
+
+- id: ep-wp-lead-wp-before-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lead_wp_before=pl.col("wp_before").shift(-1).over("game_id"),'
+  mutant: 'lead_wp_before=pl.col("wp_before").shift(-1),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: C-L12 (calculate_wpa was never mutated by the audit); killed by 1.1's real two-game concat
+
+- id: ep-wp-lead-wp-before2-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'lead_wp_before2=pl.col("wp_before").shift(-2).over("game_id"),'
+  mutant: 'lead_wp_before2=pl.col("wp_before").shift(-2),'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs
+  expected: kill
+  note: C-L12 measured 7-14 helper rows moving on real two-game concats
+
+- id: ep-wp-vegas-home-wpa-over-game-id
+  group: over-game-id
+  finding: C-L12
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '(pl.col("vegas_home_wp").shift(-1).over(grp) - pl.col("vegas_home_wp"))'
+  mutant: '(pl.col("vegas_home_wp").shift(-1) - pl.col("vegas_home_wp"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs_nflverse_wpa
+  expected: kill
+  note: >-
+    C-L12 measured vegas_home_wpa moving on 3 rows; the nflverse-path _derive_wpa on the two
+    committed nflverse slices, stacked vs per game (1.1)
+
+# --- C-L20: a constant cp passed the ep_wp test module ------------------------------------------
+- id: ep-wp-constant-cp
+  finding: C-L20
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'pl.Series("cp", cp_preds.tolist(), dtype=pl.Float64)'
+  mutant: 'pl.Series("cp", [0.5] * len(cp_preds), dtype=pl.Float64)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_completion_probability_reproduces_nflverse
+  expected: kill
+  note: >-
+    rt-C-models-004: eleven return-type / not-null tests passed a constant cp. Killed early (the
+    row read survive_until 1.5) by 1.1's oracle: the CP booster on nflverse's own inputs must
+    reproduce nflverse's cp (corr >= 0.994 / 0.993, MAE <= 0.016 on the two slices).
+
+# --- C-M7 / C-M8: prob_2pt dtype mix across captures ----------------------------------------------
+- id: nfl-prob-2pt-float64
+  finding: C-M7
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32))'
+  mutant: 'scored_pl = pl.from_pandas(scored).with_columns(pl.col("go_index").cast(pl.UInt32), pl.col("prob_2pt").cast(pl.Float64))'
+  test: tests/nfl/test_nfl_schema_allowlist.py::test_prob_2pt_has_one_documented_dtype
+  expected: kill
+  note: >-
+    The 2.17 fix as a mutant: prob_2pt Float64 whether or not the two-point model scores turns
+    the C-M7 strict xfail (Float32 on 400791508, Float64 on 221013007) into XPASS. Needs the
+    download-on-demand nfl4th WP booster, which the test loads explicitly: without it the test
+    skips by name and the mutant survives. 2.17 drops the marker and rewrites this row (the
+    snippet then carries the cast).
+
+# --- C-H1: the phase-2 `-3` port flips 1.1's 31 strict xfails --------------------------------------
+- id: nfl-second-level-yards-port
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py::test_rushing_decomposition_sums_to_the_carry[401872922]
+  expected: kill
+  note: >-
+    The xfails are live: the CFB `-3` port makes line + second level + open field equal the carry
+    on every 4+ yard rush, so all 31 strict xfails XPASS (measured: 31 failed; the row runs one
+    game to stay cheap). 2.1 lands exactly
+    this, drops the markers and rewrites this row and nfl-second-level-yards-offset (snippet
+    `- 3)`, mutant `- 4)`, expected kill).
+
+# --- C-M6: CFB overtime shootout threshold is period-based only -----------------------------------
+- id: cfb-ot-shootout-threshold-6
+  group: cfb-ot-thresholds
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
+  mutant: 'return (pl.col("period.number") >= 6) & ~last_td'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
+  expected:
+    survive_until: "3.2"
+  note: rt-C-processing-002; 1.2 commits one capture per OT rule set, 3.2 adds test_cfb_overtime_eras.py
+
+- id: cfb-ot-shootout-threshold-7
+  group: cfb-ot-thresholds
+  finding: C-M6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'return (pl.col("period.number") >= 5) & ~last_td'
+  mutant: 'return (pl.col("period.number") >= 7) & ~last_td'
+  test: tests/cfb/test_cfb_pbp_offline.py -k "overtime or shootout"
+  expected:
+    survive_until: "3.2"
+  note: the only shootout fixture (401282146) has its first attempt in period 7, so >= 7 still passes
+
+# --- C-M13 / C-NF-2: the CFB opening-kickoff team can be inverted unnoticed ------------------------
+- id: cfb-first-half-kickoff-team-swap
+  finding: C-M13
+  file: sportsdataverse/cfb/cfb_pbp.py
+  # the live frame expression (cfb_pbp.py:2865-2873) that start/end.pos_team_receives_2H_kickoff read;
+  # block scalars: the first line sets the indent, the later lines keep their 16 spaces
+  snippet: |-
+    .then(pl.col("homeTeamId"))
+                    .otherwise(pl.col("awayTeamId"))
+                    .alias("firstHalfKickoffTeamId"),
+  mutant: |-
+    .then(pl.col("awayTeamId"))
+                    .otherwise(pl.col("homeTeamId"))
+                    .alias("firstHalfKickoffTeamId"),
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "first_half_kickoff_team and (400547699 or 400547865)"
+  expected: kill
+  note: >-
+    C-NF-2. The row used to mutate the pbp_txt["firstHalfKickoffTeamId"] np.where at :3323-3330, a
+    dict key nothing reads or returns, so no test could ever kill it (tier C M13's "survives 242
+    tests" was measured there). The swap of the live expression makes the home-kicked captures
+    right, so their strict-xfail truth tests XPASS (red). Task 2.6 deletes the dead np.where block
+    and flips the test to a plain assert, which then kills the swap on every capture.
+
+# --- C-H4: the CFB kickoff touchback spot (the rule: 80 through 2011, 75 from 2012; main's #778) ------
+- id: cfb-kickoff-touchback-75-from-2014
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
+                    .then(75)
+  mutant: |-
+    pl.when((kick_mask).and_(pl.col("season") >= _KICKOFF_2012_RULES_FROM))
+                    .then(80)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (322590228 or 400547866 or 401628455)"
+  expected: kill
+  note: >-
+    a regression of the 75 spot from 2012 (2012's 322590228, 2014+'s 400547866 / 401628455 go red).
+    Re-keyed on main's #778 (2b73fa5a5e) snippet; the id keeps its old name so ledgers still resolve.
+
+- id: cfb-kickoff-touchback-80-through-2011
+  group: cfb-touchback
+  finding: C-H4
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: |-
+    .when(kick_mask)
+                    .then(80)
+  mutant: |-
+    .when(kick_mask)
+                    .then(75)
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "touchback and (313090025 or 243040130)"
+  expected: kill
+  note: >-
+    cfbfastR's unconditional 75 (create_epa.R:233), the parity "fix" the owner ruled against: 2011's
+    313090025 and 2004's 243040130 go red. Re-keyed on main's #778 (2b73fa5a5e) snippet.
+
+# --- C-H1 (CFB twin) / C-NF-3: the CFB rushing decomposition --------------------------------------
+- id: cfb-second-level-yards-offset
+  group: cfb-rush-yards
+  finding: C-H1
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 3))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "decomposition and (400547866 or 401628455)"
+  expected: kill
+  note: the half-yard C-H1 left in NFL; the CFB decomposition-sum test pins the fixed `-3`
+
+- id: cfb-line-yards-loss-credit
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1.2 * pl.col("adj_rush_yardage"))'
+  mutant: '.then(pl.col("adj_rush_yardage"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "losses_and_gains and (400547866 or 401628455)"
+  expected: kill
+  note: the 120% loss credit of the per-yard band (EXECUTION-FINDINGS ruling for 2.1)
+
+- id: cfb-line-yards-loss-null
+  group: cfb-rush-yards
+  finding: C-NF-3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '.then(1.2 * pl.col("adj_rush_yardage"))'
+  mutant: '.then(None)'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "losses_and_gains and (400547866 or 401628455)"
+  expected: kill
+  note: >-
+    review of #760 (R2): a null line_yards on every loss survived 252/252 when the mismatch filters
+    dropped nulls; the null-aware filter kills it
+
+# --- C-T3 / R-010: the static season-literal gate -------------------------------------------------
+- id: season-literal-gate-new-literal
+  finding: C-T3
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: 'kick_spot = pl.when(pl.col("season") <= 2004)'
+  mutant: 'kick_spot = pl.when(pl.col("season") <= 2005)'
+  test: tests/test_no_inline_season_literals.py
+  expected: kill
+  note: a literal without an allowlist row (and an allowlisted one gone) fails the gate
+
+# --- C-H1: NFL second_level_yards half-yard (the CFB `-3` port never reached NFL) ----------------
+- id: nfl-second-level-yards-offset
+  finding: C-H1
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '.then(0.5 * (pl.col("adj_rush_yardage") - 4))'
+  mutant: '.then(0.5 * (pl.col("adj_rush_yardage") - 5))'
+  test: tests/nfl/test_nfl_pbp_sweep_fixes.py
+  expected:
+    survive_until: "2.1"
+  note: >-
+    Today the shipped code IS the audit's mutant (`- 4`); no offline NFL test pins the
+    decomposition, so a further half-yard survives. 2.1 ports `- 3` and 1.1's decomposition-sum
+    xfail becomes a plain assert: rewrite this row then as snippet `- 3)` / mutant `- 4)`,
+    test tests/nfl/test_nfl_whole_game_oracle.py, expected kill.
+
+# --- A-M10: the release read must stay use_pyarrow=True (polars 2.0 suffix-range -> HTTP 501) ----
+- id: codegen-runtime-use-pyarrow
+  finding: A-M10
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: 'return pl.read_parquet(url, use_pyarrow=True)'
+  mutant: 'return pl.read_parquet(url)'
+  test: tests/codegen/test_runtime_release.py -k pyarrow
+  expected: kill
+  note: rt A/releases (14 passed before 1.3); 1.3 asserts the read_parquet mock's kwargs (ledger gate use-pyarrow-pinned)
+
+# --- B-M36: the NCAA capture clean-page check has no behavioural test ---------------------------
+- id: ncaa-capture-is-clean-always-true
+  group: provider-gates
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'return len(html) > _MIN_BYTES and len(_TR_RE.findall(html)) > _MIN_ROWS'
+  mutant: 'return True'
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: >-
+    rt-B-ncaa-stats-002 (175 passed on test_scrape_ncaa_league.py); 1.4's capture tests write the
+    real Akamai "Access Denied" page as a bundle under this mutant (ledger gate capture-behaviour)
+
+# --- B-M37: the Fox CFB end-to-end test cannot tell which side's snaps are mirrored --------------
+- id: fox-cfb-yardline-mirror-flip
+  group: provider-gates
+  finding: B-M37
+  file: sportsdataverse/cfb/cfb_pbp_fox.py
+  snippet: 'return int(e["yardStart"])'
+  mutant: 'return 100 - int(e["yardStart"])'
+  test: tests/cfb/test_cfb_pbp_fox_offline.py
+  expected: kill
+  note: >-
+    B-H3 is live (away snaps mirrored); flipping the mirror onto the home snaps kept
+    test_fox_cfb_pbp_full_pipeline green. 1.4's home-snap assert goes red and its strict-xfail
+    away-snap assert goes XPASS(strict) under this mutant (ledger gate fox-away-snap-xfail).
+
+# --- C-L30: the NHL faceoff gate cannot detect a skipped fit --------------------------------------
+- id: nhl-faceoff-skip-fit
+  finding: C-L30
+  file: sportsdataverse/nhl/nhl_faceoff_value.py
+  snippet: 'if taker_rows.height < 20 or len(feature_names) == 0:'
+  mutant: 'if True:'
+  test: tests/nhl/test_nhl_faceoff_value.py::test_context_fit_reproduces_real_cell_win_rates
+  expected: kill
+  note: >-
+    model-analytics-002 (4 passed with the fit skipped; the model then predicts 0.5 everywhere).
+    Killed by 1.5's real-slice cell gate (7,016 api-web faceoffs; power play 0.553 vs 0.5).
+
+# --- C-L21 / C-L22 / C-L34: rank-only ratings gates (ledger gate level-gates-beside-rank-gates) ---
+- id: nfl-ratings-adj-net-scaled
+  group: ratings-level
+  finding: C-L21
+  file: sportsdataverse/nfl/nfl_ratings.py
+  snippet: 'with_columns(adj_net=pl.col("adj_off_epa") - pl.col("adj_def_epa"))'
+  mutant: 'with_columns(adj_net=(pl.col("adj_off_epa") - pl.col("adj_def_epa")) * 10 + 5)'
+  test: tests/nfl/test_nfl_ratings_oracle.py
+  expected: kill
+  note: model-models-004; both NFL ratings gates are rank-only. Killed by 1.5's level gate vs raw team EPA
+
+- id: nba-team-ratings-no-opponent-adjustment
+  group: ratings-level
+  finding: C-L22
+  file: sportsdataverse/nba/nba_team_ratings.py
+  snippet: 'for _ in range(max_iter):'
+  mutant: 'for _ in range(0):'
+  test: tests/nba/test_nba_team_ratings_oracle.py
+  expected: kill
+  note: >-
+    model-models-005. This snippet is the PACE fixed point (the net-rating fixed point lives in
+    _common/ratings.py: row nba-ratings-no-net-adjustment). Killed by 1.5's adj_pace level gate
+    (MAE vs stats.nba.com PACE 1.3388 -> 1.3477).
+
+- id: cfb-resume-sos-affine
+  group: ratings-level
+  finding: C-L34
+  file: sportsdataverse/cfb/cfb_resume.py
+  snippet: 'pl.col("opp_adj_net").mean().alias("sos"),'
+  mutant: '(pl.col("opp_adj_net").mean() * 5 + 3).alias("sos"),'
+  test: tests/cfb/test_cfb_resume_oracle.py
+  expected: kill
+  note: model-analytics-007; resume gates are rank-only. Killed by 1.5's mean-opponent-adj_net level gate
+
+# --- A-M1 / A-L2 / A-L53: the generate.py --check gates go red (ledger gate codegen-red-path-gates) ---
+- id: codegen-live-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_live_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_live_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and live"
+  expected: kill
+  note: the ledger gate's own mutation (making _live_stale return [] unconditionally)
+
+- id: codegen-flat-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_flat_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_flat_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and flat"
+  expected: kill
+
+- id: codegen-parsed-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_parsed_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_parsed_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and parsed"
+  expected: kill
+
+- id: codegen-loaders-stale-returns-empty
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_loaders_")'
+  mutant: |2-
+        return []
+        tmp = _check_tmp("_check_loaders_")
+  test: tests/codegen/test_check.py -k "red_path_stale_gate_lists and loaders"
+  expected: kill
+
+- id: codegen-staging-check-returns-zero
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '    tmp = _check_tmp("_check_")'
+  mutant: |2-
+        return 0
+        tmp = _check_tmp("_check_")
+  test: tests/codegen/test_check.py -k red_path_staging_check
+  expected: kill
+
+- id: codegen-docs-stale-no-orphans
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: 'stale.append(f"{f.relative_to(DOCS).as_posix()} (orphan)")'
+  mutant: pass
+  test: tests/codegen/test_check.py -k docs_stale
+  expected: kill
+
+- id: codegen-coverage-gaps-never-appended
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: '            gaps.append((label, missing))'
+  mutant: '            pass'
+  test: tests/codegen/test_check.py -k coverage_gaps
+  expected: kill
+
+- id: codegen-main-check-rc-always-zero
+  group: codegen-gates
+  finding: A-M1
+  file: tools/codegen/generate.py
+  snippet: |2-
+            return rc
+        build()
+  mutant: |2-
+            return 0
+        build()
+  test: tests/codegen/test_check.py -k rc_is_one
+  expected: kill
+
+- id: codegen-check-tmp-fixed-name
+  group: codegen-gates
+  finding: A-L2
+  file: tools/codegen/generate.py
+  snippet: '    return Path(tempfile.mkdtemp(prefix=prefix, dir=OUT))'
+  mutant: |2-
+        tmp = OUT / f"{prefix}fixed"
+        shutil.rmtree(tmp, ignore_errors=True)
+        tmp.mkdir()
+        return tmp
+  test: tests/codegen/test_check.py -k overlap
+  expected: kill
+  note: ANY fixed name (not only the historical _check_*_tmp) fails the in-process overlap test (review R2)
+
+- id: codegen-star-import-commented
+  group: codegen-gates
+  finding: A-L53
+  file: sportsdataverse/wnba/__init__.py
+  snippet: from sportsdataverse.wnba.wnba_espn_ext import *
+  mutant: '# from sportsdataverse.wnba.wnba_espn_ext import *'
+  test: tests/codegen/test_check.py -k star_imported
+  expected: kill
+
+# --- A-M5: the discovered error-vocabulary matrix (ledger gate discovered-vocabulary-matrix) -----
+- id: runtime-matrix-uefa-skips-status
+  group: codegen-gates
+  finding: A-M5
+  file: sportsdataverse/soccer/uefa_runtime.py
+  snippet: '    return _json_body(resp, url)'
+  mutant: '    return resp.json()'
+  test: tests/codegen/test_runtime_errors.py -k "discovered and uefa"
+  expected: kill
+
+# --- A-M2 / A-L14 / A-N14 / A-L55: parser and schema gates --------------------------------------
+- id: espn-to-output-keeps-list-cells
+  group: codegen-gates
+  finding: A-M2
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: 'str(v) if isinstance(v, (dict, list)) else v'
+  mutant: 'str(v) if isinstance(v, dict) else v'
+  test: tests/test_espn_universal_parsers.py -k dtype_snapshot
+  expected: kill
+  note: the ledger gate hostile-body-sweep's mutation (_to_output stringifies a list column differently)
+
+- id: espn-registry-extra-key
+  group: codegen-gates
+  finding: A-L14
+  file: sportsdataverse/_common_espn_parsers.py
+  snippet: '    "coaches": parse_coaches,'
+  mutant: |2-
+        "coaches": parse_coaches,
+        "coaches_x": parse_coaches,
+  test: tests/codegen/test_capture_fixtures.py -k equality
+  expected: kill
+
+- id: native-schema-column-renamed
+  group: codegen-gates
+  finding: A-N14
+  file: tools/codegen/schemas/native/nhl_api_web/standings.yaml
+  snippet: |
+    - name: conference_abbrev
+  mutant: |
+    - name: conference_abbrev_renamed
+  test: tests/codegen/test_native_schema_sweep.py -k "nhl_api_web and standings"
+  expected: kill
+
+- id: id-cast-empty-frame-cast
+  group: codegen-gates
+  finding: A-L55
+  file: sportsdataverse/_codegen_runtime.py
+  snippet: |2-
+        if df.height == 0:
+            return df
+        for col in cols:
+  mutant: '    for col in cols:'
+  test: tests/codegen/test_id_casts.py -k empty_frame_keeps
+  expected: kill
+  note: casting the empty frame too is task 5.2's fix; the strict xfail turns XPASS (red), which is the kill
+
+# --- task 1.4: hand-written provider gates (group provider-gates) -------------------------------
+- id: cfb-schedule-drop-null-competitor-guard
+  group: provider-gates
+  finding: B-M34
+  file: sportsdataverse/cfb/cfb_schedule.py
+  snippet: 'if not _comps or not (_comps[0].get("competitors") or []):'
+  mutant: 'if False:'
+  test: tests/cfb/test_cfb_schedule_teams_offline.py
+  expected: kill
+  note: >-
+    the real 2014 scoreboard's `{}` placeholder event (and an emptied competitions list) must not
+    discard the day (ledger gate espn-8-league-offline-snapshots; the 2010 capture no longer
+    carries a placeholder)
+
+- id: nba-schedule-returns-none
+  group: provider-gates
+  finding: B-M34
+  file: sportsdataverse/nba/nba_schedule.py
+  snippet: 'return ev.to_pandas() if return_as_pandas else ev'
+  mutant: 'return None'
+  test: tests/nba/test_nba_schedule_teams_offline.py
+  expected: kill
+  note: the offline snapshot on scoreboard_nba.json (task 1.4 evidence line)
+
+- id: player-stats-display-value-first
+  group: provider-gates
+  finding: B-M33
+  file: sportsdataverse/_common_espn_player_stats.py
+  snippet: 'out[col] = num if num is not None else stat.get("displayValue")'
+  mutant: 'out[col] = stat.get("displayValue") if stat.get("displayValue") is not None else num'
+  test: tests/test_common_espn_player_stats.py
+  expected: kill
+  note: the pinned capture values (ledger gate player-stats-offline)
+
+- id: ncaa-parse-quarters-for-every-season
+  group: provider-gates
+  finding: B-M35
+  file: sportsdataverse/scrape/ncaa/parse.py
+  snippet: 'pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=wbb_period_model(season))'
+  mutant: 'pbp_df = parse_ncaa_bb_game_pbp(pbp_html, contest_id, period_model=(4, 600, 300))'
+  test: tests/scrape/ncaa/test_parse_era.py
+  expected: kill
+  note: the 2015 halves-era bundle parses to 0 rows (ledger gate ncaa-era-integration)
+
+- id: ncaa-v1-name-last-dot-first
+  group: provider-gates
+  finding: B-L39
+  file: sportsdataverse/mbb/mbb_ncaa_game_pbp.py
+  snippet: 'name = f"{first}.{last}"'
+  mutant: 'name = f"{last}.{first}"'
+  test: tests/scrape/ncaa/test_parse_era.py::test_v1_last_first_names_become_first_dot_last
+  expected: kill
+  note: the V1 LAST,FIRST branch on the real 2015 page
+
+- id: ncaa-capture-soft-ban-never-stops
+  group: provider-gates
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'if max_consecutive_failures and consecutive_failures >= max_consecutive_failures:'
+  mutant: 'if False:'
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: soft-ban stop
+
+- id: ncaa-capture-shard-rotation-offset
+  group: provider-gates
+  finding: B-M36
+  file: sportsdataverse/scrape/ncaa/capture.py
+  snippet: 'k = (shard_i * len(vendor["proxies"])) // shard_n'
+  mutant: 'k = 0'
+  test: tests/scrape/ncaa/test_capture_behaviour.py
+  expected: kill
+  note: every worker would start on the same sticky proxy
+
+- id: cbs-scoreboard-logo-order-swapped
+  group: provider-gates
+  finding: B-L61
+  file: sportsdataverse/football/cbs_common.py
+  snippet: '"away_cbs_team_id": teams[0] if len(teams) > 0 else None,'
+  mutant: '"away_cbs_team_id": teams[1] if len(teams) > 1 else None,'
+  test: tests/nfl/cbs_pbp/test_to_espn_summary.py::test_the_first_card_logo_is_the_away_team_on_a_real_page
+  expected: kill
+  note: the away-first logo order on the real 2025 week-1 page
+
+- id: pff-strict-env-only-one
+  group: provider-gates
+  finding: B-L65
+  file: sportsdataverse/nfl/pff_api_runtime.py
+  snippet: 'in {"1", "true", "yes"}'
+  mutant: 'in {"1"}'
+  test: tests/nfl/test_pff_api_runtime.py
+  expected: kill
+  note: the audit's mutant (passed all 47 tests); the documented true/yes spellings are now pinned
+
+- id: dl-utils-timeout-not-forwarded
+  group: provider-gates
+  finding: test-harness R1 (progress.md 10-11 06:52)
+  file: sportsdataverse/dl_utils.py
+  snippet: 'response = send(url, params=params, proxies=proxy, headers=headers, timeout=timeout, **body)'
+  mutant: 'response = send(url, params=params, proxies=proxy, headers=headers, **body)'
+  test: tests/test_dl_utils.py::TestDownload::test_download_valid_url_with_short_timeout
+  expected: kill
+  note: the short-timeout test is now offline and deterministic (an injected session raises the Timeout)
+
+# --- task 1.5: model and analytics gates (ledger test-harness.md) ------------------------------------
+- id: nba-ratings-no-net-adjustment
+  group: ratings-adjuster
+  finding: C-L22
+  file: sportsdataverse/_common/ratings.py
+  snippet: '    for _ in range(max_iter):'
+  mutant: '    for _ in range(0):'
+  test: tests/nba/test_nba_team_ratings_oracle.py::test_opponent_adjustment_moves_net_toward_the_adjusted_oracle
+  expected: kill
+  note: the audit's no-op opponent adjustment (adj_net == raw net); mean |adj - raw| 0.3253 -> 0
+
+- id: nfl-current-season-flips-a-day-late
+  group: frozen-clock
+  finding: C-M14
+  file: sportsdataverse/nfl/utils_date.py
+  snippet: '    return current_year if today >= season_start else current_year - 1'
+  mutant: '    return current_year if today > season_start else current_year - 1'
+  test: tests/nfl/test_utils_date_frozen.py
+  expected: kill
+  note: the nflreadr table catches a one-day slip of the season flip in every season
+
+- id: cfb-fourth-down-go-wp-scaled
+  group: fourth-down-level
+  finding: gap-C-124
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: '    out["go_wp"] = go["go_wp"].to_numpy()'
+  mutant: '    out["go_wp"] = go["go_wp"].to_numpy() * 0.98'
+  test: tests/cfb/test_cfb_fourth_down.py -k oracle
+  expected: kill
+  note: >-
+    correlation stays 0.99741; MAE 0.0171 -> 0.0213 fails the level floor (the C-L21/C-L22 trap).
+    The NFL twin is hand-run only: its oracle test needs the download-on-demand nfl4th boosters,
+    which CI does not cache, so a registry row would read SURVIVED there.
+
+- id: cfb-fourth-down-punt-spread-sign
+  group: fourth-down-level
+  finding: gap-C-124
+  file: sportsdataverse/cfb/cfb_fourth_down.py
+  snippet: '    s["pos_team_spread"] = -s["pos_team_spread"].to_numpy().astype(float)'
+  mutant: '    s["pos_team_spread"] = s["pos_team_spread"].to_numpy().astype(float)'
+  test: tests/cfb/test_cfb_fourth_down.py -k oracle
+  expected: kill
+  note: the spread-sign class (gap-C-034) a bounds-only test cannot see
+
+- id: third-down-curve-scaled
+  group: analytics-level
+  finding: C-L38
+  file: sportsdataverse/football/usage_box.py
+  snippet: '        return pl.read_parquet(f)'
+  mutant: '        return pl.read_parquet(f).with_columns(pl.col("rate") * 0.8)'
+  test: tests/football/test_usage_box.py::test_nfl_third_down_curve_level_vs_nflverse
+  expected: kill
+  note: model-analytics-011; the band test passed a 0.8-scaled curve
+
+- id: adj-rapm-prior-dropped
+  group: analytics-level
+  finding: C-L39
+  file: sportsdataverse/nba/nba_adj_rapm.py
+  snippet: '    prior_mean = np.asarray(prior_mean, dtype=np.float64)'
+  mutant: '    prior_mean = np.zeros_like(np.asarray(prior_mean, dtype=np.float64))'
+  test: tests/nba/test_nba_adj_rapm.py -k real
+  expected: kill
+  note: model-analytics-012; the no-op prior on the real three-game possessions
+
+- id: player-crosswalk-no-fuzzy-matches
+  group: analytics-level
+  finding: C-L47
+  file: sportsdataverse/_common_crosswalk_basketball.py
+  snippet: '            if best >= min_confidence:'
+  mutant: '            if best > 1.0:'
+  test: tests/test_basketball_crosswalk_parity.py -k match_rate
+  expected: kill
+  note: sdvpy-ids-003; the fuzzy pass off drops the matched share below the R golden's
+
+- id: validate-game-rush-and-pass-never-fires
+  group: analytics-level
+  finding: C-L51
+  file: sportsdataverse/validation/pbp_invariants.py
+  snippet: '            _t("rush") & _t("pass"),'
+  mutant: '            _t("rush") & _t("pass") & pl.lit(False),'
+  test: tests/validation/test_validate_game.py -k planted
+  expected: kill
+  note: sdvpy-validation-002; a real processed game driven red
+
+- id: rds-date-class-dropped
+  group: analytics-level
+  finding: C-L58
+  file: sportsdataverse/_rds.py
+  snippet: 'attributes=[writer.class_attr(["Date"])]'
+  mutant: 'attributes=[writer.class_attr(["IDate"])]'
+  test: tests/release/test_release_parity.py::test_rds_branch_byte_golden
+  expected: kill
+  note: sdvpy-release-003; the R 4.6.1 byte oracle for the Date/Datetime/Int64/Null/Categorical branches
+
+- id: participants-cap-ignored
+  group: analytics-level
+  finding: supp-007
+  file: sportsdataverse/football/play_participants.py
+  snippet: '        missing = missing.head(max_fetches)'
+  mutant: '        missing = missing'
+  test: tests/football/test_play_participants_resolve.py
+  expected: kill
+
+- id: nfl-props-boundary-inclusive
+  group: analytics-level
+  finding: supp-009
+  file: sportsdataverse/nfl/nfl_player_props.py
+  snippet: '    past = player_stats.filter(pl.col("week") < as_of_week)'
+  mutant: '    past = player_stats.filter(pl.col("week") <= as_of_week)'
+  test: tests/nfl/test_nfl_player_props.py -k real
+  expected: kill
+  note: the leakage boundary on a real load_nfl_player_stats slice
+
+- id: spadl-x-axis-flipped
+  group: spadl-offline
+  finding: supp-010
+  file: sportsdataverse/soccer/spadl.py
+  snippet: '        x = (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH'
+  mutant: '        x = FIELD_LENGTH - (pt[0] - x0) / (x1 - x0) * FIELD_LENGTH'
+  test: tests/soccer/test_soccer_spadl.py -k "full_match or oracle"
+  expected: kill
+  note: the ledger gate's own mutation; the row-level parity now runs offline
+
+- id: xgb-threads-unclamped
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '    return n if n >= 1 else 1'
+  mutant: '    return n'
+  test: tests/test_xgb.py
+  expected: kill
+  note: the ledger names `_xgb.load_booster`, which does not exist; _xgb has xgb_threads + apply_thread_env
+
+- id: mch-ratings-wrong-league
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/hockey/mch/mch_ratings.py
+  snippet: 'league="mch", return_as_pandas'
+  mutant: 'league="wch", return_as_pandas'
+  test: tests/hockey/test_mch_ratings.py
+  expected: kill
+
+- id: mbb-season-wp-pregame-anchor-dropped
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/mbb/mbb_win_prob.py
+  snippet: '        p0 = pmap.get(str(gid), fallback)'
+  mutant: '        p0 = fallback'
+  test: tests/mbb/test_mbb_win_prob.py -k real_season
+  expected: kill
+  note: the pregame Brier on real outcomes rises to the HFA-only anchor's, above the floor
+
+- id: nfl-qbr-trainer-order
+  group: qbr-order
+  finding: gap-C-083
+  file: sportsdataverse/nfl/model_vars.py
+  snippet: 'qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]'
+  mutant: 'qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]'
+  test: tests/nfl/test_qbr_feature_order.py
+  expected: kill
+  note: >-
+    task 2.7's reorder: the strict xfail turns XPASS (red), which is the kill; 2.7 flips the xfail to a
+    plain assert in the same PR and points this row at its named-booster guard
+
+- id: nfl-fourth-down-go-wp-scaled
+  group: fourth-down-level
+  finding: gap-C-125
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '    out["go_wp"] = go["go_wp"].to_numpy()'
+  mutant: '    out["go_wp"] = go["go_wp"].to_numpy() * 0.98'
+  test: tests/nfl/test_nfl_fourth_down.py -k oracle_replay
+  expected: kill
+  note: >-
+    runs in CI now: the replay serves the nfl4th boosters' recorded outputs (review PR-774 R774-1).
+    Correlation stays 0.9985; MAE fails the level floor
+
+- id: nfl-fourth-down-wp-input-changed
+  group: fourth-down-level
+  finding: gap-C-125
+  file: sportsdataverse/nfl/nfl_fourth_down.py
+  snippet: '    diff_time_ratio = home_score_diff / np.exp(-4.0 * elapsed)'
+  mutant: '    diff_time_ratio = home_score_diff * np.exp(-4.0 * elapsed)'
+  test: tests/nfl/test_nfl_fourth_down.py -k oracle_replay
+  expected: kill
+  note: a booster input the recording never saw fails the replay (a changed input cannot pass silently)
+
+- id: xgb-threads-default-not-one
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '    raw = os.environ.get("SDV_XGB_THREADS", "1")'
+  mutant: '    raw = os.environ.get("SDV_XGB_THREADS", "2")'
+  test: tests/test_xgb.py
+  expected: kill
+  note: the measured default (1 thread; 50 -> 16.5 user CPU-seconds per two games), review PR-774 R774-6
+
+- id: xgb-thread-env-overrides-operator
+  group: untested-modules
+  finding: supp-013
+  file: sportsdataverse/_xgb.py
+  snippet: '        os.environ.setdefault(var, n)'
+  mutant: '        os.environ[var] = n'
+  test: tests/test_xgb.py
+  expected: kill
+  note: an operator's explicit OMP_NUM_THREADS must win (review PR-774 R774-6)
+
+# --- CI harness: the scoreboard's sync-PR allowance (tools/quality_scoreboard.py compare()) -------
+- id: scoreboard-worse-than-all-not-any
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/quality_scoreboard.py
+  snippet: '        elif all(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  mutant: '        elif any(status == "WORSE" for _, _, status in judged):  # worse than every baseline'
+  test: tests/tools/test_quality_scoreboard.py -k "upstream_baseline_allows or baseline_more_than_once or own_direction"
+  expected: kill
+  note: >-
+    A sync PR may match the upstream branch's baseline instead of the base's; "worse than any"
+    would take that allowance away and every sync PR would need a manual waiver again
+    (#784 #796 #800 #807 #811 #816).
+
+- id: upstream-baseline-sync-needs-base-without-tip
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/upstream_baseline.sh
+  snippet: '  0:1) ;;'
+  mutant: '  0:?) ;;'
+  test: tests/tools/test_upstream_baseline.py
+  expected: kill
+  note: >-
+    A head that contains the upstream tip is a sync only when the base does NOT contain it yet; "0:?"
+    would give every task PR on an already-synced base the upstream allowance (review R824-1).
+
+- id: upstream-baseline-shallow-guard
+  group: ci-harness
+  finding: scoreboard-upstream-baseline
+  file: tools/upstream_baseline.sh
+  snippet: '[ "$(git rev-parse --is-shallow-repository)" = false ] || warn_none "history is still shallow"'
+  mutant: 'true'
+  test: tests/tools/test_upstream_baseline.py
+  expected: kill
+  note: >-
+    In a shallow history "the base lacks the upstream tip" can be a false positive (fail OPEN), so a
+    history still shallow after the fetch must add no allowance (review R824-1).

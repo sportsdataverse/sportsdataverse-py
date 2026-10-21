@@ -1,6 +1,6 @@
 {
-  "commit": "df4f4874c2 (devel-program-setup after the second 10-18 main sync to 38a22f936d: #866, #864, #868, #870, #873, #892)",
-  "measured_at": "2026-10-18T18:04:30+00:00",
+  "commit": "a94fc676c1 (devel-test-harness after the 10-20 sync of program-setup b544c68158, main b4229f1ced)",
+  "measured_at": "2026-10-20T16:45:40+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 848,
@@ -8,7 +8,7 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 322341,
+      "value": 322345,
       "better": "info",
       "label": "Hand-written lines"
     },

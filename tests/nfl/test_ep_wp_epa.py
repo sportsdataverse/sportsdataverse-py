@@ -15,8 +15,10 @@ Tests
   (``3 - ep``), a turnover (sign flip), a kickoff (touchback EP), an
   end-of-half play (``-EP_start``), a penalty (``EP_between``) and a timeout
   (``EPA = 0``).
-* A two-game concatenated frame asserting NO cross-game leak: the first play
-  of game 2 must not borrow game 1's last ``EP_end`` as its lag.
+
+The cross-game leak guard (``.over("game_id")``) is tested on two real captures
+concatenated, in ``test_nfl_whole_game_oracle.py::test_real_concat_equals_per_game_runs``
+(C-L12: the synthetic two-row games it replaced passed with most guards removed).
 """
 
 from __future__ import annotations
@@ -266,66 +268,3 @@ def test_scoring_attempt_ep_start_forced_to_0_92(play_type: str, points_value: i
         f"{play_type}: expected epa={points_value - 0.92:.4f} "
         f"(points_value={points_value} - 0.92), got {out['epa'].to_list()[0]}"
     )
-
-
-# ---------------------------------------------------------------------------
-# Multi-game no-leak invariant
-# ---------------------------------------------------------------------------
-
-
-def test_no_cross_game_leak() -> None:
-    """First play of game 2 must NOT use game 1's last EP_end as its lag.
-
-    Game 1's last play ends with EP_end = 6.0 (a huge value).  Game 2's first
-    play is a penalty whose EPA depends on ``lag_EP_end`` via ``EP_between``.
-    With a correct ``.shift(1).over("game_id")`` the lag for G2's first play is
-    null (the boundary is respected); matching ``__process_epa`` verbatim
-    (which does NOT null-fill ``lag_EP_end``), ``EP_between`` and therefore the
-    penalty-branch ``EPA`` are null there.  Crucially they are NOT the leaked
-    value that a global ``.shift(1)`` would have produced.
-
-    Two assertions pin this down:
-
-    * The G2 lag came from inside G2 (null), not from G1's 6.0.
-    * A second G2 play (with a real in-game predecessor) computes a correct,
-      non-leaked EPA.
-    """
-    g1 = _frame(
-        "G1",
-        [
-            {"type.text": "Rush", "EP_start": 1.0, "EP_end": 2.0},
-            {"type.text": "Rush", "EP_start": 3.0, "EP_end": 6.0},
-        ],
-    )
-    g2 = _frame(
-        "G2",
-        [
-            # G2 first play: lag must be null (no leak from G1's 6.0)
-            {"type.text": "Rush", "EP_start": 0.5, "EP_end": 1.0},
-            # G2 second play: penalty whose lag_EP_end is G2 row 0's EP_end (1.0)
-            {
-                "type.text": "Rush",
-                "text": "holding penalty enforced",
-                "EP_start": 2.2,
-                "EP_end": 2.8,
-                "penalty_in_text": True,
-            },
-        ],
-    )
-    out = calculate_epa(pl.concat([g1, g2], how="vertical"))
-    g2 = out.filter(pl.col("game_id") == "G2")
-
-    # No leak: G2 row 0 lag_EP_end is null (not G1's 6.0).
-    assert g2["lag_EP_end"].to_list()[0] is None
-
-    # G2 row 1 penalty: lag_EP_end = 1.0 (from G2 row 0, in-game), no possession
-    # change -> EP_between = 2.2 - 1.0 = 1.2 ;
-    # EPA = EP_end - EP_start + EP_between = 2.8 - 2.2 + 1.2 = 1.8
-    g2_penalty_epa = g2["epa"].to_list()[1]
-    assert g2_penalty_epa == pytest.approx(1.8)
-
-    # Had the shift leaked across the boundary, G2 row 0 would have used G1's
-    # 6.0 as its lag — corrupting this in-game chain.  Assert we are NOT that:
-    # a leak would give EP_between = 2.2 - (-? )... the key guard is the null
-    # boundary above plus the exact 1.8 here.
-    assert g2_penalty_epa != pytest.approx(-3.2)

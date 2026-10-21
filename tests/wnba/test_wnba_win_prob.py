@@ -189,3 +189,32 @@ def test_return_as_polars_default(monkeypatch):
     out = build_wnba_season_wp(2024)
     assert isinstance(out, pl.DataFrame)
     assert set(_WP_COLS).issubset(out.columns)
+
+
+def test_real_season_slice_compiles_and_scores_against_real_outcomes(monkeypatch):
+    """supp-013: build_wnba_season_wp compiles a real 2024 season slice, scored against real results.
+
+    pbp: tests/fixtures/nba_prediction/wnba_pbp_sample_2024.parquet (every 10th play of all 264 games of
+    the 2024 `load_wnba_pbp` release, with each game's final-score `home_win`); schedule + team box: the
+    committed wnba_results_2024 / wnba_team_box_2024 (the box's `game_date` joined from the schedule, as
+    the loader ships it). Observed 2026-10-11: Brier in-game 0.16402, pregame 0.20678, base 0.24793.
+    """
+    import importlib
+    from pathlib import Path
+
+    fix = Path(__file__).resolve().parents[1] / "fixtures" / "nba_prediction"
+    pbp = pl.read_parquet(fix / "wnba_pbp_sample_2024.parquet")
+    sched = pl.read_parquet(fix / "wnba_results_2024.parquet")
+    box = pl.read_parquet(fix / "wnba_team_box_2024.parquet").join(
+        sched.select("game_id", pl.col("date").alias("game_date")), on="game_id", how="left"
+    )
+    core = importlib.import_module("sportsdataverse.wnba.wnba_win_prob")
+    monkeypatch.setattr(core, "_load_wnba_frames", lambda season: (pbp, core._normalize_schedule(sched), box))
+    out = build_wnba_season_wp(2024)
+    assert out.height == pbp.height and set(pbp.columns) <= set(out.columns)
+    y = out["home_win"].cast(pl.Float64)
+    brier_wp = float(((out["home_win_prob"] - y) ** 2).mean())
+    brier_pre = float(((out["pregame_home_prob"] - y) ** 2).mean())
+    assert brier_wp <= 0.1641 and brier_pre <= 0.2068, (brier_wp, brier_pre)
+    assert brier_wp < brier_pre < float(((y.mean() - y) ** 2).mean())
+    print("WNBA_SEASON_WP_REAL_OK", round(brier_wp, 5), round(brier_pre, 5))

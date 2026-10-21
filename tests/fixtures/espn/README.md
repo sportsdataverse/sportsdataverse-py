@@ -4,6 +4,8 @@
 
 - [ESPN universal-endpoint fixture payloads](#espn-universal-endpoint-fixture-payloads)
   - [Returns-table captures (2026-10-07)](#returns-table-captures-2026-10-07)
+  - [Schedule and teams captures (2026-06-08, `tools/capture_espn_fixtures.py`)](#schedule-and-teams-captures-2026-06-08-toolscapture_espn_fixturespy)
+  - [Provider-gate captures (2026-10-11, task 1.4)](#provider-gate-captures-2026-10-11-task-14)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -126,5 +128,46 @@ which keeps every parsed column). `generate.py --schemas` turns each into `schem
 | `transactions_nba.json` | espn_site_v2 `transactions` | nba | <https://site.api.espn.com/apis/site/v2/sports/basketball/nba/transactions?limit=500> |
 | `venue_nfl.json` | espn_core_v2 `venue` | nfl | <https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/venues/3663> |
 | `venues_nba.json` | espn_core_v2 `venues` | nba | <https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/venues?limit=1000> |
+
+## Schedule and teams captures (2026-06-08, `tools/capture_espn_fixtures.py`)
+
+Captured on 2026-06-08 (commit `3352368a03`) by `tools/capture_espn_fixtures.py`: each
+`scoreboard_<lg>.json` is the raw dict the generated `espn_<lg>_scoreboard(..., return_parsed=False)`
+returned for the tool's `_SCOREBOARD_KWARGS`, and each `teams_<lg>.json` is the raw Site v2
+`teams?limit=1000` page. The 8 hand-written `espn_<lg>_schedule` / `espn_<lg>_teams` families
+run offline on them (`tests/<lg>/test_<lg>_schedule_teams_offline.py`, via
+`tests/espn_family_offline.py`).
+
+| file | request | contents |
+|---|---|---|
+| `scoreboard_cfb.json` | `espn_cfb_scoreboard(dates=20241012, week=7, season_type=2)` | 17 events, 2024 week 7 (2024-10-12/13) |
+| `scoreboard_mbb.json` | `espn_mbb_scoreboard(dates=20241201)` | 1 event, 2024-12-01 |
+| `scoreboard_mlb.json` | `espn_mlb_scoreboard(dates=20241025)` | 1 event, 2024 World Series game 1 (2024-10-26 UTC) |
+| `scoreboard_nba.json` | `espn_nba_scoreboard(dates=20241201)` | 10 events, 2024-12-01/02 UTC |
+| `scoreboard_nfl.json` | `espn_nfl_scoreboard(week=6, season_type=2)` | 15 events: no `dates`, so the CURRENT season's week 6 at capture time (2025 season, 2025-10-10/13) |
+| `scoreboard_nhl.json` | `espn_nhl_scoreboard(dates=20241201)` | 5 events, 2024-12-01/02 UTC |
+| `scoreboard_wbb.json` | `espn_wbb_scoreboard(dates=20241201)` | 6 events, 2024-12-01/02 UTC |
+| `scoreboard_wnba.json` | `espn_wnba_scoreboard(dates=20240622)` | 3 events, 2024-06-22/23 UTC |
+| `teams_cfb.json` | `GET https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams?limit=1000` | 755 teams |
+| `teams_mbb.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams?limit=1000` | 362 teams |
+| `teams_mlb.json` | `GET https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams?limit=1000` | 30 teams |
+| `teams_nba.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams?limit=1000` | 30 teams |
+| `teams_nfl.json` | `GET https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams?limit=1000` | 32 teams |
+| `teams_nhl.json` | `GET https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/teams?limit=1000` | 32 teams |
+| `teams_wbb.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/teams?limit=1000` | 361 teams |
+| `teams_wnba.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/wnba/teams?limit=1000` | 15 teams |
+
+The standings and leaders captures of the same commit use the tool's `_STANDINGS_KWARGS` /
+`_LEADERS_KWARGS` (season 2024).
+
+## Provider-gate captures (2026-10-11, task 1.4)
+
+One request each, from a residential IP on 2026-10-11 (`requests.get`, no credentials):
+
+| file | request | contents |
+|---|---|---|
+| `scoreboard_cfb_2014_placeholder.json` | `GET http://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?dates=2014&groups=80&limit=500` (HTTP 200, 4.4 MB) | Trimmed to `events[82:87]` (top-level `leagues`, `groups`, `provider`, `week` kept whole): ESPN's real placeholder event (a bare `{}`, event 84 of 500) between two real games on each side. The 2010 season scoreboard the cfb guard was written for no longer carries a placeholder in its first 500 events (re-checked the same day); 2014 still does. |
+| `error_404_body.json` | `GET https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/summary?event=1` (HTTP 404), captured 2026-10-11 | ESPN's real 404 body, byte-for-byte: `{code, message}` (not the `{code, detail}` signature `scrape/espn/persist.py` checks, B-L4). |
+| `athlete_statistics_core_nba_1966_2024.json` | `GET https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2024/types/2/athletes/1966/statistics/` (HTTP 200) | LeBron James, 2023-24 regular season, byte-for-byte: 3 categories, 112 stats. Drives `tests/test_common_espn_player_stats.py` (B-M33). |
 
 - `wbb_calendar_2001.json`: `leagues[0].calendar` of `site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard?groups=50&dates=2001` (125 dates, 2000-11-10 to 2001-04-01), captured 2026-10-17.

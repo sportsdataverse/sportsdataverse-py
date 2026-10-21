@@ -12,6 +12,13 @@ Live integration tests live in ``test_espn_live.py`` (gated by
 
 from __future__ import annotations
 
+import functools
+import importlib
+import inspect
+import json
+from pathlib import Path
+from typing import Any, Dict, List
+
 import polars as pl
 import pytest
 
@@ -831,14 +838,24 @@ def _catalog_parser_names() -> set[str]:
     return {ep.parser for api in apis for ep in api.endpoints if ep.parser}
 
 
+def _ext_modules() -> list:
+    """Every generated ``*_espn_ext.py``, at any depth (the soccer leagues sit two levels down)."""
+    return sorted((Path(__file__).parents[1] / "sportsdataverse").rglob("*_espn_ext.py"))
+
+
+def _leagues() -> list:
+    from tools.codegen import generate, spec
+
+    return spec.load_leagues(generate.ENDPOINTS / "leagues.yaml").leagues
+
+
 def _generated_parser_imports() -> set[str]:
     """Every ``parse_*`` name imported from ``_common_espn_parsers`` by any
     generated ``*_espn_ext`` module."""
     import ast
-    from pathlib import Path
 
     out: set[str] = set()
-    for path in Path("sportsdataverse").glob("*/*_espn_ext.py"):
+    for path in _ext_modules():
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
             if isinstance(node, ast.ImportFrom) and node.module == "sportsdataverse._common_espn_parsers":
@@ -870,47 +887,31 @@ def test_generated_modules_import_only_defined_parsers():
     assert not undefined, f"generated modules import {len(undefined)} undefined parsers: {sorted(undefined)}"
 
 
-def test_return_parsed_shim_active_on_every_wrapper_across_all_leagues():
+def test_parser_import_scan_covers_all_modules():
+    """A-L15: the scan reads every league's ext module (thirty today), not the 11 a depth-1 glob saw."""
+    stems = {p.stem for p in _ext_modules()}
+    assert stems == {f"{lg.prefix}_espn_ext" for lg in _leagues()} and len(stems) >= 30
+
+
+def test_return_parsed_shim_active_on_every_wrapper_all_modules():
     """The return_parsed kwarg must appear in the signature of every
-    bound wrapper across all 7 league extension modules."""
+    bound wrapper of every league module in leagues.yaml (A-L15, A-L54)."""
+    import importlib
     import inspect
 
-    import sportsdataverse.cfb.cfb_espn_ext as cfb_mod
-    import sportsdataverse.mbb.mbb_espn_ext as mbb_mod
-    import sportsdataverse.mlb.mlb_espn_ext as mlb_mod
-    import sportsdataverse.nba.nba_espn_ext as nba_mod
-    import sportsdataverse.nfl.nfl_espn_ext as nfl_mod
-    import sportsdataverse.wbb.wbb_espn_ext as wbb_mod
-    import sportsdataverse.wnba.wnba_espn_ext as wnba_mod
-    from sportsdataverse.cfb.cfb_espn_ext import __all__ as cfb_all
-    from sportsdataverse.mbb.mbb_espn_ext import __all__ as mbb_all
-    from sportsdataverse.mlb.mlb_espn_ext import __all__ as mlb_all
-    from sportsdataverse.nba.nba_espn_ext import __all__ as nba_all
-    from sportsdataverse.nfl.nfl_espn_ext import __all__ as nfl_all
-    from sportsdataverse.wbb.wbb_espn_ext import __all__ as wbb_all
-    from sportsdataverse.wnba.wnba_espn_ext import __all__ as wnba_all
-
-    leagues = [
-        ("nba", nba_all, nba_mod),
-        ("wnba", wnba_all, wnba_mod),
-        ("mbb", mbb_all, mbb_mod),
-        ("wbb", wbb_all, wbb_mod),
-        ("cfb", cfb_all, cfb_mod),
-        ("nfl", nfl_all, nfl_mod),
-        ("mlb", mlb_all, mlb_mod),
-    ]
     missing = []
     total = 0
-    for league, names, mod in leagues:
-        for name in names:
+    for lg in _leagues():
+        parts = [lg.group, lg.prefix] if lg.group else [lg.prefix]
+        mod = importlib.import_module(".".join(["sportsdataverse", *parts, f"{lg.prefix}_espn_ext"]))
+        for name in mod.__all__:
             fn = getattr(mod, name, None)
             if fn is None or not callable(fn):
                 continue
             total += 1
-            sig = inspect.signature(fn)
-            if "return_parsed" not in sig.parameters:
-                missing.append(f"{league}.{name}")
-    assert total >= 750, f"sanity check: expected >=750 wrappers across 7 leagues, got {total}"
+            if "return_parsed" not in inspect.signature(fn).parameters:
+                missing.append(f"{lg.prefix}.{name}")
+    assert total >= 3000, f"sanity check: expected >=3000 wrappers across {len(_leagues())} leagues, got {total}"
     assert not missing, f"{len(missing)} wrappers missing the return_parsed shim: {missing[:10]}..."
 
 
@@ -1230,3 +1231,591 @@ def test_rankings_wrapper_routes_through_parse_rankings(monkeypatch):
     monkeypatch.setattr(ext, "_get", lambda *args, **kwargs: fixture)
     assert ext.espn_cfb_rankings(return_parsed=False) is fixture
     assert ext.espn_cfb_rankings().height == _RANKINGS_ROWS["cfb"]
+
+
+# ===========================================================================
+# Hostile bodies and the dtype snapshot (A-M2, A-L16, A-L17, A-M13, A-M14, A-M15, EX-1.3-a)
+# ===========================================================================
+#
+# Every public ``parse_*`` defined in a ``sportsdataverse/**/*_parsers.py`` module (214 today, the 30
+# ESPN registry parsers among them) is DISCOVERED and fed five hostile bodies, so a new parser is
+# swept with no edit here. The parser contract: the error envelope may raise the vocabulary's
+# failed-fetch errors (NoDataError / AssetFetchError) or return zero rows; the other four shapes must
+# return zero rows. The envelope is ESPN's own (tests/fixtures/runtime_errors/espn_site_roster_400.json).
+# Every committed top-level ESPN capture is parsed by its endpoint's parser and its (column, dtype)
+# set compared with tests/espn_parser_dtype_snapshot.json; regenerate that file with
+# ``python -m tests.test_espn_universal_parsers`` only for a deliberate dtype change.
+
+_SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
+# Four snapshot entries pin zero columns (injuries_mbb, injuries_wbb, team_schedule_cfb, team_schedule_nhl):
+# their captures are empty and parse to zero-width frames. Task 5.1 gives empty frames their documented schema.
+# scoreboard_cfb_2014_placeholder carries ESPN's real `{}` placeholder event, which has no ids: its row comes back
+# all-null, so its id columns keep the String dtype of every other scoreboard (A-M15, task 5.2), but the pandas hop
+# turns six Int64 columns Float64 (season_year, season_type, status_period, attendance, home_rank, away_rank;
+# A-M14's class, task 5.2). The snapshot pins that measured state.
+_ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
+# Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
+# hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
+# hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py, main #860).
+_NO_PARSER = {
+    "athlete_statistics_core_nba_1966_2024",
+    "athlete_statslog_lbj",
+    "depthcharts_mlb",
+    "depthcharts_nba",
+    "depthcharts_nfl",
+    "depthcharts_nhl",
+    "error_404_body",
+    "wbb_calendar_2001",
+}
+_PKG = Path(__file__).parents[1] / "sportsdataverse"
+
+
+def _registered() -> Dict[str, Any]:
+    """``{short: parser}``: the registry, plus the curated returns-schema parsers it lacks (``teams``)."""
+    from sportsdataverse._common_espn_parsers import ENDPOINT_PARSERS
+    from tools.codegen import generate
+
+    return {**{k: fn for k, (fn, _) in generate._return_schema_parsers().items()}, **ENDPOINT_PARSERS}
+
+
+def _parsers() -> Dict[str, Any]:
+    return {fn.__name__: fn for fn in _registered().values()}
+
+
+@functools.lru_cache(maxsize=1)
+def _public_parsers() -> Dict[str, Any]:
+    """``{"<module>.<parse_fn>": fn}`` for every public ``parse_*`` defined in a ``*_parsers.py`` module."""
+    out = {}
+    for path in sorted(_PKG.rglob("*_parsers.py")):
+        mod = ".".join(path.relative_to(_PKG.parent).with_suffix("").parts)
+        for name, fn in vars(importlib.import_module(mod)).items():
+            if name.startswith("parse_") and callable(fn) and getattr(fn, "__module__", "") == mod:
+                out[f"{mod.split('.', 1)[1]}.{name}"] = fn
+    return out
+
+
+def _captures() -> Dict[str, str]:
+    """``{fixture stem: short}`` for every top-level ESPN capture a registered parser reads."""
+    shorts = sorted(_registered(), key=len, reverse=True)
+    out = {}
+    for fx in sorted(_ESPN_FIX.glob("*.json")):
+        short = next((s for s in shorts if fx.stem.startswith(s + "_")), None)
+        if short is not None:
+            out[fx.stem] = short
+    return out
+
+
+def _frames(out: Any) -> Dict[str, pl.DataFrame]:
+    if isinstance(out, pl.DataFrame):
+        return {"": out}
+    assert isinstance(out, dict) and all(isinstance(v, pl.DataFrame) for v in out.values()), type(out)
+    return out
+
+
+def _dtype_snapshot() -> Dict[str, Dict[str, Dict[str, str]]]:
+    reg = _registered()
+    return {
+        stem: {sec: {c: str(t) for c, t in df.schema.items()} for sec, df in _frames(reg[short](_load(stem))).items()}
+        for stem, short in _captures().items()
+    }
+
+
+_ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_site_roster_400.json").read_text("utf-8"))
+_HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_envelope": _ENVELOPE}
+# Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
+# case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
+_HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
+    "_common_espn_parsers.parse_athlete_gamelog": {"list": AttributeError},
+    "_common_espn_parsers.parse_athlete_overview": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_athlete_splits": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_athlete_stats": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_coaches": {"list": AttributeError},
+    "_common_espn_parsers.parse_draft": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_linescores": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_roster": {"list": AttributeError},
+    "_common_espn_parsers.parse_event_competitor_statistics": {
+        "error_envelope": AssertionError,
+        "list": AttributeError,
+    },
+    "_common_espn_parsers.parse_event_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_fpi": {"list": AttributeError},
+    "_common_espn_parsers.parse_leaders": {"error_envelope": AssertionError, "list": AttributeError},
+    "_common_espn_parsers.parse_scoreboard": {"list": AttributeError},
+    "_common_espn_parsers.parse_single_entity": {"error_envelope": AssertionError},
+    "_common_espn_parsers.parse_standings": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_against_the_spread": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_broadcasts": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_drive_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_drives": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_game_info": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_injuries": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_news": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_odds": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_officials": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_pickcenter": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_scoring_plays": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_season_series": {"list": AttributeError},
+    "_common_espn_parsers.parse_summary_standings": {"list": AttributeError},
+    "_common_espn_parsers.parse_weekly_powerindex": {"list": AttributeError},
+    "cbs.cbs_napi_parsers.parse_cbs_napi": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.on3_parsers.parse_on3_rankings": {"list": AttributeError},
+    "cfb.on3_parsers.parse_on3_rdb": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.on3_parsers.parse_on3_team_rankings": {"list": AttributeError},
+    "cfb.sports247_parsers.parse_sports247_institution_rankings": {
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "cfb.sports247_parsers.parse_sports247_result_set": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.sports247_parsers.parse_sports247_teams": {"error_envelope": AssertionError, "list": AssertionError},
+    "cfb.sports247_site_pages_parsers.parse_sports247_site_page": {"error_envelope": AssertionError},
+    "espn_content.espn_content_parsers.parse_espn_content": {"error_envelope": AssertionError, "list": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague": {"error_envelope": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague_header": {"error_envelope": AssertionError},
+    "euroleague.euroleague_parsers.parse_euroleague_points": {"error_envelope": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_events": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_header": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_nav": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_polls": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_roster": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_search": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_standings": {"list": AssertionError},
+    "fox.fox_api_parsers.parse_fox_api_trending": {"list": AssertionError},
+    "hockeytech._parsers.parse_game_info": {"list": AttributeError},
+    "hockeytech._parsers.parse_game_summary": {
+        "dict": AssertionError,
+        "empty_str": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AttributeError,
+        "none": AssertionError,
+    },
+    "hockeytech._parsers.parse_leaders": {"list": AttributeError},
+    "hockeytech._parsers.parse_pbp": {"list": AssertionError},
+    "hockeytech._parsers.parse_player_box": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_game_log": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_info": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_search": {"list": AttributeError},
+    "hockeytech._parsers.parse_player_stats": {"list": AttributeError},
+    "hockeytech._parsers.parse_playoff_bracket": {"list": AttributeError},
+    "hockeytech._parsers.parse_roster": {"list": AttributeError},
+    "hockeytech._parsers.parse_schedule": {"list": AttributeError},
+    "hockeytech._parsers.parse_scorebar": {"list": AttributeError},
+    "hockeytech._parsers.parse_seasons": {"list": AttributeError},
+    "hockeytech._parsers.parse_shifts": {"list": AttributeError},
+    "hockeytech._parsers.parse_stats": {"list": AttributeError},
+    "hockeytech._parsers.parse_streaks": {"list": AttributeError},
+    "hockeytech._parsers.parse_teams": {"list": AttributeError},
+    "hockeytech._parsers.parse_transactions": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_draft_latest": {"error_envelope": AssertionError},
+    "mlb.mlb_api_parsers.parse_mlb_api_team_roster": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_teams": {"list": AttributeError},
+    "mlb.mlb_api_parsers.parse_mlb_api_timecodes": {"list": AssertionError},
+    "mlb.mlb_api_parsers.parse_mlb_api_win_probability": {"list": AssertionError},
+    "mlb.mlb_statcast_parsers.parse_mlb_statcast_player": {"error_envelope": TypeError, "list": TypeError},
+    "nba.nba_stats_parsers.parse_nba_stats_commonallplayers": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_leaguedashplayerstats": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_playercareerstats": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nba.nba_stats_parsers.parse_nba_stats_result_sets": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_combine_profiles": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_draft_picks": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_game_details_by_slug": {"error_envelope": AssertionError},
+    "nfl.nfl_api_parsers.parse_nfl_game_details_v2": {"error_envelope": AssertionError},
+    "nfl.nfl_api_parsers.parse_nfl_game_summaries": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_injuries": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_rosters": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_standings": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_team": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_teams_history": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weekly_game_details": {
+        "empty_str": AttributeError,
+        "list": AssertionError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weeks": {
+        "empty_str": AttributeError,
+        "list": AttributeError,
+        "none": AttributeError,
+    },
+    "nfl.nfl_api_parsers.parse_nfl_weeks_by_date": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "nfl.nflpro_parsers.parse_nfl_pro_stats": {"list": AssertionError},
+    "nfl.sleeper_parsers.parse_sleeper": {"error_envelope": AssertionError, "list": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_draft_picks": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_landing": {"error_envelope": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_pbp": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_game_log": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_landing": {"error_envelope": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_spotlight": {"list": AssertionError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_score": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_standings": {"list": AttributeError},
+    "nhl.nhl_api_web_parsers.parse_nhl_web_standings_season": {"list": AttributeError},
+    "nhl.nhl_edge_parsers.parse_edge_detail": {"error_envelope": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_payload": {"error_envelope": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_top10": {"list": AssertionError},
+    "nhl.nhl_edge_parsers.parse_edge_zone_time": {"error_envelope": AssertionError},
+    "odds.kalshi_parsers.parse_kalshi": {"error_envelope": AssertionError, "list": AssertionError},
+    "odds.polymarket_parsers.parse_polymarket": {"error_envelope": AssertionError, "list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_event_odds": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_event_odds_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_events": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_events_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_odds": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_odds_history": {
+        "dict": AssertionError,
+        "error_envelope": AssertionError,
+        "list": AssertionError,
+    },
+    "odds.the_odds_api_parsers.parse_toa_participants": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_scores": {"list": AssertionError},
+    "odds.the_odds_api_parsers.parse_toa_sports": {"list": AssertionError},
+    "soccer.asa_parsers.parse_asa": {"error_envelope": AssertionError},
+    "soccer.asa_parsers.parse_asa_goals_added": {"error_envelope": AssertionError},
+    "soccer.fifa_parsers.parse_fifa": {"error_envelope": AssertionError},
+    "soccer.fotmob_parsers.parse_fotmob": {"error_envelope": AssertionError},
+    "soccer.mls.mls_api_parsers.parse_mls_api": {"error_envelope": AssertionError},
+    "soccer.mls.mls_api_parsers.parse_mls_entity": {"error_envelope": AssertionError},
+    "soccer.openligadb_parsers.parse_openligadb": {"error_envelope": AssertionError, "list": AssertionError},
+    "soccer.uefa_parsers.parse_uefa": {"error_envelope": AssertionError},
+    "thesportsdb.thesportsdb_parsers.parse_thesportsdb": {"list": AssertionError},
+}
+# Main's families merged 10-17 (#826 European hockey, #859/#862 international basketball) return rows for a
+# hostile body, measured 2026-10-18 on the sync tree (109 cases, every one AssertionError = rows returned).
+_HOSTILE_SYNC_1018: Dict[str, Dict[str, type]] = {
+    **{
+        q: {"error_envelope": AssertionError}
+        for q in (
+            "basketball.dbl.sportality_parsers.parse_sportality",
+            "basketball.dbl.sportality_parsers.parse_sportality_page",
+            "basketball.easl.easl_parsers.parse_easl_health",
+            "basketball.fiba_hub.fiba_gdap_parsers.parse_fiba_gdap_rounds",
+            "basketball.scb.scb_parsers.parse_scb_season_player",
+            "basketball.scb.scb_parsers.parse_scb_team",
+            "hockey.esports_parsers.parse_esports",
+            "hockey.esports_parsers.parse_esports_game_info",
+            "hockey.ha.ha_parsers.parse_ha",
+            "hockey.ha.ha_parsers.parse_ha_leaders",
+            "hockey.ha.ha_parsers.parse_ha_players",
+            "hockey.ha.ha_parsers.parse_ha_standings",
+            "hockey.ha.ha_parsers.parse_ha_team_stats",
+            "hockey.khl.khl_webcaster_parsers.parse_khl_webcaster",
+            "hockey.liiga.liiga_parsers.parse_liiga",
+            "hockey.liiga.liiga_parsers.parse_liiga_player",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague_player_stats",
+            "hockey.nl.nationalleague_parsers.parse_nationalleague_team_info",
+            "hockey.shl.shl_parsers.parse_shl",
+            "hockey.shl.shl_parsers.parse_shl_page",
+        )
+    },
+    **{
+        q: {"error_envelope": AssertionError, "list": AssertionError}
+        for q in (
+            "hockey.ha.ha_parsers.parse_ha_games",
+            "hockey.ha.ha_parsers.parse_ha_schedule",
+        )
+    },
+    **{
+        q: {"list": AssertionError}
+        for q in (
+            "basketball.cba.cba_parsers.parse_cba_game_team_four",
+            "basketball.cba.cba_parsers.parse_cba_game_team_shots",
+            "basketball.cba.cba_parsers.parse_cba_match_types",
+            "basketball.cba.cba_parsers.parse_cba_schedule_day",
+            "basketball.cba.cba_parsers.parse_cba_schedule_month",
+            "basketball.cba.cba_parsers.parse_cba_seasons",
+            "basketball.cba.cba_parsers.parse_cba_team_basic",
+            "basketball.cba.cba_parsers.parse_cba_team_counts",
+            "basketball.cba.cba_parsers.parse_cba_team_four",
+            "basketball.cba.cba_parsers.parse_cba_team_options",
+            "basketball.cba.cba_parsers.parse_cba_teams",
+            "basketball.cebl.cebl_parsers.parse_cebl_games",
+            "basketball.cebl.cebl_parsers.parse_cebl_news",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_gamelog",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_seasons",
+            "basketball.cebl.cebl_parsers.parse_cebl_player_stats",
+            "basketball.cebl.cebl_parsers.parse_cebl_roster",
+            "basketball.cebl.cebl_parsers.parse_cebl_seasons",
+            "basketball.cebl.cebl_parsers.parse_cebl_standings",
+            "basketball.cebl.cebl_parsers.parse_cebl_team_stats",
+            "basketball.cebl.cebl_parsers.parse_cebl_teams",
+            "basketball.easl.easl_parsers.parse_easl_game",
+            "basketball.easl.easl_parsers.parse_easl_players",
+            "basketball.easl.easl_parsers.parse_easl_schedule",
+            "basketball.easl.easl_parsers.parse_easl_seasons",
+            "basketball.easl.easl_parsers.parse_easl_standings",
+            "basketball.easl.easl_parsers.parse_easl_team_box",
+            "basketball.easl.easl_parsers.parse_easl_team_schedule",
+            "basketball.easl.easl_parsers.parse_easl_teams",
+            "basketball.genius.genius_parsers.parse_genius_competition_games",
+            "basketball.kbl.kbl_parsers.parse_kbl_current_standings",
+            "basketball.kbl.kbl_parsers.parse_kbl_pbp",
+            "basketball.kbl.kbl_parsers.parse_kbl_player_box",
+            "basketball.kbl.kbl_parsers.parse_kbl_player_totals",
+            "basketball.kbl.kbl_parsers.parse_kbl_players",
+            "basketball.kbl.kbl_parsers.parse_kbl_round_mvps",
+            "basketball.kbl.kbl_parsers.parse_kbl_schedule",
+            "basketball.kbl.kbl_parsers.parse_kbl_seasons",
+            "basketball.kbl.kbl_parsers.parse_kbl_standings",
+            "basketball.kbl.kbl_parsers.parse_kbl_team_box",
+            "basketball.kbl.kbl_parsers.parse_kbl_teams",
+            "basketball.kzs.kzs_parsers.parse_kzs_competitions",
+            "basketball.kzs.kzs_parsers.parse_kzs_matches",
+            "basketball.kzs.kzs_parsers.parse_kzs_player_leaderboard",
+            "basketball.kzs.kzs_parsers.parse_kzs_playing_days",
+            "basketball.kzs.kzs_parsers.parse_kzs_roster",
+            "basketball.kzs.kzs_parsers.parse_kzs_seasons",
+            "basketball.kzs.kzs_parsers.parse_kzs_team_leaderboard",
+            "basketball.kzs.kzs_parsers.parse_kzs_teams",
+            "basketball.nbl_au.nbl_rosetta_parsers.parse_nbl_rosetta_next_matches",
+            "basketball.scb.scb_parsers.parse_scb_games",
+            "basketball.scb.scb_parsers.parse_scb_player_statistics",
+            "basketball.scb.scb_parsers.parse_scb_referees",
+            "basketball.scb.scb_parsers.parse_scb_seasons",
+            "basketball.scb.scb_parsers.parse_scb_standings",
+            "basketball.scb.scb_parsers.parse_scb_team_statistics",
+            "basketball.scb.scb_parsers.parse_scb_transfers",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_divisions",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_games",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_games",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_player_shots",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_roster",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_seasons",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_standings",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_team_shots",
+            "basketball.tpbl.tpbl_parsers.parse_tpbl_teams",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_player_parameters",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_best_team_parameters",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_calendar",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_cross_table",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_playoff",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_seasons",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_standings",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_comps",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_games",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_preview",
+            "basketball.vtb.vtb_infobasket_parsers.parse_vtb_infobasket_team_seasons",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_leagues",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_matches",
+            "basketball.vtb.vtb_league_parsers.parse_vtb_league_seasons",
+            "basketball.wjbl.wjbl_parsers.parse_wjbl_leagues",
+            "basketball.wjbl.wjbl_parsers.parse_wjbl_teams",
+            "hockey.esports_parsers.parse_esports_player_stats",
+            "hockey.esports_parsers.parse_esports_shifts",
+        )
+    },
+}
+# Plan v2.2: task 4.1 owns the ESPN parsers' zero-row contract (A-L17, A-M13), 4.9 narrows the
+# nhl/mlb/nba parsers' error handling (A-L60), and 4.1b owns every other provider parser (A-L17).
+_TASK_49 = ("nhl.nhl_edge_parsers.", "nhl.nhl_api_web_parsers.", "mlb.mlb_api_parsers.", "nba.nba_stats_parsers.")
+
+
+def _open(qual: str, shape: str) -> str:
+    """The finding id and fixing task of an open ``(parser, shape)`` case."""
+    if qual.startswith("_common_espn_parsers.") and qual.rsplit(".", 1)[1] in _parsers():
+        if shape == "error_envelope":
+            return "A-M13: ESPN's 200 error envelope parses to rows; task 4.1"
+        return "A-L17: a non-dict body raises instead of returning a zero-row frame; task 4.1"
+    task = "4.1" if qual.startswith("_common_espn_parsers.") else "4.9" if qual.startswith(_TASK_49) else "4.1b"
+    return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
+
+
+def _hostile_params() -> List[Any]:
+    params = []
+    for qual in sorted(_public_parsers()):
+        for shape in _HOSTILE:
+            exc = _HOSTILE_OPEN.get(qual, {}).get(shape)
+            marks = [pytest.mark.xfail(strict=True, raises=exc, reason=_open(qual, shape))] if exc else []
+            if _HOSTILE_SYNC_1018.get(qual, {}).get(shape):
+                marks = [
+                    pytest.mark.xfail(
+                        strict=True,
+                        raises=_HOSTILE_SYNC_1018[qual][shape],
+                        reason=f"EX-SYNC-g: a hostile {shape} body parses to rows; task providers 4.1b",
+                    )
+                ]
+            params.append(pytest.param(qual, shape, id=f"{qual}-{shape}", marks=marks))
+    return params
+
+
+@pytest.mark.parametrize(("qual", "shape"), _hostile_params())
+def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
+    from sportsdataverse.errors import AssetFetchError, NoDataError
+
+    parse = _public_parsers()[qual]
+    if shape == "error_envelope":  # a failed fetch: the one body the vocabulary lets a parser raise on
+        try:
+            out = parse(_HOSTILE[shape])
+        except (NoDataError, AssetFetchError):
+            return
+    else:
+        out = parse(_HOSTILE[shape])
+    assert {sec: df.height for sec, df in _frames(out).items() if df.height} == {}
+
+
+def test_hostile_sweep_covers_every_public_parser():
+    parsers = _public_parsers()
+    assert len(parsers) >= 214 and {f"_common_espn_parsers.{n}" for n in _parsers()} <= set(parsers)
+    needs_more = [
+        q
+        for q, fn in parsers.items()
+        if any(
+            p.default is p.empty and p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD, p.KEYWORD_ONLY)
+            for p in list(inspect.signature(fn).parameters.values())[1:]
+        )
+    ]
+    assert needs_more == [], "a parser needs more than its payload: give the sweep its arguments"
+    assert set(_HOSTILE_OPEN) <= set(parsers), sorted(set(_HOSTILE_OPEN) - set(parsers))
+    assert set(_HOSTILE_SYNC_1018) <= set(parsers), sorted(set(_HOSTILE_SYNC_1018) - set(parsers))
+    assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
+    unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
+    assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
+
+
+def test_dtype_snapshot_matches_every_committed_capture():
+    """A-M2: column names AND dtypes per capture; a parser change that retypes a column fails here."""
+    want = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    got = _dtype_snapshot()
+    assert sorted(got) == sorted(want)
+    diffs = [
+        (stem, sec, col, want[stem].get(sec, {}).get(col), got[stem].get(sec, {}).get(col))
+        for stem in got
+        for sec in set(got[stem]) | set(want[stem])
+        for col in set(got[stem].get(sec, {})) | set(want[stem].get(sec, {}))
+        if want[stem].get(sec, {}).get(col) != got[stem].get(sec, {}).get(col)
+    ]
+    # Fix the parser, or regenerate only for a deliberate change: (capture, section, column, want, got).
+    assert not diffs, f"{len(diffs)} column dtypes changed, e.g. {sorted(diffs, key=str)[:8]}"
+
+
+def _id_cols(name: str) -> Dict[str, str]:
+    """``{capture/section/column: dtype}`` for every id column ``name`` emits on its captures."""
+    reg = _registered()
+    snap = json.loads(_SNAPSHOT.read_text(encoding="utf-8"))
+    return {
+        f"{stem}/{sec}/{col}": dtype
+        for stem, short in _captures().items()
+        if reg[short].__name__ == name
+        for sec, cols in snap[stem].items()
+        for col, dtype in cols.items()
+        if col == "id" or col.endswith("_id")
+    }
+
+
+# Parsers whose id columns are not Int64 on their captures today (String; parse_summary also
+# Float64). Task 5.2 makes every ESPN id Int64 at the parser boundary.
+_IDS_NOT_INT64 = {
+    "parse_athlete_gamelog",
+    "parse_athlete_overview",
+    "parse_event_plays",
+    "parse_fpi",
+    "parse_groups",
+    "parse_injuries",
+    "parse_items",
+    "parse_leaders",
+    "parse_news",
+    "parse_rankings",
+    "parse_scoreboard",
+    "parse_single_entity",
+    "parse_standings",
+    "parse_summary",
+    "parse_team_roster",
+    "parse_team_schedule",
+    "parse_teams",
+    "parse_transactions",
+}
+
+
+def _id_params(open_ids: set, reason: str) -> List[Any]:
+    return [
+        pytest.param(
+            name,
+            marks=[pytest.mark.xfail(strict=True, raises=AssertionError, reason=reason)] if name in open_ids else [],
+        )
+        for name in sorted(_parsers())
+    ]
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params(_IDS_NOT_INT64, "A-M15: ESPN ids are String here but Int64 in parse_weekly_powerindex; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_int64(name):
+    assert {k: v for k, v in _id_cols(name).items() if v != "Int64"} == {}
+
+
+@pytest.mark.parametrize(
+    "name",
+    _id_params({"parse_summary"}, "A-M14: the pandas hop turns point_after_attempt_id into Float64; task 5.2"),
+)
+def test_dtype_snapshot_ids_are_never_float(name):
+    """A float id stringifies as ``"123.0"`` and joins nothing."""
+    assert {k: v for k, v in _id_cols(name).items() if v.startswith("Float")} == {}
+
+
+if __name__ == "__main__":  # regenerate the snapshot after a deliberate dtype change
+    _SNAPSHOT.write_text(json.dumps(_dtype_snapshot(), indent=1) + "\n", encoding="utf-8", newline="\n")

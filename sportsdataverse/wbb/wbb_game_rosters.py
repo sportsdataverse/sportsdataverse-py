@@ -304,7 +304,7 @@ def helper_wbb_game_rosters(payload: dict, *, season: int, game_id: int | str) -
     """Parse one game's rosters sidecar into the released game-rosters frame.
 
     Faithful polars port of the script-local ``parse_one_game`` /
-    ``parse_one_athlete`` in ``wehoop-wbb-data/R/espn_wbb_08_game_rosters_creation.R``
+    ``parse_one_athlete`` in ``wehoop-wbb-data/R/espn_wbb_11_game_rosters_creation.R``
     (no wehoop helper exists for this dataset). The stored sidecar is a
     summary-shaped payload, so the roster source falls through to
     ``boxscore.players`` and athletes to ``statistics[0].athletes``. The

@@ -142,3 +142,32 @@ def test_dispatch_serves_the_game_from_fox(final):
     assert served.provenance["lossy_columns"]
     assert served.plays_frame.height > 150
     assert served.plays_frame["EPA"].null_count() < served.plays_frame.height
+
+
+#: supp-012: observed 2026-10-11 against ESPN's own summary of 401856679 (164 / 164 plays, 137 paired):
+#: agreement type.* .9781, rush .9854, start.yardLine / end.pos_team.id / pass / td_play 1.0; corr
+#: EP_start .9996, EP_end .9719, EPA .9380, wp_before .9996, wp_after .9964. Floors, never lowered.
+ESPN_REFERENCE_PINNED = {
+    "paired_share": 0.95,
+    "agreement": {
+        "type.id": 0.97,
+        "type.text": 0.97,
+        "type.abbreviation": 0.97,
+        "start.yardLine": 0.99,
+        "end.pos_team.id": 0.99,
+        "rush": 0.98,
+        "pass": 0.99,
+        "td_play": 0.99,
+    },
+    "correlation": {"EP_start": 0.999, "EP_end": 0.97, "EPA": 0.93, "wp_before": 0.999, "wp_after": 0.995},
+}
+
+
+def test_fox_cfb_espn_reference_parity(final):
+    """Fox CFB vs the ESPN summary of the same game (supp-012): per-play floors, as the CBS/Yahoo gates pin."""
+    from tests.football.sources._espn_reference import espn_reference_report
+
+    odds = {"gameSpread": 5.5, "overUnder": 43.5, "homeFavorite": False, "gameSpreadAvailable": True}
+    report = espn_reference_report("cfb", int(ROW["espn_event_id"]), "fox", final, ROW, odds)
+    assert report.check(ESPN_REFERENCE_PINNED) == [], report.gates()
+    print("FOX_CFB_ESPN_REFERENCE_OK", report.gates()["paired_share"])

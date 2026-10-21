@@ -61,3 +61,27 @@ def test_wab_tracks_fpi_strength_of_record() -> None:
     """Wins-above-bubble vs FPI Strength-of-Record (Accomplishment) rank (observed 0.977)."""
     r = abs(spearman_corr(_JOINED["wab"].to_numpy(), _JOINED["fpi_sor_rank"].to_numpy()))
     assert r >= 0.93, r
+
+
+def test_sos_level_is_the_mean_opponent_adj_net() -> None:
+    """Level gate beside the rank gates (C-L34): FPI publishes SoS as a rank only, so a
+    rescaled ``sos * 5 + 3`` passed every gate. ``sos`` is documented as the mean
+    opponent ``adj_net`` over a team's completed games; recompute that from the
+    committed results + ratings with plain Python and require equality (observed max
+    |diff| 2.8e-17 over 232 rated teams, 2026-10-11).
+    """
+    adj = dict(zip(_RATINGS["team_id"].to_list(), _RATINGS["adj_net"].to_list()))
+    opps: dict[str, list[float]] = {}
+    for g in _RES.iter_rows(named=True):
+        if g["home_score"] is None or g["away_score"] is None:
+            continue
+        home, away = str(g["home_team_id"]), str(g["away_team_id"])
+        if away in adj:
+            opps.setdefault(home, []).append(adj[away])
+        if home in adj:
+            opps.setdefault(away, []).append(adj[home])
+    got = _RESUME.filter(pl.col("sos").is_not_null())
+    assert got.height >= 230
+    worst = max(abs(sos - sum(opps[t]) / len(opps[t])) for t, sos in got.select("team_id", "sos").iter_rows())
+    assert worst <= 1e-9, worst
+    print("CFB_SOS_LEVEL_OK", got.height)

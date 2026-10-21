@@ -460,6 +460,34 @@ def test_nba_player_crosswalk_parity() -> None:
     assert lost == UNRECOVERABLE["nba"], f"unreconstructable rejected-best rows moved: {lost}"
 
 
+def _player_crosswalk(league: str) -> tuple[pl.DataFrame, pl.DataFrame]:
+    from sportsdataverse._common_crosswalk_basketball import assemble_player_espn_fox
+
+    want = golden(f"{league}_player")
+    if league in ("wbb", "mbb"):
+        got = _player_espn_fox(want, assemble_player_espn_fox, exact_tiebreak=league == "mbb")
+    else:
+        got = _player_espn_stats_fox(want, league, exact_tiebreak=league == "nba")
+    return got, want
+
+
+@pytest.mark.parametrize("league", ["wbb", "mbb", "wnba", "nba"])
+def test_player_crosswalk_match_rate_floor(league: str) -> None:
+    """C-L47: the player crosswalks had no match-rate floor (the NCAA-ESPN team crosswalk does).
+
+    The oracle is the R golden's own matched share (`match_method != "unmatched"`): wbb 4,949/5,018,
+    mbb 5,388/5,442, wnba 203/203, nba 395/544 (fixture README). The Python reconstruction must match
+    at least that share of the same ESPN rows; a weakened matcher (a raised Jaro-Winkler floor, the
+    exact-name pass skipped) drops below it while the per-row parity diff only counts moved rows.
+    """
+    got, want = _player_crosswalk(league)
+    r_rate = float((want["match_method"] != "unmatched").mean())
+    py_rate = float((got["match_method"] != "unmatched").mean())
+    assert got.height == want.height, (got.height, want.height)
+    assert py_rate >= r_rate, f"{league}: Python matched {py_rate:.4f} < R golden {r_rate:.4f}"
+    print("PLAYER_CROSSWALK_MATCH_RATE_OK", league, round(py_rate, 4), round(r_rate, 4))
+
+
 # ---------------------------------------------------------------------------
 # Schedule crosswalks (complete reconstruction: both sides survive the golden)
 # ---------------------------------------------------------------------------

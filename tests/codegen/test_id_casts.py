@@ -67,6 +67,17 @@ def test_cast_is_a_noop_for_missing_columns_and_empty_frames():
     assert _cast_ids_int64(empty, ["team_id"]).height == 0
 
 
+@pytest.mark.xfail(
+    strict=True,
+    raises=AssertionError,
+    reason="A-L55: _cast_ids_int64 returns an empty frame untouched (String ids); task 5.2",
+)
+def test_cast_on_an_empty_frame_keeps_the_int64_contract():
+    """An all-empty result must carry the same id dtype as a populated one, or a join on it fails."""
+    empty = pl.DataFrame({"team_id": []}, schema={"team_id": pl.Utf8})
+    assert _cast_ids_int64(empty, ["team_id"]).schema["team_id"] == pl.Int64
+
+
 def test_cast_leaves_other_columns_alone():
     df = pl.DataFrame({"team_id": ["1"], "other_id": ["2"], "name": ["x"]})
     out = _cast_ids_int64(df, ["team_id"])
