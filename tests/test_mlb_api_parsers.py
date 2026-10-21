@@ -181,7 +181,7 @@ def test_mlb_api_endpoint_parsers_registry_references_real_wrappers():
         assert callable(getattr(mlb, fn_name))
 
 
-def test_schema_drift_warns_instead_of_reading_as_no_data():
+def test_schema_drift_warns_instead_of_reading_as_no_data(json_normalize_flavour):
     """Real captures with their row lists drifted: zero rows AND a SchemaDriftWarning naming the path (A-L60)."""
     from sportsdataverse.errors import SchemaDriftWarning
     from sportsdataverse.mlb.mlb_api_parsers import parse_mlb_api_teams, parse_mlb_api_timecodes

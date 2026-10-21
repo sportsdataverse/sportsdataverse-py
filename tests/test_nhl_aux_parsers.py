@@ -174,7 +174,7 @@ def test_parser_for_nhl_records_always_returns_callable():
         ("nhl_records_parsers", "parse_nhl_records", "nhl_records", "records_allstar_coach_career"),
     ],
 )
-def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, directory, stem):
+def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, directory, stem, json_normalize_flavour):
     """A ``data`` list that stops holding objects gives zero rows AND a SchemaDriftWarning (A-L60)."""
     import importlib
 

@@ -281,7 +281,7 @@ def _drifted(raw, key=None):
         ("parse_edge_zone_time", "skater_zone_time", "zoneTimeDetails", "parse_edge_zone_time: zoneTimeDetails"),
     ],
 )
-def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, where):
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, where, json_normalize_flavour):
     """A drifted row list still yields zero rows (the parser contract) but now SAYS so (A-L60)."""
     import sportsdataverse.nhl.nhl_edge_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning
@@ -292,3 +292,29 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, 
         out = parse(_drifted(raw, key))
     if parser != "parse_edge_zone_time":  # zone_time moves on to the next zone key (zoneStarts) after warning
         assert out.height == 0
+
+
+def test_edge_payload_later_row_drift_warns(json_normalize_flavour):
+    """parse_edge_payload picks its row list by the FIRST row, so only a later row can drift: it warns and
+    falls back to the single detail row (pandas 2 read the string rows as empty ones, silently; WB-1)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_payload
+
+    raw = _load("skater_skating_speed_detail")
+    rows = raw["topSkatingSpeeds"]
+    assert parse_edge_payload(raw).height == len(rows) > 1
+    with pytest.warns(SchemaDriftWarning, match="parse_edge_payload: topSkatingSpeeds"):
+        assert parse_edge_payload({**raw, "topSkatingSpeeds": [rows[0], *map(str, rows[1:])]}).height == 1
+
+
+def test_edge_nested_shot_location_drift_warns(json_normalize_flavour):
+    """The nested (dict-of-sections) shot-location shape: no committed capture has it, so the real
+    team_shot_loc zone list is moved under one section. A later zone that is not an object warns (WB-1)."""
+    from sportsdataverse.errors import SchemaDriftWarning
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_shot_location
+
+    zones = _load("team_shot_loc")["shotLocationDetails"]
+    assert parse_edge_shot_location({"all": {"shotLocationDetails": zones}}).height == len(zones)
+    drifted = {"all": {"shotLocationDetails": [zones[0], *map(str, zones[1:])]}}
+    with pytest.warns(SchemaDriftWarning, match=r"parse_edge_shot_location: all\.shotLocationDetails"):
+        assert parse_edge_shot_location(drifted).height == 0
