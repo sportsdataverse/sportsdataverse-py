@@ -2210,6 +2210,25 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         if "defensive_two_point_conv" in df.columns
         else pl.lit(False)
     )
+    # A kickoff the kicking team recovers (NFLPlayProcess's _kicker_recovers, R810-3).
+    kicker_recovers = (
+        (pl.col("_kicker_recovers") == True).fill_null(False) if "_kicker_recovers" in df.columns else pl.lit(False)
+    )
+    # The scoring overlays below key on ESPN's type.text. Two kinds of row are typed wrong for that:
+    # a kicking-team recovery returned for a touchdown is typed "Kickoff Return Touchdown" (an
+    # offense_score_vec type) but scores for the kicker, so it takes the defence-TD values (R831-6,
+    # 301107009/1557); and a touchdown-typed row whose touchdown did not stand (NFLPlayProcess's
+    # td_play false: the 2024 short/onside kickoffs ESPN types "Kickoff Return Touchdown", nullified
+    # and reversed scores) takes no scoring overlay at all, its EP_end coming from the end state
+    # (EX-2.20-a). A frame without td_play (the nflverse path) keeps keying on type.text alone.
+    kicker_td = pl.col("type.text").is_in(kickoff_vec) & pl.col("type.text").is_in(offense_score_vec) & kicker_recovers
+    td_stood = (
+        (pl.col("td_play") == True).fill_null(False) | ~pl.col("type.text").str.contains("Touchdown").fill_null(False)
+        if "td_play" in df.columns
+        else pl.lit(True)
+    )
+    def_score = (pl.col("type.text").is_in(defense_score_vec) | kicker_td) & td_stood
+    off_score = pl.col("type.text").is_in(offense_score_vec) & td_stood  # a kicker_td row met def_score first
     kick_good = _lower.str.contains(r"kick\)")
     kick_failed = _lower.str.contains(r"pat (?:failed|missed|no good)|extra point is (?:no good|blocked)")
     if "xp_attempt" in df.columns and "xp_made" in df.columns:
@@ -2242,50 +2261,50 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(-2)
             # Safeties
             .when(
-                (pl.col("type.text").is_in(defense_score_vec)).and_(
+                def_score.and_(
                     pl.col("text").str.to_lowercase().str.contains(r"(?i)safety"),
                 ),
             )
             .then(-2)
             # Defense TD + Successful Two-Point Conversion
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_good))
+            .when(def_score.and_(two_pt_good))
             .then(-8)
             # Defense TD + Failed Two-Point Conversion
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(two_pt_failed))
+            .when(def_score.and_(two_pt_failed))
             .then(-6)
             # Defense TD + Kick/PAT Missed
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_failed))
+            .when(def_score.and_(kick_failed))
             .then(-6)
             # Defense TD + Kick/PAT Good
-            .when((pl.col("type.text").is_in(defense_score_vec)).and_(kick_good))
+            .when(def_score.and_(kick_good))
             .then(-7)
             # Defense TD
-            .when(pl.col("type.text").is_in(defense_score_vec))
+            .when(def_score)
             .then(-6.92)
             # Offense TD + try returned by the defence for two
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(def_two))
+            .when(off_score.and_(def_two))
             .then(4)
             # Offense TD + Failed Two-Point Conversion
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_failed))
+            .when(off_score.and_(two_pt_failed))
             .then(6)
             # Offense TD + Successful Two-Point Conversion
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(two_pt_good))
+            .when(off_score.and_(two_pt_good))
             .then(8)
             # Offense Made FG
             .when(
-                (pl.col("type.text").is_in(offense_score_vec))
-                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal"))
-                .and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")),
+                off_score.and_(pl.col("type.text").str.to_lowercase().str.contains(r"(?i)field goal")).and_(
+                    pl.col("type.text").str.to_lowercase().str.contains(r"(?i)good")
+                ),
             )
             .then(3)
             # Offense TD + Kick/PAT Missed
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_failed))
+            .when(off_score.and_(kick_failed))
             .then(6)
             # Offense TD + Kick/PAT Good
-            .when((pl.col("type.text").is_in(offense_score_vec)).and_(kick_good))
+            .when(off_score.and_(kick_good))
             .then(7)
             # Offense TD
-            .when(pl.col("type.text").is_in(offense_score_vec))
+            .when(off_score)
             .then(6.92)
             # Extra Point Good
             .when(pl.col("type.text").is_in(["Extra Point Good"]))
@@ -2328,6 +2347,10 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
             .then(pl.col("EP_end") * -1)
             # Onside kicks
             .when((pl.col("kickoff_onside") == True).and_(pl.col("change_of_pos_team") == True))
+            .then(pl.col("EP_end") * -1)
+            # Any other kickoff the kicking team recovers (a muff; R810-3): EP_end is the kicker's.
+            # NFLPlayProcess flags it as _kicker_recovers; a frame without the flag has none.
+            .when(pl.col("type.text").is_in(kickoff_vec) & kicker_recovers)
             .then(pl.col("EP_end") * -1)
             .otherwise(pl.col("EP_end")),
         )
@@ -2399,6 +2422,12 @@ def calculate_epa(df: pl.DataFrame) -> pl.DataFrame:
         .with_columns(
             EPA=pl.when(pl.col("type.text").is_in(clock_stoppage_vec))
             .then(0)
+            # nflfastR (helper_add_ep_wp.R:710-724) keeps a scoring play's epa (sp == 1), and a good
+            # try is sp == 1 though scoring_play leaves the try types out: a try that ends a half
+            # realises its own points, whatever penalty its text carries (a missed one's 0 - 0.92 is
+            # -EP_start anyway; R832-3)
+            .when((pl.col("end_of_half") == True).and_(pl.col("type.text").is_in(_TRY_TYPES)))
+            .then(pl.col("EP_end") - pl.col("EP_start"))
             .when((pl.col("scoring_play") == False).and_(pl.col("end_of_half") == True))
             .then(-1 * pl.col("EP_start"))
             .when((pl.col("type.text").is_in(kickoff_vec)).and_(pl.col("penalty_in_text") == True))

@@ -94,6 +94,28 @@ TOUCHBACK_YARDLINE_2024: int = 70
 #: Dynamic-kickoff touchback spot from 2025 (the 35).
 TOUCHBACK_YARDLINE_2025: int = 65
 
+#: First season ESPN's NFL play text is a full sentence on kickoffs and punts. Not a playing rule: a
+#: feed era (finding R808-4). The 2006-08 feed writes a bare "Kickoff" / "Punt", so an unscored row
+#: typed "Kickoff Return Touchdown" / "Punt Return Touchdown" with no touchdown in its text looks the
+#: same whether it is a real return TD (four in 2006-07, nflverse ``touchdown`` 1) or not (13 rows
+#: 2006-08). From 2009 every such row is an onside or short-of-landing-zone kick or a plain punt
+#: (32 rows in 2024, nflverse ``touchdown`` 0), so ``nfl_pbp._touchdown_did_not_stand`` clears it.
+ESPN_FULL_KICK_TEXT_FROM: int = 2009
+
+#: First season whose ESPN NFL ``period.number`` is not repaired from its neighbours. Not a playing
+#: rule: a feed era (finding R832-10). Before it ESPN files a play under a LATER period than the plays
+#: on both sides of it in id order while the clock runs on (261022011's Q2 kickoff at 0:08 as period
+#: 3): 727 such rows in nfl-raw 2002-2013 (721 of them 2005-08), every one of the 722 that join to
+#: nflverse ``qtr`` agreeing with the neighbours' period. From 2014 the same pattern fires on 3 rows,
+#: one of them (401030749/906) a play whose id is out of order and whose ESPN period is right; the floor
+#: gives up the other 2, correct repairs, to avoid that 1 wrong one. Each guard of
+#: ``nfl_pbp._repair_espn_period``, measured alone on nfl-raw 2002-2025 against nflverse ``qtr``:
+#: lowering only (raising a sandwiched row would be wrong 50 of 51 times); no repair just before an
+#: "End ..." row (without it 6 early-quarter rows beside a late "End Period" row move the wrong way);
+#: the clock running down across the three rows (it blocks 2 wrong lowerings and 10 right ones, kept so
+#: that no row moves away from nflverse).
+ESPN_PERIOD_REPAIR_BEFORE: int = 2014
+
 
 def touchback_yardline(season: int) -> int:
     """Kickoff-touchback yards-to-endzone for *season* (80 / 75 / 70 / 65).
@@ -613,4 +635,6 @@ end_change_vec = [
 ]
 kickoff_turnovers = ["Kickoff Team Fumble Recovery", "Kickoff Team Fumble Recovery Touchdown"]
 
-qbr_vars = ["qbr_epa", "sack_epa", "pass_epa", "rush_epa", "pen_epa", "spread"]
+# The trainer's column order (cfbfastR-dev/cfb_qbr/qbr_xgb.R:233), embedded in qbr_model.ubj's
+# feature_names, so a permuted DMatrix raises instead of scoring sack EPA as pass EPA (gap-C-083).
+qbr_vars = ["qbr_epa", "pass_epa", "rush_epa", "sack_epa", "pen_epa", "spread"]
