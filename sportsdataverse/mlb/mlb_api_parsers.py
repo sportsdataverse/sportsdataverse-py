@@ -52,7 +52,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _require_objects, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -106,8 +106,7 @@ def _flatten_rows(items, return_as_pandas: bool, where: str):
     if not items:
         return _empty_frame(return_as_pandas)
     try:
-        _require_objects(items)
-        df = pd.json_normalize(items, sep="_")
+        df = pd.json_normalize(_object_rows(items), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)
@@ -178,7 +177,7 @@ def parse_mlb_api_list(payload: Dict, return_as_pandas: bool = False) -> pl.Data
         return _empty_frame(return_as_pandas)
     for key in _LIST_KEYS:
         candidate = payload.get(key)
-        if isinstance(candidate, list) and candidate and isinstance(candidate[0], dict):
+        if isinstance(candidate, list) and isinstance(_first_row(candidate), dict):
             return _flatten_rows(candidate, return_as_pandas, where="parse_mlb_api_list: candidate")
     return _empty_frame(return_as_pandas)
 

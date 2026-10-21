@@ -346,23 +346,39 @@ class SchemaDriftWarning(UserWarning):
 
 
 #: What flattening a payload of the wrong shape raises (a row that is not an object: ``TypeError``
-#: from :func:`_require_objects`; a missing key; an unparseable value).
+#: from :func:`_object_rows`; a missing key; an unparseable value).
 #: Parsers catch exactly these, warn :class:`SchemaDriftWarning` and return zero rows.
 _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
 
 
-def _require_objects(rows: list) -> None:
-    """Raise ``TypeError`` when a row is not an object, before ``pd.json_normalize`` sees it (WB-1).
+def _object_rows(rows: list) -> list[dict]:
+    """The row rule: drop null rows, and raise ``TypeError`` on any other row that is not an object.
 
-    pandas 3 raises this itself, but pandas 2 (allowed on every supported Python) reads a string row
-    as an empty one, so drift came back as an N x 0 frame with no warning. Like pandas 3, an NA-like
-    scalar row (``None``, ``NaN``, ``pd.NA``) is allowed.
+    A null row (``None``, ``NaN``, ``pd.NA``) is no data, so it is dropped: ``pd.json_normalize`` would
+    read it as an all-null row, and a list of nulls as an N x 0 frame (4.13). Any other row that is not
+    an object is schema drift, which pandas 3 raises on itself but pandas 2 reads as an empty row (WB-1).
+    Call it on the rows handed to ``pd.json_normalize``, inside the parser's ``_SHAPE_ERRORS`` catch.
     """
+    kept: list[dict] = []
+    for row in rows:
+        if isinstance(row, dict):
+            kept.append(row)
+        elif not _is_null(row):
+            raise TypeError(f"a row is {type(row).__name__}, not an object")
+    return kept
+
+
+def _is_null(row: Any) -> bool:
+    """Whether a row is a null one (``None``, ``NaN``, ``pd.NA``): no data, which the row rule drops."""
     import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
 
-    for row in rows:
-        if not isinstance(row, dict) and not (pd.api.types.is_scalar(row) and pd.isna(row)):
-            raise TypeError(f"a row is {type(row).__name__}, not an object")
+    return bool(pd.api.types.is_scalar(row) and pd.isna(row))
+
+
+def _first_row(rows: list) -> Any:
+    """The first row that is not null, or ``None``: a parser that picks a shape from a row must skip the
+    null rows the row rule drops, or a leading null reshapes the frame (R953-2)."""
+    return next((row for row in rows if not _is_null(row)), None)
 
 
 def _warn_schema_drift(where: str, exc: BaseException) -> None:

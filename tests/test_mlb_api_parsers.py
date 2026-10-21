@@ -188,6 +188,14 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(json_normalize_flavour
 
     teams, stamps = _load("teams_2024"), _load("game_timestamps")
     assert parse_mlb_api_teams(teams).height > 0 and parse_mlb_api_timecodes(stamps).height > 0
+    # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
+    n = parse_mlb_api_teams(teams).height
+    assert parse_mlb_api_teams({**teams, "teams": [None, *teams["teams"], None]}).equals(parse_mlb_api_teams(teams))
+    assert parse_mlb_api_teams({**teams, "teams": [None] * n}).height == 0
+    # R953-2: the generic list parser picks its list by the first NON-null row.
+    from sportsdataverse.mlb.mlb_api_parsers import parse_mlb_api_list
+
+    assert parse_mlb_api_list({"teams": [None, *teams["teams"]]}).equals(parse_mlb_api_list(teams))
     with pytest.warns(SchemaDriftWarning, match="parse_mlb_api_teams: teams"):
         assert parse_mlb_api_teams({**teams, "teams": [str(t) for t in teams["teams"]]}).height == 0
     with pytest.warns(SchemaDriftWarning, match="parse_mlb_api_timecodes"):

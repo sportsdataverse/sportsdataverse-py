@@ -100,21 +100,25 @@ def test_redact_exception_drops_every_credential_header():
     assert dict(err.request.headers) == {"Accept": "application/json"}
 
 
-def test_require_objects_rejects_what_pandas3_json_normalize_rejects():
+def test_object_rows_drops_null_rows_and_rejects_other_non_objects():
     """WB-1: the row check pandas 3 makes itself, run on every pandas. An NA-like row (JSON null, NaN,
-    pd.NA) passes, as on pandas 3, and never hides a bad row after it (R941-1)."""
+    pd.NA) is no data: it is dropped (4.13), and never hides a bad row after it (R941-1)."""
     import pandas as pd
 
-    from sportsdataverse.errors import _require_objects
+    from sportsdataverse.errors import _first_row, _object_rows
 
     for na in (None, float("nan"), pd.NA):
-        _require_objects([{"a": 1}, na])
-        _require_objects([na, {}])
-        pd.json_normalize([na, {"a": 1}])  # pandas itself accepts the same rows
+        assert _object_rows([{"a": 1}, na]) == [{"a": 1}]
+        assert _object_rows([na, {}, na]) == [{}]
+        assert _object_rows([na, na]) == []
+        rows = [{"a": 1}, na, {"b": 2}, {"a": 1}, {"c": 3}]
+        assert _object_rows(rows) == [{"a": 1}, {"b": 2}, {"a": 1}, {"c": 3}]  # order kept, no dedup (R953-3)
+        assert _first_row([na, na, {"b": 2}, {"a": 1}]) == {"b": 2}
+        assert _first_row([na]) is None
     for bad in ("x", 1, [1]):
         with pytest.raises(TypeError, match=f"a row is {type(bad).__name__}, not an object"):
-            _require_objects([{"a": 1}, bad])
+            _object_rows([{"a": 1}, bad])
     with pytest.raises(TypeError, match="a row is str, not an object"):
-        _require_objects([None, "x"])
+        _object_rows([None, "x"])
     with pytest.raises(TypeError, match="a row is list, not an object"):  # pd.isna([None]) is not a scalar NA (R941-9)
-        _require_objects([[None]])
+        _object_rows([[None]])

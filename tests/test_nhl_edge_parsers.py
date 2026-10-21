@@ -265,6 +265,13 @@ def _drifted(raw, key=None):
     return {**raw, key: [str(row) for row in raw[key]]}
 
 
+def _nulled(raw, key, keep):
+    """The real capture with null rows added to the row list at ``key`` (``keep``), or only nulls left (4.13)."""
+    rows = raw if key is None else raw[key]
+    nulled = [None, *rows, None] if keep else [None] * len(rows)
+    return nulled if key is None else {**raw, key: nulled}
+
+
 @pytest.mark.parametrize(
     ("parser", "fixture", "key", "where"),
     [
@@ -288,10 +295,23 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, 
 
     parse, raw = getattr(mod, parser), _load(fixture)
     assert parse(raw).height > 0  # the real capture parses to rows, with no warning (pytest.ini: warnings are errors)
+    # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
+    assert parse(_nulled(raw, key, keep=True)).equals(parse(raw))  # a leading null too, order kept (R953-2/-3)
+    assert parse(_nulled(raw, key, keep=False)).height == 0
     with pytest.warns(SchemaDriftWarning, match=where):
         out = parse(_drifted(raw, key))
     if parser != "parse_edge_zone_time":  # zone_time moves on to the next zone key (zoneStarts) after warning
         assert out.height == 0
+
+
+def test_edge_top10_finds_a_wrapped_list_behind_a_leading_null():
+    """R953-2: the last-ditch lookup (a list under a key top10 does not know) decides by the first NON-null row."""
+    from sportsdataverse.nhl.nhl_edge_parsers import parse_edge_top10
+
+    rows = _load("skater_speed_top_10")
+    expected = parse_edge_top10(rows)
+    assert expected.height > 1
+    assert parse_edge_top10({"wrapped": [None, *rows]}).equals(expected)
 
 
 def test_edge_payload_later_row_drift_warns(json_normalize_flavour):
@@ -303,6 +323,8 @@ def test_edge_payload_later_row_drift_warns(json_normalize_flavour):
     raw = _load("skater_skating_speed_detail")
     rows = raw["topSkatingSpeeds"]
     assert parse_edge_payload(raw).height == len(rows) > 1
+    # 4.13 / R953-2: null rows are dropped wherever they sit; a leading one must not hide the list.
+    assert parse_edge_payload({**raw, "topSkatingSpeeds": [None, *rows, None]}).equals(parse_edge_payload(raw))
     with pytest.warns(SchemaDriftWarning, match="parse_edge_payload: topSkatingSpeeds"):
         assert parse_edge_payload({**raw, "topSkatingSpeeds": [rows[0], *map(str, rows[1:])]}).height == 1
 
@@ -315,6 +337,8 @@ def test_edge_nested_shot_location_drift_warns(json_normalize_flavour):
 
     zones = _load("team_shot_loc")["shotLocationDetails"]
     assert parse_edge_shot_location({"all": {"shotLocationDetails": zones}}).height == len(zones)
+    nested = parse_edge_shot_location({"all": {"shotLocationDetails": zones}})
+    assert parse_edge_shot_location({"all": {"shotLocationDetails": [None, *zones, None]}}).equals(nested)  # 4.13
     drifted = {"all": {"shotLocationDetails": [zones[0], *map(str, zones[1:])]}}
     with pytest.warns(SchemaDriftWarning, match=r"parse_edge_shot_location: all\.shotLocationDetails"):
         assert parse_edge_shot_location(drifted).height == 0
