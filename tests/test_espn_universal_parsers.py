@@ -1938,6 +1938,41 @@ _ESPN_DRIFT = [
 ]
 
 
+def _nulled(raw: Any, path: tuple, keep: bool) -> Any:
+    """A deep copy of the real capture whose list at ``path`` gains null rows (``keep``) or holds only nulls."""
+    import copy
+
+    out = copy.deepcopy(raw)
+    node = out
+    for step in path[:-1]:
+        node = node[step]
+    rows = node[path[-1]]
+    node[path[-1]] = [None, *rows, None] if keep else [None] * len(rows)
+    return out
+
+
+# The _ESPN_DRIFT rows whose parser hands its rows to errors._object_rows (#941's sites). The others walk
+# their rows themselves (_drifted), so the row rule does not reach them yet.
+_ESPN_ROW_RULE = [
+    entry
+    for entry in _ESPN_DRIFT
+    if entry[0]
+    not in {"parse_teams", "parse_groups", "parse_coaches", "parse_event_competitor_roster", "parse_event_plays"}
+    and entry[2] != ("athletes", 0, "items")  # the grouped roster
+]
+
+
+@pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_ROW_RULE, ids=str)
+def test_espn_null_rows_are_dropped(parser, fixture, path, where):
+    """4.13: a null row is no data. It is dropped (not an all-null row), and a list of nulls is zero rows, with
+    no warning (pytest.ini makes warnings errors). No committed capture holds a null row, so nulls are added."""
+    import sportsdataverse._common_espn_parsers as mod
+
+    parse, raw = getattr(mod, parser), _load(fixture)
+    assert parse(_nulled(raw, path, keep=True)).height == parse(raw).height > 0
+    assert parse(_nulled(raw, path, keep=False)).height == 0
+
+
 @pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
 def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where, json_normalize_flavour):
     """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
@@ -1966,10 +2001,9 @@ def test_espn_draft_picks_drift_warns(json_normalize_flavour):
     "rounds",
     [
         [{"number": 1, "picks": ["bad"]}],  # dict("bad") -> ValueError
-        ["bad"],  # "bad".get -> AttributeError
-        [{"number": 1, "picks": [None]}],  # dict(None) -> TypeError
+        ["bad"],  # a round that is not an object
     ],
-    ids=["str_pick", "str_round", "null_pick"],
+    ids=["str_pick", "str_round"],
 )
 def test_espn_draft_inline_rounds_drift_warns(rounds):
     """R941-2: the inline ``rounds[].picks[]`` walk runs inside the catch, so a round or pick that is not an
@@ -1982,6 +2016,17 @@ def test_espn_draft_inline_rounds_drift_warns(rounds):
     assert parse_draft({"rounds": [good]}).height == 1
     with pytest.warns(SchemaDriftWarning, match="parse_draft: rounds"):
         assert parse_draft({"rounds": [good, *rounds]}).height == 0
+
+
+def test_espn_draft_null_rounds_and_picks_are_dropped():
+    """4.13: the row rule reaches the inline rounds too. A null round or pick is dropped (it was drift, so the
+    whole draft was zero rows), and rounds of nothing but null picks are zero rows, with no warning."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+
+    pick = _load("season_draft_nba")["athletes"]
+    assert parse_draft({"rounds": [None, {"number": 1, "picks": [None, pick, None]}]}).height == 1
+    assert parse_draft({"rounds": [{"number": 1, "picks": [None, None]}]}).height == 0
+    assert parse_draft({"rounds": [], "picks": [None, pick]}).height == 1
 
 
 def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():
