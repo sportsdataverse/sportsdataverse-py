@@ -1939,7 +1939,7 @@ _ESPN_DRIFT = [
 
 
 @pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
-def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where):
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where, json_normalize_flavour):
     """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
     import sportsdataverse._common_espn_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning
@@ -1951,7 +1951,7 @@ def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, 
         assert parse(_drift(raw, path)).height == 0
 
 
-def test_espn_draft_picks_drift_warns():
+def test_espn_draft_picks_drift_warns(json_normalize_flavour):
     """parse_draft's inline picks shape has no committed capture (its docstring says so): the real 2024 index
     capture with its ``$ref`` rounds swapped for a picks list that holds strings reaches the same catch."""
     from sportsdataverse._common_espn_parsers import parse_draft

@@ -98,3 +98,13 @@ def test_redact_exception_drops_every_credential_header():
     err = requests.ConnectionError("connection refused", request=req)
     _redact_exception(err)
     assert dict(err.request.headers) == {"Accept": "application/json"}
+
+
+def test_require_objects_rejects_what_pandas3_json_normalize_rejects():
+    """WB-1: the row check pandas 3 makes itself, run on every pandas. A JSON null row passes, as on pandas 3."""
+    from sportsdataverse.errors import _require_objects
+
+    _require_objects([{"a": 1}, None])
+    for bad in ("x", 1, [1]):
+        with pytest.raises(TypeError, match=f"a row is {type(bad).__name__}, not an object"):
+            _require_objects([{"a": 1}, bad])

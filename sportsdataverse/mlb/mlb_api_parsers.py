@@ -52,7 +52,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _require_objects, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -106,6 +106,7 @@ def _flatten_rows(items, return_as_pandas: bool, where: str):
     if not items:
         return _empty_frame(return_as_pandas)
     try:
+        _require_objects(items)
         df = pd.json_normalize(items, sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift(where, exc)

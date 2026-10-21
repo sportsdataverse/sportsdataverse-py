@@ -341,10 +341,22 @@ class SchemaDriftWarning(UserWarning):
     """
 
 
-#: What flattening a payload of the wrong shape raises (``pd.json_normalize`` on a list of strings:
-#: ``TypeError`` on pandas 3, ``AttributeError`` on pandas 2; a missing key; an unparseable value).
+#: What flattening a payload of the wrong shape raises (a row that is not an object: ``TypeError``
+#: from :func:`_require_objects`; a missing key; an unparseable value).
 #: Parsers catch exactly these, warn :class:`SchemaDriftWarning` and return zero rows.
 _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueError, KeyError, IndexError)
+
+
+def _require_objects(rows: list) -> None:
+    """Raise ``TypeError`` when a row is not an object, before ``pd.json_normalize`` sees it (WB-1).
+
+    pandas 3 raises this itself, but pandas 2 (still allowed, and resolved on Python 3.10) reads a
+    string row as an empty one, so drift came back as an N x 0 frame with no warning. Like pandas 3,
+    a ``None`` (JSON null) row is allowed.
+    """
+    bad = next((row for row in rows if row is not None and not isinstance(row, dict)), None)
+    if bad is not None:
+        raise TypeError(f"a row is {type(bad).__name__}, not an object")
 
 
 def _warn_schema_drift(where: str, exc: BaseException) -> None:
