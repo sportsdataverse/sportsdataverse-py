@@ -74,7 +74,10 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
     interval is closed at the last ``scored`` event's ``game_seconds`` + 1 for that game
     (there is no explicit "end of game" CHANGE row in the shift-chart feed). A shot or goal
     at a change second credits its xG to the interval that ends there (the players on the
-    ice before the change), as NHL scorers credit the outgoing line.
+    ice before the change), following fastRhockey's within-second event order
+    (``R/nhl_game_feed.R``: shots, goals, stops and penalties before a CHANGE, faceoffs
+    after). So xG sums over ``(start_s, end_s]`` while goalie and ``strength_state`` read
+    the events in ``[start_s, end_s)``, falling back to the xG window when that is empty.
 
     Known simplification: shift-chart id lists do not distinguish position, so
     ``home_ids``/``away_ids`` may include the on-ice goalie's id alongside skaters;
@@ -182,16 +185,22 @@ def build_stints(shifts: pl.DataFrame, scored: pl.DataFrame, *, as_of: int | Non
             # A shot at a change second belongs to the players on the ice BEFORE the change:
             # the shift chart changes lines at the goal second, so the half-open window
             # above handed most goals' xG to the line that came on after them (WB-hockey-1).
-            # xG therefore uses (start_s, end_s] -- the hockeyR / fastRhockey NHL order,
-            # shots and goals before CHANGE, faceoffs after -- and the first interval also
-            # keeps its own start second. Goalie / strength stay on `window`: the PWHL
-            # adapter's CHANGE rows at start_s carry the new interval's strength.
+            # xG therefore uses (start_s, end_s] -- fastRhockey's within-second order
+            # (R/nhl_game_feed.R:984-1006): shots, goals, stops, penalties before CHANGE,
+            # faceoffs after -- and the first interval also keeps its own start second.
+            # Goalie / strength stay on `window`: the CHANGE and faceoff rows at start_s
+            # describe the new interval.
             xg_lo = start_s - 1 if i == 0 else start_s
             xg_window = (
                 game_scored.filter((pl.col("game_seconds") > xg_lo) & (pl.col("game_seconds") <= end_s))
                 if game_scored.height > 0
                 else game_scored
             )
+            # An interval whose only event is a shot at end_s has an empty `window`; read goalie /
+            # strength off the xG window then, or its xG would carry a null strength_state (dropped
+            # by every strength filter) and the goalie would be fitted as a skater (R960-1).
+            if window.height == 0:
+                window = xg_window
             xgf_home = xgf_away = 0.0
             if xg_window.height > 0:
                 xgf_home = float(xg_window.filter(pl.col("event_team_abbr") == home_abbr)["xg"].sum() or 0.0)
