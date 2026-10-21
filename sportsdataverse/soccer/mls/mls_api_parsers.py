@@ -36,7 +36,7 @@ from typing import Any, Dict, List, Union
 import pandas as pd
 import polars as pl
 
-from sportsdataverse.errors import _data_only
+from sportsdataverse.errors import _data_only, _object_records
 from sportsdataverse.soccer._frames import as_output, as_tables, rows_to_frame
 
 __all__ = [
@@ -160,7 +160,9 @@ def parse_mls_entity(
     .. _MLS Season Pass: https://www.mlssoccer.com/
     """
     if isinstance(raw, list):
-        rows: List[Any] = raw
+        # an entity list holds records: a row that is not an object is drift (R945-3)
+        # stacklevel 4: _object_records <- this parser <- its _data_only wrapper <- the caller
+        rows: List[Any] = _object_records(raw, "parse_mls_entity: payload", stacklevel=4) or []
     elif isinstance(raw, dict) and raw:
         rows = [raw]
     else:

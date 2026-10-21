@@ -155,6 +155,7 @@ def parse_sports247_site_page(
     flat.columns = [underscore(str(c)) for c in flat.columns]
     for c in flat.columns:
         if flat[c].dtype == object:
-            flat[c] = flat[c].map(lambda v: v if v is None or isinstance(v, str) else str(v))
+            # a gap is NaN on pandas 2, None on pandas 3: keep it null, never the string "nan" (R945-4)
+            flat[c] = flat[c].map(lambda v: v if v is None or isinstance(v, str) else None if v != v else str(v))
     df = _cast_numeric_strings(pl.from_pandas(flat))
     return df.to_pandas() if return_as_pandas else df
