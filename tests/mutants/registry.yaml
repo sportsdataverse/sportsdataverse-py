@@ -1079,7 +1079,7 @@
   note: The pre-R841-1 hold on a period's last row (end <= start only), which the clamp passes.
 
 # --- C-M10 / C-L35: NBA props + availability as-of boundaries (task 3.7) ---------------------------
-# Killers: tests/nba/test_nba_player_props_asof.py on the committed real 2023-24 corpus and
+# Killers: tests/nba/test_nba_player_props_asof.py and test_nba_player_props.py on the committed real 2023-24 corpus and
 # tests/nba/test_nba_availability.py on the committed nba_draft/wnba_draft corpora.
 - id: nba-props-asof-inclusive
   group: nba-props-asof
@@ -1121,14 +1121,32 @@
   group: nba-props-asof
   finding: C-M10
   file: sportsdataverse/nba/nba_player_props.py
-  snippet: '    if "game_date" not in logs.columns:'
+  snippet: '    if "game_date" not in box.columns:'
   mutant: '    if False:'
-  test: tests/nba/test_nba_player_props_asof.py -k without_game_date
+  test: tests/nba/test_nba_player_props.py -k without_game_date
   expected: kill
   note: >-
-    Logs without game_date would skip the cut. Killed by the error TYPE changing (the default-cut
-    lookup then raises polars ColumnNotFoundError, not the ValueError the test matches), not by a
-    silent leak: the guard only names the failure (R850-2).
+    Box logs without game_date reach _load_player_logs' select, which raises polars
+    ColumnNotFoundError instead of the documented ValueError the test matches (NBA and WNBA loaders
+    stubbed, the real function run). The guard only names the failure (R850-2, WB-basketball-5).
+- id: nba-props-logs-guard-always-raises
+  group: nba-props-asof
+  finding: R943-2
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in box.columns:'
+  mutant: '    if True:'
+  test: tests/nba/test_nba_player_props.py -k with_game_date_returns
+  expected: kill
+  note: Every live call raises; the well-formed box (real game_date from results_2024) must pass through.
+- id: nba-props-logs-guard-wrong-column
+  group: nba-props-asof
+  finding: R943-2
+  file: sportsdataverse/nba/nba_player_props.py
+  snippet: '    if "game_date" not in box.columns:'
+  mutant: '    if "game_datetime" not in box.columns:'
+  test: tests/nba/test_nba_player_props.py -k with_game_date_returns
+  expected: kill
+  note: The guard keyed on a column the loader never ships raises on every well-formed box.
 - id: nba-props-asof-no-schedule-fallback
   group: nba-props-asof
   finding: R850-1
