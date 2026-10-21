@@ -3024,3 +3024,19 @@
   note: >-
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
+
+# --- cfb 3.4 R832-6: the half-end play keys on the next real play's team (cfbfastR create_wpa_naive.R) ---
+# Killer on a committed capture: tests/cfb/test_cfb_whole_game_oracle.py (401858224's regulation-ending FG).
+
+- id: cfb-half-end-wp-keys-on-the-next-real-plays-team
+  group: nfl-end-of-half
+  finding: R832-6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "other_teams_next_play"
+  expected: kill
+  note: >-
+    The pre-fix condition. 401858224's tying field goal keeps its team (start == end) and the next real play is
+    overtime's first snap by the other team: keyed on the play's own possession change it falls through to the
+    model's end state, 0.476, instead of cfbfastR's 1 - 0.502 = 0.498.

@@ -654,6 +654,22 @@ def test_timeout_ending_half_end_possession_change_wp_after_is_one_minus_next_pl
     assert abs(punt["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (punt["wp_after"], nxt["wp_before"])
 
 
+def test_timeout_ending_half_end_to_the_other_teams_next_play_is_one_minus_its_wp_before():
+    # R832-6: 401858224's regulation ends on 2509's tying field goal, then a Timeout row, then 154's
+    # first overtime snap. The kick keeps its own team (start == end), but the next real play is the
+    # other team's. cfbfastR keys the half-end play on that play's team (create_wpa_naive.R:178-187,
+    # wpa_change_nxt_ind = pos_team != lead_pos_team2): 1 - its wp_before (0.498), not the model's
+    # own end state (0.476).
+    f = _frame(401858224).with_row_index("row")
+    last = f.filter((pl.col("period") <= 4) & (pl.col("type.text") != "Timeout")).tail(1).row(0, named=True)
+    nxt = f.filter((pl.col("row") > last["row"]) & (pl.col("type.text") != "Timeout")).head(1).row(0, named=True)
+    if not (last["end_of_half"] is True and last["start.pos_team.id"] == last["end.pos_team.id"]):
+        pytest.fail(f"401858224's regulation no longer ends on a kept-possession play ({last['type.text']})")
+    if nxt["start.pos_team.id"] == last["start.pos_team.id"]:
+        pytest.fail("401858224's first overtime snap is no longer the other team's")
+    assert abs(last["wp_after"] - (1 - nxt["wp_before"])) < 1e-9, (last["wp_after"], nxt["wp_before"])
+
+
 # --- supp-002: ESPN's degenerate end block --------------------------------------------------------
 
 _DEGENERATE = tuple(gid for gid in CAPTURES if FEEDS[gid].degenerate_ends)
