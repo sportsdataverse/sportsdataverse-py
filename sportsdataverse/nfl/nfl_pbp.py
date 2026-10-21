@@ -1070,6 +1070,31 @@ class NFLPlayProcess(object):
         ):
             logging.debug(f"{self.gameId}: appear to be too many plays ({len(pbp_txt['plays'])}) for a completed game")
             return pbp_txt
+        # A play's whole ``start`` / ``end`` block, its clock or its scores can be absent from every
+        # play: json_normalize then emits no such column and the chain below raised ColumnNotFoundError
+        # (C-NF-10(a)). Materialize them null, as the CFB processor does; strings as String-null for
+        # the ``.str`` ops, the scores Int64-null (their published dtype), the rest untyped for the casts.
+        _required_play_cols = {
+            "clock.displayValue": pl.String,
+            "type.text": pl.String,
+            "text": pl.String,
+            "homeScore": pl.Int64,
+            "awayScore": pl.Int64,
+            "start.downDistanceText": pl.String,
+            **dict.fromkeys(
+                [
+                    f"{side}.{f}"
+                    for side in ("start", "end")
+                    for f in ("team.id", "down", "distance", "yardsToEndzone", "yardLine")
+                ],
+                pl.Null,
+            ),
+        }
+        _missing = [c for c in _required_play_cols if c not in pbp_txt["plays"].columns]
+        if _missing:
+            pbp_txt["plays"] = pbp_txt["plays"].with_columns(
+                pl.lit(None, dtype=_required_play_cols[c]).alias(c) for c in _missing
+            )
         pbp_txt["plays"] = (
             pbp_txt["plays"]
             .with_columns(
@@ -1650,24 +1675,26 @@ class NFLPlayProcess(object):
         # offline (a supplied summary): the summary's own pickcenter is the only
         # odds source, so one provider is enough and an empty array means the
         # documented defaults, never a request
+        pickcenter = None
         if n_pick > 1 or (offline and n_pick >= 1):
             pickcenter = pd.json_normalize(data=pbp_txt, record_path="pickcenter")
             pickcenter = pickcenter.sort_values(by=["provider.id"])
-            homeFavorite = (
-                pickcenter[pickcenter["homeTeamOdds.favorite"].notnull()][["homeTeamOdds.favorite"]].values[0]
-                if "homeTeamOdds.favorite" in pickcenter.columns
-                else True
-            )
-            gameSpread = (
-                pickcenter[pickcenter["spread"].notnull()][["spread"]].values[0]
-                if "spread" in pickcenter.columns
-                else 2.5
-            )
-            overUnder = (
-                pickcenter[pickcenter["overUnder"].notnull()][["overUnder"]].values[0]
-                if "overUnder" in pickcenter.columns
-                else 55.0
-            )
+
+        def _first(column, default):
+            """The first provider's non-null ``column`` (``provider.id`` order), else ``default``.
+
+            One value, not the shape-(1,) ndarray ``.values[0]`` gave: the callers cast it to a Python scalar so
+            the payload's odds are a valid (JSON-safe) ``odds_override`` (the CFB twin's C-M19). An all-null
+            column no longer raises IndexError (C-NF-10(b)).
+            """
+            values = pickcenter[column].dropna() if column in pickcenter.columns else ()
+            return values.iloc[0] if len(values) else default
+
+        # a pickcenter whose providers carry no spread is no spread: it takes the path below
+        if pickcenter is not None and _first("spread", None) is not None:
+            homeFavorite = bool(_first("homeTeamOdds.favorite", True))
+            gameSpread = float(_first("spread", 2.5))
+            overUnder = float(_first("overUnder", 55.0))
             gameSpreadAvailable = True
             self.odds_source = "summary_pickcenter"
             # self.logger.info(f"Spread: {gameSpread}, home Favorite: {homeFavorite}, ou: {overUnder}")

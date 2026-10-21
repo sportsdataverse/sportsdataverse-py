@@ -7,12 +7,10 @@ expected value is read from the captured payload or from the documented returns 
 (``tools/codegen/schemas/autodoc/<lg>/espn_<lg>_*.yaml``), never from a stored copy of the
 function's own output.
 
-A case the code fails today is a strict xfail naming its finding id and the task that fixes it:
-B-H2 / B-M12 / B-M14 / B-M16 (shape half) / B-M24 / B-M25 / B-GB-21 in task 2.9, B-M16 (dtype
-half) in task 5.1. A fix turns the xfail into XPASS(strict) and the fixing PR flips it. Each
-mark pins the failure mode measured today (``raises=``): an assertion for the value cases, the
-exception the parser raises for each malformed-event case, so a fix that trades one crash for
-another, or a new crash, fails the test instead of staying XFAIL.
+Task 2.9 fixed the defects these cases pinned as strict xfails (B-H2, B-M12, B-M14, B-M16 shape
+half, B-M24, B-M25, B-GB-21, B-L2); the frame assembly they exercise lives once, in
+``sportsdataverse._espn_schedule``. A new known defect goes back in as a strict xfail naming its
+finding id, the task that fixes it and the exception it raises today (``raises=``).
 """
 
 from __future__ import annotations
@@ -24,7 +22,6 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 import polars as pl
-import pytest
 import yaml
 
 from tests.codegen.test_runtime_errors import _route
@@ -45,9 +42,6 @@ CAPTURE_DATES = {
     "cfb": 20241012,
     "mlb": 20241025,
 }
-
-#: The six copies that still send the camelCase key ESPN's generated scoreboard does not use.
-CAMEL_SEASON_TYPE = {"mbb", "wbb", "nba", "wnba", "nfl", "nhl"}
 
 #: Explicit id-column allowlist per family: column -> the dtype its returns table documents
 #: (``character`` -> String, ``integer`` -> Int32/Int64). An id column the parser emits that is
@@ -79,10 +73,6 @@ SCHEDULE_IDS: Dict[str, Dict[str, tuple]] = {
 TEAMS_IDS = {"team_id": _STR, "team_uid": _STR}
 
 
-def _xfail(finding: str, why: str, raises: Any = AssertionError) -> Any:
-    return pytest.mark.xfail(strict=True, raises=raises, reason=f"{finding}: {why}")
-
-
 def _documented(league: str, family: str) -> List[str]:
     doc = yaml.safe_load((AUTODOC / league / f"espn_{league}_{family}.yaml").read_text(encoding="utf-8"))
     return [c["name"] for c in doc["columns"]]
@@ -100,12 +90,7 @@ def _call(league: str, family: str, monkeypatch, body: Dict[str, Any], **kwargs:
     """
     calls = _route(monkeypatch, lambda url: (200, json.dumps(body), "application/json"))
     fn = getattr(importlib.import_module(f"sportsdataverse.{league}.{league}_{family}"), f"espn_{league}_{family}")
-    clear = getattr(fn, "cache_clear", lambda: None)  # the teams functions are lru_cached
-    clear()
-    try:
-        out = fn(**kwargs)
-    finally:
-        clear()  # never leave a served fixture in the cache for another test
+    out = fn(**kwargs)  # the teams functions no longer cache (task 2.11), so nothing to clear
     assert isinstance(out, pl.DataFrame), f"espn_{league}_{family} returned {type(out).__name__}, not a DataFrame"
     return out, calls
 
@@ -132,13 +117,6 @@ def _no_season(event: Dict[str, Any]) -> None:
 
 
 #: Mutations of ONE real event (B-M24's proof test): the other events of the day must survive.
-#: The exception each copy without a per-event guard raises on it today (the strict xfail's ``raises=``).
-EVENT_MUTATION_RAISES = {
-    "event_missing_notes": KeyError,
-    "event_one_competitor": IndexError,
-    "event_empty_competitions": IndexError,
-    "event_missing_season": AttributeError,
-}
 EVENT_MUTATIONS: Dict[str, Callable[[Dict[str, Any]], None]] = {
     "event_missing_notes": _drop_notes,
     "event_one_competitor": _one_competitor,
@@ -148,40 +126,13 @@ EVENT_MUTATIONS: Dict[str, Callable[[Dict[str, Any]], None]] = {
 
 
 def schedule_cases(league: str) -> List[Any]:
-    """The schedule case ids for one league, each marked with its known defect if any."""
-    cases: List[Any] = ["snapshot"]
-    id_marks = (
-        [_xfail("B-M16", "tournament_id arrives Float64 (documented integer); task 5.1")] if league == "wbb" else []
-    )
-    cases.append(pytest.param("id_dtypes", marks=id_marks))
-    key_marks = (
-        [_xfail("B-M14", "sends camelCase seasonType, not seasontype; task 2.9")] if league in CAMEL_SEASON_TYPE else []
-    )
-    cases.append(pytest.param("query_key", marks=key_marks))
-    col_marks = (
-        []
-        if league == "mlb"
-        else [_xfail("B-M16", "per-event concat makes the column set day-dependent (shape half); task 2.9")]
-    )
-    cases.append(pytest.param("returns_table_columns", marks=col_marks))
-    if league in ("cfb", "mlb"):
-        empty_marks = [_xfail("B-H2", "returns None on an empty slate; task 2.9")]
-    else:
-        empty_marks = [_xfail("B-M12", "returns a (0, 0) frame without the documented columns; task 2.9")]
-    cases.append(pytest.param("empty_slate", marks=empty_marks))
-    for name in EVENT_MUTATIONS:
-        guarded = league == "mlb" or (league == "cfb" and name == "event_empty_competitions")
-        raises = EVENT_MUTATION_RAISES[name]
-        why = f"one malformed event discards the whole day ({raises.__name__}); task 2.9"
-        marks = [] if guarded else [_xfail("B-M24", why, raises=raises)]
-        cases.append(pytest.param(name, marks=marks))
+    """The schedule case ids for one league (task 2.9 fixed every known defect these pinned)."""
+    cases: List[Any] = ["snapshot", "id_dtypes", "query_key", "returns_table_columns", "empty_slate"]
+    cases += list(EVENT_MUTATIONS)
     if league != "mlb":  # mlb emits no linescores
-        canceled_marks = [] if league == "cfb" else [_xfail("B-GB-21", "only Postponed is masked; task 2.9")]
-        cases.append(pytest.param("canceled_masked", marks=canceled_marks))
+        cases += ["canceled_masked", "parse_twice"]
     if league == "nfl":
-        cases.append(
-            pytest.param("rank_not_default", marks=[_xfail("B-M25", "NFL ranks default to the CFB 99; task 2.9")])
-        )
+        cases.append("rank_not_default")
     if league == "cfb":
         cases.append("placeholder_event_2014")
     return cases
@@ -255,12 +206,22 @@ def check_schedule(league: str, case: str, monkeypatch) -> None:
         row = df.filter(pl.col("game_id").cast(pl.Int64) == int(event["id"]))
         assert row.height == 1
         assert row["home_linescores"][0] is None and row["away_linescores"][0] is None
+    elif case == "parse_twice":
+        # B-L2: the parser used to pop keys off the payload, so a second parse of it raised
+        module = importlib.import_module(f"sportsdataverse.{league}.{league}_schedule")
+        monkeypatch.setattr(module, "_download_json", lambda *a, **k: body)  # the SAME object, twice
+        first = getattr(module, f"espn_{league}_schedule")(**kwargs)
+        second = getattr(module, f"espn_{league}_schedule")(**kwargs)
+        assert first.height == len(events) and first.equals(second)
+        assert body == _payload(f"scoreboard_{league}.json")
     elif case == "rank_not_default":
         df, _ = _call(league, "schedule", monkeypatch, body, **kwargs)
-        # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns must be absent or null
+        # NFL competitors carry no curatedRank (0 of 15 in the capture): the columns are all null, and
+        # with the documented dtype (integer), not the String an all-null column takes on the pandas hop (R855-3)
         assert not any(c.get("curatedRank") for e in events for c in e["competitions"][0]["competitors"])
         for col in ("home_current_rank", "away_current_rank"):
-            assert col not in df.columns or df[col].null_count() == df.height, df[col].unique().to_list()
+            assert df[col].null_count() == df.height, df[col].unique().to_list()
+            assert df.schema[col] == pl.Int64, df.schema[col]
     elif case == "placeholder_event_2014":
         real = _payload("scoreboard_cfb_2014_placeholder.json")
         assert any(not e for e in real["events"])  # the capture carries ESPN's `{}` placeholder

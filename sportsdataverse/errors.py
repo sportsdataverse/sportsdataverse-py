@@ -451,6 +451,59 @@ def _may_be_json(response: Any) -> bool:
     return not (isinstance(ctype, str) and ctype.strip().lower().startswith(_BINARY_TYPES))
 
 
+class DefaultOddsWarning(UserWarning):
+    """Warned when a CFB game is processed with no pregame spread, or a market spread with no total.
+
+    ``CFBPlayProcess`` needs a spread and a total as EPA / WP inputs. When neither the summary's
+    ``pickcenter`` nor ESPN's odds endpoint has one -- or an ``odds_override`` says the spread is
+    unavailable, as a rebuild of such a game does -- it uses a default spread and total, and every
+    EPA / WP value of that game rests on a number no market set. The ``gameSpreadAvailable`` play
+    column records it per game; this warning makes it visible at processing time. A producer that
+    must not publish such a game turns it into an error.
+
+    It also fires when the spread is a market line but the total is not (``gameSpreadAvailable``
+    True, ``overUnderAvailable`` False): the default total feeds the fourth-down decision surface's
+    implied team totals. The ``overUnderAvailable`` play column records that case per game, and an
+    ``odds_override`` rebuild that carries ``overUnderAvailable=False`` warns again.
+
+    Example:
+        Strict mode for a producer::
+
+            import warnings
+            from sportsdataverse.errors import DefaultOddsWarning
+
+            warnings.simplefilter("error", DefaultOddsWarning)
+
+        Silence it deliberately::
+
+            warnings.filterwarnings("ignore", category=DefaultOddsWarning)
+    """
+
+
+class PlayOrderWarning(UserWarning):
+    """Warned when a CFB game's processed plays step back a period along the row order.
+
+    ``CFBPlayProcess`` orders the plays by ESPN's play id and splits overtime by the period
+    label, and nothing else in the feed says which of the two is right. A ``period`` that
+    decreases from one row to the next means one of them is wrong at that row (2024 401628439
+    files an overtime touchdown as period 2), and every feature read from a neighbouring row
+    there (scores, EPA lookbacks, WPA, series) reads the wrong neighbour. The warning names the
+    game and the play ids.
+
+    Example:
+        Strict mode for a producer::
+
+            import warnings
+            from sportsdataverse.errors import PlayOrderWarning
+
+            warnings.simplefilter("error", PlayOrderWarning)
+
+        Silence it deliberately::
+
+            warnings.filterwarnings("ignore", category=PlayOrderWarning)
+    """
+
+
 def no_espn_data(response: "requests.Response") -> "requests.Response":
     """Validate an ESPN response, raising :class:`NoDataError` if empty.
 

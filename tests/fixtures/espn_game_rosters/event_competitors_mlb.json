@@ -1,0 +1,98 @@
+{
+ "count": 2,
+ "pageIndex": 1,
+ "pageSize": 25,
+ "pageCount": 1,
+ "items": [
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19?lang=en&region=us",
+   "id": "19",
+   "uid": "s:1~l:10~t:19",
+   "type": "team",
+   "order": 0,
+   "homeAway": "home",
+   "winner": true,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/19?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/19/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/teams/19/record?lang=en&region=us"
+   },
+   "probables": [
+    {
+     "name": "probableStartingPitcher",
+     "displayName": "Probable Starting Pitcher",
+     "shortDisplayName": "Starter",
+     "abbreviation": "SP",
+     "playerId": 33837,
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/33837?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/3/athletes/33837/statistics/0?lang=en&region=us"
+     }
+    }
+   ]
+  },
+  {
+   "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10?lang=en&region=us",
+   "id": "10",
+   "uid": "s:1~l:10~t:10",
+   "type": "team",
+   "order": 1,
+   "homeAway": "away",
+   "winner": false,
+   "team": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/teams/10?lang=en&region=us"
+   },
+   "score": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/score?lang=en&region=us"
+   },
+   "linescores": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/linescores?lang=en&region=us"
+   },
+   "roster": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/roster?lang=en&region=us"
+   },
+   "statistics": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/statistics?lang=en&region=us"
+   },
+   "leaders": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/events/401701038/competitions/401701038/competitors/10/leaders?lang=en&region=us"
+   },
+   "record": {
+    "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/2/teams/10/record?lang=en&region=us"
+   },
+   "probables": [
+    {
+     "name": "probableStartingPitcher",
+     "displayName": "Probable Starting Pitcher",
+     "shortDisplayName": "Starter",
+     "abbreviation": "SP",
+     "playerId": 32081,
+     "athlete": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/athletes/32081?lang=en&region=us"
+     },
+     "statistics": {
+      "$ref": "http://sports.core.api.espn.com/v2/sports/baseball/leagues/mlb/seasons/2024/types/3/athletes/32081/statistics/0?lang=en&region=us"
+     }
+    }
+   ]
+  }
+ ]
+}

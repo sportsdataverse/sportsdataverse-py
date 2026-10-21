@@ -62,7 +62,7 @@ class SourceContext:
         | idmap_row | dict or None | the game's id-map row (``idmap._lookup``): native game + team ids |
         | payload | Any | the source's native payload, injected for offline runs (ESPN: the summary dict); None = fetch |
         | participants | polars.DataFrame or None | pre-shaped ``participants=`` frame to hand the processor |
-        | odds_override | dict or None | ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` for sources without odds |
+        | odds_override | dict or None | ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` for sources without odds |
     """
 
     idmap_row: dict | None = None
@@ -410,7 +410,7 @@ def _process_game(
         except Exception as exc:
             attempts.append(Attempt(src, False, f"{type(exc).__name__}: {exc}", time.perf_counter() - t0))
             continue
-        report: ContractReport = _validate_summary(adapted.summary, league)
+        report: ContractReport = _validate_summary(adapted.summary, league, source=src)
         if not report.ok:
             attempts.append(
                 Attempt(

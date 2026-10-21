@@ -226,3 +226,9 @@ columns:
 - name: away_logo_dark
   type: character
   description: ''
+- name: home_winner
+  type: logical
+  description: ''
+- name: away_winner
+  type: logical
+  description: ''

@@ -4288,6 +4288,8 @@ load_cfb_pbp:
   type: Boolean
 - name: overUnder
   type: Float64
+- name: overUnderAvailable
+  type: Boolean
 - name: homeTeamSpread
   type: Float64
 - name: clock.minutes
