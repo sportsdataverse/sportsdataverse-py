@@ -11,6 +11,7 @@ from datetime import date
 from pathlib import Path
 
 import polars as pl
+import pytest
 
 from sportsdataverse.nba.nba_player_props import (
     nba_player_props,
@@ -167,3 +168,38 @@ def test_nba_player_props_orchestrator(monkeypatch) -> None:
     assert out.schema["player_id"] == pl.Utf8
     assert out.height >= 1
     assert (out["stat_pts_exp"] >= 0).all()
+
+
+@pytest.mark.parametrize(
+    ("league_id", "loader_module", "loader_name"),
+    [
+        ("00", "sportsdataverse.nba.nba_loaders", "load_nba_player_boxscore"),
+        ("10", "sportsdataverse.wnba.wnba_loaders", "load_wnba_player_boxscore"),
+    ],
+)
+def test_load_player_logs_without_game_date_raises_value_error(monkeypatch, league_id, loader_module, loader_name):
+    """A box loader with no game_date raises the documented ValueError, not polars' ColumnNotFoundError.
+
+    The real ``_load_player_logs`` runs; only the box loader it imports is stubbed, serving the committed
+    2023-24 ESPN player box logs under the loader's own column names, without ``game_date``.
+    """
+    box = (
+        pl.read_parquet(FIXTURE_DIR / "player_box_logs_2024.parquet")
+        .head(20)
+        .select(
+            "game_id",
+            pl.col("player_id").alias("athlete_id"),
+            "team_id",
+            "minutes",
+            pl.col("pts").alias("points"),
+            pl.col("reb").alias("rebounds"),
+            pl.col("ast").alias("assists"),
+            pl.col("fg3m").alias("three_point_field_goals_made"),
+        )
+    )
+    monkeypatch.setattr(importlib.import_module(loader_module), loader_name, lambda seasons: box)
+    mod = importlib.import_module("sportsdataverse.nba.nba_player_props")
+    with pytest.raises(ValueError, match="box logs need game_date"):
+        mod._load_player_logs(2024, league_id)
+    with pytest.raises(ValueError, match="box logs need game_date"):
+        nba_player_props(2024, "401656363", "6", "2", league_id=league_id)

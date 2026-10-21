@@ -148,12 +148,6 @@ def test_explicit_as_of_date_is_strict(monkeypatch, corpus):
     assert bumped > base + 0.1, (base, bumped)
 
 
-def test_logs_without_game_date_raise(monkeypatch, corpus):
-    logs, ratings, game, _ = corpus
-    with pytest.raises(ValueError, match="game_date"):
-        _project(monkeypatch, logs.drop("game_date"), ratings, game, "x")
-
-
 def test_played_game_missing_from_the_logs_is_cut_at_its_schedule_date(monkeypatch, corpus):
     """R850-1: a played game absent from the box logs (an ESPN gap) still gets the as-of cut, from the
     schedule; without it a later line would leak into the projection."""
