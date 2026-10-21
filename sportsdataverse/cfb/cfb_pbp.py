@@ -526,6 +526,41 @@ def _warn_period_steps_back(play_df: pl.DataFrame, game_id) -> None:
         )
 
 
+def _reconcile_play_scores(play_df: pl.DataFrame) -> pl.DataFrame:
+    """Repair ``homeScore`` / ``awayScore`` before the end markers are dropped and any margin is derived."""
+    # An "End of Game" / "End of OT" marker is dropped after this, but it is often the only row
+    # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
+    # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
+    # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
+    # it, so the game still ends at its final; a lower score on a marker is a glitch and is
+    # ignored.
+    marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
+    play_df = play_df.with_columns(
+        *[
+            pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
+            .then(pl.col(c).shift(-1))
+            .otherwise(pl.col(c))
+            .alias(c)
+            for c in ("homeScore", "awayScore")
+        ]
+    )
+    # A few feeds keep homeScore/awayScore reversed for the whole game (2006 262590245,
+    # 2016 400876038 / 400876049, 2018 401135269): the away team's points sit under
+    # homeScore from its first score to the last row, so every margin in the game read
+    # for the wrong side. The header's final is the one statement of the score that does
+    # not come from a play row; when the last row is that final reversed, and the two
+    # sides differ, the columns are swapped back before any margin is derived.
+    _reversed = (
+        (pl.col("homeScore").last() == pl.col("awayFinalScore").first())
+        & (pl.col("awayScore").last() == pl.col("homeFinalScore").first())
+        & (pl.col("homeFinalScore").first() != pl.col("awayFinalScore").first())
+    ).fill_null(False)
+    return play_df.with_columns(
+        homeScore=pl.when(_reversed).then(pl.col("awayScore")).otherwise(pl.col("homeScore")),
+        awayScore=pl.when(_reversed).then(pl.col("homeScore")).otherwise(pl.col("awayScore")),
+    )
+
+
 def _ot_second(play_df, team_col: str):
     """Per row: is ``team_col`` second in its overtime period? Null where unknown."""
     if not {"period", "start.pos_team.id", team_col}.issubset(play_df.columns):
@@ -4412,37 +4447,7 @@ class CFBPlayProcess(object):
             keep="last",
             maintain_order=True,
         )
-        # An "End of Game" / "End of OT" marker is dropped below, but it is often the only row
-        # that carries the final score: ESPN drops the winning touchdown row from overtime feeds
-        # (2021 401301042 ends 23-30 on its last play and 29-30 on the marker; 2024 401628428
-        # 38-38 against a 43-41 marker). Carry a marker's higher score back onto the play before
-        # it, so the game still ends at its final; a lower score on a marker is a glitch and is
-        # ignored.
-        marker = pl.col("type.text").str.contains("(?i)end of|(?i)end period")
-        play_df = play_df.with_columns(
-            *[
-                pl.when(marker.shift(-1).fill_null(False) & (pl.col(c).shift(-1) > pl.col(c)))
-                .then(pl.col(c).shift(-1))
-                .otherwise(pl.col(c))
-                .alias(c)
-                for c in ("homeScore", "awayScore")
-            ]
-        )
-        # A few feeds keep homeScore/awayScore reversed for the whole game (2006 262590245,
-        # 2016 400876038 / 400876049, 2018 401135269): the away team's points sit under
-        # homeScore from its first score to the last row, so every margin in the game read
-        # for the wrong side. The header's final is the one statement of the score that does
-        # not come from a play row; when the last row is that final reversed, and the two
-        # sides differ, the columns are swapped back before any margin is derived.
-        _reversed = (
-            (pl.col("homeScore").last() == pl.col("awayFinalScore").first())
-            & (pl.col("awayScore").last() == pl.col("homeFinalScore").first())
-            & (pl.col("homeFinalScore").first() != pl.col("awayFinalScore").first())
-        ).fill_null(False)
-        play_df = play_df.with_columns(
-            homeScore=pl.when(_reversed).then(pl.col("awayScore")).otherwise(pl.col("homeScore")),
-            awayScore=pl.when(_reversed).then(pl.col("homeScore")).otherwise(pl.col("awayScore")),
-        )
+        play_df = _reconcile_play_scores(play_df)
         play_df = play_df.filter(
             pl.col("type.text").str.contains("(?i)end of|(?i)coin toss|(?i)end period|(?i)wins toss") == False,
         )
