@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Union
 
-from sportsdataverse.errors import _data_only, _dict_only, _object_records
+from sportsdataverse.errors import _data_only, _dict_only, _object_rows
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -70,8 +70,8 @@ def _to_frame(records: List, return_as_pandas: bool, where: str) -> DataFrameT:
 
     from sportsdataverse.dl_utils import underscore
 
-    # stacklevel 5: _object_records <- _to_frame <- the parser <- its _data_only / _dict_only wrapper <- the caller
-    records = _object_records(records, where, stacklevel=5)
+    # stacklevel 5: _object_rows <- _to_frame <- the parser <- its _data_only / _dict_only wrapper <- the caller
+    records = _object_rows(records, where, stacklevel=5)
     if not records:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     try:
@@ -116,9 +116,9 @@ def parse_nfl_standings(raw: Dict, return_as_pandas: bool = False) -> DataFrameT
             parse_nfl_standings(raw).head()
     """
     records: List = []
-    # stacklevel 4: _object_records <- this parser <- its _dict_only wrapper <- the caller
-    for wk in _object_records(raw.get("weeks"), "parse_nfl_standings: weeks", stacklevel=4) or []:
-        standings = _object_records(wk.get("standings"), "parse_nfl_standings: weeks[].standings", stacklevel=4)
+    # stacklevel 4: _object_rows <- this parser <- its _dict_only wrapper <- the caller
+    for wk in _object_rows(raw.get("weeks"), "parse_nfl_standings: weeks", stacklevel=4) or []:
+        standings = _object_rows(wk.get("standings"), "parse_nfl_standings: weeks[].standings", stacklevel=4)
         if standings is None:  # drift, already warned: zero rows, never a partial table
             return _to_frame([], return_as_pandas, "parse_nfl_standings: weeks[].standings")
         records.extend(standings)

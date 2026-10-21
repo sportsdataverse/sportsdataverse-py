@@ -1784,8 +1784,8 @@ def _nulled(raw: Any, path: tuple, keep: bool, nulls: bool = True) -> Any:
     return out
 
 
-# Every _ESPN_DRIFT row whose list holds rows: each parser applies errors._object_rows to it, directly or through
-# _rows_or_drift. teams_nba's ``sports`` walk reads no group rows, so it has none to null.
+# Every _ESPN_DRIFT row whose list holds rows: each parser applies errors._object_rows to it, raising inside its
+# catch or warning through where=. teams_nba's ``sports`` walk reads no group rows, so it has none to null.
 _ESPN_ROW_RULE = [entry for entry in _ESPN_DRIFT if entry[1] != "teams_nba"] + [
     # the grouped roster's position groups themselves (the players inside one are in _ESPN_DRIFT)
     ("parse_team_roster", "team_roster_nfl", ("athletes",), "parse_team_roster: athletes"),

@@ -21,7 +21,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _data_only, _object_records
+from sportsdataverse.errors import _data_only, _object_rows
 
 __all__ = [
     "parse_sports247_result_set",
@@ -55,8 +55,8 @@ def _records_frame(raw: Any, return_as_pandas: bool, where: str) -> Union[pl.Dat
     # fallback's one invented row (R945-9)
     key = next((k for k in _LIST_KEYS if isinstance(raw, dict) and raw.get(k) is not None), None)
     rows = raw[key] if key else _extract_rows(raw)
-    # stacklevel 5: _object_records <- here <- the parser <- its _data_only wrapper <- the caller
-    df = _rows_to_frame(_object_records(rows, f"{where}.{key}" if key else where, stacklevel=5) or [])
+    # stacklevel 5: _object_rows <- here <- the parser <- its _data_only wrapper <- the caller
+    df = _rows_to_frame(_object_rows(rows, f"{where}.{key}" if key else where, stacklevel=5) or [])
     return df.to_pandas() if return_as_pandas else df
 
 
