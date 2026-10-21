@@ -926,8 +926,9 @@ never soften a rate limit into an empty frame. This is
 deliberate and measured, not an oversight: it is the read polars' own URL path makes
 (`urlopen` + `BytesIO`), while a trip through `download()` holds an extra `requests`
 copy of the compressed asset. On the 59 MB
-`play_by_play_2025.parquet` the buffered variant cost **+7% peak RSS and +75% wall**
-(1010 MB / 6.0s → 1081 MB / 10.5s); temp-file and zero-copy `pa.py_buffer` variants
+`play_by_play_2025.parquet` the `download()` variant cost **+7% peak RSS and +75% wall**
+(1010 MB / 6.0s → 1081 MB / 10.5s; the extra copy explains the RSS, while the wall cost
+was measured, not traced to a cause); temp-file and zero-copy `pa.py_buffer` variants
 were no better. `download()` is still used there to **classify** a failed read — a
 404 becomes `NoDataError` (skip the season), any other non-200 becomes
 `AssetFetchError` (surface it), so a fetch that FAILED is never recorded as a

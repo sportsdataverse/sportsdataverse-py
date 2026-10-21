@@ -350,13 +350,15 @@ _SHAPE_ERRORS: tuple[type[Exception], ...] = (TypeError, AttributeError, ValueEr
 def _require_objects(rows: list) -> None:
     """Raise ``TypeError`` when a row is not an object, before ``pd.json_normalize`` sees it (WB-1).
 
-    pandas 3 raises this itself, but pandas 2 (still allowed, and resolved on Python 3.10) reads a
-    string row as an empty one, so drift came back as an N x 0 frame with no warning. Like pandas 3,
-    a ``None`` (JSON null) row is allowed.
+    pandas 3 raises this itself, but pandas 2 (allowed on every supported Python) reads a string row
+    as an empty one, so drift came back as an N x 0 frame with no warning. Like pandas 3, an NA-like
+    scalar row (``None``, ``NaN``, ``pd.NA``) is allowed.
     """
-    bad = next((row for row in rows if row is not None and not isinstance(row, dict)), None)
-    if bad is not None:
-        raise TypeError(f"a row is {type(bad).__name__}, not an object")
+    import pandas as pd  # lazy: errors.py is imported by every module, pandas only by the parsers
+
+    for row in rows:
+        if not isinstance(row, dict) and not (pd.api.types.is_scalar(row) and pd.isna(row)):
+            raise TypeError(f"a row is {type(row).__name__}, not an object")
 
 
 def _warn_schema_drift(where: str, exc: BaseException) -> None:

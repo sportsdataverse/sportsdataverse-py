@@ -1078,26 +1078,25 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         return _single_row(payload, return_as_pandas)
     all_picks: List[dict] = []
 
-    if rounds:
-        for rnd in rounds:
-            round_num = rnd.get("number") or rnd.get("round")
-            picks = rnd.get("picks") or rnd.get("items") or []
-            for pick in picks:
-                p = dict(pick)
-                p.setdefault("round_number", round_num)
-                all_picks.append(p)
-    else:
-        # Fallback shapes
-        all_picks = payload.get("picks") or payload.get("items") or []
-
-    if not all_picks:
-        return _empty_frame(return_as_pandas)
-
     try:
+        if rounds:
+            for rnd in rounds:  # a round or pick that is not an object raises here, inside the catch
+                round_num = rnd.get("number") or rnd.get("round")
+                picks = rnd.get("picks") or rnd.get("items") or []
+                for pick in picks:
+                    p = dict(pick)
+                    p.setdefault("round_number", round_num)
+                    all_picks.append(p)
+        else:
+            # Fallback shapes
+            all_picks = payload.get("picks") or payload.get("items") or []
+
+        if not all_picks:
+            return _empty_frame(return_as_pandas)
         _require_objects(all_picks)
         df = pd.json_normalize(all_picks, sep="_")
     except _SHAPE_ERRORS as exc:
-        _warn_schema_drift("parse_draft: all_picks", exc)
+        _warn_schema_drift("parse_draft: rounds" if rounds else "parse_draft: all_picks", exc)
         return _empty_frame(return_as_pandas)
     else:
         df = _snake_columns(df)
