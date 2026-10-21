@@ -1939,7 +1939,7 @@ _ESPN_DRIFT = [
 
 
 @pytest.mark.parametrize(("parser", "fixture", "path", "where"), _ESPN_DRIFT, ids=lambda v: str(v))
-def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where):
+def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, path, where, json_normalize_flavour):
     """Task 4.9: a row list that stops holding objects is zero rows AND a SchemaDriftWarning naming the path."""
     import sportsdataverse._common_espn_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning
@@ -1951,7 +1951,7 @@ def test_espn_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, 
         assert parse(_drift(raw, path)).height == 0
 
 
-def test_espn_draft_picks_drift_warns():
+def test_espn_draft_picks_drift_warns(json_normalize_flavour):
     """parse_draft's inline picks shape has no committed capture (its docstring says so): the real 2024 index
     capture with its ``$ref`` rounds swapped for a picks list that holds strings reaches the same catch."""
     from sportsdataverse._common_espn_parsers import parse_draft
@@ -1960,6 +1960,28 @@ def test_espn_draft_picks_drift_warns():
     raw = _load("season_draft_nba")
     with pytest.warns(SchemaDriftWarning, match="parse_draft: all_picks"):
         assert parse_draft({**raw, "rounds": [], "picks": [str(raw["athletes"])]}).height == 0
+
+
+@pytest.mark.parametrize(
+    "rounds",
+    [
+        [{"number": 1, "picks": ["bad"]}],  # dict("bad") -> ValueError
+        ["bad"],  # "bad".get -> AttributeError
+        [{"number": 1, "picks": [None]}],  # dict(None) -> TypeError
+    ],
+    ids=["str_pick", "str_round", "null_pick"],
+)
+def test_espn_draft_inline_rounds_drift_warns(rounds):
+    """R941-2: the inline ``rounds[].picks[]`` walk runs inside the catch, so a round or pick that is not an
+    object is zero rows + SchemaDriftWarning, not an exception. A good round before it does not leak rows.
+    The shape has no committed capture, so the good pick is the real 2024 capture's athletes ``$ref`` object."""
+    from sportsdataverse._common_espn_parsers import parse_draft
+    from sportsdataverse.errors import SchemaDriftWarning
+
+    good = {"number": 1, "picks": [_load("season_draft_nba")["athletes"]]}
+    assert parse_draft({"rounds": [good]}).height == 1
+    with pytest.warns(SchemaDriftWarning, match="parse_draft: rounds"):
+        assert parse_draft({"rounds": [good, *rounds]}).height == 0
 
 
 def test_espn_grouped_roster_with_a_group_that_is_not_an_object_warns():

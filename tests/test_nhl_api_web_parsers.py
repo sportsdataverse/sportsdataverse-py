@@ -334,7 +334,7 @@ def test_parser_for_nhl_api_web_returns_callable_or_none():
         ("parse_nhl_web_player_game_log", "player_mcdavid_gamelog", "gameLog"),
     ],
 )
-def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, json_normalize_flavour):
     """A row list that stops holding objects gives zero rows AND a SchemaDriftWarning naming the path (A-L60)."""
     import sportsdataverse.nhl.nhl_api_web_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning

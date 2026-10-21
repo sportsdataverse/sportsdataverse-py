@@ -914,19 +914,21 @@ result directly. Read JSON through `_codegen_runtime._download_json(download, ur
 `_json_body` and `_transport_errors`; HTML/text sites use `_text_body` / `_check_response`.
 
 **Exception — remote columnar reads.** `_fetch_release_parquet()` in
-`_codegen_runtime.py` hands the release URL straight to Arrow rather than
-buffering it through `download()`. Two variants share that one implementation:
+`_codegen_runtime.py` never routes the asset's bytes through `download()`:
+`_release_bytes` reads the whole body with `urllib` (timeout `SDV_PY_HTTP_TIMEOUT`,
+default 30 s) into a `BytesIO`, and pyarrow parses that buffer. Two variants share that one implementation:
 `_fetch_release_parquet` **raises** `NoDataError` when an asset is absent (used by
 the hand-written `nfl_loaders.py` and `cfb_loaders_extra.py`, where a missing
 season is an error), and `_read_release_parquet` returns **`None`** instead (used
 by the 291 generated call sites, where a season gap is routine). Only "absent"
 differs — a failed fetch raises `AssetFetchError` from both, so the wrapper can
 never soften a rate limit into an empty frame. This is
-deliberate and measured, not an oversight: Arrow overlaps the fetch with decoding
-and range-reads column chunks, while any fetch-then-parse path serializes the two
-and holds an extra copy of the compressed asset. On the 59 MB
-`play_by_play_2025.parquet` the buffered variant cost **+7% peak RSS and +75% wall**
-(1010 MB / 6.0s → 1081 MB / 10.5s); temp-file and zero-copy `pa.py_buffer` variants
+deliberate and measured, not an oversight: it is the read polars' own URL path makes
+(`urlopen` + `BytesIO`), while a trip through `download()` holds an extra `requests`
+copy of the compressed asset. On the 59 MB
+`play_by_play_2025.parquet` the `download()` variant cost **+7% peak RSS and +75% wall**
+(1010 MB / 6.0s → 1081 MB / 10.5s; the extra copy explains the RSS, while the wall cost
+was measured, not traced to a cause); temp-file and zero-copy `pa.py_buffer` variants
 were no better. `download()` is still used there to **classify** a failed read — a
 404 becomes `NoDataError` (skip the season), any other non-200 becomes
 `AssetFetchError` (surface it), so a fetch that FAILED is never recorded as a

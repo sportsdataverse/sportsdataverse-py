@@ -68,7 +68,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _require_objects, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -167,6 +167,7 @@ def parse_edge_top10(payload: Dict, return_as_pandas: bool = False) -> pl.DataFr
     if not rows:
         return _empty_frame(return_as_pandas)
     try:
+        _require_objects(rows)
         df = pd.json_normalize(rows, sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_edge_top10: rows", exc)
@@ -274,6 +275,7 @@ def parse_edge_shot_location(payload: Dict, return_as_pandas: bool = False) -> p
         zones = payload.get(key)
         if isinstance(zones, list) and zones:
             try:
+                _require_objects(zones)
                 df = pd.json_normalize(zones, sep="_")
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_shot_location: {key}", exc)
@@ -291,6 +293,7 @@ def parse_edge_shot_location(payload: Dict, return_as_pandas: bool = False) -> p
             zones = contents.get(key)
             if isinstance(zones, list) and zones:
                 try:
+                    _require_objects(zones)
                     sub = pd.json_normalize(zones, sep="_")
                 except _SHAPE_ERRORS as exc:
                     _warn_schema_drift(f"parse_edge_shot_location: {section}.{key}", exc)
@@ -357,6 +360,7 @@ def parse_edge_zone_time(payload: Dict, return_as_pandas: bool = False) -> pl.Da
             # Multi-row case: strength-state splits (e.g. zoneTimeDetails on
             # skater-zone-time returns 4 rows keyed by ``strengthCode``).
             try:
+                _require_objects(candidate)
                 df = pd.json_normalize(candidate, sep="_")
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_zone_time: {key}", exc)
@@ -408,6 +412,7 @@ def parse_edge_sog_details(payload: Dict, return_as_pandas: bool = False) -> pl.
         rows = payload.get(key)
         if isinstance(rows, list) and rows:
             try:
+                _require_objects(rows)
                 df = pd.json_normalize(rows, sep="_")
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_sog_details: {key}", exc)
@@ -439,6 +444,7 @@ def parse_edge_sog_summary(payload: Dict, return_as_pandas: bool = False) -> pl.
         rows = payload.get(key)
         if isinstance(rows, list) and rows:
             try:
+                _require_objects(rows)
                 df = pd.json_normalize(rows, sep="_")
             except _SHAPE_ERRORS as exc:
                 _warn_schema_drift(f"parse_edge_sog_summary: {key}", exc)
@@ -470,6 +476,7 @@ def parse_edge_hardest_shots(payload: Dict, return_as_pandas: bool = False) -> p
     if not isinstance(shots, list) or not shots:
         return _empty_frame(return_as_pandas)
     try:
+        _require_objects(shots)
         df = pd.json_normalize(shots, sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_edge_hardest_shots: hardestShots", exc)
@@ -511,6 +518,7 @@ def parse_edge_payload(payload: Dict, return_as_pandas: bool = False) -> pl.Data
 
     if best_key is not None:
         try:
+            _require_objects(payload[best_key])
             df = pd.json_normalize(payload[best_key], sep="_")
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift(f"parse_edge_payload: {best_key}", exc)
