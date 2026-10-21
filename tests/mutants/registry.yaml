@@ -3116,6 +3116,31 @@
     Windowed by half only, the next snap is read across the game boundary in a frame of several games: a
     game's last kick of a half reads the next game's first snap.
 
+- id: nfl-half-end-wp-keys-on-next-real-play-team
+  group: nfl-end-of-half
+  finding: nfl 2.26
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: '.and_(pl.col("start.pos_team.id") != half_next_team)'
+  mutant: '.and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    The devel-nfl branch 2 (the NFL analog of R832-6): keyed on the play's own possession change, a
+    half-ending play that kept the ball with the other team receiving next fell through to the model's
+    end state; 18 of the 37 captures broke home WP continuity into the next real play.
+
+- id: nfl-half-end-wp-reads-past-stoppage-rows
+  group: nfl-end-of-half
+  finding: nfl 2.26
+  file: sportsdataverse/nfl/ep_wp.py
+  snippet: 'half_next_team, half_next_wb = _next_play(team, _stoppage), _next_play(pl.col("wp_before"), _stoppage)'
+  mutant: 'half_next_team, half_next_wb = pl.col("lead_pos_team"), pl.col("lead_wp_before")'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous"
+  expected: kill
+  note: >-
+    Read from the next ROW, a Timeout after the half-ending play (400791590 among the captures) hands over the
+    Timeout's own model wp_before and its team, not the second-half kickoff's.
+
 # --- Task nfl 2.25: every punt ends at the receiver's next snap, with its clock (R785-6, R963-3, R963-5) -------------
 - id: nfl-punt-next-snap-every-era
   group: nfl-era-play-order

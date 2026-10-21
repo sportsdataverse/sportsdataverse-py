@@ -2524,12 +2524,15 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
       to the defense ``def_wp_before``).
     * ``wp_after`` is rewritten by the end-of-half / end-of-game / OT two-path:
       timeouts hold ``wp_before``; a completed final play resolves to ``1.0`` /
-      ``0.0`` by the winner; end-of-half and ``End Period`` / ``End of Half``
-      lead plays take ``lead_wp_before`` (or ``1 - lead_wp_before`` on a
-      possession change); a possession change otherwise flips the lead;
+      ``0.0`` by the winner; the play that ends a half takes the next real
+      play's ``wp_before`` (past clock stoppages), flipped when that play is
+      the other team's; ``End Period`` / ``End of Half`` lead plays take
+      ``lead_wp_before`` (or ``1 - lead_wp_before`` on a possession change);
+      a possession change otherwise flips the lead;
       everything else keeps the model ``wp_after``.
     * ``def_wp_after = 1 - wp_after``; ``home_wp_after`` / ``away_wp_after``
-      use the **end** possession team for the perspective flip.
+      use the **start** possession team for the perspective flip (every
+      ``wp_after`` branch above is stated in that team's frame).
     * ``wpa = wp_after - wp_before``.
 
     **Every** ``shift`` / forward reference is grouped ``.over("game_id")`` so a
@@ -2694,6 +2697,8 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
         & kick_team.is_not_null()
     )
     kick_board = pl.when(kick_team == team).then(kick_wb).otherwise(1 - kick_wb)
+    # the next real play after a half-ending play; wp_before is read after the overlay below
+    half_next_team, half_next_wb = _next_play(team, _stoppage), _next_play(pl.col("wp_before"), _stoppage)
 
     play_df = (
         df.with_columns(
@@ -2777,18 +2782,25 @@ def calculate_wpa(df: pl.DataFrame) -> pl.DataFrame:
             .then(0.0)
             .when(try_to_kickoff)
             .then(kick_board)
+            # The play that ends a half hands over to the next real play, past any clock-stoppage
+            # row (on the captures, only ever a Timeout: ESPN's end-of-period marker rows do not
+            # reach this frame): its wp_before, flipped when that play is the other team's. nflfastR
+            # has no branch here, home_wpa = lead(home_wp) - home_wp with the marker rows filled
+            # up from the next play (helper_add_ep_wp.R:1073-1181). Keyed on this play's own
+            # possession change, a half-ending play that kept the ball (a kneel, then the other
+            # team's second-half kickoff) fell through to the model's end state (2.26, R832-6).
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") == pl.col("lead_pos_team"))
+                .and_(pl.col("start.pos_team.id") == half_next_team)
                 .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
-            .then(pl.col("lead_wp_before"))
+            .then(half_next_wb)
             .when(
                 (pl.col("end_of_half") == True)
-                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))
+                .and_(pl.col("start.pos_team.id") != half_next_team)
                 .and_(pl.col("type.text").is_in(clock_stoppage_vec) == False),
             )
-            .then(1 - pl.col("lead_wp_before"))
+            .then(1 - half_next_wb)
             .when(
                 (pl.col("lead_play_type").is_in(["End Period", "End of Half"])).and_(
                     pl.col("change_of_pos_team") == False,
