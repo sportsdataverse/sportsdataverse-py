@@ -551,9 +551,7 @@ def parse_lkl_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
         historical. The page carries no officials' contact or birth data; any such key would be dropped by the
         runtime. Videos, logos and the UI config props are dropped. An empty or unrecognised input gives a zero-row
         frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -614,9 +612,7 @@ def parse_lkl_game_players(
         One row per rostered player. ``player_id`` (lkl.lt persons, stable across seasons) and ``slug`` are the
         two keys: this frame is the slug -> id map for the box score, leaders and play-by-play, which carry the
         slug only. ``jersey`` is a string. An empty or unrecognised input gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -720,9 +716,7 @@ def parse_lkl_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
         short name ``I. Surname``; ``player_slug`` is the key the site uses, and ``player_id`` is resolved through
         the game roster the runtime stamps (null on a bare body). ``seconds_played`` is the ``mm:ss`` minutes in
         seconds. Team total rows are in ``lkl_team_box``. A body without players gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -842,9 +836,7 @@ def parse_lkl_team_box(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         ``fast_break_points``, ``second_chance_points`` and ``points_in_paint`` are 0 before 2024-25 (not
         tracked). Per-period points are in ``lkl_period_scores``. A body without ``gameStatistics`` gives a
         zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -886,9 +878,7 @@ def parse_lkl_period_scores(
         One row per team and period (home first, periods ascending). ``points`` is the points scored IN the
         period, not cumulative. ``period`` 1-4 is regulation (``period_type`` ``regular``); 5 is the first
         overtime, 6 the second (``overtime``). A body without period scores gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -993,9 +983,7 @@ def parse_lkl_summary(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         has no groups; ``lkl_game_stats`` labels them). The summary also repeats ``gameStatistics`` (use
         ``lkl_team_box``), four leader categories (use ``lkl_leaders``) and a broadcasts HTML string, which is
         not parsed. A body without a comparison gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1023,9 +1011,7 @@ def parse_lkl_game_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
         lines the tab also shows in its ``shooting`` (2PT, 3PT, free throws) and ``main`` (rebounds, assists,
         steals) bar groups; it is null for the rest. A 2007-08 game has only a few lines and a flat lead chart
         (no event data then). A body without a comparison gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1071,9 +1057,7 @@ def parse_lkl_lead_chart(raw: Any, *, return_as_pandas: bool = False, columns: O
         ``clock`` is the clock REMAINING as the site's ``mm:ss:00`` text (a trailing ``:00``; ``10:00:00`` is the
         period start); ``column_height`` is the bar height (``|diff| / maxDiff x 50``). A 2007-08 game has a flat
         chart (no event data then). A body without ``leads`` gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1119,9 +1103,7 @@ def parse_lkl_game_score(raw: Any, *, return_as_pandas: bool = False, columns: O
         One row: the two scores and the clock text. The clock is NOT a state flag: an old game keeps
         ``'1 KELINYS - 10:00'`` after the final, and a finished overtime game reads ``'1 pratesimas - 00:00'``.
         A body without scores gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1170,9 +1152,7 @@ def parse_lkl_leaders(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         category leader and 2 and up are the runners-up, in the order the site lists them (up to 4 a side).
         ``player_slug`` is the site's key and ``player_id`` is resolved through the game roster the runtime
         stamps (null on a bare body). A body without leaders gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1284,9 +1264,7 @@ def parse_lkl_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         ``score_home`` / ``score_away`` are the running score AFTER the play on every line. Team, period and game
         lines have no player. ``player_id`` is resolved through the game roster the runtime stamps. The site
         charts play-by-play from 2024-25 on. A body without plays gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1364,9 +1342,7 @@ def parse_lkl_shots(raw: Any, *, return_as_pandas: bool = False, columns: Option
         is named by ``player_id`` (lkl.lt persons); ``player_slug`` is the reverse lookup through the runtime's
         roster (null on a bare body). The site charts shots from 2024-25 on. A body without shots gives a zero-row
         frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1447,9 +1423,7 @@ def parse_lkl_results(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         ``team_id`` with ``lkl_game_info``. ``time`` is the Lithuanian local tip-off ``HH:MM``. ``winner_highlighted``
         is the side whose score the page shows in bold. Played games only; the unplayed schedule is not
         wrapped. A record without games gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1514,9 +1488,7 @@ def parse_lkl_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
         results as ``W`` / ``L`` letters in the order rendered (oldest first, unverified). ``season_id`` is the
         site's standings-season id, a different key space from the results id. Team slugs join
         ``lkl_results``. A record without tables gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::

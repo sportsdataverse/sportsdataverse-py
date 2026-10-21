@@ -503,6 +503,12 @@ A polars (or pandas) DataFrame with one row per (sim, team): overall record (`ga
 | `conf_rank` | integer | Rank within the conference from the tiebreaker cascade (1 = best); null for independents. |
 | `conf_champ` | logical | Whether the team is its conference's champion - the CONF_CHAMP game winner when one was played, otherwise the conference's rank-1 team; always false for independents. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If required columns are missing or `tiebreaker_depth` / `game_type` values are invalid. |
+
 **Example**
 
 ```python
@@ -725,6 +731,13 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_alternate_color` | character | Alternate team color. |
 | `team_is_active` | logical |  |
 | `team_logo_href` | character | Default team logo URL. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
 
 **Example**
 

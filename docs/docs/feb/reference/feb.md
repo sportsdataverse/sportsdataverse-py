@@ -62,6 +62,14 @@ Game header: competition, tip-off, venue, officials, status, both teams and the 
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_game_info-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_game_info-example}
 
 ```python
@@ -94,6 +102,14 @@ Points each team scored in each period of a game.
 | `away_points` | integer | Points the away team scored IN this period (not cumulative). |
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
+
+### Raises {#feb_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_period_scores-example}
 
@@ -163,6 +179,14 @@ Team totals of both teams in a game: shooting, rebounds, assists, turnovers, fou
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_team_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_team_stats-example}
 
 ```python
@@ -230,6 +254,14 @@ Per-player box score of a game: minutes, points, shooting splits, rebounds, assi
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_player_box-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_player_box-example}
 
 ```python
@@ -286,6 +318,14 @@ Play-by-play of a game (KeyFacts): every shot, rebound, foul, substitution and t
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_pbp-example}
 
 ```python
@@ -325,6 +365,14 @@ Every field-goal attempt of a game with its court position (percent of a full-co
 | `y` | numeric | Court y position: percent (0-100) of the width of a horizontal full-court image from the top edge; baskets sit near y = 50. Metres (y/100 x 15) are an unverified inference. |
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
+
+### Raises {#feb_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_shots-example}
 
@@ -366,6 +414,14 @@ Each team's top players of a game by points, rebounds, assists and fouls.
 | `value` | integer | The player's count in the row's category (points, rebounds, assists or personal fouls). |
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
+
+### Raises {#feb_leaders-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_leaders-example}
 
@@ -420,6 +476,14 @@ Today's (or the latest) games of every live FEB competition, with scores and sta
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_overview-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_overview-example}
 
 ```python
@@ -468,6 +532,14 @@ Full schedule of one group (phase) of a competition season: every round, game, r
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_schedule-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_schedule-example}
 
 ```python
@@ -515,6 +587,14 @@ Latest round's results and the next round's fixtures of a competition season.
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
 
+### Raises {#feb_results-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#feb_results-example}
 
 ```python
@@ -561,6 +641,14 @@ League table of a competition season (live standings, or the final classificatio
 | `streak_text` | character | The streak cell verbatim ('+3'). |
 
 **`return_parsed=False`** — the raw body (`dict`): the LiveStats envelope (all ten blocks, only the route's filled) or the schedule page record, plus `_request` (the game id, or group and season asked for).
+
+### Raises {#feb_standings-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The FEB has nothing for the request (a game the API does not serve, an unknown group, a schedule page with no games, an empty overview window). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a rejected bearer token, an error or changed envelope, a page for another season or group). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#feb_standings-example}
 

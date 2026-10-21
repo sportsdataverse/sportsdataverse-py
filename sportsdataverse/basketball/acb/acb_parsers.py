@@ -1655,9 +1655,8 @@ def parse_acb_match_header(
         advanced stats) the site offers. ``team_id`` is the season-team entry, ``club_id`` the stable
         club.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1683,9 +1682,8 @@ def parse_acb_period_scores(
         One row per period: ``quarter`` (1-4, 5+ overtime), ``home_score`` and ``away_score`` are the
         points scored IN that period, not cumulative. Old games list fewer periods.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1712,9 +1710,8 @@ def parse_acb_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
         seconds; counts are ``Int64``. ``player_id`` is the ACB licence number; ``game_role`` is the
         Spanish position.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1739,9 +1736,8 @@ def parse_acb_team_box(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         the team's own events), ``team`` is the part credited to the team itself rather than a player
         (team rebounds, team turnovers). ``quarter`` 0 is the whole game.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1765,9 +1761,8 @@ def parse_acb_box_info(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         One row per team. ``arena``, ``attendance`` and ``referees`` (joined with ``'; '``) describe the
         game and repeat on both rows; ``assistant_coaches`` is joined with ``'; '``.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1797,9 +1792,8 @@ def parse_acb_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
         acting player's running box score AFTER the event. Games before 2016-17 answer no events (the
         wrapper raises NoDataError).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1829,9 +1823,8 @@ def parse_acb_shots(raw: Any, *, return_as_pandas: bool = False, columns: Option
         ``zone``; legacy zones are unreliable. The inference of units and origin is the refs' (arc and
         sideline fit), not documented by ACB. ``player_name`` comes from the game's shooter list.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1857,9 +1850,8 @@ def parse_acb_lead_tracker(
         One row per point on the lead chart: the period, the clock left, both scores and ``margin`` =
         ``home_score - away_score``.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1885,9 +1877,8 @@ def parse_acb_lead_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
         sent (a count, or ``'mm:ss'`` for time ahead); ``bar_progress`` is the length of the site's
         comparison bar.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1913,9 +1904,8 @@ def parse_acb_lineup(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         (false once the game is over). ``rebounds`` is total rebounds, ``fouls`` personal fouls
         committed, ``differential`` the plus/minus.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1942,9 +1932,8 @@ def parse_acb_match_leaders(
         ``points``, ``rebounds``, ``assists``; ``rank`` 1 is the leader). ``value`` is the player's
         count.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -1972,9 +1961,8 @@ def parse_acb_team_comparison(
         a count stays a count); for the shooting statistics ``*_made`` / ``*_attempted`` parse the
         ``'19/24'`` subtitle. ``*_is_highlighted`` marks the side the site highlights.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2001,9 +1989,8 @@ def parse_acb_serie(raw: Any, *, return_as_pandas: bool = False, columns: Option
         series wins, ``best_of`` the series length as sent (0 in the 2016-17 final sample: read it as unknown). A game outside a
         series answers HTTP 204 (NoDataError).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2028,9 +2015,8 @@ def parse_acb_quickfacts(raw: Any, *, return_as_pandas: bool = False, columns: O
         ``losses`` the record before the game, ``last_results`` the recent results joined with ``'; '``
         (``WIN`` / ``LOSS``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2056,9 +2042,8 @@ def parse_acb_season_leaders(
         One row per team, metric and rank, like ``acb_match_leaders`` but over the season so far;
         ``value`` is a total or an average depending on the metric.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2087,9 +2072,8 @@ def parse_acb_match_advanced_stats(
         shooting, points, ratings, rebounds. All are ``Float64`` (rates are percentages 0-100 unless the
         stat is a ratio, such as ``pointsPerPossession``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2115,9 +2099,8 @@ def parse_acb_player_advanced_stats(
         One row per statistic group and statistic, with the same value columns as
         ``acb_match_advanced_stats``. ``player_id`` is the requested licence (the body names no player).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2142,9 +2125,8 @@ def parse_acb_matchlist(raw: Any, *, return_as_pandas: bool = False, columns: Op
         teams' series record in a playoff series (null otherwise). ``match_grouping`` is ``round`` or
         ``week``. ``team_id`` columns are season-team entries; ``club_id`` is stable.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2171,9 +2153,8 @@ def parse_acb_competition_editions(
         and ``season`` (END year), plus how many rounds and weeks the edition lists.
         ``competition_name`` is the API's name for the competition (the Liga is ``Liga Nacional`` here).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2199,9 +2180,8 @@ def parse_acb_competition_rounds(
         One row per edition and round: the global ``round_id`` (the key of the round routes),
         ``round_number`` within the phase and the sub-phase.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2227,9 +2207,8 @@ def parse_acb_competition_weeks(
         One row per edition and week: the global ``week_id``, the Spanish ``description`` ('Semana 1')
         and the Monday ``start_date``.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2254,9 +2233,8 @@ def parse_acb_competition_current(
     Returns:
         One row: the ids the site opens by default, and the current match with its teams.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2283,9 +2261,8 @@ def parse_acb_round_matches(
         ``broadcasters`` joins the channel names with ``'; '``. The team columns are looked up in the
         body's team list; ``week_id`` is the selected week.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2309,9 +2286,8 @@ def parse_acb_standings(raw: Any, *, return_as_pandas: bool = False, columns: Op
         One row per team: position, record, points for and against, home and away records. ``round_id``
         is the round the table is as of; ``total_rounds`` the rounds in the phase.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2337,9 +2313,8 @@ def parse_acb_standings_rounds(
         One row per team and round: ``position`` after that round and the team's game of the round
         (``match_id``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2364,9 +2339,8 @@ def parse_acb_bracket(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         ``away_wins`` are the series score, ``best_of`` the series length, ``n_games`` the games listed.
         An edition with no playoffs yet raises NoDataError.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2392,9 +2366,8 @@ def parse_acb_bracket_games(
         One row per game; ``series_*`` columns describe its series and ``stage`` the round of the
         bracket.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2418,9 +2391,8 @@ def parse_acb_calendar(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         One row per game with its round (``round_id``, ``round_number``) and the teams looked up in the
         body's team list. The cheapest way to crawl a season: one call lists every game id.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2447,9 +2419,8 @@ def parse_acb_league_zones(
         paint, mid_range_left / center / right, corner_three_left / right, wing_three_left / right,
         top_three.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2473,9 +2444,8 @@ def parse_acb_teams(raw: Any, *, return_as_pandas: bool = False, columns: Option
         One row per team: the entry of the selected edition (``team_id``, new every season) and the
         club's latest entry (``latest_team_id``). ``club_id`` is the stable key.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2500,9 +2470,8 @@ def parse_acb_team_matches(
     Returns:
         One row per game, with ``is_selected_local`` true when the club played at home.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2527,9 +2496,8 @@ def parse_acb_next_matches(
     Returns:
         One row per game (recent and upcoming around today); same columns as ``acb_matchlist``.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2553,9 +2521,8 @@ def parse_acb_club_data(raw: Any, *, return_as_pandas: bool = False, columns: Op
         One row: the club's current team entry, the arena (name, address, capacity), foundation year,
         contact details and social links. Several fields are null for many clubs.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2584,9 +2551,8 @@ def parse_acb_current_roster(
         ``nationality_iso`` its ISO alpha-2 code. ``temporary_roster`` is true while the roster is
         provisional. Absence lists are not parsed.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2614,9 +2580,8 @@ def parse_acb_team_leaders(
         category (``points``, ``avg_points``, ``played_matches``...); ``value`` is a total or an average
         depending on the metric (Float64). The scope assignment is inferred from the values.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2641,9 +2606,8 @@ def parse_acb_team_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
         ``*_percentage`` are Float64), ``avg_*`` per-game averages and ``per40_*`` per-40-minute rates
         (Float64). ``num_games`` is games played and ``starter`` games started.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2669,9 +2633,8 @@ def parse_acb_team_totals(
         One row: the same ``total_*`` / ``avg_*`` / ``per40_*`` columns as ``acb_team_stats``, for the
         team as a whole (``team_id`` is the season-team entry).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2698,9 +2661,8 @@ def parse_acb_team_records(
         ``game_date``), the player and both teams of that game. Records go back to 1983-84; ``game_id``
         is a match id of the legacy sequence.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2729,9 +2691,8 @@ def parse_acb_player_data(
         ``JFL``; meanings unverified). The current team columns are the
         player's team entry for the edition.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2758,9 +2719,8 @@ def parse_acb_player_stats(
         ``per40_*`` per-40 rates as in ``acb_team_stats``. ``edition_year`` is the label
         (``'2026-2027'``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2786,9 +2746,8 @@ def parse_acb_player_totals(
         One row: the same ``total_*`` / ``avg_*`` / ``per40_*`` columns as ``acb_player_stats`` over the
         player's whole ACB career.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2814,9 +2773,8 @@ def parse_acb_career_stints(
         One row per stint: first and last year, the club's team entry for the stint and how many
         editions it spans (``n_editions``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2841,9 +2799,8 @@ def parse_acb_career_trophies(
     Returns:
         One row per competition: times champion and times runner-up.
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2871,9 +2828,8 @@ def parse_acb_player_matches(
         Percentages are Float64, the rest counts. Names follow the player-route vocabulary
         (``rebounds``, ``shots_rejected``, ``fouls_received``).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::
@@ -2898,9 +2854,8 @@ def parse_acb_search(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         ``coaches`` came back empty), so the team and coach row shapes are unverified. ``person_id`` is
         the licence number for players and coaches (a team hit carries its team entry id).
         A body that is empty or not this route's gives a zero-row frame with the documented columns and dtypes.
-
-    Raises:
-        None: the parser never raises on data; the wrapper raises NoDataError / AssetFetchError before parsing.
+        The parser never raises on data; the wrapper raises NoDataError / AssetFetchError before
+        parsing.
 
     Example:
         Quick start::

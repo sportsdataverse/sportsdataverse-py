@@ -297,6 +297,15 @@ def test_unplayed_games_have_null_scores_not_zero():
     assert games.filter(pl.col("status") == "OFFICIAL")["home_score"].null_count() == 0
 
 
+def test_tv_channel_objects_join_their_names_and_skip_null_names():
+    recent = _parsed("games_recent")["tv_channel"].drop_nulls().to_list()
+    header = P.parse_scb_games(R._stamp(_load("bbl/games__gameId__2026.json"), {"league": "bbl"}))
+    assert "DYN,Sport Bild Stream" in recent and header["tv_channel"][0] == "DYN,Sport Bild Stream"
+    assert not any("{" in c or "None" in c for c in recent)
+    assert P._join([{"name": "DYN"}, {"name": None}, None, "Magenta"]) == "DYN,Magenta"
+    assert P._join([{"name": None}, None]) is None
+
+
 def test_game_header_has_the_status_fields_a_games_page_lacks():
     header = P.parse_scb_games(R._stamp(_load("bbl/games__gameId__2026.json"), {"league": "bbl"}))
     assert header.height == 1 and {"stat_status", "game_progress"} <= set(header.columns)
@@ -569,7 +578,7 @@ def test_a_truncated_page_is_refused_not_returned_as_the_season(net):
     ("path", "params", "league", "body"),
     [
         ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId=2023)])),  # another season
-        ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId="2024")])),  # type-strict
+        ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(seasonId="2024")])),  # str season id
         ("/games", {"seasonId": 2024, "currentPage": 1}, "bbl", _page([_game()])),  # DBBL rows from the BBL host
         ("/games", {"seasonId": 2024, "currentPage": 1}, "dbbl", _page([_game(competition="BBL")])),
         (

@@ -22,3 +22,9 @@ Read a saved ESPN NHL play-by-play payload from disk.
 **Returns**
 
 The payload exactly as saved (the raw ESPN summary JSON), ready for `helper_nhl_pbp`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | There is no `{game_id}.json` in `path_to_json`. |

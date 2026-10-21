@@ -17,7 +17,7 @@ toc_max_heading_level: 2
 
 > **Note:** Ids: gmkey S{seasonCode}G{gameCode}N{gameNo} (a string, an object only inside the new playoff bracket), team_code (two-digit string with a leading zero, not stable across ownership changes) and pcode (six-digit string, the same on every route). The play-by-play carries no pcode: join its player_name to the game's box score on name and team_code. isEnded is unreliable (0 on every finished game through 2005-06), so a game is final when isEnded is 1 or when it is dated before today (KST), both teams scored and its play-by-play reached the game-end row; anything else raises AssetFetchError. The first game call also fetches the header (and, for such a game, the play-by-play) once; the answer is cached for the process.
 
-> **Note:** Coverage: box scores and play-by-play from the first season (1997); shot x/y from 2006-07 (an earlier game's shot chart is empty: NoDataError); advanced rates are filled from 1997-98 on (the vendor computes them from the box); screen assists and deflections are 0 before the recent seasons. fg is TWO-point field goals made (dunks included), fgt all field goals, and a made dunk is its own row in the play-by-play. Shot x/y are pixels on the site's 726 x 412 full-court image; basket names the target end and teams switch at half-time, so normalise with basket before stacking shots.
+> **Note:** Coverage: box scores and play-by-play from the first season (1997); shot x/y from 2006-07 (an earlier game's shot chart is empty: a zero-row frame); advanced rates are filled from 1997-98 on (the vendor computes them from the box); screen assists and deflections are 0 before the recent seasons. fg is TWO-point field goals made (dunks included), fgt all field goals, and a made dunk is its own row in the play-by-play. Shot x/y are pixels on the site's 726 x 412 full-court image; basket names the target end and teams switch at half-time, so normalise with basket before stacking shots.
 
 ## Player
 
@@ -26,6 +26,14 @@ toc_max_heading_level: 2
 | [kbl_player_box](kbl/player.md#kbl_player_box) | Player box score of a final game with the vendor's advanced rates, one row per player of both teams. |
 | [kbl_player_totals](kbl/player.md#kbl_player_totals) | Season player totals of one competition (every player with at least one game). |
 | [kbl_players](kbl/player.md#kbl_players) | The site's player directory (current and former players) with their current or last team. |
+
+## Playoff
+
+| Function | Summary |
+|---|---|
+| [kbl_playoff_seeds](kbl/playoff.md#kbl_playoff_seeds) | The regular-season finish that seeds the playoffs (the top six). |
+| [kbl_playoff_series](kbl/playoff.md#kbl_playoff_series) | The playoff series (quarterfinals, semifinals, final): wins and losses of each team in each series. |
+| [kbl_playoff_games](kbl/playoff.md#kbl_playoff_games) | The games of the playoff bracket (2024-25 on; the older bracket format lists no games). |
 
 ## Team
 
@@ -49,9 +57,6 @@ toc_max_heading_level: 2
 | [kbl_game_leaders](kbl/other.md#kbl_game_leaders) | Each team's leader per category (points, rebounds, assists, steals, blocks) in a final game. |
 | [kbl_standings](kbl/other.md#kbl_standings) | Standings of one competition with each team's season totals. |
 | [kbl_rounds](kbl/other.md#kbl_rounds) | The season's round calendar (the KBL plays six rounds) with each round's first and last date. |
-| [kbl_playoff_seeds](kbl/other.md#kbl_playoff_seeds) | The regular-season finish that seeds the playoffs (the top six). |
-| [kbl_playoff_series](kbl/other.md#kbl_playoff_series) | The playoff series (quarterfinals, semifinals, final): wins and losses of each team in each series. |
-| [kbl_playoff_games](kbl/other.md#kbl_playoff_games) | The games of the playoff bracket (2024-25 on; the older bracket format lists no games). |
 | [kbl_round_mvps](kbl/other.md#kbl_round_mvps) | The round MVPs of a season with their totals over the round. |
 | [kbl_current_standings](kbl/other.md#kbl_current_standings) | Current standings of the active season (no parameter): record, games behind, streaks, splits. |
 | [kbl_season_leaders](kbl/other.md#kbl_season_leaders) | Current season leaders per category (no parameter): points, rebounds, assists, steals, blocks, shooting. |

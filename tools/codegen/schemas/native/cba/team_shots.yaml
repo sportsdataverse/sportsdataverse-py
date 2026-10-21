@@ -1,16 +1,16 @@
 columns:
 - description: ''
   name: bout_no_points_sort
-  type: character
+  type: numeric
 - description: ''
   name: bout_point_sort
-  type: character
+  type: numeric
 - description: ''
   name: bout_subtract_points_sort
-  type: character
+  type: numeric
 - description: ''
   name: guard_field_goals_at_rim
-  type: character
+  type: numeric
 - description: ''
   name: guard_field_goals_at_rim_rank
   type: numeric
@@ -19,7 +19,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_hit_at_rim_made_rate
-  type: character
+  type: numeric
 - description: ''
   name: guard_hit_at_rim_made_rate_rank
   type: numeric
@@ -28,7 +28,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_hit_middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: guard_hit_middle_rate_rank
   type: numeric
@@ -37,7 +37,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: guard_middle_rate_rank
   type: numeric
@@ -46,7 +46,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_real_point
-  type: character
+  type: numeric
 - description: ''
   name: guard_real_point_rank
   type: numeric
@@ -55,7 +55,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_three_goals_rate
-  type: character
+  type: numeric
 - description: ''
   name: guard_three_goals_rate_rank
   type: numeric
@@ -64,7 +64,7 @@ columns:
   type: numeric
 - description: ''
   name: guard_three_rate
-  type: character
+  type: numeric
 - description: ''
   name: guard_three_rate_rank
   type: numeric
@@ -79,7 +79,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_field_goals_at_rim
-  type: character
+  type: numeric
 - description: ''
   name: offensive_field_goals_at_rim_rank
   type: numeric
@@ -88,7 +88,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_hit_at_rim_made_rate
-  type: character
+  type: numeric
 - description: ''
   name: offensive_hit_at_rim_made_rate_rank
   type: numeric
@@ -97,7 +97,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_hit_middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: offensive_hit_middle_rate_rank
   type: numeric
@@ -106,7 +106,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_middle_rate
-  type: character
+  type: numeric
 - description: ''
   name: offensive_middle_rate_rank
   type: numeric
@@ -115,7 +115,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_real_point
-  type: character
+  type: numeric
 - description: ''
   name: offensive_real_point_rank
   type: numeric
@@ -124,7 +124,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_three_goals_rate
-  type: character
+  type: numeric
 - description: ''
   name: offensive_three_goals_rate_rank
   type: numeric
@@ -133,7 +133,7 @@ columns:
   type: numeric
 - description: ''
   name: offensive_three_rate
-  type: character
+  type: numeric
 - description: ''
   name: offensive_three_rate_rank
   type: numeric

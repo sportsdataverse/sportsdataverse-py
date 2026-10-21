@@ -508,6 +508,12 @@ text-derived columns are lower fidelity than the ESPN path).
 
 The processed game payload (same keys as `CFBPlayProcess.run_processing_pipeline`) with an added `source="fox"` key. When `raw=True`, the adapted summary dict.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | Fox answered but carries no play-by-play for the game (it does not cover it, e.g. an FCS-hosted game). |
+
 **Example**
 
 ```python
@@ -909,3 +915,9 @@ Adapt a Fox `cfb/event/{id}/data` payload into the ESPN-summary shape.
 **Returns**
 
 A dict shaped like ESPN's `college-football/summary` response (`header` + `drives` + stub `pickcenter`/`boxscore`/...), ready to assign onto `CFBPlayProcess(...).json`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `fox_data` is an archive-format game (no `modalPlay` geometry on any play), where yards-to-goal is unavailable and the EPA pipeline cannot run. |

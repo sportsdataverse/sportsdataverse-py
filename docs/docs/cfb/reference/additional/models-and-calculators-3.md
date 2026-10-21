@@ -578,6 +578,13 @@ A pandas copy of `pbp_df` with the decision columns added. Empty input returns t
 
 No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
+| `ValueError` | If `season` is absent or all-null. The era-aware models would otherwise score against an all-zero one-hot -- a rule era that never existed -- and return a plausible number. |
+
 **Example**
 
 ```python

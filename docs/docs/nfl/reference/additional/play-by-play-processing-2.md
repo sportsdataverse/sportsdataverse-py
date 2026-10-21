@@ -571,6 +571,12 @@ All plays from the requested games/seasons, concatenated with schema-union seman
 | `fg_return_player_id` | character | ESPN athlete id of the player who returned the blocked or missed field goal. |
 | `xp_kicker_player_id` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If *source* is not one of `"espn"`, `"nflverse"`, `"shield"`; or if the wrong input parameter is supplied for the chosen source (e.g. passing *seasons* to `source="espn"`, *game_ids* to `source="nflverse"`, or *raw_dir* to a non-shield source); or if the required parameter is missing or empty. |
+
 **Example**
 
 ```python
@@ -736,6 +742,12 @@ A polars (or pandas) DataFrame in the published `load_nfl_team_stats` schema (~1
 | `gwfg_missed` | integer |  |
 | `gwfg_blocked` | integer |  |
 | `gwfg_distance` | integer |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_level` is not `"week"`/`"season"` or `season_type` is not `"REG"`/`"POST"`/`"REG+POST"`. |
 
 **Example**
 

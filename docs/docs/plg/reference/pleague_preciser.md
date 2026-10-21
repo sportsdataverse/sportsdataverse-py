@@ -61,6 +61,14 @@ Every field-goal attempt of one finished game with court x / y (vendor frame), z
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
 
+### Raises {#pleague_preciser_shots-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_preciser_shots-example}
 
 ```python
@@ -119,6 +127,14 @@ Post-game team comparison of one finished game: totals, situational points, lead
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
 
+### Raises {#pleague_preciser_summary_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_preciser_summary_teams-example}
 
 ```python
@@ -156,6 +172,14 @@ Scoring log of one finished game (scoring events only, with the running score).
 | `away_score` | integer | Away score after the event. |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
+
+### Raises {#pleague_preciser_score_log-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_preciser_score_log-example}
 
@@ -196,6 +220,14 @@ Score at each minute mark of one finished game, with the score difference (the l
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
 
+### Raises {#pleague_preciser_lead_flow-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_preciser_lead_flow-example}
 
 ```python
@@ -228,6 +260,14 @@ The vendor's home-team win probability by minute for one finished game.
 | `home_win_pct` | numeric | The home team's win probability in percent (0-100) at that minute; the vendor documents no method. |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
+
+### Raises {#pleague_preciser_win_probability-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_preciser_win_probability-example}
 
@@ -271,6 +311,14 @@ On-court stints of every player of one finished game (the rotation chart).
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
 
+### Raises {#pleague_preciser_rotation-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#pleague_preciser_rotation-example}
 
 ```python
@@ -308,6 +356,14 @@ Injury report of one finished game: one row per team.
 | `injury_report` | character | The team's injury report as a JSON string; null when the vendor sent null. It was null on all 16 sampled games, so its shape is unverified. |
 
 **`return_parsed=False`** — the raw record (`dict`): `{'data': <the vendor's game object>, '_request': {...}}` with the clip access key scrubbed.
+
+### Raises {#pleague_preciser_injury-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The source has nothing for the request (an unknown game, a stage the season does not have, a game with no play-by-play or vendor data). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (a page or body for another game, an unfinished game, a body that does not match its game page, layout drift, a play-by-play phrase outside the observed vocabulary). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#pleague_preciser_injury-example}
 

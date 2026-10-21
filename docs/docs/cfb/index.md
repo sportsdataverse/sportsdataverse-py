@@ -90,7 +90,7 @@ description: "sdv-py CFB: endpoint references, dataset loaders and parsers for C
 - [`calculate_wpa`](reference/additional/models-and-calculators#calculate_wpa)
 - [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass)
 - [`cfb_adjusted_epa`](reference/additional/models-and-calculators#cfb_adjusted_epa)
-- [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators#cfb_adjusted_epa_by_game)
+- [`cfb_adjusted_epa_by_game`](reference/additional/models-and-calculators-2#cfb_adjusted_epa_by_game)
 - [`cfb_compute_results`](reference/additional/models-and-calculators-2#cfb_compute_results)
 - [`cfb_draft_projection`](reference/additional/models-and-calculators-2#cfb_draft_projection)
 - [`cfb_field_position`](reference/additional/models-and-calculators-2#cfb_field_position)
@@ -180,7 +180,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`calculate_xpass`](reference/additional/models-and-calculators#calculate_xpass) | [`calculate_xpass`](https://cfbfastR.sportsdataverse.org/reference/calculate_xpass.html) |
 | [`espn_cfb_award`](reference/core/other#espn_cfb_award) | [`espn_cfb_award`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_award.html) |
 | [`espn_cfb_awards`](reference/core/other#espn_cfb_awards) | [`espn_cfb_awards`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_awards.html) |
-| [`espn_cfb_calendar`](reference/site#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
+| [`espn_cfb_calendar`](reference/site/other#espn_cfb_calendar) | [`espn_cfb_calendar`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_calendar.html) |
 | [`espn_cfb_coach`](reference/core/other#espn_cfb_coach) | [`espn_cfb_coach`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach.html) |
 | [`espn_cfb_coach_record`](reference/core/other#espn_cfb_coach_record) | [`espn_cfb_coach_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_coach_record.html) |
 | [`espn_cfb_franchise`](reference/core/other#espn_cfb_franchise) | [`espn_cfb_franchise`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_franchise.html) |
@@ -211,21 +211,21 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`cf
 | [`espn_cfb_player_stats_v3`](reference/web#espn_cfb_player_stats_v3) | [`espn_cfb_player_stats_v3`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_player_stats_v3.html) |
 | [`espn_cfb_position`](reference/core/other#espn_cfb_position) | [`espn_cfb_position`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_position.html) |
 | [`espn_cfb_positions`](reference/core/other#espn_cfb_positions) | [`espn_cfb_positions`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_positions.html) |
-| [`espn_cfb_rankings`](reference/site#espn_cfb_rankings) | [`espn_cfb_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_rankings.html) |
+| [`espn_cfb_rankings`](reference/site/other#espn_cfb_rankings) | [`espn_cfb_rankings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_rankings.html) |
 | [`espn_cfb_recruits`](reference/core/other#espn_cfb_recruits) | [`espn_cfb_recruits`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_recruits.html) |
 | [`espn_cfb_schedule`](reference/additional/highlights#espn_cfb_schedule) | [`espn_cfb_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_schedule.html) |
-| [`espn_cfb_scoreboard`](reference/site#espn_cfb_scoreboard) | [`espn_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_scoreboard.html) |
+| [`espn_cfb_scoreboard`](reference/site/other#espn_cfb_scoreboard) | [`espn_cfb_scoreboard`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_scoreboard.html) |
 | [`espn_cfb_season_info`](reference/core/season#espn_cfb_season_info) | [`espn_cfb_season_info`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_season_info.html) |
 | [`espn_cfb_season_types`](reference/core/season#espn_cfb_season_types) | [`espn_cfb_season_types`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_season_types.html) |
 | [`espn_cfb_season_weeks`](reference/core/season#espn_cfb_season_weeks) | [`espn_cfb_season_weeks`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_season_weeks.html) |
 | [`espn_cfb_seasons`](reference/core/other#espn_cfb_seasons) | [`espn_cfb_seasons`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_seasons.html) |
-| [`espn_cfb_standings`](reference/site#espn_cfb_standings) | [`espn_cfb_standings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_standings.html) |
-| [`espn_cfb_team`](reference/site#espn_cfb_team) | [`espn_cfb_team`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team.html) |
-| [`espn_cfb_team_leaders`](reference/site#espn_cfb_team_leaders) | [`espn_cfb_team_leaders`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_leaders.html) |
+| [`espn_cfb_standings`](reference/site/other#espn_cfb_standings) | [`espn_cfb_standings`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_standings.html) |
+| [`espn_cfb_team`](reference/site/team#espn_cfb_team) | [`espn_cfb_team`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team.html) |
+| [`espn_cfb_team_leaders`](reference/site/team#espn_cfb_team_leaders) | [`espn_cfb_team_leaders`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_leaders.html) |
 | [`espn_cfb_team_powerindex`](reference/core/other#espn_cfb_team_powerindex) | [`espn_cfb_team_powerindex`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_powerindex.html) |
-| [`espn_cfb_team_record`](reference/site#espn_cfb_team_record) | [`espn_cfb_team_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_record.html) |
-| [`espn_cfb_team_roster`](reference/site#espn_cfb_team_roster) | [`espn_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_roster.html) |
-| [`espn_cfb_team_schedule`](reference/site#espn_cfb_team_schedule) | [`espn_cfb_team_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_schedule.html) |
+| [`espn_cfb_team_record`](reference/site/team#espn_cfb_team_record) | [`espn_cfb_team_record`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_record.html) |
+| [`espn_cfb_team_roster`](reference/site/team#espn_cfb_team_roster) | [`espn_cfb_team_roster`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_roster.html) |
+| [`espn_cfb_team_schedule`](reference/site/team#espn_cfb_team_schedule) | [`espn_cfb_team_schedule`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_team_schedule.html) |
 | [`espn_cfb_teams`](reference/additional/espn#espn_cfb_teams) | [`espn_cfb_teams`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_teams.html) |
 | [`espn_cfb_venue`](reference/core/other#espn_cfb_venue) | [`espn_cfb_venue`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venue.html) |
 | [`espn_cfb_venues`](reference/core/other#espn_cfb_venues) | [`espn_cfb_venues`](https://cfbfastR.sportsdataverse.org/reference/espn_cfb_venues.html) |

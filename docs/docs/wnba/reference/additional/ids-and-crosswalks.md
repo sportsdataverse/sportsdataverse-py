@@ -47,6 +47,12 @@ columns stay null unless `fox=True`.
 
 `{"team": ..., "schedule": ..., "player": ...}`, with the same columns as `wnba_team_crosswalk`, `wnba_schedule_crosswalk` and `wnba_player_crosswalk`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | `stats_dir` holds no box scores for `season`. |
+
 **Example**
 
 ```python
@@ -92,6 +98,12 @@ Jaro-Winkler with jersey and DOB tiebreaks); Fox contributes
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | A Stats team-directory or `commonteamroster` call for any team failed or was refused (stats.wnba.com answers a throttle or block with an empty body), so `wnba_*` would otherwise be silently null. Throttles are retried only when `SDV_PY_NBA_STATS_RETRIES` is set (default `0`, backoff `SDV_PY_NBA_STATS_BACKOFF`); without it one transient refusal aborts the whole build. The per-team ESPN or Fox rosters failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+
 **Example**
 
 ```python
@@ -136,6 +148,12 @@ effectively current-season.
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | The per-date ESPN scoreboard failed every per-item fetch and answered none -- the signature of an unreachable or rate-limited host -- or, with `strict`, any one fetch failed. Isolated failures are skipped and logged as a warning. |
+
 **Example**
 
 ```python
@@ -173,6 +191,12 @@ and joined on the normalized `city + name`.
 `pl.DataFrame` (or pandas), one row per ESPN team, with `TEAM_COLUMNS`.
 
 No returns table is published for this function: no capture: it reads stats.wnba.com, which answers HTTP 403 to the datacenter IP the docs are built on; the function works from a residential IP.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `CrosswalkSourceError` | A source that was not passed in pre-fetched could not be produced (Fox or the Stats schedule). Building on a missing source would emit a well-formed crosswalk whose `fox_*` / `wnba_*` columns are silently all-null, so it fails here instead. |
 
 **Example**
 

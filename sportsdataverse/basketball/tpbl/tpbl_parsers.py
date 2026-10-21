@@ -709,9 +709,7 @@ def parse_tpbl_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Opt
         number), ``gohoops_season_id`` GoHoops' own, ``season`` the END year read from the label
         ``2024-2025 賽季`` (2025). ``started_at`` / ``ended_at`` stay ``YYYY-MM-DD HH:MM:SS`` text. A body
         without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -751,9 +749,7 @@ def parse_tpbl_divisions(raw: Any, *, return_as_pandas: bool = False, columns: O
         ``gohoops_event_id`` and the Traditional Chinese ``name`` (熱身賽 preseason, 例行賽 regular season,
         季後挑戰賽 postseason challenge / play-in, 季後賽 playoffs, 冠軍賽 finals). ``season`` and ``season_id``
         come from the stamp (null on a bare body). A body without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -790,9 +786,7 @@ def parse_tpbl_teams(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         One row per team. ``is_real_team`` is false for a bracket placeholder (id 67 '高順位隊伍' = higher-seed
         team, 68 '低順位隊伍' = lower-seed team in 2025-26). ``team_id`` is the franchise id, stable across seasons.
         A body without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -873,9 +867,7 @@ def parse_tpbl_games(raw: Any, *, return_as_pandas: bool = False, columns: Optio
         tip-off). ``tipoff`` is a naive timestamp in Taiwan local time (UTC+8 by every tip-off seen; the API sends no
         zone); ``attendance`` is the API's ``visitors`` string as an integer. Team names are Traditional Chinese with
         the sponsor; ``*_alt_name`` is the lowercase English slug. A body without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -902,9 +894,7 @@ def parse_tpbl_game(raw: Any, *, return_as_pandas: bool = False, columns: Option
         game detail does not name its season (``gohoops_season_id`` does). The recap, live-stream and
         judgement-report links are filled on a detail and may be missing on a list row. The referees are in
         ``tpbl_referees``. A body without a game gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -932,9 +922,7 @@ def parse_tpbl_referees(raw: Any, *, return_as_pandas: bool = False, columns: Op
         BASKETBALL_CHIEF_REFEREE (crew chief), BASKETBALL_FIRST_ASSISTANT_REFEREE (umpire 1),
         BASKETBALL_SECOND_ASSISTANT_REFEREE (umpire 2). Names only: no contact or birth data is published. A game
         without referees gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -974,9 +962,7 @@ def parse_tpbl_standings(raw: Any, *, return_as_pandas: bool = False, columns: O
         as ``Float64`` so half games cannot break the dtype) and ``streak`` is 'W' or 'L' plus the run length
         (W2 = two straight wins). The head-to-head records are in ``tpbl_standings_against``. A body without rows
         gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1020,9 +1006,7 @@ def parse_tpbl_standings_against(
     Returns:
         One row per (team, opponent): ``won`` / ``lost`` / ``drawn`` are the games ``team_id`` won, lost and drew
         against ``opponent_team_id`` in the division. A body without records gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1119,9 +1103,7 @@ def parse_tpbl_box_players(
         seconds. Percentages are 0-100 floats; the 'made/attempted' text columns are dropped. ``status`` is the
         player's registration as of the request, not at game time ('withdrawn' = the player left the squad later
         and may well have played). A body without players gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1151,9 +1133,7 @@ def parse_tpbl_box_player_periods(
         One row per player and quarter in which he was on court (a quarter line without stats is skipped), with the
         columns of ``tpbl_box_players`` plus ``period``: 1-4 regulation, 5 the first overtime, 6 the second. The
         periods of a player add up to his whole-game line. A body without lines gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1183,9 +1163,7 @@ def parse_tpbl_box_teams(raw: Any, *, return_as_pandas: bool = False, columns: O
         Two rows, home then away. ``won_score`` is the final score, ``lost_score`` the opponent's. The team line has
         fewer stat columns than a player line (no turnover types or shot types). Percentages are 0-100 floats. A body
         without teams gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1219,9 +1197,7 @@ def parse_tpbl_box_team_periods(
         the points scored and conceded IN the quarter; ``total_won_score`` / ``total_lost_score`` are running
         totals (the last quarter's ``total_won_score`` is the final score); ``time_on_court`` is the summed seconds
         of the five players on court. A body without lines gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1253,9 +1229,7 @@ def parse_tpbl_roster(raw: Any, *, return_as_pandas: bool = False, columns: Opti
         appear in the box scores with status 'withdrawn' (division 2 lists 13 registered players for team 4 while 22
         appeared in its box scores). ``position`` is the API's PascalCase enum (PointGuardAndShootingGuard, ...),
         '' when unset. A body without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1332,9 +1306,7 @@ def parse_tpbl_team_shots(
         is NO shooter, game, quarter or time field, and the body names no team or division, so ``division_id`` and
         ``team_id`` come from the request stamp (null on a bare body). ``rounds`` is the quarter filter asked for
         ('1,2'), null for all quarters. A body without shots gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1362,9 +1334,7 @@ def parse_tpbl_player_shots(
         One row per field-goal attempt of the player, in the shape of ``tpbl_team_shots`` without ``rounds``. The
         body names no player or division, so ``division_id`` and ``player_id`` come from the request stamp (null on
         a bare body). A body without shots gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -1395,9 +1365,7 @@ def parse_tpbl_player_games(
         the division. The API's ``performance_index_rating``, ``effective_field_goals_percentage`` and
         ``true_shooting_percentage`` are named ``pir``, ``efg`` and ``tsp`` as in ``tpbl_box_players``. Birth dates
         and the career note are not kept. A body without rows gives a zero-row frame.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::

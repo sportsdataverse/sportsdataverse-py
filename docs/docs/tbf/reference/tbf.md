@@ -13,6 +13,14 @@ toc_max_heading_level: 2
 
 > **Note:** Coverage: season and competition are parameters (`bsl` Basketbol Super Ligi, back to 1966-67 in the league list; `tbl` second tier; `kbsl` women, both from 2015-16). Game wrappers serve FINISHED games only (an unfinished game raises AssetFetchError). Box scores exist from 2006-07 (no starters flagged that season); play-by-play and shots from 2025-26 only, an earlier finished game raises NoDataError. Every game carries a Genius LiveStats id (`genius_id`, joins the `genius` family) from 2018-19 on some seasons and on every game of 2025-26 and later. Birth dates, contact details, photos and logos are dropped. Names and category labels are Turkish; the column descriptions give the English gloss.
 
+## Game
+
+| Function | Summary |
+|---|---|
+| [tbf_game_header](tbf/game.md#tbf_game_header) | Game header of a finished game: teams, coaches, final score, officials, venue and the Genius LiveStats id. |
+| [tbf_game_players](tbf/game.md#tbf_game_players) | Game roster from the header: every listed player of both sides (names and shirt numbers, no usable ids). |
+| [tbf_game_leaders](tbf/game.md#tbf_game_leaders) | Game leaders of a finished game per statistic category (top five each). |
+
 ## Leaders
 
 | Function | Summary |
@@ -57,10 +65,7 @@ toc_max_heading_level: 2
 | [tbf_standings](tbf/other.md#tbf_standings) | League table of one league-season after a week (default the latest), one row per team and group. |
 | [tbf_schedule](tbf/other.md#tbf_schedule) | Schedule and results of one league-season: the games of one week, or of every week. |
 | [tbf_daily_matches](tbf/other.md#tbf_daily_matches) | Every TBF game played on one date, grouped by competition, optionally for one league-season. |
-| [tbf_game_header](tbf/other.md#tbf_game_header) | Game header of a finished game: teams, coaches, final score, officials, venue and the Genius LiveStats id. |
-| [tbf_game_players](tbf/other.md#tbf_game_players) | Game roster from the header: every listed player of both sides (names and shirt numbers, no usable ids). |
 | [tbf_pbp](tbf/other.md#tbf_pbp) | Play-by-play of a finished game (2025-26 onward), in game order, with the running score and an English gloss. |
 | [tbf_shots](tbf/other.md#tbf_shots) | Every field-goal attempt of a finished game (2025-26 onward) with its court position. |
 | [tbf_period_scores](tbf/other.md#tbf_period_scores) | Points each side scored in each period of a finished game, overtime included. |
 | [tbf_highlights](tbf/other.md#tbf_highlights) | Team comparison of a finished game: rebounds, paint points, fast-break points, lead changes and more. |
-| [tbf_game_leaders](tbf/other.md#tbf_game_leaders) | Game leaders of a finished game per statistic category (top five each). |

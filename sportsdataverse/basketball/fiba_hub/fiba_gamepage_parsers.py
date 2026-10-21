@@ -220,9 +220,7 @@ def parse_fiba_gamepage_pbp(
         the acting team's stable id (NOT ``team_id``); both are null on team and period actions.
         ``shot_x`` / ``shot_y`` are image pixels (scale unverified). A page with no play-by-play (box-only
         eras, 2006-2011 OVR events) gives a zero-row frame typed from the returns schema.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -254,9 +252,7 @@ def parse_fiba_gamepage_shots(
         pixels on a half-court image with both teams drawn on one basket (scale and which sideline is
         ``x = 0`` are unverified); a free throw is 0, 0 and ``has_location`` is False. A zero-row frame,
         typed from the returns schema, when the page has no play-by-play.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -342,9 +338,7 @@ def parse_fiba_gamepage_box_players(
         id, ``minutes`` a ``m:ss`` string (``0:0`` = did not play) and percentages are 0-100. ``cb`` is a
         flag whose meaning is unverified. A zero-row frame, typed from the returns schema, when the page has
         no box score.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -401,9 +395,7 @@ def parse_fiba_gamepage_box_teams(
         samples and their meaning is unverified. ``lead_changes``, ``times_tied``, ``duration`` and
         ``attendance`` are game-level and repeat on both rows. A zero-row frame, typed from the returns
         schema, when the page has no box score.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -453,9 +445,7 @@ def parse_fiba_gamepage_period_scores(
         One row per team and period (Q1..Q4, OT1...). ``points`` is the team's points in the period and
         ``points_first_five_min`` its points in the period's first five minutes (null when the page omits
         it). A zero-row frame, typed from the returns schema, when the page has no box score.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
@@ -507,9 +497,7 @@ def parse_fiba_gamepage_lineup(
     Returns:
         One row per registered player. ``player_id`` joins the box score, the play-by-play and the roster;
         ``jersey`` is a string. A zero-row frame, typed from the returns schema, when the page lists no players.
-
-    Raises:
-        None: a malformed page parses to a zero-row frame instead of raising.
+        A malformed page parses to a zero-row frame instead of raising.
 
     Example:
         Quick start::
