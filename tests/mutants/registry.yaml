@@ -2020,8 +2020,8 @@
   group: nfl-end-of-half
   finding: C-NF-12
   file: sportsdataverse/cfb/cfb_pbp.py
-  snippet: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(lwb))"
-  mutant: ".and_(pl.col(\"start.pos_team.id\") != pl.col(\"end.pos_team.id\"))\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(wb).shift(-1))"
+  snippet: ".and_(pl.col(\"start.pos_team.id\") != lead_team)\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(lwb))"
+  mutant: ".and_(pl.col(\"start.pos_team.id\") != lead_team)\n                .and_(pl.col(\"type.text\") != \"Timeout\"),\n            )\n            .then(1 - pl.col(wb).shift(-1))"
   test: tests/cfb/test_cfb_whole_game_oracle.py -k "half_end_possession_change"
   expected: kill
   note: >-
@@ -2029,6 +2029,7 @@
     edited 401234617 (its End of Half marker retyped as a Timeout row) the next ROW is the Timeout.
     Re-keyed at the 10-21 main -> devel-cfb sync: the read is cfb's `lwb` (next non-Timeout row), so
     the mutant reads the next ROW's wp_before.
+    Re-keyed again for R832-6 (#966): branch 2 keys on `lead_team`, not the play's own `end.pos_team.id`.
 
 - id: nfl-end-of-half-try-keeps-its-epa
   group: nfl-end-of-half
@@ -3024,3 +3025,33 @@
   note: >-
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
+
+# --- cfb 3.4 R832-6: the half-end play keys on the next real play's team (cfbfastR create_wpa_naive.R) ---
+# Killer on a committed capture: tests/cfb/test_cfb_whole_game_oracle.py (401858224's regulation-ending FG).
+
+- id: cfb-half-end-wp-keys-on-the-next-real-plays-team
+  group: nfl-end-of-half
+  finding: R832-6
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_(pl.col("start.pos_team.id") != pl.col("end.pos_team.id"))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "other_teams_next_play"
+  expected: kill
+  note: >-
+    The pre-fix condition. 401858224's tying field goal keeps its team (start == end) and the next real play is
+    overtime's first snap by the other team: keyed on the play's own possession change it falls through to the
+    model's end state, 0.476, instead of cfbfastR's 1 - 0.502 = 0.498.
+
+- id: cfb-half-end-wp-next-team-rule-on-every-boundary
+  group: nfl-end-of-half
+  finding: R966-2
+  file: sportsdataverse/cfb/cfb_pbp.py
+  snippet: '                .and_(pl.col("start.pos_team.id") != lead_team)'
+  mutant: '                .and_((pl.col("start.pos_team.id") != lead_team) & ((pl.col("start.pos_team.id") != pl.col("end.pos_team.id")) | (pl.col("type.text").shift(-1) == "Timeout")))'
+  test: tests/cfb/test_cfb_whole_game_oracle.py -k "continuous_into_the_next_real_play"
+  expected: kill
+  note: >-
+    Review #966's hand mutant B2: the fix holds only when a Timeout row follows the half-ending play, and
+    every other boundary keeps the pre-fix own-possession-change key. It survived the full tests/cfb (only
+    401858224's regulation end, which has a Timeout, pinned the branch) while it reverts 63 of the 64 moved
+    capture rows, mostly the first half's last snap handing to the other team's 2H kickoff.
