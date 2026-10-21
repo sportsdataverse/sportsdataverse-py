@@ -3,4 +3,4 @@
   an N x 0 frame on pandas 2, a raise on pandas 3. A null row (`None` / `NaN` / `pd.NA`) is no row. (#945)
 - **NFL.com Shield / 247Sports / MLS parsers:** `parse_nfl_standings` no longer raises on a non-object week or a
   non-list `standings`; `parse_sports247_teams`, `_institution_rankings` and `parse_mls_entity` read a scalar array
-  as drift, not `value` rows; 247Sports keeps a pandas-2 gap null, never `"nan"`. (#945)
+  (or a non-list `list`) as drift, not invented rows; 247Sports keeps a pandas-2 gap null, never `"nan"`. (#945)

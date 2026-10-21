@@ -61,6 +61,12 @@ _NFL_KEYED = [
         ("parse_nfl_standings", {"weeks": 5}, r"parse_nfl_standings: weeks: .*\(records is int"),
         ("parse_nfl_standings", {"weeks": [{"standings": 5}]}, r"weeks\[\]\.standings: .*\(records is int"),
         ("parse_nfl_standings", {"weeks": [{"standings": ["a"]}]}, r"weeks\[\]\.standings: .*\(a record is str"),
+        # R945-8: one good week and one drifted week is zero rows, never a partial table
+        (
+            "parse_nfl_standings",
+            {"weeks": [{"standings": [{"team": {"abbr": "KC"}}]}, {"standings": 5}]},
+            r"weeks\[\]\.standings: .*\(records is int",
+        ),
     ]
     + [(name, {key: 5}, rf"{name}: \S+: .*\(records is int, not a list") for name, key in _NFL_KEYED]
     + [(name, {key: {"a": 1}}, rf"{name}: \S+: .*\(records is dict, not a list") for name, key in _NFL_KEYED],
@@ -110,6 +116,16 @@ def test_record_payload_parsers_read_a_scalar_array_as_drift(module, name):
     import importlib
 
     _drifts(getattr(importlib.import_module(module), name), ["a", "b", "c"], f"{name}: payload")
+
+
+@pytest.mark.parametrize("name", ["parse_sports247_teams", "parse_sports247_institution_rankings"])
+@pytest.mark.parametrize("value", [5, "x", {"a": 1}])
+def test_sports247_record_envelope_with_a_non_list_collection_is_drift(name, value):
+    """R945-9: ``{"pagination": ..., "list": 5}`` was one invented row from the flat-object fallback."""
+    from sportsdataverse.cfb import sports247_parsers
+
+    body = {"pagination": {"page": 1}, "list": value}
+    _drifts(getattr(sports247_parsers, name), body, rf"{name}: payload\.list: .*\(records is {type(value).__name__}")
 
 
 def test_sports247_wraps_every_scalar_not_only_a_leading_one_and_drops_null_rows():

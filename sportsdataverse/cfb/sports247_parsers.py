@@ -51,8 +51,12 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
 
 def _records_frame(raw: Any, return_as_pandas: bool, where: str) -> Union[pl.DataFrame, pd.DataFrame]:
     """For a parser whose documented rows are records: a row that is not an object is drift (R945-3)."""
+    # a present collection key holding something that is not a list is drift too, never the flat-object
+    # fallback's one invented row (R945-9)
+    key = next((k for k in _LIST_KEYS if isinstance(raw, dict) and raw.get(k) is not None), None)
+    rows = raw[key] if key else _extract_rows(raw)
     # stacklevel 5: _object_records <- here <- the parser <- its _data_only wrapper <- the caller
-    df = _rows_to_frame(_object_records(_extract_rows(raw), where, stacklevel=5) or [])
+    df = _rows_to_frame(_object_records(rows, f"{where}.{key}" if key else where, stacklevel=5) or [])
     return df.to_pandas() if return_as_pandas else df
 
 
