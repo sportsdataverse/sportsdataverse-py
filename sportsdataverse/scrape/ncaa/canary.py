@@ -37,7 +37,6 @@ import statistics
 import sys
 import tempfile
 import time
-import tomllib
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -461,6 +460,20 @@ def scorecard(vendor: dict, rows: list[dict], n_games: int) -> str:
     return "\n".join(lines)
 
 
+def _toml_loads(text: str) -> dict[str, Any]:
+    """Parse TOML on every supported Python: ``tomllib`` is 3.11+, ``tomli`` (declared for
+    ``python_version < '3.11'``) covers 3.10. The only TOML entry point in the package;
+    ``capture._vendor_fetcher`` reads the same vendor config through it.
+    """
+    if sys.version_info >= (3, 11):
+        import tomllib
+
+        return tomllib.loads(text)
+    import tomli
+
+    return tomli.loads(text)
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--config", default="canary_vendors.toml", help="TOML vendor config")
@@ -476,7 +489,7 @@ def main(argv: Optional[list[str]] = None) -> int:
             file=sys.stderr,
         )
         return 2
-    conf = tomllib.loads(cfg_path.read_text(encoding="utf-8"))
+    conf = _toml_loads(cfg_path.read_text(encoding="utf-8"))
     contest_ids = [str(c) for c in conf.get("contest_ids", DEFAULT_CONTEST_IDS)]
     if args.games:
         contest_ids = contest_ids[: args.games]

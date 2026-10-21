@@ -7,7 +7,7 @@
   - [Repository Workflow](#repository-workflow)
   - [Commit Convention](#commit-convention)
   - [Code Style](#code-style)
-  - [DataFrame Engine — Polars 1.x and 2.x](#dataframe-engine--polars-1x-and-2x)
+  - [DataFrame Engine — Polars 2.x](#dataframe-engine--polars-2x)
   - [HTTP Layer](#http-layer)
   - [Module Naming](#module-naming)
   - [NFL — nflreadpy Parity](#nfl--nflreadpy-parity)
@@ -52,7 +52,7 @@ under `tests/` as the source of truth.
 ## Repository Workflow
 
 - Use feature branches for changes.
-- `main` is the default branch and release branch. It uses **polars** (1.x and 2.x)
+- `main` is the default branch and release branch. It uses **polars** 2.x
   end-to-end, all packaging metadata lives in `pyproject.toml` (PEP 621),
   and **uv** is the canonical day-to-day package manager.
 - A separate `0.36-live` branch carries pandas-based development with a
@@ -100,12 +100,12 @@ is the sole attributable contributor.
   are no `[[tool.mypy.overrides]]` blocks — do not add one; a whole-package
   override would make the gate permanently red on the untyped legacy surface.
 - DO use `from __future__ import annotations`: 682 of 729 modules already do,
-  and it keeps `X | None` working on the 3.9 floor. Modern type syntax
+  and it keeps `X | None` working on the 3.10 floor. Modern type syntax
   (`dict[str, X]`, `X | None`, `list[int]`) is allowed everywhere.
 
-## DataFrame Engine — Polars 1.x and 2.x
+## DataFrame Engine — Polars 2.x
 
-Runtime is `polars>=1.0,<3` (lock: 2.0 on Python >= 3.10, 1.36 on 3.9); code must run on both
+Runtime is `polars>=2.0,<3`; polars 1.x is not supported, so code may use 2.x-only API
 (see `CLAUDE.md`, "Polars version"). Use the modern API surface:
 
 | Use this | Don't use this (0.18-era) |
@@ -371,7 +371,9 @@ Mirror their structure for any new ESPN-endpoint module:
 - Warnings are errors (`pytest.ini`): assert an expected warning with
   `pytest.warns(..., match=...)`; filter an incidental one by exact message, with a
   comment naming the test that asserts it.
-- CI runs **Python 3.13.2 only**; the `[project]` target range is 3.9-3.14.
+- The suite runs on **3.13.2 only**; a separate job installs every extra and imports every module
+  on the **3.10 floor** (`tests.yml` `floor-import`). No other version runs the full suite; the
+  `[project]` range is 3.10-3.14.
 - Assertion style: prefer **subset** column checks (`expected_cols.issubset(set(df.columns))`)
   rather than exact equality, so upstream column additions don't fail tests.
 - Smoke tests for live endpoints assert shape (row count > 0, expected
@@ -459,12 +461,9 @@ uv add --dev some-package           # add dev-only dep
   walkthroughs, one per sport. New sport submodules should add a parallel
   `0X_<sport>_intro.ipynb`. Outputs are intentionally cleared — users
   execute them locally against live APIs.
-- **Polars literal-from-numpy no longer auto-broadcasts in 1.x.** Use
+- **Polars literal-from-numpy does not auto-broadcast (since 1.x).** Use
   `pl.lit(np_array).first()` to extract a scalar, or pass a Python value
   directly.
-- **`pyjanitor 0.32.18+` silently switched to pandas 3.x.** Keep the
-  defensive `pyjanitor<0.32.18` upper bound in `pyproject.toml` until
-  pandas 3 is the project floor.
 
 - **ESPN injuries come from the LEAGUE endpoint, never the game summary.** The
   per-game `summary` payload's `injuries` key is present and always `[]`, so a

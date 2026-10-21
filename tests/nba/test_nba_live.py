@@ -81,8 +81,9 @@ def test_pbp_every_foul_has_official_id():
 def test_pbp_time_actual_parses_as_datetime():
     df = parse_nba_live_pbp(PBP_PAYLOAD)
     sample = df["time_actual"][0]
-    # ISO-8601 with a trailing Z (e.g. "2025-10-21T23:43:24.7Z")
-    parsed = dt.datetime.fromisoformat(sample.replace("Z", "+00:00"))
+    # ISO-8601 with a trailing Z and a one-digit fraction (e.g. "2025-10-21T23:43:24.7Z").
+    # strptime, not fromisoformat: the latter only accepts a 1-digit fraction from 3.11.
+    parsed = dt.datetime.strptime(sample, "%Y-%m-%dT%H:%M:%S.%fZ")
     assert isinstance(parsed, dt.datetime)
 
 

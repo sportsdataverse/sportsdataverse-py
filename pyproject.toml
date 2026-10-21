@@ -10,7 +10,7 @@ description = "Retrieve Sports data in Python"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE", "NOTICE"]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = [
     # Leagues + sports
     "nba",
@@ -48,7 +48,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Software Development :: Libraries",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -56,22 +55,26 @@ classifiers = [
     "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
-    "attrs>=20.3.0",
     "beautifulsoup4>=4.11.0",
-    "inflection>=0.5.1",
     "lxml>=4.9.0",
-    "matplotlib>=3.5.0",
     "numpy>=1.23.0",
     "pandas>=2.0.0",
-    "polars>=1.0,<3",
+    "polars>=2.0,<3",
     "pyarrow>=14.0.0",
-    "pyjanitor>=0.23.1",
-    "requests>=2.28.0",
+    # 2.30 is the first requests that accepts urllib3 2.x; the urllib3 floor below is
+    # unsatisfiable with 2.28/2.29 (they pin urllib3<1.27).
+    "requests>=2.30.0",
     "scipy>=1.10.0",
     "tqdm>=4.50.0",
     "scikit-learn>=1.0.0",
     "xgboost>=2.0.0",
     "rapidfuzz>=3.13.0",
+    # requests' transport, on every dl_utils.download() path. Pinned directly so a
+    # pip resolution cannot land below 2.8.0 (GHSA-8988-9cw3-xx77, GHSA-gh4c-6fx4-qh6g,
+    # GHSA-vxq7-64xx-v4gw are all fixed there).
+    "urllib3>=2.8.0",
+    # TOML reader for the NCAA vendor config on the 3.10 floor; tomllib is 3.11+.
+    "tomli>=2.0; python_version < '3.11'",
     # IANA tz database for zoneinfo on Windows (release.py Toronto timestamps);
     # Linux/macOS use the system database. pandas pins the same marker.
     "tzdata; sys_platform == 'win32'",
@@ -80,19 +83,18 @@ dependencies = [
 
 [project.optional-dependencies]
 tests = [
-    "black>=22.3.0",
-    "curl_cffi>=0.6.0",
-    "flake8>=5.0.0",
-    "isort>=5.10.1",
+    # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
+    "curl_cffi>=0.15.0",
     "mypy>=1.0.0",
-    "pycln>=2.1.6",
-    "pydocstyle>=6.3.0",
     "pytest>=8.0",
     "pytest-cov>=2.10.1",
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
     # tests/soccer/test_soccer_events.py loads a StatsBomb fixture through kloppy.
     "kloppy[polars]>=3.19",
+    # tests/test_metric_registry.py and the codegen tests import yaml; it used to arrive
+    # through pycln, which left this extra. `pip install -e .[tests]` is a documented path.
+    "pyyaml>=6.0",
 ]
 soccer = [
     # kloppy reads ~15 event/tracking providers (StatsBomb, Opta, Wyscout, Sportec,
@@ -108,18 +110,9 @@ nflpro = [
     "playwright>=1.40",
 ]
 models = [
-    "beautifulsoup4>=4.11.0",
-    "inflection>=0.5.1",
-    "requests>=2.28.0",
-    "lxml>=4.9.0",
-    "pyarrow>=14.0.0",
-    "pyjanitor>=0.23.1",
-    "scipy>=1.10.0",
-    "matplotlib>=3.5.0",
-    "tqdm>=4.50.0",
-    "attrs>=20.3.0",
-    "scikit-learn>=1.0.0",
-    "xgboost>=2.0.0",
+    # Empty on purpose, kept so `pip install sportsdataverse[models]` keeps working:
+    # the model stack (scikit-learn, xgboost, scipy) has been a base dependency since
+    # the bundled EP/WP models shipped (0.0.68).
 ]
 pff = [
     # Optional headless-browser auth for PFF Premium: point SDV_PY_PFF_STORAGE_STATE
@@ -128,42 +121,29 @@ pff = [
     "playwright>=1.40",
 ]
 mcp = [
-    # sdv-docs MCP server (sdv_docs/). mcp 2.x needs Python >= 3.10; on 3.9 the extra
-    # installs nothing and `sdv-docs` exits 2 with an install hint.
-    "mcp>=2.3,<3; python_version >= '3.10'",
+    # sdv-docs MCP server (sdv_docs/); Python >= 3.10 is the package floor.
+    "mcp>=2.3,<3",
 ]
 all = [
-    # Mirrors `tests + models`. Kept explicit (rather than referencing the other
-    # groups) because PEP 621 does not have a "union of groups" mechanism that
-    # older pip / build-frontends understand uniformly.
-    "black>=22.3.0",
-    "curl_cffi>=0.6.0",
-    "flake8>=5.0.0",
-    "isort>=5.10.1",
+    # `tests` + `nflpro` + `pff` + `soccer` + the NCAA browser transport + pyyaml
+    # (NOT `mcp`, the sdv-docs server's extra). Kept explicit (rather than
+    # referencing the other groups) because PEP 621 does not have a "union of
+    # groups" mechanism that older pip / build-frontends understand uniformly.
+    # stats.nba.com TLS impersonation runtime; >= 0.15.0 closes GHSA-qw2m-4pqf-rmpp (redirect SSRF).
+    "curl_cffi>=0.15.0",
     "mypy>=1.0.0",
-    "pycln>=2.1.6",
-    "pydocstyle>=6.3.0",
     "pytest>=8.0",
     "pytest-cov>=2.10.1",
     "pytest-xdist>=2.1.0",
     "ruff>=0.1.0",
-    "beautifulsoup4>=4.11.0",
-    "inflection>=0.5.1",
-    "requests>=2.28.0",
-    "lxml>=4.9.0",
-    "pyarrow>=14.0.0",
-    "pyjanitor>=0.23.1",
-    "scipy>=1.10.0",
-    "matplotlib>=3.5.0",
-    "tqdm>=4.50.0",
-    "attrs>=20.3.0",
-    "scikit-learn>=1.0.0",
-    "xgboost>=2.0.0",
     "playwright>=1.40",
     # NCAA (stats.ncaa.org) browser transport -- anti-detect fork of Playwright
     # that clears Akamai bm-verify; vanilla Playwright is flagged. See mbb_ncaa_fetch.
     "patchright>=1.50",
     "kloppy[polars]>=3.19",
+    # sportsdataverse.schemas.raw_schema() reads the bundled YAML payload schemas and
+    # its install hint names this extra; pyyaml was only ever present through pycln.
+    "pyyaml>=6.0",
 ]
 
 
@@ -253,12 +233,6 @@ include = ["sportsdataverse*", "sdv_docs*"]
 sportsdataverse = ["cfb/models/*", "cfb/ncaa_pbp/data/*", "cricket/models/*", "mbb/data/*", "mbb/models/*", "mlb/models/*", "nba/models/*", "nfl/models/*", "nfl/shield_pbp/data/*", "nhl/models/*", "soccer/models/*", "wbb/data/*", "registry/*.yaml", "schemas/raw/*.yaml", "validation/*.yaml", "py.typed"]
 
 
-[tool.isort]
-profile = "black"
-# Note: `known_first_party = ["functions", "queries", "db_utils"]` was the
-# copy-pasted starter; sdv-py's first-party package is `sportsdataverse`.
-known_first_party = ["sportsdataverse"]
-add_imports = ["from __future__ import annotations"]
 
 
 [tool.ruff]
@@ -308,9 +282,9 @@ line-ending = "lf"
 
 
 [tool.mypy]
-# 3.12 (not the 3.9 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
+# 3.12 (not the 3.10 floor): modern dep stubs (numpy 2.3+, which itself requires py3.11+)
 # use PEP 695 `type` aliases that mypy rejects under an older target. The curated modules
-# below stay 3.9-compatible regardless; this only sets the type-checker's target syntax.
+# below stay 3.10-compatible regardless; this only sets the type-checker's target syntax.
 python_version = "3.12"
 # Strict-typing ratchet via ``files`` (NOT ``[[tool.mypy.overrides]]``): the gate
 # checks ONLY the curated modules listed below, in isolation. This is deliberate
