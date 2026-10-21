@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import datetime
 
-import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
+from sportsdataverse._espn_schedule import _schedule_frame
 from sportsdataverse.dl_utils import download
 from sportsdataverse.errors import SeasonNotFoundError
 
@@ -28,7 +28,8 @@ def espn_wbb_schedule(
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
     Returns:
-        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. Returns None if no games
+        pl.DataFrame: Polars dataframe containing schedule dates for the requested season. A day with no
+            games returns a zero-row frame carrying the documented columns.
 
     Example:
         Single date (April 7, 2024 - 2024 NCAA W championship day)::
@@ -66,41 +67,12 @@ def espn_wbb_schedule(
     url = "http://site.api.espn.com/apis/site/v2/sports/basketball/womens-college-basketball/scoreboard"
     params = {
         "dates": dates,
-        "seasonType": season_type,
+        "seasontype": season_type,
         "groups": groups if groups is not None else "50",
         "limit": limit,
     }
-    ev = pd.DataFrame()
     events_txt = _download_json(download, url, params=params, **kwargs)
-    events = events_txt.get("events")
-    if events is None:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
-    if len(events) == 0:
-        return pd.DataFrame() if return_as_pandas else pl.DataFrame()
-
-    for event in events:
-        event = scoreboard_event_parsing(event)
-        x = pl.from_pandas(pd.json_normalize(event.get("competitions")[0], sep="_"))
-        x = x.with_columns(
-            game_id=(pl.col("id").cast(pl.Int32)),
-            season=(event.get("season").get("year")),
-            season_type=(event.get("season").get("type")),
-            home_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("home_linescores")),
-            away_linescores=pl.when(pl.col("status_type_description") == "Postponed")
-            .then(None)
-            .otherwise(pl.col("away_linescores")),
-        ).with_columns(
-            season=pl.col("season").cast(pl.Int32),
-            season_type=pl.col("season_type").cast(pl.Int32),
-        )
-        x = x[[s.name for s in x if s.null_count() != x.height]]
-        ev = pd.concat([ev, x.to_pandas()], axis=0, ignore_index=True)
-    ev = pl.from_pandas(ev)
-    ev = ev.janitor.clean_names()
-
-    return ev.to_pandas() if return_as_pandas else ev
+    return _schedule_frame(events_txt.get("events"), scoreboard_event_parsing, "wbb", return_as_pandas=return_as_pandas)
 
 
 def scoreboard_event_parsing(event):
@@ -193,7 +165,8 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
     """espn_wbb_calendar - look up the women's college basketball calendar for a given season
 
     Args:
-        season (int): Used to define different seasons. 2001 is the earliest available season.
+        season (int): Used to define different seasons. 2001 is the earliest available season;
+            ``None`` means the current season.
         ondays (boolean): Used to return dates for calendar ondays
         return_as_pandas (bool): If True, returns a pandas dataframe. If False, returns a polars dataframe.
 
@@ -201,7 +174,7 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         pl.DataFrame: Polars dataframe containing calendar dates for the requested season.
 
     Raises:
-        ValueError: If `season` is less than 2001.
+        SeasonNotFoundError: If `season` is less than 2001.
 
     Example:
         Calendar dates for a single season::
@@ -229,7 +202,8 @@ def espn_wbb_calendar(season=None, ondays=None, return_as_pandas=False, **kwargs
         .. _cfbfastR: https://cfbfastR.sportsdataverse.org
         .. _ESPN: https://www.espn.com
     """
-    if int(season) < 2001:  # ESPN serves a WBB calendar from 2000-01 (2001); 2000 and earlier answer an empty one
+    season = most_recent_wbb_season() if season is None else int(season)  # B-L9: never `2024.0` in a URL
+    if season < 2001:  # ESPN serves a WBB calendar from 2000-01 (2001); 2000 and earlier answer an empty one
         raise SeasonNotFoundError("season cannot be less than 2001")
     if ondays:
         full_schedule = __ondays_wbb_calendar(season, **kwargs)

@@ -769,6 +769,7 @@ categories:
       - sportsdataverse.nfl.model_vars
       - sportsdataverse.nfl.nfl_fourth_down
       - sportsdataverse.cfb.cfb_fourth_down
+      - sportsdataverse.cfb.model_vars
       - sportsdataverse.football.spring_football_ep_wp
       - sportsdataverse.nba.nba_draft_model
       - sportsdataverse.nfl.nfl_draft_model

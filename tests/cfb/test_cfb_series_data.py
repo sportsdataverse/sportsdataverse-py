@@ -27,6 +27,10 @@ import pytest
 
 from sportsdataverse.cfb.cfb_pbp import CFBPlayProcess
 
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
+
 SERIES_FIX = Path(__file__).parent / "fixtures" / "series"
 GIDS = [400869270, 401135269, 401309854, 401754598]  # 2016 / 2019 / 2021 / 2024
 OUT_COLS = ["new_series", "firstD_by_kickoff", "firstD_by_poss", "firstD_by_penalty", "firstD_by_yards"]

@@ -301,7 +301,14 @@ def _calculate(
         of them lossy.
     """
     prepared = add_era_columns(normalize_pbp_columns(df, model), model, season=season)
-    raw = predict_from_card(prepared, model, _booster_for(model))
+    scored = prepared
+    if model in ("wp_spread", "wp_naive") and {"is_home", "pos_team_receives_2H_kickoff"} <= set(prepared.columns):
+        # C-NF-2 shim, until a WP retrain on the corrected flag (none has shipped; retraining is an open owner decision):
+        # score the flag as the boosters were trained
+        # (1 - is_home, cfb_pbp._as_trained_2h_flag); the returned frame keeps the caller's column
+        flag = (1 - pl.col("is_home").cast(pl.Float64)).alias("pos_team_receives_2H_kickoff")
+        scored = prepared.with_columns(flag)
+    raw = predict_from_card(scored, model, _booster_for(model))
     values = transform(raw) if transform is not None else raw
     out = prepared.with_columns(pl.Series(out_col, values))
     return out.to_pandas() if return_as_pandas else out

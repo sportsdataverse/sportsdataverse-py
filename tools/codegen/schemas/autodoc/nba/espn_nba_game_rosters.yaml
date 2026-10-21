@@ -175,6 +175,21 @@ columns:
 - name: status_abbreviation
   type: character
   description: ''
+- name: position_id
+  type: integer
+  description: ''
+- name: position_name
+  type: character
+  description: ''
+- name: position_display_name
+  type: character
+  description: ''
+- name: position_abbreviation
+  type: character
+  description: ''
+- name: position_leaf
+  type: logical
+  description: ''
 - name: birth_place_state
   type: character
   description: ''

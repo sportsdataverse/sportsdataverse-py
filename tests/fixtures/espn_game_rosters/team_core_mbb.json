@@ -1,0 +1,361 @@
+{
+ "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752?lang=en&region=us",
+ "id": "2752",
+ "guid": "8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82",
+ "uid": "s:40~l:41~t:2752",
+ "alternateIds": {
+  "sdr": "8087"
+ },
+ "slug": "xavier-musketeers",
+ "location": "Xavier",
+ "name": "Musketeers",
+ "nickname": "Xavier",
+ "abbreviation": "XAV",
+ "displayName": "Xavier Musketeers",
+ "shortDisplayName": "Xavier",
+ "color": "21304e",
+ "alternateColor": "a5a7a8",
+ "isActive": true,
+ "isAllStar": false,
+ "logos": [
+  {
+   "href": "https://a.espncdn.com/i/teamlogos/ncaa/500/2752.png",
+   "width": 500,
+   "height": 500,
+   "alt": "",
+   "rel": [
+    "full",
+    "default"
+   ],
+   "lastUpdated": "2023-12-13T21:29Z"
+  },
+  {
+   "href": "https://a.espncdn.com/i/teamlogos/ncaa/500-dark/2752.png",
+   "width": 500,
+   "height": 500,
+   "alt": "",
+   "rel": [
+    "full",
+    "dark"
+   ],
+   "lastUpdated": "2023-12-13T21:30Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_on_white_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_on_white_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_on_black_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_on_black_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_on_primary_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_on_primary_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_on_secondary_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_on_secondary_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_black.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_black"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/primary_logo_white.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "primary_logo_white"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_on_white_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_on_white_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_on_black_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_on_black_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_on_primary_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_on_primary_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_on_secondary_color.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_on_secondary_color"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_black.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_black"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  },
+  {
+   "href": "https://a.espncdn.com/guid/8d8b7bf1-76b6-2bcd-1035-6c7a2b192a82/logos/secondary_logo_white.png",
+   "width": 4096,
+   "height": 4096,
+   "alt": "",
+   "rel": [
+    "full",
+    "secondary_logo_white"
+   ],
+   "lastUpdated": "2026-07-23T17:49Z"
+  }
+ ],
+ "record": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/3/teams/2752/record?lang=en&region=us"
+ },
+ "athletes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752/athletes?lang=en&region=us"
+ },
+ "venue": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/venues/1973?lang=en&region=us",
+  "id": "1973",
+  "guid": "62d6cf65-6552-3643-b50f-de2e00712c22",
+  "fullName": "Cintas Center",
+  "address": {
+   "city": "Cincinnati",
+   "state": "OH"
+  },
+  "grass": false,
+  "indoor": true,
+  "images": [
+   {
+    "href": "https://a.espncdn.com/i/venues/mens-college-basketball/day/1973.jpg",
+    "width": 2000,
+    "height": 1125,
+    "alt": "",
+    "rel": [
+     "full",
+     "day"
+    ]
+   }
+  ]
+ },
+ "groups": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/3/groups/4?lang=en&region=us"
+ },
+ "ranks": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752/ranks?lang=en&region=us"
+ },
+ "statistics": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/0/teams/2752/statistics?lang=en&region=us"
+ },
+ "leaders": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/0/teams/2752/leaders?lang=en&region=us"
+ },
+ "links": [
+  {
+   "language": "en-US",
+   "rel": [
+    "clubhouse",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/team/_/id/2752/xavier-musketeers",
+   "text": "Clubhouse",
+   "shortText": "Clubhouse",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "roster",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/team/roster/_/id/2752",
+   "text": "Roster",
+   "shortText": "Roster",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "roster",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:2752&section=roster",
+   "text": "Roster",
+   "shortText": "Roster",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/team/stats/_/id/2752",
+   "text": "Statistics",
+   "shortText": "Statistics",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "stats",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:2752&section=stats",
+   "text": "Statistics",
+   "shortText": "Statistics",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/team/schedule/_/id/2752",
+   "text": "Schedule",
+   "shortText": "Schedule",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "schedule",
+    "sportscenter",
+    "app",
+    "team"
+   ],
+   "href": "sportscenter://x-callback-url/showClubhouse?uid=s:40~l:41~t:2752&section=scores",
+   "text": "Schedule",
+   "shortText": "Schedule",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "photos",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.espn.com/mens-college-basketball/team/photos/_/id/2752",
+   "text": "photos",
+   "shortText": "photos",
+   "isExternal": false,
+   "isPremium": false
+  },
+  {
+   "language": "en-US",
+   "rel": [
+    "tickets",
+    "desktop",
+    "team"
+   ],
+   "href": "https://www.vividseats.com/xavier-musketeers-mens-basketball-tickets--sports-ncaa-basketball/performer/948?wsUser=717",
+   "text": "Tickets",
+   "shortText": "Tickets",
+   "isExternal": true,
+   "isPremium": false
+  }
+ ],
+ "notes": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/teams/2752/notes?lang=en&region=us"
+ },
+ "againstTheSpreadRecords": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/types/3/teams/2752/ats?lang=en&region=us"
+ },
+ "awards": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752/awards?lang=en&region=us"
+ },
+ "franchise": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/franchises/2752?lang=en&region=us"
+ },
+ "events": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752/events?lang=en&region=us"
+ },
+ "coaches": {
+  "$ref": "http://sports.core.api.espn.com/v2/sports/basketball/leagues/mens-college-basketball/seasons/2025/teams/2752/coaches?lang=en&region=us"
+ },
+ "college": {
+  "$ref": "http://sports.core.api.espn.com/v2/colleges/2752?lang=en&region=us"
+ }
+}

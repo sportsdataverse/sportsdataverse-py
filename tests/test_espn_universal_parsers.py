@@ -1399,8 +1399,10 @@ _SNAPSHOT = Path(__file__).parent / "espn_parser_dtype_snapshot.json"
 _ESPN_FIX = Path(__file__).parent / "fixtures" / "espn"
 # Captures no registered parser reads (kept for other tests): ``athlete_statistics_core_*`` feeds the
 # hand-written core-v2 stat pivot (tests/test_common_espn_player_stats.py) and ``error_404_body`` is
-# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``wbb_calendar_2001`` feeds the
-# hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py, main #860).
+# ESPN's real 404 body, not a payload (tests/scrape/test_scrape_espn_engine.py). ``mbb_season_days_2024``
+# bundles seven real scoreboard days keyed by date, not one payload (tests/mbb/test_mbb_schedule.py).
+# ``wbb_calendar_2001`` feeds the hand-written espn_wbb_calendar season floor (tests/test_wbb_calendar_floor.py,
+# main #860).
 _NO_PARSER = {
     "athlete_statistics_core_nba_1966_2024",
     "athlete_statslog_lbj",
@@ -1409,6 +1411,7 @@ _NO_PARSER = {
     "depthcharts_nfl",
     "depthcharts_nhl",
     "error_404_body",
+    "mbb_season_days_2024",
     "wbb_calendar_2001",
 }
 _PKG = Path(__file__).parents[1] / "sportsdataverse"
@@ -1493,7 +1496,6 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     "fox.fox_api_parsers.parse_fox_api_search": {"list": AssertionError},
     "fox.fox_api_parsers.parse_fox_api_standings": {"list": AssertionError},
     "fox.fox_api_parsers.parse_fox_api_trending": {"list": AssertionError},
-    "hockeytech._parsers.parse_game_info": {"list": AttributeError},
     "hockeytech._parsers.parse_game_summary": {
         "dict": AssertionError,
         "empty_str": AssertionError,
@@ -1503,9 +1505,7 @@ _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {
     },
     "hockeytech._parsers.parse_leaders": {"list": AttributeError},
     "hockeytech._parsers.parse_pbp": {"list": AssertionError},
-    "hockeytech._parsers.parse_player_box": {"list": AttributeError},
     "hockeytech._parsers.parse_player_game_log": {"list": AttributeError},
-    "hockeytech._parsers.parse_player_info": {"list": AttributeError},
     "hockeytech._parsers.parse_player_search": {"list": AttributeError},
     "hockeytech._parsers.parse_player_stats": {"list": AttributeError},
     "hockeytech._parsers.parse_playoff_bracket": {"list": AttributeError},
