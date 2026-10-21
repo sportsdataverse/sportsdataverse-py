@@ -39,6 +39,19 @@ def _ordered_rows(df: "pl.DataFrame", team: str, name: str, volume: str | None =
     return df.sort(keys, descending=[c == volume for c in keys], nulls_last=True, maintain_order=True)
 
 
+def _home_first(df: pl.DataFrame, team: str, home: int) -> pl.DataFrame:
+    """One-row-per-team table in a total order: the home team, then the rest by team id.
+
+    The team tables are built by ``group_by`` + full joins, so without a sort the
+    two rows came out in a different order in every process (R828-4). ``team`` is
+    the grouping key, so no two rows share it; in a two-team game this is
+    ``[home, away]``, the order the turnover table already used.
+    """
+    if team not in df.columns:
+        return df
+    return df.sort([pl.col(team) != home, pl.col(team)], nulls_last=True, maintain_order=True)
+
+
 def air_yards_box(pass_box: "pl.DataFrame", key: str) -> "pl.DataFrame":
     """Per-``key`` air-yards / YAC aggregate for the passer + receiver box scores.
 
