@@ -3046,7 +3046,7 @@
   group: nfl-era-play-order
   finding: EX-2.19-a
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '                _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),'
+  snippet: '                _kick_spot=((kickoff | punt) & unscored & next_snap).fill_null(False),'
   mutant: '                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),'
   test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt or punt-td-nullified"
   expected: kill
@@ -3070,7 +3070,7 @@
   group: nfl-era-play-order
   finding: EX-2.19-a
   file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '        & (~bare_punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early'
+  snippet: '        & (~punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early'
   mutant: '        & pl.lit(True)'
   test: tests/nfl/test_nfl_era_play_order.py -k "261113029"
   expected: kill
@@ -3084,26 +3084,13 @@
   finding: EX-2.19-a
   file: sportsdataverse/nfl/nfl_pbp.py
   snippet: '        & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball'
-  mutant: '        & (bare_punt | (pl.col("_nxt").struct.field("team") == after_kick))'
+  mutant: '        & (punt | (pl.col("_nxt").struct.field("team") == after_kick))'
   test: tests/nfl/test_nfl_era_play_order.py -k "punting_teams"
   expected: kill
   note: >-
     R963-1 (review M1). 261113029/126 is followed in id order by the punting team's own 141, filed out of order
     but not earlier on the clock; without the team check the punt ends at TB's 71 instead of ESPN's 82 (CAR's
     next snap). Its EPA cannot gate it (nflverse -0.710 is nearer the wrong spot's 0.229 than the right 0.988).
-
-- id: nfl-bare-punt-season-floor
-  group: nfl-era-play-order
-  finding: EX-2.19-a
-  file: sportsdataverse/nfl/nfl_pbp.py
-  snippet: '    bare_punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)'
-  mutant: '    bare_punt = pl.col("type.text").is_in(punt_vec).fill_null(False)'
-  test: tests/nfl/test_nfl_era_play_order.py -k "post_2009"
-  expected: kill
-  note: >-
-    R963-2 (review M3). Without the floor 400554340/1481 (2014) ends at the receiver's 92 and the strict xfail
-    asserting it XPASSes. 2009+ punts are task nfl 2.25 (R785-6), which measures them across eras first and
-    deletes the marker.
 
 - id: nfl-kick-next-snap-rank-per-game
   group: nfl-era-play-order
@@ -3153,3 +3140,66 @@
   note: >-
     Read from the next ROW, a Timeout after the half-ending play (400791590 among the captures) hands over the
     Timeout's own model wp_before and its team, not the second-half kickoff's.
+
+# --- Task nfl 2.25: every punt ends at the receiver's next snap, with its clock (R785-6, R963-3, R963-5) -------------
+- id: nfl-punt-next-snap-every-era
+  group: nfl-era-play-order
+  finding: R785-6
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '    punt = pl.col("type.text").is_in(punt_vec).fill_null(False)'
+  mutant: '    punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "post_2009"
+  expected: kill
+  note: >-
+    The 2.24 floor back: 2009+ punts keep ESPN's end, so 400554340/1481 ends at 8 (EPA -5.360, nflverse 0.077),
+    290927014/3343 at 12 and 401671835/770 at 27 instead of the receiver's next snap (92 / 94 / 73).
+
+- id: nfl-punt-ends-at-the-next-snaps-clock
+  group: nfl-era-play-order
+  finding: R963-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.lit(False)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
+  expected: kill
+  note: >-
+    Without the clocks, 270930001/1000 keeps ESPN's end clock 0 and the half-end clamp puts it at the 99 (EPA 0.485)
+    instead of the receiver's snap at 870 s (game clock 2670) and the 90 (EPA 0.386, nflverse 0.061), and
+    291203002/3741 keeps 205 s from a misfiled timeout row instead of the snap's 152.
+
+- id: nfl-punt-clock-carry-not-only-a-zero-clock
+  group: nfl-era-play-order
+  finding: R971-3
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                    pl.when(pl.col("_kick_spot") & punt).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  mutant: '                    pl.when(pl.col("_kick_spot") & punt & (pl.col("end.TimeSecsRem") <= 0)).then(n.field(f)).otherwise(pl.col(c)).alias(c)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "next_snaps_clock"
+  expected: kill
+  note: >-
+    Review #971 mutant B: carrying the snap's clock only where ESPN's end clock is 0 keeps 291203002/3741's 205 s,
+    the clock of a timeout row ESPN filed after the punt, instead of the snap's 152 (nflverse 152).
+
+- id: nfl-punt-next-snap-not-a-free-kick
+  group: nfl-era-play-order
+  finding: R971-4
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        (pl.col("_nxt").struct.field("kick") == False)'
+  mutant: '        ((pl.col("_nxt").struct.field("kick") == False) | punt)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "free_kick"
+  expected: kill
+  note: >-
+    Review #971 mutant A: if a punt's next play may be a kickoff, 271021019/2661 (a blocked punt out of the end zone
+    for a safety, unscored by ESPN) ends at NYG's free-kick spot instead of keeping ESPN's 99.
+
+- id: nfl-kick-spot-keys-on-scoringplay
+  group: nfl-era-play-order
+  finding: R963-5
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                _kick_spot=((kickoff | punt) & unscored & next_snap).fill_null(False),'
+  mutant: '                _kick_spot=((kickoff | punt) & ~(pl.col("text").str.contains("(?i)touchdown") | pl.col("type.text").str.contains("Touchdown")).fill_null(False) & next_snap).fill_null(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "unscored_return"
+  expected: kill
+  note: >-
+    Gated on a named touchdown (td_play's test) instead of scoringPlay, an unscored return TD keeps ESPN's end
+    instead of its try: 261022011/1629 wpa -0.136 (try -0.171, nflverse -0.275) and 271209034/1856 0.001 (try 0.101,
+    nflverse 0.116). Task 2.25 measured the td_play gate and rejected it on this evidence.
