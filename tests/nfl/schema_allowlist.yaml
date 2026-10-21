@@ -7,16 +7,12 @@
 # Every row names the open finding that owns it. The list may only shrink: the test pins the
 # committed set and fails on a row that no capture needs any more, so the fix PR deletes its rows.
 # Measured on HEAD 36f7a02f1b (2026-10-11), with the download-on-demand nfl4th boosters off (the
-# hermetic run). prob_2pt's dtype mix (C-M7) needs them, so it is a strict xfail of its own
-# (test_prob_2pt_has_one_documented_dtype), not a row here.
+# hermetic run). prob_2pt's dtype mix (C-M7, fixed in task 2.17) needs them, so it has a test of
+# its own (test_prob_2pt_has_one_documented_dtype), not a row here.
 
-- column: teamParticipants
-  kind: dtype
-  finding: C-L10
-  note: List(Struct) field order follows the payload (3 physical dtypes over 31 games)
-
-# C-L10's source row (adv-C-processing-003) names these 15 columns with teamParticipants: ESPN
-# passthrough fields (and one column derived from them) that exist only when the feed carries them.
+# C-L10's source row (adv-C-processing-003) names these 15 columns with teamParticipants (whose
+# struct field order task 2.17 pinned): ESPN passthrough fields (and one column derived from them)
+# that exist only when the feed carries them.
 - column: wallclock
   kind: presence
   finding: C-L10
