@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-import datetime
-
 import pandas as pd
 import polars as pl
 
 from sportsdataverse._codegen_runtime import _download_json
 from sportsdataverse.dl_utils import download
+
+# One season/week rule (nflreadr's), owned by utils_date; re-exported here under the old names.
+from sportsdataverse.nfl.utils_date import get_current_nfl_week
+from sportsdataverse.nfl.utils_date import most_recent_nfl_season as most_recent_nfl_season
 
 
 def espn_nfl_schedule(
@@ -257,35 +259,12 @@ def __ondays_nfl_calendar(season, **kwargs):
     return result
 
 
-def most_recent_nfl_season():
-    """Return the most recent NFL season year using a coarse September cutoff.
-
-    Simpler counterpart to :func:`sportsdataverse.nfl.get_current_nfl_season` --
-    flips on September 1 rather than the Thursday after Labor Day. Use the
-    ``utils_date`` version when you need calendar precision; this one is
-    fine for "what's the current season" UI labels.
-
-    Returns:
-        int: Current season year.
-
-    Example:
-        Quick label for a UI banner::
-
-            from sportsdataverse.nfl.nfl_schedule import most_recent_nfl_season
-            label = f"NFL {most_recent_nfl_season()} season"
-    """
-    today = datetime.datetime.now()
-    current_year = today.year
-    current_month = today.month
-    # current_day = today.day
-    return current_year if current_month >= 9 else current_year - 1
-
-
-def get_current_week():
+def get_current_week() -> int:
     """Return the current NFL week (1-22) using a calendar-driven heuristic.
 
-    Counts whole weeks since the first Thursday of September of the
-    current season (Labor Day Monday + 3 days) and clamps to ``[1, 22]``.
+    Delegates to :func:`sportsdataverse.nfl.get_current_nfl_week` with
+    ``use_date=True``, the one owner of nflreadr's rule: whole weeks since the
+    Thursday after Labor Day of the current season, clamped to ``[1, 22]``.
 
     Returns:
         int: Current week number, capped at 22.
@@ -304,17 +283,4 @@ def get_current_week():
               unified ``utils_date`` variant; supports a schedule-driven
               ``use_date=False`` mode and a ``roster=True`` flag.
     """
-    # Find first Monday of September in current season
-    week1_sep = pd.to_datetime([f"{most_recent_nfl_season()}-09-0{num}" for num in range(1, 8)]).to_series()
-    monday1_sep = week1_sep[week1_sep.dt.dayofweek == 0]
-
-    # NFL season starts 3 days later
-    first_game = monday1_sep
-    first_game += pd.Timedelta(days=3)
-
-    # current week number of nfl season is 1 + how many weeks have elapsed since first game
-    current_week = int((pd.to_datetime("today") - first_game).dt.days / 7 + 1)
-
-    # hardcoded week bounds because this whole date based thing has assumptions anyway
-    current_week = max(current_week, 1)
-    return min(current_week, 22)
+    return get_current_nfl_week(use_date=True)

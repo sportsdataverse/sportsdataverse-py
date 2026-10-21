@@ -30,6 +30,7 @@ season columns keep the wire value.
 from __future__ import annotations
 
 import json
+from decimal import Decimal, InvalidOperation
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
 import pandas as pd
@@ -45,7 +46,7 @@ except ImportError:  # pragma: no cover -- first run of the generator
 
 Frame = Union[pl.DataFrame, pd.DataFrame]
 REQUEST_KEY = "_request"
-_CODES = {"i": pl.Int64, "f": pl.Float64, "b": pl.Boolean, "s": pl.String}
+_CODES = {"i": pl.Int64, "f": pl.Float64, "p": pl.Float64, "b": pl.Boolean, "s": pl.String}
 #: Wire keys never output (operator ids, one holds a mobile phone number).
 JUNK = frozenset({"createdBy", "lastModifiedBy"})
 _SIDES_HOME_AWAY = ("home", "away")
@@ -86,7 +87,14 @@ _PERIODS = ("oneScore", "twoScore", "threeScore", "fourScore", "fiveScore", "six
 
 
 def _cast(value: Any, code: str) -> Any:
-    """``value`` as the dtype ``code`` (``i`` / ``f`` / ``b`` / ``s``); ``None`` when it does not convert."""
+    """``value`` as the dtype ``code`` (``i`` / ``f`` / ``p`` / ``b`` / ``s``); ``None`` when it does not convert.
+
+    Display text of a number is parsed: ``'21.6'`` -> 21.6 and ``'1,234'`` -> 1234 (thousands commas dropped);
+    ``'12.0'`` under ``i`` -> 12 (a non-whole ``'12.5'`` is null); ``'nan'`` / ``'inf'`` and an empty string are null.
+    ``p`` is a percent column whose route sends percent STRINGS, so every string under ``p`` is percent display text
+    and becomes a FRACTION 0-1, with or without the ``%`` sign (``'39.4%'`` -> 0.394, ``'100'`` -> 1.0); a JSON number
+    under ``p`` is taken as already that fraction. Under ``f`` a ``'15.3%'`` keeps the route's 0-100 scale (15.3).
+    """
     if value is None:
         return None
     if code == "s":
@@ -95,16 +103,21 @@ def _cast(value: Any, code: str) -> Any:
         return str(value)
     if code == "b":
         return value if isinstance(value, bool) else None
-    if isinstance(value, bool):
+    if isinstance(value, bool) or not isinstance(value, (int, float, str)):
         return None
+    text = isinstance(value, str)
     try:
-        if code == "i":
-            if isinstance(value, float):
-                return int(value) if value == int(value) else None
-            return int(value)
-        return float(value)
-    except (TypeError, ValueError):
+        if isinstance(value, str):
+            num = Decimal(value.strip().rstrip("%").replace(",", ""))
+        else:
+            num = Decimal(repr(value) if isinstance(value, float) else value)
+    except InvalidOperation:
         return None
+    if not num.is_finite():
+        return None
+    if code == "i":
+        return int(num) if num == num.to_integral_value() else None
+    return round(float(num) / 100, 6) if code == "p" and text else float(num)
 
 
 def _flat(row: Dict[str, Any]) -> Dict[str, Any]:
@@ -172,9 +185,7 @@ def parse_cba_seasons(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         One row per season: label, START year, default flag. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -200,9 +211,7 @@ def parse_cba_match_types(
 
     Returns:
         One row per match type (regular season, playoffs, preseason, all-star, relegation). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -228,9 +237,7 @@ def parse_cba_team_options(
 
     Returns:
         One row per team: id (key) and display name. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -254,9 +261,7 @@ def parse_cba_teams(raw: Any, *, return_as_pandas: bool = False, columns: Option
 
     Returns:
         One row per club: logo, id, club name and display name. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -282,9 +287,7 @@ def parse_cba_schedule_month(
 
     Returns:
         One row per day with games: date and game count. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -310,9 +313,7 @@ def parse_cba_schedule_day(
 
     Returns:
         One row per game: ids, teams, status, score, round and the data flags. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -335,9 +336,7 @@ def parse_cba_game_info(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
     Returns:
         One row: both teams, score, tip-off time and colours. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -360,9 +359,7 @@ def parse_cba_player_box(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per player and a team rebounds/turnovers row per side (null player_id). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -387,9 +384,7 @@ def parse_cba_period_scores(
 
     Returns:
         One row per side and played period (overtime included). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -415,9 +410,7 @@ def parse_cba_game_team_shots(
 
     Returns:
         One row per team (and averages); a team-season table, not game data. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -442,9 +435,7 @@ def parse_cba_player_advanced(
 
     Returns:
         One row per player (deduplicated on player_id, first row kept). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -469,9 +460,7 @@ def parse_cba_player_extras(
 
     Returns:
         One row per player (deduplicated on player_id, first row kept). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -497,9 +486,7 @@ def parse_cba_game_team_four(
 
     Returns:
         One row per team; a team-season table of the previous season, not game data. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -524,9 +511,7 @@ def parse_cba_best_player(
 
     Returns:
         One row per side with the star player's line. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -549,9 +534,7 @@ def parse_cba_best_stats(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per side and category. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -574,9 +557,7 @@ def parse_cba_rosters(raw: Any, *, return_as_pandas: bool = False, columns: Opti
 
     Returns:
         One row per registered player (season registration, not the game box). An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -601,9 +582,7 @@ def parse_cba_report_status(
 
     Returns:
         One row with the is_report flag. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -626,9 +605,7 @@ def parse_cba_pbp(raw: Any, *, return_as_pandas: bool = False, columns: Optional
 
     Returns:
         One row per play, oldest first, all periods. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -654,9 +631,7 @@ def parse_cba_team_counts(
 
     Returns:
         One row per match type. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -680,9 +655,7 @@ def parse_cba_team_basic(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per season of the team. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -706,9 +679,7 @@ def parse_cba_team_four(raw: Any, *, return_as_pandas: bool = False, columns: Op
 
     Returns:
         One row per season of the team. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -733,9 +704,7 @@ def parse_cba_team_overview(
 
     Returns:
         One row per season of the team. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -758,9 +727,7 @@ def parse_cba_team_shots(raw: Any, *, return_as_pandas: bool = False, columns: O
 
     Returns:
         One row per season of the team. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -785,9 +752,7 @@ def parse_cba_player_base(
 
     Returns:
         One row per player of the requested page. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -812,9 +777,7 @@ def parse_cba_player_offensive(
 
     Returns:
         One row per player of the requested page. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -839,9 +802,7 @@ def parse_cba_player_defensive(
 
     Returns:
         One row per player of the requested page. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::
@@ -866,9 +827,7 @@ def parse_cba_player_shots(
 
     Returns:
         One row per player of the requested page. An empty or unrecognised body gives a zero-row frame with the documented columns.
-
-    Raises:
-        None: bad input is a typed zero-row frame.
+        Bad input is a typed zero-row frame.
 
     Example:
         Quick start::

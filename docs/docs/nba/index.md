@@ -119,7 +119,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_decay_rapm`](reference/additional/models-and-calculators#nba_decay_rapm)
 - [`nba_draft_model`](reference/additional/models-and-calculators#nba_draft_model)
 - [`nba_expected_turnovers`](reference/additional/models-and-calculators#nba_expected_turnovers)
-- [`nba_four_factor_rapm`](reference/additional/models-and-calculators#nba_four_factor_rapm)
+- [`nba_four_factor_rapm`](reference/additional/models-and-calculators-2#nba_four_factor_rapm)
 - [`nba_in_game_win_prob`](reference/additional/models-and-calculators-2#nba_in_game_win_prob)
 - [`nba_la_rapm`](reference/additional/models-and-calculators-2#nba_la_rapm)
 - [`nba_matchup_drapm`](reference/additional/models-and-calculators-2#nba_matchup_drapm)
@@ -171,7 +171,7 @@ description: "sdv-py NBA: endpoint references, dataset loaders and parsers for N
 - [`nba_playtype_ratings`](reference/additional/analytics#nba_playtype_ratings)
 - [`nba_ratings_panel`](reference/additional/analytics#nba_ratings_panel)
 - [`nba_raw_store_season_frame`](reference/additional/analytics#nba_raw_store_season_frame)
-- [`nba_referee_assignments`](reference/additional/analytics#nba_referee_assignments)
+- [`nba_referee_assignments`](reference/additional/analytics-2#nba_referee_assignments)
 - [`nba_shot_value`](reference/additional/analytics-2#nba_shot_value)
 - [`nba_shot_value_lineups`](reference/additional/analytics-2#nba_shot_value_lineups)
 - [`nba_team_clutch`](reference/additional/analytics-2#nba_team_clutch)
@@ -356,7 +356,7 @@ Each `sportsdataverse` function and its equivalent in the sister R package, [`ho
 | [`nba_live_boxscore`](reference/additional/nba-stats-api#nba_live_boxscore) | [`nba_live_boxscore`](https://hoopR.sportsdataverse.org/reference/nba_live_boxscore.html) |
 | [`nba_live_pbp`](reference/additional/nba-stats-api#nba_live_pbp) | [`nba_live_pbp`](https://hoopR.sportsdataverse.org/reference/nba_live_pbp.html) |
 | [`nba_player_crosswalk`](reference/additional/ids-and-crosswalks#nba_player_crosswalk) | [`nba_player_crosswalk`](https://hoopR.sportsdataverse.org/reference/nba_player_crosswalk.html) |
-| [`nba_referee_assignments`](reference/additional/analytics#nba_referee_assignments) | [`nba_referee_assignments`](https://hoopR.sportsdataverse.org/reference/nba_referee_assignments.html) |
+| [`nba_referee_assignments`](reference/additional/analytics-2#nba_referee_assignments) | [`nba_referee_assignments`](https://hoopR.sportsdataverse.org/reference/nba_referee_assignments.html) |
 | [`nba_schedule_crosswalk`](reference/additional/ids-and-crosswalks#nba_schedule_crosswalk) | [`nba_schedule_crosswalk`](https://hoopR.sportsdataverse.org/reference/nba_schedule_crosswalk.html) |
 | [`nba_team_crosswalk`](reference/additional/ids-and-crosswalks#nba_team_crosswalk) | [`nba_team_crosswalk`](https://hoopR.sportsdataverse.org/reference/nba_team_crosswalk.html) |
 | [`nbadraft_mock_draft`](reference/additional/analytics-2#nbadraft_mock_draft) | [`nbadraft_mock_draft`](https://hoopR.sportsdataverse.org/reference/nbadraft_mock_draft.html) |

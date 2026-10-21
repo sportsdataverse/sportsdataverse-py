@@ -1,3 +1,11 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Sportradar Atrium embed API fixtures (`embed-api.eui.connect.sportradar.com/v1/embed`)](#sportradar-atrium-embed-api-fixtures-embed-apieuiconnectsportradarcomv1embed)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Sportradar Atrium embed API fixtures (`embed-api.eui.connect.sportradar.com/v1/embed`)
 
 **Per-route captures** (`<websiteId>__<type>[__<sub>].json` in this directory): copied verbatim from
@@ -24,6 +32,11 @@ three are cut to their first rows to stay small, every kept row complete:
 | `12__fixtures.json` | LNB results of one season (`sub=RESULTS`, 240 games) and the site's 19-season list | first 60 fixtures |
 | `12__persons.json` | LNB players of one season (294) | first 60 rows |
 | `12__statistics_persons.json` | LNB player season statistics, three tables of 276 players | first 60 players per table |
+
+**`refusals/`**: `14__fixture_detail__pbp__other_site.json` is the LNB game `5423072b-6715-11f0-bd8b-9ffadebc148f`
+asked under site 14 (LNBP), fetched live on 2026-10-18 (keyless `GET`, compacted): HTTP 200 with an empty `fixture`
+(no `fixtureId`, `seasonId` or competition) and no periods, byte-for-byte the body an unknown fixture id gets on its
+own site. It sits outside `full/` because it parses to nothing.
 
 `spec_paths.json` is the spec's route list, written by `tools/codegen/gen_atrium.py` so the tests check the
 YAML without the private refs checkout.

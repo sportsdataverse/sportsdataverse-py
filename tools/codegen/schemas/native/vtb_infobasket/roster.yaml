@@ -40,7 +40,7 @@ columns:
   type: character
 - description: ''
   name: rank
-  type: character
+  type: integer
 - description: ''
   name: height
   type: integer

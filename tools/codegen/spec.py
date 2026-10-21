@@ -109,6 +109,11 @@ class Endpoint:
     body: str = "query"
     # ``fixed_params`` keys that stay in the query string of a body endpoint (CBA ``startNum``).
     fixed_in_query: List[str] = field(default_factory=list)
+    # A body endpoint's runtime callable the wrapper passes its flat body dict through before sending,
+    # e.g. to nest fields into the JSON the API expects. Resolved from the family's ``getter_module``,
+    # else ``sportsdataverse._codegen_runtime`` (the generated import follows). Only top-level None
+    # values are stripped from its output: the builder owns None handling inside what it nests.
+    body_builder: Optional[str] = None
     # Per-route getter: the callable this route's wrapper calls instead of the family ``_get``. A bare name
     # is looked up in the family ``getter_module``; ``pkg.module:name`` imports it from that module (a
     # multi-host family whose routes need different transports). Its module supplies the route's
@@ -449,6 +454,7 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         method=str(e.get("method") or "get").lower(),
         body=body,
         fixed_in_query=list(e.get("fixed_in_query") or []),
+        body_builder=e.get("body_builder"),
         getter=e.get("getter"),
     )
     if ep.method not in ("get", "post"):
@@ -460,6 +466,8 @@ def _parse_endpoint(e: dict, registry: Dict[str, Param], path: Path) -> Endpoint
         raise SpecError(f"{path}: endpoint {ep.short!r} body {ep.body!r} is not query, form or json")
     if ep.body != "query" and ep.method != "post":
         raise SpecError(f"{path}: endpoint {ep.short!r} sets body {ep.body!r} but is not a post")
+    if ep.body_builder and ep.body == "query":
+        raise SpecError(f"{path}: endpoint {ep.short!r} sets body_builder but has no body kind (form or json)")
     names = [p.python_name for p in (*ep.query_params, *ep.path_params)]
     if len(names) != len(set(names)):
         raise SpecError(f"{path}: endpoint {ep.short!r} repeats a parameter name: {sorted(names)}")

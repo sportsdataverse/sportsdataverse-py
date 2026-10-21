@@ -53,7 +53,7 @@ full reference.
 | [`espn_nfl_schedule`](../nfl/reference/additional/espn.md#espn_nfl_schedule) · [`espn_nfl_scoreboard`](../nfl/reference/site.md#espn_nfl_scoreboard) | ESPN scoreboard/schedule (no auth) | 🔵 ESPN (secondary) |
 | [`load_nfl_snap_counts`](../nfl/reference/loaders/other.md#load_nfl_snap_counts) | Weekly snap counts & snap-share % per player | 📦 nflverse release |
 | [`load_nfl_depth_charts`](../nfl/reference/loaders/other.md#load_nfl_depth_charts) | Weekly depth charts, one row per slotted player | 📦 nflverse release |
-| [`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
+| [`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_schedule) | Game results + lines, one row per game | 📦 nflverse release |
 | [`load_nfl_draft_picks`](../nfl/reference/additional/nflverse-data-releases.md#load_nfl_draft_picks) | Every draft pick + career value, one row per pick | 📦 nflverse release |
 | `get_current_nfl_season` · `most_recent_nfl_season` | Season helpers | 🟢 helper |
 
@@ -604,7 +604,7 @@ sep
 
 ### Recipe 12 — The nail-biters: closest games of the season 😬
 
-[`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-2.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
+[`load_nfl_schedule`](../nfl/reference/additional/nflverse-data-releases-3.md#load_nfl_schedule) carries the final `result` (home margin). Take its absolute value and sort ascending to surface the one-score thrillers — built-in betting lines ride along too.
 
 
 ```python

@@ -1,10 +1,10 @@
 ---
-title: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_schedule"
-sidebar_label: "nflverse data releases: nfl_espn–nfl_schedule"
+title: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players"
+sidebar_label: "nflverse data releases: nfl_espn–nfl_players"
 sidebar_position: 6
-description: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_schedule — function reference in sdv-py, the SportsDataverse Python package."
+description: "NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_schedule
+# NFL — additional Python functions — nflverse data releases: nfl_espn–nfl_players
 
 ### load_nfl_espn_qbr {#load_nfl_espn_qbr}
 
@@ -58,6 +58,13 @@ Polars dataframe containing ESPN Total QBR for the requested seasons, summarized
 | `headshot_href` | character | URL of the quarterback's ESPN headshot image. |
 | `team` | character | Full team name for the quarterback's team during the period. |
 | `qualified` | logical | Whether the quarterback met ESPN's minimum action-play threshold to qualify for ranking. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_type` is not `"season"` / `"week"`, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `SeasonNotFoundError` | If any requested season is before 2006. |
 
 **Example**
 
@@ -261,6 +268,12 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 | `total_fantasy_points_exp_team` | double | Team-level total expected total_fantasy_points_exp for a game, summed across all plays & players for that team. |
 | `total_fantasy_points_diff_team` | double | Team-level difference between actual and expected number of total_fantasy_points_diff for a game, summed across all plays/players for that team. Often interpreted as team-level efficiency. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2006, or if `stat_type` / `model_version` are not allowed values. |
+
 **Example**
 
 ```python
@@ -394,6 +407,12 @@ Polars dataframe containing fantasy football rankings data.
 | `scrape_date` | character | Date this dataframe was last updated |
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the resolved value is not one of the allowed values. |
+
 **Example**
 
 ```python
@@ -467,6 +486,13 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `player_last_name` | character | Player's last name |
 | `player_jersey_number` | integer | Player's jersey number |
 | `player_short_name` | character | Short version of player's name |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` is not one of the allowed values. |
+| `SeasonNotFoundError` | If any season is less than 2016. |
 
 **Example**
 
@@ -584,6 +610,12 @@ Polars dataframe containing PFR advanced stats data for the requested `stat_type
 | `def_times_blitzed` | double | Number of times the defensive player sent additional rushers on a blitz during the game or season period. |
 | `def_times_hurried` | double | Number of times the defensive player hurried or pressured the quarterback without recording a sack. |
 | `def_times_hitqb` | double | Number of times the defensive player made contact with the quarterback (hit on the QB) during pass rushes. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` or `summary_level` are not allowed values, or if any season is less than 2018. |
 
 **Example**
 
@@ -715,6 +747,14 @@ Polars dataframe containing player stats. `seasons=[]` gives the contracted colu
 | `fantasy_points` | double | Standard fantasy points. |
 | `fantasy_points_ppr` | double | PPR fantasy points. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `SeasonNotFoundError` | If any requested season is less than 1999. |
+| `TypeError` | If `seasons` is `False` -- the first positional argument used to be `kicking`, so `load_nfl_player_stats(False)` is rejected loudly. `True` is nflreadpy's "every season". |
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`; or if `kicking=True` is combined with the SDV source (the SDV play-by-play surface lacks a `kicker_player_id`, so kicking stats are nflverse-only). |
+
 **Example**
 
 ```python
@@ -809,6 +849,13 @@ One-row-per-player identity master. `return_as_pandas` narrows the return to a `
 | `draft_pick` | integer | Overall pick number at which the player was drafted (null if undrafted). |
 | `draft_team` | character | Abbreviation of the team that drafted the player (null if undrafted). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `Exception` | Propagates any network / parquet-read error from the underlying `pl.read_parquet` against the release URL. |
+
 **Example**
 
 ```python
@@ -830,92 +877,4 @@ players_sdv.select(["display_name", "position", "espn_id"]).head()
 
 import polars as pl
 load_nfl_players().select(["gsis_id", "display_name", "position"]).head()
-```
-
-### load_nfl_schedule {#load_nfl_schedule}
-
-`load_nfl_schedule(seasons: 'List[int]', return_as_pandas=False) -> 'pl.DataFrame'`
-
-Load NFL schedule data
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `seasons` | `list` |  | Used to define different seasons. 1999 is the earliest available season. `None` loads the current season, `True` every published season, and `[]` an empty frame (no request). |
-| `return_as_pandas` | `bool` | `False` | If True, returns a pandas dataframe. If False, returns a polars dataframe. |
-
-**Returns**
-
-Polars dataframe containing the schedule for the requested seasons. `seasons=[]` gives an empty frame with no columns; schema'd empty frames come with the dtype contract.
-
-| col_name | type | description |
-|---|---|---|
-| `game_id` | character | Ten digit identifier for NFL game. |
-| `season` | integer | 4 digit number indicating to which season(s) the specified timeframe belongs to. |
-| `game_type` | character | The most recent game type of that season that a player appeared on the roster. |
-| `week` | integer | Season week. |
-| `gameday` | character | The date on which the game occurred. |
-| `weekday` | character | The day of the week on which the game occcured. |
-| `gametime` | character | The kickoff time of the game. This is represented in 24-hour time and the Eastern time zone, regardless of what time zone the game was being played in. |
-| `away_team` | character | String abbreviation for the away team. |
-| `away_score` | integer | The number of points the away team scored. Is NA for games which haven't yet been played. |
-| `home_team` | character | The home team. Note that this contains the designated home team for games which no team is playing at home such as Super Bowls or NFL International games. |
-| `home_score` | integer | The number of points the home team scored. Is NA for games which haven't yet been played. |
-| `location` | character | Either Home if the home team is playing in their home stadium, or Neutral if the game is being played at a neutral location. This still shows as Home for games between the Giants and Jets even though they share the same home stadium. |
-| `result` | integer | The number of points the home team scored minus the number of points the visiting team scored. Equals h_score - v_score. Is NA for games which haven't yet been played. Convenient for evaluating against the spread bets. |
-| `total` | integer | The sum of each team's score in the game. Equals h_score + v_score. Is NA for games which haven't yet been played. Convenient for evaluating over/under total bets. |
-| `overtime` | integer | Binary indicator of whether or not game went to overtime. |
-| `old_game_id` | character | Legacy NFL game ID. |
-| `gsis` | integer | The id of the game issued by the NFL Game Statistics & Information System. |
-| `nfl_detail_id` | character | The id of the game issued by NFL Detail. |
-| `pfr` | character | The id of the game issued by [Pro-Football-Reference](https://www.pro-football-reference.com/) |
-| `pff` | integer | The id of the game issued by [Pro Football Focus](https://www.pff.com/) |
-| `espn` | character | The id of the game issued by [ESPN](https://www.espn.com/) |
-| `ftn` | integer | FTN Data game identifier corresponding to this scheduled game. |
-| `away_rest` | integer | Days of rest that the away team is coming off of. |
-| `home_rest` | integer | Days of rest that the home team is coming off of. |
-| `away_moneyline` | integer | Odds for away team to win the game. |
-| `home_moneyline` | integer | Odds for home team to win the game. |
-| `spread_line` | double | The closing spread line for the game. A positive number means the home team was favored by that many points, a negative number means the away team was favored by that many points. (Source: Pro-Football-Reference) |
-| `away_spread_odds` | integer | Odds for away team to cover the spread. |
-| `home_spread_odds` | integer | Odds for home team to cover the spread. |
-| `total_line` | double | The closing total line for the game. (Source: Pro-Football-Reference) |
-| `under_odds` | integer | Odds that total score of game would be under the total_line. |
-| `over_odds` | integer | Odds that total score of game would be over the total_ine. |
-| `div_game` | integer | Binary indicator of whether or not game was played by 2 teams in the same division. |
-| `roof` | character | One of 'dome', 'outdoors', 'closed', 'open' indicating indicating the roof status of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `surface` | character | What type of ground the game was played on. (Source: Pro-Football-Reference) |
-| `temp` | integer | The temperature at the stadium only for 'roof' = 'outdoors' or 'open'.(Source: Pro-Football-Reference) |
-| `wind` | integer | The speed of the wind in miles/hour only for 'roof' = 'outdoors' or 'open'. (Source: Pro-Football-Reference) |
-| `away_qb_id` | character | GSIS Player ID for away team starting quarterback. |
-| `home_qb_id` | character | GSIS Player ID for home team starting quarterback. |
-| `away_qb_name` | character | Name of away team starting QB. |
-| `home_qb_name` | character | Name of home team starting QB. |
-| `away_coach` | character | First and last name of the away team coach. (Source: Pro-Football-Reference) |
-| `home_coach` | character | First and last name of the home team coach. (Source: Pro-Football-Reference) |
-| `referee` | character | Name of the game's referee (head official) |
-| `stadium_id` | character | ID of the stadium the game was played in. (Source: Pro-Football-Reference) |
-| `stadium` | character | Name of the stadium |
-
-**Example**
-
-```python
-from sportsdataverse.nfl import load_nfl_schedule
-schedule = load_nfl_schedule(seasons=[2024])
-schedule.shape
-
-# Multi-season range
-
-schedule = load_nfl_schedule(seasons=range(2020, 2025))
-
-# Filter to a single week
-
-import polars as pl
-week_one = load_nfl_schedule(seasons=[2024]).filter(pl.col("week") == 1)
-
-# Pandas round-trip
-
-schedule_pd = load_nfl_schedule(seasons=[2024], return_as_pandas=True)
-schedule_pd[["game_id", "home_team", "away_team", "week"]].head()
 ```

@@ -108,9 +108,6 @@ def parse_thesportsdb(
         zero-row frame when the payload is ``None``, empty, malformed, or the
         envelope key is ``null`` (a no-results lookup).
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 

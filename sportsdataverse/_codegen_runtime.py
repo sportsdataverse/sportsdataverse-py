@@ -370,8 +370,19 @@ def _download_json(transport: Callable[..., Any], url: str, **kwargs: Any) -> An
     raise AssertionError("unreachable")  # pragma: no cover
 
 
-def _get(url: str, params: Optional[dict] = None, *, transport: Optional[Callable[..., Any]] = None, **kwargs) -> Any:
-    """GET ``url`` as JSON. Strips ``None`` params.
+def _get(
+    url: str,
+    params: Optional[dict] = None,
+    data: Any = None,
+    json: Any = None,
+    *,
+    transport: Optional[Callable[..., Any]] = None,
+    **kwargs,
+) -> Any:
+    """GET ``url`` as JSON, or POST it when a ``data`` (form) or ``json`` body is given.
+
+    Strips ``None`` params, and the ``None`` fields of a dict body, so a body endpoint
+    (``body: form|json``) can run on this shared getter: ``params`` stays the query string.
 
     ``transport`` replaces :func:`~sportsdataverse.dl_utils.download` (a runtime passes
     :func:`_no_content_transport` to see a 204 / 205 instead of its ``{}``).
@@ -383,6 +394,9 @@ def _get(url: str, params: Optional[dict] = None, *, transport: Optional[Callabl
             retries, or a 2xx whose body is empty (not 204/205) or not JSON.
     """
     clean = {k: v for k, v in (params or {}).items() if v is not None}
+    for kind, body in (("data", data), ("json_body", json)):  # download names its JSON body json_body
+        if body is not None:
+            kwargs[kind] = {k: v for k, v in body.items() if v is not None} if isinstance(body, dict) else body
     return _download_json(transport or download, url, params=clean, **kwargs)
 
 
@@ -462,8 +476,10 @@ def _path_seg(value: Any) -> str:
     return quote(_wire_text(value), safe="")
 
 
-#: Keyword arguments a generated ESPN wrapper forwards through ``_get`` to ``download``.
-_GET_KWARGS = frozenset(inspect.signature(download).parameters) - {"url", "params"}
+#: Keyword arguments a generated ESPN wrapper forwards through ``_get`` to ``download``. A body
+#: (``data`` / ``json_body``) is not one: it would silently turn the wrapper's GET into an uncached
+#: POST.
+_GET_KWARGS = frozenset(inspect.signature(download).parameters) - {"url", "params", "data", "json_body"}
 
 
 def _check_kwargs(fn: str, kwargs: dict) -> None:

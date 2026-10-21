@@ -49,6 +49,12 @@ A polars (or pandas) `DataFrame`, one row per player (both teams), with `side` a
 | `completions` | integer | The number of completed passes. |
 | `headshot` | character | NFL headshot url for player |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `group` is not a recognized key. |
+
 **Example**
 
 ```python
@@ -149,6 +155,12 @@ A polars (or pandas) `DataFrame`, one row per leader entry.
 | `play_isChangeOfPossession` | logical | Boolean flag indicating whether the highlighted play resulted in a change of ball possession. |
 | `play_playDirection` | character | Direction of the highlighted play on the field (e.g., left, middle, right). |
 | `play_startGameClock` | character | Game clock time (MM:SS) at the start of the highlighted play. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `category` is not a recognized key. |
 
 **Example**
 

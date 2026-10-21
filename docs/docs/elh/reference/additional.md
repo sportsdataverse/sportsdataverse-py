@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # ELH — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.elh`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.elh` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## hokej.cz (Czech Extraliga)
 
@@ -38,6 +38,14 @@ One row per file: `hokejcz_game_id` (Int64), `season` (END year), `key`, `last_m
 | `key` | character | Full S3 object key of the play-by-play file. |
 | `last_modified` | character | Time the file was last written, an ISO 8601 UTC timestamp string from the S3 listing. |
 | `size` | integer | File size in bytes; a file of a few hundred bytes is written ahead of a game and holds no events. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The season folder holds no play-by-play file. |
+| `AssetFetchError` | A page failed, is not a listing, or the listing does not advance. |
+| `ValueError` | `season` is not a year. |
 
 **Example**
 

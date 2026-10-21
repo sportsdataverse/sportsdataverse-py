@@ -1,10 +1,10 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: build_priors–score_to"
-sidebar_label: "Models and calculators: build_priors–score_to"
+title: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit"
+sidebar_label: "Models and calculators: build_priors–ridge_fit"
 sidebar_position: 10
-description: "MBB — additional Python functions — Models and calculators: build_priors–score_to — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: build_priors–ridge_fit — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: build_priors–score_to
+# MBB — additional Python functions — Models and calculators: build_priors–ridge_fit
 
 ### build_priors {#build_priors}
 
@@ -160,6 +160,12 @@ Task 3.5 "`ndarray` breaks deep `==`" concern).
 **Returns**
 
 A `RapmPreProcDiagnostics`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `numpy.linalg.LinAlgError` | If the SVD fails to converge (not reachable via either oracle fixture). |
 
 **Example**
 
@@ -390,6 +396,12 @@ numpy-propagate).
 
 `sum((player_outs[i] - regressed_outs[i]) ** 2)` -- the `errSq` term consumed by `calculate_sd_rapm`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `player_outs` and `regressed_outs` have different lengths -- see landmine 7 above. |
+
 **Example**
 
 ```python
@@ -439,6 +451,12 @@ Cites [arXiv:1509.09169](https://arxiv.org/pdf/1509.09169.pdf).
 **Returns**
 
 A length-`num_players` array of per-player RAPM standard errors.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ZeroDivisionError` | If `num_lineups == num_players` -- see landmine 8 above. |
 
 **Example**
 
@@ -521,6 +539,12 @@ Return the `LeagueConstants` for a league.
 
 The league's `LeagueConstants`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not a known key of `LEAGUE_CONSTANTS`. |
+
 **Example**
 
 ```python
@@ -543,6 +567,12 @@ Return the `PlayerValueConstants` for a league.
 **Returns**
 
 The league's `PlayerValueConstants`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `league` is not a known key. |
 
 **Example**
 
@@ -623,6 +653,12 @@ call) and an `old_value` (from the second) side by side.
 | `adaptive_correl_weights` | `list[float] \| None` |  | Optional per-player adaptive-correlation weights, forwarded to `calc_lineup_outputs` / `_get_strong_weight` exactly as `pick_ridge_regression` does. |
 | `read_value_keys` | `tuple[ValueKey, ValueKey]` | `('value', 'value')` | `(off_key, def_key)` -- which key (`"value"`/`"old_value"`) to prefer when reading `stats_averages`/`ctx["team_info"]` offsets and when calling `calc_lineup_outputs` (forwarded as its `use_old_val_if_possible` flag). |
 | `write_value_key` | `ValueKey` | `'value'` | `"value"` or `"old_value"` -- which key each written field carries its result under. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | If a player in `players` is absent from both `ctx["removed_players"]` and `ctx["player_to_col"]` -- see landmine 12 (a Python-vs-JS divergence in genuinely dead territory for the oracle). |
 
 **Example**
 
@@ -841,6 +877,13 @@ One row per field team: `team_id, seed?, reach_r32, reach_s16, reach_e8, reach_f
 
 No returns table is published for this function: no capture: it needs a bracket-ordered field whose size is a power of two, and no package function returns one.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the field size is not a power of two. |
+| `KeyError` | If a field team is missing from `ratings`. |
+
 **Example**
 
 ```python
@@ -924,6 +967,12 @@ One row per play: the five feature columns plus `home_win_prob`.
 | `home_has_ball` | integer |  |
 | `home_win_prob` | double |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ImportError` | If the bundled artifact is an xgboost tree (`.ubj`) and `xgboost` is not installed (`pip install sportsdataverse[models]`). |
+
 **Example**
 
 ```python
@@ -957,6 +1006,12 @@ Joins the ratings frame twice (home / away) and applies the closed-form
 One row per input game: `game_id, home_team_id, away_team_id, exp_margin, home_win_prob, exp_total`. Games whose teams are missing from `ratings` carry nulls.
 
 No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a join-key dtype mismatches `ratings['team_id']`, or if `ratings` has duplicate `team_id` rows (e.g. multiple seasons passed at once). |
 
 **Example**
 
@@ -1036,6 +1091,12 @@ Monte Carlo the remaining schedule: expected wins + title odds.
 One row per team: `season, team_id, exp_wins` (mean simulated total wins), `playoff_prob` (share of sims finishing in the top 68 win totals -- a field-size proxy, ties broken by `adj_em`) and `conf_title_prob` (share of sims with the most wins among conference members; ties count for every tied team; null without a `conference` column).
 
 No returns table is published for this function: no capture: it needs a schedule with home_team_id / away_team_id columns, and no package function returns one (load_mbb_schedule ships home_id / away_id).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If a scheduled team is missing from `ratings` -- every `home_team_id` / `away_team_id` must have a ratings row. |
 
 **Example**
 
@@ -1214,6 +1275,12 @@ One row per (season, team_id) with columns `season, team_id, adj_o, adj_d, adj_e
 | `games` | integer | Games played. |
 | `rank` | integer | Rank. |
 | `adj_em_z` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a requested season's games have no turnovers under any turnover key (ESPN's pre-2009 women's box schema), so its possession estimate -- and every rating derived from it -- would be wrong rather than merely missing. |
 
 **Example**
 
@@ -1589,6 +1656,12 @@ One row per (game_id, team_id): `game_id, season, date, team_id, opp_team_id, is
 | `off_eff` | double | Off eff. |
 | `def_eff` | double | Def eff. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `InsufficientInputError` | When more than 10% of a season's games have 0 turnovers under every turnover key (ESPN's pre-2009 women's box), so no rating built from it would be meaningful. |
+
 **Example**
 
 ```python
@@ -1646,80 +1719,4 @@ Coefficient vector of length `d + 1` (intercept first).
 import numpy as np
 from sportsdataverse.mbb.mbb_player_value_constants import ridge_fit
 beta = ridge_fit(np.random.rand(50, 3), np.random.rand(50), lam=1.0)
-```
-
-### roc_auc {#roc_auc}
-
-`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
-
-Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
-| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
-
-**Returns**
-
-AUC in `[0, 1]`; `nan` when only one class is present.
-
-**Example**
-
-```python
-import numpy as np
-from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
-roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
-```
-
-### save_artifact {#save_artifact}
-
-`save_artifact(name: 'str', obj: 'dict') -> 'None'`
-
-Write a bundled artifact (dev/fitter use -- writes into the source tree).
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
-| `obj` | `dict` |  | JSON-serializable artifact payload. |
-
-**Example**
-
-```python
-save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
-```
-
-### score_to_tuple {#score_to_tuple}
-
-`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
-
-Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
-
-`ExtractorUtils.scala:107-113`).
-
-Scala's `str match { case regex(s1, s2) => ... }` on a compiled
-`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
-`Matcher.matches()`, not `find()`) -- ported here as
-`re.fullmatch`, not `re.match`/`re.search`.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
-
-**Returns**
-
-`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
-
-**Example**
-
-```python
-from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
-
-score_to_tuple("55-68")   # (55, 68)
-score_to_tuple("garbage")  # (0, 0)
 ```

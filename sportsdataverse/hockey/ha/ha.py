@@ -403,8 +403,8 @@ def ha_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -455,8 +455,8 @@ def ha_game(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -517,8 +517,8 @@ def ha_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -593,8 +593,8 @@ def ha_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -672,8 +672,8 @@ def ha_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -756,8 +756,8 @@ def ha_skater_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -873,8 +873,8 @@ def ha_goalie_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -969,8 +969,8 @@ def ha_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -1064,8 +1064,8 @@ def ha_teams(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -1131,8 +1131,8 @@ def ha_leaders(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:
@@ -1198,8 +1198,8 @@ def ha_players(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
-        ValueError: a value outside its enumerated set, or a field the site requires is missing.
+        NoDataError: The host answered 404 -- the requested resource does not exist. The site has nothing for the request (a season before 2005/06, an unknown or pre-2025/26 game, a phase not played).
+        ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help. A value outside its enumerated set, or a field the site requires is missing.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
     Example:

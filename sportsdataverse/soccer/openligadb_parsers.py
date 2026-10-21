@@ -106,9 +106,6 @@ def parse_openligadb(
         ``Utf8`` and nested ``matchResults`` / ``goals`` lists JSON-encoded. A
         zero-row frame when the payload is ``None``, empty or malformed.
 
-    Raises:
-        None: malformed payloads yield a zero-row frame rather than an exception.
-
     Example:
         Quick start::
 

@@ -322,6 +322,15 @@ If `raw=True`, the raw JSON dict. Otherwise, a dict of six DataFrames (`game`, `
 | `statistics_two_pointers_made` | integer | Two-point field goals made by the team's players. |
 | `statistics_two_pointers_percentage` | double | Two-point percentage as a 0-1 fraction, statistics_two_pointers_made / statistics_two_pointers_attempted. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no liveData boxscore object. |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
+
 **Example**
 
 ```python
@@ -414,6 +423,15 @@ If `raw=True`, the raw JSON dict. Otherwise, a DataFrame with one row per action
 | `jump_ball_lost_player_name` | character | Last name of the jumper who lost the tip on a jump ball. |
 | `jump_ball_recoverd_person_id` | integer | Player id of the player who recovered the tip on a jump ball, null when a team recovered it; the column keeps the feed's own spelling (jumpBallRecoverdPersonId). |
 | `jump_ball_recovered_name` | character | First initial and last name of the player who recovered the tip on a jump ball, e.g. L. Lacan, or a team label when a team recovered it. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `game_id` is not one non-negative integer id -- a bool, a negative or fractional number, a string that is not all digits, or more than 10 digits (checked before any request). |
+| `NoDataError` | The game has no liveData play-by-play object. |
+| `AssetFetchError` | The fetch failed (network error, rate limit, or a bot-check block), or the 200 body is not a JSON object carrying the liveData `game` object -- checked with `raw=True` too. |
+| `ImportError` | Curl_cffi is not installed -- required for the live transport (`pip install curl_cffi` / `sportsdataverse[all]`). |
 
 **Example**
 

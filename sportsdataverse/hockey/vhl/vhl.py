@@ -392,8 +392,8 @@ def vhl_schedule(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -455,8 +455,8 @@ def vhl_game_info(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -519,8 +519,8 @@ def vhl_goals(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -583,8 +583,8 @@ def vhl_penalties(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -647,8 +647,8 @@ def vhl_player_box(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -711,8 +711,8 @@ def vhl_goalie_box(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -775,8 +775,8 @@ def vhl_pbp(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -835,8 +835,8 @@ def vhl_standings(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -892,8 +892,8 @@ def vhl_skater_stats(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -953,8 +953,8 @@ def vhl_goalie_stats(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1012,8 +1012,8 @@ def vhl_player(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1067,8 +1067,8 @@ def vhl_player_career(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1122,8 +1122,8 @@ def vhl_roster(
         A polars/pandas DataFrame by default; the page's parsed record (``dict``): the sdv-internal-refs capture shape, plus ``_request`` (season, stage, tn and the ids asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
-        sportsdataverse.errors.AssetFetchError: the page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The VHL has nothing for the request (a season without that stage, a game not in the season's calendar, an unknown game, player or team page).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The page could not be fetched, or it is not the page asked for (another season, game or player; a missing table or header drift).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

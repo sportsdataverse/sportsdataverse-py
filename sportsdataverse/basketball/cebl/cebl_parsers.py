@@ -444,9 +444,6 @@ def parse_cebl_seasons(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         One row per season: ``season_id`` (CEBL's row id, no route takes it), ``season`` (calendar year = END
         year), ``is_active`` and ``is_live``. A zero-row frame with the same columns for empty or malformed input.
 
-    Raises:
-        None: bad input yields the typed zero-row frame.
-
     Example:
         Quick start::
 
@@ -467,9 +464,6 @@ def parse_cebl_teams(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     Returns:
         One row per team id (15 today): ``team_id``, English and French names, ``is_active`` (false on a former
         identity such as Guelph Nighthawks) and logo URLs. A typed zero-row frame for empty or malformed input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -493,9 +487,7 @@ def parse_cebl_standings(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         ``conference`` (EAST, WEST; OVERALL in 2019), ``position``, home/away splits, ``win_percentage`` (0-1),
         ``games_behind``, ``points_difference``, ``last_five`` and ``streak``. A typed zero-row frame for empty
         input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -519,9 +511,7 @@ def parse_cebl_roster(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         ``nationality`` (upper-case English country name), ``birth_date`` (public bio), ``position``,
         ``jersey_number`` (a string: '0' and '00' differ; null when unknown) and ``photo_url``. A typed
         zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -546,9 +536,7 @@ def parse_cebl_team_stats(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         ``points_against``). The request's ``season`` / ``mode`` / ``competition`` / ``segment`` /
         ``vs_conference`` / ``vs_team_id`` are stamped on each row; every figure is ``Float64`` (TOTALS sums or
         PER_GAME averages). A typed zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -574,9 +562,7 @@ def parse_cebl_games(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         misspelling CANELLED for a cancelled game), ``period``, venue, the two teams with their ids and scores,
         and the link columns. ``home_team_score`` / ``away_team_score`` are null on some games (a cancelled game, or
         a completed 2026 row without a score). A typed zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -600,9 +586,7 @@ def parse_cebl_player_stats(raw: Any, *, return_as_pandas: bool = False) -> Fram
         ``player_id``, ``full_name``, ``nationality``, the team (``team_id`` and names, a player traded in a
         season has a row for each team), ``played`` / ``started`` and the figures as ``Float64`` (TOTALS sums or
         PER_GAME averages; percentages 0-100; minutes decimal). A typed zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -625,9 +609,7 @@ def parse_cebl_player_seasons(raw: Any, *, return_as_pandas: bool = False) -> Fr
         One row per season and team, plus the career row (``season`` null, ``is_career`` true; the API sends it
         with ``career_only=False`` too, and ``career_only=True`` returns it alone). ``player_id`` is the player;
         figures as in :func:`parse_cebl_player_stats`. A typed zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -650,9 +632,6 @@ def parse_cebl_player(raw: Any, *, return_as_pandas: bool = False) -> Frame:
         day of the request), ``position``, ``jersey_number``, ``photo_url`` and the current team. An unknown
         player answers an object whose every field is null; that parses to a typed zero-row frame, as does any
         empty or malformed input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -679,9 +658,7 @@ def parse_cebl_player_gamelog(raw: Any, *, return_as_pandas: bool = False) -> Fr
         ``game_date`` (UTC), ``genius_match_id`` (parsed from ``game_stats_url_en``), ``matchup`` as the site prints it
         ('OTT 112 vs 130 VAN', '@' for an away game), counts as ``Int64`` (the API sends ``rebounds`` as a string),
         ``minutes`` and the percentages as ``Float64`` (0-100). A typed zero-row frame for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -705,9 +682,7 @@ def parse_cebl_player_leaders(raw: Any, *, return_as_pandas: bool = False) -> Fr
         ranking: ties share a rank and skip the next, 1, 1, 1, 4), ``player_id``, the team, ``value`` as ``Float64``
         in the requested mode, plus the request's ``season`` / ``mode`` / ``competition``. A typed zero-row frame
         for empty input.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::
@@ -737,9 +712,7 @@ def parse_cebl_news(raw: Any, *, return_as_pandas: bool = False) -> Frame:
     Returns:
         One row per article: ``news_id``, ``language`` (from the request), ``title``, ``published_at_utc``,
         ``image_url`` and ``html_content``. A typed zero-row frame for empty input, which is the usual answer.
-
-    Raises:
-        None: bad input yields the typed zero-row frame.
+        Bad input yields the typed zero-row frame.
 
     Example:
         Quick start::

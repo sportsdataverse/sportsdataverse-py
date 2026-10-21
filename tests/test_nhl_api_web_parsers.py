@@ -334,12 +334,15 @@ def test_parser_for_nhl_api_web_returns_callable_or_none():
         ("parse_nhl_web_player_game_log", "player_mcdavid_gamelog", "gameLog"),
     ],
 )
-def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key):
+def test_schema_drift_warns_instead_of_reading_as_no_data(parser, fixture, key, json_normalize_flavour):
     """A row list that stops holding objects gives zero rows AND a SchemaDriftWarning naming the path (A-L60)."""
     import sportsdataverse.nhl.nhl_api_web_parsers as mod
     from sportsdataverse.errors import SchemaDriftWarning
 
     parse, raw = getattr(mod, parser), _load(fixture)
     assert parse(raw).height > 0
+    # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
+    assert parse({**raw, key: [None, *raw[key], None]}).equals(parse(raw))  # order kept (R953-3)
+    assert parse({**raw, key: [None] * len(raw[key])}).height == 0
     with pytest.warns(SchemaDriftWarning, match=f"{parser}: {key}"):
         assert parse({**raw, key: [str(row) for row in raw[key]]}).height == 0

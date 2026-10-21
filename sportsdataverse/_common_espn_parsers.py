@@ -91,7 +91,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
-from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _warn_schema_drift
+from sportsdataverse.errors import _SHAPE_ERRORS, _error_envelope_code, _first_row, _object_rows, _warn_schema_drift
 
 # What ``pl.from_pandas`` raises on a mixed-type object column: pyarrow's ArrowInvalid (ValueError),
 # ArrowTypeError (TypeError), ArrowNotImplementedError (NotImplementedError), or a polars error.
@@ -146,13 +146,14 @@ def _to_output(df: pd.DataFrame, return_as_pandas: bool) -> pl.DataFrame:
         return pl.from_pandas(df)
 
 
-def _drifted(entries: list, where: str) -> bool:
-    """Whether a row list holds something other than objects; if so, warn :class:`SchemaDriftWarning` (A-L60)."""
-    bad = next((e for e in entries if not isinstance(e, dict)), None)
-    if bad is None:
-        return False
-    _warn_schema_drift(where, TypeError(f"an entry is {type(bad).__name__}, not an object"))
-    return True
+def _rows_or_drift(entries: list, where: str) -> list[dict] | None:
+    """``entries`` under the row rule (:func:`~sportsdataverse.errors._object_rows`: null rows dropped), or
+    ``None`` after a :class:`SchemaDriftWarning` when another entry is not an object (A-L60, R953-1)."""
+    try:
+        return _object_rows(entries)
+    except TypeError as exc:
+        _warn_schema_drift(where, exc)
+        return None
 
 
 def _empty_frame(return_as_pandas: bool = False):
@@ -353,7 +354,7 @@ def parse_teams(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         # Strip heavy sub-objects that polars can't handle and we don't need
         _drop = {"record", "links", "nextEvent", "standingSummary"}
         cleaned = []
-        for entry in teams_raw:
+        for entry in _object_rows(teams_raw):  # the row rule: a null team is dropped (4.13)
             t = dict(entry.get("team") or entry)
             for k in _drop:
                 t.pop(k, None)
@@ -463,8 +464,8 @@ def parse_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFra
 def _flatten_groups(groups: List[dict], parent_id: str = "", depth: int = 0) -> List[dict]:
     """Recursively flatten a groups list."""
     rows: List[dict] = []
-    for g in groups:
-        children = g.get("children") or []
+    for g in _object_rows(groups):  # the row rule, at every level (R953-7): raises TypeError on drift
+        children = _object_rows(g.get("children") or [])
         row = {
             "group_id": g.get("id") or g.get("groupId"),
             "name": g.get("name"),
@@ -514,7 +515,11 @@ def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     if not groups:
         return _empty_frame(return_as_pandas)
 
-    rows = _flatten_groups(groups)
+    try:
+        rows = _flatten_groups(groups)
+    except _SHAPE_ERRORS as exc:  # a group or child that is not an object (a null one is dropped)
+        _warn_schema_drift("parse_groups: groups", exc)
+        return _empty_frame(return_as_pandas)
     if not rows:
         return _empty_frame(return_as_pandas)
 
@@ -1020,7 +1025,8 @@ def parse_coaches(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame
     items = payload.get("items") or payload.get("coaches") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    if _drifted(items, "parse_coaches: items"):
+    items = _rows_or_drift(items, "parse_coaches: items")
+    if items is None:
         return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
@@ -1078,25 +1084,24 @@ def parse_draft(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
         return _single_row(payload, return_as_pandas)
     all_picks: List[dict] = []
 
-    if rounds:
-        for rnd in rounds:
-            round_num = rnd.get("number") or rnd.get("round")
-            picks = rnd.get("picks") or rnd.get("items") or []
-            for pick in picks:
-                p = dict(pick)
-                p.setdefault("round_number", round_num)
-                all_picks.append(p)
-    else:
-        # Fallback shapes
-        all_picks = payload.get("picks") or payload.get("items") or []
-
-    if not all_picks:
-        return _empty_frame(return_as_pandas)
-
     try:
-        df = pd.json_normalize(all_picks, sep="_")
+        if rounds:
+            for rnd in _object_rows(rounds):  # the row rule, rounds and picks alike, inside the catch
+                round_num = rnd.get("number") or rnd.get("round")
+                picks = rnd.get("picks") or rnd.get("items") or []
+                for pick in _object_rows(picks):
+                    p = dict(pick)
+                    p.setdefault("round_number", round_num)
+                    all_picks.append(p)
+        else:
+            # Fallback shapes
+            all_picks = payload.get("picks") or payload.get("items") or []
+
+        if not all_picks:
+            return _empty_frame(return_as_pandas)
+        df = pd.json_normalize(_object_rows(all_picks), sep="_")
     except _SHAPE_ERRORS as exc:
-        _warn_schema_drift("parse_draft: all_picks", exc)
+        _warn_schema_drift("parse_draft: rounds" if rounds else "parse_draft: all_picks", exc)
         return _empty_frame(return_as_pandas)
     else:
         df = _snake_columns(df)
@@ -1128,7 +1133,8 @@ def parse_event_competitor_roster(payload: Dict, return_as_pandas: bool = False)
     entries = payload.get("entries") or payload.get("items") or []
     if not entries:
         return _empty_frame(return_as_pandas)
-    if _drifted(entries, "parse_event_competitor_roster: entries"):
+    entries = _rows_or_drift(entries, "parse_event_competitor_roster: entries")
+    if entries is None:
         return _empty_frame(return_as_pandas)
 
     rows: List[dict] = []
@@ -1289,7 +1295,8 @@ def parse_event_plays(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     items = payload.get("items") or payload.get("plays") or []
     if not items:
         return _empty_frame(return_as_pandas)
-    if _drifted(items, "parse_event_plays: items"):
+    items = _rows_or_drift(items, "parse_event_plays: items")
+    if items is None:
         return _empty_frame(return_as_pandas)
 
     # Drop keys that are too deeply nested or too large for a flat frame
@@ -1386,7 +1393,7 @@ def parse_items(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
             stacklevel=2,
         )
     try:
-        df = pd.json_normalize(rows, sep="_")
+        df = pd.json_normalize(_object_rows(rows), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_items: items", exc)
         return _empty_frame(return_as_pandas)
@@ -1427,7 +1434,7 @@ def parse_team_schedule(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     if not isinstance(events, list) or not events:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(events, sep="_")
+        df = pd.json_normalize(_object_rows(events), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_team_schedule: events", exc)
         return _empty_frame(return_as_pandas)
@@ -1472,16 +1479,19 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
     # Detect grouped shape: first element has ``position`` + ``items``
     # keys, and ``items`` is a list. MLB / NFL / NHL use this shape;
     # NBA / WNBA / MBB / WBB / CFB use the flat shape.
-    first = athletes[0] if athletes else {}
+    first = _first_row(athletes)  # a leading null row must not decide the shape (R953-2)
     is_grouped = isinstance(first, dict) and "position" in first and isinstance(first.get("items"), list)
 
     if is_grouped:
-        if _drifted(athletes, "parse_team_roster: athletes"):
+        groups = _rows_or_drift(athletes, "parse_team_roster: athletes")
+        if groups is None:
             return _empty_frame(return_as_pandas)
         rows = []
-        for group in athletes:
-            players = group.get("items") or []
-            if _drifted(players, f"parse_team_roster: athletes[{group.get('position')}].items"):
+        for group in groups:
+            players = _rows_or_drift(
+                group.get("items") or [], f"parse_team_roster: athletes[{group.get('position')}].items"
+            )
+            if players is None:
                 return _empty_frame(return_as_pandas)
             rows += [{"position_group": group.get("position"), **player} for player in players]
         if not rows:
@@ -1489,7 +1499,7 @@ def parse_team_roster(payload: Dict, return_as_pandas: bool = False) -> pl.DataF
         df = pd.json_normalize(rows, sep="_")  # rows built here are objects: this always normalizes
     else:
         try:
-            df = pd.json_normalize(athletes, sep="_")
+            df = pd.json_normalize(_object_rows(athletes), sep="_")
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift("parse_team_roster: athletes", exc)
             return _empty_frame(return_as_pandas)
@@ -1529,7 +1539,7 @@ def parse_news(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     if not isinstance(articles, list) or not articles:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(articles, sep="_")
+        df = pd.json_normalize(_object_rows(articles), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_news: articles", exc)
         return _empty_frame(return_as_pandas)
@@ -1564,7 +1574,7 @@ def parse_transactions(payload: Dict, return_as_pandas: bool = False) -> pl.Data
     if not isinstance(records, list) or not records:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(records, sep="_")
+        df = pd.json_normalize(_object_rows(records), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_transactions: records", exc)
         return _empty_frame(return_as_pandas)
@@ -1602,7 +1612,7 @@ def parse_injuries(payload: Dict, return_as_pandas: bool = False) -> pl.DataFram
     if not isinstance(teams, list) or not teams:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(teams, sep="_")
+        df = pd.json_normalize(_object_rows(teams), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_injuries: teams", exc)
         return _empty_frame(return_as_pandas)
@@ -1772,7 +1782,7 @@ def parse_summary_plays(payload: Dict, return_as_pandas: bool = False) -> pl.Dat
     if not isinstance(plays, list) or not plays:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(plays, sep="_")
+        df = pd.json_normalize(_object_rows(plays), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_summary_plays: plays", exc)
         return _empty_frame(return_as_pandas)
@@ -1805,7 +1815,7 @@ def parse_summary_winprobability(payload: Dict, return_as_pandas: bool = False) 
     if not isinstance(wp, list) or not wp:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(wp, sep="_")
+        df = pd.json_normalize(_object_rows(wp), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift("parse_summary_winprobability: wp", exc)
         return _empty_frame(return_as_pandas)
@@ -1889,7 +1899,7 @@ def _row_per_item(items, return_as_pandas: bool, where: str):
     if not isinstance(items, list) or not items:
         return _empty_frame(return_as_pandas)
     try:
-        df = pd.json_normalize(items, sep="_")
+        df = pd.json_normalize(_object_rows(items), sep="_")
     except _SHAPE_ERRORS as exc:
         _warn_schema_drift(where, exc)
         return _empty_frame(return_as_pandas)

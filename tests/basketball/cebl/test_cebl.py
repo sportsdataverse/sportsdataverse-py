@@ -197,8 +197,9 @@ def test_return_as_pandas(short):
 def test_every_public_parser_has_the_docstring_sections():
     for name in P.__all__:
         doc = getattr(P, name).__doc__ or ""
-        for part in ("Args:", "Returns:", "Raises:", "Example:", "::"):
+        for part in ("Args:", "Returns:", "Example:", "::"):
             assert part in doc, (name, part)
+        assert not any(ln.strip().startswith("None:") for ln in doc.splitlines()), name  # a parser raises nothing
         assert ">>>" not in doc
     assert set(P.__all__) <= set(cebl_pkg.__all__)
     assert not [n for n in dir(P) if n.startswith("parse_") and n not in P.__all__]

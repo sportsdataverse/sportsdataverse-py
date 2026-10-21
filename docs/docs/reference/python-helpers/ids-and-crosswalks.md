@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — IDs and crosswalks"
 sidebar_label: "IDs and crosswalks"
-sidebar_position: 13
+sidebar_position: 14
 description: "Package — additional Python functions — IDs and crosswalks — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — IDs and crosswalks
@@ -29,6 +29,13 @@ every team in the league and search their rosters (slower).
 
 Single athlete dict or list. Each entry contains the athlete's ESPN ID plus the team they were found on (so callers can immediately call `espn_{league}_athlete_overview(athlete_id=...)` or other athlete-scoped wrappers).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not one of the supported slugs. |
+| `AssetFetchError` | A roster fetch failed (403, rate limit, 5xx, dead connection), so whether the athlete exists is unknown. A roster that answers 404 is skipped. |
+
 ### find_event {#find_event}
 
 `find_event(date: 'str', league: 'str', *, home: 'Optional[str]' = None, away: 'Optional[str]' = None, multi: 'bool' = False) -> 'Union[Optional[Dict[str, Any]], List[Dict[str, Any]]]'`
@@ -48,6 +55,14 @@ Resolve a game to its ESPN event ID via the scoreboard endpoint.
 **Returns**
 
 Single event dict (with the `id` you'd pass to `espn_{league}_summary(event_id=...)` / `espn_{league}_pbp(game_id=...)`) or a list when `multi=True`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not one of the supported slugs, or `date` is not `YYYYMMDD` / `YYYY-MM-DD`. |
+| `NoDataError` | The scoreboard endpoint answered 404. |
+| `AssetFetchError` | The scoreboard fetch failed (403, rate limit, 5xx, dead connection), so the answer is unknown. |
 
 ### find_team {#find_team}
 
@@ -71,6 +86,14 @@ by default; pass `multi=True` to get every candidate.
 **Returns**
 
 Single team dict (`{id, displayName, abbreviation, location, ...}`) or `None` when nothing matches; or a list of all matches when `multi=True`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not one of the supported slugs. |
+| `NoDataError` | The teams endpoint answered 404. |
+| `AssetFetchError` | The teams fetch failed (403, rate limit, 5xx, dead connection), so the answer is unknown. |
 
 ### function_count {#function_count}
 

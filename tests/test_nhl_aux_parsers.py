@@ -174,7 +174,7 @@ def test_parser_for_nhl_records_always_returns_callable():
         ("nhl_records_parsers", "parse_nhl_records", "nhl_records", "records_allstar_coach_career"),
     ],
 )
-def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, directory, stem):
+def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, directory, stem, json_normalize_flavour):
     """A ``data`` list that stops holding objects gives zero rows AND a SchemaDriftWarning (A-L60)."""
     import importlib
 
@@ -182,5 +182,8 @@ def test_schema_drift_warns_instead_of_reading_as_no_data(module, parser, direct
 
     parse, raw = getattr(importlib.import_module(f"sportsdataverse.nhl.{module}"), parser), _load(directory, stem)
     assert parse(raw).height > 0
+    # 4.13: a null row is no data, dropped without a warning; a list of nulls is zero rows, never N x 0.
+    assert parse({**raw, "data": [None, *raw["data"], None]}).equals(parse(raw))  # order kept (R953-3)
+    assert parse({**raw, "data": [None] * len(raw["data"])}).height == 0
     with pytest.warns(SchemaDriftWarning, match=f"{parser}: data"):
         assert parse({**raw, "data": [str(row) for row in raw["data"]]}).height == 0

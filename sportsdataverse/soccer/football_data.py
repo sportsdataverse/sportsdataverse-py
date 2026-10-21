@@ -43,7 +43,7 @@ def football_data_extra_league(
         A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: football-data.co.uk answered 404 (no file for that season or division).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -91,7 +91,7 @@ def football_data_fixtures(
         A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: football-data.co.uk answered 404 (no file for that season or division).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -143,7 +143,7 @@ def football_data_league_season(
         A polars/pandas DataFrame by default; the raw CSV response body (``str``) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: football-data.co.uk answered 404 (no file for that season or division).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Football-data.co.uk answered 404 (no file for that season or division).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

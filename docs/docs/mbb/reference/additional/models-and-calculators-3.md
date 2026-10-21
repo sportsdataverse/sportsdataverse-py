@@ -1,10 +1,86 @@
 ---
-title: "MBB — additional Python functions — Models and calculators: simulate_game–win_prob"
-sidebar_label: "Models and calculators: simulate_game–win_prob"
+title: "MBB — additional Python functions — Models and calculators: roc_auc–win_prob"
+sidebar_label: "Models and calculators: roc_auc–win_prob"
 sidebar_position: 11
-description: "MBB — additional Python functions — Models and calculators: simulate_game–win_prob — function reference in sdv-py, the SportsDataverse Python package."
+description: "MBB — additional Python functions — Models and calculators: roc_auc–win_prob — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# MBB — additional Python functions — Models and calculators: simulate_game–win_prob
+# MBB — additional Python functions — Models and calculators: roc_auc–win_prob
+
+### roc_auc {#roc_auc}
+
+`roc_auc(y_true: 'np.ndarray', score: 'np.ndarray') -> 'float'`
+
+Area under the ROC curve via the rank-sum (Mann-Whitney) identity.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `y_true` | `ndarray` |  | Binary outcomes (0/1). |
+| `score` | `ndarray` |  | Predicted scores (any monotone scale). |
+
+**Returns**
+
+AUC in `[0, 1]`; `nan` when only one class is present.
+
+**Example**
+
+```python
+import numpy as np
+from sportsdataverse.mbb.mbb_player_value_constants import roc_auc
+roc_auc(np.array([0, 1]), np.array([0.2, 0.9]))
+```
+
+### save_artifact {#save_artifact}
+
+`save_artifact(name: 'str', obj: 'dict') -> 'None'`
+
+Write a bundled artifact (dev/fitter use -- writes into the source tree).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `str` |  | Artifact stem, e.g. `"mbb_box_bpm"`. |
+| `obj` | `dict` |  | JSON-serializable artifact payload. |
+
+**Example**
+
+```python
+save_artifact("mbb_box_bpm", {"league": "mens", "coef": [0.1]})
+```
+
+### score_to_tuple {#score_to_tuple}
+
+`score_to_tuple(s: 'str') -> 'tuple[int, int]'`
+
+Parse a `"scored-allowed"` score string (`ExtractorUtils.score_to_tuple`,
+
+`ExtractorUtils.scala:107-113`).
+
+Scala's `str match { case regex(s1, s2) => ... }` on a compiled
+`Regex` requires the ENTIRE string to match (`Regex.unapplySeq` calls
+`Matcher.matches()`, not `find()`) -- ported here as
+`re.fullmatch`, not `re.match`/`re.search`.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `s` | `str` |  | The raw score string, e.g. `"55-68"`. |
+
+**Returns**
+
+`(scored, allowed)` as a tuple of ints, or `(0, 0)` if `s` doesn't fully match `([0-9]+)-([0-9]+)`.
+
+**Example**
+
+```python
+from sportsdataverse.mbb.mbb_ncaa_models import score_to_tuple
+
+score_to_tuple("55-68")   # (55, 68)
+score_to_tuple("garbage")  # (0, 0)
+```
 
 ### simulate_game {#simulate_game}
 
@@ -57,6 +133,12 @@ this is a plain matrix inverse (`numpy.linalg.inv`), not an SVD.
 **Returns**
 
 The `(num_players, num_lineups)` solver matrix; apply it to a target vector via `calculate_rapm`.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `numpy.linalg.LinAlgError` | If `XᵀX + ridge_lambda·I` is singular -- not reachable with `ridge_lambda > 0` (which always makes the matrix positive-definite), but possible with `ridge_lambda <= 0` on a rank-deficient `X`. |
 
 **Example**
 
