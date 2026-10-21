@@ -287,6 +287,10 @@ def add_attribution_cols(
         ("penalty_declined", pl.Boolean),
         ("penalty_offset", pl.Boolean),
         ("penalty_no_play", pl.Boolean),
+        ("end.yardLine", pl.Int64),
+        ("end.yardsToEndzone", pl.Int64),
+        ("scoringPlay", pl.Boolean),
+        ("change_of_pos_team", pl.Boolean),
     ):
         if _col not in play_df.columns:
             play_df = play_df.with_columns(pl.lit(None, dtype=_dtype).alias(_col))
@@ -526,7 +530,20 @@ def add_attribution_cols(
                 & (pl.col("_is_punt_return") == False)
                 & (pl.col("_is_kick_return") == False)
                 & (pl.col("fumbling_team") == pl.col("pos_team"))
-                & (pl.col("end.pos_team.id") != pl.col("pos_team")),
+                & (pl.col("end.pos_team.id") != pl.col("pos_team"))
+                # EX-3.4-d: ESPN's degenerate end block {yardLine 0, yardsToEndzone 0} states no
+                # spot, and its team is no evidence either: 401856674165, the retained-fumble
+                # companion of 401856674175, carries the defense's id there while the offense
+                # snaps next. A non-scoring row behind such a block whose possession did not
+                # change (change_of_pos_team, the owner's R834-7 predicate) kept the ball.
+                & (
+                    (pl.col("end.yardLine") == 0)
+                    & (pl.col("end.yardsToEndzone") == 0)
+                    & (pl.col("scoringPlay") == False)
+                    & (pl.col("change_of_pos_team") == False)
+                )
+                .fill_null(False)
+                .not_(),
             )
             .then(pl.col("fumbling_team"))
             .otherwise(pl.lit(None, dtype=pl.Int64)),

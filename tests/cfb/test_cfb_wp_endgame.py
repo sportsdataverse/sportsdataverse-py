@@ -214,6 +214,24 @@ def test_the_big_ten_championship_hook_keeps_its_call():
 HOLDOUT = FIX / "wp_overtime"
 
 
+def _base_wp_is_in_sample_on(seasons: tuple[int, int]) -> None:
+    """The 2022-25 rows are a holdout for ``wp_ot_reach`` only (task 3.8, C-M11).
+
+    Their ``wp_before`` comes from ``wp_spread``, fit on every season 2004-2025: the "before"
+    numbers these tests beat are IN-SAMPLE for the base booster, so they flatter it. The cards
+    say so; if a retrain ships a real holdout, this goes red and the tests must be re-read.
+    """
+    from sportsdataverse.cfb.model_cards import load_model_card
+
+    ot = load_model_card("wp_ot_reach")
+    assert ot["holdout_seasons"] == list(seasons) and ot["training_seasons"][1] < seasons[0]
+    for model in ("wp_spread", "wp_naive"):
+        card = load_model_card(model)
+        assert card["in_sample"] is True, model
+        lo, hi = card["training_seasons"]
+        assert lo <= seasons[0] and seasons[1] <= hi, model
+
+
 def _logloss(p, y):
     p = np.clip(np.asarray(p, dtype=float), 1e-6, 1 - 1e-6)
     return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
@@ -224,6 +242,7 @@ def _brier(p, y):
 
 
 def test_tied_late_holdout_rows_are_calibrated_through_the_runtime():
+    _base_wp_is_in_sample_on((2022, 2025))
     # 2022-25 holdout (see fixtures/wp_overtime/README.md): Q4 scrimmage snaps, tied, two minutes
     # or less. The booster gave the team with the ball 0.771; it won 0.648.
     from sportsdataverse.cfb.cfb_wp_overtime import adjust_wp
@@ -308,6 +327,7 @@ def test_the_card_records_a_disjoint_holdout_that_the_fix_improves():
 
 
 def test_q4_one_score_holdout_rows_hold_calibration_through_the_runtime():
+    _base_wp_is_in_sample_on((2022, 2025))
     # Every 2022-25 Q4 scrimmage snap within eight points (43,182 rows, 1,830 games), scored
     # through the runtime. The correction pulls a leader toward the tie value; it must not cost
     # calibration anywhere in the fourth, above all to leaders with time left. Observed at the
@@ -341,7 +361,11 @@ def test_q4_one_score_holdout_rows_hold_calibration_through_the_runtime():
 
 #: One late-fourth regulation value per published surface, pinned as observed on the committed
 #: card. With ``adjust_wp`` an identity in regulation every one of them moves (see the PR's
-#: mutation run), so none of these surfaces can drop the correction silently.
+#: mutation run), so none of these surfaces can drop the correction silently. They also guard the
+#: C-NF-2 booster-input shim (``cfb_pbp._as_trained_2h_flag`` and its twin in ``cfb_fourth_down._to_pandas``,
+#: removed by a retrain on the corrected flag (owner decision)): fed the corrected flag instead of ``1 - is_home``, the 401754554
+#: rows move off these base values by up to 0.0077 (task 2.6 had re-pinned them there) and fail
+#: (registry rows ``cfb-wp-shim-pipeline`` / ``cfb-wp-shim-fourth-down``).
 REGULATION_PINS = [
     # Virginia, tied 24-24, 2nd and 10 with 0:10 left: the booster alone read ~0.7
     (401754554, 171, "Chandler Morris pass complete", "wp_before", 0.5129),

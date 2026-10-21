@@ -594,7 +594,7 @@ def _cbs_cfb_to_espn_summary(
             possession and the box score, so they must be ESPN's. ``season``, ``season_type``,
             ``week``, ``kickoff_utc`` and ``neutral_site`` fill the header.
         game: the optional ``resource/game/{cbs_game_id}`` body, for the venue.
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` (a stored closing
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` (a stored closing
             line). Becomes the summary's one-provider ``pickcenter``.
 
     Returns:

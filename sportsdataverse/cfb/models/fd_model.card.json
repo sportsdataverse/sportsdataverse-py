@@ -16,6 +16,8 @@
   "n_features": 9,
   "label": "statYardage",
   "training_seasons": null,
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/model_training/fourth_down/cli.py train-fd on every play it loads (train_from_plays, no split). The card's training_seasons is null because --seasons was left at its default (all seasons in --final-dir) and the run that produced this booster is not logged, so the span is unknown; no season was withheld.",
   "n_training_rows": null,
   "hyperparameters": null,
   "source": "cfb_final_json",

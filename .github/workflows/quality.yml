@@ -178,15 +178,21 @@ jobs:
     # selects no rows fails; tests/tools/test_run_mutants.py asserts the shards partition the
     # registry). Measured: 71 rows = 1023 s of rows serially (run 38156528933, 17m04s job), ~4-5 min per
     # shard at 4 shards. By 10-18 the topic registries had grown and 4-shard jobs hit the 15-min timeout
-    # (EX-CI-a), so the matrix went to 6: 74 rows ran in 4-6 min per shard (#879). Add a shard when one
-    # nears ~10 min.
+    # (EX-CI-a), so the matrix went to 6: 74 rows ran in 4-6 min per shard (#879). By 10-19 the registry
+    # held 191 rows (211 with #898) and 6-shard jobs hit the timeout again (R898-19). Measured on run
+    # 39195638017 (191 rows, 6 shards): 4240 s of rows serially, 22.2 s/row mean, a heavy tail (max
+    # 113 s), ~25 s setup per job, slowest shard 14m22s. Replaying those per-row times through the
+    # round-robin split, N=8 puts the slowest shard at 12.1 min at 211 rows (avg 10.2) and 13.6 min at
+    # 250 rows (avg 12.0); N=11 would give 8.7. The owner chose 8 shards with a 20-min timeout: fewer
+    # runners held at once over the fastest feedback. Add a shard or raise the timeout when the slowest
+    # shard nears ~16 min.
     name: mutation registry (${{ matrix.shard }}/${{ strategy.job-total }})
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v5
         with:

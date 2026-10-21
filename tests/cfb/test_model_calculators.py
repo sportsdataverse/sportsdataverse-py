@@ -213,6 +213,36 @@ def test_win_probability_picks_the_spread_model_when_a_spread_is_present(monkeyp
     assert seen == ["wp_spread", "wp_naive"]
 
 
+def test_win_probability_scores_the_2h_flag_as_the_boosters_were_trained():
+    """C-NF-2 shim, removed by a retrain on the corrected flag (owner decision): wp_naive / wp_spread learned
+    pos_team_receives_2H_kickoff as 1 - is_home, so the calculator scores that whatever the
+    caller's (corrected) flag says, and hands the caller's column back unchanged."""
+    state = {
+        "TimeSecsRem": [1500.0],
+        "adj_TimeSecsRem": [3300.0],
+        "ExpScoreDiff_Time_Ratio": [0.0],
+        "pos_score_diff_start": [0.0],
+        "down": [1.0],
+        "distance": [10.0],
+        "yards_to_goal": [75.0],
+        "is_home": [1.0],
+        "pos_team_timeouts_rem_before": [3.0],
+        "def_pos_team_timeouts_rem_before": [3.0],
+        "period": [1.0],
+    }
+    flagged = pl.DataFrame({**state, "pos_team_receives_2H_kickoff": [1.0]})
+    unflagged = pl.DataFrame({**state, "pos_team_receives_2H_kickoff": [0.0]})
+    booster = mc._booster_for("wp_naive")
+    # the booster itself reads the flag, so equal outputs below are the shim's doing
+    assert (
+        mc.predict_from_card(flagged, "wp_naive", booster)[0] != mc.predict_from_card(unflagged, "wp_naive", booster)[0]
+    )
+    out = mc.calculate_win_probability(flagged)
+    assert out["wp"][0] == mc.calculate_win_probability(unflagged)["wp"][0]
+    assert out["wp"][0] == mc.predict_from_card(unflagged, "wp_naive", booster)[0]
+    assert out["pos_team_receives_2H_kickoff"][0] == 1.0
+
+
 def test_epa_requires_the_after_play_value():
     """EPA is a difference; this scores rows, not sequences. Silently inventing
     ep_end would produce a number that looks like EPA and is not."""

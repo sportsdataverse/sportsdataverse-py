@@ -1,6 +1,6 @@
 {
-  "commit": "8c8b0d996e (devel-nfl after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a)",
-  "measured_at": "2026-10-18T09:43:04+00:00",
+  "commit": "9769eb7183 (devel-cfb after the 10-18 sync of devel-test-harness 98fdc83e4d, main 3cda70429a)",
+  "measured_at": "2026-10-18T08:25:28+00:00",
   "metrics": {
     "handwritten_files": {
       "value": 848,
@@ -8,7 +8,7 @@
       "label": "Hand-written modules"
     },
     "handwritten_lines": {
-      "value": 323184,
+      "value": 323318,
       "better": "info",
       "label": "Hand-written lines"
     },
@@ -33,7 +33,7 @@
       "label": "Modules over 1,500 lines"
     },
     "mypy_checked_files": {
-      "value": 561,
+      "value": 562,
       "better": "higher",
       "label": "Files in the mypy strict list"
     },
@@ -115,30 +115,30 @@
   },
   "details": {
     "longest_functions": [
-      "1176 lines  sportsdataverse/cfb/cfb_pbp.py:2545 __helper_cfb_pbp_features",
-      "998 lines  sportsdataverse/cfb/cfb_pbp.py:8823 create_box_score",
-      "978 lines  sportsdataverse/nfl/nfl_pbp.py:6760 create_box_score",
-      "815 lines  sportsdataverse/cfb/cfb_pbp.py:7452 __process_epa",
-      "785 lines  sportsdataverse/cfb/cfb_ncaa_cfbfastr.py:529 to_cfbfastr",
-      "643 lines  sportsdataverse/cfb/cfb_pbp.py:6284 __add_player_cols",
-      "635 lines  sportsdataverse/nfl/nfl_pbp.py:3647 __add_player_cols",
+      "1180 lines  sportsdataverse/cfb/cfb_pbp.py:2693 __helper_cfb_pbp_features",
+      "992 lines  sportsdataverse/cfb/cfb_pbp.py:9052 create_box_score",
+      "964 lines  sportsdataverse/nfl/nfl_pbp.py:6417 create_box_score",
+      "874 lines  sportsdataverse/cfb/cfb_pbp.py:7630 __process_epa",
+      "787 lines  sportsdataverse/cfb/cfb_ncaa_cfbfastr.py:529 to_cfbfastr",
+      "643 lines  sportsdataverse/cfb/cfb_pbp.py:6457 __add_player_cols",
+      "635 lines  sportsdataverse/nfl/nfl_pbp.py:3371 __add_player_cols",
       "581 lines  sportsdataverse/football/attribution.py:260 add_attribution_cols",
-      "548 lines  sportsdataverse/nfl/nfl_pbp.py:977 __helper_nfl_pbp_features",
-      "541 lines  sportsdataverse/cfb/cfb_pbp.py:4526 __add_new_play_types",
-      "484 lines  sportsdataverse/cfb/cfb_pbp.py:5324 __add_play_category_flags",
-      "459 lines  sportsdataverse/nfl/nfl_pbp.py:2875 __add_play_category_flags",
+      "572 lines  sportsdataverse/nfl/nfl_pbp.py:740 __helper_nfl_pbp_features",
+      "541 lines  sportsdataverse/cfb/cfb_pbp.py:4702 __add_new_play_types",
+      "487 lines  sportsdataverse/cfb/cfb_pbp.py:5500 __add_play_category_flags",
       "456 lines  sportsdataverse/cfb/cfb_situational_stats.py:108 create_situational_stats",
       "449 lines  sportsdataverse/mbb/mbb_ncaa_game_pbp.py:648 parse_ncaa_bb_game_pbp",
+      "443 lines  sportsdataverse/nfl/nfl_pbp.py:2615 __add_play_category_flags",
       "427 lines  sportsdataverse/mbb/mbb_ratings.py:421 build_o_rtg",
       "427 lines  sportsdataverse/hockeytech/_family.py:53 build_family",
-      "418 lines  sportsdataverse/nfl/nfl_pbp.py:6334 __add_fixed_drives_series",
       "390 lines  sportsdataverse/football/series.py:11 add_series_data",
-      "383 lines  sportsdataverse/nfl/nfl_pbp.py:5113 __process_epa",
-      "380 lines  sportsdataverse/nfl/nfl_simulations.py:296 nfl_simulations"
+      "388 lines  sportsdataverse/nfl/nfl_pbp.py:6021 __add_fixed_drives_series",
+      "380 lines  sportsdataverse/nfl/nfl_simulations.py:296 nfl_simulations",
+      "379 lines  sportsdataverse/nfl/ep_wp.py:2461 calculate_wpa"
     ],
     "largest_classes": [
-      "8540 lines  sportsdataverse/cfb/cfb_pbp.py:2262 CFBPlayProcess",
-      "7432 lines  sportsdataverse/nfl/nfl_pbp.py:704 NFLPlayProcess",
+      "8632 lines  sportsdataverse/cfb/cfb_pbp.py:2396 CFBPlayProcess",
+      "7260 lines  sportsdataverse/nfl/nfl_pbp.py:467 NFLPlayProcess",
       "317 lines  sportsdataverse/mbb/mbb_ncaa_fetch.py:982 NcaaFetcher",
       "232 lines  sportsdataverse/mbb/mbb_ncaa_fetch.py:698 _PlaywrightTransport",
       "187 lines  sportsdataverse/_rds.py:104 _RdsWriter",
@@ -149,9 +149,9 @@
       "125 lines  sportsdataverse/mbb/mbb_ncaa_stints.py:764 LineupBuildingState"
     ],
     "largest_modules": [
-      "10802 lines  sportsdataverse/cfb/cfb_pbp.py",
-      "8136 lines  sportsdataverse/nfl/nfl_pbp.py",
-      "4600 lines  sportsdataverse/nfl/ep_wp.py",
+      "11028 lines  sportsdataverse/cfb/cfb_pbp.py",
+      "7727 lines  sportsdataverse/nfl/nfl_pbp.py",
+      "4593 lines  sportsdataverse/nfl/ep_wp.py",
       "2924 lines  sportsdataverse/nfl/nfl_loaders.py",
       "2913 lines  sportsdataverse/basketball/acb/acb_parsers.py",
       "2811 lines  sportsdataverse/nfl/nfl_stats.py",
