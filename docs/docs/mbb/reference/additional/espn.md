@@ -35,6 +35,12 @@ Polars dataframe containing calendar dates for the requested season.
 | `dateURL` | character | The calendar day as YYYYMMDD, the dates= value of that day's scoreboard request. |
 | `url` | character | RotoWire player page URL. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2002. |
+
 **Example**
 
 ```python

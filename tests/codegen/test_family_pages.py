@@ -235,3 +235,11 @@ def test_no_family_page_label_carries_a_page_number(first_render):
         for m in re.finditer(r'(?m)^(?:sidebar_label|title): .*\(\d+\).*$|"label": ".*\(\d+\).*"', text)
     ]
     assert numbered == []
+
+
+def test_a_family_last_page_never_holds_one_function_alone():
+    items = [(f"x_a_f{i}", "a", s) for i, s in enumerate((30_000, 30_000, 9_000, 5_000))]
+    pages = generate._pack_families(items)
+    assert [p[3] for p in pages] == [["x_a_f0", "x_a_f1"], ["x_a_f2", "x_a_f3"]]  # was [f0, f1, f2] + [f3]
+    big = [(f"x_a_f{i}", "a", s) for i, s in enumerate((30_000, 30_000, 9_000, 80_000))]
+    assert [p[3] for p in generate._pack_families(big)][-1] == ["x_a_f3"]  # over the budget: its own page

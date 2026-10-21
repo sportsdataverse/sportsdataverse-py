@@ -365,6 +365,14 @@ A polars DataFrame, one row per play (plus, while `summary.phase` is `INGAME`, o
 | `fg_wp_diff` | double |  |
 | `fourth_down_recommendation` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | Neither *game_detail* nor *shield_game_id* was given. |
+| `NoDataError` | Shield has no game for *shield_game_id* (HTTP 404). |
+| `AssetFetchError` | The Shield fetch failed or exhausted its retries (HTTP 403 and up). |
+
 **Example**
 
 ```python
@@ -395,6 +403,12 @@ Project one Shield game (any phase) onto an ESPN-summary-shaped dict.
 **Returns**
 
 `(summary, notes)`. | item | type | description | |---|---|---| | summary | dict | An ESPN-summary-shaped payload: `header` (season/week/competitions/competitors/status), `drives.previous` (+ `drives.current` while the game is live), `gameInfo`, `pickcenter`, `boxscore` (filled when `player_stats`/`team_stats` are given) and passthrough arrays. Feed it to `espn_nfl_pbp(summary=)`. | | notes | list[str] | Adapter-side degradations worth surfacing in provenance: a missing `summary.timeouts` block, a missing `summary.homeTeam`/`awayTeam` team id, a PAT with no touchdown to fold into, plays outside the drive chart, and (pre-2014) play ids that do not join ESPN's own. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | `idmap_row` is missing `espn_event_id` or a team id. |
 
 **Example**
 

@@ -88,7 +88,7 @@ columns:
   type: character
 - description: ''
   name: utc_offset
-  type: integer
+  type: numeric
 - description: ''
   name: buy_tickets_url
   type: character

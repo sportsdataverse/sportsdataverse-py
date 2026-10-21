@@ -364,6 +364,14 @@ A pandas copy of `pbp_df` with the decision columns added. Empty input returns t
 | `fg_wp_diff` | double |  |
 | `fourth_down_recommendation` | character |  |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `FileNotFoundError` | In strict mode, for a missing nfl4th model (warns otherwise; see `get_go_wp`). |
+| `XGBoostError` | A cached nfl4th booster is corrupt. |
+| `ValueError` | A model card beside a booster disagrees with the applier's fitted constants. |
+
 **Example**
 
 ```python

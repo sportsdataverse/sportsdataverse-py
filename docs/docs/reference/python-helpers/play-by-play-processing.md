@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Play-by-play processing"
 sidebar_label: "Play-by-play processing"
-sidebar_position: 9
+sidebar_position: 10
 description: "Package — additional Python functions — Play-by-play processing — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Play-by-play processing

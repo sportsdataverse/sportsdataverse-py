@@ -1,11 +1,117 @@
 ---
-title: "NHL — NHL EDGE API — Skater: landing"
-sidebar_label: "Skater: landing"
+title: "NHL — NHL EDGE API — Skater: zone–landing"
+sidebar_label: "Skater: zone–landing"
 sidebar_position: 4
-description: "NHL — NHL EDGE API — Skater: landing — function reference in sdv-py, the SportsDataverse Python package."
+description: "NHL — NHL EDGE API — Skater: zone–landing — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
-# NHL — NHL EDGE API — Skater: landing
+# NHL — NHL EDGE API — Skater: zone–landing
+
+## nhl_edge_skater_zone_time
+
+Pull EDGE zone-time detail for a single skater.
+
+**Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-zone-time/{player_id}/{season}/{game_type}`
+
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time/8480801/now](https://api-web.nhle.com/v1/edge/skater-zone-time/8480801/now)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `player_id` | `player_id` |  | `Y` |  | player_id path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
+
+### Returns {#nhl_edge_skater_zone_time-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `strength_code` | character | Strength state code (e.g., all, even, pp, pk). |
+| `offensive_zone_pctg` | double | Percentage of time spent in the offensive zone. |
+| `offensive_zone_percentile` | double | League percentile rank for offensive-zone time. |
+| `offensive_zone_league_avg` | double | League average offensive-zone time percentage. |
+| `neutral_zone_pctg` | double | Percentage of time spent in the neutral zone. |
+| `neutral_zone_percentile` | double | League percentile rank for neutral-zone time. |
+| `neutral_zone_league_avg` | double | League average neutral-zone time percentage. |
+| `defensive_zone_pctg` | double | Percentage of time spent in the defensive zone. |
+| `defensive_zone_percentile` | double | League percentile rank for defensive-zone time. |
+| `defensive_zone_league_avg` | double | League average defensive-zone time percentage. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_zone_time-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#nhl_edge_skater_zone_time-example}
+
+```python
+nhl_edge_skater_zone_time(player_id=8480801)
+```
+
+_Last validated n/a._
+
+## nhl_edge_skater_zone_time_top_10
+
+Pull the EDGE top-10 skaters by zone time.
+
+**Endpoint URL:** `GET https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/{positions}/{strength}/{sort_by}/{season}/{game_type}`
+
+**Valid URL:** [https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2](https://api-web.nhle.com/v1/edge/skater-zone-time-top-10/defense/all/offensive/20242025/2)
+
+| API Parameter | Python | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|---|
+| `positions` | `positions` |  | `Y` |  | positions path parameter. |
+| `strength` | `strength` |  | `Y` |  | strength path parameter. |
+| `sort_by` | `sort_by` |  | `Y` |  | sort_by path parameter. |
+| `season` | `season` |  |  | `Y` | season path parameter. |
+| `game_type` | `game_type` |  |  | `Y` | game_type path parameter. |
+
+### Returns {#nhl_edge_skater_zone_time_top_10-returns}
+
+**`return_parsed=True`** (default) — a tidy `polars.DataFrame` with the columns below; pass `return_as_pandas=True` for a `pandas.DataFrame`.
+
+| col_name | type | description |
+|---|---|---|
+| `defensive_zone_time` | double | Percentage of time spent in the defensive zone. |
+| `neutral_zone_time` | double | Percentage of time spent in the neutral zone. |
+| `offensive_zone_time` | double | Percentage of time spent in the offensive zone. |
+| `player_first_name_default` | character | Player first name (default language). |
+| `player_headshot` | character | URL to the player headshot image. |
+| `player_last_name_default` | character | Player last name (default language). |
+| `player_position` | character | Primary player position. |
+| `player_slug` | character | URL slug for the player. |
+| `player_sweater_number` | integer | Player jersey number. |
+| `player_team_abbrev` | character | Player team abbreviation. |
+| `player_team_common_name_default` | character | Player team common name (default locale). |
+| `player_team_place_name_with_preposition_default` | character | Player team place name with preposition (default locale). |
+| `player_team_place_name_with_preposition_fr` | character | Player team place name with preposition (French locale). |
+| `player_team_slug` | character | Player team URL-friendly slug. |
+| `player_team_team_logo_dark` | character | Player team dark-mode logo URL. |
+| `player_team_team_logo_light` | character | Player team light-mode logo URL. |
+
+**`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_zone_time_top_10-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
+
+### Example {#nhl_edge_skater_zone_time_top_10-example}
+
+```python
+nhl_edge_skater_zone_time_top_10(positions='defense', strength='all', sort_by='offensive', season=20242025)
+```
+
+_Last validated n/a._
 
 ## nhl_edge_skater_landing
 
@@ -173,6 +279,14 @@ Pull the EDGE skater landing page (summary across all skaters).
 | `leaders_defensive_zone_time_zone_time` | double | Total time the defensive zone time leaderboard leader spent in the defensive zone, as tracked by NHL EDGE player tracking. |
 
 **`return_parsed=False`** — the raw JSON `Dict` payload, unparsed.
+
+### Raises {#nhl_edge_skater_landing-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. |
 
 ### Example {#nhl_edge_skater_landing-example}
 

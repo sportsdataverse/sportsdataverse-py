@@ -433,8 +433,8 @@ def khl_webcaster_stages(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -494,8 +494,8 @@ def khl_webcaster_event(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -568,8 +568,8 @@ def khl_webcaster_events(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -642,8 +642,8 @@ def khl_webcaster_leaders(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -714,8 +714,8 @@ def khl_webcaster_players(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -779,8 +779,8 @@ def khl_webcaster_players_light(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -838,8 +838,8 @@ def khl_webcaster_tables(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -905,8 +905,8 @@ def khl_webcaster_team(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -976,8 +976,8 @@ def khl_webcaster_teams(
         A polars/pandas DataFrame by default; the raw JSON body (betting fields and the caller's IP removed) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: an error envelope with code 404 (unknown id), an empty object, or an unknown season.
-        sportsdataverse.errors.AssetFetchError: a body for another id / stage / player than the one requested, or any other error envelope.
+        NoDataError: The host answered 404 -- the requested resource does not exist. An error envelope with code 404 (unknown id), an empty object, or an unknown season.
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A body for another id / stage / player than the one requested, or any other error envelope.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

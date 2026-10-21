@@ -902,6 +902,12 @@ Update the active config in place.
 
 The (mutated) global config object.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a passed key does not correspond to a field. |
+
 **Example**
 
 ```python

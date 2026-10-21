@@ -286,6 +286,8 @@ def download(
     logger=None,
     cache_ttl=None,
     retry_statuses=_RETRYABLE_STATUS,
+    data=None,
+    json_body=None,
 ):
     """Download a URL with retries and ESPN-aware error handling.
 
@@ -330,6 +332,13 @@ def download(
             narrower set (e.g. ``{429, 503}``) for an auth'd endpoint where a
             403 is a real forbidden rather than ESPN-under-load. A 403 from a host
             in :data:`_PERMANENT_403_HOSTS` is never retried.
+        data: Form body. When ``data`` or ``json_body`` is given the request is
+            a ``POST`` and is never cached. A POST is retried exactly like a GET
+            (same budget, statuses and backoff), which assumes the endpoint is an
+            idempotent READ API that takes its query as a body; do not send a
+            write through this gateway.
+        json_body: JSON body (see ``data``); sent as ``requests``' ``json=``.
+            Named ``json_body`` so it never shadows the :mod:`json` module here.
 
     Raises:
         NoDataError: When the host answers 404, or ESPN answers 200 with a
@@ -428,13 +437,17 @@ def download(
         get_cache_mode,
     )
 
+    # A POST body is not part of the cache key, so a body request is never cached.
+    body = {k: v for k, v in (("data", data), ("json", json_body)) if v is not None}
     # Decided once: a body is decoded for the cache only when it could be stored -- a cache mode
-    # is on, the URL's TTL (or ``cache_ttl``) is not zero, and the request carries no credential.
-    # Otherwise every 2xx body (a multi-MB binary asset included) was JSON-decoded for nothing.
+    # is on, the request sends no body, the URL's TTL (or ``cache_ttl``) is not zero, and the
+    # request carries no credential. Otherwise every 2xx body (a multi-MB binary asset included)
+    # was JSON-decoded for nothing.
     _cache_params = {k: v for k, v in (params or {}).items() if v is not None}
     cacheable = (
         get_cache_mode() != "off"
         and not credentialed
+        and not body
         and _resolve_ttl(url, cache_ttl, params=_cache_params).total_seconds() > 0
     )
     if cacheable:
@@ -460,7 +473,8 @@ def download(
         # be honoured again and spend the wait budget on a stale answer.
         response = None
         try:
-            response = session.get(url, params=params, proxies=proxy, headers=headers, timeout=timeout)
+            send = session.post if body else session.get
+            response = send(url, params=params, proxies=proxy, headers=headers, timeout=timeout, **body)
             response = no_espn_data(response)
             # Transient status codes (rate-limit / server errors) come back as a
             # normal Response — `requests` does not raise on them. Retry with the

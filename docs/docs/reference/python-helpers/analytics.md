@@ -1,7 +1,7 @@
 ---
 title: "Package — additional Python functions — Analytics"
 sidebar_label: "Analytics"
-sidebar_position: 11
+sidebar_position: 12
 description: "Package — additional Python functions — Analytics — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # Package — additional Python functions — Analytics
@@ -65,6 +65,13 @@ one row per `(season, team_id, position_group)` the defense faced, `OUTPUT_SCHEM
 | `targets` | integer | WR and TE rows only, null for other groups; targets to the group's players that name a receiver. |
 | `yards_per_target_allowed` | double | WR and TE rows only, null for other groups; receiving yards per target, 0 on an incompletion or interception. ESPN CFB names no receiver on most incompletions and every interception, so CFB targets are mostly completions and run high. |
 | `qualified` | logical | True when games >= 3 (MIN_GAMES), the floor below which the producer gives no percentile. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `league` is not `"cfb"` or `"nfl"`, or a non-empty `pbp` has no `seasonType` (CFB) / `season_type` (NFL) column. |
+| `TypeError` | A team, game or player id column (pbp or roster) is float. |
 
 **Example**
 
@@ -134,6 +141,12 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`; ids are text.
 | `epa` | double | EPA of the play from the released pbp. |
 | `id_source` | character | Always "espn": the ids are ESPN athlete and team ids. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | An id column is float (it would stringify as `"123.0"`). |
+
 **Example**
 
 ```python
@@ -173,6 +186,13 @@ scramble flag, so a scramble is a carry.
 one row per event x metric (`epa`, `success_rate`), `EVENT_SCHEMA`.
 
 No returns table is published for this function: no capture: its game_dates input needs game_id with game_date, and no package function returns that pair (load_cfb_schedule carries start_date).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | An id column is float. |
+| `ValueError` | A play's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
 
 **Example**
 
@@ -231,6 +251,13 @@ one row per (season, entity, metric, down, bucket), `OUTPUT_SCHEMA`: * `entity_t
 | `successes` | integer | Successful attempts in the bucket: makes, completions, EPA successes (EPA > 0), fourth-down conversions or made shots. |
 | `rate` | double | successes divided by attempts, computed exactly (no smoothing). |
 | `epa_per_att` | double | Mean EPA of the bucket's attempts that carry an EPA; null for shots and for kicks without EPA. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | `player_id` / `team_id` is float. |
+| `ValueError` | Unknown `league`, a `metric` with no bucket edges, or an attempts frame that mixes id namespaces (more than one `id_source`). |
 
 **Example**
 
@@ -294,6 +321,12 @@ one row per attempt x metric, `ATTEMPT_SCHEMA`.
 | `success` | logical | Whether the attempt succeeded: a make, a completion, an EPA success, a fourth-down conversion or a made shot. |
 | `epa` | double | EPA of the play from nfl_model_pbp. |
 | `id_source` | character | Always "gsis": player ids are nflfastR gsis ids and teams are nflfastR abbreviations. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | An id column is float. |
 
 **Example**
 
@@ -418,6 +451,13 @@ one row per shot, `ATTEMPT_SCHEMA`; `season` is the asset's key (END year for th
 | `epa` | double | Always null: shots carry no EPA. |
 | `id_source` | character | "nba_stats" or "wnba_stats" per the league argument: the stats site whose person_id and team_id the row carries. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | An id column is float. |
+| `ValueError` | `league` is not `"nba"` or `"wnba"`. |
+
 **Example**
 
 ```python
@@ -467,6 +507,13 @@ one row per attempt x unit, `EVENT_SCHEMA`. `entity_id` is the stats.nba / stats
 | `event_date` | character |  |
 | `seq` | integer |  |
 | `value` | double |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `TypeError` | `person_id` or `team_id` is float. |
+| `ValueError` | A shot's game has no `game_date`, or `game_dates` has a duplicate `game_id`. |
 
 **Example**
 

@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # VHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.vhl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.hockey.vhl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## VHL
 
@@ -31,6 +31,14 @@ site keys every season page by; the wrappers map it for you, so you need it only
 **Returns**
 
 the tn (`1374` for the 2025/26 regular season).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season` is not a year or `stage` is not in `STAGES`. |
+| `NoDataError` | The calendar lists no such season and stage. |
+| `AssetFetchError` | The calendar page could not be fetched or has no tournament select. |
 
 **Example**
 

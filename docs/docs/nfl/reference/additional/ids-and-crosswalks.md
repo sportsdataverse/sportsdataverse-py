@@ -60,6 +60,13 @@ A one-row-per-player `DataFrame` with the documented schema (`espn_id`, `full_na
 | `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
 | `college` | character | Official college (usually the last one attended) |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | An athletes index page failed after retries (a 403, 429 or 5xx, an empty or non-JSON 200, or a connection failure). |
+| `CrosswalkSourceError` | Every athlete detail fetch failed; isolated failures are skipped and logged instead. |
+
 **Example**
 
 ```python
@@ -118,6 +125,12 @@ A one-row-per-`gsis_id` `DataFrame` of cross-system IDs (all `Utf8`) + `full_nam
 | `smart_id` | character | SMART ID for player (that's in raw pbp. It includes a hashed ESB_ID) |
 | `yahoo_id` | character | Yahoo ID - usual format is an integer with ~5 digits |
 | `cbs_id` | character | CBS ID - usual format is an integer with ~ 7 digits. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `AssetFetchError` | The players master could not be fetched (403, rate limit, 5xx): a zero-row crosswalk would null every id in a join. |
 
 **Example**
 

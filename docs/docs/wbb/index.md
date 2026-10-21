@@ -212,7 +212,7 @@ description: "sdv-py WBB: endpoint references, dataset loaders and parsers for W
 - [`strength_of_schedule`](reference/additional/analytics#strength_of_schedule)
 - [`test_positional_aware_filter`](reference/additional/analytics#test_positional_aware_filter)
 - [`using_roster_pos`](reference/additional/analytics#using_roster_pos)
-- [`wbb_bracketology`](reference/additional/analytics#wbb_bracketology)
+- [`wbb_bracketology`](reference/additional/analytics-2#wbb_bracketology)
 - [`wbb_strength_of_schedule`](reference/additional/analytics-2#wbb_strength_of_schedule)
 - [`weighted_avg`](reference/additional/analytics-2#weighted_avg)
 

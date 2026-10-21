@@ -196,6 +196,12 @@ Update the active config in place.
 
 The (mutated) global config object, for chaining or inspection.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If a passed key does not correspond to an `NflConfig` field, or `cache_mode` is not `"memory"`, `"filesystem"` or `"off"` (an unknown mode used to switch caching off silently). |
+
 **Example**
 
 ```python

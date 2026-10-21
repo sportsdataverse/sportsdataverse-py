@@ -37,7 +37,7 @@ columns:
   type: integer
 - description: ''
   name: real_point_rate
-  type: character
+  type: numeric
 - description: ''
   name: rebounds
   type: integer
@@ -49,7 +49,7 @@ columns:
   type: character
 - description: ''
   name: turn_share
-  type: character
+  type: numeric
 - description: ''
   name: turnovers
   type: integer

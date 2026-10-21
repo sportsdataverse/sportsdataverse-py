@@ -288,6 +288,13 @@ Polars dataframe containing ESPN Total QBR for the requested seasons, summarized
 | `team` | character | NFL team. Uses official abbreviations as per NFL.com |
 | `qualified` | logical | True/False indicator of whether or not player meets minimum play requirement |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `summary_type` is not `"season"` / `"week"`, or if `source` is not one of `"nflverse"`, `None`, `"sportsdataverse"`, or `"sdv"`. |
+| `SeasonNotFoundError` | If any requested season is before 2006. |
+
 **Example**
 
 ```python
@@ -490,6 +497,12 @@ Polars dataframe containing fantasy football opportunity data for the requested 
 | `total_fantasy_points_exp_team` | double | Team-level total expected total_fantasy_points_exp for a game, summed across all plays & players for that team. |
 | `total_fantasy_points_diff_team` | double | Team-level difference between actual and expected number of total_fantasy_points_diff for a game, summed across all plays/players for that team. Often interpreted as team-level efficiency. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2006, or if `stat_type` / `model_version` are not allowed values. |
+
 **Example**
 
 ```python
@@ -623,6 +636,12 @@ Polars dataframe containing fantasy football rankings data.
 | `scrape_date` | character | Date this dataframe was last updated |
 | `tm` | character | Team ID as used on MyFantasyLeague.com |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If the resolved value is not one of the allowed values. |
+
 **Example**
 
 ```python
@@ -690,6 +709,12 @@ Polars dataframe containing FTN charting data available for the requested season
 | `n_pass_rushers` | integer | number of pass rushers |
 | `is_qb_fault_sack` | logical | sack that is the fault of the quarterback |
 | `date_pulled` | character | Date the data was retrieved from the FTN Data API by nflverse jobs |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `season` is less than 2022. |
 
 **Example**
 
@@ -815,6 +840,13 @@ Polars dataframe containing NextGen Stats data for the requested `stat_type` and
 | `player_last_name` | character | Player's last name |
 | `player_jersey_number` | integer | Player's jersey number |
 | `player_short_name` | character | Short version of player's name |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If `stat_type` is not one of the allowed values. |
+| `SeasonNotFoundError` | If any season is less than 2016. |
 
 **Example**
 

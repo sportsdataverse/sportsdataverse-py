@@ -69,8 +69,8 @@ def nl_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -127,8 +127,8 @@ def nl_current_games(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -187,8 +187,8 @@ def nl_team_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -245,8 +245,8 @@ def nl_playoffs(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -303,8 +303,8 @@ def nl_playouts(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -361,8 +361,8 @@ def nl_game_overview(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -417,8 +417,8 @@ def nl_pbp(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -473,8 +473,8 @@ def nl_lineups(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -529,8 +529,8 @@ def nl_player_box(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -585,8 +585,8 @@ def nl_team_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -641,8 +641,8 @@ def nl_shots(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -699,8 +699,8 @@ def nl_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -762,8 +762,8 @@ def nl_top_scorers(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -826,8 +826,8 @@ def nl_team_player_stats(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -889,8 +889,8 @@ def nl_player_season(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -950,8 +950,8 @@ def nl_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1009,8 +1009,8 @@ def nl_team_info(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: a 404, or an empty answer (no games or rows for that season, team or phase).
-        sportsdataverse.errors.AssetFetchError: a failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
+        NoDataError: The host answered 404 -- the requested resource does not exist. A 404, or an empty answer (no games or rows for that season, team or phase).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. A failed fetch, an error object in a 200, a body without the ids it must carry, or an answer for another season, team, game or player.
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

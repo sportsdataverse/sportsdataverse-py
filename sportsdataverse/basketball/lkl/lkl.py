@@ -321,8 +321,8 @@ def lkl_game_info(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -379,8 +379,8 @@ def lkl_game_players(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -437,8 +437,8 @@ def lkl_player_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -495,8 +495,8 @@ def lkl_team_box(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -553,8 +553,8 @@ def lkl_period_scores(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -611,8 +611,8 @@ def lkl_summary(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -669,8 +669,8 @@ def lkl_game_score(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -727,8 +727,8 @@ def lkl_game_stats(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -785,8 +785,8 @@ def lkl_lead_chart(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -843,8 +843,8 @@ def lkl_leaders(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -901,8 +901,8 @@ def lkl_pbp(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -959,8 +959,8 @@ def lkl_shots(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1017,8 +1017,8 @@ def lkl_results(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:
@@ -1077,8 +1077,8 @@ def lkl_standings(
         A polars/pandas DataFrame by default; the raw body (``dict``): the JSON of a game route, the game page record, or the merged results / standings record, plus ``_request`` (the game id, team ids and slug -> player id map, or the season asked for) when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
-        sportsdataverse.errors.AssetFetchError: the fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Lkl.lt has nothing for the request (an unknown game or standings season, a season the site's selects do not list, a finished game before 2024-25 asked for play-by-play or shots).
+        AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body or page for another game or season, an error or changed body, a truncated results list).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
 
     Example:

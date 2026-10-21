@@ -67,6 +67,12 @@ One row per player: `ranker`, `player`, `age`, `team`, `pos`, `g`, `gs` plus the
 | `table` | character | Stat table requested through the table argument, echoed on every row ('per_game' in sampled data). |
 | `league` | character | League slug. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `league` is not `"nba"`/`"wnba"`, or `table` is not one of that league's stat tables. |
+
 **Example**
 
 ```python
@@ -122,6 +128,12 @@ One row per team: `conference` (`"E"` / `"W"` for **both** leagues -- wehoop emi
 | `playoffs` | logical | `TRUE` if the team made the playoffs (`*` marker). |
 | `season` | integer | Season year. |
 | `league` | character | League slug. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `league` is not `"nba"`/`"wnba"`. |
 
 **Example**
 
@@ -197,6 +209,12 @@ One row per team: `ranker`, `team`, `g`, `mp` and the box categories scaled to `
 | `table` | character | Stat table requested through the table argument, echoed on every row ('per_game' in sampled data). |
 | `league` | character | League slug. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | When `league` or `table` is not one of the supported values for that league. |
+
 **Example**
 
 ```python
@@ -248,6 +266,12 @@ frame is tagged with a `season` column.
 The season possession frame (+ `season` and `game_date` cols). Empty typed frame if no games.
 
 No returns table is published for this function: no capture: it reads stats.nba.com (HTTP 403 to the datacenter IP the docs are built on), and compiling a season from the raw store takes far longer than the capture allows.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | If any compiled possession's `game_id` is missing (or has a null) `game_date` in the season index — surfaced as an explicit error rather than silently emitting null dates. |
 
 **Example**
 
@@ -454,6 +478,14 @@ A single-row wide DataFrame (polars by default). When `raw=True` returns the raw
 | `team_alternate_color` | character | Team alternate color (hex without leading '#'). |
 | `team_is_active` | logical | TRUE if the team is currently active. |
 | `team_logo_href` | character |  |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | `season_type` is not `"regular"`/`"postseason"`. |
+| `sportsdataverse.errors.NoDataError` | ESPN returned 404. |
+| `sportsdataverse.errors.AssetFetchError` | The statistics, athlete or team fetch failed (403, 429, 5xx, a dead connection); only a 404 on the athlete or team node leaves those columns null. |
 
 **Example**
 

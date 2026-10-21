@@ -49,7 +49,7 @@ def espn_content_league_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: content.core answered 404 (unknown story id, sport or league slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -104,7 +104,7 @@ def espn_content_news(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: content.core answered 404 (unknown story id, sport or league slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -157,7 +157,7 @@ def espn_content_story(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: content.core answered 404 (unknown story id, sport or league slug).
+        NoDataError: The host answered 404 -- the requested resource does not exist. Content.core answered 404 (unknown story id, sport or league slug).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

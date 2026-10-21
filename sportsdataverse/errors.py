@@ -216,6 +216,10 @@ class AssetFetchError(SportsDataverseError):
                 print(f"fetch failed, retry later: {exc}")
     """
 
+    #: Set True by a runtime when the failure is a dead connection or a 429/5xx, so a caller
+    #: that retries can tell it from a definitive refusal (a WAF block, a wrong page).
+    transient: bool = False
+
 
 class NoDataError(SportsDataverseError):
     """Raised when a source has no payload for the request.

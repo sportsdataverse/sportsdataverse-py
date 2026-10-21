@@ -165,6 +165,14 @@ Whole-game box score lines of every player on either team sheet, keyed by GoHoop
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
 
+### Raises {#tpbl_box_players-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tpbl_box_players-example}
 
 ```python
@@ -331,6 +339,14 @@ Per-quarter box score lines of the players who were on court, overtimes included
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
 
+### Raises {#tpbl_box_player_periods-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#tpbl_box_player_periods-example}
 
 ```python
@@ -399,6 +415,14 @@ Whole-game team totals of both teams: shooting, rebounds, fouls, assists, turnov
 | `fast_break_points` | integer | Points scored on the fast break by the team over the whole game. |
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
+
+### Raises {#tpbl_box_teams-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_teams-example}
 
@@ -469,6 +493,14 @@ Per-quarter team lines of both teams: points scored and conceded in the quarter,
 | `fast_break_points` | integer | Points scored on the fast break by the team in this quarter. |
 
 **`return_parsed=False`** — the raw body (`dict`): the API's JSON object, or a list body wrapped as `{'data': [...]}`, plus `_request` (the season, game, division, team or player asked for and the ids the runtime resolved).
+
+### Raises {#tpbl_box_team_periods-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The API has nothing for the request (an unknown id, a season it does not list, an empty list such as the standings of a playoff division). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a box score or list that disagrees with the game it was asked for, an error envelope, a non-JSON body, a server error). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#tpbl_box_team_periods-example}
 

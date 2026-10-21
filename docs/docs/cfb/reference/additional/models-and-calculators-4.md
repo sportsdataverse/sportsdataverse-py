@@ -372,10 +372,10 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 | `stopped_run` | logical | True when the rush was stopped at or behind the line of scrimmage. |
 | `opportunity_run` | logical | True when a rush reached 4 yards -- the carries on which the blocking did its job. Matches cfbfastR's espn_cfb_15 definition. Assets published before the 2026-08 fix carry the inverted (4 yards or fewer) flag. |
 | `highlight_run` | logical | True when the rush gained 8 or more yards. |
-| `adj_rush_yardage` | double | Rushing yards capped at 8, the input to the line-yards decomposition. |
-| `line_yards` | double | Yards credited to the offensive line on a rush, using the standard sliding scale: 1.2x the capped yardage on a loss, all of it through 3 yards, half of each yard from 4 to 8, and a 5.5-yard ceiling beyond that. |
-| `second_level_yards` | double | Rushing yards earned from 4 to 8, split evenly between line and carrier under the line-yards decomposition. |
-| `open_field_yards` | double | Rushing yards gained beyond 8, credited to the ball carrier rather than the line. |
+| `adj_rush_yardage` | double | Rushing yards capped at 10, the input to the line-yards decomposition. Assets published before the 2026-10 line-yards fix cap at 8. |
+| `line_yards` | double | Yards credited to the offensive line on a rush, on the standard adjusted-line-yards band: 1.2x the yardage on a loss, all of yards 0-4, half of each yard from 5 to 10, and nothing beyond 10 (a 7-yard ceiling). Line, second-level and open-field yards sum to the carry on every gain. Assets published before the 2026-10 line-yards fix carry the old band (all of yards 0-3, half of 4-8, a 5.5-yard ceiling). |
+| `second_level_yards` | double | The ball carrier's half of yards 5-10 of a rush (the line takes the other half); 0 on carries of 4 yards or fewer. Assets published before the 2026-10 line-yards fix carry the old band here: half of yards 4-8 in college football, half of yards 5-8 in the NFL (where the old parts came up half a yard short of the carry). |
+| `open_field_yards` | double | Rushing yards gained beyond 10, credited to the ball carrier rather than the line. Assets published before the 2026-10 line-yards fix count the yards beyond 8. |
 | `highlight_yards` | double | Second-level plus open-field yards -- the yardage credited to the carrier. |
 | `opp_highlight_yards` | double | Highlight yards earned on opportunity runs, isolating carrier production on carries where the blocking succeeded. Assets published before the 2026-08 fix are identically 0 here, because the inverted opportunity_run gate could never co-occur with non-zero highlight yards. |
 | `short_rush_success` | character | True when a short-yardage rush gained the yardage needed. |
@@ -530,6 +530,13 @@ A pandas copy of `pbp_df` plus `fg_make_prob`, `make_fg_wp`, `miss_fg_wp` and `f
 | `two_pt_recommendation` | character | Point-after recommendation: "go_for_2" when two_pt_wp exceeds xp_wp, otherwise "kick_xp". |
 | `two_pt_wp_diff` | double | two_pt_wp minus xp_wp; positive favors going for two. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
+| `ValueError` | If `season` is absent or all-null. The era-aware models would otherwise score against an all-zero one-hot -- a rule era that never existed -- and return a plausible number. |
+
 **Example**
 
 ```python
@@ -584,6 +591,13 @@ A pandas copy of `pbp_df` plus `go_wp` (prob-weighted WP of going for it), `firs
 
 No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
+| `ValueError` | If `season` is absent or all-null. The era-aware models would otherwise score against an all-zero one-hot -- a rule era that never existed -- and return a plausible number. |
+
 **Example**
 
 ```python
@@ -637,6 +651,12 @@ Expected win probability of punting on 4th down (cfb4th `get_punt_wp`).
 A pandas copy of `pbp_df` plus `punt_wp` (prob-weighted WP of punting, from the punting team's perspective). `punt_wp` is NaN where the punt end-yardline distribution has no support for the play's `yards_to_goal` (e.g. inside the 31, where punting is dominated and the cfb4th table is empty -- matching the R reference's left-join NA behavior).
 
 No returns table is published for this function: no capture: on the smallest real input (one released season of play-by-play) it runs longer than the capture allows.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `KeyError` | If `pbp_df` is missing a required state column from `_PBP_COLS`. The frame is validated up front rather than substituting `NaN`, which used to surface far downstream as `AttributeError: 'float' object has no attribute 'to_numpy'`. |
 
 **Example**
 

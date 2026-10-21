@@ -16,7 +16,7 @@ columns:
   type: numeric
 - description: ''
   name: orpg
-  type: integer
+  type: numeric
 - description: ''
   name: rpg
   type: numeric
@@ -28,7 +28,7 @@ columns:
   type: numeric
 - description: ''
   name: blkpg
-  type: integer
+  type: numeric
 - description: ''
   name: pfpg
   type: numeric
@@ -52,7 +52,7 @@ columns:
   type: numeric
 - description: ''
   name: plus_minus_pg
-  type: integer
+  type: numeric
 - description: ''
   name: info_uuid
   type: character
