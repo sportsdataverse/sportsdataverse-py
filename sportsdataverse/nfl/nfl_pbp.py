@@ -595,8 +595,8 @@ def _ends_a_half(half_play: pl.Expr) -> pl.Expr:
     )
 
 
-def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
-    """The kickoff net-spot read for ``__add_downs_data``: ``(kickoff, nxt, next_snap, kicker_recovers)``.
+def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Expr, pl.Expr]:
+    """The kick net-spot read for ``__add_downs_data``: ``(kickoff, bare_punt, nxt, next_snap, kicker_recovers)``.
 
     Kickoff EPA (the owner's model) is EP(1st & 10 at the net spot, for the team with the ball
     after the kick) - EP(1st & 10 at the touchback spot), so every unscored kickoff (returned,
@@ -613,23 +613,46 @@ def _kickoff_next_snap(stop: pl.Expr) -> tuple[pl.Expr, pl.Expr, pl.Expr, pl.Exp
     team of its own "kicks ... from XXX"; only the text after a REVERSED ruling counts (a reversed
     recovery, 301114003/3734, is the receiver's ball). ESPN files some kickoffs inside the kicking
     team's drive (401326517/1442), whose next snap is then not the receiver's.
+
+    A punt before ``ESPN_FULL_KICK_TEXT_FROM`` (the bare "Punt" feed) ends the same way, at the
+    receiver's next snap: ESPN's end yard line there is often not the receiver's spot (280921001/594
+    ends 1 yard from the receiver's goal, his next snap is at his own 8; EX-2.19-a). A punt whose
+    next snap is the punting team's (a muff it recovered, a re-kick after a penalty) keeps ESPN's,
+    and so does one whose next snap by id starts earlier in the half than the punt: ESPN filed a
+    play out of order there (261113029/386 at 7:26 is followed by 416 at 11:45).
     """
     kickoff = pl.col("type.text").is_in(kickoff_vec).fill_null(False)
+    bare_punt = (pl.col("type.text").is_in(punt_vec) & (pl.col("season") < ESPN_FULL_KICK_TEXT_FROM)).fill_null(False)
+    receiver = pl.when(pl.col("start.pos_team.id") == pl.col("homeTeamId"))
+    receiver = receiver.then(pl.col("awayTeamId")).otherwise(pl.col("homeTeamId"))
     kick_abbr = pl.col("text").str.extract(r"(?i)\bkicks\b.*?\bfrom\s+([A-Z]{2,3})\s+\d", 1)
     ruled = pl.col("text").str.split("REVERSED").list.last()  # the play as it stands
     recovered_by = ruled.str.extract_all(r"RECOVERED by [A-Z]{2,3}\b").list.last().str.slice(13)
     kicker_recovers = (
         kickoff & (pl.col("type.text").is_in(kickoff_turnovers) | (recovered_by == kick_abbr))  # R810-3
     ).fill_null(False)
-    after_kick = pl.when(kicker_recovers).then(pl.col("start.team.id")).otherwise(pl.col("start.pos_team.id"))
+    after_kick = (
+        pl.when(kicker_recovers)
+        .then(pl.col("start.team.id"))
+        .when(bare_punt)
+        .then(receiver)
+        .otherwise(pl.col("start.pos_team.id"))
+    )
     seq_rank = pl.when(~stop).then(pl.col("sequenceNumber")).rank("ordinal").over("half")
-    nxt = pl.struct(y2e=pl.col("start.yardsToEndzone"), kick=kickoff, r=seq_rank, team=pl.col("start.pos_team.id"))
+    nxt = pl.struct(
+        y2e=pl.col("start.yardsToEndzone"),
+        kick=kickoff,
+        r=seq_rank,
+        team=pl.col("start.pos_team.id"),
+        clock=pl.col("start.TimeSecsRem"),
+    )
     next_snap = (
         (pl.col("_nxt").struct.field("kick") == False)
         & (pl.col("_nxt").struct.field("r") == seq_rank + 1)
         & (pl.col("_nxt").struct.field("team") == after_kick)  # the snap of the team with the ball
+        & (~bare_punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early
     ).fill_null(False)
-    return kickoff, nxt, next_snap, kicker_recovers
+    return kickoff, bare_punt, nxt, next_snap, kicker_recovers
 
 
 def _missed_fg_unblocked() -> pl.Expr:
@@ -1808,7 +1831,7 @@ class NFLPlayProcess(object):
         stop = pl.col("type.text").is_in(clock_stoppage_vec).fill_null(False)
         unscored = ~(pl.col("scoringPlay") == True).fill_null(False)
         no_down = (pl.col("end.down") == -1) & ~stop & unscored
-        kickoff, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
+        kickoff, bare_punt, nxt, next_snap, kicker_recovers = _kickoff_next_snap(stop)
         # A missed field goal starts the other team's possession at a first down (the owner's
         # missed-field-goal model); its spot is set in __add_play_category_flags, once the kick's
         # line of scrimmage is final.
@@ -1825,7 +1848,7 @@ class NFLPlayProcess(object):
             .with_columns(_nxt=pl.when(~stop).then(nxt).backward_fill().shift(-1).over("half"))
             .with_columns(
                 _first_down=first_down.fill_null(False),
-                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),
+                _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),
                 # read by calculate_epa (EP_end is the kicker's), dropped after it
                 _kicker_recovers=kicker_recovers,
             )

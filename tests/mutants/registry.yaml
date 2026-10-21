@@ -1799,3 +1799,41 @@
   note: >-
     At the start clock with the clamped 99 end, 400791544/2058 and 401127996/1913 are scored as the receiver's
     ball on his own 1: EPA -0.431 / -0.316 (R856-15, the round-2 head).
+
+# --- Task 2.24: a pre-2009 bare "Punt" ends at the receiver's next snap (EX-2.19-a/c) -------------------------
+- id: nfl-bare-punt-ends-at-the-next-snap
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '                _kick_spot=((kickoff | bare_punt) & unscored & next_snap).fill_null(False),'
+  mutant: '                _kick_spot=(kickoff & unscored & next_snap).fill_null(False),'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt or punt-td-nullified"
+  expected: kill
+  note: >-
+    Without the punt in the net-spot read, 280921001/594 keeps ESPN's end 1 yard from the receiver's goal
+    (EPA -4.246, nflverse 1.240) and 281109021/3307 goes back to 0.321 (nflverse -1.690).
+
+- id: nfl-bare-punt-next-snap-is-the-receivers
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        .then(receiver)'
+  mutant: '        .then(pl.col("start.pos_team.id"))'
+  test: tests/nfl/test_nfl_era_play_order.py -k "bare_punt"
+  expected: kill
+  note: >-
+    A punt row's start.pos_team is the punting team; reading the punter's next snap finds none after a
+    punt, so 280921001/594 keeps ESPN's end at the 1.
+
+- id: nfl-bare-punt-next-snap-not-filed-early
+  group: nfl-era-play-order
+  finding: EX-2.19-a
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: '        & (~bare_punt | (pl.col("_nxt").struct.field("clock") <= pl.col("start.TimeSecsRem")))  # not filed early'
+  mutant: '        & pl.lit(True)'
+  test: tests/nfl/test_nfl_era_play_order.py -k "261113029"
+  expected: kill
+  note: >-
+    ESPN files some pre-2009 plays out of id order: 261113029/386 (a punt at 7:26) is followed by TB's 416 at
+    11:45 from the TB 45; without the clock check the punt ends there (EPA -2.632, nflverse -0.119) instead of
+    ESPN's 83, where TB's next snap starts. On the 644 sample games it is the one row the check moves.

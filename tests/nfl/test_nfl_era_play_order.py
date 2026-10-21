@@ -34,7 +34,7 @@ def _plays(path: str, game_id: int) -> pl.DataFrame:
     return proc.plays_frame
 
 
-def _row(path: str, game_id: int, play_id: int) -> dict:
+def _row(path: str, game_id: int, play_id: int | str) -> dict:
     f = _plays(path, game_id).filter(pl.col("id").cast(pl.Utf8) == f"{game_id}{play_id}")
     assert f.height == 1, f"{game_id}/{play_id} not in the processed plays"
     return f.row(0, named=True)
@@ -86,10 +86,9 @@ _EPA = {
     ("td_flag_residuals/summary_401671715.json.gz", 401671715, 4728): (1.419, 0.40),
     # R856-1: a defence-typed score that did not stand. D.Hixon's 73-yard "Punt Return Touchdown" was nullified by
     # holding (td_play false); without td_stood on def_score the punting offence took the receiver's -6.92: EPA
-    # -5.833. The rest (0.321 vs -1.690) is the punt end state, not the overlay: the 2.02 ceiling is almost all
-    # that error. Tighten it to the overlay's own error when the punt end-state fix (EX-2.19-a) lands; never
-    # loosen it before then.
-    (_era(281109021), 281109021, 3307): (-1.690, 2.02),
+    # -5.833. The punt end state (EX-2.19-a, task 2.24: the receiver's next snap, not ESPN's end yard line) took
+    # it from 0.321 to -1.825; the 0.14 ceiling is the remaining error rounded up (it was 2.02 before 2.24).
+    (_era(281109021), 281109021, 3307): (-1.690, 0.14),
 }
 
 
@@ -144,3 +143,23 @@ def test_text_touchback_with_a_zero_end_clock_ends_at_the_spot(game_id, play_id)
     assert row["kickoff_tb"] is True and "Touchback" in row["text"]
     assert (row["end.TimeSecsRem"], row["end.yardsToEndzone"]) == (0, 99)  # the public end state is untouched
     assert abs(row["EPA"] - _CLAMPED_TEXT_TOUCHBACKS[(game_id, play_id)]) < 1e-3, (row["EP_start"], row["EP_end"])
+
+
+# EX-2.19-a / EX-2.19-c (task 2.24): before ESPN_FULL_KICK_TEXT_FROM (2009) the feed writes a bare "Punt", and its
+# end yard line is often not the receiver's spot. 280921001/594 (2008, KC punts from its 33; nflverse: "punts 52
+# yards to ATL 15", returned to the ATL 8, epa 1.240) has ESPN's end 1 yard from ATL's goal, so EP_end was ATL's
+# 1st & goal at the 1: EPA -4.246. Like a kickoff, the punt ends where the receiver's next snap starts (ATL 8,
+# 92 yards to go): EPA 1.530. Unless ESPN filed the next snap out of order: 261113029/386 (2006, CAR punts at 7:26
+# of Q1 to the TB 5, returned to the 17; nflverse epa -0.119) is followed in id order by TB's 416 at 11:45, a snap
+# from before the punt at the TB 45. Its end stays ESPN's 83, where TB's next snap (428, 7:15) starts: EPA 0.005
+# (-2.632 at the 45). Each ceiling is the measured error rounded up.
+_BARE_PUNTS = {(280921001, 594): (1.240, 92, 0.30), (261113029, 386): (-0.119, 83, 0.13)}
+
+
+@pytest.mark.parametrize(("game_id", "play_id"), list(_BARE_PUNTS))
+def test_bare_punt_ends_at_the_receivers_next_snap(game_id, play_id):
+    nflverse_epa, next_snap_y2e, ceiling = _BARE_PUNTS[(game_id, play_id)]
+    row = _row(_era(game_id), game_id, f"{play_id:04d}")  # ESPN pads the play part of the id: 2809210010594
+    assert row["type.text"] == "Punt" and row["text"] in ("Punt", None)  # the bare pre-2009 feed
+    assert row["end.yardsToEndzone"] == next_snap_y2e
+    assert abs(row["EPA"] - nflverse_epa) <= ceiling, (row["EP_start"], row["EP_end"])
