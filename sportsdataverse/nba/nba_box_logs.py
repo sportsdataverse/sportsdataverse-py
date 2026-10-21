@@ -169,9 +169,7 @@ def nba_player_identity(player_logs: pl.DataFrame) -> pl.DataFrame:
         ``min`` is required rather than optional: without it every team totals
         zero minutes and "primary team" quietly degrades to whichever ``team_id``
         sorts first, which looks like an answer but is not one.
-
-    Raises:
-        None: a malformed frame yields the typed zero-row frame instead of
+        A malformed frame yields the typed zero-row frame instead of
         raising, so a caller can join unconditionally.
 
     Example:

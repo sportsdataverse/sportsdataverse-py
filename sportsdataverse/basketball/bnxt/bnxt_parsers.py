@@ -630,9 +630,7 @@ def parse_sportpress_ui_strings(
     Returns:
         One row per language (``en``, ``fr``, ``nl``) and UI key (302 keys each). Only 11 keys label
         data columns (the statistics labels); the rest are menus and buttons.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -662,9 +660,7 @@ def parse_sportpress_club_seasons(
 
     Returns:
         One row per season, END year (2021 = 2020-21).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -695,9 +691,7 @@ def parse_sportpress_referees(
     Returns:
         One row per referee: ``staff_id``, ``name``, ``title_id``, ``title_name``. Photos and any
         contact data are not kept.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -729,9 +723,7 @@ def parse_sportpress_phases(
         One row per phase of the season's competition. ``competition_id`` is the key of every per-
         competition route; ``standings_visible`` is false for playoff phases (their standings answer
         empty).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -762,9 +754,7 @@ def parse_sportpress_competition_teams(
     Returns:
         One row per team: ``competition_team_id`` (new every season), ``uu_team_id`` (the stable club
         key), name, short name and country (``club_id``).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -795,9 +785,7 @@ def parse_sportpress_competition_staff(
     Returns:
         One row per team and staff member (head coach, assistant coach); the staff list of
         ``sportpress_competition_teams``.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -828,9 +816,7 @@ def parse_sportpress_standings(
     Returns:
         One row per team: record, points for and against, home and away split, last five and the current
         streak. Empty (``NoDataError``) for 2022-23 and 2023-24 and for phases without standings.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -862,9 +848,7 @@ def parse_sportpress_schedule(
         One row per game with the home and away team and score. ``status`` is ``finished`` or ``ready``
         (upcoming). ``game_time`` is a naive local datetime. Carries no ``genius_id`` (see
         ``sportpress_game_slider``).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -896,9 +880,7 @@ def parse_sportpress_game_slider(
         One row per game. ``genius_id`` is the Genius Sports LiveStats match id (organisation ``BNXT``),
         the join to the ``genius`` family; it is null for the 2020-21 competition. A window, not a list:
         use ``sportpress_schedule`` for a complete season.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -930,9 +912,7 @@ def parse_sportpress_team_rankings(
         One row per team and category (``efficiency``, ``points``, ``total_rebound``, ``block``,
         ``assist``, ``steal``, ``two_point_percent``, ``three_point_percent``, ``free_throw_percent``),
         ``rank`` 1 = best.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -964,9 +944,7 @@ def parse_sportpress_player_rankings(
         One row per player and category, ``rank`` 1 = best. Only players who played more than half of
         their team's games appear. ``throw_made`` / ``throw_attempted`` (field goals per game) are
         filled in the three percentage categories only.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -997,9 +975,7 @@ def parse_sportpress_season_roster(
     Returns:
         One row per roster entry (a player on one team in the season). Current entries only: a player
         who left mid-season is absent. ``nationality_code`` is dirty.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1029,9 +1005,7 @@ def parse_sportpress_nationality_codes(
 
     Returns:
         One row per code, in first-seen order, including the empty string and lower-case variants.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1061,9 +1035,7 @@ def parse_sportpress_team_roster(
 
     Returns:
         One row per roster entry of the team (current entries only).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1094,9 +1066,7 @@ def parse_sportpress_team_find(
     Returns:
         One row. ``average_score_for``, ``average_score_against`` and ``field_goal_percent`` are null
         for a team with no statistics.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1127,9 +1097,7 @@ def parse_sportpress_team_player_averages(
     Returns:
         One row per roster entry. Statistics are per-game MEANS (Float64); ``games_started`` is a count.
         Also lists departed roster entries, so it is not a subset of the team roster.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1160,9 +1128,7 @@ def parse_sportpress_team_games(
     Returns:
         One row per finished game with both sides and the team's own totals in the statistic columns
         (counts, ``Int64``).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1193,9 +1159,7 @@ def parse_sportpress_roster_find(
     Returns:
         One row: the roster entry, the player and the team and season. The player's latest-game line is
         in the raw body (``return_parsed=False``).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1225,9 +1189,7 @@ def parse_sportpress_player_career(
 
     Returns:
         One row per season and team of the person, as per-game means (Float64).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1258,9 +1220,7 @@ def parse_sportpress_player_games(
     Returns:
         One row per game the roster entry has a line in (including games with 0 minutes), with the
         game's teams and scores and the player's line (counts, ``Int64``).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1292,9 +1252,7 @@ def parse_sportpress_game_find(
         One row. ``period_name`` is the period the game ended in (``Extra2`` = second overtime).
         ``last_game_id`` is the latest finished meeting of the same two teams in the competition, which
         can be LATER than this game. Referees are in the raw body.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1325,9 +1283,7 @@ def parse_sportpress_game_periods(
     Returns:
         One row per side and period: ``period`` 1-4 are the quarters, 5 and up overtimes. The sum of
         ``score`` per side is the final score.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1358,9 +1314,7 @@ def parse_sportpress_game_overview(
     Returns:
         One row per side with the final score and the team's statistic totals. A finished game with no
         statistics (some 2022-23 games) raises ``NoDataError``.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1390,9 +1344,7 @@ def parse_sportpress_game_top_performers(
 
     Returns:
         One row per side: the player and his full line.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1423,9 +1375,7 @@ def parse_sportpress_game_leaders(
     Returns:
         One row per side and statistic (``stat`` is the provider's column name, e.g. ``points``,
         ``total_rebound``): the leading player and the ``value``.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1458,9 +1408,7 @@ def parse_sportpress_game_box(
         2023-24 games answer empty (``NoDataError``). 15 of 14,142 sampled lines have a null player. A
         team's box total can differ from the schedule final score on about 18 of 1,246 sampled team
         boxes (documented, not refused).
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1491,9 +1439,7 @@ def parse_sportpress_game_team_box(
     Returns:
         One row per side. ``points`` can differ from the schedule final score on about 18 of 1,246
         sampled team boxes (mostly 2024-25, by 2-21 points); the frame reports the box total as served.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::
@@ -1530,9 +1476,7 @@ def parse_sportpress_game_film(
         assist, 1009 block, 1011 substitution (the only event with a second player), 1101 period marker;
         the 2xxx codes are team events (meaning unverified). x / y are court coordinates in an
         unverified system.
-
-    Raises:
-        None: a malformed or empty body parses to a zero-row frame with the documented columns.
+        A malformed or empty body parses to a zero-row frame with the documented columns.
 
     Example:
         Quick start::

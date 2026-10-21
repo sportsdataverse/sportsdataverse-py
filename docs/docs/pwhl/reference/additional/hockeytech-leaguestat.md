@@ -1,10 +1,10 @@
 ---
-title: "PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–transactions"
-sidebar_label: "HockeyTech / LeagueStat: game_corsi–transactions"
+title: "PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–streaks"
+sidebar_label: "HockeyTech / LeagueStat: game_corsi–streaks"
 sidebar_position: 2
-description: "PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–transactions — function reference in sdv-py, the SportsDataverse Python package."
+description: "PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–streaks — function reference in sdv-py, the SportsDataverse Python package."
 ---
-# PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–transactions
+# PWHL — additional Python functions — HockeyTech / LeagueStat: game_corsi–streaks
 
 ### pwhl_game_corsi {#pwhl_game_corsi}
 
@@ -88,6 +88,13 @@ One row: `game_id`, `game_number`, `game_date` / `game_date_iso`, `start_time` /
 | `game_report_url` | character | URL of the official HockeyTech game report. |
 | `boxscore_url` | character | URL of the HockeyTech text box score. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -153,6 +160,13 @@ PWHL game summary — dict of frames (game/goals/penalties/shots_by_period/three
 
 `game` (one row: `game_id`, `date`, `status`, `venue`, `attendance`, both teams and scores), `goals` (one row per goal with the scorer, both assists and the plus / minus skaters), `penalties` (one row per penalty), `shots_by_period` (`side`, `period`, `shots`) and `three_stars`.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -203,6 +217,13 @@ One row per ranked skater (points and goals leaders): `rank` (Int64), `player_id
 | `photo_small` | character | URL of the small-format headshot image for the PWHL leader-board player. |
 | `position` | character | Player position. |
 | `division` | character | Division identifier. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 
@@ -360,6 +381,13 @@ One row per event (shot, goal, penalty, faceoff, hit, goalie change ...): `game_
 | `on_ice_home` | character | Comma-joined sorted player_ids on ice for the home team. |
 | `on_ice_away` | character | Comma-joined sorted player_ids on ice for the away team. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -392,6 +420,13 @@ the `fastRhockey-pwhl-raw` producer reads it (`box["skaters"]` / `box["goalies"]
 
 `skaters` -- one row per dressed skater, home team first: `player_id`, `first_name`, `last_name`, `position`, `team_id`, `game_id`, `league`, `toi` ("mm:ss"), `time_on_ice` (Float64 minutes), `goals`, `assists`, `points`, `shots`, `hits`, `blocked_shots`, `penalty_minutes`, `plus_minus`, `faceoff_attempts` / `faceoff_wins` / `faceoff_losses`, `faceoff_pct` (Float64, null on no attempts) and `starting` (1 = starting lineup). `goalies` -- one row per dressed goalie with the same id / name / time columns, `saves`, `goals_against`, `shots_against`, the scoring, penalty and faceoff columns and `starting`; a goalie who did not play has null `toi` / `time_on_ice`. Ids and counts are Int64. Both frames are zero-row with these columns when the reply carries no players. pandas DataFrames when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -421,6 +456,13 @@ PWHL player game-by-game log.
 **Returns**
 
 One row per game played: `id` (the game id), `date_played`, `home_team_code` / `visiting_team_code` and names, `player_team`, `goals`, `assists`, `points`, `plus_minus`, `shots`, `hits`, `penalty_minutes`, `ice_time_minutes_seconds`, faceoff, power-play, short-handed and shootout counts. Counts arrive as strings except `points` and the percentages (Int64). A pandas DataFrame when `return_as_pandas` is True; a zero-row frame for a player with no games.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 
@@ -471,6 +513,13 @@ One row: `player_id` and `person_id` (Int64), `first_name`, `last_name`, `name`,
 | `team_nickname` | character | Nickname of the player's most recent team (e.g. 'Fleet'). |
 | `image_url` | character | URL of the player's 240x240 profile image. |
 | `current_season_id` | integer | HockeyTech season id the feed treats as current when answering (not a season the player played). |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 
@@ -531,6 +580,13 @@ One row per matching player (String): `person_id`, `player_id`, `first_name` / `
 | `profile_image` | character | File name of the player's profile photo, not a URL (e.g. '7dea378a91cedc9d5d14b1222802322c.jpg'). |
 | `score` | character | Search relevance score of the match as a decimal string (e.g. '5.911529541015625'), not a game score. |
 | `last_active_date` | character | Date (YYYY-MM-DD) the feed reports the person as last active; for the active players captured it equals the capture date, so it is not the date of the player's last game. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 
@@ -613,6 +669,13 @@ One row per season (and team) the player played: `season_id`, `season_name`, `pl
 | `shots_blocked_by_player` | character | Shots blocked by the player. |
 | `stat_type` | character | Statistic type ("regular"/"playoff"). |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -674,6 +737,13 @@ the newest season overall is usually still before its playoffs, with no bracket.
 
 One row per playoff series: `round` / `round_name` / `round_type_name`, `series_letter` / `series_name`, `team1` / `team2` (team ids), `team1_wins` / `team2_wins` (Int64), `winner` (the winning team id, but the feed often leaves it empty even after a series ends, so read the result from the win counts), `feeder_series1` / `feeder_series2`, and `games` (a list of structs, one per game: ids, both teams, goal counts, status, date). A pandas DataFrame when `return_as_pandas` is True.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The seasons feed lists no playoff season, or the feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -717,6 +787,14 @@ One row per game: `game_id`, `game_date`, `game_status`, `home_team` / `home_tea
 | `venue` | character | Venue where the game was played. |
 | `season_id` | character | Season identifier. |
 | `game_type` | character | Game type the row belongs to. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404, or, with no season given, the seasons feed lists no regular season. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+| `ValueError` | No season matches `season`. |
 
 **Example**
 
@@ -814,6 +892,13 @@ One row per game in the window, as the feed ships it (String): `id`, `season_id`
 | `flo_hockey_url` | character | URL to the FloHockey streaming page for this PWHL game. |
 | `combined_client_code` | character | Combined league-and-client identifier string used by the HockeyTech feed to distinguish multi-tenant deployments. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -850,6 +935,12 @@ Same schema as `nhl_skater_rapm`: `player_id:Int64, xg_rapm_off:Float64, xg_rapm
 
 No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A HockeyTech pbp/shift column the NHL contract needs is missing. |
+
 **Example**
 
 ```python
@@ -881,6 +972,12 @@ Same schema as `nhl_skater_war`: `player_id:Int64, ev_off:Float64, ev_def:Float6
 
 No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A HockeyTech pbp/shift column the NHL contract needs is missing. |
+
 **Example**
 
 ```python
@@ -911,6 +1008,12 @@ Guards on PWHL shift-chart coverage (see the module docstring).
 Same schema as `nhl_special_teams_value`: `player_id:Int64, pp_toi_minutes:Float64, pk_toi_minutes:Float64, pp_value:Float64, pk_value:Float64`. A zero-row frame with this schema (+ a `cli_warn`) when PWHL shift coverage is insufficient.
 
 No returns table is published for this function: no capture: since #846 it runs on the published PWHL pbp and shift releases (tested on five real 2025 games) and returns the same schema as its NHL engine, which has no capture of its own.
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `ValueError` | A HockeyTech pbp/shift column the NHL contract needs is missing. |
 
 **Example**
 
@@ -956,6 +1059,13 @@ One row per team: `team`, `team_code`, `team_rank` and `wins` (Int64), and `game
 | `team_rank` | integer | Team rank in the standings. |
 | `team` | character | Team name. |
 | `wins` | integer | Wins. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 
@@ -1078,6 +1188,13 @@ One row per player for that season and position, as the feed ships it (String, ~
 | `team_breakdown` | integer | Per-team statistical breakdown. |
 | `is_total` | double | Whether the row is a season total. |
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
+
 **Example**
 
 ```python
@@ -1114,149 +1231,4 @@ df = pwhl_streaks()
 # Next step
 
 print(df.shape)
-```
-
-### pwhl_team_roster {#pwhl_team_roster}
-
-`pwhl_team_roster(team_id: 'int', season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
-
-PWHL team roster for a given team + season.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `team_id` | `int` |  | The HockeyTech team id. |
-| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
-| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per rostered player: `player_id`, `person_id`, names (`first_name`, `last_name`, `display_name`), `position`, `tp_jersey_number`, `shoots` / `catches`, `height` / `weight`, `birthdate`, home and birth places, `rookie`, `veteran_status`, `draft_status` and `player_image` (String, as the feed ships them). A pandas DataFrame when `return_as_pandas` is True.
-
-| col_name | type | description |
-|---|---|---|
-| `id` | character | Unique player identifier. |
-| `person_id` | character | Unique person identifier. |
-| `active` | character | Whether athlete is currently active. |
-| `first_name` | character | Player first name. |
-| `last_name` | character | Player last name. |
-| `phonetic_name` | character | Phonetic spelling of the player name. |
-| `display_name` | character | Player display name. |
-| `shoots` | character | Shooting hand. |
-| `hometown` | character | Prospect hometown. |
-| `homeprov` | character | Player home province/state. |
-| `homecntry` | character | Player home country. |
-| `homeplace` | character | Player home place description. |
-| `birthtown` | character | Player birth town. |
-| `birthprov` | character | Player birth province/state. |
-| `birthcntry` | character | Player birth country. |
-| `birthplace` | character | City, province/state, or country where the player was born, as recorded in the PWHL HockeyTech roster. |
-| `height` | character | Player height in inches. |
-| `weight` | character | Player weight in pounds. |
-| `height_hyphenated` | character | Player's height formatted as feet-inches with a hyphen separator (e.g., '5-9'), as supplied by the PWHL HockeyTech API. |
-| `hidden` | character | Flag indicating whether the player's roster entry is suppressed from public-facing displays in the PWHL HockeyTech system. |
-| `current_team` | character | Name or identifier of the PWHL team to which the player is currently rostered. |
-| `player_id` | character | Unique player identifier. |
-| `status` | character | Status string (e.g. captain markers). |
-| `birthdate` | character | Date of birth. |
-| `birthdate_year` | character | Player birth year. |
-| `rawbirthdate` | character | Player's birth date as a raw string in the format returned by the PWHL HockeyTech API, typically YYYY-MM-DD. |
-| `latest_team_id` | character | Most recent team identifier. |
-| `veteran_status` | character | Player veteran status. |
-| `veteran_description` | character | Text label or descriptor indicating the player's veteran status or experience classification in the PWHL. |
-| `team_id` | character | Unique team identifier. |
-| `team_name` | character | Team name. |
-| `division` | character | Division identifier. |
-| `tp_jersey_number` | character | Jersey number assigned to the player on the current PWHL team roster, as provided by the HockeyTech feed. |
-| `rookie` | character | Whether the player is a rookie. |
-| `position_id` | character | Official position identifier. |
-| `position` | character | Player position. |
-| `nhlteam` | character | Name or identifier of the NHL organization that holds the player's NHL rights, if applicable. |
-| `player_id_1` | character | Alternate or secondary HockeyTech player identifier, distinct from the primary person_id and player_id fields. |
-| `is_rookie` | character | Whether the player is a rookie. |
-| `h` | character |  |
-| `w` | character |  |
-| `draft_status` | character | Text description of the player's draft history or eligibility status (e.g., undrafted, drafted year and round). |
-| `name` | character | Player full name, first then last (e.g. 'Megan Keller'). |
-| `player_image` | character | URL of the player's official roster photograph from the PWHL HockeyTech feed. |
-| `catches` | character | Catching hand (goalies). |
-
-**Example**
-
-```python
-from sportsdataverse.pwhl import pwhl_team_roster
-df = pwhl_team_roster(team_id=1, season=2025)
-
-# Next step
-
-import polars as pl
-df.filter(pl.col("position") == "G")
-```
-
-### pwhl_teams {#pwhl_teams}
-
-`pwhl_teams(season: 'Optional[int]' = None, season_id: 'Optional[int]' = None, return_as_pandas: 'bool' = False) -> 'Any'`
-
-PWHL teams for a given season.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `season` | `Optional[int]` | `None` | Season as an END year (2026 = the 2025-26 season). Defaults to the newest regular season when neither `season` nor `season_id` is given. |
-| `season_id` | `Optional[int]` | `None` | The HockeyTech season id, when it is already known. |
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per team: `team_id`, `team_name`, `team_code`, `team_nickname`, `team_label`, `division` and `team_logo` (String). A pandas DataFrame when `return_as_pandas` is True.
-
-| col_name | type | description |
-|---|---|---|
-| `team_name` | character | Team name. |
-| `team_id` | character | Unique team identifier. |
-| `team_code` | character | Team abbreviation. |
-| `team_nickname` | character | Team nickname. |
-| `team_label` | character | Short city label. |
-| `division` | character | Division identifier. |
-| `team_logo` | character | URL to the team logo image. |
-
-**Example**
-
-```python
-from sportsdataverse.pwhl import pwhl_teams
-df = pwhl_teams(season=2025)
-
-# Next step
-
-df.select("team_id", "team_name", "team_code")
-```
-
-### pwhl_transactions {#pwhl_transactions}
-
-`pwhl_transactions(return_as_pandas: 'bool' = False) -> 'Any'`
-
-PWHL roster transactions.
-
-**Parameters**
-
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `return_as_pandas` | `bool` | `False` | Return a pandas DataFrame instead of polars. |
-
-**Returns**
-
-One row per transaction on the feed's current page (the newest 20): `transaction_date` / `transaction_time`, `transaction_type` / `ttype_text`, `title`, `detail`, `player_id` / `player_name` / `position`, and `team_id` / `team_name` / `team_code` / `team_city` (String). A pandas DataFrame when `return_as_pandas` is True.
-
-**Example**
-
-```python
-from sportsdataverse.pwhl import pwhl_transactions
-df = pwhl_transactions()
-
-# Next step
-
-df.head()
 ```

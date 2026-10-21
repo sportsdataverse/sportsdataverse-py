@@ -314,16 +314,20 @@ def _md_tables(md: Path) -> Dict[str, Dict[str, str]]:
 
 # Wire-format phrases the parsers have already normalised (a numeric string is a Float64 here, an id an Int64, an
 # empty string a null): reworded so a description matches the frame it documents.
+_WIRE = r"(a number|the integer 0|an? (numeric )?string( with (one|two) decimals?)?)"
 _FIXES = [
     (re.compile(r"\(Genius key space; a string\)"), "(Genius key space; Int64)"),
-    (re.compile(r",? \(?(as )?an? (numeric )?string( with (one|two) decimals?)?\)?"), ""),
+    # a whole wire-type aside, "(a number or a numeric string)", is dropped before the loose form below can cut it
+    (re.compile(rf" \({_WIRE}(,? or {_WIRE})*\)"), ""),
+    (re.compile(r"\(an? (numeric )?string (?=in )"), "("),
+    # the loose form strips a paren only with its partner, never cutting an aside in half
     (
         re.compile(
-            r" \((the integer 0|a numeric string), or (the integer 0|a numeric string|a string with two decimals)\)"
+            r",? (\((as )?an? (numeric )?string( with (one|two) decimals?)?\)|(as )?an? (numeric )?string( with "
+            r"(one|two) decimals?)?)"
         ),
         "",
     ),
-    (re.compile(r" \(the integer 0, or a string with two decimals\)"), ""),
     (re.compile(r"'' on (the )?team rows"), "null on the bench and totals rows"),
     (re.compile(r"; an integer for a played game, '' \(string\) before the game"), "; null before the game is played"),
     (re.compile(r" \(a number, or null on the bench and totals rows\)"), ""),

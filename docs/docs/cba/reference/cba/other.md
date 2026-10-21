@@ -1,7 +1,7 @@
 ---
 title: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Other"
 sidebar_label: "Other"
-sidebar_position: 4
+sidebar_position: 5
 description: "CBA — CBA data API (data-server.cbaleague.com, China; encrypted bodies) — Other — function reference in sdv-py, the SportsDataverse Python package."
 toc_max_heading_level: 2
 ---
@@ -29,6 +29,14 @@ Every season of the CBA data site, newest first (the upcoming season is the defa
 | `value` | character | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. String of digits ('2025'); the value every season parameter takes. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_seasons-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_seasons-example}
 
@@ -60,6 +68,14 @@ The match types (regular season, playoffs, preseason, all-star, relegation play-
 | `value` | character | Match type id as a string ('1' regular season, '2' playoffs, '3' preseason, '4' all-star, '9' relegation); the matchTypeId of every other route. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_match_types-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_match_types-example}
 
@@ -93,6 +109,14 @@ Game count per day of one calendar month.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_schedule_month-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_schedule_month-example}
 
 ```python
@@ -121,10 +145,10 @@ The games of one day: ids, teams, status, score, round and the data flags.
 |---|---|---|
 | `home_team_id` | integer | teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 'Zhejiang Guangsha' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList and the team and player routes. Not a player or schedule id. |
 | `home_team_logo` | character | Absolute URL of the home team logo (300x300 png). |
-| `home_team_lose` | character | Home team's cumulative losses after this game, as a STRING. |
+| `home_team_lose` | integer | Home team's cumulative losses after this game. An integer (the API sends it as digit text). |
 | `home_team_name` | character | Home team name (Chinese) as of the game's season; changes with the sponsor. Names change with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml. |
 | `home_team_score` | integer | Home team final points (a game not yet played has no score; a scheduled 2026-27 game outside the samples showed null). |
-| `home_team_win` | character | Home team's cumulative wins after this game in the match type, as a STRING ('1'). |
+| `home_team_win` | integer | Home team's cumulative wins after this game in the match type. An integer (the API sends it as digit text). |
 | `is_events` | integer | Play-by-play flag: 1 = play-by-play exists (2017-18 and later in the samples), 2 = none (the 2009-10 sample answers empty pages). |
 | `is_report` | integer | Game-report flag: 1 = a game report page exists (every sample). |
 | `match_order` | integer | Sequence number of the game within its season and match type (1-based). |
@@ -134,20 +158,28 @@ The games of one day: ids, teams, status, score, round and the data flags.
 | `round` | integer | Round number within the match type (1-based). |
 | `round_desc` | character | Unobserved: null in every sample, so no meaning is claimed beyond its name (round description). |
 | `schedule_id` | integer | CBA game id (key space: CBA games, ONE global 9-digit sequence 100xxxxxx across seasons and match types; the {scheduleId} of every game route). Stamped by the runtime from the request; null on a body parsed without it. |
-| `schedule_num` | character | Unobserved: null in every sample on this route (the game count is filled on schedules/month). |
+| `schedule_num` | integer | Unobserved: null in every sample on this route (the game count is filled on schedules/month). Typed Int64 like the family's other routes. |
 | `schedule_time` | character | Tip-off as 'YYYY-MM-DD HH:MM:SS' (China local time, no zone). |
 | `schedule_type_name` | character | Round label (Chinese), e.g. 常规赛第1轮 = regular season, round 1. |
 | `season` | integer | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. |
-| `seconds` | character | Unobserved: null in every sample (the clock seconds of a live game, by its name). |
+| `seconds` | numeric | Unobserved: null in every sample (the clock seconds of a live game, by its name). Typed Float64 like the family's other routes. |
 | `status` | integer | Game status: 4 = finished (every sampled game). 1 = not started and 2 = in progress are inferred from the site's polling logic; 3 is unobserved. See the code table. |
 | `visiting_team_id` | integer | teamId (key space: CBA clubs; 5 digits 29115-29140 for the long-standing clubs, 9 digits for newer ones (100074683 = Ningbo); stable across seasons and club renames, but the display name changes with the sponsor: 29128 = 浙江广厦 'Zhejiang Guangsha' under many sponsor names, 浙江浙商证券 in 2025-26). Joins getTeam / teamList and the team and player routes. Not a player or schedule id. |
 | `visiting_team_logo` | character | Absolute URL of the visiting team logo (300x300 png). |
-| `visiting_team_lose` | character | Visiting team's cumulative losses after this game, as a STRING. |
+| `visiting_team_lose` | integer | Visiting team's cumulative losses after this game. An integer (the API sends it as digit text). |
 | `visiting_team_name` | character | Visiting team name (Chinese) as of the game's season; changes with the sponsor. Names change with the sponsor, the id does not; teamId -> English glossary in cba_glossary.yaml. |
 | `visiting_team_score` | integer | Visiting team final points. |
-| `visiting_team_win` | character | Visiting team's cumulative wins after this game, as a STRING. |
+| `visiting_team_win` | integer | Visiting team's cumulative wins after this game. An integer (the API sends it as digit text). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_schedule_day-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_schedule_day-example}
 
@@ -165,9 +197,9 @@ Points each side scored in each period of a finished game (up to seven periods).
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-quarters/getQuarterInfo' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
 
 ### Returns {#cba_period_scores-returns}
 
@@ -181,6 +213,14 @@ Points each side scored in each period of a finished game (up to seven periods).
 | `points` | integer | Points the side scored IN this period (not cumulative); overtime periods included. |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_period_scores-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_period_scores-example}
 
@@ -220,15 +260,23 @@ The best player of each side in the game report.
 | `player_name` | character | Full player name (Chinese, may include the first name: 贾卡尔-桑普森). Null on some rows (the short name is in playerNameStr). |
 | `player_name_str` | character | Short display name (Chinese surname form: 桑普森). |
 | `points` | integer | Points scored by the player in this game. |
-| `real_point_rate` | character | 真实命中率 true-shooting percentage as a whole-percent string ('74%'). |
+| `real_point_rate` | numeric | 真实命中率 true-shooting percentage. A FRACTION 0-1 (the API sends a percent string such as '39.4%'). |
 | `rebounds` | integer | Total rebounds by the player in this game. |
 | `steals` | integer | Steals by the player in this game. |
 | `three_points_str` | character | Three-point field goals as the string 'made/attempted'. |
-| `turn_share` | character | 回合占有率 possession share (see advance-count turnShare) as a whole-percent string ('16%'). |
+| `turn_share` | numeric | 回合占有率 possession share (see advance-count turnShare). A FRACTION 0-1 (the API sends a percent string such as '39.4%'). |
 | `turnovers` | integer | Turnovers by the player in this game. |
 | `two_points_str` | character | Two-point field goals as the string 'made/attempted' ('3/5'). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_best_player-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_best_player-example}
 
@@ -268,6 +316,14 @@ Single-category leaders of each side in the game report.
 | `type` | integer | Side flag: 0 on home rows, 2 on visiting rows (differs from advance-count, where the visiting side is 1). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_best_stats-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_best_stats-example}
 
@@ -326,7 +382,7 @@ Registered rosters of both sides with player bio fields (the season registration
 | `season_id` | integer | Season START year (2025 = the 2025-26 season). The sdv season key is the END year = season + 1; map at the boundary. Same value as season. |
 | `season_name` | character | Unobserved: null in every sample. |
 | `season_year` | character | Unobserved: null in every sample. |
-| `team_cba_id` | integer | teamId as a string ('29128'); meaning unverified beyond equalling teamId in the sample. |
+| `team_cba_id` | integer | teamId again as an integer (29128); meaning unverified beyond equalling team_id in the sample. |
 | `team_cn_alias` | character | Team short name (Chinese) in that season. |
 | `team_cn_name` | character | Team full legal name (Chinese), e.g. 浙江广厦雄狮俱乐部浙商证券篮球队 'Zhejiang Guangsha Lions Club Zheshang Securities basketball team'. |
 | `team_en_alias` | character | Team code or English city name as registered: a three-letter code on recent rows ('ZGL', 'SBW'), an English city name on older ones ('Guangdong', 'Sichuan'), '' when none. |
@@ -335,6 +391,14 @@ Registered rosters of both sides with player bio fields (the season registration
 | `weight` | integer | Weight in kg (integer). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_rosters-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_rosters-example}
 
@@ -367,6 +431,14 @@ Whether the game report page exists for the game.
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
 
+### Raises {#cba_report_status-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
+
 ### Example {#cba_report_status-example}
 
 ```python
@@ -383,10 +455,10 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 
 **Example request:** `curl -X POST 'https://data-server.cbaleague.com/api/schedule-eventses/filterPage?startNum=0' -H 'Content-Type: application/json' -d '{"scheduleId": 100105799}'`
 
-| API Parameter | Python | Pattern | Required | Nullable | Description |
-|---|---|:---:|:---:|:---:|---|
-| `scheduleId` | `schedule_id` |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
-| `quarterNum` | `quarter_num` |  |  | `Y` | Optional period number. Omitted = every period (the API serves one period per request; the runtime fetches them all and checks the set). |
+| API Parameter | Python | In | Pattern | Required | Nullable | Description |
+|---|---|:---:|:---:|:---:|:---:|---|
+| `scheduleId` | `schedule_id` | body |  | `Y` |  | Required. CBA game id (integer), the global 9-digit sequence 100xxxxxx (100105799 = 2025-26 round 1). Only a finished game is served. |
+| `quarterNum` | `quarter_num` | body |  |  | `Y` | Optional period number. Omitted = every period (the API serves one period per request; the runtime fetches them all and checks the set). |
 
 ### Returns {#cba_pbp-returns}
 
@@ -415,6 +487,14 @@ Play-by-play of a finished game, every period merged, oldest first (Chinese text
 | `visitor_score` | integer | Visiting team points after the play (same caveat as homeScore). |
 
 **`return_parsed=False`** — the raw DECRYPTED JSON (`list` or `dict`); a game route that answers an object also carries `_request` (the game id), and play-by-play is merged over every period into `{records, total}`.
+
+### Raises {#cba_pbp-raises}
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The host answered 404 -- the requested resource does not exist. The host answered 404, or the game has no play-by-play (2009-10). |
+| `AssetFetchError` | The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty. The fetch failed or the answer is not the one asked for (an unfinished game, a body that does not decrypt or an unencrypted error envelope, an empty body, a body for another game or season, a partial play-by-play set, a dead connection). |
+| `ValueError` | The host answered 400 / 422 -- the request is wrong; retrying cannot help. |
 
 ### Example {#cba_pbp-example}
 

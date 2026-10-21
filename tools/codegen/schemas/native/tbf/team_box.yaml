@@ -82,7 +82,7 @@ columns:
   type: integer
 - description: ''
   name: efficiency
-  type: numeric
+  type: integer
 - description: ''
   name: team_off_rebounds
   type: integer

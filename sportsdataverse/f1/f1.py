@@ -337,7 +337,7 @@ def f1_circuits(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -403,7 +403,7 @@ def f1_constructor_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -469,7 +469,7 @@ def f1_constructors(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -535,7 +535,7 @@ def f1_driver(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -601,7 +601,7 @@ def f1_driver_standings(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -667,7 +667,7 @@ def f1_drivers(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -735,7 +735,7 @@ def f1_laps_page(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -803,7 +803,7 @@ def f1_pitstops(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -871,7 +871,7 @@ def f1_qualifying(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -939,7 +939,7 @@ def f1_race(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -1007,7 +1007,7 @@ def f1_results(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -1073,7 +1073,7 @@ def f1_schedule(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -1137,7 +1137,7 @@ def f1_seasons(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -1205,7 +1205,7 @@ def f1_sprint(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 
@@ -1269,7 +1269,7 @@ def f1_status(
         A polars/pandas DataFrame by default; the raw JSON ``Dict`` when ``return_parsed=False``.
 
     Raises:
-        sportsdataverse.errors.NoDataError: the Jolpica API returned 404 (unknown season, round or driver id).
+        NoDataError: The host answered 404 -- the requested resource does not exist. The Jolpica API returned 404 (unknown season, round or driver id).
         ValueError: The host answered 400 / 422 -- the request is wrong; retrying cannot help.
         AssetFetchError: The fetch failed (a non-2xx answer or a connection failure after retries, e.g. 401/403/429/5xx, or an empty or unreadable 200 body) -- the answer is unknown, not empty.
 

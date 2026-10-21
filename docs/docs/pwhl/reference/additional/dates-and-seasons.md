@@ -19,6 +19,13 @@ preseason the feed lists before its regular season is not a default.
 
 The newest regular season's END year (2026 = the 2025-26 season).
 
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The seasons feed lists no regular season. |
+| `AssetFetchError` | The seasons feed failed. |
+
 **Example**
 
 ```python
@@ -57,6 +64,13 @@ One row per season: `season_id` (Int64), `season_name`, `season_short`, `career`
 | `end_date` | character | Season end date. |
 | `season_yr` | integer | End year of the season the row belongs to, read from its name: "2025-26", "2025/26" and "2025-2026" are 2026, "26-27" is 2027, a compact "2425" is 2025. A preseason or exhibition named with the one year it starts in belongs to the next season ("2026 Pre-season" is 2027). Null when the name holds no year. |
 | `game_type_label` | character | Game type read from the season name, first match wins: "preseason" (pre-season, preseason), "playoffs" (playoff, post), "exhibition", else "regular". One-off events such as all-star games are labelled "regular" too; season resolution skips them. |
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `NoDataError` | The feed answered 404. |
+| `AssetFetchError` | The fetch failed: a non-2xx status, an empty or unparseable body, or an `Undefined Tab` / `InvalidView` sentinel. |
 
 **Example**
 

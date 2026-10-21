@@ -6,8 +6,8 @@ sidebar_position: 50
 ---
 # PWHL — additional Python functions
 
-Hand-written wrappers, loaders, and helpers in `sportsdataverse.pwhl`
-not covered by the generated API-endpoint reference above.
+Hand-written wrappers, loaders, and helpers in `sportsdataverse.pwhl` that are not
+generated API-endpoint wrappers (those have their own reference pages).
 
 ## sportsdataverse-data releases
 
@@ -45,9 +45,9 @@ not covered by the generated API-endpoint reference above.
 | [pwhl_standings](additional/hockeytech-leaguestat.md#pwhl_standings) | PWHL standings — one row per team. |
 | [pwhl_stats](additional/hockeytech-leaguestat.md#pwhl_stats) | PWHL aggregate stats by season and position. |
 | [pwhl_streaks](additional/hockeytech-leaguestat.md#pwhl_streaks) | Current PWHL player/team streaks — **non-functional: no such upstream view**. |
-| [pwhl_team_roster](additional/hockeytech-leaguestat.md#pwhl_team_roster) | PWHL team roster for a given team + season. |
-| [pwhl_teams](additional/hockeytech-leaguestat.md#pwhl_teams) | PWHL teams for a given season. |
-| [pwhl_transactions](additional/hockeytech-leaguestat.md#pwhl_transactions) | PWHL roster transactions. |
+| [pwhl_team_roster](additional/hockeytech-leaguestat-2.md#pwhl_team_roster) | PWHL team roster for a given team + season. |
+| [pwhl_teams](additional/hockeytech-leaguestat-2.md#pwhl_teams) | PWHL teams for a given season. |
+| [pwhl_transactions](additional/hockeytech-leaguestat-2.md#pwhl_transactions) | PWHL roster transactions. |
 | [pwhl_unit_ratings](additional/hockeytech-leaguestat-2.md#pwhl_unit_ratings) | ⑤ PWHL line/pair ratings -- shim over `nhl_unit_ratings` with `league='pwhl'`. |
 
 ## Models and calculators

@@ -339,6 +339,19 @@ def test_goalie_stats_columns_are_declared_and_typed():
     assert [skaters.schema[c] for c in goalie] == [df.schema[c] for c in goalie]
 
 
+def test_goalie_stats_real_values_and_scale():
+    df = P.parse_khl_player_stats(
+        _load("stat__players_goalies_starters.json"), columns=list(P.SCHEMAS["khl_player_stats"])
+    )
+    assert df.height == 4 and min(df["gp"]) > 0
+    assert (df.schema["sv_pct"], df.schema["gaa"], df.schema["toi"]) == (pl.Float64, pl.Float64, pl.Utf8)
+    assert df["sv_pct"].to_list() == [92.2, 92.7, 93.1, 93.1]  # 0-100 scale, not 0-1
+    assert df["gaa"].to_list() == [2.47, 1.89, 2.14, 2.13]
+    assert df["toi"].to_list() == ["3521:21", "3304:10", "3202:39", "3065:15"]  # minutes:seconds
+    # sv_pct is saves / shots x 100, rounded to one decimal
+    assert all(abs(r["sv"] / r["sog"] * 100 - r["sv_pct"]) < 0.05 for r in df.iter_rows(named=True))
+
+
 def test_goalie_stats_descriptions_exist():
     manual = yaml.safe_load((ROOT / "tools" / "codegen" / "manual_column_descriptions.yaml").read_text("utf-8"))
     assert {"w", "l", "sop", "ga", "sv", "sv_pct", "gaa", "so", "toi"} <= set(manual["khl_player_stats"])

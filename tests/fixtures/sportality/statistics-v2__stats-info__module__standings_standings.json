@@ -18,6 +18,48 @@
         "type": "integer",
         "highlighted": false,
         "group": ""
+      },
+      {
+        "name": "W",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "L",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "TP",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "For",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "GA",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "PlusMinus",
+        "type": "integer",
+        "highlighted": false,
+        "group": ""
+      },
+      {
+        "name": "Strk",
+        "type": "string",
+        "highlighted": false,
+        "group": ""
       }
     ],
     "defaultSortKey": {
