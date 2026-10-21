@@ -1300,8 +1300,17 @@ def _attach_group(df: pl.DataFrame, positions: dict[str, Any]) -> pl.DataFrame:
     )
 
 
-def _to_rows(df: pl.DataFrame) -> list[dict[str, Any]]:
-    return df.to_dicts() if df is not None and df.height else []
+def _to_rows(df: pl.DataFrame, section: str) -> list[dict[str, Any]]:
+    """Serialise one section sorted by its keys (:data:`_SUM_KEYS`), a total order.
+
+    The sections come out of ``group_by`` and full joins, whose row order changes
+    from one process to the next (R828-4); the keys are the grouping keys, so no two
+    rows share them and the same game always serialises to the same list.
+    """
+    if df is None or not df.height:
+        return []
+    keys = [c for c in _SUM_KEYS[section] if c in df.columns]
+    return (df.sort(keys, nulls_last=True, maintain_order=True) if keys else df).to_dicts()
 
 
 def create_usage_box(
@@ -1352,7 +1361,7 @@ def create_usage_box(
             curve = None
     df = _standing_scrimmage(plays)
     if df.height == 0 or "pos_team" not in df.columns:
-        empty.update({k: _to_rows(v) for k, v in _special_teams(plays).items()})
+        empty.update({k: _to_rows(v, k) for k, v in _special_teams(plays).items()})
         return empty
     positions = _position_map(participants, rosters)
 
@@ -1403,14 +1412,14 @@ def create_usage_box(
     st = _special_teams(plays)
 
     out = {
-        "player_usage": _to_rows(player),
-        "position_group_usage": _to_rows(group),
-        "tackles": _to_rows(tackles),
-        "position_group_tackles": _to_rows(group_tackles),
-        "team_usage": _to_rows(team),
-        "drive_scripting": _to_rows(scripting),
+        "player_usage": _to_rows(player, "player_usage"),
+        "position_group_usage": _to_rows(group, "position_group_usage"),
+        "tackles": _to_rows(tackles, "tackles"),
+        "position_group_tackles": _to_rows(group_tackles, "position_group_tackles"),
+        "team_usage": _to_rows(team, "team_usage"),
+        "drive_scripting": _to_rows(scripting, "drive_scripting"),
     }
-    out.update({k: _to_rows(v) for k, v in st.items()})
+    out.update({k: _to_rows(v, k) for k, v in st.items()})
     return out
 
 

@@ -224,6 +224,34 @@ print(df.shape)
 df.sort("fp_margin", descending=True).head()
 ```
 
+### cfb_kickoff_out_of_bounds_spot_expr {#cfb_kickoff_out_of_bounds_spot_expr}
+
+`cfb_kickoff_out_of_bounds_spot_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
+
+The receiving team's yardline after a kickoff out of bounds: the 40 through 2011, the 35 from 2012.
+
+Reads `KICKOFF_OUT_OF_BOUNDS_SPOT_BY_SEASON` (the NCAA 2012 kickoff rule).
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An integer expression of the out-of-bounds spot per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr
+
+df = pl.DataFrame({"season": [2011, 2012]})
+print(df.select(cfb_kickoff_out_of_bounds_spot_expr(pl.col("season"))).to_series().to_list())  # [40, 35]
+```
+
 ### cfb_predict_games {#cfb_predict_games}
 
 `cfb_predict_games(games: 'pl.DataFrame', ratings: 'pl.DataFrame', *, era: 'str' = 'modern', return_as_pandas: 'bool' = False) -> 'pl.DataFrame | pd.DataFrame'`
@@ -510,6 +538,36 @@ print(out["overall"].sort("won_cfp", descending=True).head())
 
 out = cfb_simulations(games, teams, simulations=100,
                       sim_include="REG", seed=1)
+```
+
+### cfb_touchback_yardline_expr {#cfb_touchback_yardline_expr}
+
+`cfb_touchback_yardline_expr(season: polars.expr.expr.Expr) -> polars.expr.expr.Expr`
+
+Kickoff-touchback yards-to-endzone per row: 80 through 2011, 75 from 2012.
+
+Reads `TOUCHBACK_YARDLINE_BY_SEASON` (the NCAA 2012 kickoff rule). Named with the `cfb_`
+prefix so the top-level `sportsdataverse` namespace keeps NFL's `touchback_yardline_expr`
+(2016 cut) distinct from this one.
+
+**Parameters**
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `season` | `Expr` |  | Integer season expression (`pl.col("season")`). |
+
+**Returns**
+
+An integer expression of the touchback yards-to-endzone per row.
+
+**Example**
+
+```python
+import polars as pl
+from sportsdataverse.cfb import cfb_touchback_yardline_expr
+
+df = pl.DataFrame({"season": [2011, 2012]})
+print(df.select(cfb_touchback_yardline_expr(pl.col("season"))).to_series().to_list())  # [80, 75]
 ```
 
 ### efficiency_ratings {#efficiency_ratings}

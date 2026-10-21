@@ -38,8 +38,8 @@ _LEAGUE_REFERER: Dict[str, str] = {
 
 
 def _strip_jsonp(text: str) -> str:
-    """Strip an ``angular.callbacks._N( ... )`` or bare ``( ... )`` JSONP wrapper."""
-    text = text.strip()
+    """Strip an ``angular.callbacks._N( ... )`` or bare ``( ... )`` JSONP wrapper, and a trailing ``;``."""
+    text = text.strip().rstrip(";").rstrip()
     if _CALLBACK_RE.match(text) and text.endswith(")"):
         text = text[text.index("(") + 1 : -1]
     elif text.startswith("(") and text.endswith(")"):

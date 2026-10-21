@@ -89,3 +89,12 @@ def test_safe_json_raises_on_a_failed_athlete_deref(monkeypatch, status):
         _serve(monkeypatch, athlete_status=status, athlete_body='{"message": "unavailable"}')
     with pytest.raises(AssetFetchError):
         _lebron()
+
+
+@pytest.mark.parametrize("value", [float("nan"), "nan", " NaN "])
+def test_coerce_float_maps_nan_to_null(value):
+    """B-GB-20: a NaN is a missing value, not a float that stringifies as "nan"."""
+    from sportsdataverse._common_espn_player_stats import _coerce_float
+
+    assert _coerce_float(value) is None
+    assert _coerce_float(" 7.8 ") == 7.8 and _coerce_float(3) == 3.0 and _coerce_float("7.8-15.7") is None

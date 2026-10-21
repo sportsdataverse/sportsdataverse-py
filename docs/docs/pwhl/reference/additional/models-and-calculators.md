@@ -1,7 +1,7 @@
 ---
 title: "PWHL — additional Python functions — Models and calculators"
 sidebar_label: "Models and calculators"
-sidebar_position: 3
+sidebar_position: 4
 description: "PWHL — additional Python functions — Models and calculators — function reference in sdv-py, the SportsDataverse Python package."
 ---
 # PWHL — additional Python functions — Models and calculators
@@ -181,30 +181,35 @@ mae(np.array([1.0, 2.0]), np.array([1.5, 2.5]))
 
 ### pwhl_team_ratings {#pwhl_team_ratings}
 
-`pwhl_team_ratings(seasons: 'Any', *, league: 'str' = 'pwhl', **kwargs: 'Any') -> 'Any'`
+`pwhl_team_ratings(seasons: 'Any', *, league: 'Any' = None, **kwargs: 'Any') -> 'Any'`
 
 PWHL opponent-adjusted, shrunk even-strength xG team ratings.
 
-Delegates to `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings`
-with `league="pwhl"` defaulted. Oracle gate deferred (no xG-bearing
-PWHL pbp yet -- see module docstring).
+Delegates to `sportsdataverse.pwhl.pwhl_xg_proxy.pwhl_ratings_from_proxy`,
+which loads PWHL pbp, schedules and game info only.
 
 **Parameters**
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `seasons` | `Any` |  | an int or iterable of seasons. |
-| `league` | `str` | `'pwhl'` | league key (defaults to `"pwhl"`). |
+| `seasons` | `Any` |  | an int or iterable of PWHL season end-years (`>= 2024`). |
+| `league` | `Any` | `None` | deprecated and ignored (the ratings are always PWHL); passing it warns. |
 
 **Returns**
 
-The NHL core's ratings frame, computed with PWHL constants.
+One row per (season, team), the `sportsdataverse.nhl.nhl_team_ratings.nhl_team_ratings` schema (`season`, `team`, `adj_xgf`, `adj_xga`, `adj_xg_net`, `adj_gf`, `adj_ga`, `games`, `off_rank`, `def_rank`, `net_rank`, `net_z`).
+
+**Raises**
+
+| Exception | Description |
+|---|---|
+| `DeprecationWarning` | As a warning, when `league` is passed. |
 
 **Example**
 
 ```python
 from sportsdataverse.pwhl.pwhl_team_ratings import pwhl_team_ratings
-ratings = pwhl_team_ratings(2024)
+ratings = pwhl_team_ratings(2025)
 ```
 
 ### spearman_corr {#spearman_corr}

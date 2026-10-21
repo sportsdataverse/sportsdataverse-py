@@ -372,7 +372,7 @@ def _yahoo_to_espn_summary(
             ``home_espn_team_id`` and ``away_espn_team_id`` are required -- Yahoo's team ids are
             its own, and ``CFBPlayProcess`` casts ``team.id`` to ``int`` and uses it for logos,
             possession and the box score, so they must be ESPN's.
-        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable}`` (a stored closing
+        odds: ``{gameSpread, overUnder, homeFavorite, gameSpreadAvailable, overUnderAvailable}`` (a stored closing
             line). Becomes the summary's one-provider ``pickcenter``; when None, Yahoo's own
             pregame line is used if it states one.
 

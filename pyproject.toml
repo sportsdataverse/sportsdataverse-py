@@ -358,6 +358,9 @@ disallow_incomplete_defs = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 files = [
+    "sportsdataverse/_espn_schedule.py",
+    "sportsdataverse/_espn_game_rosters.py",
+    "sportsdataverse/_espn_teams.py",
     "sportsdataverse/_deprecation.py",
     "sportsdataverse/euroleague/euroleague_parsers.py",
     "sportsdataverse/euroleague/euroleague_runtime.py",
@@ -519,6 +522,7 @@ files = [
     "sportsdataverse/cfb/cfb_tempo.py",
     "sportsdataverse/cfb/cfb_transfer_impact.py",
     "sportsdataverse/cfb/cfb_yahoo_ext.py",
+    "sportsdataverse/cfb/model_vars.py",
     "sportsdataverse/nfl/config.py",
     "sportsdataverse/nfl/model_vars.py",
     "sportsdataverse/nfl/nfl_build.py",
@@ -817,6 +821,7 @@ files = [
     "sportsdataverse/nhl/nhl_special_teams.py",
     "sportsdataverse/nhl/nhl_war.py",
     "sportsdataverse/pwhl/pwhl_player_impact.py",
+    "sportsdataverse/pwhl/_impact_contract.py",
     "sportsdataverse/pwhl/pwhl_xg_proxy.py",
     "sportsdataverse/nhl/nhl_microstat_constants.py",
     "sportsdataverse/nhl/nhl_faceoff_value.py",
