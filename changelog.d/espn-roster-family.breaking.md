@@ -1,0 +1,1 @@
+- **ESPN game rosters:** `espn_<lg>_game_rosters(raw=True)` (mbb, wbb, nba, wnba, nfl, nhl, cfb) returns the Core v2 competitors payload (a dict); `raw=` was accepted and ignored, so it returned the parsed frame. (#878)
