@@ -3203,3 +3203,40 @@
     Gated on a named touchdown (td_play's test) instead of scoringPlay, an unscored return TD keeps ESPN's end
     instead of its try: 261022011/1629 wpa -0.136 (try -0.171, nflverse -0.275) and 271209034/1856 0.001 (try 0.101,
     nflverse 0.116). Task 2.25 measured the td_play gate and rejected it on this evidence.
+
+- id: nfl-naive-half-end-hands-to-next-real-play
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'half_end = (pl.col("end_of_half") == True) & (stoppage == False)  # noqa: E712'
+  mutant: 'half_end = pl.lit(False)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  expected: kill
+  note: >-
+    devel-nfl had no half-end branch in the naive family: a half-ending play that kept the ball read the next ROW's
+    wp through its own possession change, so a kneel before the other team's kickoff, or before a Timeout, broke
+    home_wp_after_naive's continuity into the next real play.
+
+- id: nfl-naive-half-end-reads-past-stoppage-rows
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'naive_next_team, naive_next_wb = _next_play(team, stoppage), _next_play(pl.col("wp_before_naive"), stoppage)'
+  mutant: 'naive_next_team, naive_next_wb = team.shift(-1), pl.col("wp_before_naive").shift(-1)'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  expected: kill
+  note: >-
+    Read from the next ROW, a Timeout after the half-ending play hands over the Timeout's own naive wp and team, not
+    the second-half kickoff's (400791590 among the captures).
+
+- id: nfl-naive-home-wp-after-keys-on-start-team
+  group: nfl-end-of-half
+  finding: nfl 2.27
+  file: sportsdataverse/nfl/nfl_pbp.py
+  snippet: 'home_wp_after_naive=pl.when(team == pl.col("homeTeamId"))'
+  mutant: 'home_wp_after_naive=pl.when(pl.col("end.pos_team.id") == pl.col("homeTeamId"))'
+  test: tests/nfl/test_nfl_whole_game_oracle.py -k "half_end_home_wp_is_continuous and _naive"
+  expected: kill
+  note: >-
+    wp_after_naive is stated in the START team's frame; keyed on the end team, every punt or turnover flipped
+    home_wp_after_naive twice (767 rows in the 59 fixture games), half-ending punts and missed field goals included.
