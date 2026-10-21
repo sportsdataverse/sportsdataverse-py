@@ -464,8 +464,8 @@ def parse_standings(payload: Dict, return_as_pandas: bool = False) -> pl.DataFra
 def _flatten_groups(groups: List[dict], parent_id: str = "", depth: int = 0) -> List[dict]:
     """Recursively flatten a groups list."""
     rows: List[dict] = []
-    for g in groups:
-        children = g.get("children") or []
+    for g in _object_rows(groups):  # the row rule, at every level (R953-7): raises TypeError on drift
+        children = _object_rows(g.get("children") or [])
         row = {
             "group_id": g.get("id") or g.get("groupId"),
             "name": g.get("name"),
@@ -515,7 +515,11 @@ def parse_groups(payload: Dict, return_as_pandas: bool = False) -> pl.DataFrame:
     if not groups:
         return _empty_frame(return_as_pandas)
 
-    rows = _flatten_groups(groups)
+    try:
+        rows = _flatten_groups(groups)
+    except _SHAPE_ERRORS as exc:  # a group or child that is not an object (a null one is dropped)
+        _warn_schema_drift("parse_groups: groups", exc)
+        return _empty_frame(return_as_pandas)
     if not rows:
         return _empty_frame(return_as_pandas)
 

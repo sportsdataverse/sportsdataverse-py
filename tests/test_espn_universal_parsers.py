@@ -1925,6 +1925,8 @@ _ESPN_DRIFT = [
     ("parse_items", "season_coaches_nba", ("items",), "parse_items: items"),
     ("parse_teams", "teams_mbb", ("sports", 0, "leagues", 0, "teams"), "parse_teams: teams"),
     ("parse_groups", "teams_nba", ("sports",), "parse_groups: sports"),
+    ("parse_groups", "conferences_nba", ("groups",), "parse_groups: groups"),
+    ("parse_groups", "conferences_nba", ("groups", 0, "children"), "parse_groups: groups"),
     ("parse_coaches", "season_coaches_nba", ("items",), "parse_coaches: items"),
     ("parse_event_competitor_roster", "event_competitor_roster_nba", ("entries",), "parse_event_competitor_roster"),
     ("parse_event_plays", "event_plays_nba", ("items",), "parse_event_plays: items"),
@@ -1952,9 +1954,9 @@ def _nulled(raw: Any, path: tuple, keep: bool, nulls: bool = True) -> Any:
     return out
 
 
-# The _ESPN_DRIFT rows whose parser hands its rows to errors._object_rows (#941's sites). The others walk
-# their rows themselves (_drifted), so the row rule does not reach them yet.
-_ESPN_ROW_RULE = [entry for entry in _ESPN_DRIFT if entry[0] != "parse_groups"] + [
+# Every _ESPN_DRIFT row whose list holds rows: each parser applies errors._object_rows to it, directly or through
+# _rows_or_drift. teams_nba's ``sports`` walk reads no group rows, so it has none to null.
+_ESPN_ROW_RULE = [entry for entry in _ESPN_DRIFT if entry[1] != "teams_nba"] + [
     # the grouped roster's position groups themselves (the players inside one are in _ESPN_DRIFT)
     ("parse_team_roster", "team_roster_nfl", ("athletes",), "parse_team_roster: athletes"),
 ]

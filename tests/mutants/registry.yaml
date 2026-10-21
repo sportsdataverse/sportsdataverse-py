@@ -2412,11 +2412,11 @@
   finding: A-L60
   file: sportsdataverse/nhl/nhl_api_web_parsers.py
   snippet: |-
-    df = pd.json_normalize(items, sep="_")
+    df = pd.json_normalize(_object_rows(items), sep="_")
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift(where, exc)
   mutant: |-
-    df = pd.json_normalize(items, sep="_")
+    df = pd.json_normalize(_object_rows(items), sep="_")
         except _SHAPE_ERRORS as exc:
             pass
   test: tests/test_nhl_api_web_parsers.py -k schema_drift
@@ -2438,11 +2438,11 @@
   finding: A-L60
   file: sportsdataverse/mlb/mlb_api_parsers.py
   snippet: |-
-    df = pd.json_normalize(items, sep="_")
+    df = pd.json_normalize(_object_rows(items), sep="_")
         except _SHAPE_ERRORS as exc:
             _warn_schema_drift(where, exc)
   mutant: |-
-    df = pd.json_normalize(items, sep="_")
+    df = pd.json_normalize(_object_rows(items), sep="_")
         except _SHAPE_ERRORS as exc:
             pass
   test: tests/test_mlb_api_parsers.py -k schema_drift
@@ -2607,8 +2607,12 @@
   group: codegen-runtime
   finding: A-L60
   file: sportsdataverse/_common_espn_parsers.py
-  snippet: '        _warn_schema_drift(where, exc)'
-  mutant: '        pass'
+  snippet: |-
+    except _SHAPE_ERRORS as exc:
+            _warn_schema_drift(where, exc)
+  mutant: |-
+    except _SHAPE_ERRORS as exc:
+            pass
   test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and parse_summary_officials"
   expected: kill
   note: R907-1, a drifted summary sub-list (officials) read as "no data" with no warning
@@ -2617,11 +2621,13 @@
   group: codegen-runtime
   finding: A-L60
   file: sportsdataverse/_common_espn_parsers.py
-  snippet: '    bad = next((e for e in entries if not isinstance(e, dict)), None)'
-  mutant: '    bad = None'
+  snippet: |-
+    _warn_schema_drift(where, exc)
+            return None
+  mutant: return entries
   test: tests/test_espn_universal_parsers.py -k "espn_schema_drift and (parse_coaches or parse_event_plays or parse_team_roster)"
   expected: kill
-  note: R907-1, a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
+  note: R907-1 / R953-1, _rows_or_drift; a coach / play / roster entry that is not an object raised AttributeError (or a grouped roster dropped it)
 
 - id: nba-stats-non-object-result-set-warns
   group: codegen-runtime
