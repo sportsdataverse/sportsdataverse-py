@@ -423,6 +423,26 @@ def _dict_only(parse: _Parser) -> _Parser:
     return _cast(_Parser, _normalize_payload(parse, lambda payload: payload if isinstance(payload, dict) else {}))
 
 
+def _object_records(records: Any, where: str) -> list | None:
+    """``records`` without its null entries, ready for ``pd.json_normalize``; ``None`` when it drifted (WB-providers-2).
+
+    A record that is not an object is drift: pandas 2 reads a scalar record as an empty row (an N x 0
+    frame) and pandas 3 raises, so the provider flatteners check here first, warn
+    :class:`SchemaDriftWarning` naming ``where`` (``"<parser>: <payload path>"``) and return zero rows.
+    ponytail: one row check per flattener; it becomes #941's ``_require_objects`` once that syncs in.
+    """
+    kept = [r for r in records or [] if r is not None]  # a null record carries no row
+    bad = next((r for r in kept if not isinstance(r, dict)), None)
+    if bad is None:
+        return kept
+    _warnings.warn(
+        f"{where}: unexpected payload shape (a record is {type(bad).__name__}, not an object); no rows read from it",
+        SchemaDriftWarning,
+        stacklevel=3,
+    )
+    return None
+
+
 #: Routes (``host/path`` prefixes) whose 2xx answer is a bare JSON string BY DESIGN. Every other
 #: route's JSON scalar is a failed fetch (B-GB-16). OpenLigaDB's last-change timestamp answers
 #: ``"2025-08-24T19:25:06.787"`` (tools/codegen/endpoints/openligadb.yaml, R880-1).

@@ -14,6 +14,7 @@ import pandas as pd
 import polars as pl
 
 from sportsdataverse.dl_utils import underscore
+from sportsdataverse.errors import _object_records
 
 
 def _snake_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -233,9 +234,10 @@ def parse_mlb_statcast_gamefeed(payload: Dict, return_as_pandas: bool = False) -
         ev = payload.get("exit_velocity")
         if isinstance(ev, list):
             rows = ev
-    if not rows:
+    records = _object_records(rows, "parse_mlb_statcast_gamefeed: team_home/team_away/exit_velocity")
+    if not records:
         return _empty_frame(return_as_pandas)
-    df = _snake_columns(pd.json_normalize(rows, sep="_"))
+    df = _snake_columns(pd.json_normalize(records, sep="_"))
     _warn_uncast_ids(_pin_id_columns(df), stacklevel=2)  # parse_mlb_statcast_gamefeed <- caller
     return _to_output(df, return_as_pandas)
 
@@ -268,9 +270,10 @@ def parse_mlb_statcast_schedule(payload: Dict, return_as_pandas: bool = False) -
     for d in dates:
         if isinstance(d, dict) and isinstance(d.get("games"), list):
             games.extend(d["games"])
-    if not games:
+    records = _object_records(games, "parse_mlb_statcast_schedule: schedule.dates[].games")
+    if not records:
         return _empty_frame(return_as_pandas)
-    df = pd.json_normalize(games, sep="_")
+    df = pd.json_normalize(records, sep="_")
     return _to_output(_snake_columns(df), return_as_pandas)
 
 
@@ -296,7 +299,8 @@ def parse_mlb_statcast_html_leaderboard(payload: str, return_as_pandas: bool = F
             df = parse_mlb_statcast_html_leaderboard(html_text)
     """
     rows = _html_decode_var(payload if isinstance(payload, str) else "", "data")
-    if not isinstance(rows, list) or not rows:
+    rows = _object_records(rows, "parse_mlb_statcast_html_leaderboard: data") if isinstance(rows, list) else None
+    if not rows:
         return _empty_frame(return_as_pandas)
     df = pd.json_normalize(rows, sep="_")
     return _to_output(_snake_columns(df), return_as_pandas)
@@ -332,7 +336,8 @@ def parse_mlb_statcast_player(
     """
     # the player page is HTML text: any other body (a JSON object or array) has no serverVals (A-L62)
     rows = _html_script_json(payload if isinstance(payload, str) else "", "serverVals").get(section)
-    if not isinstance(rows, list) or not rows:
+    rows = _object_records(rows, f"parse_mlb_statcast_player: serverVals.{section}") if isinstance(rows, list) else None
+    if not rows:
         return _empty_frame(return_as_pandas)
     df = pd.json_normalize(rows, sep="_")
     return _to_output(_snake_columns(df), return_as_pandas)

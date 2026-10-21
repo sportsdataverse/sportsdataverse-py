@@ -1466,7 +1466,41 @@ def _dtype_snapshot() -> Dict[str, Dict[str, Dict[str, str]]]:
 
 
 _ENVELOPE = json.loads((Path(__file__).parent / "fixtures/runtime_errors/espn_site_roster_400.json").read_text("utf-8"))
-_HOSTILE = {"dict": {}, "list": [{}], "none": None, "empty_str": "", "error_envelope": _ENVELOPE}
+_HOSTILE = {
+    "dict": {},
+    "list": [{}],
+    "none": None,
+    "empty_str": "",
+    "error_envelope": _ENVELOPE,
+    # WB-providers-2: pandas 2 reads a scalar record as an empty row (N x 0), pandas 3 raises. Zero rows on both,
+    # a SchemaDriftWarning allowed; the 3.10 CI job (#941) runs this sweep on pandas 2.
+    "scalar_list": ["a", "b", "c"],
+}
+# Parsers whose documented payload IS a scalar array (247 ``sports/{k}/year`` -> [2007, ...], a list of ids,
+# MLB timecodes): one row per scalar in this one column, never drift.
+_SCALAR_ARRAY = {
+    "cbs.cbs_napi_parsers.parse_cbs_napi": "value",
+    "cfb.on3_parsers.parse_on3_rdb": "value",
+    "cfb.sports247_parsers.parse_sports247_institution_rankings": "value",
+    "cfb.sports247_parsers.parse_sports247_result_set": "value",
+    "cfb.sports247_parsers.parse_sports247_teams": "value",
+    "euroleague.euroleague_parsers.parse_euroleague": "value",
+    "mlb.mlb_api_parsers.parse_mlb_api_timecodes": "timecode",
+    "soccer.asa_parsers.parse_asa": "value",
+    "soccer.fifa_parsers.parse_fifa": "value",
+    "soccer.fotmob_parsers.parse_fotmob": "value",
+    "soccer.mls.mls_api_parsers.parse_mls_api": "value",
+    "soccer.mls.mls_api_parsers.parse_mls_entity": "value",
+    "soccer.nwsl.nwsl_api_parsers.parse_nwsl_sdp": "value",
+    "soccer.uefa_parsers.parse_uefa": "value",
+}
+# The scalar-list cases still N x 0 on pandas 2 in modules #941 (WB-codegen-runtime-1) fixes; the devel-providers
+# sync brings it, the strict xfail then XPASSes and this dict must be emptied.
+_SCALAR_LIST_941 = {
+    "mlb.mlb_api_parsers.parse_mlb_api_win_probability",
+    "nhl.nhl_api_web_parsers.parse_nhl_web_player_spotlight",
+    "nhl.nhl_edge_parsers.parse_edge_top10",
+}
 # Parsers that break the contract today, measured 2026-10-11 (polars 2.0): ``{parser: {shape: what the
 # case fails with}}``, AssertionError meaning it returned rows. The fixing task follows from the module.
 _HOSTILE_OPEN: Dict[str, Dict[str, type]] = {}  # task 4.1b closed the last of them (A-L17, A-L62, B-L6)
@@ -1493,6 +1527,12 @@ def _open(qual: str, shape: str) -> str:
     return f"EX-1.3-a: a hostile {shape} body breaks the zero-row contract; task {task}"
 
 
+def _pandas_major() -> int:
+    import pandas as pd
+
+    return int(pd.__version__.split(".")[0])
+
+
 def _hostile_params() -> List[Any]:
     params = []
     for qual in sorted(_public_parsers()):
@@ -1505,6 +1545,12 @@ def _hostile_params() -> List[Any]:
                         strict=True,
                         raises=_HOSTILE_SYNC_1018[qual][shape],
                         reason=f"EX-SYNC-g: a hostile {shape} body parses to rows; task providers 4.1b",
+                    )
+                ]
+            if shape == "scalar_list" and qual in _SCALAR_LIST_941 and _pandas_major() < 3:
+                marks = [
+                    pytest.mark.xfail(
+                        strict=True, raises=AssertionError, reason="WB-codegen-runtime-1: N x 0 on pandas 2; #941"
                     )
                 ]
             params.append(pytest.param(qual, shape, id=f"{qual}-{shape}", marks=marks))
@@ -1520,6 +1566,15 @@ def test_hostile_body_is_zero_rows_or_a_vocabulary_raise(qual, shape):
         try:
             out = parse(_HOSTILE[shape])
         except (NoDataError, AssetFetchError):
+            return
+    elif shape == "scalar_list":
+        from sportsdataverse.errors import SchemaDriftWarning
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SchemaDriftWarning)  # drift may say so; it must not read as rows
+            out = parse(_HOSTILE[shape])
+        if qual in _SCALAR_ARRAY:
+            assert {sec: df.columns for sec, df in _frames(out).items() if df.height} == {"": [_SCALAR_ARRAY[qual]]}
             return
     else:
         out = parse(_HOSTILE[shape])
@@ -1548,6 +1603,8 @@ def test_hostile_sweep_covers_every_public_parser():
     assert set(_HOSTILE_OPEN) <= set(parsers), sorted(set(_HOSTILE_OPEN) - set(parsers))
     assert set(_HOSTILE_SYNC_1018) <= set(parsers), sorted(set(_HOSTILE_SYNC_1018) - set(parsers))
     assert not set(_HOSTILE_SYNC_1018) & set(_HOSTILE_OPEN)
+    listed = set(_SCALAR_ARRAY) | _SCALAR_LIST_941
+    assert listed <= set(parsers), sorted(listed - set(parsers))
     unread = {fx.stem for fx in _ESPN_FIX.glob("*.json")} - set(_captures())
     assert unread == _NO_PARSER, "a new capture needs a parser (or a reason in _NO_PARSER)"
 

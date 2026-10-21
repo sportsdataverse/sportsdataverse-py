@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Dict, List, Union
 
-from sportsdataverse.errors import _data_only, _dict_only
+from sportsdataverse.errors import _data_only, _dict_only, _object_records
 
 if TYPE_CHECKING:  # pragma: no cover -- annotation-only imports (PEP 563 defers eval)
     import pandas as pd
@@ -45,7 +45,7 @@ __all__ = [
 ]
 
 
-def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
+def _to_frame(records: List, return_as_pandas: bool, where: str) -> DataFrameT:
     """Flatten a list of nested dicts into a polars (or pandas) DataFrame.
 
     Follows the shared ``*_parsers.py`` contract: ``pandas.json_normalize`` for
@@ -56,18 +56,21 @@ def _to_frame(records: List, return_as_pandas: bool) -> DataFrameT:
     Args:
         records: A list of (possibly nested) JSON record dicts. ``None`` / empty /
             malformed yields a zero-row frame rather than raising.
+        where: ``"<parser>: <payload path>"``, named by the drift warning.
         return_as_pandas: When ``True``, return a ``pandas.DataFrame``; otherwise a
             ``polars.DataFrame``.
 
     Returns:
         A ``polars.DataFrame`` (default) or ``pandas.DataFrame`` with nested keys
-        flattened (``sep="_"``) and snake-cased columns.
+        flattened (``sep="_"``) and snake-cased columns. Zero rows, with a
+        :class:`~sportsdataverse.errors.SchemaDriftWarning`, when a record is not an object.
     """
     import pandas as pd
     import polars as pl
 
     from sportsdataverse.dl_utils import underscore
 
+    records = _object_records(records, where)
     if not records:
         return pd.DataFrame() if return_as_pandas else pl.DataFrame()
     try:
@@ -113,8 +116,9 @@ def parse_nfl_standings(raw: Dict, return_as_pandas: bool = False) -> DataFrameT
     """
     records: List = []
     for wk in raw.get("weeks", []) or []:
-        records.extend(wk.get("standings", []) or [])
-    return _to_frame(records, return_as_pandas)
+        # a week that is not an object reaches _to_frame as a record, which reads it as drift
+        records.extend((wk.get("standings", []) or []) if isinstance(wk, dict) else [wk])
+    return _to_frame(records, return_as_pandas, "parse_nfl_standings: weeks[].standings")
 
 
 @_dict_only
@@ -136,7 +140,7 @@ def parse_nfl_rosters(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
             raw = nfl_rosters(season=2024, return_parsed=False)
             parse_nfl_rosters(raw).head()
     """
-    return _to_frame(raw.get("rosters", []), return_as_pandas)
+    return _to_frame(raw.get("rosters", []), return_as_pandas, "parse_nfl_rosters: rosters")
 
 
 @_dict_only
@@ -158,7 +162,7 @@ def parse_nfl_teams_history(raw: Dict, return_as_pandas: bool = False) -> DataFr
             raw = nfl_teams_history(season=2024, return_parsed=False)
             parse_nfl_teams_history(raw).head()
     """
-    return _to_frame(raw.get("teams", []), return_as_pandas)
+    return _to_frame(raw.get("teams", []), return_as_pandas, "parse_nfl_teams_history: teams")
 
 
 @_data_only
@@ -180,7 +184,9 @@ def parse_nfl_team(raw: Union[Dict, List], return_as_pandas: bool = False) -> Da
             raw = nfl_team(team_id="10403800-517c-7b8c-65a3-c61b95d86123", return_parsed=False)
             parse_nfl_team(raw)
     """
-    return _to_frame([raw] if isinstance(raw, dict) and raw else raw, return_as_pandas)  # {} is no row
+    return _to_frame(
+        [raw] if isinstance(raw, dict) and raw else raw, return_as_pandas, "parse_nfl_team: payload"
+    )  # {} is no row
 
 
 @_dict_only
@@ -203,7 +209,7 @@ def parse_nfl_weeks(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
             raw = nfl_weeks(season=2024, season_type="REG", return_parsed=False)
             parse_nfl_weeks(raw).head()
     """
-    return _to_frame(raw.get("weeks", []), return_as_pandas)
+    return _to_frame(raw.get("weeks", []), return_as_pandas, "parse_nfl_weeks: weeks")
 
 
 @_data_only
@@ -226,7 +232,9 @@ def parse_nfl_weeks_by_date(raw: Union[Dict, List], return_as_pandas: bool = Fal
             raw = nfl_weeks_by_date(date="2024-09-08", return_parsed=False)
             parse_nfl_weeks_by_date(raw)
     """
-    return _to_frame([raw] if isinstance(raw, dict) and raw else raw, return_as_pandas)  # {} is no row
+    return _to_frame(
+        [raw] if isinstance(raw, dict) and raw else raw, return_as_pandas, "parse_nfl_weeks_by_date: payload"
+    )  # {} is no row
 
 
 @_dict_only
@@ -248,7 +256,7 @@ def parse_nfl_combine_profiles(raw: Dict, return_as_pandas: bool = False) -> Dat
             raw = nfl_combine_profiles(year=2024, return_parsed=False)
             parse_nfl_combine_profiles(raw).head()
     """
-    return _to_frame(raw.get("combineProfiles", []), return_as_pandas)
+    return _to_frame(raw.get("combineProfiles", []), return_as_pandas, "parse_nfl_combine_profiles: combineProfiles")
 
 
 @_dict_only
@@ -270,7 +278,7 @@ def parse_nfl_draft_picks(raw: Dict, return_as_pandas: bool = False) -> DataFram
             raw = nfl_draft_picks(year=2024, return_parsed=False)
             parse_nfl_draft_picks(raw).head()
     """
-    return _to_frame(raw.get("picks", []), return_as_pandas)
+    return _to_frame(raw.get("picks", []), return_as_pandas, "parse_nfl_draft_picks: picks")
 
 
 @_dict_only
@@ -292,7 +300,7 @@ def parse_nfl_injuries(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
             raw = nfl_injuries(season=2024, season_type="REG", week=1, return_parsed=False)
             parse_nfl_injuries(raw).head()
     """
-    return _to_frame(raw.get("injuries", []), return_as_pandas)
+    return _to_frame(raw.get("injuries", []), return_as_pandas, "parse_nfl_injuries: injuries")
 
 
 @_dict_only
@@ -314,7 +322,7 @@ def parse_nfl_game_summaries(raw: Dict, return_as_pandas: bool = False) -> DataF
             raw = nfl_game_summaries(season=2024, season_type="REG", week=1, return_parsed=False)
             parse_nfl_game_summaries(raw).head()
     """
-    return _to_frame(raw.get("data", []), return_as_pandas)
+    return _to_frame(raw.get("data", []), return_as_pandas, "parse_nfl_game_summaries: data")
 
 
 @_data_only
@@ -339,7 +347,7 @@ def parse_nfl_weekly_game_details(raw: Union[Dict, List], return_as_pandas: bool
     records = (
         raw if isinstance(raw, list) else (raw.get("games", []) or raw.get("data", [])) if isinstance(raw, dict) else []
     )
-    return _to_frame(records, return_as_pandas)
+    return _to_frame(records, return_as_pandas, "parse_nfl_weekly_game_details: games/data")
 
 
 def parse_nfl_live_team_statistics(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
@@ -366,13 +374,13 @@ def parse_nfl_live_team_statistics(raw: Dict, return_as_pandas: bool = False) ->
             parse_nfl_live_team_statistics(raw).select(["side", "team_id"])
     """
     if not isinstance(raw, dict):
-        return _to_frame([], return_as_pandas)
+        return _to_frame([], return_as_pandas, "parse_nfl_live_team_statistics: payload")
     rows = []
     for side in ("away", "home"):
         team = raw.get(f"{side}Team")
         if isinstance(team, dict):
             rows.append({"gameId": raw.get("gameId"), "offset": raw.get("offset"), "side": side, **team})
-    return _to_frame(rows, return_as_pandas)
+    return _to_frame(rows, return_as_pandas, "parse_nfl_live_team_statistics: payload")
 
 
 def parse_nfl_live_player_statistics(raw: Dict, return_as_pandas: bool = False) -> DataFrameT:
@@ -397,7 +405,7 @@ def parse_nfl_live_player_statistics(raw: Dict, return_as_pandas: bool = False) 
             parse_nfl_live_player_statistics(raw).select(["side", "gsis_player_name"]).head()
     """
     if not isinstance(raw, dict):
-        return _to_frame([], return_as_pandas)
+        return _to_frame([], return_as_pandas, "parse_nfl_live_player_statistics: payload")
     rows = []
     for side in ("away", "home"):
         team = raw.get(f"{side}Team")
@@ -414,7 +422,7 @@ def parse_nfl_live_player_statistics(raw: Dict, return_as_pandas: bool = False) 
                         **player,
                     }
                 )
-    return _to_frame(rows, return_as_pandas)
+    return _to_frame(rows, return_as_pandas, "parse_nfl_live_player_statistics: payload")
 
 
 @_data_only
@@ -442,7 +450,9 @@ def parse_nfl_game_details_v2(raw: Dict, return_as_pandas: bool = False) -> Data
             raw = nfl_game_details_v2(game_id="a9a890ed-4feb-11f1-abca-2c54536568a9", return_parsed=False)
             parse_nfl_game_details_v2(raw).select(["id", "status"])
     """
-    return _to_frame([raw] if isinstance(raw, dict) and raw else [], return_as_pandas)
+    return _to_frame(
+        [raw] if isinstance(raw, dict) and raw else [], return_as_pandas, "parse_nfl_game_details_v2: payload"
+    )
 
 
 @_data_only
@@ -469,4 +479,6 @@ def parse_nfl_game_details_by_slug(raw: Dict, return_as_pandas: bool = False) ->
             raw = nfl_game_details_by_slug(slug="broncos-at-chiefs-2026-reg-1", return_parsed=False)
             parse_nfl_game_details_by_slug(raw).select(["id", "status"])
     """
-    return _to_frame([raw] if isinstance(raw, dict) and raw else [], return_as_pandas)
+    return _to_frame(
+        [raw] if isinstance(raw, dict) and raw else [], return_as_pandas, "parse_nfl_game_details_by_slug: payload"
+    )

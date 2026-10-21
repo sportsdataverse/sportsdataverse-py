@@ -37,14 +37,15 @@ def _rows_to_frame(rows: List[Any]) -> pl.DataFrame:
     if not rows:
         return pl.DataFrame()
     # Scalar-array payloads (e.g. ``sports/{k}/year`` -> [2007, 2008, ...]) carry
-    # no keys; surface them under a single ``value`` column.
-    if not isinstance(rows[0], dict):
-        rows = [{"value": r} for r in rows]
+    # no keys; surface them under a single ``value`` column. Every scalar, not just a leading
+    # one: pandas 3 raises on a scalar after a dict, pandas 2 reads it as an empty row (WB-providers-2).
+    rows = [r if isinstance(r, dict) else {"value": r} for r in rows]
     df = pd.json_normalize(rows, sep="_")
     df.columns = [underscore(str(c)) for c in df.columns]
     for c in df.columns:
         if df[c].dtype == object:
-            df[c] = df[c].map(lambda v: v if v is None or isinstance(v, str) else str(v))
+            # a gap is NaN on pandas 2, None on pandas 3: keep it null, never the string "nan"
+            df[c] = df[c].map(lambda v: v if v is None or isinstance(v, str) else None if v != v else str(v))
     return pl.from_pandas(df)
 
 
