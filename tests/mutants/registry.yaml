@@ -2356,6 +2356,26 @@
   expected: kill
   note: R846-3 -- the special-teams engine must keep a given xG.
 
+- id: nhl-rapm-stints-goal-xg-pre-change
+  group: pwhl-impact-routing
+  finding: WB-hockey-1
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: '(pl.col("game_seconds") > xg_lo) & (pl.col("game_seconds") <= end_s)'
+  mutant: '(pl.col("game_seconds") >= start_s) & (pl.col("game_seconds") < end_s)'
+  test: tests/nhl/test_nhl_stints_goal_credit.py
+  expected: kill
+  note: task 2.27 -- a goal at a change second credits the line on the ice before the change (pre-fix 11/25 PWHL, 1/14 NHL scorers on ice).
+
+- id: nhl-rapm-stints-strength-falls-back-to-xg-window
+  group: pwhl-impact-routing
+  finding: R960-1
+  file: sportsdataverse/nhl/nhl_rapm.py
+  snippet: 'window = xg_window'
+  mutant: 'window = window'
+  test: tests/nhl/test_nhl_stints_goal_credit.py -k nhl
+  expected: kill
+  note: task 2.27 -- a stint whose only event is the shot at its end second reads strength / goalies off the xG window (without it, 9 NHL xG stints carry a null strength_state).
+
 - id: nhl-war-threads-xg-scored
   group: pwhl-impact-routing
   finding: C-NF-5
