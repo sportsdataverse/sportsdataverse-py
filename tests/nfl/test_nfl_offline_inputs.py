@@ -142,3 +142,65 @@ def test_odds_override_replaces_the_pickcenter_cascade(summary, monkeypatch):
     assert proc.odds_source == "injected"
     with pytest.raises(ValueError, match="missing required keys"):
         NFLPlayProcess(gameId=GAME_ID, odds_override={"gameSpread": 1})
+
+
+@pytest.mark.parametrize("keys", [("start",), ("end",), ("clock",), ("homeScore", "awayScore")], ids=lambda k: k[0])
+def test_a_play_field_absent_from_every_play_does_not_crash(summary, keys):
+    """C-NF-10(a): with a block absent from EVERY play json_normalize emits no column for it, and the
+    plays build raised ColumnNotFoundError; the processor now runs with those columns null."""
+    stripped = json.loads(json.dumps(summary))
+    for drive in stripped["drives"]["previous"]:
+        for play in drive["plays"]:
+            for key in keys:
+                play.pop(key, None)
+    proc = NFLPlayProcess(gameId=GAME_ID)
+    proc.espn_nfl_pbp(summary=stripped)
+    plays = proc.run_processing_pipeline()["plays"]
+    assert len(plays) > 100
+
+
+_ODDS_KEYS = ("gameSpread", "overUnder", "homeFavorite", "gameSpreadAvailable")
+
+
+def _payload_odds(summary, **kwargs):
+    import copy
+
+    proc = NFLPlayProcess(gameId=GAME_ID, **kwargs)
+    pbp_txt, _ = proc._NFLPlayProcess__helper_nfl_pbp(copy.deepcopy(proc.espn_nfl_pbp(summary=summary)))
+    return proc, pbp_txt
+
+
+def test_pickcenter_round_trip_odds_are_espn_scalars(summary):
+    """The CFB C-M19 twin: the summary_pickcenter odds were shape-(1,) ndarrays, so the payload's odds
+    could not be serialized into ``odds_override``. They are Python scalars equal to ESPN's pickcenter
+    numbers (the oracle) and survive JSON into ``odds_override`` unchanged."""
+    proc, pbp_txt = _payload_odds(summary)
+    assert proc.odds_source == "summary_pickcenter"
+    odds = {k: pbp_txt[k] for k in _ODDS_KEYS}
+    assert [type(odds[k]) for k in _ODDS_KEYS] == [float, float, bool, bool]
+    assert odds == {"gameSpread": -8.5, "overUnder": 40.5, "homeFavorite": True, "gameSpreadAvailable": True}
+    assert {(p["spread"], p["overUnder"], p["homeTeamOdds"]["favorite"]) for p in summary["pickcenter"]} == {
+        (odds["gameSpread"], odds["overUnder"], odds["homeFavorite"]),
+    }
+    again, re_txt = _payload_odds(summary, odds_override=json.loads(json.dumps(odds)))
+    assert again.odds_source == "injected"
+    assert {k: re_txt[k] for k in _ODDS_KEYS} == odds
+    assert re_txt["homeTeamSpread"] == pbp_txt["homeTeamSpread"] == 8.5
+
+
+def test_pickcenter_all_null_spread_takes_the_default_path(summary):
+    """An all-null pickcenter spread raised IndexError (the CFB C-NF-10(b) twin): it is no spread, so the
+    offline path takes the documented defaults."""
+    import copy
+
+    stripped = copy.deepcopy(summary)
+    for provider in stripped["pickcenter"]:
+        provider["spread"] = None
+    proc, pbp_txt = _payload_odds(stripped)
+    assert proc.odds_source == "default"
+    assert {k: pbp_txt[k] for k in _ODDS_KEYS} == {
+        "gameSpread": 2.5,
+        "overUnder": 55.5,
+        "homeFavorite": True,
+        "gameSpreadAvailable": False,
+    }

@@ -361,6 +361,7 @@ from sportsdataverse.cfb import cfb_compute_results as cfb_compute_results  # no
 from sportsdataverse.cfb import cfb_draft_projection as cfb_draft_projection  # noqa: F401
 from sportsdataverse.cfb import cfb_field_position as cfb_field_position  # noqa: F401
 from sportsdataverse.cfb import cfb_games_from_schedule as cfb_games_from_schedule  # noqa: F401
+from sportsdataverse.cfb import cfb_kickoff_out_of_bounds_spot_expr as cfb_kickoff_out_of_bounds_spot_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_odds_events_crosswalk as cfb_odds_events_crosswalk  # noqa: F401
 from sportsdataverse.cfb import cfb_playoff_seeds as cfb_playoff_seeds  # noqa: F401
 from sportsdataverse.cfb import cfb_predict_games as cfb_predict_games  # noqa: F401
@@ -375,6 +376,7 @@ from sportsdataverse.cfb import cfb_season_odds as cfb_season_odds  # noqa: F401
 from sportsdataverse.cfb import cfb_simulations as cfb_simulations  # noqa: F401
 from sportsdataverse.cfb import cfb_standings as cfb_standings  # noqa: F401
 from sportsdataverse.cfb import cfb_teams_crosswalk as cfb_teams_crosswalk  # noqa: F401
+from sportsdataverse.cfb import cfb_touchback_yardline_expr as cfb_touchback_yardline_expr  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_impact as cfb_transfer_impact  # noqa: F401
 from sportsdataverse.cfb import cfb_transfer_moves as cfb_transfer_moves  # noqa: F401
 from sportsdataverse.cfb import check_box_invariants as check_box_invariants  # noqa: F401
@@ -550,6 +552,7 @@ __all__ = [
     "cfb_draft_projection",
     "cfb_field_position",
     "cfb_games_from_schedule",
+    "cfb_kickoff_out_of_bounds_spot_expr",
     "cfb_odds_events_crosswalk",
     "cfb_playoff_seeds",
     "cfb_predict_games",
@@ -564,6 +567,7 @@ __all__ = [
     "cfb_simulations",
     "cfb_standings",
     "cfb_teams_crosswalk",
+    "cfb_touchback_yardline_expr",
     "cfb_transfer_impact",
     "cfb_transfer_moves",
     "check_box_invariants",

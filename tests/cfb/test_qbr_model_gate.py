@@ -15,10 +15,15 @@ import math
 from pathlib import Path
 
 import polars as pl
+import pytest
 from xgboost import DMatrix
 
 from sportsdataverse.cfb import cfb_pbp
 from sportsdataverse.cfb.model_vars import qbr_vars
+
+# Processing a default-odds capture warns DefaultOddsWarning incidentally;
+# tests/cfb/test_cfb_pbp_offline.py::test_default_odds_warn asserts it.
+pytestmark = pytest.mark.filterwarnings("ignore::sportsdataverse.errors.DefaultOddsWarning")
 
 MODELS = Path(cfb_pbp.__file__).parent / "models"
 FIX = Path(__file__).parent / "fixtures"

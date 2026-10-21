@@ -15,6 +15,8 @@
   "n_features": 8,
   "label": "completion",
   "training_seasons": null,
+  "in_sample": true,
+  "in_sample_reason": "Fit by cfbfastR-cfb-data python/cfb_model_build/cpoe/cli.py, which trains the shipped booster on every season it loads ('Training on full dataset'; --loso only evaluates). The card did not record --seasons and the run that produced this booster is not logged, so the span is unknown (.github/workflows/cfb_model_pipeline.yml passes 2004 through the current year); no season was withheld.",
   "n_training_rows": null,
   "hyperparameters": null,
   "source": "cfb_final_json",

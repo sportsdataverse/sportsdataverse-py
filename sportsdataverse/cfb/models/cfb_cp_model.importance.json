@@ -1,0 +1,71 @@
+{
+  "model": "cfb_cp_model",
+  "sha256": "71d52772ee5999872b25d71b21b849ac9c0d8922330b7223ffb8068b4a4536c9",
+  "method": "xgboost Booster.get_score: gain and cover are means per split, total_gain sums them, weight counts splits; a multiclass booster pools all its class trees",
+  "features": [
+    {
+      "feature": "down",
+      "gain": 177.9183502,
+      "total_gain": 89670.85156,
+      "weight": 504.0,
+      "cover": 63539.08594,
+      "share_total_gain": 0.2795831871
+    },
+    {
+      "feature": "distance",
+      "gain": 42.2912941,
+      "total_gain": 30111.40234,
+      "weight": 712.0,
+      "cover": 52017.61328,
+      "share_total_gain": 0.09388381718
+    },
+    {
+      "feature": "yards_to_goal",
+      "gain": 52.57306671,
+      "total_gain": 60301.30859,
+      "weight": 1147.0,
+      "cover": 46221.42578,
+      "share_total_gain": 0.1880124003
+    },
+    {
+      "feature": "score_diff",
+      "gain": 82.29258728,
+      "total_gain": 60073.58594,
+      "weight": 730.0,
+      "cover": 65030.79297,
+      "share_total_gain": 0.1873023878
+    },
+    {
+      "feature": "seconds_remaining",
+      "gain": 42.70433807,
+      "total_gain": 43985.46875,
+      "weight": 1030.0,
+      "cover": 49295.19531,
+      "share_total_gain": 0.1371415273
+    },
+    {
+      "feature": "is_home",
+      "gain": 50.20647049,
+      "total_gain": 6577.047852,
+      "weight": 131.0,
+      "cover": 94470.70312,
+      "share_total_gain": 0.020506463
+    },
+    {
+      "feature": "period",
+      "gain": 55.21624374,
+      "total_gain": 14742.7373,
+      "weight": 267.0,
+      "cover": 63321.29688,
+      "share_total_gain": 0.045966124
+    },
+    {
+      "feature": "passing_down",
+      "gain": 155.7967682,
+      "total_gain": 15268.08398,
+      "weight": 98.0,
+      "cover": 48657.12109,
+      "share_total_gain": 0.04760409327
+    }
+  ]
+}
